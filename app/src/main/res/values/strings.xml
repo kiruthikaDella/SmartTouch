@@ -1,0 +1,70 @@
+<resources>
+    <string name="app_name">Smartouch</string>
+    <string name="org_name">Della Electronics Pvt Ltd.</string>
+
+    <!--    Google Authentication-->
+    <string name="google_client_id">254538999523-d0dfbtkuegliqtupjfjid8bjkduom0o2.apps.googleusercontent.com</string>
+    <string name="google_client_secret">Q-x9vJg8UGTX-VNma3F7ZKHm</string>
+
+    <string name="facebook_app_id">447085073257901</string>
+    <string name="fb_login_protocol_scheme">fb447085073257901</string>
+
+
+    <string name="welcome"><font fgcolor='#1A8EFF'>Welcome to</font> \n<font fgcolor='#011B25'> Smartouch</font></string>
+    <!--    <string name="welcome">Welcome to</string>-->
+
+    <!--    Login     -->
+    <string name="hint_text_email">Email</string>
+    <string name="hint_text_password">Password</string>
+    <string name="text_login">Login</string>
+    <string name="text_remember">Remember</string>
+    <string name="text_forgot_password">Forgot password?</string>
+    <string name="text_facebook">Facebook</string>
+    <string name="text_google">Google</string>
+    <string name="text_do_not_have_account">Don\'t have an account?</string>
+    <string name="text_sign_up">Sign Up</string>
+
+    <!--    Sign up-->
+    <string name="title_text_create_account">Create Account</string>
+    <string name="hint_full_name">Full Name</string>
+    <string name="hint_user_name">User Name</string>
+    <string name="hint_phone_number">Phone Number</string>
+    <string name="hint_confirm_password">Confirm Password</string>
+    <string name="text_already_have_account">Already have an account?</string>
+
+    <!--    Sign up validation-->
+    <string name="error_text_full_name">Please enter full name</string>
+    <string name="error_text_full_name_length">FullName must be more than 3 character</string>
+    <string name="error_text_user_name">Please enter user name</string>
+    <string name="error_text_user_name_length">UserName must be more than 3 character</string>
+    <string name="error_text_phone_number">Please enter phone number</string>
+    <string name="error_text_email">Please enter email</string>
+    <string name="error_text_valid_email">Please enter valid email</string>
+    <string name="error_text_password">Please enter password</string>
+    <string name="error_text_password_length">Password is too short. Please enter at least six character</string>
+    <string name="error_text_confirm_password">Password does not match</string>
+
+    <!--    Forgot Password-->
+    <string name="title_text_forgot_password">Forgot your password?</string>
+    <string name="hint_enter_register_email">Enter your registered email address</string>
+    <string name="text_send">Send</string>
+    <string name="text_remember_password">Remember password?</string>
+
+    <!--    Dialog Strings-->
+    <string name="text_no_internet_available">No internet available</string>
+    <string name="text_ok">OK</string>
+
+    <!--    Home Screen-->
+    <string name="title_text_home_screen">Smartouch</string>
+
+    <!--    Side Navigation-->
+    <string name="side_nav_text_account_settings">Account Settings</string>
+    <string name="side_nav_text_restore_device">Restore Devices</string>
+    <string name="side_nav_text_profile_reset">Profile Reset</string>
+    <string name="side_nav_text_faqs">FAQ\'s</string>
+    <string name="side_nav_text_shop">Shop</string>
+    <string name="side_nav_text_contact_us">Contact us</string>
+    <string name="side_nav_text_logout">Logout</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+</resources>

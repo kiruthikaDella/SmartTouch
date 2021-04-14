@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <dimen name="login_component_height">@dimen/_40sdp</dimen>
+    <dimen name="login_component_start_margin">@dimen/_16sdp</dimen>
+    <dimen name="login_component_end_margin">@dimen/_16sdp</dimen>
+</resources>

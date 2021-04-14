@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/nav_account_settings"
+        android:icon="@drawable/ic_side_nav_account_settings"
+        android:title="@string/side_nav_text_account_settings" />
+
+    <item
+        android:id="@+id/nav_restore_devices"
+        android:icon="@drawable/ic_side_nav_restore_device"
+        android:title="@string/side_nav_text_restore_device" />
+
+    <item
+        android:id="@+id/nav_profile_reset"
+        android:icon="@drawable/ic_side_nav_profile_reset"
+        android:title="@string/side_nav_text_profile_reset" />
+
+    <item
+        android:id="@+id/nav_faqs"
+        android:icon="@drawable/ic_side_nav_faqs"
+        android:title="@string/side_nav_text_faqs" />
+
+    <item
+        android:id="@+id/nav_shop"
+        android:icon="@drawable/ic_side_nav_shop"
+        android:title="@string/side_nav_text_shop" />
+
+    <item
+        android:id="@+id/nav_contact_us"
+        android:icon="@drawable/ic_side_nav_contact_us"
+        android:title="@string/side_nav_text_contact_us" />
+
+    <item
+        android:id="@+id/nav_logout"
+        android:icon="@drawable/ic_side_nav_logout"
+        android:title="@string/side_nav_text_logout" />
+
+</menu>
