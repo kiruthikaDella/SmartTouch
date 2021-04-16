@@ -30,13 +30,12 @@
         <item name="android:background">@drawable/ic_back_arrow</item>
     </style>
 
- <!--   <style name="BackImageStyle" parent="Widget.AppCompat.ImageButton">
-        <item name="android:layout_width">@dimen/_15sdp</item>
-        <item name="android:layout_height">@dimen/_10sdp</item>
-        <item name="android:layout_marginTop">@dimen/_18sdp</item>
-        <item name="android:layout_marginStart">@dimen/_12sdp</item>
+    <style name="BackImageStyle" parent="Widget.AppCompat.ImageButton">
+        <item name="android:layout_width">@dimen/_11sdp</item>
+        <item name="android:layout_height">@dimen/_18sdp</item>
+        <item name="android:layout_marginStart">@dimen/screen_start_margin</item>
         <item name="android:background">@drawable/ic_back</item>
-    </style>-->
+    </style>
 
     <style name="ScreenTitleAuthenticationStyle" parent="Widget.AppCompat.TextView">
         <item name="android:layout_marginTop">@dimen/_8sdp</item>
