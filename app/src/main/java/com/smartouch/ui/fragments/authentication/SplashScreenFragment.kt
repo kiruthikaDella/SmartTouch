@@ -23,13 +23,10 @@ class SplashScreenFragment : Fragment() {
         return inflater.inflate(R.layout.fragment_splash_screen, container, false)
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
+    override fun onResume() {
+        super.onResume()
         Handler(Looper.getMainLooper()).postDelayed({
             findNavController().navigate(SplashScreenFragmentDirections.actionSplashScreenFragmentToLoginFragment())
         }, 2000)
-
     }
-
 }

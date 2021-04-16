@@ -13,4 +13,5 @@
     <color name="silver">#C9C9C9</color>
     <color name="theme_color">@color/dodger_blue</color>
     <color name="nepal">#8DA4C2</color>
+    <color name="gull_gray">#90A4AE</color>
 </resources>

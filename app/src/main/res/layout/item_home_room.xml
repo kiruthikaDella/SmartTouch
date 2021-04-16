@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.jcminarro.roundkornerlayout.RoundKornerRelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/_110sdp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_marginTop="@dimen/_15sdp"
+    app:corner_radius="@dimen/_15sdp">
+
+    <ImageView
+        android:id="@+id/iv_room_image"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/img_living_room"
+        android:scaleType="centerCrop" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/daintree"
+        android:alpha="0.4" />
+
+    <TextView
+        android:id="@+id/tv_room_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Living Room"
+        android:textSize="@dimen/_12ssp"
+        android:layout_marginStart="@dimen/_13sdp"
+        android:layout_marginTop="@dimen/_13sdp"
+        android:background="@android:color/transparent"
+        android:textColor="@color/white" />
+
+    <ImageView
+        android:id="@+id/iv_room_settings"
+        android:layout_width="@dimen/_12sdp"
+        android:layout_height="@dimen/_12sdp"
+        android:background="@drawable/ic_home_room_settings"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="@dimen/_18sdp"
+        android:layout_marginEnd="@dimen/_15sdp" />
+
+</com.jcminarro.roundkornerlayout.RoundKornerRelativeLayout>

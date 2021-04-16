@@ -9,5 +9,18 @@
         android:id="@+id/homeFragment"
         android:name="com.smartouch.ui.fragments.home.HomeFragment"
         android:label="fragment_home"
-        tools:layout="@layout/fragment_home" /><action android:id="@+id/action_global_homeFragment" app:destination="@id/homeFragment"/>
+        tools:layout="@layout/fragment_home" >
+        <action
+            android:id="@+id/action_homeFragment_to_roomPanelFragment"
+            app:destination="@id/roomPanelFragment" />
+    </fragment><action android:id="@+id/action_global_homeFragment" app:destination="@id/homeFragment"/>
+    <fragment
+        android:id="@+id/roomPanelFragment"
+        android:name="com.smartouch.ui.fragments.home.RoomPanelFragment"
+        android:label="fragment_room_panel"
+        tools:layout="@layout/fragment_room_panel" >
+        <argument
+            android:name="roomDetail"
+            app:argType="com.smartouch.model.HomeRoomModel" />
+    </fragment>
 </navigation>

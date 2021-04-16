@@ -95,31 +95,22 @@
 
     </androidx.cardview.widget.CardView>
 
-    <androidx.cardview.widget.CardView
-        android:id="@+id/card_login"
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btn_login"
         android:layout_width="match_parent"
         android:layout_height="@dimen/login_component_height"
-        app:cardBackgroundColor="@color/theme_color"
-        app:cardCornerRadius="@dimen/_6sdp"
-        app:cardElevation="0dp"
+        android:layout_gravity="center_vertical"
+        app:backgroundTint="@null"
+        android:background="@drawable/dodger_blue_background_with_rounded_corners"
+        android:fontFamily="@font/roboto_medium"
+        android:letterSpacing="0"
+        android:text="@string/text_login"
+        android:textAllCaps="false"
+        android:textColor="@color/white"
+        android:textSize="@dimen/_12ssp"
         android:layout_marginStart="@dimen/login_component_start_margin"
         android:layout_marginEnd="@dimen/login_component_end_margin"
-        app:layout_constraintBottom_toBottomOf="@+id/guideline">
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btn_login"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_gravity="center_vertical"
-            android:background="@android:color/transparent"
-            android:fontFamily="@font/roboto_medium"
-            android:letterSpacing="0"
-            android:text="@string/text_login"
-            android:textAllCaps="false"
-            android:textColor="@color/white"
-            android:textSize="@dimen/_12ssp" />
-
-    </androidx.cardview.widget.CardView>
+        app:layout_constraintBottom_toBottomOf="@+id/guideline"/>
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline"

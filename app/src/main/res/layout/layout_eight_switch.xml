@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_30sdp">
+
+            <ImageButton
+                android:id="@+id/img_btn_switch_one"
+                android:layout_width="@dimen/_15sdp"
+                android:layout_height="@dimen/_15sdp"
+                android:layout_centerVertical="true"
+                android:background="@drawable/ic_side_navigation"/>
+
+            <TextView
+                android:id="@+id/tv_switch_one_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/text_switch_one"
+                android:layout_toEndOf="@+id/img_btn_switch_one"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="@dimen/_10sdp"
+                android:textSize="@dimen/_12ssp"
+                android:fontFamily="@font/roboto_medium"
+                android:textColor="@color/daintree"
+                android:maxLength="8"
+                android:singleLine="true"/>
+
+            <TextView
+                android:id="@+id/tv_switch_one_type"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/text_switch_one"
+                android:layout_toEndOf="@+id/tv_switch_one_title"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="@dimen/_10sdp"
+                android:textSize="@dimen/_11ssp"
+                android:fontFamily="@font/roboto_medium"
+                android:textColor="@color/gull_gray"
+                android:maxLength="8"
+                android:singleLine="true"/>
+
+            <TextView
+                android:id="@+id/tv_switch_one_edit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/text_edit"
+                android:layout_toEndOf="@+id/tv_switch_one_type"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="@dimen/_15sdp"
+                android:textSize="@dimen/_11ssp"
+                android:fontFamily="@font/roboto_medium"
+                android:textColor="@color/theme_color"
+                android:maxLength="8"
+                android:singleLine="true"/>
+
+        </RelativeLayout>
+    </LinearLayout>
+
+</RelativeLayout>

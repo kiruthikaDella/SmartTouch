@@ -8,14 +8,15 @@
     android:clipChildren="false"
     tools:context=".ui.activities.MainActivity">
 
-    <androidx.coordinatorlayout.widget.CoordinatorLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
         <RelativeLayout
+            android:id="@+id/relative_main_header"
             android:layout_width="match_parent"
             android:layout_height="@dimen/_40sdp"
-            android:layout_marginTop="@dimen/_18sdp"
+            android:layout_marginTop="@dimen/_10sdp"
             android:orientation="horizontal"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent">
@@ -44,42 +45,53 @@
         </RelativeLayout>
 
         <androidx.fragment.app.FragmentContainerView
-            android:id="@+id/fragment"
+            android:id="@+id/main_fragment_container"
             android:name="androidx.navigation.fragment.NavHostFragment"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginTop="@dimen/_60sdp"
-            android:layout_marginBottom="@dimen/_62sdp"
+            android:layout_below="@+id/relative_main_header"
+            android:layout_above="@+id/coordinator_bottom_navigation"
             app:defaultNavHost="true"
             app:navGraph="@navigation/nav_main" />
 
-        <com.google.android.material.bottomappbar.BottomAppBar
-            android:id="@+id/bottom_app_bar"
+        <androidx.coordinatorlayout.widget.CoordinatorLayout
+            android:id="@+id/coordinator_bottom_navigation"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/_60sdp"
-            app:contentInsetStart="0dp"
-            android:layout_gravity="bottom">
+            android:layout_height="@dimen/_100sdp"
+            android:layout_alignParentBottom="true">
 
-            <com.google.android.material.bottomnavigation.BottomNavigationView
-                android:id="@+id/bottom_navigation_view"
+            <com.google.android.material.bottomappbar.BottomAppBar
+                android:id="@+id/bottom_app_bar"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@color/white"
-                app:labelVisibilityMode="unlabeled"
-                app:menu="@menu/bottom_nav_menu"
-                app:itemIconTint="@color/bottom_nav_color_selector" />
+                android:layout_height="@dimen/_60sdp"
+                app:contentInsetStart="0dp"
+                android:layout_gravity="bottom"
+                android:background="@color/white">
 
-        </com.google.android.material.bottomappbar.BottomAppBar>
+                <com.google.android.material.bottomnavigation.BottomNavigationView
+                    android:id="@+id/bottom_navigation_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    app:labelVisibilityMode="unlabeled"
+                    app:menu="@menu/bottom_nav_menu"
+                    android:background="@color/white"
+                    app:itemIconTint="@color/bottom_nav_color_selector"
+                    app:itemIconSize="@dimen/_14sdp"
+                    app:itemRippleColor="@android:color/transparent" />
 
-        <ImageView
-            android:id="@+id/iv_add_room"
-            android:layout_width="@dimen/_45sdp"
-            android:layout_height="@dimen/_45sdp"
-            android:src="@drawable/ic_bottom_navigation_add_room"
-            app:layout_anchor="@id/bottom_app_bar"
-            app:layout_anchorGravity="center_horizontal" />
+            </com.google.android.material.bottomappbar.BottomAppBar>
 
-    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+            <ImageView
+                android:id="@+id/iv_add_room"
+                android:layout_width="@dimen/_60sdp"
+                android:layout_height="@dimen/_60sdp"
+                android:background="@drawable/ic_bottom_navigation_add_room"
+                app:layout_anchor="@id/bottom_app_bar"
+                app:layout_anchorGravity="center_horizontal" />
+
+        </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+    </RelativeLayout>
 
     <com.google.android.material.navigation.NavigationView
         android:id="@+id/side_navigation_view"

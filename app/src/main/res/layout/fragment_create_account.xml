@@ -9,7 +9,7 @@
 
     <ImageButton
         android:id="@+id/iv_back"
-        style="@style/BackImageStyle" />
+        style="@style/BackArrowImageStyle" />
 
     <TextView
         android:id="@+id/tv_title"
