@@ -3,8 +3,11 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_marginTop="@dimen/_10sdp"
+    android:layout_marginStart="@dimen/screen_start_margin"
+    android:layout_marginEnd="@dimen/screen_end_margin"
     app:cardElevation="@dimen/_5sdp"
-    app:cardCornerRadius="@dimen/_6sdp">
+    app:cardCornerRadius="@dimen/_2sdp">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -17,7 +20,7 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             app:cardBackgroundColor="@color/white"
-            app:cardElevation="@dimen/_5sdp">
+            app:cardElevation="@dimen/_1sdp">
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -25,14 +28,15 @@
 
                 <ImageButton
                     android:id="@+id/img_panel_menu"
-                    android:layout_width="@dimen/_15sdp"
-                    android:layout_height="@dimen/_15sdp"
+                    android:layout_width="@dimen/_12sdp"
+                    android:layout_height="@dimen/_11sdp"
                     android:layout_marginStart="@dimen/_10sdp"
                     android:layout_centerVertical="true"
                     android:tint="@color/theme_color"
-                    android:background="@drawable/ic_panel_menu"/>
+                    android:background="@drawable/ic_panel_menu" />
 
                 <TextView
+                    android:id="@+id/tv_panel_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="SMT2028189"
@@ -41,7 +45,7 @@
                     android:fontFamily="@font/roboto_bold"
                     android:layout_centerVertical="true"
                     android:layout_toEndOf="@+id/img_panel_menu"
-                    android:layout_marginStart="@dimen/_10sdp"/>
+                    android:layout_marginStart="@dimen/_10sdp" />
 
                 <ImageButton
                     android:id="@+id/img_panel_edit"
@@ -51,12 +55,13 @@
                     android:layout_centerVertical="true"
                     android:layout_alignParentEnd="true"
                     android:tint="@color/theme_color"
-                    android:background="@drawable/ic_panel_edit"/>
+                    android:background="@drawable/ic_panel_edit" />
 
             </RelativeLayout>
 
         </androidx.cardview.widget.CardView>
 
+        <include layout="@layout/layout_eight_switch"/>
 
     </LinearLayout>
 

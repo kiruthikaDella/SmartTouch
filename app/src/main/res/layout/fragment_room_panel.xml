@@ -32,7 +32,7 @@
         <ImageButton
             android:layout_width="@dimen/_15sdp"
             android:layout_height="@dimen/_15sdp"
-            android:src="@drawable/ic_edit"
+            android:background="@drawable/ic_edit"
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
             android:layout_marginEnd="@dimen/screen_end_margin" />
@@ -42,8 +42,8 @@
     <com.google.android.material.button.MaterialButton
         android:layout_width="match_parent"
         android:layout_height="@dimen/_35sdp"
-        android:layout_marginStart="@dimen/_12sdp"
-        android:layout_marginEnd="@dimen/_12sdp"
+        android:layout_marginStart="@dimen/screen_start_margin"
+        android:layout_marginEnd="@dimen/screen_end_margin"
         android:layout_marginTop="@dimen/_10sdp"
         android:text="add panel"
         android:textSize="@dimen/_11ssp"
@@ -55,7 +55,6 @@
         android:id="@+id/recycler_room_panels"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="@dimen/_10sdp"
         android:clipToPadding="false"
         android:overScrollMode="never"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />

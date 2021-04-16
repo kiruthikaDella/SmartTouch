@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "254538999523",
+    "project_id": "smartouch-1618288984434",
+    "storage_bucket": "smartouch-1618288984434.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:254538999523:android:e5620b42d2c9586c69c7d6",
+        "android_client_info": {
+          "package_name": "com.smartouch"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "254538999523-b47ep57nce9upe14lia26i01fv1l750p.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.smartouch",
+            "certificate_hash": "fee262586124b9fdc8651918047aeacc5f77e311"
+          }
+        },
+        {
+          "client_id": "254538999523-d0dfbtkuegliqtupjfjid8bjkduom0o2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDikwDNouTGDgIigeUHOlK9DiySQqoUs68"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "254538999523-d0dfbtkuegliqtupjfjid8bjkduom0o2.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -26,7 +26,7 @@
                 android:layout_width="@dimen/_23sdp"
                 android:layout_height="@dimen/_17sdp"
                 android:background="@drawable/ic_side_navigation"
-                android:layout_marginStart="@dimen/_12sdp"
+                android:layout_marginStart="@dimen/screen_start_margin"
                 android:layout_centerVertical="true" />
 
             <TextView

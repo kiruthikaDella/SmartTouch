@@ -1,10 +1,10 @@
 package com.smartouch.ui.activities
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import com.facebook.*
 import com.facebook.login.LoginManager
 import com.facebook.login.LoginResult
@@ -17,7 +17,7 @@ import org.json.JSONObject
 
 class AuthenticationActivity : AppCompatActivity() {
 
-    private val  logTag = this::class.java.simpleName
+    private val logTag = this::class.java.simpleName
     private lateinit var callbackManager: CallbackManager
     private lateinit var accessToken: AccessToken
     private var profileTracker: ProfileTracker? = null
@@ -94,7 +94,10 @@ class AuthenticationActivity : AppCompatActivity() {
                         val profile = Profile.getCurrentProfile()
 
                         profile?.let {
-                            Log.d(logTag, "Facebook userId = ${accessToken.userId} firstname = ${it.firstName} lastName = ${it.lastName}")
+                            Log.d(
+                                logTag,
+                                "Facebook userId = ${accessToken.userId} firstname = ${it.firstName} lastName = ${it.lastName}"
+                            )
                         } ?: run {
                             performFacebookLogin()
                         }
@@ -129,7 +132,7 @@ class AuthenticationActivity : AppCompatActivity() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        Log.e("AuthAct", " onActivityResult ")
+        Log.e(logTag, " onActivityResult ")
         if (FacebookSdk.isFacebookRequestCode(requestCode)) {
             callbackManager.onActivityResult(requestCode, resultCode, data)
         }

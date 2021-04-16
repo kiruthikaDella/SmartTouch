@@ -4,6 +4,8 @@ plugins {
     id 'kotlin-android-extensions'
     id 'kotlin-kapt'
     id 'androidx.navigation.safeargs'
+    id 'com.google.gms.google-services'
+    id 'com.google.firebase.crashlytics'
 }
 
 android {
@@ -51,6 +53,8 @@ dependencies {
 
     // UI Libraries
     implementation 'com.jcminarro:RoundKornerLayouts:0.4.0'
+    implementation 'com.github.warkiz.widget:indicatorseekbar:2.1.2' // --->> seekbar
+    implementation 'com.sothree.slidinguppanel:library:3.4.0' // --->> bottom sliding panel
 
     // Navigation Component dependencies
     implementation "androidx.navigation:navigation-fragment-ktx:2.3.5"
@@ -70,4 +74,8 @@ dependencies {
     implementation 'com.google.android.gms:play-services-auth:19.0.0' // ----> Google
     implementation 'com.facebook.android:facebook-login:8.1.0' // ----> Facebook
 
+    //Firebase
+    implementation platform('com.google.firebase:firebase-bom:27.0.0')
+    implementation 'com.google.firebase:firebase-analytics-ktx'
+    implementation 'com.google.firebase:firebase-crashlytics-ktx'
 }

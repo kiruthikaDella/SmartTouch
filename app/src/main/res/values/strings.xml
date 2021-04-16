@@ -11,7 +11,6 @@
 
 
     <string name="welcome"><font fgcolor='#1A8EFF'>Welcome to</font> \n<font fgcolor='#011B25'> Smartouch</font></string>
-    <!--    <string name="welcome">Welcome to</string>-->
 
     <!--    Login     -->
     <string name="hint_text_email">Email</string>
@@ -56,6 +55,10 @@
 
     <!--    Home Screen-->
     <string name="title_text_home_screen">Smartouch</string>
+    <string name="title_text_add_room">Add Room</string>
+    <string name="hint_text_room_name">Enter your room name</string>
+    <string name="title_text_room_type">Room Type</string>
+    <string name="button_text_add_room">+ Add</string>
 
     <!--    Side Navigation-->
     <string name="side_nav_text_account_settings">Account Settings</string>
@@ -70,6 +73,7 @@
     <!--    Room Panel-->
     <string name="text_add_panel">Add Panel</string>
     <string name="text_edit">Edit</string>
+
     <!--    Switch name-->
     <string name="text_switch_one">Switch 1</string>
     <string name="text_switch_two">Switch 2</string>
@@ -79,4 +83,7 @@
     <string name="text_switch_six">Switch 6</string>
     <string name="text_switch_seven">Switch 7</string>
     <string name="text_switch_eight">Switch 8</string>
+
+    <string name="text_usb_port_a">USB Port <font fgcolor='#1A8EFF'>A</font></string>
+    <string name="text_usb_port_c">USB Port <font fgcolor='#1A8EFF'>C</font></string>
 </resources>
