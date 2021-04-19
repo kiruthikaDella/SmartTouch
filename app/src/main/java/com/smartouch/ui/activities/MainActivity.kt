@@ -1,13 +1,17 @@
 package com.smartouch.ui.activities
 
 import android.os.Bundle
+import android.view.MenuItem
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
-import androidx.navigation.ui.NavigationUI
+import androidx.navigation.ui.onNavDestinationSelected
+import androidx.navigation.ui.setupWithNavController
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.smartouch.R
 import com.smartouch.databinding.ActivityMainBinding
 import com.sothree.slidinguppanel.SlidingUpPanelLayout
@@ -17,10 +21,11 @@ import com.sothree.slidinguppanel.SlidingUpPanelLayout
  * Created by Jignesh Dangar on 09-04-2021.
  */
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemSelectedListener {
 
     private lateinit var binding: ActivityMainBinding
     private val logTag = this::class.java.simpleName
+    private lateinit var navController: NavController
 
     private var roomList = arrayOf("Living Room", "Bedroom", "Kitchen", "Master Bedroom")
 
@@ -32,14 +37,13 @@ class MainActivity : AppCompatActivity() {
         val navHostFragment =
             supportFragmentManager.findFragmentById(R.id.main_fragment_container) as NavHostFragment
 
-        NavigationUI.setupWithNavController(
-            binding.bottomNavigationView,
-            navHostFragment.navController
-        )
+        navController = navHostFragment.navController
+
+        binding.bottomNavigationView.setupWithNavController(navController)
 
         navHostFragment.navController.addOnDestinationChangedListener { _, destination, _ ->
             when (destination.id) {
-                R.id.homeFragment -> {
+                R.id.homeFragment, R.id.controlModeFragment -> {
                     binding.coordinatorBottomNavigation.visibility = View.VISIBLE
                 }
                 else -> {
@@ -47,6 +51,9 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }
+
+        binding.bottomNavigationView.setOnNavigationItemSelectedListener(this)
+        binding.bottomNavigationView.menu.getItem(2).isEnabled = false
 
         binding.ivAddRoom.setOnClickListener {
             binding.layoutSlidingUpPanel.panelState = SlidingUpPanelLayout.PanelState.EXPANDED
@@ -60,7 +67,7 @@ class MainActivity : AppCompatActivity() {
         roomAdapter.setDropDownViewResource(R.layout.simple_spinner_dropdown)
         binding.spinnerRoom.adapter = roomAdapter
 
-        binding.spinnerRoom.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
+        binding.spinnerRoom.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(
                 parent: AdapterView<*>?,
                 view: View?,
@@ -77,5 +84,10 @@ class MainActivity : AppCompatActivity() {
         }
 
     }
+
+    override fun onNavigationItemSelected(item: MenuItem): Boolean {
+        return item.onNavDestinationSelected(navController) || super.onOptionsItemSelected(item)
+    }
+
 
 }

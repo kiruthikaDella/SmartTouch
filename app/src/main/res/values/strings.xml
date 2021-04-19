@@ -52,6 +52,7 @@
     <!--    Dialog Strings-->
     <string name="text_no_internet_available">No internet available</string>
     <string name="text_ok">OK</string>
+    <string name="text_cancel">Cancel</string>
 
     <!--    Home Screen-->
     <string name="title_text_home_screen">Smartouch</string>
@@ -72,6 +73,9 @@
     <!--    Room Panel-->
     <string name="text_add_panel">Add Panel</string>
     <string name="text_edit">Edit</string>
+    <string name="text_customization">Customization</string>
+    <string name="text_features">Features</string>
+    <string name="text_settings">Settings</string>
     <string name="text_retain_state">Retain State</string>
     <string name="text_serial_number">Serial Number</string>
     <string name="hint_text_enter_panel_name">Enter panel name</string>
@@ -101,4 +105,7 @@
 
     <string name="text_usb_port_a">USB Port <font fgcolor='#1A8EFF'>A</font></string>
     <string name="text_usb_port_c">USB Port <font fgcolor='#1A8EFF'>C</font></string>
+
+    <!--    Control Mode-->
+    <string name="dialog_title_pin_control_mode">Do you want to make Control Mode page as Home page for easy Access?</string>
 </resources>

@@ -1,13 +1,18 @@
 package com.smartouch.common.utils
 
+import android.app.Activity
+import android.app.Dialog
 import android.content.Context
-import android.content.DialogInterface
 import android.content.pm.PackageManager
+import android.graphics.drawable.ColorDrawable
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.os.Build
 import android.util.Base64
+import android.util.DisplayMetrics
 import android.util.Log
+import android.widget.Button
+import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import com.smartouch.AppDelegate
 import com.smartouch.common.interfaces.DialogShowListener
@@ -75,10 +80,10 @@ object Utils {
         builder.setTitle(title)
         builder.setCancelable(false)
         builder.setMessage(message)
-        builder.setPositiveButton(buttonText, DialogInterface.OnClickListener { dialog, which ->
+        builder.setPositiveButton(buttonText) { dialog, _ ->
             dialog.dismiss()
             dialogShowListener?.onClick()
-        })
+        }
         builder.show()
     }
 

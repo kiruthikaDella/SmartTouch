@@ -2,7 +2,7 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:id="@+id/home"
+        android:id="@+id/homeFragment"
         android:icon="@drawable/ic_bottom_navigation_home"
         android:enabled="true"
         android:title=""/>
@@ -17,7 +17,7 @@
         android:title=""/>
 
     <item
-        android:id="@+id/settings"
+        android:id="@+id/controlModeFragment"
         android:icon="@drawable/ic_bottom_navigation_settings"
         android:title=""/>
 

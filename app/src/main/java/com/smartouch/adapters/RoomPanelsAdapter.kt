@@ -4,7 +4,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
+import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.switchmaterial.SwitchMaterial
 import com.smartouch.R
@@ -32,6 +34,14 @@ class RoomPanelsAdapter(
 
         holder.apply {
             tvPanelName.text = data.title
+
+            imgBtnPanelMenu.setOnClickListener {
+                if (linearPanelMenu.isVisible){
+                    linearPanelMenu.visibility = View.GONE
+                }else{
+                    linearPanelMenu.visibility = View.VISIBLE
+                }
+            }
         }
     }
 
@@ -44,6 +54,7 @@ class RoomPanelsAdapter(
         val imgBtnPanelMenu = itemView.findViewById<ImageButton>(R.id.img_panel_menu)
         val imgBtnPanelEdit = itemView.findViewById<ImageButton>(R.id.img_panel_edit)
         val tvPanelName = itemView.findViewById<TextView>(R.id.tv_panel_name)
+        val linearPanelMenu = itemView.findViewById<LinearLayout>(R.id.linear_panel_menu)
 
         val tvSwitchNameOne = itemView.findViewById<TextView>(R.id.tv_switch_one_name)
         val tvSwitchNameTwo = itemView.findViewById<TextView>(R.id.tv_switch_two_name)
@@ -76,7 +87,6 @@ class RoomPanelsAdapter(
 
         val tvSwitchPortA = itemView.findViewById<SwitchMaterial>(R.id.switch_usb_port_a)
         val tvSwitchPortC = itemView.findViewById<SwitchMaterial>(R.id.switch_usb_port_c)
-
 
     }
 }
