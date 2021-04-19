@@ -22,7 +22,6 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private val logTag = this::class.java.simpleName
 
-    //    private var roomList: List<String> = ArrayList()
     private var roomList = arrayOf("Living Room", "Bedroom", "Kitchen", "Master Bedroom")
 
     override fun onCreate(savedInstanceState: Bundle?) {

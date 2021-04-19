@@ -6,13 +6,17 @@
     android:orientation="vertical">
 
     <com.jcminarro.roundkornerlayout.RoundKornerLinearLayout
+        android:id="@+id/drag_add_panel"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
+        android:layout_gravity="bottom"
+        android:background="@color/white"
         app:top_left_corner_radius="@dimen/_20sdp"
         app:top_right_corner_radius="@dimen/_20sdp">
 
         <ImageButton
+            android:id="@+id/iv_hide_panel"
             android:layout_width="@dimen/_14sdp"
             android:layout_height="@dimen/_9sdp"
             android:layout_gravity="center_horizontal"
@@ -32,7 +36,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/title_text_add_room"
+            android:text="@string/text_add_panel"
             android:textColor="@color/daintree"
             android:textSize="@dimen/_12ssp"
             android:fontFamily="@font/roboto_medium"
@@ -48,17 +52,17 @@
             android:layout_marginTop="@dimen/_5sdp"
             android:textColor="@color/daintree"
             android:textSize="@dimen/_12ssp"
-            android:hint="@string/hint_text_room_name"
+            android:hint="@string/hint_text_enter_panel_name"
             android:paddingStart="@dimen/_10sdp"
             android:paddingEnd="@dimen/_10sdp"
             android:textColorHint="@color/ghost"
+            android:fontFamily="@font/roboto_regular"
             android:background="@drawable/catskill_white_background_with_rounded_corners" />
-
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/title_text_room_type"
+            android:text="@string/text_serial_number"
             android:textColor="@color/daintree"
             android:textSize="@dimen/_12ssp"
             android:fontFamily="@font/roboto_medium"
@@ -72,12 +76,13 @@
             android:layout_marginStart="@dimen/screen_start_margin"
             android:layout_marginEnd="@dimen/screen_end_margin"
             android:layout_marginTop="@dimen/_5sdp"
-            android:textColor="@color/daintree"
+            android:textColor="@color/theme_color"
             android:textSize="@dimen/_12ssp"
             android:hint="@string/hint_text_room_name"
             android:paddingStart="@dimen/_10sdp"
             android:paddingEnd="@dimen/_10sdp"
             android:textColorHint="@color/ghost"
+            android:fontFamily="@font/roboto_medium"
             android:background="@drawable/catskill_white_background_with_rounded_corners" />
 
         <com.google.android.material.button.MaterialButton

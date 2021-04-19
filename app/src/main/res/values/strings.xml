@@ -73,6 +73,9 @@
     <string name="text_add_panel">Add Panel</string>
     <string name="text_edit">Edit</string>
     <string name="text_retain_state">Retain State</string>
+    <string name="text_serial_number">Serial Number</string>
+    <string name="hint_text_enter_panel_name">Enter panel name</string>
+    <string name="hint_text_enter_serial_number">Enter serial number</string>
 
     <string name="text_living_room">Living Room</string>
     <string name="text_bedroom">Bedroom</string>

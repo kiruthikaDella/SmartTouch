@@ -13,6 +13,7 @@ import com.smartouch.adapters.RoomPanelsAdapter
 import com.smartouch.databinding.FragmentRoomPanelBinding
 import com.smartouch.model.HomeRoomModel
 import com.smartouch.model.RoomPanelModel
+import com.sothree.slidinguppanel.SlidingUpPanelLayout
 
 /**
  * Created by Jignesh Dangar on 09-04-2021.
@@ -49,6 +50,14 @@ class RoomPanelFragment : Fragment() {
 
         panelAdapter = RoomPanelsAdapter(roomList)
         binding.recyclerRoomPanels.adapter = panelAdapter
+
+        binding.ivHidePanel.setOnClickListener {
+            binding.layoutSlidingUpPanel.panelState = SlidingUpPanelLayout.PanelState.HIDDEN
+        }
+
+        binding.btnAddPanel.setOnClickListener {
+            binding.layoutSlidingUpPanel.panelState = SlidingUpPanelLayout.PanelState.EXPANDED
+        }
     }
 
 }
