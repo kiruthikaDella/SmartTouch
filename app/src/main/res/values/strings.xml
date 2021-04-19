@@ -69,10 +69,10 @@
     <string name="side_nav_text_contact_us">Contact us</string>
     <string name="side_nav_text_logout">Logout</string>
 
-
     <!--    Room Panel-->
     <string name="text_add_panel">Add Panel</string>
     <string name="text_edit">Edit</string>
+    <string name="text_retain_state">Retain State</string>
 
     <!--    Switch name-->
     <string name="text_switch_one">Switch 1</string>
