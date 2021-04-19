@@ -74,6 +74,18 @@
     <string name="text_edit">Edit</string>
     <string name="text_retain_state">Retain State</string>
 
+    <string name="text_living_room">Living Room</string>
+    <string name="text_bedroom">Bedroom</string>
+    <string name="text_kitchen">Kitchen</string>
+    <string name="text_master_bedroom">Master Bedroom</string>
+
+    <string-array name="room_list">
+        <item>@string/text_living_room</item>
+        <item>@string/text_bedroom</item>
+        <item>@string/text_kitchen</item>
+        <item>@string/text_master_bedroom</item>
+    </string-array>
+
     <!--    Switch name-->
     <string name="text_switch_one">Switch 1</string>
     <string name="text_switch_two">Switch 2</string>
