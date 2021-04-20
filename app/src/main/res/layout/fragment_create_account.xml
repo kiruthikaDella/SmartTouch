@@ -29,107 +29,41 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <androidx.cardview.widget.CardView
-                android:id="@+id/card_full_name"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/login_component_height"
-                style="@style/CreateAccountCardView"
-                app:layout_constraintTop_toTopOf="parent">
+            <EditText
+                android:id="@+id/edt_full_name"
+                style="@style/CreateAccountEditText"
+                android:inputType="textPersonName"
+                android:hint="@string/hint_full_name" />
 
-                <EditText
-                    android:id="@+id/edt_full_name"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    style="@style/CreateAccountEditText"
-                    android:inputType="textPersonName"
-                    android:hint="@string/hint_full_name" />
+            <EditText
+                android:id="@+id/edt_user_name"
+                style="@style/CreateAccountEditText"
+                android:inputType="text"
+                android:hint="@string/hint_user_name" />
 
-            </androidx.cardview.widget.CardView>
+            <EditText
+                android:id="@+id/edt_phone_number"
+                style="@style/CreateAccountEditText"
+                android:inputType="phone"
+                android:hint="@string/hint_phone_number" />
 
-            <androidx.cardview.widget.CardView
-                android:id="@+id/card_user_name"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/login_component_height"
-                style="@style/CreateAccountCardView"
-                app:layout_constraintTop_toBottomOf="@+id/card_full_name">
+            <EditText
+                android:id="@+id/edt_email"
+                style="@style/CreateAccountEditText"
+                android:inputType="textEmailAddress"
+                android:hint="@string/hint_text_email" />
 
-                <EditText
-                    android:id="@+id/edt_user_name"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    style="@style/CreateAccountEditText"
-                    android:inputType="text"
-                    android:hint="@string/hint_user_name" />
+            <EditText
+                android:id="@+id/edt_password"
+                style="@style/CreateAccountEditText"
+                android:inputType="textPassword"
+                android:hint="@string/hint_text_password" />
 
-            </androidx.cardview.widget.CardView>
-
-            <androidx.cardview.widget.CardView
-                android:id="@+id/card_phone_number"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/login_component_height"
-                style="@style/CreateAccountCardView"
-                app:layout_constraintTop_toBottomOf="@+id/card_user_name">
-
-                <EditText
-                    android:id="@+id/edt_phone_number"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    style="@style/CreateAccountEditText"
-                    android:inputType="phone"
-                    android:hint="@string/hint_phone_number" />
-
-            </androidx.cardview.widget.CardView>
-
-            <androidx.cardview.widget.CardView
-                android:id="@+id/card_email"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/login_component_height"
-                style="@style/CreateAccountCardView"
-                app:layout_constraintTop_toBottomOf="@+id/card_phone_number">
-
-                <EditText
-                    android:id="@+id/edt_email"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    style="@style/CreateAccountEditText"
-                    android:inputType="textEmailAddress"
-                    android:hint="@string/hint_text_email" />
-
-            </androidx.cardview.widget.CardView>
-
-            <androidx.cardview.widget.CardView
-                android:id="@+id/card_password"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/login_component_height"
-                style="@style/CreateAccountCardView"
-                app:layout_constraintTop_toBottomOf="@+id/card_email">
-
-                <EditText
-                    android:id="@+id/edt_password"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    style="@style/CreateAccountEditText"
-                    android:inputType="textPassword"
-                    android:hint="@string/hint_text_password" />
-
-            </androidx.cardview.widget.CardView>
-
-            <androidx.cardview.widget.CardView
-                android:id="@+id/card_confirm_password"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/login_component_height"
-                style="@style/CreateAccountCardView"
-                app:layout_constraintTop_toBottomOf="@+id/card_password">
-
-                <EditText
-                    android:id="@+id/edt_confirm_password"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    style="@style/CreateAccountEditText"
-                    android:inputType="textPassword"
-                    android:hint="@string/hint_confirm_password" />
-
-            </androidx.cardview.widget.CardView>
+            <EditText
+                android:id="@+id/edt_confirm_password"
+                style="@style/CreateAccountEditText"
+                android:inputType="textPassword"
+                android:hint="@string/hint_confirm_password" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btn_sign_up"
