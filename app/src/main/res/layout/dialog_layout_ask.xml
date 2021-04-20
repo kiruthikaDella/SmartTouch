@@ -7,7 +7,7 @@
     android:background="@color/white"
     android:gravity="center"
     android:layout_gravity="center"
-    app:corner_radius="@dimen/_20sdp">
+    app:corner_radius="@dimen/corner_radius_20dp">
 
     <TextView
         android:id="@+id/tv_dialog_title"
