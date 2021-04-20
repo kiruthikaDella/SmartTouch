@@ -115,7 +115,7 @@
             android:paddingStart="@dimen/_10sdp"
             android:paddingEnd="@dimen/_10sdp"
             android:textColorHint="@color/ghost"
-            android:background="@drawable/catskill_white_background_with_rounded_corners"/>
+            android:background="@drawable/catskill_white_background"/>
 
 
         <TextView
@@ -135,7 +135,7 @@
             android:layout_marginStart="@dimen/screen_start_margin"
             android:layout_marginEnd="@dimen/screen_end_margin"
             android:layout_marginTop="@dimen/_5sdp"
-            android:background="@drawable/catskill_white_background_with_rounded_corners">
+            android:background="@drawable/catskill_white_background">
 
             <Spinner
                 android:id="@+id/spinner_room"
@@ -186,7 +186,7 @@
             android:textSize="@dimen/_13ssp"
             android:textColor="@color/white"
             app:backgroundTint="@null"
-            android:background="@drawable/dodger_blue_background_with_rounded_corners" />
+            android:background="@drawable/dodger_blue_background" />
 
 
 

@@ -59,7 +59,7 @@
 
     <style name="DodgerBlueButtonStyle" parent="Widget.MaterialComponents.Button">
         <item name="backgroundTint">@null</item>
-        <item name="android:background">@drawable/dodger_blue_background_with_rounded_corners</item>
+        <item name="android:background">@drawable/dodger_blue_background</item>
     </style>
 
     <style name="CreateAccountEditText" parent="Widget.AppCompat.EditText">

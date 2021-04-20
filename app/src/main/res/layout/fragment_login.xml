@@ -16,70 +16,50 @@
         android:text="@string/welcome"
         android:textColor="@color/theme_color"
         android:textSize="@dimen/_24ssp"
-        app:layout_constraintBottom_toTopOf="@+id/card_email"
+        app:layout_constraintBottom_toTopOf="@+id/edt_email"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <androidx.cardview.widget.CardView
-        android:id="@+id/card_email"
+    <EditText
+        android:id="@+id/edt_email"
         android:layout_width="match_parent"
         android:layout_height="@dimen/login_component_height"
+        android:layout_gravity="center_vertical"
         android:layout_marginTop="@dimen/_20sdp"
         android:layout_marginStart="@dimen/login_component_start_margin"
         android:layout_marginEnd="@dimen/login_component_end_margin"
-        app:cardBackgroundColor="@color/catskill_white"
-        app:cardCornerRadius="@dimen/_6sdp"
-        app:cardElevation="0dp"
-        app:layout_constraintBottom_toTopOf="@+id/card_password"
-        app:layout_constraintTop_toBottomOf="@+id/tv_welcome_to">
+        android:background="@drawable/catskill_white_background_without_border"
+        android:fontFamily="@font/roboto_regular"
+        android:hint="@string/hint_text_email"
+        android:inputType="textEmailAddress"
+        android:paddingStart="@dimen/_10sdp"
+        android:paddingEnd="@dimen/_10sdp"
+        android:textColor="@color/daintree"
+        android:textColorHint="@color/silver"
+        android:textSize="@dimen/_12ssp"
+        app:layout_constraintBottom_toTopOf="@+id/edt_password"
+        app:layout_constraintTop_toBottomOf="@+id/tv_welcome_to"/>
 
-        <EditText
-            android:id="@+id/edt_email"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_gravity="center_vertical"
-            android:background="@android:color/transparent"
-            android:fontFamily="@font/roboto_regular"
-            android:hint="@string/hint_text_email"
-            android:inputType="textEmailAddress"
-            android:paddingStart="@dimen/_10sdp"
-            android:paddingEnd="@dimen/_10sdp"
-            android:textColor="@color/daintree"
-            android:textColorHint="@color/silver"
-            android:textSize="@dimen/_12ssp" />
-
-    </androidx.cardview.widget.CardView>
-
-    <androidx.cardview.widget.CardView
-        android:id="@+id/card_password"
+    <EditText
+        android:id="@+id/edt_password"
         android:layout_width="match_parent"
         android:layout_height="@dimen/login_component_height"
+        android:layout_gravity="center_vertical"
         android:layout_marginVertical="@dimen/_20sdp"
-        app:cardBackgroundColor="@color/catskill_white"
-        app:cardCornerRadius="@dimen/_6sdp"
-        app:cardElevation="0dp"
+        android:background="@drawable/catskill_white_background_without_border"
+        android:fontFamily="@font/roboto_regular"
+        android:hint="@string/hint_text_password"
+        android:inputType="textPassword"
+        android:paddingStart="@dimen/_10sdp"
+        android:paddingEnd="@dimen/_10sdp"
+        android:textColor="@color/daintree"
+        android:textColorHint="@color/silver"
+        android:textSize="@dimen/_12ssp"
         android:layout_marginStart="@dimen/login_component_start_margin"
         android:layout_marginEnd="@dimen/login_component_end_margin"
         app:layout_constraintBottom_toTopOf="@+id/btn_login"
-        app:layout_constraintTop_toBottomOf="@+id/card_email">
-
-        <EditText
-            android:id="@+id/edt_password"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_gravity="center_vertical"
-            android:background="@android:color/transparent"
-            android:fontFamily="@font/roboto_regular"
-            android:hint="@string/hint_text_password"
-            android:inputType="textPassword"
-            android:paddingStart="@dimen/_10sdp"
-            android:paddingEnd="@dimen/_10sdp"
-            android:textColor="@color/daintree"
-            android:textColorHint="@color/silver"
-            android:textSize="@dimen/_12ssp" />
-
-    </androidx.cardview.widget.CardView>
+        app:layout_constraintTop_toBottomOf="@+id/edt_email"/>
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btn_login"
@@ -145,79 +125,60 @@
         android:layout_marginTop="@dimen/_30sdp"
         android:layout_marginEnd="@dimen/login_component_end_margin"
         android:orientation="horizontal"
+        android:background="@color/white"
         app:layout_constraintTop_toBottomOf="@+id/relative_remember">
 
-        <com.jcminarro.roundkornerlayout.RoundKornerLinearLayout
+        <LinearLayout
             android:id="@+id/linear_facebook"
             android:layout_width="0dp"
             android:layout_height="@dimen/_40sdp"
             android:layout_marginEnd="@dimen/_8sdp"
             android:layout_weight="0.5"
-            android:background="@color/silver"
-            android:padding="1dp"
-            app:corner_radius="@dimen/_6sdp">
+            android:background="@drawable/transparent_background_with_silver_border"
+            android:gravity="center"
+            android:orientation="horizontal">
 
-            <com.jcminarro.roundkornerlayout.RoundKornerLinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@color/white"
-                android:gravity="center"
-                android:orientation="horizontal"
-                app:corner_radius="@dimen/_6sdp">
+            <ImageView
+                android:layout_width="@dimen/_20sdp"
+                android:layout_height="@dimen/_20sdp"
+                android:src="@drawable/ic_facebook" />
 
-                <ImageView
-                    android:layout_width="@dimen/_20sdp"
-                    android:layout_height="@dimen/_20sdp"
-                    android:src="@drawable/ic_facebook" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_10sdp"
+                android:fontFamily="@font/roboto_medium"
+                android:text="@string/text_facebook"
+                android:textColor="@color/daintree"
+                android:textSize="@dimen/_12ssp" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/_10sdp"
-                    android:fontFamily="@font/roboto_medium"
-                    android:text="@string/text_facebook"
-                    android:textColor="@color/daintree"
-                    android:textSize="@dimen/_12ssp" />
+        </LinearLayout>
 
-            </com.jcminarro.roundkornerlayout.RoundKornerLinearLayout>
-
-        </com.jcminarro.roundkornerlayout.RoundKornerLinearLayout>
-
-        <com.jcminarro.roundkornerlayout.RoundKornerLinearLayout
+        <LinearLayout
             android:id="@+id/linear_google"
             android:layout_width="0dp"
             android:layout_height="@dimen/_40sdp"
             android:layout_marginStart="@dimen/_8sdp"
             android:layout_weight="0.5"
-            android:background="@color/silver"
-            android:padding="1dp"
-            app:corner_radius="@dimen/_6sdp">
+            android:background="@drawable/transparent_background_with_silver_border"
+            android:gravity="center"
+            android:orientation="horizontal">
 
-            <com.jcminarro.roundkornerlayout.RoundKornerLinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@color/white"
-                android:gravity="center"
-                android:orientation="horizontal"
-                app:corner_radius="@dimen/_6sdp">
+            <ImageView
+                android:layout_width="@dimen/_20sdp"
+                android:layout_height="@dimen/_20sdp"
+                android:src="@drawable/ic_google" />
 
-                <ImageView
-                    android:layout_width="@dimen/_20sdp"
-                    android:layout_height="@dimen/_20sdp"
-                    android:src="@drawable/ic_google" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_10sdp"
+                android:fontFamily="@font/roboto_medium"
+                android:text="@string/text_google"
+                android:textColor="@color/daintree"
+                android:textSize="@dimen/_12ssp" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/_10sdp"
-                    android:fontFamily="@font/roboto_medium"
-                    android:text="@string/text_google"
-                    android:textColor="@color/daintree"
-                    android:textSize="@dimen/_12ssp" />
-
-            </com.jcminarro.roundkornerlayout.RoundKornerLinearLayout>
-
-        </com.jcminarro.roundkornerlayout.RoundKornerLinearLayout>
+        </LinearLayout>
 
     </LinearLayout>
 

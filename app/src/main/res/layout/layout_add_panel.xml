@@ -57,7 +57,7 @@
             android:paddingEnd="@dimen/_10sdp"
             android:textColorHint="@color/ghost"
             android:fontFamily="@font/roboto_regular"
-            android:background="@drawable/catskill_white_background_with_rounded_corners" />
+            android:background="@drawable/catskill_white_background" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -83,7 +83,7 @@
             android:paddingEnd="@dimen/_10sdp"
             android:textColorHint="@color/ghost"
             android:fontFamily="@font/roboto_medium"
-            android:background="@drawable/catskill_white_background_with_rounded_corners" />
+            android:background="@drawable/catskill_white_background" />
 
         <com.google.android.material.button.MaterialButton
             android:layout_width="match_parent"
@@ -97,7 +97,7 @@
             android:textSize="@dimen/_13ssp"
             android:textColor="@color/white"
             app:backgroundTint="@null"
-            android:background="@drawable/dodger_blue_background_with_rounded_corners" />
+            android:background="@drawable/dodger_blue_background" />
 
     </com.jcminarro.roundkornerlayout.RoundKornerLinearLayout>
 
