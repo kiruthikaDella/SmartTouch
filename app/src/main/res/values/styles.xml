@@ -57,6 +57,11 @@
         <item name="cardCornerRadius">@dimen/_6sdp</item>
     </style>
 
+    <style name="DodgerBlueButtonStyle" parent="Widget.MaterialComponents.Button">
+        <item name="backgroundTint">@null</item>
+        <item name="android:background">@drawable/dodger_blue_background_with_rounded_corners</item>
+    </style>
+
     <style name="CreateAccountEditText" parent="Widget.AppCompat.EditText">
         <item name="android:layout_gravity">center_vertical</item>
         <item name="android:paddingStart">@dimen/_10sdp</item>

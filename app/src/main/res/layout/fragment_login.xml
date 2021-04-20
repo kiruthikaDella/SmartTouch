@@ -19,21 +19,7 @@
         app:layout_constraintBottom_toTopOf="@+id/card_email"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
-
-<!--    <TextView
-        android:id="@+id/tv_app_name"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:fontFamily="@font/roboto_bold"
-        android:text="@string/app_name"
-        android:textColor="@color/daintree"
-        android:visibility="invisible"
-        android:textSize="@dimen/_26ssp"
-        app:layout_constraintBottom_toTopOf="@+id/card_email"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_welcome_to" />-->
+        app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.cardview.widget.CardView
         android:id="@+id/card_email"
@@ -75,7 +61,7 @@
         app:cardElevation="0dp"
         android:layout_marginStart="@dimen/login_component_start_margin"
         android:layout_marginEnd="@dimen/login_component_end_margin"
-        app:layout_constraintBottom_toTopOf="@+id/card_login"
+        app:layout_constraintBottom_toTopOf="@+id/btn_login"
         app:layout_constraintTop_toBottomOf="@+id/card_email">
 
         <EditText
@@ -100,8 +86,7 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/login_component_height"
         android:layout_gravity="center_vertical"
-        app:backgroundTint="@null"
-        android:background="@drawable/dodger_blue_background_with_rounded_corners"
+        style="@style/DodgerBlueButtonStyle"
         android:fontFamily="@font/roboto_medium"
         android:letterSpacing="0"
         android:text="@string/text_login"
@@ -110,7 +95,7 @@
         android:textSize="@dimen/_12ssp"
         android:layout_marginStart="@dimen/login_component_start_margin"
         android:layout_marginEnd="@dimen/login_component_end_margin"
-        app:layout_constraintBottom_toBottomOf="@+id/guideline"/>
+        app:layout_constraintBottom_toBottomOf="@+id/guideline" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline"
