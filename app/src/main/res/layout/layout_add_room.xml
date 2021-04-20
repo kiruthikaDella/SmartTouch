@@ -6,8 +6,8 @@
     android:orientation="vertical"
     android:layout_gravity="bottom"
     android:background="@color/white"
-    app:top_left_corner_radius="@dimen/_20sdp"
-    app:top_right_corner_radius="@dimen/_20sdp">
+    app:top_left_corner_radius="@dimen/corner_radius_20dp"
+    app:top_right_corner_radius="@dimen/corner_radius_20dp">
 
     <ImageButton
         android:id="@+id/iv_hide_panel"
@@ -81,7 +81,7 @@
             android:gravity="center"
             android:spinnerMode="dropdown"
             android:layout_toStartOf="@+id/iv_down"
-            android:layout_marginEnd="@dimen/_5sdp"/>
+            android:layout_marginEnd="@dimen/_5sdp" />
 
         <ImageButton
             android:id="@+id/iv_down"
@@ -91,7 +91,7 @@
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
             android:layout_marginEnd="@dimen/_12sdp"
-            android:backgroundTint="@color/daintree"/>
+            android:backgroundTint="@color/daintree" />
 
     </RelativeLayout>
 
@@ -106,8 +106,7 @@
         android:textAllCaps="false"
         android:textSize="@dimen/_13ssp"
         android:textColor="@color/white"
-        app:backgroundTint="@null"
-        android:background="@drawable/dodger_blue_background" />
+        style="@style/DodgerBlueButtonStyle" />
 
 
 </com.jcminarro.roundkornerlayout.RoundKornerLinearLayout>

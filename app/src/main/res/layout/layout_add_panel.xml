@@ -96,8 +96,7 @@
             android:textAllCaps="false"
             android:textSize="@dimen/_13ssp"
             android:textColor="@color/white"
-            app:backgroundTint="@null"
-            android:background="@drawable/dodger_blue_background" />
+            style="@style/DodgerBlueButtonStyle" />
 
     </com.jcminarro.roundkornerlayout.RoundKornerLinearLayout>
 

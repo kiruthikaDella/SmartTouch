@@ -14,11 +14,8 @@
 
         <ImageButton
             android:id="@+id/iv_back"
-            android:layout_width="@dimen/_11sdp"
-            android:layout_height="@dimen/_18sdp"
-            android:background="@drawable/ic_back"
-            android:layout_marginStart="@dimen/_12sdp"
-            android:layout_centerVertical="true" />
+            android:layout_centerVertical="true"
+            style="@style/BackImageStyle" />
 
         <TextView
             android:id="@+id/tv_title"
@@ -106,7 +103,7 @@
                             <ImageView
                                 android:layout_width="@dimen/_14sdp"
                                 android:layout_height="@dimen/_14sdp"
-                                android:src="@drawable/img_info"/>
+                                android:src="@drawable/img_info" />
 
                         </LinearLayout>
 
@@ -120,7 +117,7 @@
                             <ImageView
                                 android:layout_width="@dimen/_22sdp"
                                 android:layout_height="@dimen/_22sdp"
-                                android:src="@drawable/ic_customize"/>
+                                android:src="@drawable/ic_customize" />
 
                         </LinearLayout>
 
@@ -165,7 +162,7 @@
                             <ImageView
                                 android:layout_width="@dimen/_14sdp"
                                 android:layout_height="@dimen/_14sdp"
-                                android:src="@drawable/img_info"/>
+                                android:src="@drawable/img_info" />
 
                         </LinearLayout>
 
@@ -179,7 +176,7 @@
                             <ImageView
                                 android:layout_width="@dimen/_22sdp"
                                 android:layout_height="@dimen/_22sdp"
-                                android:src="@drawable/ic_customize"/>
+                                android:src="@drawable/ic_customize" />
 
                         </LinearLayout>
 
@@ -224,7 +221,7 @@
                             <ImageView
                                 android:layout_width="@dimen/_14sdp"
                                 android:layout_height="@dimen/_14sdp"
-                                android:src="@drawable/img_info"/>
+                                android:src="@drawable/img_info" />
 
                         </LinearLayout>
 
@@ -238,7 +235,7 @@
                             <ImageView
                                 android:layout_width="@dimen/_22sdp"
                                 android:layout_height="@dimen/_22sdp"
-                                android:src="@drawable/ic_customize"/>
+                                android:src="@drawable/ic_customize" />
 
                         </LinearLayout>
 
@@ -283,7 +280,7 @@
                             <ImageView
                                 android:layout_width="@dimen/_14sdp"
                                 android:layout_height="@dimen/_14sdp"
-                                android:src="@drawable/img_info"/>
+                                android:src="@drawable/img_info" />
 
                         </LinearLayout>
 
@@ -307,7 +304,7 @@
                                     android:gravity="center"
                                     android:spinnerMode="dropdown"
                                     android:layout_toStartOf="@+id/iv_icon_size_down"
-                                    android:layout_marginEnd="@dimen/_2sdp"/>
+                                    android:layout_marginEnd="@dimen/_2sdp" />
 
                                 <ImageButton
                                     android:id="@+id/iv_icon_size_down"
@@ -317,7 +314,7 @@
                                     android:layout_alignParentEnd="true"
                                     android:layout_centerVertical="true"
                                     android:layout_marginEnd="@dimen/_5sdp"
-                                    android:backgroundTint="@color/daintree"/>
+                                    android:backgroundTint="@color/daintree" />
 
                             </RelativeLayout>
 
@@ -364,7 +361,7 @@
                             <ImageView
                                 android:layout_width="@dimen/_14sdp"
                                 android:layout_height="@dimen/_14sdp"
-                                android:src="@drawable/img_info"/>
+                                android:src="@drawable/img_info" />
 
                         </LinearLayout>
 
@@ -377,7 +374,7 @@
 
                             <CheckBox
                                 android:layout_width="@dimen/_22sdp"
-                                android:layout_height="@dimen/_22sdp"/>
+                                android:layout_height="@dimen/_22sdp" />
 
                         </LinearLayout>
 
@@ -422,7 +419,7 @@
                             <ImageView
                                 android:layout_width="@dimen/_14sdp"
                                 android:layout_height="@dimen/_14sdp"
-                                android:src="@drawable/img_info"/>
+                                android:src="@drawable/img_info" />
 
                         </LinearLayout>
 
@@ -436,7 +433,7 @@
                             <ImageView
                                 android:layout_width="@dimen/_22sdp"
                                 android:layout_height="@dimen/_22sdp"
-                                android:src="@drawable/ic_customize"/>
+                                android:src="@drawable/ic_customize" />
 
                         </LinearLayout>
 
@@ -481,7 +478,7 @@
                             <ImageView
                                 android:layout_width="@dimen/_14sdp"
                                 android:layout_height="@dimen/_14sdp"
-                                android:src="@drawable/img_info"/>
+                                android:src="@drawable/img_info" />
 
                         </LinearLayout>
 
@@ -495,7 +492,7 @@
                             <ImageView
                                 android:layout_width="@dimen/_22sdp"
                                 android:layout_height="@dimen/_22sdp"
-                                android:src="@drawable/ic_customize"/>
+                                android:src="@drawable/ic_customize" />
 
                         </LinearLayout>
 
@@ -540,7 +537,7 @@
                             <ImageView
                                 android:layout_width="@dimen/_14sdp"
                                 android:layout_height="@dimen/_14sdp"
-                                android:src="@drawable/img_info"/>
+                                android:src="@drawable/img_info" />
 
                         </LinearLayout>
 
@@ -564,7 +561,7 @@
                                     android:gravity="center"
                                     android:spinnerMode="dropdown"
                                     android:layout_toStartOf="@+id/iv_text_size_down"
-                                    android:layout_marginEnd="@dimen/_2sdp"/>
+                                    android:layout_marginEnd="@dimen/_2sdp" />
 
                                 <ImageButton
                                     android:id="@+id/iv_text_size_down"
@@ -574,7 +571,7 @@
                                     android:layout_alignParentEnd="true"
                                     android:layout_centerVertical="true"
                                     android:layout_marginEnd="@dimen/_5sdp"
-                                    android:backgroundTint="@color/daintree"/>
+                                    android:backgroundTint="@color/daintree" />
 
                             </RelativeLayout>
 
@@ -606,7 +603,7 @@
                     android:text="@string/button_text_synchronize"
                     android:textColor="@color/white"
                     android:textSize="@dimen/_12ssp"
-                    android:fontFamily="@font/roboto_medium"/>
+                    android:fontFamily="@font/roboto_medium" />
 
             </androidx.cardview.widget.CardView>
 

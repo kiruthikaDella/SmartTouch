@@ -7,7 +7,7 @@
     android:layout_marginStart="@dimen/screen_start_margin"
     android:layout_marginEnd="@dimen/screen_end_margin"
     app:cardElevation="@dimen/_5sdp"
-    app:cardCornerRadius="@dimen/_2sdp">
+    app:cardCornerRadius="@dimen/corner_radius_2dp">
 
     <RelativeLayout
         android:layout_width="match_parent"

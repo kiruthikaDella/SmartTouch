@@ -6,7 +6,9 @@
     <dimen name="login_component_end_margin">@dimen/_16sdp</dimen>
     <dimen name="screen_start_margin">@dimen/_12sdp</dimen>
     <dimen name="screen_end_margin">@dimen/_12sdp</dimen>
-    <dimen name="corner_radius_6dp">@dimen/_6sdp</dimen>
+    <dimen name="corner_radius_2dp">@dimen/_2sdp</dimen>
     <dimen name="corner_radius_4dp">@dimen/_4sdp</dimen>
+    <dimen name="corner_radius_6dp">@dimen/_6sdp</dimen>
+    <dimen name="corner_radius_12dp">@dimen/_12sdp</dimen>
     <dimen name="corner_radius_20dp">@dimen/_20sdp</dimen>
 </resources>

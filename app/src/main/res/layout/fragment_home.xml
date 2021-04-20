@@ -18,9 +18,7 @@
             android:layout_width="match_parent"
             android:layout_height="@dimen/_40sdp"
             android:layout_marginTop="@dimen/_10sdp"
-            android:orientation="horizontal"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent">
+            android:orientation="horizontal">
 
             <ImageButton
                 android:id="@+id/iv_side_navigation"
@@ -37,11 +35,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:text="@string/title_text_home_screen"
-                android:layout_centerInParent="true"
-                app:layout_constraintBottom_toBottomOf="@+id/iv_side_navigation"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/iv_side_navigation" />
+                android:layout_centerInParent="true" />
 
         </RelativeLayout>
 
