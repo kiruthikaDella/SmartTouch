@@ -1,17 +1,16 @@
 package com.smartouch.ui.fragments.home
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import com.smartouch.R
-import com.smartouch.adapters.HomeRoomsAdapter
 import com.smartouch.adapters.RoomPanelsAdapter
+import com.smartouch.common.interfaces.AdapterItemClickListener
 import com.smartouch.databinding.FragmentRoomPanelBinding
-import com.smartouch.model.HomeRoomModel
 import com.smartouch.model.RoomPanelModel
 import com.sothree.slidinguppanel.SlidingUpPanelLayout
 
@@ -21,6 +20,7 @@ import com.sothree.slidinguppanel.SlidingUpPanelLayout
 
 class RoomPanelFragment : Fragment() {
 
+    private val logTag = this::class.java.simpleName
     private lateinit var binding: FragmentRoomPanelBinding
     private val args: RoomPanelFragmentArgs by navArgs()
     private var roomList = arrayListOf<RoomPanelModel>()
@@ -50,6 +50,15 @@ class RoomPanelFragment : Fragment() {
 
         panelAdapter = RoomPanelsAdapter(roomList)
         binding.recyclerRoomPanels.adapter = panelAdapter
+
+        panelAdapter.setOnCustomizationClickListener(object :
+            AdapterItemClickListener<RoomPanelModel> {
+            override fun onItemClick(data: RoomPanelModel) {
+                Log.e(logTag, "clicked ${data.title}")
+                findNavController().navigate(RoomPanelFragmentDirections.actionRoomPanelFragmentToDeviceCustomizationFragment())
+            }
+
+        })
 
         binding.ivHidePanel.setOnClickListener {
             binding.layoutSlidingUpPanel.panelState = SlidingUpPanelLayout.PanelState.HIDDEN

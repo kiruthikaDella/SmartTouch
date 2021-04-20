@@ -21,7 +21,7 @@ class RoomPanelsAdapter(
     private val panelList: List<RoomPanelModel>
 ) : RecyclerView.Adapter<RoomPanelsAdapter.MyViewHolder>() {
 
-    private var roomClickListener: AdapterItemClickListener<RoomPanelModel>? = null
+    private var customizationClickListener: AdapterItemClickListener<RoomPanelModel>? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
         val v = LayoutInflater.from(parent.context)
@@ -36,11 +36,15 @@ class RoomPanelsAdapter(
             tvPanelName.text = data.title
 
             imgBtnPanelMenu.setOnClickListener {
-                if (linearPanelMenu.isVisible){
+                if (linearPanelMenu.isVisible) {
                     linearPanelMenu.visibility = View.GONE
-                }else{
+                } else {
                     linearPanelMenu.visibility = View.VISIBLE
                 }
+            }
+
+            linearCustomization.setOnClickListener {
+                customizationClickListener?.onItemClick(data)
             }
         }
     }
@@ -51,42 +55,48 @@ class RoomPanelsAdapter(
 
     inner class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-        val imgBtnPanelMenu = itemView.findViewById<ImageButton>(R.id.img_panel_menu)
-        val imgBtnPanelEdit = itemView.findViewById<ImageButton>(R.id.img_panel_edit)
-        val tvPanelName = itemView.findViewById<TextView>(R.id.tv_panel_name)
-        val linearPanelMenu = itemView.findViewById<LinearLayout>(R.id.linear_panel_menu)
+        val imgBtnPanelMenu = itemView.findViewById(R.id.img_panel_menu) as ImageButton
+        val imgBtnPanelEdit = itemView.findViewById(R.id.img_panel_edit) as ImageButton
+        val tvPanelName = itemView.findViewById(R.id.tv_panel_name) as TextView
+        val linearPanelMenu = itemView.findViewById(R.id.linear_panel_menu) as LinearLayout
 
-        val tvSwitchNameOne = itemView.findViewById<TextView>(R.id.tv_switch_one_name)
-        val tvSwitchNameTwo = itemView.findViewById<TextView>(R.id.tv_switch_two_name)
-        val tvSwitchNameThree = itemView.findViewById<TextView>(R.id.tv_switch_three_name)
-        val tvSwitchNameFour = itemView.findViewById<TextView>(R.id.tv_switch_four_name)
-        val tvSwitchNameFive = itemView.findViewById<TextView>(R.id.tv_switch_five_name)
-        val tvSwitchNameSix = itemView.findViewById<TextView>(R.id.tv_switch_six_name)
-        val tvSwitchNameSeven = itemView.findViewById<TextView>(R.id.tv_switch_seven_name)
-        val tvSwitchNameEight = itemView.findViewById<TextView>(R.id.tv_switch_eight_name)
+        val linearCustomization = itemView.findViewById(R.id.linear_customization) as LinearLayout
 
-        val tvSwitchOneEdit = itemView.findViewById<TextView>(R.id.tv_switch_one_edit)
-        val tvSwitchTwoEdit = itemView.findViewById<TextView>(R.id.tv_switch_two_edit)
-        val tvSwitchThreeEdit = itemView.findViewById<TextView>(R.id.tv_switch_three_edit)
-        val tvSwitchFourEdit = itemView.findViewById<TextView>(R.id.tv_switch_four_edit)
-        val tvSwitchFiveEdit = itemView.findViewById<TextView>(R.id.tv_switch_five_edit)
-        val tvSwitchSixEdit = itemView.findViewById<TextView>(R.id.tv_switch_six_edit)
-        val tvSwitchsevenEdit = itemView.findViewById<TextView>(R.id.tv_switch_seven_edit)
-        val tvSwitchEightEdit = itemView.findViewById<TextView>(R.id.tv_switch_eight_edit)
+        val tvSwitchNameOne = itemView.findViewById(R.id.tv_switch_one_name) as TextView
+        val tvSwitchNameTwo = itemView.findViewById(R.id.tv_switch_two_name) as TextView
+        val tvSwitchNameThree = itemView.findViewById(R.id.tv_switch_three_name) as TextView
+        val tvSwitchNameFour = itemView.findViewById(R.id.tv_switch_four_name) as TextView
+        val tvSwitchNameFive = itemView.findViewById(R.id.tv_switch_five_name) as TextView
+        val tvSwitchNameSix = itemView.findViewById(R.id.tv_switch_six_name) as TextView
+        val tvSwitchNameSeven = itemView.findViewById(R.id.tv_switch_seven_name) as TextView
+        val tvSwitchNameEight = itemView.findViewById(R.id.tv_switch_eight_name) as TextView
 
-        val tvSwitchOne = itemView.findViewById<SwitchMaterial>(R.id.switch_one)
-        val tvSwitchTwo = itemView.findViewById<SwitchMaterial>(R.id.switch_two)
-        val tvSwitchThree = itemView.findViewById<SwitchMaterial>(R.id.switch_three)
-        val tvSwitchFour = itemView.findViewById<SwitchMaterial>(R.id.switch_four)
-        val tvSwitchFive = itemView.findViewById<SwitchMaterial>(R.id.switch_five)
-        val tvSwitchSix = itemView.findViewById<SwitchMaterial>(R.id.switch_six)
-        val tvSwitchSeven = itemView.findViewById<SwitchMaterial>(R.id.switch_seven)
-        val tvSwitchEight = itemView.findViewById<SwitchMaterial>(R.id.switch_eight)
+        val tvSwitchOneEdit = itemView.findViewById(R.id.tv_switch_one_edit) as TextView
+        val tvSwitchTwoEdit = itemView.findViewById(R.id.tv_switch_two_edit) as TextView
+        val tvSwitchThreeEdit = itemView.findViewById(R.id.tv_switch_three_edit) as TextView
+        val tvSwitchFourEdit = itemView.findViewById(R.id.tv_switch_four_edit) as TextView
+        val tvSwitchFiveEdit = itemView.findViewById(R.id.tv_switch_five_edit) as TextView
+        val tvSwitchSixEdit = itemView.findViewById(R.id.tv_switch_six_edit) as TextView
+        val tvSwitchSevenEdit = itemView.findViewById(R.id.tv_switch_seven_edit) as TextView
+        val tvSwitchEightEdit = itemView.findViewById(R.id.tv_switch_eight_edit) as TextView
 
-        val seekBar = itemView.findViewById<IndicatorSeekBar>(R.id.seek_bar)
+        val tvSwitchOne = itemView.findViewById(R.id.switch_one) as SwitchMaterial
+        val tvSwitchTwo = itemView.findViewById(R.id.switch_two) as SwitchMaterial
+        val tvSwitchThree = itemView.findViewById(R.id.switch_three) as SwitchMaterial
+        val tvSwitchFour = itemView.findViewById(R.id.switch_four) as SwitchMaterial
+        val tvSwitchFive = itemView.findViewById(R.id.switch_five) as SwitchMaterial
+        val tvSwitchSix = itemView.findViewById(R.id.switch_six) as SwitchMaterial
+        val tvSwitchSeven = itemView.findViewById(R.id.switch_seven) as SwitchMaterial
+        val tvSwitchEight = itemView.findViewById(R.id.switch_eight) as SwitchMaterial
 
-        val tvSwitchPortA = itemView.findViewById<SwitchMaterial>(R.id.switch_usb_port_a)
-        val tvSwitchPortC = itemView.findViewById<SwitchMaterial>(R.id.switch_usb_port_c)
+        val seekBar = itemView.findViewById(R.id.seek_bar) as IndicatorSeekBar
 
+        val tvSwitchPortA = itemView.findViewById(R.id.switch_usb_port_a) as SwitchMaterial
+        val tvSwitchPortC = itemView.findViewById(R.id.switch_usb_port_c) as SwitchMaterial
+
+    }
+
+    fun setOnCustomizationClickListener(listener: AdapterItemClickListener<RoomPanelModel>) {
+        this.customizationClickListener = listener
     }
 }

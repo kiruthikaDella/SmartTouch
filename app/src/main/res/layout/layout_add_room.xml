@@ -95,20 +95,6 @@
 
     </RelativeLayout>
 
-    <!--  <EditText
-          android:layout_width="match_parent"
-          android:layout_height="@dimen/login_component_height"
-          android:layout_marginStart="@dimen/screen_start_margin"
-          android:layout_marginEnd="@dimen/screen_end_margin"
-          android:layout_marginTop="@dimen/_5sdp"
-          android:textColor="@color/daintree"
-          android:textSize="@dimen/_12ssp"
-          android:hint="@string/hint_text_room_name"
-          android:paddingStart="@dimen/_10sdp"
-          android:paddingEnd="@dimen/_10sdp"
-          android:textColorHint="@color/ghost"
-          android:background="@drawable/catskill_white_background_with_rounded_corners"/>
-  -->
     <com.google.android.material.button.MaterialButton
         android:layout_width="match_parent"
         android:layout_height="@dimen/_35sdp"

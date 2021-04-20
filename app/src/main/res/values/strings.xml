@@ -108,4 +108,18 @@
 
     <!--    Control Mode-->
     <string name="dialog_title_pin_control_mode">Do you want to make Control Mode page as Home page for easy Access?</string>
+
+    <!--    Device Customization-->
+    <string name="title_text_device_customization">Device Customization</string>
+    <string name="text_screen_layout">Screen Layout</string>
+    <string name="text_upload_image">Upload Image</string>
+    <string name="text_switch_icons">Switch Icons</string>
+    <string name="text_switch_icon_size">Switch Icon Size</string>
+    <string name="text_switch_name">Switch Name</string>
+    <string name="text_style">Text Style</string>
+    <string name="text_color">Text Color</string>
+    <string name="text_size">Text Size</string>
+    <string name="button_text_synchronize">Synchronize</string>
+
+
 </resources>

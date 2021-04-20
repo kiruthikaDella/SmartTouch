@@ -55,9 +55,6 @@ class HomeFragment : Fragment(), AdapterItemClickListener<HomeRoomModel> {
 
     override fun onItemClick(data: HomeRoomModel) {
         findNavController().navigate(HomeFragmentDirections.actionHomeFragmentToRoomPanelFragment(data))
-        /*var intent = Intent(activity, RoomPanelActivity::class.java)
-        intent.putExtra("roomDetail", data)
-        startActivity(intent)*/
     }
 
     private fun setUpNavigationView() {
