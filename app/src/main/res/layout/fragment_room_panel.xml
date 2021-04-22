@@ -19,7 +19,7 @@
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="@dimen/_40sdp"
+            android:layout_height="?actionBarSize"
             android:orientation="horizontal">
 
             <ImageButton
@@ -99,7 +99,7 @@
                         android:layout_alignParentEnd="true"
                         android:layout_centerVertical="true"
                         style="@style/PanelSwitchColorStyle"
-                        android:layout_marginEnd="@dimen/_5sdp"/>
+                        android:layout_marginEnd="@dimen/_5sdp" />
                 </RelativeLayout>
 
             </androidx.cardview.widget.CardView>

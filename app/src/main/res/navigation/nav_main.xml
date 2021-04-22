@@ -28,6 +28,9 @@
         <action
             android:id="@+id/action_roomPanelFragment_to_deviceCustomizationFragment"
             app:destination="@id/deviceCustomizationFragment" />
+        <action
+            android:id="@+id/action_roomPanelFragment_to_deviceFeaturesFragment"
+            app:destination="@id/deviceFeaturesFragment" />
     </fragment>
     <fragment
         android:id="@+id/controlModeFragment"
@@ -38,5 +41,28 @@
         android:id="@+id/deviceCustomizationFragment"
         android:name="com.smartouch.ui.fragments.home.DeviceCustomizationFragment"
         android:label="fragment_device_customization"
-        tools:layout="@layout/fragment_device_customization" />
+        tools:layout="@layout/fragment_device_customization" >
+        <action
+            android:id="@+id/action_deviceCustomizationFragment_to_screenLayoutFragment"
+            app:destination="@id/screenLayoutFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/screenLayoutFragment"
+        android:name="com.smartouch.ui.fragments.home.ScreenLayoutFragment"
+        android:label="fragment_screen_layout"
+        tools:layout="@layout/fragment_screen_layout" />
+    <fragment
+        android:id="@+id/deviceFeaturesFragment"
+        android:name="com.smartouch.ui.fragments.home.DeviceFeaturesFragment"
+        android:label="fragment_device_features"
+        tools:layout="@layout/fragment_device_features" >
+        <action
+            android:id="@+id/action_deviceFeaturesFragment_to_createSceneFragment"
+            app:destination="@id/createSceneFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/createSceneFragment"
+        android:name="com.smartouch.ui.fragments.home.CreateSceneFragment"
+        android:label="fragment_create_scene"
+        tools:layout="@layout/fragment_create_scene" />
 </navigation>

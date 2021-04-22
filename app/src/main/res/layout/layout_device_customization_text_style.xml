@@ -4,7 +4,6 @@
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
-    android:layout_gravity="bottom"
     android:background="@color/white"
     app:top_left_corner_radius="@dimen/corner_radius_20dp"
     app:top_right_corner_radius="@dimen/corner_radius_20dp">
@@ -15,54 +14,28 @@
         android:layout_height="@dimen/_9sdp"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="@dimen/_15sdp"
-        android:background="@drawable/ic_arrow_down" />
+        android:background="@drawable/ic_arrow_down"/>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/title_text_add_room"
+        android:text="@string/text_style"
         android:textColor="@color/theme_color"
         android:textSize="@dimen/_18ssp"
         android:fontFamily="@font/roboto_bold"
         android:layout_marginTop="@dimen/_20sdp"
-        android:layout_gravity="center_horizontal" />
+        android:layout_gravity="center_horizontal"/>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/title_text_add_room"
+        android:text="@string/text_select_font"
         android:textColor="@color/daintree"
         android:textSize="@dimen/_12ssp"
         android:fontFamily="@font/roboto_medium"
         android:layout_marginStart="@dimen/screen_start_margin"
         android:layout_marginTop="@dimen/_20sdp"
-        android:layout_gravity="start" />
-
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/login_component_height"
-        android:layout_marginStart="@dimen/screen_start_margin"
-        android:layout_marginEnd="@dimen/screen_end_margin"
-        android:layout_marginTop="@dimen/_5sdp"
-        android:textColor="@color/daintree"
-        android:textSize="@dimen/_12ssp"
-        android:hint="@string/hint_text_room_name"
-        android:paddingStart="@dimen/_10sdp"
-        android:paddingEnd="@dimen/_10sdp"
-        android:textColorHint="@color/ghost"
-        android:background="@drawable/catskill_white_background" />
-
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/title_text_room_type"
-        android:textColor="@color/daintree"
-        android:textSize="@dimen/_12ssp"
-        android:fontFamily="@font/roboto_medium"
-        android:layout_marginStart="@dimen/screen_start_margin"
-        android:layout_marginTop="@dimen/_20sdp"
-        android:layout_gravity="start" />
+        android:layout_gravity="start"/>
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -81,7 +54,7 @@
             android:gravity="center"
             android:spinnerMode="dropdown"
             android:layout_toStartOf="@+id/iv_down"
-            android:layout_marginEnd="@dimen/_5sdp" />
+            android:layout_marginEnd="@dimen/_5sdp"/>
 
         <ImageButton
             android:id="@+id/iv_down"
@@ -91,22 +64,35 @@
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
             android:layout_marginEnd="@dimen/_12sdp"
-            android:backgroundTint="@color/daintree" />
+            android:backgroundTint="@color/daintree"/>
 
     </RelativeLayout>
 
-    <com.google.android.material.button.MaterialButton
+    <com.jcminarro.roundkornerlayout.RoundKornerLinearLayout
         android:layout_width="match_parent"
-        android:layout_height="@dimen/_35sdp"
+        android:layout_height="@dimen/login_component_height"
+        android:orientation="horizontal"
+        android:background="@color/dodger_blue"
         android:layout_marginStart="@dimen/screen_start_margin"
         android:layout_marginEnd="@dimen/screen_end_margin"
-        android:layout_marginBottom="@dimen/_10sdp"
-        android:layout_marginTop="@dimen/_10sdp"
-        android:text="@string/button_text_add_room"
-        android:textAllCaps="false"
-        android:textSize="@dimen/_13ssp"
-        android:textColor="@color/white"
-        style="@style/DodgerBlueButtonStyle" />
+        android:layout_marginBottom="@dimen/_15sdp"
+        android:layout_marginTop="@dimen/_25sdp"
+        android:gravity="center"
+        app:corner_radius="@dimen/corner_radius_6dp">
 
+        <ImageView
+            android:layout_width="@dimen/_14sdp"
+            android:layout_height="@dimen/_14sdp"
+            android:src="@drawable/ic_save" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/text_save"
+            android:textColor="@color/white"
+            android:fontFamily="@font/roboto_medium"
+            android:textSize="@dimen/_12ssp"
+            android:layout_marginStart="@dimen/_5sdp" />
+    </com.jcminarro.roundkornerlayout.RoundKornerLinearLayout>
 
 </com.jcminarro.roundkornerlayout.RoundKornerLinearLayout>

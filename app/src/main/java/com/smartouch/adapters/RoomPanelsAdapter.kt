@@ -22,6 +22,7 @@ class RoomPanelsAdapter(
 ) : RecyclerView.Adapter<RoomPanelsAdapter.MyViewHolder>() {
 
     private var customizationClickListener: AdapterItemClickListener<RoomPanelModel>? = null
+    private var featuresClickListener: AdapterItemClickListener<RoomPanelModel>? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
         val v = LayoutInflater.from(parent.context)
@@ -46,6 +47,10 @@ class RoomPanelsAdapter(
             linearCustomization.setOnClickListener {
                 customizationClickListener?.onItemClick(data)
             }
+
+            linearFeature.setOnClickListener {
+                featuresClickListener?.onItemClick(data)
+            }
         }
     }
 
@@ -61,6 +66,7 @@ class RoomPanelsAdapter(
         val linearPanelMenu = itemView.findViewById(R.id.linear_panel_menu) as LinearLayout
 
         val linearCustomization = itemView.findViewById(R.id.linear_customization) as LinearLayout
+        val linearFeature = itemView.findViewById(R.id.linear_features) as LinearLayout
 
         val tvSwitchNameOne = itemView.findViewById(R.id.tv_switch_one_name) as TextView
         val tvSwitchNameTwo = itemView.findViewById(R.id.tv_switch_two_name) as TextView
@@ -98,5 +104,9 @@ class RoomPanelsAdapter(
 
     fun setOnCustomizationClickListener(listener: AdapterItemClickListener<RoomPanelModel>) {
         this.customizationClickListener = listener
+    }
+
+    fun setOnFeaturesClickListener(listener: AdapterItemClickListener<RoomPanelModel>) {
+        this.featuresClickListener = listener
     }
 }

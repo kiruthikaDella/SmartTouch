@@ -1,7 +1,6 @@
 package com.smartouch.ui.fragments.home
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -54,10 +53,14 @@ class RoomPanelFragment : Fragment() {
         panelAdapter.setOnCustomizationClickListener(object :
             AdapterItemClickListener<RoomPanelModel> {
             override fun onItemClick(data: RoomPanelModel) {
-                Log.e(logTag, "clicked ${data.title}")
                 findNavController().navigate(RoomPanelFragmentDirections.actionRoomPanelFragmentToDeviceCustomizationFragment())
             }
+        })
 
+        panelAdapter.setOnFeaturesClickListener(object : AdapterItemClickListener<RoomPanelModel> {
+            override fun onItemClick(data: RoomPanelModel) {
+                findNavController().navigate(RoomPanelFragmentDirections.actionRoomPanelFragmentToDeviceFeaturesFragment())
+            }
         })
 
         binding.ivHidePanel.setOnClickListener {

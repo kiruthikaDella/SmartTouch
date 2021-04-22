@@ -36,7 +36,7 @@
     <string name="error_text_full_name_length">FullName must be more than 3 character</string>
     <string name="error_text_user_name">Please enter user name</string>
     <string name="error_text_user_name_length">UserName must be more than 3 character</string>
-    <string name="error_text_phone_number">Please enter phone number</string>
+    <string name="error_text_phone_number"><Pl></Pl>ease enter phone number</string>
     <string name="error_text_email">Please enter email</string>
     <string name="error_text_valid_email">Please enter valid email</string>
     <string name="error_text_password">Please enter password</string>
@@ -121,6 +121,51 @@
     <string name="text_size">Text Size</string>
     <string name="button_text_synchronize">Synchronize</string>
     <string name="dialog_title_text_lock">Do you want to lock customisation with your account?</string>
+    <string name="text_eight_icons_view">8 Icons View</string>
+    <string name="text_six_icons_view">6 Icons View</string>
+    <string name="text_left_most">Left Most</string>
+    <string name="text_right_most">Right Most</string>
+    <string name="text_left_right">Left &amp; Right</string>
+    <string name="text_middle_center">Middle Center</string>
+    <string name="text_top_center">Top Center</string>
+    <string name="text_bottom_center">Bottom Center</string>
+    <string name="text_remove">Remove</string>
+    <string name="text_gallery">Gallery</string>
+    <string name="text_photo">Photo</string>
+    <string name="button_text_upload">Upload</string>
+    <string name="text_select_font">Select font</string>
+    <string name="text_save">Save</string>
+
+
+    <!--    Device Features-->
+    <string name="title_text_device_features">Device Features</string>
+    <string name="text_create_scene">Create Scene</string>
+    <string name="text_sleep_mode">Sleep Mode</string>
+    <string name="text_night_mode">Night Mode</string>
+    <string name="text_outdoor_mode">Outdoor Mode</string>
+    <string name="text_time">Time</string>
+    <string name="text_time_format">Time Format</string>
+    <string name="text_12_hours">12 Hours</string>
+    <string name="text_24_hours">24 Hours</string>
+    <string name="text_weather_report">Weather Report</string>
+    <string name="text_room_temperature">Room Temperature</string>
+    <string name="text_temperature_unit">Temperature Unit</string>
+    <string name="text_celsius">Celsius</string>
+    <string name="text_fahrenheit">Fahrenheit</string>
+    <string name="text_display_brightness">Display Brightness</string>
+    <string name="text_auto">Auto</string>
+    <string name="text_manual">Manual</string>
+
+    <!--    Create Scene   -->
+    <string name="title_text_create_scene">Create Scene</string>
+    <string name="text_scene_name">Scene Name</string>
+    <string name="text_room_name">Room Name</string>
+    <string name="text_device_name">Device Name</string>
+    <string name="text_status">Status</string>
+    <string name="text_add">Add</string>
+    <string name="text_frequency">Frequency</string>
+    <string name="text_daily">Daily</string>
+    <string name="text_scene_time"><font fgcolor='#1A8EFF'>9:05</font><font fgcolor='#011B25'> am</font></string>
 
 
 </resources>

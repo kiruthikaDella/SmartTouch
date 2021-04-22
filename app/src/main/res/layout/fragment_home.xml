@@ -16,7 +16,7 @@
         <RelativeLayout
             android:id="@+id/relative_main_header"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/_40sdp"
+            android:layout_height="?actionBarSize"
             android:layout_marginTop="@dimen/_10sdp"
             android:orientation="horizontal">
 
