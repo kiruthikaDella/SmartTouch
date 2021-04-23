@@ -1,5 +1,6 @@
 package com.smartouch.ui.fragments.home
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -14,6 +15,7 @@ import com.smartouch.adapters.HomeRoomsAdapter
 import com.smartouch.common.interfaces.AdapterItemClickListener
 import com.smartouch.databinding.FragmentHomeBinding
 import com.smartouch.model.HomeRoomModel
+import com.smartouch.ui.activities.AuthenticationActivity
 
 /**
  * Created by Jignesh Dangar on 09-04-2021.
@@ -79,7 +81,10 @@ class HomeFragment : Fragment(), AdapterItemClickListener<HomeRoomModel> {
                     Log.e(logTag, "nav_contact_us")
                 }
                 R.id.nav_logout -> {
-                    Log.e(logTag, "nav_logout")
+                    activity?.let {
+                        startActivity(Intent(it,AuthenticationActivity::class.java))
+                        it.finishAffinity()
+                    }
                 }
             }
 

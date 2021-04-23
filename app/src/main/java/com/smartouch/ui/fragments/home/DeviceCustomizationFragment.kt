@@ -97,11 +97,11 @@ class DeviceCustomizationFragment : Fragment() {
             }
         }
 
-        binding.ivScreenLayout.setOnClickListener {
+        binding.ivScreenLayoutSettings.setOnClickListener {
             findNavController().navigate(DeviceCustomizationFragmentDirections.actionDeviceCustomizationFragmentToScreenLayoutFragment())
         }
 
-        binding.ivUploadImage.setOnClickListener {
+        binding.ivUploadImageSettings.setOnClickListener {
             binding.layoutSlidingUpPanel.panelState = SlidingUpPanelLayout.PanelState.EXPANDED
         }
 
@@ -109,7 +109,7 @@ class DeviceCustomizationFragment : Fragment() {
             binding.layoutSlidingUpPanel.panelState = SlidingUpPanelLayout.PanelState.HIDDEN
         }
 
-        binding.ivTextStyle.setOnClickListener {
+        binding.ivTextStyleSettings.setOnClickListener {
             openTextStyleDialog()
         }
     }
