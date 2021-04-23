@@ -71,6 +71,7 @@
             android:paddingStart="@dimen/_10sdp"
             android:paddingEnd="@dimen/_10sdp">
 
+
             <androidx.constraintlayout.widget.Guideline
                 android:id="@+id/guideline1"
                 android:layout_width="match_parent"
@@ -257,7 +258,7 @@
                 android:id="@+id/tv_switch_three_type"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_gravity="start"
+                android:text="20 Amp"
                 android:textSize="@dimen/_11ssp"
                 android:fontFamily="@font/roboto_medium"
                 android:textColor="@color/gull_gray"
@@ -331,6 +332,7 @@
                 android:textSize="@dimen/_11ssp"
                 android:fontFamily="@font/roboto_medium"
                 android:textColor="@color/gull_gray"
+                android:text="Dimmer"
                 android:maxLength="8"
                 android:singleLine="true"
                 app:layout_constraintStart_toStartOf="@+id/guideline1"
@@ -363,286 +365,6 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/switch_three" />
 
-            <!--        Switch five        -->
-
-
-            <ImageView
-                android:id="@+id/iv_switch_five_network"
-                android:layout_width="@dimen/_15sdp"
-                android:layout_height="@dimen/_15sdp"
-                android:layout_gravity="center"
-                android:src="@drawable/ic_switch_network"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/switch_five"
-                app:layout_constraintBottom_toBottomOf="@+id/switch_five" />
-
-            <TextView
-                android:id="@+id/tv_switch_five_name"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:text="@string/text_switch_five"
-                android:textSize="@dimen/_12ssp"
-                android:fontFamily="@font/roboto_medium"
-                android:textColor="@color/daintree"
-                android:maxLength="8"
-                android:singleLine="true"
-                android:layout_marginStart="@dimen/_5sdp"
-                app:layout_constraintStart_toEndOf="@+id/iv_switch_five_network"
-                app:layout_constraintTop_toTopOf="@+id/iv_switch_five_network"
-                app:layout_constraintBottom_toBottomOf="@+id/iv_switch_five_network"
-                app:layout_constraintEnd_toEndOf="@+id/guideline1" />
-
-            <TextView
-                android:id="@+id/tv_switch_five_type"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="start"
-                android:textSize="@dimen/_11ssp"
-                android:fontFamily="@font/roboto_medium"
-                android:textColor="@color/gull_gray"
-                android:maxLength="8"
-                android:singleLine="true"
-                app:layout_constraintStart_toStartOf="@+id/guideline1"
-                app:layout_constraintEnd_toEndOf="@+id/guideline2"
-                app:layout_constraintTop_toTopOf="@+id/tv_switch_five_name"
-                app:layout_constraintBottom_toBottomOf="@+id/tv_switch_five_name" />
-
-            <TextView
-                android:id="@+id/tv_switch_five_edit"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:text="@string/text_edit"
-                android:layout_marginStart="@dimen/_5sdp"
-                android:textSize="@dimen/_11ssp"
-                android:fontFamily="@font/roboto_medium"
-                android:textColor="@color/theme_color"
-                android:maxLength="8"
-                android:singleLine="true"
-                app:layout_constraintStart_toStartOf="@+id/guideline2"
-                app:layout_constraintTop_toTopOf="@+id/tv_switch_five_name"
-                app:layout_constraintBottom_toBottomOf="@+id/tv_switch_five_name"
-                app:layout_constraintEnd_toEndOf="@+id/switch_five" />
-
-            <com.google.android.material.switchmaterial.SwitchMaterial
-                android:id="@+id/switch_five"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_5sdp"
-                style="@style/PanelSwitchColorStyle"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/switch_four" />
-
-            <!--        Switch six        -->
-
-
-            <ImageView
-                android:id="@+id/iv_switch_six_network"
-                android:layout_width="@dimen/_15sdp"
-                android:layout_height="@dimen/_15sdp"
-                android:layout_gravity="center"
-                android:src="@drawable/ic_switch_network"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/switch_six"
-                app:layout_constraintBottom_toBottomOf="@+id/switch_six" />
-
-            <TextView
-                android:id="@+id/tv_switch_six_name"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:text="@string/text_switch_six"
-                android:textSize="@dimen/_12ssp"
-                android:fontFamily="@font/roboto_medium"
-                android:textColor="@color/daintree"
-                android:maxLength="8"
-                android:singleLine="true"
-                android:layout_marginStart="@dimen/_5sdp"
-                app:layout_constraintStart_toEndOf="@+id/iv_switch_six_network"
-                app:layout_constraintTop_toTopOf="@+id/iv_switch_six_network"
-                app:layout_constraintBottom_toBottomOf="@+id/iv_switch_six_network"
-                app:layout_constraintEnd_toEndOf="@+id/guideline1" />
-
-            <TextView
-                android:id="@+id/tv_switch_six_type"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="start"
-                android:text="20 Amp"
-                android:textSize="@dimen/_11ssp"
-                android:fontFamily="@font/roboto_medium"
-                android:textColor="@color/gull_gray"
-                android:maxLength="8"
-                android:singleLine="true"
-                app:layout_constraintStart_toStartOf="@+id/guideline1"
-                app:layout_constraintEnd_toEndOf="@+id/guideline2"
-                app:layout_constraintTop_toTopOf="@+id/tv_switch_six_name"
-                app:layout_constraintBottom_toBottomOf="@+id/tv_switch_six_name" />
-
-            <TextView
-                android:id="@+id/tv_switch_six_edit"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:text="@string/text_edit"
-                android:layout_marginStart="@dimen/_5sdp"
-                android:textSize="@dimen/_11ssp"
-                android:fontFamily="@font/roboto_medium"
-                android:textColor="@color/theme_color"
-                android:maxLength="8"
-                android:singleLine="true"
-                app:layout_constraintStart_toStartOf="@+id/guideline2"
-                app:layout_constraintTop_toTopOf="@+id/tv_switch_six_name"
-                app:layout_constraintBottom_toBottomOf="@+id/tv_switch_six_name"
-                app:layout_constraintEnd_toEndOf="@+id/switch_six" />
-
-            <com.google.android.material.switchmaterial.SwitchMaterial
-                android:id="@+id/switch_six"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_5sdp"
-                style="@style/PanelSwitchColorStyle"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/switch_five" />
-
-
-            <!--        Switch seven        -->
-
-
-            <ImageView
-                android:id="@+id/iv_switch_seven_network"
-                android:layout_width="@dimen/_15sdp"
-                android:layout_height="@dimen/_15sdp"
-                android:layout_gravity="center"
-                android:src="@drawable/ic_switch_network"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/switch_seven"
-                app:layout_constraintBottom_toBottomOf="@+id/switch_seven" />
-
-            <TextView
-                android:id="@+id/tv_switch_seven_name"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:text="@string/text_switch_seven"
-                android:textSize="@dimen/_12ssp"
-                android:fontFamily="@font/roboto_medium"
-                android:textColor="@color/daintree"
-                android:maxLength="8"
-                android:singleLine="true"
-                android:layout_marginStart="@dimen/_5sdp"
-                app:layout_constraintStart_toEndOf="@+id/iv_switch_seven_network"
-                app:layout_constraintTop_toTopOf="@+id/iv_switch_seven_network"
-                app:layout_constraintBottom_toBottomOf="@+id/iv_switch_seven_network"
-                app:layout_constraintEnd_toEndOf="@+id/guideline1" />
-
-            <TextView
-                android:id="@+id/tv_switch_seven_type"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="start"
-                android:text="3 Pin"
-                android:textSize="@dimen/_11ssp"
-                android:fontFamily="@font/roboto_medium"
-                android:textColor="@color/gull_gray"
-                android:maxLength="8"
-                android:singleLine="true"
-                app:layout_constraintStart_toStartOf="@+id/guideline1"
-                app:layout_constraintEnd_toEndOf="@+id/guideline2"
-                app:layout_constraintTop_toTopOf="@+id/tv_switch_seven_name"
-                app:layout_constraintBottom_toBottomOf="@+id/tv_switch_seven_name" />
-
-            <TextView
-                android:id="@+id/tv_switch_seven_edit"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:text="@string/text_edit"
-                android:layout_marginStart="@dimen/_5sdp"
-                android:textSize="@dimen/_11ssp"
-                android:fontFamily="@font/roboto_medium"
-                android:textColor="@color/theme_color"
-                android:maxLength="8"
-                android:singleLine="true"
-                app:layout_constraintStart_toStartOf="@+id/guideline2"
-                app:layout_constraintTop_toTopOf="@+id/tv_switch_seven_name"
-                app:layout_constraintBottom_toBottomOf="@+id/tv_switch_seven_name"
-                app:layout_constraintEnd_toEndOf="@+id/switch_seven" />
-
-            <com.google.android.material.switchmaterial.SwitchMaterial
-                android:id="@+id/switch_seven"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_5sdp"
-                style="@style/PanelSwitchColorStyle"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/switch_six" />
-
-            <!--        Switch eight        -->
-
-
-            <ImageView
-                android:id="@+id/iv_switch_eight_network"
-                android:layout_width="@dimen/_15sdp"
-                android:layout_height="@dimen/_15sdp"
-                android:layout_gravity="center"
-                android:src="@drawable/ic_switch_network"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/switch_eight"
-                app:layout_constraintBottom_toBottomOf="@+id/switch_eight" />
-
-            <TextView
-                android:id="@+id/tv_switch_eight_name"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:text="@string/text_switch_eight"
-                android:textSize="@dimen/_12ssp"
-                android:fontFamily="@font/roboto_medium"
-                android:textColor="@color/daintree"
-                android:maxLength="8"
-                android:singleLine="true"
-                android:layout_marginStart="@dimen/_5sdp"
-                app:layout_constraintStart_toEndOf="@+id/iv_switch_eight_network"
-                app:layout_constraintTop_toTopOf="@+id/iv_switch_eight_network"
-                app:layout_constraintBottom_toBottomOf="@+id/iv_switch_eight_network"
-                app:layout_constraintEnd_toEndOf="@+id/guideline1" />
-
-            <TextView
-                android:id="@+id/tv_switch_eight_type"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="start"
-                android:text="Dimmer"
-                android:textSize="@dimen/_11ssp"
-                android:fontFamily="@font/roboto_medium"
-                android:textColor="@color/gull_gray"
-                android:maxLength="8"
-                android:singleLine="true"
-                app:layout_constraintStart_toStartOf="@+id/guideline1"
-                app:layout_constraintEnd_toEndOf="@+id/guideline2"
-                app:layout_constraintTop_toTopOf="@+id/tv_switch_eight_name"
-                app:layout_constraintBottom_toBottomOf="@+id/tv_switch_eight_name" />
-
-            <TextView
-                android:id="@+id/tv_switch_eight_edit"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:text="@string/text_edit"
-                android:layout_marginStart="@dimen/_5sdp"
-                android:textSize="@dimen/_11ssp"
-                android:fontFamily="@font/roboto_medium"
-                android:textColor="@color/theme_color"
-                android:maxLength="8"
-                android:singleLine="true"
-                app:layout_constraintStart_toStartOf="@+id/guideline2"
-                app:layout_constraintTop_toTopOf="@+id/tv_switch_eight_name"
-                app:layout_constraintBottom_toBottomOf="@+id/tv_switch_eight_name"
-                app:layout_constraintEnd_toEndOf="@+id/switch_eight" />
-
-            <com.google.android.material.switchmaterial.SwitchMaterial
-                android:id="@+id/switch_eight"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_5sdp"
-                style="@style/PanelSwitchColorStyle"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/switch_seven" />
-
             <com.warkiz.widget.IndicatorSeekBar
                 android:id="@+id/seek_bar"
                 android:layout_width="match_parent"
@@ -663,7 +385,7 @@
                 app:isb_track_progress_size="@dimen/_1sdp"
                 app:isb_thumb_drawable="@drawable/ic_panel_seekbar_thumb"
                 app:isb_thumb_size="@dimen/_50sdp"
-                app:layout_constraintTop_toBottomOf="@+id/switch_eight"
+                app:layout_constraintTop_toBottomOf="@+id/switch_four"
                 app:layout_constraintStart_toStartOf="parent" />
 
             <TextView
