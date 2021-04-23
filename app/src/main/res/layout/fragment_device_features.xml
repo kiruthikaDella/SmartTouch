@@ -30,7 +30,8 @@
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:overScrollMode="never">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -48,332 +49,218 @@
                 app:cardElevation="@dimen/_5sdp"
                 app:cardCornerRadius="@dimen/corner_radius_6dp">
 
-                <LinearLayout
+                <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
                     android:layout_marginTop="@dimen/_15sdp"
-                    android:layout_marginBottom="@dimen/_15sdp">
+                    android:layout_marginBottom="@dimen/_15sdp"
+                    android:paddingStart="@dimen/_10sdp"
+                    android:paddingEnd="@dimen/_10sdp">
 
-                    <LinearLayout
+                    <androidx.constraintlayout.widget.Guideline
+                        android:id="@+id/guideline"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:weightSum="1"
-                        android:layout_marginTop="@dimen/_5sdp"
-                        android:gravity="center_vertical"
-                        android:layout_gravity="center_vertical"
-                        android:layout_marginStart="@dimen/_10sdp"
-                        android:layout_marginEnd="@dimen/_10sdp"
-                        android:orientation="horizontal"
-                        android:baselineAligned="false">
-
-                        <LinearLayout
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="0.4"
-                            android:orientation="horizontal">
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="@string/text_create_scene"
-                                android:textSize="@dimen/_12ssp"
-                                android:layout_gravity="start"
-                                android:fontFamily="@font/roboto_medium"
-                                android:textColor="@color/daintree"
-                                android:singleLine="true" />
-
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:gravity="center"
-                            android:layout_weight="0.1"
-                            android:orientation="horizontal">
-
-                            <ImageView
-                                android:layout_width="@dimen/_14sdp"
-                                android:layout_height="@dimen/_14sdp"
-                                android:src="@drawable/img_info" />
-
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="0.5"
-                            android:gravity="end"
-                            android:orientation="horizontal">
-
-                            <ImageView
-                                android:id="@+id/iv_create_scene"
-                                android:layout_width="@dimen/_22sdp"
-                                android:layout_height="@dimen/_22sdp"
-                                android:src="@drawable/ic_customize" />
-
-                        </LinearLayout>
-
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:weightSum="1"
-                        android:layout_marginTop="@dimen/_12sdp"
-                        android:gravity="center_vertical"
-                        android:layout_gravity="center_vertical"
-                        android:layout_marginStart="@dimen/_10sdp"
-                        android:layout_marginEnd="@dimen/_10sdp"
-                        android:orientation="horizontal"
-                        android:baselineAligned="false">
-
-                        <LinearLayout
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="0.4"
-                            android:orientation="horizontal">
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="@string/text_sleep_mode"
-                                android:textSize="@dimen/_12ssp"
-                                android:layout_gravity="start"
-                                android:fontFamily="@font/roboto_medium"
-                                android:textColor="@color/daintree"
-                                android:singleLine="true" />
-
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:gravity="center"
-                            android:layout_weight="0.1"
-                            android:orientation="horizontal">
-
-                            <ImageView
-                                android:layout_width="@dimen/_14sdp"
-                                android:layout_height="@dimen/_14sdp"
-                                android:src="@drawable/img_info" />
-
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="0.5"
-                            android:gravity="end"
-                            android:orientation="horizontal">
-
-                            <com.google.android.material.switchmaterial.SwitchMaterial
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                style="@style/PanelSwitchColorStyle" />
-
-                        </LinearLayout>
-
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:weightSum="1"
-                        android:layout_marginTop="@dimen/_12sdp"
-                        android:gravity="center_vertical"
-                        android:layout_gravity="center_vertical"
-                        android:layout_marginStart="@dimen/_10sdp"
-                        android:layout_marginEnd="@dimen/_10sdp"
-                        android:orientation="horizontal"
-                        android:baselineAligned="false">
-
-                        <LinearLayout
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="0.4"
-                            android:orientation="horizontal">
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="@string/text_night_mode"
-                                android:textSize="@dimen/_12ssp"
-                                android:layout_gravity="start"
-                                android:fontFamily="@font/roboto_medium"
-                                android:textColor="@color/daintree"
-                                android:singleLine="true" />
-
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:gravity="center"
-                            android:layout_weight="0.1"
-                            android:orientation="horizontal">
-
-                            <ImageView
-                                android:layout_width="@dimen/_14sdp"
-                                android:layout_height="@dimen/_14sdp"
-                                android:src="@drawable/img_info" />
-
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="0.5"
-                            android:gravity="end"
-                            android:orientation="horizontal">
-
-                            <com.google.android.material.switchmaterial.SwitchMaterial
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                style="@style/PanelSwitchColorStyle" />
-
-                        </LinearLayout>
-
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:weightSum="1"
-                        android:layout_marginTop="@dimen/_12sdp"
-                        android:gravity="center_vertical"
-                        android:layout_gravity="center_vertical"
-                        android:layout_marginStart="@dimen/_10sdp"
-                        android:layout_marginEnd="@dimen/_10sdp"
-                        android:orientation="horizontal"
-                        android:baselineAligned="false">
-
-                        <LinearLayout
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="0.4"
-                            android:orientation="horizontal">
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="@string/text_outdoor_mode"
-                                android:textSize="@dimen/_12ssp"
-                                android:layout_gravity="start"
-                                android:fontFamily="@font/roboto_medium"
-                                android:textColor="@color/daintree"
-                                android:singleLine="true" />
-
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:gravity="center"
-                            android:layout_weight="0.1"
-                            android:orientation="horizontal">
-
-                            <ImageView
-                                android:layout_width="@dimen/_14sdp"
-                                android:layout_height="@dimen/_14sdp"
-                                android:src="@drawable/img_info" />
-
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="0.5"
-                            android:gravity="end"
-                            android:orientation="horizontal">
-
-                            <com.google.android.material.switchmaterial.SwitchMaterial
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                style="@style/PanelSwitchColorStyle" />
-
-                        </LinearLayout>
-
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:weightSum="1"
-                        android:layout_marginTop="@dimen/_12sdp"
-                        android:gravity="center_vertical"
-                        android:layout_gravity="center_vertical"
-                        android:layout_marginStart="@dimen/_10sdp"
-                        android:layout_marginEnd="@dimen/_10sdp"
-                        android:orientation="horizontal"
-                        android:baselineAligned="false">
-
-                        <LinearLayout
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="0.4"
-                            android:orientation="horizontal">
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="@string/text_time"
-                                android:textSize="@dimen/_12ssp"
-                                android:layout_gravity="start"
-                                android:fontFamily="@font/roboto_medium"
-                                android:textColor="@color/daintree"
-                                android:singleLine="true" />
-
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:gravity="center"
-                            android:layout_weight="0.1"
-                            android:orientation="horizontal">
-
-                            <ImageView
-                                android:layout_width="@dimen/_14sdp"
-                                android:layout_height="@dimen/_14sdp"
-                                android:src="@drawable/img_info" />
-
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="0.5"
-                            android:gravity="end"
-                            android:orientation="horizontal">
-
-                            <com.google.android.material.switchmaterial.SwitchMaterial
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                style="@style/PanelSwitchColorStyle" />
-
-                        </LinearLayout>
-
-                    </LinearLayout>
+                        android:layout_height="match_parent"
+                        android:orientation="vertical"
+                        app:layout_constraintGuide_percent="0.45" />
 
                     <TextView
-                        android:layout_width="wrap_content"
+                        android:id="@+id/tv_create_scene"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/_12sdp"
-                        android:layout_marginStart="@dimen/_10sdp"
-                        android:text="@string/text_time_format"
+                        android:text="@string/text_create_scene"
                         android:textSize="@dimen/_12ssp"
-                        android:layout_gravity="start"
                         android:fontFamily="@font/roboto_medium"
                         android:textColor="@color/daintree"
-                        android:singleLine="true" />
+                        android:singleLine="true"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="@+id/iv_create_scene_settings"
+                        app:layout_constraintBottom_toBottomOf="@+id/iv_create_scene_settings"
+                        app:layout_constraintEnd_toEndOf="@+id/guideline"
+                        android:layout_marginEnd="@dimen/_2sdp" />
+
+                    <ImageView
+                        android:id="@+id/iv_create_scene_info"
+                        android:layout_width="@dimen/_14sdp"
+                        android:layout_height="@dimen/_14sdp"
+                        android:src="@drawable/img_info"
+                        app:layout_constraintStart_toStartOf="@+id/guideline"
+                        app:layout_constraintTop_toTopOf="@+id/iv_create_scene_settings"
+                        app:layout_constraintBottom_toBottomOf="@+id/iv_create_scene_settings" />
+
+                    <ImageView
+                        android:id="@+id/iv_create_scene_settings"
+                        android:layout_width="@dimen/_22sdp"
+                        android:layout_height="@dimen/_22sdp"
+                        android:src="@drawable/ic_customize"
+                        android:layout_marginTop="@dimen/_5sdp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/tv_sleep_mode"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:text="@string/text_sleep_mode"
+                        android:textSize="@dimen/_12ssp"
+                        android:fontFamily="@font/roboto_medium"
+                        android:textColor="@color/daintree"
+                        android:singleLine="true"
+                        android:layout_marginEnd="@dimen/_2sdp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="@+id/switch_sleep_mode"
+                        app:layout_constraintBottom_toBottomOf="@+id/switch_sleep_mode"
+                        app:layout_constraintEnd_toEndOf="@+id/iv_sleep_mode_info" />
+
+                    <ImageView
+                        android:id="@+id/iv_sleep_mode_info"
+                        android:layout_width="@dimen/_14sdp"
+                        android:layout_height="@dimen/_14sdp"
+                        android:src="@drawable/img_info"
+                        app:layout_constraintStart_toStartOf="@+id/guideline"
+                        app:layout_constraintTop_toTopOf="@+id/switch_sleep_mode"
+                        app:layout_constraintBottom_toBottomOf="@+id/switch_sleep_mode" />
+
+                    <com.google.android.material.switchmaterial.SwitchMaterial
+                        android:id="@+id/switch_sleep_mode"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_8sdp"
+                        style="@style/PanelSwitchColorStyle"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/iv_create_scene_settings" />
+
+                    <TextView
+                        android:id="@+id/tv_night_mode"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:text="@string/text_night_mode"
+                        android:textSize="@dimen/_12ssp"
+                        android:fontFamily="@font/roboto_medium"
+                        android:textColor="@color/daintree"
+                        android:singleLine="true"
+                        android:layout_marginEnd="@dimen/_2sdp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="@+id/switch_night_mode"
+                        app:layout_constraintBottom_toBottomOf="@+id/switch_night_mode"
+                        app:layout_constraintEnd_toEndOf="@+id/iv_night_mode_info" />
+
+                    <ImageView
+                        android:id="@+id/iv_night_mode_info"
+                        android:layout_width="@dimen/_14sdp"
+                        android:layout_height="@dimen/_14sdp"
+                        android:src="@drawable/img_info"
+                        app:layout_constraintStart_toStartOf="@+id/guideline"
+                        app:layout_constraintTop_toTopOf="@+id/switch_night_mode"
+                        app:layout_constraintBottom_toBottomOf="@+id/switch_night_mode" />
+
+                    <com.google.android.material.switchmaterial.SwitchMaterial
+                        android:id="@+id/switch_night_mode"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_8sdp"
+                        style="@style/PanelSwitchColorStyle"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/switch_sleep_mode" />
+
+                    <TextView
+                        android:id="@+id/tv_outdoor_mode"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:text="@string/text_outdoor_mode"
+                        android:textSize="@dimen/_12ssp"
+                        android:fontFamily="@font/roboto_medium"
+                        android:textColor="@color/daintree"
+                        android:singleLine="true"
+                        android:layout_marginEnd="@dimen/_2sdp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="@+id/switch_outdoor_mode"
+                        app:layout_constraintBottom_toBottomOf="@+id/switch_outdoor_mode"
+                        app:layout_constraintEnd_toEndOf="@+id/iv_outdoor_mode_info" />
+
+                    <ImageView
+                        android:id="@+id/iv_outdoor_mode_info"
+                        android:layout_width="@dimen/_14sdp"
+                        android:layout_height="@dimen/_14sdp"
+                        android:src="@drawable/img_info"
+                        app:layout_constraintStart_toStartOf="@+id/guideline"
+                        app:layout_constraintTop_toTopOf="@+id/switch_outdoor_mode"
+                        app:layout_constraintBottom_toBottomOf="@+id/switch_outdoor_mode" />
+
+                    <com.google.android.material.switchmaterial.SwitchMaterial
+                        android:id="@+id/switch_outdoor_mode"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_8sdp"
+                        style="@style/PanelSwitchColorStyle"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/switch_night_mode" />
+
+                    <TextView
+                        android:id="@+id/tv_time"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:text="@string/text_time"
+                        android:textSize="@dimen/_12ssp"
+                        android:fontFamily="@font/roboto_medium"
+                        android:textColor="@color/daintree"
+                        android:singleLine="true"
+                        android:layout_marginEnd="@dimen/_2sdp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="@+id/switch_time"
+                        app:layout_constraintBottom_toBottomOf="@+id/switch_time"
+                        app:layout_constraintEnd_toEndOf="@+id/iv_time_info" />
+
+                    <ImageView
+                        android:id="@+id/iv_time_info"
+                        android:layout_width="@dimen/_14sdp"
+                        android:layout_height="@dimen/_14sdp"
+                        android:src="@drawable/img_info"
+                        app:layout_constraintStart_toStartOf="@+id/guideline"
+                        app:layout_constraintTop_toTopOf="@+id/switch_time"
+                        app:layout_constraintBottom_toBottomOf="@+id/switch_time" />
+
+                    <com.google.android.material.switchmaterial.SwitchMaterial
+                        android:id="@+id/switch_time"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_8sdp"
+                        style="@style/PanelSwitchColorStyle"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/switch_outdoor_mode" />
+
+                    <TextView
+                        android:id="@+id/tv_time_format"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:text="@string/text_time_format"
+                        android:textSize="@dimen/_12ssp"
+                        android:fontFamily="@font/roboto_medium"
+                        android:textColor="@color/daintree"
+                        android:singleLine="true"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="@+id/switch_time_format"
+                        app:layout_constraintBottom_toBottomOf="@+id/switch_time_format" />
+
+                    <com.google.android.material.switchmaterial.SwitchMaterial
+                        android:id="@+id/switch_time_format"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_8sdp"
+                        style="@style/PanelSwitchColorStyle"
+                        android:visibility="invisible"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/switch_time" />
 
                     <RadioGroup
+                        android:id="@+id/rg_time_format"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_10sdp"
-                        android:layout_marginStart="@dimen/_10sdp"
-                        android:orientation="horizontal">
+                        android:orientation="horizontal"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/tv_time_format">
 
                         <RadioButton
                             android:layout_width="wrap_content"
@@ -382,7 +269,7 @@
                             android:text="@string/text_12_hours"
                             android:textColor="@color/nepal"
                             android:textSize="@dimen/_12ssp"
-                            android:fontFamily="@font/roboto_medium"/>
+                            android:fontFamily="@font/roboto_medium" />
 
                         <RadioButton
                             android:layout_width="wrap_content"
@@ -392,148 +279,107 @@
                             android:text="@string/text_24_hours"
                             android:textColor="@color/nepal"
                             android:textSize="@dimen/_12ssp"
-                            android:fontFamily="@font/roboto_medium"/>
+                            android:fontFamily="@font/roboto_medium" />
 
                     </RadioGroup>
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:weightSum="1"
-                        android:layout_marginTop="@dimen/_12sdp"
-                        android:gravity="center_vertical"
-                        android:layout_gravity="center_vertical"
-                        android:layout_marginStart="@dimen/_10sdp"
-                        android:layout_marginEnd="@dimen/_10sdp"
-                        android:orientation="horizontal"
-                        android:baselineAligned="false">
-
-                        <LinearLayout
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="0.4"
-                            android:orientation="horizontal">
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="@string/text_weather_report"
-                                android:textSize="@dimen/_12ssp"
-                                android:layout_gravity="start"
-                                android:fontFamily="@font/roboto_medium"
-                                android:textColor="@color/daintree"
-                                android:singleLine="true" />
-
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:gravity="center"
-                            android:layout_weight="0.1"
-                            android:orientation="horizontal">
-
-                            <ImageView
-                                android:layout_width="@dimen/_14sdp"
-                                android:layout_height="@dimen/_14sdp"
-                                android:src="@drawable/img_info" />
-
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="0.5"
-                            android:gravity="end"
-                            android:orientation="horizontal">
-
-                            <com.google.android.material.switchmaterial.SwitchMaterial
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                style="@style/PanelSwitchColorStyle" />
-
-                        </LinearLayout>
-
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:weightSum="1"
-                        android:layout_marginTop="@dimen/_12sdp"
-                        android:gravity="center_vertical"
-                        android:layout_gravity="center_vertical"
-                        android:layout_marginStart="@dimen/_10sdp"
-                        android:layout_marginEnd="@dimen/_10sdp"
-                        android:orientation="horizontal"
-                        android:baselineAligned="false">
-
-                        <LinearLayout
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="0.4"
-                            android:orientation="horizontal">
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="@string/text_room_temperature"
-                                android:textSize="@dimen/_12ssp"
-                                android:layout_gravity="start"
-                                android:fontFamily="@font/roboto_medium"
-                                android:textColor="@color/daintree"
-                                android:singleLine="true" />
-
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:gravity="center"
-                            android:layout_weight="0.1"
-                            android:orientation="horizontal">
-
-                            <ImageView
-                                android:layout_width="@dimen/_14sdp"
-                                android:layout_height="@dimen/_14sdp"
-                                android:src="@drawable/img_info" />
-
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="0.5"
-                            android:gravity="end"
-                            android:orientation="horizontal">
-
-                            <com.google.android.material.switchmaterial.SwitchMaterial
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                style="@style/PanelSwitchColorStyle" />
-
-                        </LinearLayout>
-
-                    </LinearLayout>
-
                     <TextView
-                        android:layout_width="wrap_content"
+                        android:id="@+id/tv_weather_report"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/_12sdp"
-                        android:layout_marginStart="@dimen/_10sdp"
-                        android:text="@string/text_temperature_unit"
+                        android:text="@string/text_weather_report"
                         android:textSize="@dimen/_12ssp"
-                        android:layout_gravity="start"
                         android:fontFamily="@font/roboto_medium"
                         android:textColor="@color/daintree"
-                        android:singleLine="true" />
+                        android:singleLine="true"
+                        android:layout_marginEnd="@dimen/_2sdp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="@+id/switch_weather_report"
+                        app:layout_constraintBottom_toBottomOf="@+id/switch_weather_report"
+                        app:layout_constraintEnd_toEndOf="@+id/iv_weather_report_info" />
+
+                    <ImageView
+                        android:id="@+id/iv_weather_report_info"
+                        android:layout_width="@dimen/_14sdp"
+                        android:layout_height="@dimen/_14sdp"
+                        android:src="@drawable/img_info"
+                        app:layout_constraintStart_toStartOf="@+id/guideline"
+                        app:layout_constraintTop_toTopOf="@+id/switch_weather_report"
+                        app:layout_constraintBottom_toBottomOf="@+id/switch_weather_report" />
+
+                    <com.google.android.material.switchmaterial.SwitchMaterial
+                        android:id="@+id/switch_weather_report"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_8sdp"
+                        style="@style/PanelSwitchColorStyle"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/rg_time_format" />
+
+                    <TextView
+                        android:id="@+id/tv_room_temperature"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:text="@string/text_room_temperature"
+                        android:textSize="@dimen/_12ssp"
+                        android:fontFamily="@font/roboto_medium"
+                        android:textColor="@color/daintree"
+                        android:singleLine="true"
+                        android:layout_marginEnd="@dimen/_2sdp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="@+id/switch_room_temperature"
+                        app:layout_constraintBottom_toBottomOf="@+id/switch_room_temperature"
+                        app:layout_constraintEnd_toEndOf="@+id/iv_room_temperature_info" />
+
+                    <ImageView
+                        android:id="@+id/iv_room_temperature_info"
+                        android:layout_width="@dimen/_14sdp"
+                        android:layout_height="@dimen/_14sdp"
+                        android:src="@drawable/img_info"
+                        app:layout_constraintStart_toStartOf="@+id/guideline"
+                        app:layout_constraintTop_toTopOf="@+id/switch_room_temperature"
+                        app:layout_constraintBottom_toBottomOf="@+id/switch_room_temperature" />
+
+                    <com.google.android.material.switchmaterial.SwitchMaterial
+                        android:id="@+id/switch_room_temperature"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_8sdp"
+                        style="@style/PanelSwitchColorStyle"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/switch_weather_report" />
+
+                    <TextView
+                        android:id="@+id/tv_temperature_unit"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:text="@string/text_temperature_unit"
+                        android:textSize="@dimen/_12ssp"
+                        android:fontFamily="@font/roboto_medium"
+                        android:textColor="@color/daintree"
+                        android:singleLine="true"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="@+id/switch_temperature_unit"
+                        app:layout_constraintBottom_toBottomOf="@+id/switch_temperature_unit" />
+
+                    <com.google.android.material.switchmaterial.SwitchMaterial
+                        android:id="@+id/switch_temperature_unit"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_8sdp"
+                        style="@style/PanelSwitchColorStyle"
+                        android:visibility="invisible"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/switch_room_temperature" />
 
                     <RadioGroup
+                        android:id="@+id/rg_temperature_unit"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_10sdp"
-                        android:layout_marginStart="@dimen/_10sdp"
-                        android:orientation="horizontal">
+                        android:orientation="horizontal"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/tv_temperature_unit">
 
                         <RadioButton
                             android:layout_width="wrap_content"
@@ -542,7 +388,7 @@
                             android:text="@string/text_celsius"
                             android:textColor="@color/nepal"
                             android:textSize="@dimen/_12ssp"
-                            android:fontFamily="@font/roboto_medium"/>
+                            android:fontFamily="@font/roboto_medium" />
 
                         <RadioButton
                             android:layout_width="wrap_content"
@@ -552,62 +398,52 @@
                             android:text="@string/text_fahrenheit"
                             android:textColor="@color/nepal"
                             android:textSize="@dimen/_12ssp"
-                            android:fontFamily="@font/roboto_medium"/>
+                            android:fontFamily="@font/roboto_medium" />
 
                     </RadioGroup>
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
+                    <TextView
+                        android:id="@+id/tv_display_brightness"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:weightSum="1"
-                        android:layout_marginTop="@dimen/_12sdp"
-                        android:gravity="center_vertical"
-                        android:layout_gravity="center_vertical"
-                        android:layout_marginStart="@dimen/_10sdp"
-                        android:layout_marginEnd="@dimen/_10sdp"
-                        android:orientation="horizontal"
-                        android:baselineAligned="false">
+                        android:text="@string/text_display_brightness"
+                        android:textSize="@dimen/_12ssp"
+                        android:fontFamily="@font/roboto_medium"
+                        android:textColor="@color/daintree"
+                        android:singleLine="true"
+                        android:layout_marginEnd="@dimen/_2sdp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="@+id/switch_display_brightness"
+                        app:layout_constraintBottom_toBottomOf="@+id/switch_display_brightness"
+                        app:layout_constraintEnd_toEndOf="@+id/iv_display_brightness_info" />
 
-                        <LinearLayout
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="0.4"
-                            android:orientation="horizontal">
+                    <ImageView
+                        android:id="@+id/iv_display_brightness_info"
+                        android:layout_width="@dimen/_14sdp"
+                        android:layout_height="@dimen/_14sdp"
+                        android:src="@drawable/img_info"
+                        app:layout_constraintStart_toStartOf="@+id/guideline"
+                        app:layout_constraintTop_toTopOf="@+id/switch_display_brightness"
+                        app:layout_constraintBottom_toBottomOf="@+id/switch_display_brightness" />
 
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="@string/text_display_brightness"
-                                android:textSize="@dimen/_12ssp"
-                                android:layout_gravity="start"
-                                android:fontFamily="@font/roboto_medium"
-                                android:textColor="@color/daintree"
-                                android:singleLine="true" />
-
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:gravity="center"
-                            android:layout_weight="0.1"
-                            android:orientation="horizontal">
-
-                            <ImageView
-                                android:layout_width="@dimen/_14sdp"
-                                android:layout_height="@dimen/_14sdp"
-                                android:src="@drawable/img_info" />
-
-                        </LinearLayout>
-
-                    </LinearLayout>
+                    <com.google.android.material.switchmaterial.SwitchMaterial
+                        android:id="@+id/switch_display_brightness"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_8sdp"
+                        style="@style/PanelSwitchColorStyle"
+                        android:visibility="invisible"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/rg_temperature_unit" />
 
                     <RadioGroup
+                        android:id="@+id/rg_display_brightness"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_10sdp"
-                        android:layout_marginStart="@dimen/_10sdp"
-                        android:orientation="horizontal">
+                        android:orientation="horizontal"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/tv_display_brightness">
 
                         <RadioButton
                             android:layout_width="wrap_content"
@@ -616,7 +452,7 @@
                             android:text="@string/text_auto"
                             android:textColor="@color/nepal"
                             android:textSize="@dimen/_12ssp"
-                            android:fontFamily="@font/roboto_medium"/>
+                            android:fontFamily="@font/roboto_medium" />
 
                         <RadioButton
                             android:layout_width="wrap_content"
@@ -626,11 +462,12 @@
                             android:text="@string/text_manual"
                             android:textColor="@color/nepal"
                             android:textSize="@dimen/_12ssp"
-                            android:fontFamily="@font/roboto_medium"/>
+                            android:fontFamily="@font/roboto_medium" />
 
                     </RadioGroup>
-                    
+
                     <androidx.appcompat.widget.AppCompatSeekBar
+                        android:id="@+id/seek_bar_brightness"
                         android:layout_marginTop="@dimen/_12sdp"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -638,9 +475,11 @@
                         android:progress="70"
                         android:thumb="@drawable/seekbar_thumb"
                         android:backgroundTint="@color/gull_gray"
-                        android:progressTint="@color/gull_gray"/>
+                        android:progressTint="@color/gull_gray"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/rg_display_brightness" />
 
-                </LinearLayout>
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
             </androidx.cardview.widget.CardView>
 

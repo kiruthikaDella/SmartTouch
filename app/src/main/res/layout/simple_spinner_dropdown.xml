@@ -11,4 +11,5 @@
     android:singleLine="true"
     android:background="@color/white"
     android:fontFamily="@font/roboto_regular"
-    android:textColor="@color/daintree"/>
+    android:textColor="@color/daintree"
+    android:gravity="start|center_vertical"/>

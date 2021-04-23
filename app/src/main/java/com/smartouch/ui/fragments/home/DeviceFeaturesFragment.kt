@@ -32,7 +32,7 @@ class DeviceFeaturesFragment : Fragment() {
             findNavController().navigateUp()
         }
 
-        binding.ivCreateScene.setOnClickListener {
+        binding.ivCreateSceneSettings.setOnClickListener {
             findNavController().navigate(DeviceFeaturesFragmentDirections.actionDeviceFeaturesFragmentToCreateSceneFragment())
         }
     }

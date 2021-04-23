@@ -1,30 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.jcminarro.roundkornerlayout.RoundKornerLinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:background="@color/white"
-    app:top_left_corner_radius="@dimen/corner_radius_20dp"
-    app:top_right_corner_radius="@dimen/corner_radius_20dp">
-
-    <ImageButton
-        android:id="@+id/iv_hide_panel"
-        android:layout_width="@dimen/_14sdp"
-        android:layout_height="@dimen/_9sdp"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="@dimen/_15sdp"
-        android:background="@drawable/ic_arrow_down"/>
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/text_style"
-        android:textColor="@color/theme_color"
-        android:textSize="@dimen/_18ssp"
-        android:fontFamily="@font/roboto_bold"
-        android:layout_marginTop="@dimen/_20sdp"
-        android:layout_gravity="center_horizontal"/>
+    android:id="@+id/linear_text_style">
 
     <TextView
         android:layout_width="wrap_content"
@@ -35,7 +16,7 @@
         android:fontFamily="@font/roboto_medium"
         android:layout_marginStart="@dimen/screen_start_margin"
         android:layout_marginTop="@dimen/_20sdp"
-        android:layout_gravity="start"/>
+        android:layout_gravity="start" />
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -54,7 +35,7 @@
             android:gravity="center"
             android:spinnerMode="dropdown"
             android:layout_toStartOf="@+id/iv_down"
-            android:layout_marginEnd="@dimen/_5sdp"/>
+            android:layout_marginEnd="@dimen/_5sdp" />
 
         <ImageButton
             android:id="@+id/iv_down"
@@ -64,7 +45,7 @@
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
             android:layout_marginEnd="@dimen/_12sdp"
-            android:backgroundTint="@color/daintree"/>
+            android:backgroundTint="@color/daintree" />
 
     </RelativeLayout>
 
@@ -95,4 +76,4 @@
             android:layout_marginStart="@dimen/_5sdp" />
     </com.jcminarro.roundkornerlayout.RoundKornerLinearLayout>
 
-</com.jcminarro.roundkornerlayout.RoundKornerLinearLayout>
+</LinearLayout>

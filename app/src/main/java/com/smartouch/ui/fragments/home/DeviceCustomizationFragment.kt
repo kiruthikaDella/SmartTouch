@@ -4,18 +4,18 @@ import android.app.Dialog
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
-import android.util.DisplayMetrics
+import android.os.Handler
+import android.os.Looper
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
-import android.widget.ImageButton
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.smartouch.R
-import com.smartouch.common.utils.Constants
 import com.smartouch.common.utils.dialog
 import com.smartouch.databinding.FragmentDeviceCustomizationBinding
 import com.sothree.slidinguppanel.SlidingUpPanelLayout
@@ -102,7 +102,13 @@ class DeviceCustomizationFragment : Fragment() {
         }
 
         binding.ivUploadImageSettings.setOnClickListener {
-            binding.layoutSlidingUpPanel.panelState = SlidingUpPanelLayout.PanelState.EXPANDED
+            binding.tvBottomViewTitle.text = getString(R.string.text_upload_image)
+            binding.layoutTextStyle.linearTextStyle.isVisible = false
+            binding.layoutUploadImage.linearUploadImage.isVisible = true
+
+            Handler(Looper.getMainLooper()).postDelayed({
+                binding.layoutSlidingUpPanel.panelState = SlidingUpPanelLayout.PanelState.EXPANDED
+            }, 500)
         }
 
         binding.ivHideUploadImagePanel.setOnClickListener {
@@ -110,25 +116,35 @@ class DeviceCustomizationFragment : Fragment() {
         }
 
         binding.ivTextStyleSettings.setOnClickListener {
-            openTextStyleDialog()
+            binding.tvBottomViewTitle.text = getString(R.string.text_style)
+            binding.layoutUploadImage.linearUploadImage.isVisible = false
+            binding.layoutTextStyle.linearTextStyle.isVisible = true
+
+            Handler(Looper.getMainLooper()).postDelayed({
+                binding.layoutSlidingUpPanel.panelState = SlidingUpPanelLayout.PanelState.EXPANDED
+            }, 500)
+
         }
     }
 
     private fun openTextStyleDialog() {
         context?.let {
-            textStyleDialog = Dialog(it,R.style.DialogSlideAnim)
+            textStyleDialog = Dialog(it, R.style.DialogSlideAnim)
             textStyleDialog?.setContentView(R.layout.layout_device_customization_text_style)
             textStyleDialog?.setCancelable(false)
 
-            val ibHide = textStyleDialog?.findViewById(R.id.iv_hide_panel) as ImageButton
+            /*    val ibHide = textStyleDialog?.findViewById(R.id.iv_hide_panel) as ImageButton
 
-            ibHide.setOnClickListener {
-                textStyleDialog?.dismiss()
-            }
+                ibHide.setOnClickListener {
+                    textStyleDialog?.dismiss()
+                }*/
 
             textStyleDialog?.window?.setGravity(Gravity.BOTTOM)
             textStyleDialog?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-            textStyleDialog?.window?.setLayout(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT)
+            textStyleDialog?.window?.setLayout(
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT
+            )
             textStyleDialog?.show()
         }
     }
