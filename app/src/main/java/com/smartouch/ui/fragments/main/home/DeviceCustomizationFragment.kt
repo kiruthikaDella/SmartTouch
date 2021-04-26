@@ -1,12 +1,9 @@
-package com.smartouch.ui.fragments.home
+package com.smartouch.ui.fragments.main.home
 
 import android.app.Dialog
-import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -23,7 +20,6 @@ import com.sothree.slidinguppanel.SlidingUpPanelLayout
 class DeviceCustomizationFragment : Fragment() {
 
     private lateinit var binding: FragmentDeviceCustomizationBinding
-    private var textStyleDialog: Dialog? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -127,25 +123,4 @@ class DeviceCustomizationFragment : Fragment() {
         }
     }
 
-    private fun openTextStyleDialog() {
-        context?.let {
-            textStyleDialog = Dialog(it, R.style.DialogSlideAnim)
-            textStyleDialog?.setContentView(R.layout.layout_device_customization_text_style)
-            textStyleDialog?.setCancelable(false)
-
-            /*    val ibHide = textStyleDialog?.findViewById(R.id.iv_hide_panel) as ImageButton
-
-                ibHide.setOnClickListener {
-                    textStyleDialog?.dismiss()
-                }*/
-
-            textStyleDialog?.window?.setGravity(Gravity.BOTTOM)
-            textStyleDialog?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-            textStyleDialog?.window?.setLayout(
-                ViewGroup.LayoutParams.MATCH_PARENT,
-                ViewGroup.LayoutParams.WRAP_CONTENT
-            )
-            textStyleDialog?.show()
-        }
-    }
 }

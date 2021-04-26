@@ -55,6 +55,7 @@ dependencies {
     implementation 'com.jcminarro:RoundKornerLayouts:0.4.0'
     implementation 'com.github.warkiz.widget:indicatorseekbar:2.1.2' // --->> seekbar
     implementation 'com.sothree.slidinguppanel:library:3.4.0' // --->> bottom sliding panel
+    implementation 'com.thoughtbot:expandablerecyclerview:1.4' // --->> expandable recycler view
 
     // Navigation Component dependencies
     implementation "androidx.navigation:navigation-fragment-ktx:2.3.5"

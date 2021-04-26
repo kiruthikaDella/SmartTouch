@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".ui.fragments.home.RoomPanelFragment"
+    tools:context=".ui.fragments.main.home.RoomPanelFragment"
     android:orientation="vertical"
     android:gravity="bottom"
     app:umanoDragView="@id/drag_add_panel"

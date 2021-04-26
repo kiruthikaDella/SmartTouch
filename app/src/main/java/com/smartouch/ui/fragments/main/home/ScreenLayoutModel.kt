@@ -1,4 +1,4 @@
-package com.smartouch.ui.fragments.home
+package com.smartouch.ui.fragments.main.home
 
 import android.content.Context
 import android.view.View

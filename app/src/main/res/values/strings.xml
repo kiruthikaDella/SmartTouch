@@ -53,6 +53,8 @@
     <string name="text_no_internet_available">No internet available</string>
     <string name="text_ok">OK</string>
     <string name="text_cancel">Cancel</string>
+    <string name="dialog_title_restore_device">Do you really want to restore all connected devices?</string>
+    <string name="dialog_title_profile_reset">Do you really want to erase all saved data from your account?</string>
 
     <!--    Home Screen-->
     <string name="title_text_home_screen">Smartouch</string>
@@ -167,5 +169,23 @@
     <string name="text_daily">Daily</string>
     <string name="text_scene_time"><font fgcolor='#1A8EFF'>9:05</font><font fgcolor='#011B25'> am</font></string>
 
+
+    <!--    Account Settings   -->
+    <string name="title_text_account_settings">Account Settings</string>
+    <string name="text_name">Name</string>
+    <string name="text_email">Email</string>
+    <string name="text_phone_number">Phone Number</string>
+    <string name="text_password">Password</string>
+    <string name="text_ownership_transfer">Ownership Transfer</string>
+    <string name="text_for_master_users">for master users only</string>
+    <string name="text_update">Update</string>
+
+    <!--    Faqs Screen-->
+    <string name="title_text_faqs">FAQ\'s</string>
+    <string name="title_text_answer">Sed dignissim lacinia nunc. Curabitur tortor. Pellentesque nibh. Aenean quam. In scelerisque sem at dolor. Maecenas mattis. Sed convallis tristique sem. Proin ut ligula vel nunc egestas porttitor. Morbi lectus risus, iaculis vel, suscipit quis, luctus non, massa. Fusce ac turpis quis ligula lacinia aliquet. Mauris ipsum.</string>
+    <string name="que1">What is smartouch?</string>
+    <string name="que2">What do I require to use smartouch application?</string>
+    <string name="que3">How can I restore all devices?</string>
+    <string name="que4">How can I update user management details?</string>
 
 </resources>

@@ -1,4 +1,4 @@
-package com.smartouch.ui.fragments.home
+package com.smartouch.ui.fragments.main.home
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -6,22 +6,21 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
-import com.smartouch.databinding.FragmentDeviceFeaturesBinding
+import com.smartouch.databinding.FragmentAccountSettingsBinding
 
 /**
- * Created by Jignesh Dangar on 09-04-2021.
+ * Created by Jignesh Dangar on 26-04-2021.
  */
 
-class DeviceFeaturesFragment : Fragment() {
+class AccountSettingsFragment : Fragment() {
 
-    private val logTag = this::class.java.simpleName
-    private lateinit var binding: FragmentDeviceFeaturesBinding
+    private lateinit var binding: FragmentAccountSettingsBinding
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentDeviceFeaturesBinding.inflate(inflater, container, false)
+        binding = FragmentAccountSettingsBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -30,10 +29,6 @@ class DeviceFeaturesFragment : Fragment() {
 
         binding.ivBack.setOnClickListener {
             findNavController().navigateUp()
-        }
-
-        binding.ivCreateSceneSettings.setOnClickListener {
-            findNavController().navigate(DeviceFeaturesFragmentDirections.actionDeviceFeaturesFragmentToCreateSceneFragment())
         }
     }
 }

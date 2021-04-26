@@ -1,4 +1,4 @@
-package com.smartouch.ui.fragments.home
+package com.smartouch.ui.fragments.main.home
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -6,7 +6,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
-import com.smartouch.R
 import com.smartouch.adapters.DeviceSceneAdapter
 import com.smartouch.databinding.FragmentCreateSceneBinding
 

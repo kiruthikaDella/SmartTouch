@@ -7,19 +7,25 @@
 
     <fragment
         android:id="@+id/homeFragment"
-        android:name="com.smartouch.ui.fragments.home.HomeFragment"
+        android:name="com.smartouch.ui.fragments.main.home.HomeFragment"
         android:label="fragment_home"
         tools:layout="@layout/fragment_home">
         <action
             android:id="@+id/action_homeFragment_to_roomPanelFragment"
             app:destination="@id/roomPanelFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_accountSettingsFragment"
+            app:destination="@id/accountSettingsFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_faqsFragment"
+            app:destination="@id/faqsFragment" />
     </fragment>
     <action
         android:id="@+id/action_global_homeFragment"
         app:destination="@id/homeFragment" />
     <fragment
         android:id="@+id/roomPanelFragment"
-        android:name="com.smartouch.ui.fragments.home.RoomPanelFragment"
+        android:name="com.smartouch.ui.fragments.main.home.RoomPanelFragment"
         android:label="fragment_room_panel"
         tools:layout="@layout/fragment_room_panel">
         <argument
@@ -34,12 +40,12 @@
     </fragment>
     <fragment
         android:id="@+id/controlModeFragment"
-        android:name="com.smartouch.ui.fragments.home.ControlModeFragment"
+        android:name="com.smartouch.ui.fragments.main.controlmode.ControlModeFragment"
         android:label="fragment_control_mode"
         tools:layout="@layout/fragment_control_mode" />
     <fragment
         android:id="@+id/deviceCustomizationFragment"
-        android:name="com.smartouch.ui.fragments.home.DeviceCustomizationFragment"
+        android:name="com.smartouch.ui.fragments.main.home.DeviceCustomizationFragment"
         android:label="fragment_device_customization"
         tools:layout="@layout/fragment_device_customization" >
         <action
@@ -48,12 +54,12 @@
     </fragment>
     <fragment
         android:id="@+id/screenLayoutFragment"
-        android:name="com.smartouch.ui.fragments.home.ScreenLayoutFragment"
+        android:name="com.smartouch.ui.fragments.main.home.ScreenLayoutFragment"
         android:label="fragment_screen_layout"
         tools:layout="@layout/fragment_screen_layout" />
     <fragment
         android:id="@+id/deviceFeaturesFragment"
-        android:name="com.smartouch.ui.fragments.home.DeviceFeaturesFragment"
+        android:name="com.smartouch.ui.fragments.main.home.DeviceFeaturesFragment"
         android:label="fragment_device_features"
         tools:layout="@layout/fragment_device_features" >
         <action
@@ -62,7 +68,17 @@
     </fragment>
     <fragment
         android:id="@+id/createSceneFragment"
-        android:name="com.smartouch.ui.fragments.home.CreateSceneFragment"
+        android:name="com.smartouch.ui.fragments.main.home.CreateSceneFragment"
         android:label="fragment_create_scene"
         tools:layout="@layout/fragment_create_scene" />
+    <fragment
+        android:id="@+id/accountSettingsFragment"
+        android:name="com.smartouch.ui.fragments.main.home.AccountSettingsFragment"
+        android:label="fragment_account_settings"
+        tools:layout="@layout/fragment_account_settings" />
+    <fragment
+        android:id="@+id/faqsFragment"
+        android:name="com.smartouch.ui.fragments.main.home.FaqsFragment"
+        android:label="fragment_faqs"
+        tools:layout="@layout/fragment_faqs" />
 </navigation>

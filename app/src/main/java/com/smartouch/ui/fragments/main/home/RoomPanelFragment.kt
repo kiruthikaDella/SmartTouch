@@ -1,4 +1,4 @@
-package com.smartouch.ui.fragments.home
+package com.smartouch.ui.fragments.main.home
 
 import android.os.Bundle
 import android.view.LayoutInflater
