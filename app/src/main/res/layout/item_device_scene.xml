@@ -1,139 +1,167 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_marginTop="@dimen/_10sdp">
 
     <TextView
         android:id="@+id/tv_text_room_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/text_room_name"
-        android:textSize="@dimen/_12ssp"
-        android:textColor="@color/daintree"
         android:fontFamily="@font/roboto_medium"
+        android:text="@string/text_room_name"
+        android:textColor="@color/daintree"
+        android:textSize="@dimen/_12ssp"
+        app:layout_constraintBottom_toBottomOf="@+id/rl_room_name"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="@+id/rl_room_name" />
 
     <TextView
         android:id="@+id/tv_text_device_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/text_device_name"
-        android:textSize="@dimen/_12ssp"
-        android:textColor="@color/daintree"
         android:fontFamily="@font/roboto_medium"
-        android:layout_marginTop="@dimen/_15sdp"
+        android:text="@string/text_device_name"
+        android:textColor="@color/daintree"
+        android:textSize="@dimen/_12ssp"
+        app:layout_constraintBottom_toBottomOf="@+id/rl_device_name"
         app:layout_constraintStart_toStartOf="@+id/tv_text_room_name"
-        app:layout_constraintTop_toBottomOf="@+id/tv_text_room_name" />
+        app:layout_constraintTop_toTopOf="@+id/rl_device_name" />
 
     <TextView
         android:id="@+id/tv_text_switch_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/text_switch_name"
-        android:textSize="@dimen/_12ssp"
-        android:textColor="@color/daintree"
         android:fontFamily="@font/roboto_medium"
-        android:layout_marginTop="@dimen/_15sdp"
+        android:text="@string/text_switch_name"
+        android:textColor="@color/daintree"
+        android:textSize="@dimen/_12ssp"
+        app:layout_constraintBottom_toBottomOf="@+id/rl_switch_name"
         app:layout_constraintStart_toStartOf="@+id/tv_text_device_name"
-        app:layout_constraintTop_toBottomOf="@+id/tv_text_device_name" />
+        app:layout_constraintTop_toTopOf="@+id/rl_switch_name" />
 
     <TextView
         android:id="@+id/tv_text_status"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/text_status"
-        android:textSize="@dimen/_12ssp"
-        android:textColor="@color/daintree"
-        android:fontFamily="@font/roboto_medium"
         android:layout_marginTop="@dimen/_15sdp"
+        android:fontFamily="@font/roboto_medium"
+        android:text="@string/text_status"
+        android:textColor="@color/daintree"
+        android:textSize="@dimen/_12ssp"
+        app:layout_constraintBottom_toBottomOf="@+id/switch_status"
         app:layout_constraintStart_toStartOf="@+id/tv_text_switch_name"
-        app:layout_constraintTop_toBottomOf="@+id/tv_text_switch_name" />
+        app:layout_constraintTop_toTopOf="@+id/switch_status" />
 
     <View
         android:layout_width="match_parent"
         android:layout_height="0.3dp"
-        android:background="@color/nepal"
         android:layout_marginTop="@dimen/_10sdp"
-        app:layout_constraintStart_toStartOf="@+id/tv_text_status"
+        android:background="@color/nepal"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/tv_text_status"
         app:layout_constraintTop_toBottomOf="@+id/tv_text_status" />
 
-    <ImageView
-        android:id="@+id/iv_arrow_room"
-        android:layout_width="@dimen/_10sdp"
-        android:layout_height="@dimen/_6sdp"
-        android:src="@drawable/ic_right"
+    <RelativeLayout
+        android:id="@+id/rl_room_name"
+        android:layout_width="@dimen/_120sdp"
+        android:layout_height="@dimen/_30sdp"
+        android:background="@drawable/white_background_with_catskill_white_dark_border"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/tv_text_room_name"
-        app:layout_constraintBottom_toBottomOf="@+id/tv_text_room_name" />
+        app:layout_constraintTop_toTopOf="parent">
 
-    <ImageView
-        android:id="@+id/iv_arrow_device"
-        android:layout_width="@dimen/_10sdp"
-        android:layout_height="@dimen/_6sdp"
-        android:src="@drawable/ic_right"
+        <Spinner
+            android:id="@+id/spinner_room_name"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginEnd="@dimen/_2sdp"
+            android:layout_toStartOf="@+id/iv_room_name_down"
+            android:background="@android:color/transparent"
+            android:gravity="center"
+            android:spinnerMode="dropdown" />
+
+        <ImageButton
+            android:id="@+id/iv_room_name_down"
+            android:layout_width="@dimen/_10sdp"
+            android:layout_height="@dimen/_6sdp"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="@dimen/_5sdp"
+            android:background="@drawable/ic_arrow_down"
+            android:backgroundTint="@color/daintree" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/rl_device_name"
+        android:layout_width="@dimen/_120sdp"
+        android:layout_height="@dimen/_30sdp"
+        android:layout_marginTop="@dimen/_10sdp"
+        android:background="@drawable/white_background_with_catskill_white_dark_border"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/tv_text_device_name"
-        app:layout_constraintBottom_toBottomOf="@+id/tv_text_device_name" />
+        app:layout_constraintTop_toBottomOf="@+id/rl_room_name">
 
-    <ImageView
-        android:id="@+id/iv_arrow_switch"
-        android:layout_width="@dimen/_10sdp"
-        android:layout_height="@dimen/_6sdp"
-        android:src="@drawable/ic_right"
+        <Spinner
+            android:id="@+id/spinner_device_name"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginEnd="@dimen/_2sdp"
+            android:layout_toStartOf="@+id/iv_device_name_down"
+            android:background="@android:color/transparent"
+            android:gravity="center"
+            android:spinnerMode="dropdown" />
+
+        <ImageButton
+            android:id="@+id/iv_device_name_down"
+            android:layout_width="@dimen/_10sdp"
+            android:layout_height="@dimen/_6sdp"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="@dimen/_5sdp"
+            android:background="@drawable/ic_arrow_down"
+            android:backgroundTint="@color/daintree" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/rl_switch_name"
+        android:layout_width="@dimen/_120sdp"
+        android:layout_height="@dimen/_30sdp"
+        android:layout_marginTop="@dimen/_10sdp"
+        android:background="@drawable/white_background_with_catskill_white_dark_border"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/tv_text_switch_name"
-        app:layout_constraintBottom_toBottomOf="@+id/tv_text_switch_name" />
+        app:layout_constraintTop_toBottomOf="@+id/rl_device_name">
 
-    <TextView
-        android:id="@+id/tv_room_name"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/text_living_room"
-        android:textSize="@dimen/_12ssp"
-        android:textColor="@color/theme_color"
-        android:fontFamily="@font/roboto_regular"
-        android:layout_marginEnd="@dimen/_10sdp"
-        app:layout_constraintEnd_toStartOf="@+id/iv_arrow_room"
-        app:layout_constraintTop_toTopOf="@+id/iv_arrow_room"
-        app:layout_constraintBottom_toBottomOf="@+id/iv_arrow_room"/>
+        <Spinner
+            android:id="@+id/spinner_switch_name"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginEnd="@dimen/_2sdp"
+            android:layout_toStartOf="@+id/iv_switch_name_down"
+            android:background="@android:color/transparent"
+            android:gravity="center"
+            android:spinnerMode="dropdown" />
 
-    <TextView
-        android:id="@+id/tv_device_name"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="SMT00838234"
-        android:textSize="@dimen/_12ssp"
-        android:textColor="@color/theme_color"
-        android:fontFamily="@font/roboto_regular"
-        android:layout_marginEnd="@dimen/_10sdp"
-        app:layout_constraintEnd_toStartOf="@+id/iv_arrow_device"
-        app:layout_constraintTop_toTopOf="@+id/iv_arrow_device"
-        app:layout_constraintBottom_toBottomOf="@+id/iv_arrow_device"/>
+        <ImageButton
+            android:id="@+id/iv_switch_name_down"
+            android:layout_width="@dimen/_10sdp"
+            android:layout_height="@dimen/_6sdp"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="@dimen/_5sdp"
+            android:background="@drawable/ic_arrow_down"
+            android:backgroundTint="@color/daintree" />
 
-    <TextView
-        android:id="@+id/tv_switch_name"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Switch-2"
-        android:textSize="@dimen/_12ssp"
-        android:textColor="@color/theme_color"
-        android:fontFamily="@font/roboto_regular"
-        android:layout_marginEnd="@dimen/_10sdp"
-        app:layout_constraintEnd_toStartOf="@+id/iv_arrow_switch"
-        app:layout_constraintTop_toTopOf="@+id/iv_arrow_switch"
-        app:layout_constraintBottom_toBottomOf="@+id/iv_arrow_switch"/>
+    </RelativeLayout>
 
     <com.google.android.material.switchmaterial.SwitchMaterial
         android:id="@+id/switch_status"
+        style="@style/PanelSwitchColorStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        style="@style/PanelSwitchColorStyle"
+        android:layout_marginTop="@dimen/_10sdp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/tv_text_status"
-        app:layout_constraintBottom_toBottomOf="@+id/tv_text_status"/>
+        app:layout_constraintTop_toBottomOf="@+id/rl_switch_name" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

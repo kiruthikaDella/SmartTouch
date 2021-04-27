@@ -1,6 +1,5 @@
 package com.smartouch.ui.fragments.main.home
 
-import android.app.Dialog
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -15,9 +14,14 @@ import androidx.navigation.fragment.findNavController
 import com.smartouch.R
 import com.smartouch.common.utils.dialog
 import com.smartouch.databinding.FragmentDeviceCustomizationBinding
+import com.smartouch.ui.fragments.BaseFragment
 import com.sothree.slidinguppanel.SlidingUpPanelLayout
 
-class DeviceCustomizationFragment : Fragment() {
+/**
+ * Created by Jignesh Dangar on 22-04-2021.
+ */
+
+class DeviceCustomizationFragment : BaseFragment() {
 
     private lateinit var binding: FragmentDeviceCustomizationBinding
 
@@ -120,6 +124,10 @@ class DeviceCustomizationFragment : Fragment() {
                 binding.layoutSlidingUpPanel.panelState = SlidingUpPanelLayout.PanelState.EXPANDED
             }, 500)
 
+        }
+
+        binding.ivSwitchIconsSettings.setOnClickListener {
+            findNavController().navigate(DeviceCustomizationFragmentDirections.actionDeviceCustomizationFragmentToSwitchIconsFragment())
         }
     }
 

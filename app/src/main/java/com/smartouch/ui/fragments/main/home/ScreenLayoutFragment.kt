@@ -9,11 +9,12 @@ import androidx.navigation.fragment.findNavController
 import com.smartouch.R
 import com.smartouch.common.utils.dialog
 import com.smartouch.databinding.FragmentScreenLayoutBinding
+import com.smartouch.ui.fragments.BaseFragment
 
 /**
  * Created by Jignesh Dangar on 09-04-2021.
  */
-class ScreenLayoutFragment : Fragment() {
+class ScreenLayoutFragment : BaseFragment() {
 
     private val logTag = this::class.java.simpleName
     private lateinit var binding: FragmentScreenLayoutBinding

@@ -10,12 +10,13 @@ import com.smartouch.adapters.ControlModeAdapter
 import com.smartouch.common.utils.dialog
 import com.smartouch.databinding.FragmentControlModeBinding
 import com.smartouch.model.HomeRoomModel
+import com.smartouch.ui.fragments.BaseFragment
 
 /**
  * Created by Jignesh Dangar on 19-04-2021.
  */
 
-class ControlModeFragment : Fragment() {
+class ControlModeFragment : BaseFragment() {
 
     private val logTag = this::class.java.simpleName
     private lateinit var binding: FragmentControlModeBinding

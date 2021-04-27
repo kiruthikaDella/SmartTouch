@@ -123,8 +123,9 @@
     <string name="text_size">Text Size</string>
     <string name="button_text_synchronize">Synchronize</string>
     <string name="dialog_title_text_lock">Do you want to lock customisation with your account?</string>
-    <string name="text_eight_icons_view">8 Icons View</string>
-    <string name="text_six_icons_view">6 Icons View</string>
+    <string name="text_eight_icons_view">8 Icons</string>
+    <string name="text_six_icons_view">6 Icons</string>
+    <string name="text_four_icons_view">4 Icons</string>
     <string name="text_left_most">Left Most</string>
     <string name="text_right_most">Right Most</string>
     <string name="text_left_right">Left &amp; Right</string>
@@ -187,5 +188,31 @@
     <string name="que2">What do I require to use smartouch application?</string>
     <string name="que3">How can I restore all devices?</string>
     <string name="que4">How can I update user management details?</string>
+    <string name="hint_text_search">Search</string>
 
+    <!--    Contact us Screen -->
+    <string name="title_text_contact_us">Contact Us</string>
+    <string name="text_office_address">Office Address</string>
+    <string name="text_feedback">Feedback</string>
+    <string name="office_address">Akshya Nagar 1st Block 1st Cross, Rammurthy nagar, Bangalore-560016</string>
+    <string name="hint_text_comments">Your comments…</string>
+    <string name="button_text_send">Send</string>
+
+    <!--    Switch Icons   -->
+    <string name="title_text_switch_icons">Switch Icons</string>
+    <string name="text_switch">Switch</string>
+    <string name="switch_one">Switch One</string>
+
+    <!--    User Management   -->
+    <string name="title_text_user_management">User Management</string>
+    <string name="text_registered_users">Registered Users</string>
+    <string name="title_text_add_user">Add User</string>
+    <string name="hint_text_full_name_ex">Ex. Hermione Ganger</string>
+    <string name="text_email_address">Email Address</string>
+    <string name="text_add_new_user">Add new user</string>
+
+    <!--    Device Settings-->
+    <string name="title_text_device_settings">Device Settings</string>
+    <string name="text_restart">Restart</string>
+    <string name="text_factory_reset">Factory Reset</string>
 </resources>

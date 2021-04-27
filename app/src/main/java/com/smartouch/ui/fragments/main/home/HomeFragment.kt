@@ -16,12 +16,13 @@ import com.smartouch.common.utils.dialog
 import com.smartouch.databinding.FragmentHomeBinding
 import com.smartouch.model.HomeRoomModel
 import com.smartouch.ui.activities.AuthenticationActivity
+import com.smartouch.ui.fragments.BaseFragment
 
 /**
  * Created by Jignesh Dangar on 09-04-2021.
  */
 
-class HomeFragment : Fragment(), AdapterItemClickListener<HomeRoomModel> {
+class HomeFragment : BaseFragment(), AdapterItemClickListener<HomeRoomModel> {
 
     private val logTag = this::class.java.simpleName
     private lateinit var binding: FragmentHomeBinding
@@ -114,7 +115,8 @@ class HomeFragment : Fragment(), AdapterItemClickListener<HomeRoomModel> {
                     Log.e(logTag, "nav_shop")
                 }
                 R.id.nav_contact_us -> {
-                    Log.e(logTag, "nav_contact_us")
+                    openOrCloseDrawer()
+                    findNavController().navigate(HomeFragmentDirections.actionHomeFragmentToContactUsFragment())
                 }
                 R.id.nav_logout -> {
                     activity?.let {

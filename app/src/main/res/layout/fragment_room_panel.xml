@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.sothree.slidinguppanel.SlidingUpPanelLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/layout_sliding_up_panel"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".ui.fragments.main.home.RoomPanelFragment"
-    android:orientation="vertical"
     android:gravity="bottom"
+    android:orientation="vertical"
     app:umanoDragView="@id/drag_add_panel"
     app:umanoOverlay="true"
-    app:umanoPanelHeight="0dp">
+    app:umanoPanelHeight="0dp"
+    tools:context=".ui.fragments.main.home.RoomPanelFragment">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -32,48 +32,52 @@
                 style="@style/ScreenTitleHomeStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
                 android:layout_gravity="center_horizontal"
-                android:text="@string/title_text_home_screen"
-                android:layout_centerInParent="true" />
+                android:text="@string/title_text_home_screen" />
 
             <ImageButton
                 android:layout_width="@dimen/_15sdp"
                 android:layout_height="@dimen/_15sdp"
-                android:background="@drawable/ic_edit"
                 android:layout_alignParentEnd="true"
                 android:layout_centerVertical="true"
-                android:layout_marginEnd="@dimen/screen_end_margin" />
+                android:layout_marginEnd="@dimen/screen_end_margin"
+                android:background="@drawable/ic_edit" />
 
         </RelativeLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginStart="@dimen/screen_start_margin"
-            android:layout_marginEnd="@dimen/screen_end_margin"
-            android:layout_marginTop="@dimen/_10sdp">
+            android:layout_marginTop="@dimen/_10sdp"
+            android:orientation="horizontal">
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btn_add_panel"
                 android:layout_width="0dp"
-                android:layout_height="@dimen/_35sdp"
+                android:layout_height="@dimen/_38sdp"
+                android:layout_marginEnd="@dimen/_10sdp"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:layout_marginBottom="@dimen/_10sdp"
+                android:layout_marginStart="@dimen/screen_start_margin"
                 android:layout_weight="0.5"
-                android:layout_margin="@dimen/_5sdp"
+                android:background="@drawable/dodger_blue_background"
                 android:text="@string/text_add_panel"
-                android:textSize="@dimen/_11ssp"
                 android:textColor="@color/white"
-                app:backgroundTint="@null"
-                android:background="@drawable/dodger_blue_background" />
+                android:textSize="@dimen/_11ssp"
+                app:backgroundTint="@null" />
 
             <androidx.cardview.widget.CardView
                 android:layout_width="0dp"
-                android:layout_height="@dimen/_35sdp"
+                android:layout_height="@dimen/_38sdp"
+                android:layout_marginEnd="@dimen/screen_end_margin"
+                android:layout_marginStart="@dimen/_10sdp"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:layout_marginBottom="@dimen/_10sdp"
                 android:layout_weight="0.5"
                 app:cardBackgroundColor="@color/white"
-                app:cardElevation="@dimen/_4sdp"
-                android:layout_margin="@dimen/_5sdp"
-                app:cardCornerRadius="@dimen/_6sdp">
+                app:cardCornerRadius="@dimen/_6sdp"
+                app:cardElevation="@dimen/_5sdp">
 
                 <RelativeLayout
                     android:layout_width="match_parent"
@@ -84,21 +88,21 @@
                         android:id="@+id/tv_switch_one_name"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/text_retain_state"
-                        android:textSize="@dimen/_12ssp"
-                        android:layout_marginStart="@dimen/_5sdp"
                         android:layout_centerVertical="true"
+                        android:layout_marginStart="@dimen/_8sdp"
                         android:fontFamily="@font/roboto_medium"
+                        android:singleLine="true"
+                        android:text="@string/text_retain_state"
                         android:textColor="@color/daintree"
-                        android:singleLine="true" />
+                        android:textSize="@dimen/_12ssp" />
 
                     <com.google.android.material.switchmaterial.SwitchMaterial
                         android:id="@+id/switch_retain_state"
+                        style="@style/PanelSwitchColorStyle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentEnd="true"
                         android:layout_centerVertical="true"
-                        style="@style/PanelSwitchColorStyle"
                         android:layout_marginEnd="@dimen/_5sdp" />
                 </RelativeLayout>
 
@@ -120,9 +124,9 @@
         android:id="@+id/drag_add_panel"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
         android:layout_gravity="bottom"
         android:background="@color/white"
+        android:orientation="vertical"
         app:top_left_corner_radius="@dimen/_20sdp"
         app:top_right_corner_radius="@dimen/_20sdp">
 
@@ -137,78 +141,78 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="@dimen/_20sdp"
+            android:fontFamily="@font/roboto_bold"
             android:text="@string/text_add_panel"
             android:textColor="@color/theme_color"
-            android:textSize="@dimen/_18ssp"
-            android:fontFamily="@font/roboto_bold"
-            android:layout_marginTop="@dimen/_20sdp"
-            android:layout_gravity="center_horizontal" />
+            android:textSize="@dimen/_18ssp" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/text_add_panel"
-            android:textColor="@color/daintree"
-            android:textSize="@dimen/_12ssp"
-            android:fontFamily="@font/roboto_medium"
+            android:layout_gravity="start"
             android:layout_marginStart="@dimen/screen_start_margin"
             android:layout_marginTop="@dimen/_20sdp"
-            android:layout_gravity="start" />
+            android:fontFamily="@font/roboto_medium"
+            android:text="@string/text_add_panel"
+            android:textColor="@color/daintree"
+            android:textSize="@dimen/_12ssp" />
 
         <EditText
             android:layout_width="match_parent"
             android:layout_height="@dimen/login_component_height"
             android:layout_marginStart="@dimen/screen_start_margin"
-            android:layout_marginEnd="@dimen/screen_end_margin"
             android:layout_marginTop="@dimen/_5sdp"
-            android:textColor="@color/daintree"
-            android:textSize="@dimen/_12ssp"
+            android:layout_marginEnd="@dimen/screen_end_margin"
+            android:background="@drawable/catskill_white_background"
+            android:fontFamily="@font/roboto_regular"
             android:hint="@string/hint_text_enter_panel_name"
             android:paddingStart="@dimen/_10sdp"
             android:paddingEnd="@dimen/_10sdp"
+            android:textColor="@color/daintree"
             android:textColorHint="@color/ghost"
-            android:fontFamily="@font/roboto_regular"
-            android:background="@drawable/catskill_white_background" />
+            android:textSize="@dimen/_12ssp" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/text_serial_number"
-            android:textColor="@color/daintree"
-            android:textSize="@dimen/_12ssp"
-            android:fontFamily="@font/roboto_medium"
+            android:layout_gravity="start"
             android:layout_marginStart="@dimen/screen_start_margin"
             android:layout_marginTop="@dimen/_20sdp"
-            android:layout_gravity="start" />
+            android:fontFamily="@font/roboto_medium"
+            android:text="@string/text_serial_number"
+            android:textColor="@color/daintree"
+            android:textSize="@dimen/_12ssp" />
 
         <EditText
             android:layout_width="match_parent"
             android:layout_height="@dimen/login_component_height"
             android:layout_marginStart="@dimen/screen_start_margin"
-            android:layout_marginEnd="@dimen/screen_end_margin"
             android:layout_marginTop="@dimen/_5sdp"
-            android:textColor="@color/theme_color"
-            android:textSize="@dimen/_12ssp"
+            android:layout_marginEnd="@dimen/screen_end_margin"
+            android:background="@drawable/catskill_white_background"
+            android:fontFamily="@font/roboto_medium"
             android:hint="@string/hint_text_enter_serial_number"
             android:paddingStart="@dimen/_10sdp"
             android:paddingEnd="@dimen/_10sdp"
+            android:textColor="@color/theme_color"
             android:textColorHint="@color/ghost"
-            android:fontFamily="@font/roboto_medium"
-            android:background="@drawable/catskill_white_background" />
+            android:textSize="@dimen/_12ssp" />
 
         <com.google.android.material.button.MaterialButton
             android:layout_width="match_parent"
             android:layout_height="@dimen/_35sdp"
             android:layout_marginStart="@dimen/screen_start_margin"
+            android:layout_marginTop="@dimen/_10sdp"
             android:layout_marginEnd="@dimen/screen_end_margin"
             android:layout_marginBottom="@dimen/_10sdp"
-            android:layout_marginTop="@dimen/_10sdp"
+            android:background="@drawable/dodger_blue_background"
             android:text="@string/button_text_add_room"
             android:textAllCaps="false"
-            android:textSize="@dimen/_13ssp"
             android:textColor="@color/white"
-            app:backgroundTint="@null"
-            android:background="@drawable/dodger_blue_background" />
+            android:textSize="@dimen/_13ssp"
+            app:backgroundTint="@null" />
 
     </com.jcminarro.roundkornerlayout.RoundKornerLinearLayout>
 

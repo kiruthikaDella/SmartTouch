@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/app_background_color"
+    android:orientation="vertical"
+    tools:context=".ui.fragments.main.usermanagement.AddUserFragment">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="?actionBarSize"
+        android:orientation="horizontal">
+
+        <ImageButton
+            android:id="@+id/iv_back"
+            style="@style/BackImageStyle"
+            android:layout_centerVertical="true" />
+
+        <TextView
+            android:id="@+id/tv_title"
+            style="@style/ScreenTitleHomeStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_gravity="center_horizontal"
+            android:text="@string/title_text_add_user" />
+
+    </RelativeLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="start"
+        android:layout_marginStart="@dimen/screen_start_margin"
+        android:layout_marginTop="@dimen/_20sdp"
+        android:fontFamily="@font/roboto_medium"
+        android:text="@string/hint_full_name"
+        android:textColor="@color/daintree"
+        android:textSize="@dimen/_12ssp" />
+
+    <EditText
+        android:id="@+id/edt_full_name"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/login_component_height"
+        android:layout_marginStart="@dimen/screen_start_margin"
+        android:layout_marginTop="@dimen/_5sdp"
+        android:layout_marginEnd="@dimen/screen_end_margin"
+        android:background="@drawable/white_background_with_catskill_white_dark_border"
+        android:hint="@string/hint_text_full_name_ex"
+        android:inputType="text"
+        android:paddingStart="@dimen/_10sdp"
+        android:paddingEnd="@dimen/_10sdp"
+        android:singleLine="true"
+        android:textColor="@color/daintree"
+        android:textColorHint="@color/ghost"
+        android:textSize="@dimen/_12ssp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="start"
+        android:layout_marginStart="@dimen/screen_start_margin"
+        android:layout_marginTop="@dimen/_20sdp"
+        android:fontFamily="@font/roboto_medium"
+        android:text="@string/text_email_address"
+        android:textColor="@color/daintree"
+        android:textSize="@dimen/_12ssp" />
+
+    <EditText
+        android:id="@+id/edt_email_address"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/login_component_height"
+        android:layout_marginStart="@dimen/screen_start_margin"
+        android:layout_marginTop="@dimen/_5sdp"
+        android:layout_marginEnd="@dimen/screen_end_margin"
+        android:background="@drawable/white_background_with_catskill_white_dark_border"
+        android:text="hermione.granger@gmail.com"
+        android:inputType="textEmailAddress"
+        android:paddingStart="@dimen/_10sdp"
+        android:paddingEnd="@dimen/_10sdp"
+        android:singleLine="true"
+        android:textColor="@color/theme_color"
+        android:textColorHint="@color/ghost"
+        android:textSize="@dimen/_12ssp" />
+
+    <com.jcminarro.roundkornerlayout.RoundKornerLinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/login_component_height"
+        android:orientation="horizontal"
+        android:background="@color/dodger_blue"
+        android:layout_marginStart="@dimen/screen_start_margin"
+        android:layout_marginEnd="@dimen/screen_end_margin"
+        android:layout_marginBottom="@dimen/_15sdp"
+        android:layout_marginTop="@dimen/_25sdp"
+        android:gravity="center"
+        app:corner_radius="@dimen/corner_radius_6dp">
+
+        <ImageView
+            android:layout_width="@dimen/_12sdp"
+            android:layout_height="@dimen/_12sdp"
+            android:src="@drawable/ic_add" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/text_add_new_user"
+            android:textColor="@color/white"
+            android:fontFamily="@font/roboto_medium"
+            android:textSize="@dimen/_13ssp"
+            android:layout_marginStart="@dimen/_5sdp" />
+    </com.jcminarro.roundkornerlayout.RoundKornerLinearLayout>
+
+</LinearLayout>

@@ -20,7 +20,7 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             android:background="@drawable/catskill_white_background"
-            android:src="@drawable/ic_remove"
+            android:src="@drawable/ic_delete"
             android:padding="@dimen/_25sdp" />
 
         <TextView

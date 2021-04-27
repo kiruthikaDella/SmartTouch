@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.jcminarro.roundkornerlayout.RoundKornerLinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:background="@color/white"
+    android:orientation="vertical"
+    android:paddingTop="@dimen/_20sdp"
+    android:paddingBottom="@dimen/_30sdp"
+    app:corner_radius="@dimen/corner_radius_20dp">
+
+    <TextView
+        android:id="@+id/tv_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/_15sdp"
+        android:fontFamily="@font/roboto_bold"
+        android:text="@string/text_edit"
+        android:textColor="@color/theme_color"
+        android:textSize="@dimen/_16ssp" />
+
+    <EditText
+        android:id="@+id/edt_edit"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/_15sdp"
+        android:layout_marginTop="@dimen/_8sdp"
+        android:layout_marginEnd="@dimen/_15sdp"
+        android:background="@drawable/white_background_with_catskill_white_dark_border"
+        android:fontFamily="@font/roboto_regular"
+        android:gravity="start|top"
+        android:padding="@dimen/_10sdp"
+        android:singleLine="true"
+        android:text="Switch 1"
+        android:textColor="@color/daintree"
+        android:textColorHint="@color/ghost_2"
+        android:textSize="@dimen/_12ssp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/_15sdp"
+        android:layout_marginTop="@dimen/_10sdp"
+        android:layout_marginEnd="@dimen/_15sdp"
+        android:orientation="horizontal">
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/_5sdp"
+            android:layout_weight="0.5"
+            app:cardBackgroundColor="@color/nepal"
+            app:cardCornerRadius="@dimen/corner_radius_4dp"
+            app:cardElevation="@dimen/_5sdp">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_cancel"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@android:color/transparent"
+                android:fontFamily="@font/roboto_medium"
+                android:letterSpacing="0"
+                android:text="@string/text_cancel"
+                android:textAllCaps="false"
+                android:textColor="@color/white"
+                android:textSize="@dimen/_12ssp"
+                app:backgroundTint="@null" />
+
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_5sdp"
+            android:layout_weight="0.5"
+            app:cardBackgroundColor="@color/theme_color"
+            app:cardCornerRadius="@dimen/corner_radius_4dp"
+            app:cardElevation="@dimen/_5sdp">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_save"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@android:color/transparent"
+                android:fontFamily="@font/roboto_medium"
+                android:letterSpacing="0"
+                android:text="@string/text_save"
+                android:textAllCaps="false"
+                android:textColor="@color/white"
+                android:textSize="@dimen/_12ssp"
+                app:backgroundTint="@null" />
+
+        </androidx.cardview.widget.CardView>
+    </LinearLayout>
+
+</com.jcminarro.roundkornerlayout.RoundKornerLinearLayout>

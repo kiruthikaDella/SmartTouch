@@ -43,7 +43,7 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
 
         navHostFragment.navController.addOnDestinationChangedListener { _, destination, _ ->
             when (destination.id) {
-                R.id.homeFragment, R.id.controlModeFragment -> {
+                R.id.homeFragment, R.id.controlModeFragment, R.id.userManagementFragment -> {
                     binding.coordinatorBottomNavigation.visibility = View.VISIBLE
                 }
                 else -> {
@@ -59,15 +59,15 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
             binding.layoutSlidingUpPanel.panelState = SlidingUpPanelLayout.PanelState.EXPANDED
         }
 
-        binding.ivHidePanel.setOnClickListener {
+        binding.layoutAddRoom.ivHidePanel.setOnClickListener {
             binding.layoutSlidingUpPanel.panelState = SlidingUpPanelLayout.PanelState.HIDDEN
         }
 
         val roomAdapter = ArrayAdapter(this, R.layout.simple_spinner_dropdown, roomList)
         roomAdapter.setDropDownViewResource(R.layout.simple_spinner_dropdown)
-        binding.spinnerRoom.adapter = roomAdapter
+        binding.layoutAddRoom.spinnerRoom.adapter = roomAdapter
 
-        binding.spinnerRoom.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+        binding.layoutAddRoom.spinnerRoom.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(
                 parent: AdapterView<*>?,
                 view: View?,

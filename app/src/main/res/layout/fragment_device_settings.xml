@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/app_background_color"
+    android:orientation="vertical"
+    tools:context=".ui.fragments.main.home.DeviceSettingsFragment">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="?actionBarSize"
+        android:orientation="horizontal">
+
+        <ImageButton
+            android:id="@+id/iv_back"
+            style="@style/BackImageStyle"
+            android:layout_centerVertical="true" />
+
+        <TextView
+            android:id="@+id/tv_title"
+            style="@style/ScreenTitleHomeStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_gravity="center_horizontal"
+            android:text="@string/title_text_device_settings" />
+
+
+    </RelativeLayout>
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="@dimen/screen_start_margin"
+        app:cardBackgroundColor="@color/catskill_white"
+        app:cardCornerRadius="@dimen/corner_radius_6dp"
+        app:cardElevation="@dimen/_5sdp">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginStart="@dimen/_20sdp"
+            android:layout_marginEnd="@dimen/_15sdp">
+
+            <ImageView
+                android:id="@+id/iv_restart"
+                android:layout_width="@dimen/_13sdp"
+                android:layout_height="@dimen/_16sdp"
+                android:layout_marginTop="@dimen/_25sdp"
+                android:src="@drawable/ic_restart"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/tv_restart"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_10sdp"
+                android:fontFamily="@font/roboto_medium"
+                android:text="@string/text_restart"
+                android:textColor="@color/daintree"
+                android:textSize="@dimen/_12ssp"
+                app:layout_constraintBottom_toBottomOf="@+id/iv_restart"
+                app:layout_constraintStart_toEndOf="@+id/iv_restart"
+                app:layout_constraintTop_toTopOf="@+id/iv_restart" />
+
+            <ImageView
+                android:id="@+id/iv_restart_arrow"
+                android:layout_width="@dimen/_6sdp"
+                android:layout_height="@dimen/_12sdp"
+                android:src="@drawable/ic_arrow_right"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toBottomOf="@+id/iv_restart"
+                app:layout_constraintTop_toTopOf="@+id/iv_restart"/>
+
+
+            <ImageView
+                android:id="@+id/iv_factory_reset"
+                android:layout_width="@dimen/_16sdp"
+                android:layout_height="@dimen/_16sdp"
+                android:layout_marginTop="@dimen/_25sdp"
+                android:src="@drawable/ic_factory_reset"
+                app:layout_constraintStart_toStartOf="@+id/iv_restart"
+                app:layout_constraintTop_toBottomOf="@+id/iv_restart" />
+
+            <TextView
+                android:id="@+id/tv_factory_reset"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/roboto_medium"
+                android:text="@string/text_factory_reset"
+                android:textColor="@color/daintree"
+                android:textSize="@dimen/_12ssp"
+                app:layout_constraintBottom_toBottomOf="@+id/iv_factory_reset"
+                app:layout_constraintStart_toStartOf="@+id/tv_restart"
+                app:layout_constraintTop_toTopOf="@+id/iv_factory_reset" />
+
+            <ImageView
+                android:id="@+id/iv_factory_reset_arrow"
+                android:layout_width="@dimen/_6sdp"
+                android:layout_height="@dimen/_12sdp"
+                android:src="@drawable/ic_arrow_right"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toBottomOf="@+id/iv_factory_reset"
+                app:layout_constraintTop_toTopOf="@+id/iv_factory_reset"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.cardview.widget.CardView>
+
+</LinearLayout>

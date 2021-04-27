@@ -39,7 +39,12 @@
         android:gravity="center_vertical"
         android:paddingStart="@dimen/_10sdp"
         android:paddingEnd="@dimen/_10sdp"
-        android:drawableStart="ic"/>
+        android:hint="@string/hint_text_search"
+        android:textColorHint="@color/ghost_2"
+        android:textColor="@color/daintree"
+        android:textSize="@dimen/_12ssp"
+        android:drawablePadding="@dimen/_6sdp"
+        android:drawableStart="@drawable/ic_search"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_faq"

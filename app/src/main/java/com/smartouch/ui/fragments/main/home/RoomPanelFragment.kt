@@ -4,20 +4,22 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import com.smartouch.R
 import com.smartouch.adapters.RoomPanelsAdapter
 import com.smartouch.common.interfaces.AdapterItemClickListener
+import com.smartouch.common.utils.dialog
 import com.smartouch.databinding.FragmentRoomPanelBinding
 import com.smartouch.model.RoomPanelModel
+import com.smartouch.ui.fragments.BaseFragment
 import com.sothree.slidinguppanel.SlidingUpPanelLayout
 
 /**
  * Created by Jignesh Dangar on 09-04-2021.
  */
 
-class RoomPanelFragment : Fragment() {
+class RoomPanelFragment : BaseFragment() {
 
     private val logTag = this::class.java.simpleName
     private lateinit var binding: FragmentRoomPanelBinding
@@ -63,6 +65,29 @@ class RoomPanelFragment : Fragment() {
             }
         })
 
+        panelAdapter.setOnEditClickListener(object : AdapterItemClickListener<RoomPanelModel> {
+            override fun onItemClick(data: RoomPanelModel) {
+                activity?.let {
+                    dialog.editDialog(
+                        it,
+                        getString(R.string.text_edit),
+                        "Switch 1",
+                        getString(R.string.text_save),
+                        getString(R.string.text_cancel),
+                        null
+                    )
+                }
+            }
+
+        })
+
+        panelAdapter.setOnSettingsClickListener(object : AdapterItemClickListener<RoomPanelModel>{
+            override fun onItemClick(data: RoomPanelModel) {
+                findNavController().navigate(RoomPanelFragmentDirections.actionRoomPanelFragmentToDeviceSettingsFragment())
+            }
+
+        })
+
         binding.ivHidePanel.setOnClickListener {
             binding.layoutSlidingUpPanel.panelState = SlidingUpPanelLayout.PanelState.HIDDEN
         }
@@ -71,5 +96,6 @@ class RoomPanelFragment : Fragment() {
             binding.layoutSlidingUpPanel.panelState = SlidingUpPanelLayout.PanelState.EXPANDED
         }
     }
+
 
 }

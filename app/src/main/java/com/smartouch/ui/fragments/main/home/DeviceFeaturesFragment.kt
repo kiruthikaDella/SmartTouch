@@ -7,12 +7,13 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.smartouch.databinding.FragmentDeviceFeaturesBinding
+import com.smartouch.ui.fragments.BaseFragment
 
 /**
  * Created by Jignesh Dangar on 09-04-2021.
  */
 
-class DeviceFeaturesFragment : Fragment() {
+class DeviceFeaturesFragment : BaseFragment() {
 
     private val logTag = this::class.java.simpleName
     private lateinit var binding: FragmentDeviceFeaturesBinding

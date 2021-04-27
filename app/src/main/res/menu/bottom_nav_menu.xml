@@ -8,7 +8,7 @@
         android:title=""/>
 
     <item
-        android:id="@+id/profile"
+        android:id="@+id/userManagementFragment"
         android:icon="@drawable/ic_bottom_navigation_profile"
         android:title=""/>
 

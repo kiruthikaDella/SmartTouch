@@ -19,6 +19,9 @@
         <action
             android:id="@+id/action_homeFragment_to_faqsFragment"
             app:destination="@id/faqsFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_contactUsFragment"
+            app:destination="@id/contactUsFragment" />
     </fragment>
     <action
         android:id="@+id/action_global_homeFragment"
@@ -37,6 +40,9 @@
         <action
             android:id="@+id/action_roomPanelFragment_to_deviceFeaturesFragment"
             app:destination="@id/deviceFeaturesFragment" />
+        <action
+            android:id="@+id/action_roomPanelFragment_to_deviceSettingsFragment"
+            app:destination="@id/deviceSettingsFragment" />
     </fragment>
     <fragment
         android:id="@+id/controlModeFragment"
@@ -51,6 +57,9 @@
         <action
             android:id="@+id/action_deviceCustomizationFragment_to_screenLayoutFragment"
             app:destination="@id/screenLayoutFragment" />
+        <action
+            android:id="@+id/action_deviceCustomizationFragment_to_switchIconsFragment"
+            app:destination="@id/switchIconsFragment" />
     </fragment>
     <fragment
         android:id="@+id/screenLayoutFragment"
@@ -81,4 +90,42 @@
         android:name="com.smartouch.ui.fragments.main.home.FaqsFragment"
         android:label="fragment_faqs"
         tools:layout="@layout/fragment_faqs" />
+    <fragment
+        android:id="@+id/contactUsFragment"
+        android:name="com.smartouch.ui.fragments.main.home.ContactUsFragment"
+        android:label="fragment_contact_us"
+        tools:layout="@layout/fragment_contact_us" />
+    <fragment
+        android:id="@+id/switchIconsFragment"
+        android:name="com.smartouch.ui.fragments.main.home.SwitchIconsFragment"
+        android:label="fragment_switch_icons"
+        tools:layout="@layout/fragment_switch_icons" >
+        <action
+            android:id="@+id/action_switchIconsFragment_to_switchIconsDetailFragment"
+            app:destination="@id/switchIconsDetailFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/switchIconsDetailFragment"
+        android:name="com.smartouch.ui.fragments.main.home.SwitchIconsDetailFragment"
+        android:label="fragment_switch_icons_detail"
+        tools:layout="@layout/fragment_switch_icons_detail" />
+    <fragment
+        android:id="@+id/userManagementFragment"
+        android:name="com.smartouch.ui.fragments.main.usermanagement.UserManagementFragment"
+        android:label="fragment_user_management"
+        tools:layout="@layout/fragment_user_management" >
+        <action
+            android:id="@+id/action_userManagementFragment_to_addUserFragment"
+            app:destination="@id/addUserFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/addUserFragment"
+        android:name="com.smartouch.ui.fragments.main.usermanagement.AddUserFragment"
+        android:label="fragment_add_user"
+        tools:layout="@layout/fragment_add_user" />
+    <fragment
+        android:id="@+id/deviceSettingsFragment"
+        android:name="com.smartouch.ui.fragments.main.home.DeviceSettingsFragment"
+        android:label="fragment_device_settings"
+        tools:layout="@layout/fragment_device_settings" />
 </navigation>

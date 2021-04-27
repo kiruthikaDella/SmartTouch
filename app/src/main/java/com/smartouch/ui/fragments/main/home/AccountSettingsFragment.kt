@@ -7,12 +7,13 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.smartouch.databinding.FragmentAccountSettingsBinding
+import com.smartouch.ui.fragments.BaseFragment
 
 /**
  * Created by Jignesh Dangar on 26-04-2021.
  */
 
-class AccountSettingsFragment : Fragment() {
+class AccountSettingsFragment : BaseFragment() {
 
     private lateinit var binding: FragmentAccountSettingsBinding
 

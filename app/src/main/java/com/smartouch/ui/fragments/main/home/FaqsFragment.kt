@@ -11,8 +11,13 @@ import androidx.recyclerview.widget.RecyclerView
 import com.smartouch.adapters.faqadapter.FAQAdapter
 import com.smartouch.common.utils.Test
 import com.smartouch.databinding.FragmentFaqsBinding
+import com.smartouch.ui.fragments.BaseFragment
 
-class FaqsFragment : Fragment() {
+/**
+ * Created by Jignesh Dangar on 26-04-2021.
+ */
+
+class FaqsFragment : BaseFragment() {
 
     private lateinit var binding: FragmentFaqsBinding
     private lateinit var faqAdapter: FAQAdapter

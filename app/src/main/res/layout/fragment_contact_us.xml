@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/catskill_white"
+    android:orientation="vertical"
+    tools:context=".ui.fragments.main.home.ContactUsFragment">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="?actionBarSize"
+        android:orientation="horizontal">
+
+        <ImageButton
+            android:id="@+id/iv_back"
+            style="@style/BackImageStyle"
+            android:layout_centerVertical="true" />
+
+        <TextView
+            android:id="@+id/tv_title"
+            style="@style/ScreenTitleHomeStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_gravity="center_horizontal"
+            android:text="@string/title_text_contact_us" />
+
+    </RelativeLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guideline"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.16" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guideline2"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.85" />
+
+            <ImageView
+                android:id="@+id/iv_email"
+                android:layout_width="@dimen/_18sdp"
+                android:layout_height="@dimen/_13sdp"
+                android:layout_marginStart="@dimen/screen_start_margin"
+                android:layout_marginTop="@dimen/_20sdp"
+                android:src="@drawable/ic_as_email"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/tv_title_email"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/roboto_medium"
+                android:text="@string/text_email"
+                android:textColor="@color/daintree"
+                android:textSize="@dimen/_12ssp"
+                app:layout_constraintBottom_toBottomOf="@+id/iv_email"
+                app:layout_constraintStart_toEndOf="@+id/guideline"
+                app:layout_constraintTop_toTopOf="@+id/iv_email" />
+
+            <TextView
+                android:id="@+id/tv_email"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/_5sdp"
+                android:fontFamily="@font/roboto_regular"
+                android:singleLine="true"
+                android:text="hermione.granger@gmail.com"
+                android:textColor="@color/waikawa_gray"
+                android:textSize="@dimen/_12ssp"
+                app:layout_constraintStart_toStartOf="@+id/tv_title_email"
+                app:layout_constraintTop_toBottomOf="@+id/tv_title_email" />
+
+            <ImageView
+                android:id="@+id/iv_phone_number"
+                android:layout_width="@dimen/_18sdp"
+                android:layout_height="@dimen/_18sdp"
+                android:layout_marginTop="@dimen/_20sdp"
+                android:src="@drawable/ic_as_phone_number"
+                app:layout_constraintStart_toStartOf="@+id/iv_email"
+                app:layout_constraintTop_toBottomOf="@+id/tv_email" />
+
+            <TextView
+                android:id="@+id/tv_title_phone_number"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/roboto_medium"
+                android:text="@string/text_phone_number"
+                android:textColor="@color/daintree"
+                android:textSize="@dimen/_12ssp"
+                app:layout_constraintBottom_toBottomOf="@+id/iv_phone_number"
+                app:layout_constraintStart_toEndOf="@+id/guideline"
+                app:layout_constraintTop_toTopOf="@+id/iv_phone_number" />
+
+            <TextView
+                android:id="@+id/tv_phone_number1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/_5sdp"
+                android:fontFamily="@font/roboto_regular"
+                android:singleLine="true"
+                android:text="+91 9812345678"
+                android:textColor="@color/waikawa_gray"
+                android:textSize="@dimen/_12ssp"
+                app:layout_constraintStart_toStartOf="@+id/tv_title_phone_number"
+                app:layout_constraintTop_toBottomOf="@+id/tv_title_phone_number" />
+
+            <TextView
+                android:id="@+id/tv_phone_number2"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/_5sdp"
+                android:fontFamily="@font/roboto_regular"
+                android:singleLine="true"
+                android:text="+91 8098765432"
+                android:textColor="@color/waikawa_gray"
+                android:textSize="@dimen/_12ssp"
+                app:layout_constraintStart_toStartOf="@+id/tv_phone_number1"
+                app:layout_constraintTop_toBottomOf="@+id/tv_phone_number1" />
+
+            <ImageView
+                android:id="@+id/iv_office_address"
+                android:layout_width="@dimen/_14sdp"
+                android:layout_height="@dimen/_18sdp"
+                android:layout_marginTop="@dimen/_20sdp"
+                android:src="@drawable/ic_location"
+                app:layout_constraintStart_toStartOf="@+id/iv_email"
+                app:layout_constraintTop_toBottomOf="@+id/tv_phone_number2" />
+
+            <TextView
+                android:id="@+id/tv_title_office_address"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/roboto_medium"
+                android:text="@string/text_office_address"
+                android:textColor="@color/daintree"
+                android:textSize="@dimen/_12ssp"
+                app:layout_constraintBottom_toBottomOf="@+id/iv_office_address"
+                app:layout_constraintStart_toEndOf="@+id/guideline"
+                app:layout_constraintTop_toTopOf="@+id/iv_office_address" />
+
+            <TextView
+                android:id="@+id/tv_office_address"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/_5sdp"
+                android:fontFamily="@font/roboto_regular"
+                android:text="@string/office_address"
+                android:textColor="@color/waikawa_gray"
+                android:textSize="@dimen/_12ssp"
+                app:layout_constraintEnd_toStartOf="@+id/guideline2"
+                app:layout_constraintStart_toStartOf="@+id/tv_title_office_address"
+                app:layout_constraintTop_toBottomOf="@+id/tv_title_office_address" />
+
+            <ImageView
+                android:id="@+id/iv_feedback"
+                android:layout_width="@dimen/_18sdp"
+                android:layout_height="@dimen/_18sdp"
+                android:layout_marginTop="@dimen/_20sdp"
+                android:src="@drawable/ic_feedback"
+                app:layout_constraintStart_toStartOf="@+id/iv_email"
+                app:layout_constraintTop_toBottomOf="@+id/tv_office_address" />
+
+            <TextView
+                android:id="@+id/tv_title_feedback"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/roboto_medium"
+                android:text="@string/text_feedback"
+                android:textColor="@color/daintree"
+                android:textSize="@dimen/_12ssp"
+                app:layout_constraintBottom_toBottomOf="@+id/iv_feedback"
+                app:layout_constraintStart_toEndOf="@+id/guideline"
+                app:layout_constraintTop_toTopOf="@+id/iv_feedback" />
+
+            <EditText
+                android:id="@+id/edt_feedback"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_8sdp"
+                android:layout_marginEnd="@dimen/_20sdp"
+                android:background="@drawable/white_background_with_catskill_white_dark_border"
+                android:fontFamily="@font/roboto_regular"
+                android:gravity="start|top"
+                android:hint="@string/hint_text_comments"
+                android:maxLines="4"
+                android:minLines="4"
+                android:padding="@dimen/_10sdp"
+                android:textColor="@color/daintree"
+                android:textColorHint="@color/ghost_2"
+                android:textSize="@dimen/_12ssp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/guideline"
+                app:layout_constraintTop_toBottomOf="@+id/tv_title_feedback" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_send"
+                style="@style/DodgerBlueButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginTop="@dimen/_15sdp"
+                android:fontFamily="@font/roboto_medium"
+                android:letterSpacing="0"
+                android:paddingStart="@dimen/_35sdp"
+                android:paddingTop="@dimen/_8sdp"
+                android:paddingEnd="@dimen/_35sdp"
+                android:paddingBottom="@dimen/_8sdp"
+                android:text="@string/button_text_send"
+                android:textAllCaps="false"
+                android:textColor="@color/white"
+                android:textSize="@dimen/_13ssp"
+                app:layout_constraintStart_toStartOf="@+id/guideline"
+                app:layout_constraintTop_toBottomOf="@+id/edt_feedback" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </ScrollView>
+
+</LinearLayout>

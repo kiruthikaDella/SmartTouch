@@ -5,7 +5,9 @@ import android.app.Dialog
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.util.DisplayMetrics
+import android.widget.EditText
 import android.widget.TextView
+import com.google.android.material.button.MaterialButton
 import com.smartouch.R
 import com.smartouch.common.interfaces.DialogAskListener
 
@@ -57,9 +59,52 @@ object dialog {
         dialog?.show()
     }
 
+    fun editDialog(
+        activity: Activity,
+        title: String,
+        strEditText: String,
+        strYes: String,
+        strNo: String,
+        onClick: DialogAskListener?
+    ) {
+
+        dialog = Dialog(activity)
+        dialog?.setContentView(R.layout.dialog_room_screen_edit)
+        dialog?.setCancelable(false)
+
+        val tvTitle = dialog?.findViewById(R.id.tv_title) as TextView
+        val btnCancel = dialog?.findViewById(R.id.btn_cancel) as MaterialButton
+        val btnSave = dialog?.findViewById(R.id.btn_save) as MaterialButton
+        val editText = dialog?.findViewById(R.id.edt_edit) as EditText
+
+        tvTitle.text = title
+        editText.setText(strEditText)
+        btnCancel.text = strNo
+        btnSave.text = strYes
+
+        btnCancel.setOnClickListener {
+            dialog?.dismiss()
+            onClick?.onNoClicked()
+        }
+
+        btnSave.setOnClickListener {
+            dialog?.dismiss()
+            onClick?.onYesClicked()
+        }
+
+        val displayMetrics = DisplayMetrics()
+        activity.windowManager?.defaultDisplay?.getMetrics(displayMetrics)
+        val width = (displayMetrics.widthPixels * 0.85.toFloat())
+        val height = (displayMetrics.heightPixels * Constants.COMMON_DIALOG_HEIGHT)
+
+        dialog?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        dialog?.window?.setLayout(width.toInt(), height.toInt())
+        dialog?.show()
+    }
+
     fun hideDialog() {
         dialog?.let {
-            if (it.isShowing){
+            if (it.isShowing) {
                 it.dismiss()
             }
         }

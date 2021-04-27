@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical">
+
+    <ImageButton
+        android:id="@+id/iv_hide_panel"
+        android:layout_width="@dimen/_14sdp"
+        android:layout_height="@dimen/_9sdp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="@dimen/_15sdp"
+        android:background="@drawable/ic_arrow_down"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/title_text_add_room"
+        android:textColor="@color/theme_color"
+        android:textSize="@dimen/_18ssp"
+        android:fontFamily="@font/roboto_bold"
+        android:layout_marginTop="@dimen/_20sdp"
+        android:layout_gravity="center_horizontal"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/title_text_add_room"
+        android:textColor="@color/daintree"
+        android:textSize="@dimen/_12ssp"
+        android:fontFamily="@font/roboto_medium"
+        android:layout_marginStart="@dimen/screen_start_margin"
+        android:layout_marginTop="@dimen/_20sdp"
+        android:layout_gravity="start"/>
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/login_component_height"
+        android:layout_marginStart="@dimen/screen_start_margin"
+        android:layout_marginEnd="@dimen/screen_end_margin"
+        android:layout_marginTop="@dimen/_5sdp"
+        android:textColor="@color/daintree"
+        android:textSize="@dimen/_12ssp"
+        android:hint="@string/hint_text_room_name"
+        android:paddingStart="@dimen/_10sdp"
+        android:paddingEnd="@dimen/_10sdp"
+        android:textColorHint="@color/ghost"
+        android:background="@drawable/catskill_white_background"/>
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/title_text_room_type"
+        android:textColor="@color/daintree"
+        android:textSize="@dimen/_12ssp"
+        android:fontFamily="@font/roboto_medium"
+        android:layout_marginStart="@dimen/screen_start_margin"
+        android:layout_marginTop="@dimen/_20sdp"
+        android:layout_gravity="start"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/login_component_height"
+        android:layout_marginStart="@dimen/screen_start_margin"
+        android:layout_marginEnd="@dimen/screen_end_margin"
+        android:layout_marginTop="@dimen/_5sdp"
+        android:background="@drawable/catskill_white_background">
+
+        <Spinner
+            android:id="@+id/spinner_room"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginStart="@dimen/_5sdp"
+            android:background="@android:color/transparent"
+            android:gravity="center"
+            android:spinnerMode="dropdown"
+            android:layout_toStartOf="@+id/iv_down"
+            android:layout_marginEnd="@dimen/_5sdp"/>
+
+        <ImageButton
+            android:id="@+id/iv_down"
+            android:layout_width="@dimen/_12sdp"
+            android:layout_height="@dimen/_7sdp"
+            android:background="@drawable/ic_arrow_down"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="@dimen/_12sdp"
+            android:backgroundTint="@color/daintree"/>
+
+    </RelativeLayout>
+
+    <com.jcminarro.roundkornerlayout.RoundKornerLinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/login_component_height"
+        android:orientation="horizontal"
+        android:background="@color/dodger_blue"
+        android:layout_marginStart="@dimen/screen_start_margin"
+        android:layout_marginEnd="@dimen/screen_end_margin"
+        android:layout_marginBottom="@dimen/_15sdp"
+        android:layout_marginTop="@dimen/_25sdp"
+        android:gravity="center"
+        app:corner_radius="@dimen/corner_radius_6dp">
+
+        <ImageView
+            android:layout_width="@dimen/_12sdp"
+            android:layout_height="@dimen/_12sdp"
+            android:src="@drawable/ic_add" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/text_add"
+            android:textColor="@color/white"
+            android:fontFamily="@font/roboto_medium"
+            android:textSize="@dimen/_13ssp"
+            android:layout_marginStart="@dimen/_5sdp" />
+    </com.jcminarro.roundkornerlayout.RoundKornerLinearLayout>
+
+</LinearLayout>

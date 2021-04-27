@@ -1,24 +1,30 @@
 package com.smartouch.ui.fragments.main.home
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
+import com.smartouch.R
 import com.smartouch.adapters.DeviceSceneAdapter
+import com.smartouch.common.utils.dialog
 import com.smartouch.databinding.FragmentCreateSceneBinding
+import com.smartouch.ui.fragments.BaseFragment
 
-class CreateSceneFragment : Fragment() {
+/**
+ * Created by Jignesh Dangar on 23-04-2021.
+ */
+
+class CreateSceneFragment : BaseFragment() {
 
     private lateinit var binding: FragmentCreateSceneBinding
-    private var deviceSceneAdapter = DeviceSceneAdapter()
+    private lateinit var deviceSceneAdapter: DeviceSceneAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentCreateSceneBinding.inflate(inflater,container,false)
+        binding = FragmentCreateSceneBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -29,7 +35,16 @@ class CreateSceneFragment : Fragment() {
             findNavController().navigateUp()
         }
 
-        binding.recyclerScenes.adapter = deviceSceneAdapter
+        context?.let {
+            deviceSceneAdapter = DeviceSceneAdapter(it)
+            binding.recyclerScenes.adapter = deviceSceneAdapter
+        }
 
+        binding.ivEditCreateScene.setOnClickListener {
+            activity?.let {
+                dialog.editDialog(it,getString(R.string.text_scene_name),"Living Room",getString(R.string.text_save),getString(
+                    R.string.text_cancel),null)
+            }
+        }
     }
 }

@@ -18,23 +18,24 @@ public class Test {
     }
 
     public static QuestionModel Que1() {
-        return new QuestionModel(AppDelegate.instance.getString(R.string.que1), makeRockArtists());
+        return new QuestionModel(AppDelegate.instance.getString(R.string.que1), answer());
     }
 
     public static QuestionModel Que2() {
-        return new QuestionModel(AppDelegate.instance.getString(R.string.que2), makeRockArtists());
+        return new QuestionModel(AppDelegate.instance.getString(R.string.que2), answer());
     }
 
     public static QuestionModel Que3() {
-        return new QuestionModel(AppDelegate.instance.getString(R.string.que3), makeRockArtists());
+        return new QuestionModel(AppDelegate.instance.getString(R.string.que3), answer());
     }
 
     public static QuestionModel Que4() {
-        return new QuestionModel(AppDelegate.instance.getString(R.string.que4), makeRockArtists());
+        return new QuestionModel(AppDelegate.instance.getString(R.string.que4), answer());
     }
 
-    public static List<AnswerModel> makeRockArtists() {
+    public static List<AnswerModel> answer() {
         AnswerModel queen = new AnswerModel(AppDelegate.instance.getString(R.string.title_text_answer), true);
         return Arrays.asList(queen);
     }
+
 }

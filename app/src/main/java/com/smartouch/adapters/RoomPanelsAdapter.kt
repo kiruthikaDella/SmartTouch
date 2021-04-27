@@ -23,6 +23,8 @@ class RoomPanelsAdapter(
 
     private var customizationClickListener: AdapterItemClickListener<RoomPanelModel>? = null
     private var featuresClickListener: AdapterItemClickListener<RoomPanelModel>? = null
+    private var settingsClickListener: AdapterItemClickListener<RoomPanelModel>? = null
+    private var editClickListener: AdapterItemClickListener<RoomPanelModel>? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
         val v = LayoutInflater.from(parent.context)
@@ -51,6 +53,33 @@ class RoomPanelsAdapter(
             linearFeature.setOnClickListener {
                 featuresClickListener?.onItemClick(data)
             }
+
+            linearDeviceSettings.setOnClickListener {
+                settingsClickListener?.onItemClick(data)
+            }
+
+            tvSwitchOneEdit.setOnClickListener {
+                editClickListener?.onItemClick(data)
+            }
+
+            tvSwitchTwoEdit.setOnClickListener {
+                editClickListener?.onItemClick(data)
+            }
+            tvSwitchThreeEdit.setOnClickListener {
+                editClickListener?.onItemClick(data)
+            }
+            tvSwitchFourEdit.setOnClickListener {
+                editClickListener?.onItemClick(data)
+            }
+            tvSwitchFiveEdit.setOnClickListener {
+                editClickListener?.onItemClick(data)
+            }
+            tvSwitchSixEdit.setOnClickListener {
+                editClickListener?.onItemClick(data)
+            }
+            tvSwitchSevenEdit.setOnClickListener {
+                editClickListener?.onItemClick(data)
+            }
         }
     }
 
@@ -67,6 +96,8 @@ class RoomPanelsAdapter(
 
         val linearCustomization = itemView.findViewById(R.id.linear_customization) as LinearLayout
         val linearFeature = itemView.findViewById(R.id.linear_features) as LinearLayout
+        val linearDeviceSettings =
+            itemView.findViewById(R.id.linear_device_settings) as LinearLayout
 
         val tvSwitchNameOne = itemView.findViewById(R.id.tv_switch_one_name) as TextView
         val tvSwitchNameTwo = itemView.findViewById(R.id.tv_switch_two_name) as TextView
@@ -108,5 +139,13 @@ class RoomPanelsAdapter(
 
     fun setOnFeaturesClickListener(listener: AdapterItemClickListener<RoomPanelModel>) {
         this.featuresClickListener = listener
+    }
+
+    fun setOnSettingsClickListener(listener: AdapterItemClickListener<RoomPanelModel>) {
+        this.settingsClickListener = listener
+    }
+
+    fun setOnEditClickListener(listener: AdapterItemClickListener<RoomPanelModel>) {
+        this.editClickListener = listener
     }
 }
