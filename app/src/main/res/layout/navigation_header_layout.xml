@@ -4,8 +4,7 @@
     android:layout_height="wrap_content"
     android:background="@color/catskill_white"
     android:orientation="vertical"
-    android:paddingTop="@dimen/_25sdp"
-    android:paddingBottom="@dimen/_25sdp">
+    android:padding="@dimen/_25sdp">
 
     <TextView
         android:id="@+id/tv_name"
@@ -14,7 +13,6 @@
         android:textSize="@dimen/_14ssp"
         android:text="Hermione Granger"
         android:fontFamily="@font/roboto_medium"
-        android:layout_marginStart="@dimen/_20sdp"
         android:textColor="@color/theme_color" />
 
     <TextView
@@ -24,7 +22,6 @@
         android:textSize="@dimen/_12ssp"
         android:text="hermione.granger@gmail.com"
         android:fontFamily="@font/roboto_medium"
-        android:textColor="@color/daintree"
-        android:layout_marginStart="@dimen/_20sdp" />
+        android:textColor="@color/daintree"/>
 
 </LinearLayout>

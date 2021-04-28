@@ -64,6 +64,10 @@ class SwitchIconsDetailFragment : Fragment() {
             binding.recyclerSwitchIcons.layoutManager = GridLayoutManager(it, 4)
         }
         binding.recyclerSwitchIcons.adapter = adapter
+
+        binding.ibSwitch.setOnClickListener {
+            findNavController().navigateUp()
+        }
     }
 
 }

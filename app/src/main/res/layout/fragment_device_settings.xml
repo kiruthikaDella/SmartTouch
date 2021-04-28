@@ -106,6 +106,67 @@
                 app:layout_constraintBottom_toBottomOf="@+id/iv_factory_reset"
                 app:layout_constraintTop_toTopOf="@+id/iv_factory_reset"/>
 
+
+            <ImageView
+                android:id="@+id/iv_remove"
+                android:layout_width="@dimen/_16sdp"
+                android:layout_height="@dimen/_16sdp"
+                android:layout_marginTop="@dimen/_25sdp"
+                android:src="@drawable/ic_remove"
+                app:layout_constraintStart_toStartOf="@+id/iv_factory_reset"
+                app:layout_constraintTop_toBottomOf="@+id/iv_factory_reset" />
+
+            <TextView
+                android:id="@+id/tv_remove"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/roboto_medium"
+                android:text="@string/text_remove"
+                android:textColor="@color/daintree"
+                android:textSize="@dimen/_12ssp"
+                app:layout_constraintBottom_toBottomOf="@+id/iv_remove"
+                app:layout_constraintStart_toStartOf="@+id/tv_restart"
+                app:layout_constraintTop_toTopOf="@+id/iv_remove" />
+
+            <ImageView
+                android:id="@+id/iv_remove_arrow"
+                android:layout_width="@dimen/_6sdp"
+                android:layout_height="@dimen/_12sdp"
+                android:src="@drawable/ic_arrow_right"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toBottomOf="@+id/iv_remove"
+                app:layout_constraintTop_toTopOf="@+id/iv_remove"/>
+
+            <ImageView
+                android:id="@+id/iv_update"
+                android:layout_width="@dimen/_16sdp"
+                android:layout_height="@dimen/_16sdp"
+                android:layout_marginTop="@dimen/_25sdp"
+                android:src="@drawable/ic_update"
+                app:layout_constraintStart_toStartOf="@+id/iv_remove"
+                app:layout_constraintTop_toBottomOf="@+id/iv_remove" />
+
+            <TextView
+                android:id="@+id/tv_update"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/roboto_medium"
+                android:text="@string/text_update"
+                android:textColor="@color/daintree"
+                android:textSize="@dimen/_12ssp"
+                app:layout_constraintBottom_toBottomOf="@+id/iv_update"
+                app:layout_constraintStart_toStartOf="@+id/tv_restart"
+                app:layout_constraintTop_toTopOf="@+id/iv_update" />
+
+            <ImageView
+                android:id="@+id/iv_update_arrow"
+                android:layout_width="@dimen/_6sdp"
+                android:layout_height="@dimen/_12sdp"
+                android:src="@drawable/ic_arrow_right"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toBottomOf="@+id/iv_update"
+                app:layout_constraintTop_toTopOf="@+id/iv_update"/>
+
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.cardview.widget.CardView>

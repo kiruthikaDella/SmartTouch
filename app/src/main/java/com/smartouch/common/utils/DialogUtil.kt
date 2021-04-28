@@ -14,7 +14,7 @@ import com.smartouch.common.interfaces.DialogAskListener
 /**
  * Created by Jignesh Dangar on 20-04-2021.
  */
-object dialog {
+object DialogUtil {
 
     private var dialog: Dialog? = null
 
@@ -23,7 +23,7 @@ object dialog {
         title: String,
         strYes: String,
         strNo: String,
-        onClick: DialogAskListener?
+        onClick: DialogAskListener? = null
     ) {
 
         hideDialog()
@@ -65,7 +65,7 @@ object dialog {
         strEditText: String,
         strYes: String,
         strNo: String,
-        onClick: DialogAskListener?
+        onClick: DialogAskListener? = null
     ) {
 
         dialog = Dialog(activity)
@@ -95,6 +95,31 @@ object dialog {
         val displayMetrics = DisplayMetrics()
         activity.windowManager?.defaultDisplay?.getMetrics(displayMetrics)
         val width = (displayMetrics.widthPixels * 0.85.toFloat())
+        val height = (displayMetrics.heightPixels * Constants.COMMON_DIALOG_HEIGHT)
+
+        dialog?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        dialog?.window?.setLayout(width.toInt(), height.toInt())
+        dialog?.show()
+    }
+
+    fun loadingAlert(
+        activity: Activity,
+        title: String,
+        isCancelable: Boolean = false
+    ) {
+
+        hideDialog()
+        dialog = Dialog(activity)
+        dialog?.setContentView(R.layout.dialog_loading)
+        dialog?.setCancelable(isCancelable)
+
+        val tvTitle = dialog?.findViewById(R.id.tv_dialog_title) as TextView
+
+        tvTitle.text = title
+
+        val displayMetrics = DisplayMetrics()
+        activity.windowManager?.defaultDisplay?.getMetrics(displayMetrics)
+        val width = (displayMetrics.widthPixels * Constants.COMMON_DIALOG_WIDTH)
         val height = (displayMetrics.heightPixels * Constants.COMMON_DIALOG_HEIGHT)
 
         dialog?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))

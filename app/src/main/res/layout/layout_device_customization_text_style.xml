@@ -27,7 +27,7 @@
         android:background="@drawable/catskill_white_background">
 
         <Spinner
-            android:id="@+id/spinner_room"
+            android:id="@+id/spinner_fonts"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginStart="@dimen/_5sdp"

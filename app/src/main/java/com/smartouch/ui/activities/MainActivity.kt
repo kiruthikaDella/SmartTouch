@@ -34,6 +34,8 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        window?.statusBarColor = getColor(R.color.app_background_color)
+
         val navHostFragment =
             supportFragmentManager.findFragmentById(R.id.main_fragment_container) as NavHostFragment
 

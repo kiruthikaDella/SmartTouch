@@ -9,7 +9,7 @@ import androidx.navigation.fragment.navArgs
 import com.smartouch.R
 import com.smartouch.adapters.RoomPanelsAdapter
 import com.smartouch.common.interfaces.AdapterItemClickListener
-import com.smartouch.common.utils.dialog
+import com.smartouch.common.utils.DialogUtil
 import com.smartouch.databinding.FragmentRoomPanelBinding
 import com.smartouch.model.RoomPanelModel
 import com.smartouch.ui.fragments.BaseFragment
@@ -68,13 +68,12 @@ class RoomPanelFragment : BaseFragment() {
         panelAdapter.setOnEditClickListener(object : AdapterItemClickListener<RoomPanelModel> {
             override fun onItemClick(data: RoomPanelModel) {
                 activity?.let {
-                    dialog.editDialog(
+                    DialogUtil.editDialog(
                         it,
                         getString(R.string.text_edit),
                         "Switch 1",
                         getString(R.string.text_save),
-                        getString(R.string.text_cancel),
-                        null
+                        getString(R.string.text_cancel)
                     )
                 }
             }

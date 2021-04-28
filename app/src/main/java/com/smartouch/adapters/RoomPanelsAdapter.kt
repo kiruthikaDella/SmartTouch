@@ -19,75 +19,106 @@ import com.warkiz.widget.IndicatorSeekBar
  */
 class RoomPanelsAdapter(
     private val panelList: List<RoomPanelModel>
-) : RecyclerView.Adapter<RoomPanelsAdapter.MyViewHolder>() {
+) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private var customizationClickListener: AdapterItemClickListener<RoomPanelModel>? = null
     private var featuresClickListener: AdapterItemClickListener<RoomPanelModel>? = null
     private var settingsClickListener: AdapterItemClickListener<RoomPanelModel>? = null
     private var editClickListener: AdapterItemClickListener<RoomPanelModel>? = null
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
-        val v = LayoutInflater.from(parent.context)
-            .inflate(R.layout.item_room_eight_panel, parent, false)
-        return MyViewHolder(v)
-    }
+    private val EIGHT_PANEL_VIEW = 1
+    private val FOUR_PANEL_VIEW = 2
 
-    override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
-        val data = panelList[position]
-
-        holder.apply {
-            tvPanelName.text = data.title
-
-            imgBtnPanelMenu.setOnClickListener {
-                if (linearPanelMenu.isVisible) {
-                    linearPanelMenu.visibility = View.GONE
-                } else {
-                    linearPanelMenu.visibility = View.VISIBLE
-                }
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+        return when(viewType){
+            EIGHT_PANEL_VIEW -> {
+                val v = LayoutInflater.from(parent.context)
+                    .inflate(R.layout.item_room_eight_panel, parent, false)
+                EightPanelViewHolder(v)
             }
-
-            linearCustomization.setOnClickListener {
-                customizationClickListener?.onItemClick(data)
-            }
-
-            linearFeature.setOnClickListener {
-                featuresClickListener?.onItemClick(data)
-            }
-
-            linearDeviceSettings.setOnClickListener {
-                settingsClickListener?.onItemClick(data)
-            }
-
-            tvSwitchOneEdit.setOnClickListener {
-                editClickListener?.onItemClick(data)
-            }
-
-            tvSwitchTwoEdit.setOnClickListener {
-                editClickListener?.onItemClick(data)
-            }
-            tvSwitchThreeEdit.setOnClickListener {
-                editClickListener?.onItemClick(data)
-            }
-            tvSwitchFourEdit.setOnClickListener {
-                editClickListener?.onItemClick(data)
-            }
-            tvSwitchFiveEdit.setOnClickListener {
-                editClickListener?.onItemClick(data)
-            }
-            tvSwitchSixEdit.setOnClickListener {
-                editClickListener?.onItemClick(data)
-            }
-            tvSwitchSevenEdit.setOnClickListener {
-                editClickListener?.onItemClick(data)
+            else -> {
+                val v = LayoutInflater.from(parent.context)
+                    .inflate(R.layout.item_room_four_panel, parent, false)
+                FourPanelViewHolder(v)
             }
         }
+    }
+
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+        val data = panelList[position]
+
+        when(holder.itemViewType){
+            EIGHT_PANEL_VIEW -> {
+                val eightPanelViewHolder: EightPanelViewHolder = holder as EightPanelViewHolder
+
+                eightPanelViewHolder.apply {
+                    tvPanelName.text = data.title
+
+                    imgBtnPanelMenu.setOnClickListener {
+                        if (linearPanelMenu.isVisible) {
+                            linearPanelMenu.visibility = View.GONE
+                        } else {
+                            linearPanelMenu.visibility = View.VISIBLE
+                        }
+                    }
+
+                    linearCustomization.setOnClickListener {
+                        customizationClickListener?.onItemClick(data)
+                    }
+
+                    linearFeature.setOnClickListener {
+                        featuresClickListener?.onItemClick(data)
+                    }
+
+                    linearDeviceSettings.setOnClickListener {
+                        settingsClickListener?.onItemClick(data)
+                    }
+
+                    tvSwitchOneEdit.setOnClickListener {
+                        editClickListener?.onItemClick(data)
+                    }
+
+                    tvSwitchTwoEdit.setOnClickListener {
+                        editClickListener?.onItemClick(data)
+                    }
+                    tvSwitchThreeEdit.setOnClickListener {
+                        editClickListener?.onItemClick(data)
+                    }
+                    tvSwitchFourEdit.setOnClickListener {
+                        editClickListener?.onItemClick(data)
+                    }
+                    tvSwitchFiveEdit.setOnClickListener {
+                        editClickListener?.onItemClick(data)
+                    }
+                    tvSwitchSixEdit.setOnClickListener {
+                        editClickListener?.onItemClick(data)
+                    }
+                    tvSwitchSevenEdit.setOnClickListener {
+                        editClickListener?.onItemClick(data)
+                    }
+                }
+
+            }
+            FOUR_PANEL_VIEW -> {
+                val fourPanelViewHolder: FourPanelViewHolder = holder as FourPanelViewHolder
+            }
+        }
+
     }
 
     override fun getItemCount(): Int {
         return panelList.size
     }
 
-    inner class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    override fun getItemViewType(position: Int): Int {
+        return if (panelList[position].panelType == 1){
+            EIGHT_PANEL_VIEW
+        }else {
+            FOUR_PANEL_VIEW
+        }
+    }
+
+    inner class EightPanelViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         val imgBtnPanelMenu = itemView.findViewById(R.id.img_panel_menu) as ImageButton
         val imgBtnPanelEdit = itemView.findViewById(R.id.img_panel_edit) as ImageButton
@@ -130,6 +161,10 @@ class RoomPanelsAdapter(
 
         val tvSwitchPortA = itemView.findViewById(R.id.switch_usb_port_a) as SwitchMaterial
         val tvSwitchPortC = itemView.findViewById(R.id.switch_usb_port_c) as SwitchMaterial
+
+    }
+
+    inner class FourPanelViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
     }
 

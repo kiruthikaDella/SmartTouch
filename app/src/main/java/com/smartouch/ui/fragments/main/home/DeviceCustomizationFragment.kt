@@ -3,16 +3,18 @@ package com.smartouch.ui.fragments.main.home
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
-import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.smartouch.R
-import com.smartouch.common.utils.dialog
+import com.smartouch.common.utils.DialogUtil
 import com.smartouch.databinding.FragmentDeviceCustomizationBinding
 import com.smartouch.ui.fragments.BaseFragment
 import com.sothree.slidinguppanel.SlidingUpPanelLayout
@@ -37,6 +39,9 @@ class DeviceCustomizationFragment : BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val sizeList = arrayOf("1", "2", "3", "4", "5", "6", "7", "8", "9", "10")
+        val fontNames =
+            arrayOf("Times New Roman", "Roboto", "Montserrat", "Lato", "Krona One", "Arial")
+
 
         binding.ivBack.setOnClickListener {
             findNavController().navigateUp()
@@ -87,12 +92,11 @@ class DeviceCustomizationFragment : BaseFragment() {
 
         binding.ibLock.setOnClickListener {
             activity?.let {
-                dialog.askAlert(
+                DialogUtil.askAlert(
                     it,
                     getString(R.string.dialog_title_text_lock),
                     getString(R.string.text_ok),
-                    getString(R.string.text_cancel),
-                    null
+                    getString(R.string.text_cancel)
                 )
             }
         }
@@ -128,6 +132,45 @@ class DeviceCustomizationFragment : BaseFragment() {
 
         binding.ivSwitchIconsSettings.setOnClickListener {
             findNavController().navigate(DeviceCustomizationFragmentDirections.actionDeviceCustomizationFragmentToSwitchIconsFragment())
+        }
+
+        context?.let {
+            val roomAdapter = ArrayAdapter(it, R.layout.simple_spinner_dropdown, fontNames)
+            roomAdapter.setDropDownViewResource(R.layout.simple_spinner_dropdown)
+            binding.layoutTextStyle.spinnerFonts.adapter = roomAdapter
+
+            binding.layoutTextStyle.spinnerFonts.onItemSelectedListener =
+                object : AdapterView.OnItemSelectedListener {
+                    override fun onItemSelected(
+                        parent: AdapterView<*>?,
+                        view: View?,
+                        position: Int,
+                        id: Long
+                    ) {
+                        val textView = (parent?.getChildAt(0) as TextView)
+                        /*(parent?.getChildAt(0) as TextView).setTextColor(
+                            ContextCompat.getColor(
+                                it,
+                                R.color.theme_color
+                            )
+                        )
+                        (parent.getChildAt(0) as TextView).gravity = Gravity.CENTER*/
+
+                        textView.setTextColor(
+                            ContextCompat.getColor(
+                                it,
+                                R.color.theme_color
+                            )
+                        )
+                        textView.gravity = Gravity.CENTER
+
+                    }
+
+                    override fun onNothingSelected(parent: AdapterView<*>?) {
+
+                    }
+
+                }
         }
     }
 

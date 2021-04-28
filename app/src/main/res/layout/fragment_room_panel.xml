@@ -10,6 +10,7 @@
     app:umanoDragView="@id/drag_add_panel"
     app:umanoOverlay="true"
     app:umanoPanelHeight="0dp"
+    android:background="@color/app_background_color"
     tools:context=".ui.fragments.main.home.RoomPanelFragment">
 
     <LinearLayout

@@ -5,6 +5,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
+import com.smartouch.R
+import com.smartouch.common.utils.DialogUtil
 import com.smartouch.databinding.FragmentDeviceSettingsBinding
 import com.smartouch.ui.fragments.BaseFragment
 
@@ -18,7 +20,7 @@ class DeviceSettingsFragment : BaseFragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = FragmentDeviceSettingsBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -27,6 +29,49 @@ class DeviceSettingsFragment : BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
         binding.ivBack.setOnClickListener {
             findNavController().navigateUp()
+        }
+
+        binding.tvRestart.setOnClickListener {
+            activity?.let {
+                DialogUtil.askAlert(
+                    it,
+                    getString(R.string.dialog_title_restart_device),
+                    getString(R.string.text_ok),
+                    getString(R.string.text_cancel)
+                )
+            }
+        }
+
+        binding.tvFactoryReset.setOnClickListener {
+            activity?.let {
+                DialogUtil.askAlert(
+                    it,
+                    getString(R.string.dialog_title_factory_reset),
+                    getString(R.string.text_ok),
+                    getString(R.string.text_cancel)
+                )
+            }
+        }
+
+        binding.tvRemove.setOnClickListener {
+            activity?.let {
+                DialogUtil.askAlert(
+                    it,
+                    getString(R.string.dialog_title_remove_device),
+                    getString(R.string.text_ok),
+                    getString(R.string.text_cancel)
+                )
+            }
+        }
+
+        binding.tvUpdate.setOnClickListener {
+            activity?.let {
+                DialogUtil.loadingAlert(
+                    it,
+                    getString(R.string.text_verify_update),
+                    true
+                )
+            }
         }
     }
 

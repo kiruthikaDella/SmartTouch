@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
 import com.smartouch.R
 import com.smartouch.adapters.DeviceSceneAdapter
-import com.smartouch.common.utils.dialog
+import com.smartouch.common.utils.DialogUtil
 import com.smartouch.databinding.FragmentCreateSceneBinding
 import com.smartouch.ui.fragments.BaseFragment
 
@@ -42,8 +42,8 @@ class CreateSceneFragment : BaseFragment() {
 
         binding.ivEditCreateScene.setOnClickListener {
             activity?.let {
-                dialog.editDialog(it,getString(R.string.text_scene_name),"Living Room",getString(R.string.text_save),getString(
-                    R.string.text_cancel),null)
+                DialogUtil.editDialog(it,getString(R.string.text_scene_name),"Living Room",getString(R.string.text_save),getString(
+                    R.string.text_cancel))
             }
         }
     }

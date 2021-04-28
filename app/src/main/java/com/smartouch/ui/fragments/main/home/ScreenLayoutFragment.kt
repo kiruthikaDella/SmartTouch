@@ -4,10 +4,9 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.smartouch.R
-import com.smartouch.common.utils.dialog
+import com.smartouch.common.utils.DialogUtil
 import com.smartouch.databinding.FragmentScreenLayoutBinding
 import com.smartouch.ui.fragments.BaseFragment
 
@@ -43,12 +42,11 @@ class ScreenLayoutFragment : BaseFragment() {
 
         binding.ibLock.setOnClickListener {
             activity?.let {
-                dialog.askAlert(
+                DialogUtil.askAlert(
                     it,
                     getString(R.string.dialog_title_text_lock),
                     getString(R.string.text_ok),
-                    getString(R.string.text_cancel),
-                    null
+                    getString(R.string.text_cancel)
                 )
             }
         }

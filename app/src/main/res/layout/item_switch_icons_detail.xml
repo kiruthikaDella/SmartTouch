@@ -22,6 +22,7 @@
         android:layout_gravity="center"
         android:fontFamily="@font/roboto_regular"
         android:text="Fan"
+        android:gravity="center"
         android:textColor="@color/nepal"
-        android:textSize="@dimen/_10ssp" />
+        android:textSize="@dimen/_9ssp" />
 </LinearLayout>
