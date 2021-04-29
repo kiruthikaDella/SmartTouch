@@ -1,5 +1,6 @@
 package com.smartouch.ui.fragments.main.home
 
+import android.graphics.Color
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -47,49 +48,6 @@ class DeviceCustomizationFragment : BaseFragment() {
             findNavController().navigateUp()
         }
 
-        context?.let {
-            val sizeAdapter = ArrayAdapter(it, R.layout.simple_spinner_dropdown, sizeList)
-            sizeAdapter.setDropDownViewResource(R.layout.simple_spinner_dropdown)
-            binding.spinnerIconSize.adapter = sizeAdapter
-            binding.spinnerTextSize.adapter = sizeAdapter
-
-            binding.spinnerIconSize.onItemSelectedListener =
-                object : AdapterView.OnItemSelectedListener {
-                    override fun onItemSelected(
-                        parent: AdapterView<*>?,
-                        view: View?,
-                        position: Int,
-                        id: Long
-                    ) {
-/*                    (parent?.getChildAt(0) as TextView)?.setTextColor(ContextCompat.getColor(it,R.color.theme_color))
-                    (parent.getChildAt(0) as TextView)?.gravity = Gravity.CENTER*/
-                    }
-
-                    override fun onNothingSelected(parent: AdapterView<*>?) {
-
-                    }
-
-                }
-
-            binding.spinnerTextSize.onItemSelectedListener =
-                object : AdapterView.OnItemSelectedListener {
-                    override fun onItemSelected(
-                        parent: AdapterView<*>?,
-                        view: View?,
-                        position: Int,
-                        id: Long
-                    ) {
-/*                    (parent?.getChildAt(0) as TextView)?.setTextColor(ContextCompat.getColor(it,R.color.theme_color))
-                    (parent.getChildAt(0) as TextView)?.gravity = Gravity.CENTER*/
-                    }
-
-                    override fun onNothingSelected(parent: AdapterView<*>?) {
-
-                    }
-
-                }
-        }
-
         binding.ibLock.setOnClickListener {
             activity?.let {
                 DialogUtil.askAlert(
@@ -112,7 +70,7 @@ class DeviceCustomizationFragment : BaseFragment() {
 
             Handler(Looper.getMainLooper()).postDelayed({
                 binding.layoutSlidingUpPanel.panelState = SlidingUpPanelLayout.PanelState.EXPANDED
-            }, 500)
+            }, 600)
         }
 
         binding.ivHideUploadImagePanel.setOnClickListener {
@@ -126,7 +84,7 @@ class DeviceCustomizationFragment : BaseFragment() {
 
             Handler(Looper.getMainLooper()).postDelayed({
                 binding.layoutSlidingUpPanel.panelState = SlidingUpPanelLayout.PanelState.EXPANDED
-            }, 500)
+            }, 600)
 
         }
 
@@ -134,8 +92,66 @@ class DeviceCustomizationFragment : BaseFragment() {
             findNavController().navigate(DeviceCustomizationFragmentDirections.actionDeviceCustomizationFragmentToSwitchIconsFragment())
         }
 
-        context?.let {
-            val roomAdapter = ArrayAdapter(it, R.layout.simple_spinner_dropdown, fontNames)
+        context?.let { mContext ->
+
+            val sizeAdapter = ArrayAdapter(mContext, R.layout.simple_spinner_dropdown, sizeList)
+            sizeAdapter.setDropDownViewResource(R.layout.simple_spinner_dropdown)
+            binding.spinnerIconSize.adapter = sizeAdapter
+            binding.spinnerTextSize.adapter = sizeAdapter
+
+            binding.spinnerIconSize.onItemSelectedListener =
+                object : AdapterView.OnItemSelectedListener {
+                    override fun onItemSelected(
+                        parent: AdapterView<*>?,
+                        view: View?,
+                        position: Int,
+                        id: Long
+                    ) {
+                        parent?.getChildAt(0)?.let { mView ->
+                            val textView = mView as TextView
+                            textView.setTextColor(
+                                ContextCompat.getColor(
+                                    mContext,
+                                    R.color.theme_color
+                                )
+                            )
+                            textView.gravity = Gravity.CENTER
+                        }
+                    }
+
+                    override fun onNothingSelected(parent: AdapterView<*>?) {
+
+                    }
+
+                }
+
+            binding.spinnerTextSize.onItemSelectedListener =
+                object : AdapterView.OnItemSelectedListener {
+                    override fun onItemSelected(
+                        parent: AdapterView<*>?,
+                        view: View?,
+                        position: Int,
+                        id: Long
+                    ) {
+                        parent?.getChildAt(0)?.let { mView ->
+                            val textView = mView as TextView
+                            textView.setTextColor(
+                                ContextCompat.getColor(
+                                    mContext,
+                                    R.color.theme_color
+                                )
+                            )
+                            textView.gravity = Gravity.CENTER
+                        }
+                    }
+
+                    override fun onNothingSelected(parent: AdapterView<*>?) {
+
+                    }
+
+                }
+
+            val roomAdapter = ArrayAdapter(mContext, R.layout.simple_spinner_dropdown, fontNames)
             roomAdapter.setDropDownViewResource(R.layout.simple_spinner_dropdown)
             binding.layoutTextStyle.spinnerFonts.adapter = roomAdapter
 
@@ -147,22 +163,17 @@ class DeviceCustomizationFragment : BaseFragment() {
                         position: Int,
                         id: Long
                     ) {
-                        val textView = (parent?.getChildAt(0) as TextView)
-                        /*(parent?.getChildAt(0) as TextView).setTextColor(
-                            ContextCompat.getColor(
-                                it,
-                                R.color.theme_color
+                        parent?.getChildAt(0)?.let { mView ->
+                            val textView = mView as TextView
+                            textView.setTextColor(
+                                ContextCompat.getColor(
+                                    mContext,
+                                    R.color.theme_color
+                                )
                             )
-                        )
-                        (parent.getChildAt(0) as TextView).gravity = Gravity.CENTER*/
-
-                        textView.setTextColor(
-                            ContextCompat.getColor(
-                                it,
-                                R.color.theme_color
-                            )
-                        )
-                        textView.gravity = Gravity.CENTER
+                            textView.gravity = Gravity.CENTER
+                            textView.setBackgroundColor(Color.TRANSPARENT)
+                        }
 
                     }
 
@@ -172,6 +183,11 @@ class DeviceCustomizationFragment : BaseFragment() {
 
                 }
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        binding.layoutSlidingUpPanel.panelState = SlidingUpPanelLayout.PanelState.HIDDEN
     }
 
 }

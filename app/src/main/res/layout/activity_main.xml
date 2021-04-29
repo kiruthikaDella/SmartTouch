@@ -25,6 +25,63 @@
             app:defaultNavHost="true"
             app:navGraph="@navigation/nav_main" />
 
+        <!--<LinearLayout
+            android:id="@+id/linear_bottom_view"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_60sdp"
+            android:orientation="horizontal"
+            android:layout_alignParentBottom="true"
+            android:weightSum="5">
+
+            <ImageView
+                android:id="@+id/iv_home"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:src="@drawable/ic_bottom_navigation_home"
+                android:layout_weight="1"
+                android:padding="@dimen/_20sdp"/>
+
+            <ImageView
+                android:id="@+id/iv_user"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:src="@drawable/ic_bottom_navigation_profile"
+                android:layout_weight="1"
+                android:padding="@dimen/_20sdp"/>
+
+            <ImageView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:padding="@dimen/_20sdp"/>
+
+            <ImageView
+                android:id="@+id/iv_control_mode"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:src="@drawable/ic_bottom_navigation_settings"
+                android:layout_weight="1"
+                android:padding="@dimen/_20sdp"/>
+
+            <ImageView
+                android:id="@+id/iv_contact_us"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:src="@drawable/ic_bottom_navigation_call"
+                android:layout_weight="1"
+                android:padding="@dimen/_20sdp"/>
+
+        </LinearLayout>
+
+        <ImageView
+            android:id="@+id/iv_add_room2"
+            android:layout_width="@dimen/_60sdp"
+            android:layout_height="@dimen/_60sdp"
+            android:layout_above="@+id/linear_bottom_view"
+            android:layout_below="@+id/linear_bottom_view"
+            android:layout_centerHorizontal="true"
+            android:background="@drawable/ic_bottom_navigation_add_room" />-->
+
         <androidx.coordinatorlayout.widget.CoordinatorLayout
             android:id="@+id/coordinator_bottom_navigation"
             android:layout_width="match_parent"

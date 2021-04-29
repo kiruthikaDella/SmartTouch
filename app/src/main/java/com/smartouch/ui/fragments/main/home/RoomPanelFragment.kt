@@ -38,6 +38,7 @@ class RoomPanelFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        roomList.clear()
         roomList.add(RoomPanelModel(1, "SMT2028189"))
         roomList.add(RoomPanelModel(2, "SMT2028190"))
         roomList.add(RoomPanelModel(2, "SMT2028191"))
@@ -87,7 +88,7 @@ class RoomPanelFragment : BaseFragment() {
 
         })
 
-        binding.ivHidePanel.setOnClickListener {
+        binding.layoutRoomPanel.ivHidePanel.setOnClickListener {
             binding.layoutSlidingUpPanel.panelState = SlidingUpPanelLayout.PanelState.HIDDEN
         }
 

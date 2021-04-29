@@ -19,9 +19,6 @@
         <action
             android:id="@+id/action_homeFragment_to_faqsFragment"
             app:destination="@id/faqsFragment" />
-        <action
-            android:id="@+id/action_homeFragment_to_contactUsFragment"
-            app:destination="@id/contactUsFragment" />
     </fragment>
     <action
         android:id="@+id/action_global_homeFragment"
@@ -92,7 +89,7 @@
         tools:layout="@layout/fragment_faqs" />
     <fragment
         android:id="@+id/contactUsFragment"
-        android:name="com.smartouch.ui.fragments.main.home.ContactUsFragment"
+        android:name="com.smartouch.ui.fragments.main.contact.ContactUsFragment"
         android:label="fragment_contact_us"
         tools:layout="@layout/fragment_contact_us" />
     <fragment

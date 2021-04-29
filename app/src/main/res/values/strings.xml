@@ -107,6 +107,9 @@
     <string name="text_switch_six">Switch 6</string>
     <string name="text_switch_seven">Switch 7</string>
     <string name="text_switch_eight">Switch 8</string>
+    <string name="text_switch_20_amp">20 Amp</string>
+    <string name="text_switch_3_pin">3 Pin</string>
+    <string name="text_switch_dimmer">Dimmer</string>
 
     <string name="text_usb_port_a">USB Port <font fgcolor='#1A8EFF'>A</font></string>
     <string name="text_usb_port_c">USB Port <font fgcolor='#1A8EFF'>C</font></string>

@@ -6,17 +6,12 @@
     android:layout_height="match_parent"
     android:background="@color/catskill_white"
     android:orientation="vertical"
-    tools:context=".ui.fragments.main.home.ContactUsFragment">
+    tools:context=".ui.fragments.main.contact.ContactUsFragment">
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="?actionBarSize"
         android:orientation="horizontal">
-
-        <ImageButton
-            android:id="@+id/iv_back"
-            style="@style/BackImageStyle"
-            android:layout_centerVertical="true" />
 
         <TextView
             android:id="@+id/tv_title"

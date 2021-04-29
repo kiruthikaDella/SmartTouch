@@ -1,6 +1,7 @@
 package com.smartouch.adapters
 
 import android.content.Context
+import android.graphics.Color
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
@@ -59,13 +60,17 @@ class DeviceSceneAdapter(
                         position: Int,
                         id: Long
                     ) {
-                        (parent?.getChildAt(0) as TextView)?.setTextColor(
-                            ContextCompat.getColor(
-                                mContext,
-                                R.color.theme_color
+                        parent?.getChildAt(0)?.let { mView ->
+                            val textView = mView as TextView
+                            textView.setTextColor(
+                                ContextCompat.getColor(
+                                    mContext,
+                                    R.color.theme_color
+                                )
                             )
-                        )
-                        (parent.getChildAt(0) as TextView)?.gravity = Gravity.CENTER
+                            textView.gravity = Gravity.CENTER
+                            textView.setBackgroundColor(Color.TRANSPARENT)
+                        }
                     }
 
                     override fun onNothingSelected(parent: AdapterView<*>?) {
@@ -82,13 +87,17 @@ class DeviceSceneAdapter(
                         position: Int,
                         id: Long
                     ) {
-                        (parent?.getChildAt(0) as TextView)?.setTextColor(
-                            ContextCompat.getColor(
-                                mContext,
-                                R.color.theme_color
+                        parent?.getChildAt(0)?.let { mView ->
+                            val textView = mView as TextView
+                            textView.setTextColor(
+                                ContextCompat.getColor(
+                                    mContext,
+                                    R.color.theme_color
+                                )
                             )
-                        )
-                        (parent.getChildAt(0) as TextView)?.gravity = Gravity.CENTER
+                            textView.gravity = Gravity.CENTER
+                            textView.setBackgroundColor(Color.TRANSPARENT)
+                        }
                     }
 
                     override fun onNothingSelected(parent: AdapterView<*>?) {
@@ -105,13 +114,17 @@ class DeviceSceneAdapter(
                         position: Int,
                         id: Long
                     ) {
-                        (parent?.getChildAt(0) as TextView)?.setTextColor(
-                            ContextCompat.getColor(
-                                mContext,
-                                R.color.theme_color
+                        parent?.getChildAt(0)?.let { mView ->
+                            val textView = mView as TextView
+                            textView.setTextColor(
+                                ContextCompat.getColor(
+                                    mContext,
+                                    R.color.theme_color
+                                )
                             )
-                        )
-                        (parent.getChildAt(0) as TextView)?.gravity = Gravity.CENTER
+                            textView.gravity = Gravity.CENTER
+                            textView.setBackgroundColor(Color.TRANSPARENT)
+                        }
                     }
 
                     override fun onNothingSelected(parent: AdapterView<*>?) {

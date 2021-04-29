@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/app_background_color"
     android:orientation="vertical"
     tools:context=".ui.fragments.main.home.FaqsFragment">
 
@@ -31,20 +32,20 @@
     <EditText
         android:layout_width="match_parent"
         android:layout_height="@dimen/login_component_height"
-        android:layout_marginStart="@dimen/screen_start_margin"
-        android:layout_marginEnd="@dimen/screen_end_margin"
-        android:layout_marginTop="@dimen/_20sdp"
-        android:background="@drawable/white_background_with_catskill_white_dark_border"
         android:layout_gravity="center_vertical"
+        android:layout_marginStart="@dimen/screen_start_margin"
+        android:layout_marginTop="@dimen/_20sdp"
+        android:layout_marginEnd="@dimen/screen_end_margin"
+        android:background="@drawable/white_background_with_catskill_white_dark_border"
+        android:drawableStart="@drawable/ic_search"
+        android:drawablePadding="@dimen/_6sdp"
         android:gravity="center_vertical"
+        android:hint="@string/hint_text_search"
         android:paddingStart="@dimen/_10sdp"
         android:paddingEnd="@dimen/_10sdp"
-        android:hint="@string/hint_text_search"
-        android:textColorHint="@color/ghost_2"
         android:textColor="@color/daintree"
-        android:textSize="@dimen/_12ssp"
-        android:drawablePadding="@dimen/_6sdp"
-        android:drawableStart="@drawable/ic_search"/>
+        android:textColorHint="@color/ghost_2"
+        android:textSize="@dimen/_12ssp" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_faq"

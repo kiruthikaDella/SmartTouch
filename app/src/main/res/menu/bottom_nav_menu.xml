@@ -22,7 +22,7 @@
         android:title=""/>
 
     <item
-        android:id="@+id/call"
+        android:id="@+id/contactUsFragment"
         android:icon="@drawable/ic_bottom_navigation_call"
         android:title=""/>
 

@@ -1,4 +1,4 @@
-package com.smartouch.ui.fragments.main.home
+package com.smartouch.ui.fragments.main.contact
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -22,14 +22,6 @@ class ContactUsFragment : BaseFragment() {
     ): View {
         binding = FragmentContactUsBinding.inflate(inflater, container, false)
         return binding.root
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        binding.ivBack.setOnClickListener {
-            findNavController().navigateUp()
-        }
     }
 
 }

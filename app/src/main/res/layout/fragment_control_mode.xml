@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/app_background_color"
     android:orientation="vertical"
     tools:context=".ui.fragments.main.controlmode.ControlModeFragment">
 
@@ -12,23 +13,34 @@
         android:layout_height="?actionBarSize"
         android:orientation="horizontal">
 
+        <ImageButton
+            android:id="@+id/ib_logout"
+            android:layout_width="@dimen/_20sdp"
+            android:layout_height="@dimen/_20sdp"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="@dimen/screen_start_margin"
+            android:background="@drawable/ic_power_settings"
+            android:backgroundTint="@color/theme_color"
+            android:visibility="gone"/>
+
         <TextView
             android:id="@+id/tv_title"
             style="@style/ScreenTitleHomeStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
             android:layout_gravity="center_horizontal"
-            android:text="@string/title_text_home_screen"
-            android:layout_centerInParent="true" />
+            android:text="@string/title_text_home_screen" />
 
         <ImageButton
             android:id="@+id/ib_pin"
             android:layout_width="@dimen/_15sdp"
             android:layout_height="@dimen/_15sdp"
-            android:background="@drawable/ic_pin"
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
-            android:layout_marginEnd="@dimen/screen_end_margin" />
+            android:layout_marginEnd="@dimen/screen_end_margin"
+            android:background="@drawable/ic_pin" />
 
     </RelativeLayout>
 
@@ -38,6 +50,6 @@
         android:layout_height="match_parent"
         android:clipToPadding="false"
         android:overScrollMode="never"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
 </LinearLayout>

@@ -46,6 +46,7 @@ class HomeFragment : BaseFragment(), AdapterItemClickListener<HomeRoomModel> {
         // initializing navigation menu
         setUpNavigationView()
 
+        roomList.clear()
         roomList.add(
             HomeRoomModel(
                 R.drawable.img_living_room,
@@ -111,10 +112,10 @@ class HomeFragment : BaseFragment(), AdapterItemClickListener<HomeRoomModel> {
                 R.id.nav_shop -> {
                     Log.e(logTag, "nav_shop")
                 }
-                R.id.nav_contact_us -> {
+            /*    R.id.nav_contact_us -> {
                     openOrCloseDrawer()
                     findNavController().navigate(HomeFragmentDirections.actionHomeFragmentToContactUsFragment())
-                }
+                }*/
                 R.id.nav_logout -> {
                     activity?.let {
                         startActivity(Intent(it, AuthenticationActivity::class.java))

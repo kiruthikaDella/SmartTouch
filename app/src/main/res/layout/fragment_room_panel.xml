@@ -131,89 +131,11 @@
         app:top_left_corner_radius="@dimen/_20sdp"
         app:top_right_corner_radius="@dimen/_20sdp">
 
-        <ImageButton
-            android:id="@+id/iv_hide_panel"
-            android:layout_width="@dimen/_14sdp"
-            android:layout_height="@dimen/_9sdp"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="@dimen/_15sdp"
-            android:background="@drawable/ic_arrow_down" />
-
-        <TextView
-            android:layout_width="wrap_content"
+        <include
+            android:id="@+id/layout_room_panel"
+            layout="@layout/layout_room_panel"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="@dimen/_20sdp"
-            android:fontFamily="@font/roboto_bold"
-            android:text="@string/text_add_panel"
-            android:textColor="@color/theme_color"
-            android:textSize="@dimen/_18ssp" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="start"
-            android:layout_marginStart="@dimen/screen_start_margin"
-            android:layout_marginTop="@dimen/_20sdp"
-            android:fontFamily="@font/roboto_medium"
-            android:text="@string/text_add_panel"
-            android:textColor="@color/daintree"
-            android:textSize="@dimen/_12ssp" />
-
-        <EditText
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/login_component_height"
-            android:layout_marginStart="@dimen/screen_start_margin"
-            android:layout_marginTop="@dimen/_5sdp"
-            android:layout_marginEnd="@dimen/screen_end_margin"
-            android:background="@drawable/catskill_white_background"
-            android:fontFamily="@font/roboto_regular"
-            android:hint="@string/hint_text_enter_panel_name"
-            android:paddingStart="@dimen/_10sdp"
-            android:paddingEnd="@dimen/_10sdp"
-            android:textColor="@color/daintree"
-            android:textColorHint="@color/ghost"
-            android:textSize="@dimen/_12ssp" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="start"
-            android:layout_marginStart="@dimen/screen_start_margin"
-            android:layout_marginTop="@dimen/_20sdp"
-            android:fontFamily="@font/roboto_medium"
-            android:text="@string/text_serial_number"
-            android:textColor="@color/daintree"
-            android:textSize="@dimen/_12ssp" />
-
-        <EditText
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/login_component_height"
-            android:layout_marginStart="@dimen/screen_start_margin"
-            android:layout_marginTop="@dimen/_5sdp"
-            android:layout_marginEnd="@dimen/screen_end_margin"
-            android:background="@drawable/catskill_white_background"
-            android:fontFamily="@font/roboto_medium"
-            android:hint="@string/hint_text_enter_serial_number"
-            android:paddingStart="@dimen/_10sdp"
-            android:paddingEnd="@dimen/_10sdp"
-            android:textColor="@color/theme_color"
-            android:textColorHint="@color/ghost"
-            android:textSize="@dimen/_12ssp" />
-
-        <com.google.android.material.button.MaterialButton
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/_35sdp"
-            android:layout_marginStart="@dimen/screen_start_margin"
-            android:layout_marginTop="@dimen/_10sdp"
-            android:layout_marginEnd="@dimen/screen_end_margin"
-            android:layout_marginBottom="@dimen/_10sdp"
-            android:background="@drawable/dodger_blue_background"
-            android:text="@string/button_text_add_room"
-            android:textAllCaps="false"
-            android:textColor="@color/white"
-            android:textSize="@dimen/_13ssp"
-            app:backgroundTint="@null" />
+            android:layout_width="match_parent"/>
 
     </com.jcminarro.roundkornerlayout.RoundKornerLinearLayout>
 
