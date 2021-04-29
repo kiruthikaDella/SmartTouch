@@ -1,16 +1,19 @@
 package com.smartouch.ui.activities
 
+import android.graphics.Color
 import android.os.Bundle
+import android.view.Gravity
 import android.view.MenuItem
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.onNavDestinationSelected
-import androidx.navigation.ui.setupWithNavController
 import com.appizona.yehiahd.fastsave.FastSave
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.smartouch.R
@@ -42,28 +45,26 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
 
         navController = navHostFragment.navController
 
-        binding.bottomNavigationView.setupWithNavController(navController)
-
         navHostFragment.navController.addOnDestinationChangedListener { _, destination, _ ->
             when (destination.id) {
                 R.id.homeFragment, R.id.controlModeFragment, R.id.userManagementFragment, R.id.contactUsFragment -> {
-                    binding.coordinatorBottomNavigation.visibility = View.VISIBLE
+                    binding.linearBottomNavigationView.visibility = View.VISIBLE
+                    binding.ivAddRoom.visibility = View.VISIBLE
                 }
                 else -> {
-                    binding.coordinatorBottomNavigation.visibility = View.GONE
+                    binding.linearBottomNavigationView.visibility = View.GONE
+                    binding.ivAddRoom.visibility = View.GONE
                 }
             }
         }
 
-        binding.bottomNavigationView.setOnNavigationItemSelectedListener(this)
-        binding.bottomNavigationView.menu.getItem(2).isEnabled = false
 
         if (FastSave.getInstance()
                 .getBoolean(Constants.isControlModePinned, Constants.DEFAULT_CONTROL_MODE_STATUS)
         ) {
-            binding.bottomNavigationView.menu.getItem(3).isChecked = true
             navController.navigate(R.id.controlModeFragment)
-            binding.coordinatorBottomNavigation.visibility = View.GONE
+            binding.linearBottomNavigationView.visibility = View.GONE
+            binding.ivAddRoom.visibility = View.GONE
         }
 
         binding.ivAddRoom.setOnClickListener {
@@ -86,7 +87,17 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
                     position: Int,
                     id: Long
                 ) {
-                    (parent?.getChildAt(0) as TextView).setTextColor(getColor(R.color.theme_color))
+                    parent?.getChildAt(0)?.let { mView ->
+                        val textView = mView as TextView
+                        textView.setTextColor(
+                            ContextCompat.getColor(
+                                this@MainActivity,
+                                R.color.theme_color
+                            )
+                        )
+                        textView.gravity = Gravity.CENTER
+                        textView.setBackgroundColor(Color.TRANSPARENT)
+                    }
                 }
 
                 override fun onNothingSelected(parent: AdapterView<*>?) {
@@ -95,11 +106,93 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
 
             }
 
+        bottomNavigationClickEvent()
     }
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         return item.onNavDestinationSelected(navController) || super.onOptionsItemSelected(item)
     }
 
+    private fun bottomNavigationClickEvent() {
+        binding.ivHome.setOnClickListener {
+            binding.ivHome.setColorFilter(
+                ContextCompat.getColor(this, R.color.theme_color),
+                android.graphics.PorterDuff.Mode.SRC_IN
+            )
+            binding.ivUser.setColorFilter(
+                ContextCompat.getColor(this, R.color.daintree),
+                android.graphics.PorterDuff.Mode.SRC_IN
+            )
+            binding.ivControlMode.setColorFilter(
+                ContextCompat.getColor(this, R.color.daintree),
+                android.graphics.PorterDuff.Mode.SRC_IN
+            )
+            binding.ivContactUs.setColorFilter(
+                ContextCompat.getColor(this, R.color.daintree),
+                android.graphics.PorterDuff.Mode.SRC_IN
+            )
+            navController.navigate(R.id.homeFragment)
+        }
+
+        binding.ivUser.setOnClickListener {
+            binding.ivUser.setColorFilter(
+                ContextCompat.getColor(this, R.color.theme_color),
+                android.graphics.PorterDuff.Mode.SRC_IN
+            )
+            binding.ivHome.setColorFilter(
+                ContextCompat.getColor(this, R.color.daintree),
+                android.graphics.PorterDuff.Mode.SRC_IN
+            )
+            binding.ivControlMode.setColorFilter(
+                ContextCompat.getColor(this, R.color.daintree),
+                android.graphics.PorterDuff.Mode.SRC_IN
+            )
+            binding.ivContactUs.setColorFilter(
+                ContextCompat.getColor(this, R.color.daintree),
+                android.graphics.PorterDuff.Mode.SRC_IN
+            )
+            navController.navigate(R.id.userManagementFragment)
+        }
+
+        binding.ivControlMode.setOnClickListener {
+            binding.ivControlMode.setColorFilter(
+                ContextCompat.getColor(this, R.color.theme_color),
+                android.graphics.PorterDuff.Mode.SRC_IN
+            )
+            binding.ivHome.setColorFilter(
+                ContextCompat.getColor(this, R.color.daintree),
+                android.graphics.PorterDuff.Mode.SRC_IN
+            )
+            binding.ivUser.setColorFilter(
+                ContextCompat.getColor(this, R.color.daintree),
+                android.graphics.PorterDuff.Mode.SRC_IN
+            )
+            binding.ivContactUs.setColorFilter(
+                ContextCompat.getColor(this, R.color.daintree),
+                android.graphics.PorterDuff.Mode.SRC_IN
+            )
+            navController.navigate(R.id.controlModeFragment)
+        }
+
+        binding.ivContactUs.setOnClickListener {
+            binding.ivContactUs.setColorFilter(
+                ContextCompat.getColor(this, R.color.theme_color),
+                android.graphics.PorterDuff.Mode.SRC_IN
+            )
+            binding.ivHome.setColorFilter(
+                ContextCompat.getColor(this, R.color.daintree),
+                android.graphics.PorterDuff.Mode.SRC_IN
+            )
+            binding.ivUser.setColorFilter(
+                ContextCompat.getColor(this, R.color.daintree),
+                android.graphics.PorterDuff.Mode.SRC_IN
+            )
+            binding.ivControlMode.setColorFilter(
+                ContextCompat.getColor(this, R.color.daintree),
+                android.graphics.PorterDuff.Mode.SRC_IN
+            )
+            navController.navigate(R.id.contactUsFragment)
+        }
+    }
 
 }
