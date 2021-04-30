@@ -14,7 +14,10 @@ import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.navigation.fragment.findNavController
+import com.appizona.yehiahd.fastsave.FastSave
 import com.smartouch.R
+import com.smartouch.common.interfaces.DialogAskListener
+import com.smartouch.common.utils.Constants
 import com.smartouch.common.utils.DialogUtil
 import com.smartouch.databinding.FragmentDeviceCustomizationBinding
 import com.smartouch.ui.fragments.BaseFragment
@@ -43,6 +46,13 @@ class DeviceCustomizationFragment : BaseFragment() {
         val fontNames =
             arrayOf("Times New Roman", "Roboto", "Montserrat", "Lato", "Krona One", "Arial")
 
+        if (FastSave.getInstance().getBoolean(
+                Constants.isDeviceCustomizationLocked,
+                Constants.DEFAULT_DEVICE_CUSTOMIZATION_LOCK_STATUS
+            )
+        ) {
+            lockScreen()
+        }
 
         binding.ivBack.setOnClickListener {
             findNavController().navigateUp()
@@ -54,7 +64,21 @@ class DeviceCustomizationFragment : BaseFragment() {
                     it,
                     getString(R.string.dialog_title_text_lock),
                     getString(R.string.text_ok),
-                    getString(R.string.text_cancel)
+                    getString(R.string.text_cancel),
+                    object : DialogAskListener {
+                        override fun onYesClicked() {
+                            FastSave.getInstance()
+                                .saveBoolean(Constants.isDeviceCustomizationLocked, true)
+                            lockScreen()
+                        }
+
+                        override fun onNoClicked() {
+                            FastSave.getInstance()
+                                .saveBoolean(Constants.isDeviceCustomizationLocked, false)
+                            unLockScreen()
+                        }
+
+                    }
                 )
             }
         }
@@ -188,6 +212,30 @@ class DeviceCustomizationFragment : BaseFragment() {
     override fun onResume() {
         super.onResume()
         binding.layoutSlidingUpPanel.panelState = SlidingUpPanelLayout.PanelState.HIDDEN
+    }
+
+    private fun lockScreen() {
+        binding.ivScreenLayoutSettings.isEnabled = false
+        binding.ivUploadImageSettings.isEnabled = false
+        binding.ivSwitchIconsSettings.isEnabled = false
+        binding.spinnerIconSize.isEnabled = false
+        binding.cbSwitchNameSettings.isEnabled = false
+        binding.ivTextStyleSettings.isEnabled = false
+        binding.ivTextColorSettings.isEnabled = false
+        binding.spinnerTextSize.isEnabled = false
+        binding.btnSynchronize.isEnabled = false
+    }
+
+    private fun unLockScreen() {
+        binding.ivScreenLayoutSettings.isEnabled = true
+        binding.ivUploadImageSettings.isEnabled = true
+        binding.ivSwitchIconsSettings.isEnabled = true
+        binding.spinnerIconSize.isEnabled = true
+        binding.cbSwitchNameSettings.isEnabled = true
+        binding.ivTextStyleSettings.isEnabled = true
+        binding.ivTextColorSettings.isEnabled = true
+        binding.spinnerTextSize.isEnabled = true
+        binding.btnSynchronize.isEnabled = true
     }
 
 }

@@ -259,12 +259,12 @@
                             android:layout_width="@dimen/_14sdp"
                             android:layout_height="@dimen/_14sdp"
                             android:src="@drawable/img_info"
-                            app:layout_constraintBottom_toBottomOf="@+id/iv_switch_name_settings"
+                            app:layout_constraintBottom_toBottomOf="@+id/cb_switch_name_settings"
                             app:layout_constraintStart_toStartOf="@+id/iv_screen_layout_info"
-                            app:layout_constraintTop_toTopOf="@+id/iv_switch_name_settings" />
+                            app:layout_constraintTop_toTopOf="@+id/cb_switch_name_settings" />
 
                         <CheckBox
-                            android:id="@+id/iv_switch_name_settings"
+                            android:id="@+id/cb_switch_name_settings"
                             android:layout_width="@dimen/_22sdp"
                             android:layout_height="@dimen/_22sdp"
                             android:layout_marginTop="@dimen/_15sdp"
@@ -302,7 +302,7 @@
                             android:layout_marginTop="@dimen/_15sdp"
                             android:src="@drawable/ic_customize"
                             app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintTop_toBottomOf="@+id/iv_switch_name_settings" />
+                            app:layout_constraintTop_toBottomOf="@+id/cb_switch_name_settings" />
 
                         <TextView
                             android:id="@+id/tv_text_color"
@@ -411,6 +411,7 @@
                     app:layout_constraintTop_toBottomOf="@+id/card_components">
 
                     <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btn_synchronize"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:background="@android:color/transparent"

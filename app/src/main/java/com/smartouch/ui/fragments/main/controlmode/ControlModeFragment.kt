@@ -39,9 +39,11 @@ class ControlModeFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        if (FastSave.getInstance().getBoolean(Constants.isControlModePinned, Constants.DEFAULT_CONTROL_MODE_STATUS)
+        if (FastSave.getInstance()
+                .getBoolean(Constants.isControlModePinned, Constants.DEFAULT_CONTROL_MODE_STATUS)
         ) {
-           binding.ibLogout.isVisible = true
+            binding.ibLogout.isVisible = true
+            binding.ibPin.rotation = -45f
         }
 
         binding.ibPin.setOnClickListener {
@@ -66,7 +68,7 @@ class ControlModeFragment : BaseFragment() {
 
         binding.ibLogout.setOnClickListener {
             activity?.let {
-                startActivity(Intent(it,AuthenticationActivity::class.java))
+                startActivity(Intent(it, AuthenticationActivity::class.java))
                 it.finishAffinity()
             }
         }

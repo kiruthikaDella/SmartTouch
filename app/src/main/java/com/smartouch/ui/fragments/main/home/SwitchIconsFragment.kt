@@ -4,19 +4,22 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import com.appizona.yehiahd.fastsave.FastSave
 import com.smartouch.R
 import com.smartouch.adapters.SwitchIconsAdapter
 import com.smartouch.common.interfaces.AdapterItemClickListener
+import com.smartouch.common.interfaces.DialogAskListener
+import com.smartouch.common.utils.Constants
 import com.smartouch.common.utils.DialogUtil
 import com.smartouch.databinding.FragmentSwitchIconsBinding
 import com.smartouch.model.SwitchIconsModel
+import com.smartouch.ui.fragments.BaseFragment
 
 /**
  * Created by Jignesh Dangar on 27-04-2021.
  */
-class SwitchIconsFragment : Fragment() {
+class SwitchIconsFragment : BaseFragment() {
 
     private lateinit var binding: FragmentSwitchIconsBinding
     private var switchList = arrayListOf<SwitchIconsModel>()
@@ -25,7 +28,7 @@ class SwitchIconsFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = FragmentSwitchIconsBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -36,21 +39,29 @@ class SwitchIconsFragment : Fragment() {
             findNavController().navigateUp()
         }
 
+        if (FastSave.getInstance().getBoolean(
+                Constants.isSwitchIconsLocked,
+                Constants.DEFAULT_SWITCH_ICONS_LOCK_STATUS
+            )
+        ) {
+            lockScreen()
+        }
+
         switchList.clear()
-        switchList.add(SwitchIconsModel("Switch","1"))
-        switchList.add(SwitchIconsModel("Switch","2"))
-        switchList.add(SwitchIconsModel("Switch","3"))
-        switchList.add(SwitchIconsModel("Switch","4"))
-        switchList.add(SwitchIconsModel("Switch","5"))
-        switchList.add(SwitchIconsModel("Switch","6"))
-        switchList.add(SwitchIconsModel("Switch","7"))
-        switchList.add(SwitchIconsModel("Switch","8"))
-        switchList.add(SwitchIconsModel("Switch","9"))
-        switchList.add(SwitchIconsModel("Switch","10"))
+        switchList.add(SwitchIconsModel("Switch", "1"))
+        switchList.add(SwitchIconsModel("Switch", "2"))
+        switchList.add(SwitchIconsModel("Switch", "3"))
+        switchList.add(SwitchIconsModel("Switch", "4"))
+        switchList.add(SwitchIconsModel("Switch", "5"))
+        switchList.add(SwitchIconsModel("Switch", "6"))
+        switchList.add(SwitchIconsModel("Switch", "7"))
+        switchList.add(SwitchIconsModel("Switch", "8"))
+        switchList.add(SwitchIconsModel("Switch", "9"))
+        switchList.add(SwitchIconsModel("Switch", "10"))
 
         adapter = SwitchIconsAdapter(switchList)
         binding.recyclerSwitchIcons.adapter = adapter
-        adapter.setOnSwitchClickListener(object : AdapterItemClickListener<SwitchIconsModel>{
+        adapter.setOnSwitchClickListener(object : AdapterItemClickListener<SwitchIconsModel> {
             override fun onItemClick(data: SwitchIconsModel) {
                 findNavController().navigate(SwitchIconsFragmentDirections.actionSwitchIconsFragmentToSwitchIconsDetailFragment())
             }
@@ -63,7 +74,19 @@ class SwitchIconsFragment : Fragment() {
                     it,
                     getString(R.string.dialog_title_text_lock),
                     getString(R.string.text_ok),
-                    getString(R.string.text_cancel)
+                    getString(R.string.text_cancel),
+                    object : DialogAskListener {
+                        override fun onYesClicked() {
+                            FastSave.getInstance().saveBoolean(Constants.isSwitchIconsLocked, true)
+                            lockScreen()
+                        }
+
+                        override fun onNoClicked() {
+                            FastSave.getInstance().saveBoolean(Constants.isSwitchIconsLocked, false)
+                            unlockScreen()
+                        }
+
+                    }
                 )
             }
         }
@@ -71,6 +94,14 @@ class SwitchIconsFragment : Fragment() {
         binding.btnSynchronize.setOnClickListener {
             findNavController().navigateUp()
         }
+    }
+
+    private fun lockScreen() {
+        binding.btnSynchronize.isEnabled = false
+    }
+
+    private fun unlockScreen() {
+        binding.btnSynchronize.isEnabled = true
     }
 
 }

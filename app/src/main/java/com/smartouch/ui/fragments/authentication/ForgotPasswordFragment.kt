@@ -7,12 +7,13 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
 import com.smartouch.databinding.FragmentForgotPasswordBinding
+import com.smartouch.ui.fragments.BaseFragment
 
 /**
  * Created by Jignesh Dangar on 09-04-2021.
  */
 
-class ForgotPasswordFragment : Fragment() {
+class ForgotPasswordFragment : BaseFragment() {
 
     private lateinit var binding: FragmentForgotPasswordBinding
 

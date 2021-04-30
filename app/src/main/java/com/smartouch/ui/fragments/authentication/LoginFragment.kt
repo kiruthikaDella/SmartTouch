@@ -21,12 +21,13 @@ import com.smartouch.common.utils.Utils.showAlertDialog
 import com.smartouch.databinding.FragmentLoginBinding
 import com.smartouch.ui.activities.AuthenticationActivity
 import com.smartouch.ui.activities.MainActivity
+import com.smartouch.ui.fragments.BaseFragment
 
 /**
  * Created by Jignesh Dangar on 09-04-2021.
  */
 
-class LoginFragment : Fragment() {
+class LoginFragment : BaseFragment() {
 
     private lateinit var binding: FragmentLoginBinding
     private val logTag = this::class.java.simpleName

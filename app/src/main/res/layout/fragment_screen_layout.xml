@@ -4,8 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:background="@color/app_background_color"
+    android:orientation="vertical"
     tools:context=".ui.fragments.main.home.ScreenLayoutFragment">
 
     <RelativeLayout
@@ -349,25 +349,18 @@
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </androidx.cardview.widget.CardView>
 
-            <androidx.cardview.widget.CardView
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_synchronize"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/login_component_height"
                 android:layout_marginStart="@dimen/screen_start_margin"
                 android:layout_marginEnd="@dimen/screen_end_margin"
-                app:cardBackgroundColor="@color/theme_color"
-                app:cardCornerRadius="@dimen/corner_radius_6dp">
-
-                <com.google.android.material.button.MaterialButton
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="@android:color/transparent"
-                    android:text="@string/button_text_synchronize"
-                    android:textAllCaps="true"
-                    android:textColor="@color/white"
-                    android:textSize="@dimen/_13ssp"
-                    app:backgroundTint="@null" />
-
-            </androidx.cardview.widget.CardView>
+                android:background="@drawable/dodger_blue_background"
+                android:text="@string/button_text_synchronize"
+                android:textAllCaps="true"
+                android:textColor="@color/white"
+                android:textSize="@dimen/_13ssp"
+                app:backgroundTint="@null" />
 
         </LinearLayout>
 

@@ -10,12 +10,13 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.smartouch.R
 import com.smartouch.databinding.FragmentCreateAccountBinding
+import com.smartouch.ui.fragments.BaseFragment
 
 /**
  * Created by Jignesh Dangar on 09-04-2021.
  */
 
-class CreateAccountFragment : Fragment() {
+class CreateAccountFragment : BaseFragment() {
 
     private lateinit var binding: FragmentCreateAccountBinding
     private val logTag = this::class.java.simpleName

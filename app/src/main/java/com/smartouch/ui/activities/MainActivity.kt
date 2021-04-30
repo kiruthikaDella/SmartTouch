@@ -1,24 +1,21 @@
 package com.smartouch.ui.activities
 
-import android.graphics.Color
 import android.os.Bundle
-import android.view.Gravity
 import android.view.MenuItem
 import android.view.View
 import android.widget.AdapterView
-import android.widget.ArrayAdapter
-import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
-import androidx.core.view.isVisible
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.onNavDestinationSelected
 import com.appizona.yehiahd.fastsave.FastSave
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.smartouch.R
+import com.smartouch.adapters.spinneradapter.RoomTypeAdapter
 import com.smartouch.common.utils.Constants
 import com.smartouch.databinding.ActivityMainBinding
+import com.smartouch.model.HomeRoomModel
 import com.sothree.slidinguppanel.SlidingUpPanelLayout
 
 /**
@@ -32,6 +29,7 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
     private lateinit var navController: NavController
 
     private var roomList = arrayOf("Living Room", "Bedroom", "Kitchen", "Master Bedroom")
+    private var roomTypeList = arrayListOf<HomeRoomModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -75,8 +73,28 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
             binding.layoutSlidingUpPanel.panelState = SlidingUpPanelLayout.PanelState.HIDDEN
         }
 
-        val roomAdapter = ArrayAdapter(this, R.layout.simple_spinner_dropdown, roomList)
+/*        val roomAdapter = ArrayAdapter(this, R.layout.simple_spinner_dropdown, roomList)
         roomAdapter.setDropDownViewResource(R.layout.simple_spinner_dropdown)
+        binding.layoutAddRoom.spinnerRoom.adapter = roomAdapter*/
+
+        roomTypeList.clear()
+        roomTypeList.add(
+            HomeRoomModel(
+                R.drawable.img_living_room,
+                getString(R.string.text_living_room)
+            )
+        )
+        roomTypeList.add(HomeRoomModel(R.drawable.img_bedroom, getString(R.string.text_bedroom)))
+        roomTypeList.add(HomeRoomModel(R.drawable.img_kitchen, getString(R.string.text_kitchen)))
+        roomTypeList.add(
+            HomeRoomModel(
+                R.drawable.img_master_bedroom,
+                getString(R.string.text_master_bedroom)
+            )
+        )
+
+        val roomAdapter = RoomTypeAdapter(this, roomTypeList)
+//        roomAdapter.setDropDownViewResource(R.layout.simple_spinner_dropdown)
         binding.layoutAddRoom.spinnerRoom.adapter = roomAdapter
 
         binding.layoutAddRoom.spinnerRoom.onItemSelectedListener =
@@ -87,17 +105,7 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
                     position: Int,
                     id: Long
                 ) {
-                    parent?.getChildAt(0)?.let { mView ->
-                        val textView = mView as TextView
-                        textView.setTextColor(
-                            ContextCompat.getColor(
-                                this@MainActivity,
-                                R.color.theme_color
-                            )
-                        )
-                        textView.gravity = Gravity.CENTER
-                        textView.setBackgroundColor(Color.TRANSPARENT)
-                    }
+
                 }
 
                 override fun onNothingSelected(parent: AdapterView<*>?) {
@@ -192,6 +200,16 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
                 android.graphics.PorterDuff.Mode.SRC_IN
             )
             navController.navigate(R.id.contactUsFragment)
+        }
+    }
+
+    override fun onBackPressed() {
+        if (navController.currentDestination?.id == R.id.userManagementFragment || navController.currentDestination?.id == R.id.controlModeFragment || navController.currentDestination?.id == R.id.contactUsFragment) {
+            binding.ivHome.performClick()
+        } else if (navController.currentDestination?.id == R.id.homeFragment) {
+            finishAffinity()
+        } else {
+            super.onBackPressed()
         }
     }
 

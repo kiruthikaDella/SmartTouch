@@ -124,5 +124,5 @@
         android:id="@+id/deviceSettingsFragment"
         android:name="com.smartouch.ui.fragments.main.home.DeviceSettingsFragment"
         android:label="fragment_device_settings"
-        tools:layout="@layout/fragment_device_settings" />
+        tools:layout="@layout/fragment_device_settings" /><action android:id="@+id/action_global_userManagementFragment" app:destination="@id/userManagementFragment"/><action android:id="@+id/action_global_contactUsFragment" app:destination="@id/contactUsFragment"/><action android:id="@+id/action_global_controlModeFragment" app:destination="@id/controlModeFragment"/>
 </navigation>

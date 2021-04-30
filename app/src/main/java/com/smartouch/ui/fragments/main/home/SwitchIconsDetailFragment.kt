@@ -11,11 +11,12 @@ import com.smartouch.R
 import com.smartouch.adapters.SwitchIconsDetailAdapter
 import com.smartouch.databinding.FragmentSwitchIconsDetailBinding
 import com.smartouch.model.SwitchIconsDetailModel
+import com.smartouch.ui.fragments.BaseFragment
 
 /**
  * Created by Jignesh Dangar on 27-04-2021.
  */
-class SwitchIconsDetailFragment : Fragment() {
+class SwitchIconsDetailFragment : BaseFragment() {
 
     private lateinit var binding: FragmentSwitchIconsDetailBinding
     private lateinit var adapter: SwitchIconsDetailAdapter

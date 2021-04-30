@@ -5,7 +5,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
+import com.appizona.yehiahd.fastsave.FastSave
 import com.smartouch.R
+import com.smartouch.common.interfaces.DialogAskListener
+import com.smartouch.common.utils.Constants
 import com.smartouch.common.utils.DialogUtil
 import com.smartouch.databinding.FragmentScreenLayoutBinding
 import com.smartouch.ui.fragments.BaseFragment
@@ -36,6 +39,14 @@ class ScreenLayoutFragment : BaseFragment() {
 
         screenLayoutModel?.init()
 
+        if (FastSave.getInstance().getBoolean(
+                Constants.isScreenLayoutLocked,
+                Constants.DEFAULT_SCREEN_LAYOUT_LOCK_STATUS
+            )
+        ) {
+            lockScreen()
+        }
+
         binding.ivBack.setOnClickListener {
             findNavController().navigateUp()
         }
@@ -46,11 +57,50 @@ class ScreenLayoutFragment : BaseFragment() {
                     it,
                     getString(R.string.dialog_title_text_lock),
                     getString(R.string.text_ok),
-                    getString(R.string.text_cancel)
+                    getString(R.string.text_cancel),
+                    object : DialogAskListener {
+                        override fun onYesClicked() {
+                            FastSave.getInstance().saveBoolean(Constants.isScreenLayoutLocked, true)
+                            lockScreen()
+                        }
+
+                        override fun onNoClicked() {
+                            FastSave.getInstance()
+                                .saveBoolean(Constants.isScreenLayoutLocked, false)
+                            unlockScreen()
+                        }
+
+                    }
                 )
             }
         }
 
+    }
+
+    private fun lockScreen() {
+        binding.linearEightIconsView.isEnabled = false
+        binding.linearSixIconsView.isEnabled = false
+        binding.linearFourIconsView.isEnabled = false
+        binding.ivLeftMost.isEnabled = false
+        binding.ivRightMost.isEnabled = false
+        binding.ivLeftRight.isEnabled = false
+        binding.ivMiddleCenter.isEnabled = false
+        binding.ivTopCenter.isEnabled = false
+        binding.ivBottomCenter.isEnabled = false
+        binding.btnSynchronize.isEnabled = false
+    }
+
+    private fun unlockScreen() {
+        binding.linearEightIconsView.isEnabled = true
+        binding.linearSixIconsView.isEnabled = true
+        binding.linearFourIconsView.isEnabled = true
+        binding.ivLeftMost.isEnabled = true
+        binding.ivRightMost.isEnabled = true
+        binding.ivLeftRight.isEnabled = true
+        binding.ivMiddleCenter.isEnabled = true
+        binding.ivTopCenter.isEnabled = true
+        binding.ivBottomCenter.isEnabled = true
+        binding.btnSynchronize.isEnabled = true
     }
 
 }
