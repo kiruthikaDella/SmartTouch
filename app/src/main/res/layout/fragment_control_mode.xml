@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@color/app_background_color"
     android:orientation="vertical"
-    tools:context=".ui.fragments.main.controlmode.ControlModeFragment">
+    tools:context="com.dellainfotech.smartTouch.ui.fragments.main.controlmode.ControlModeFragment">
 
     <RelativeLayout
         android:layout_width="match_parent"

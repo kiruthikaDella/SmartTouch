@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/homeFragment"
-        android:name="com.smartouch.ui.fragments.main.home.HomeFragment"
+        android:name="com.dellainfotech.smartTouch.ui.fragments.main.home.HomeFragment"
         android:label="fragment_home"
         tools:layout="@layout/fragment_home">
         <action
@@ -25,12 +25,12 @@
         app:destination="@id/homeFragment" />
     <fragment
         android:id="@+id/roomPanelFragment"
-        android:name="com.smartouch.ui.fragments.main.home.RoomPanelFragment"
+        android:name="com.dellainfotech.smartTouch.ui.fragments.main.home.RoomPanelFragment"
         android:label="fragment_room_panel"
         tools:layout="@layout/fragment_room_panel">
         <argument
             android:name="roomDetail"
-            app:argType="com.smartouch.model.HomeRoomModel" />
+            app:argType="com.dellainfotech.smartTouch.model.HomeRoomModel" />
         <action
             android:id="@+id/action_roomPanelFragment_to_deviceCustomizationFragment"
             app:destination="@id/deviceCustomizationFragment" />
@@ -43,12 +43,12 @@
     </fragment>
     <fragment
         android:id="@+id/controlModeFragment"
-        android:name="com.smartouch.ui.fragments.main.controlmode.ControlModeFragment"
+        android:name="com.dellainfotech.smartTouch.ui.fragments.main.controlmode.ControlModeFragment"
         android:label="fragment_control_mode"
         tools:layout="@layout/fragment_control_mode" />
     <fragment
         android:id="@+id/deviceCustomizationFragment"
-        android:name="com.smartouch.ui.fragments.main.home.DeviceCustomizationFragment"
+        android:name="com.dellainfotech.smartTouch.ui.fragments.main.home.DeviceCustomizationFragment"
         android:label="fragment_device_customization"
         tools:layout="@layout/fragment_device_customization" >
         <action
@@ -60,12 +60,12 @@
     </fragment>
     <fragment
         android:id="@+id/screenLayoutFragment"
-        android:name="com.smartouch.ui.fragments.main.home.ScreenLayoutFragment"
+        android:name="com.dellainfotech.smartTouch.ui.fragments.main.home.ScreenLayoutFragment"
         android:label="fragment_screen_layout"
         tools:layout="@layout/fragment_screen_layout" />
     <fragment
         android:id="@+id/deviceFeaturesFragment"
-        android:name="com.smartouch.ui.fragments.main.home.DeviceFeaturesFragment"
+        android:name="com.dellainfotech.smartTouch.ui.fragments.main.home.DeviceFeaturesFragment"
         android:label="fragment_device_features"
         tools:layout="@layout/fragment_device_features" >
         <action
@@ -74,27 +74,27 @@
     </fragment>
     <fragment
         android:id="@+id/createSceneFragment"
-        android:name="com.smartouch.ui.fragments.main.home.CreateSceneFragment"
+        android:name="com.dellainfotech.smartTouch.ui.fragments.main.home.CreateSceneFragment"
         android:label="fragment_create_scene"
         tools:layout="@layout/fragment_create_scene" />
     <fragment
         android:id="@+id/accountSettingsFragment"
-        android:name="com.smartouch.ui.fragments.main.home.AccountSettingsFragment"
+        android:name="com.dellainfotech.smartTouch.ui.fragments.main.home.AccountSettingsFragment"
         android:label="fragment_account_settings"
         tools:layout="@layout/fragment_account_settings" />
     <fragment
         android:id="@+id/faqsFragment"
-        android:name="com.smartouch.ui.fragments.main.home.FaqsFragment"
+        android:name="com.dellainfotech.smartTouch.ui.fragments.main.home.FaqsFragment"
         android:label="fragment_faqs"
         tools:layout="@layout/fragment_faqs" />
     <fragment
         android:id="@+id/contactUsFragment"
-        android:name="com.smartouch.ui.fragments.main.contact.ContactUsFragment"
+        android:name="com.dellainfotech.smartTouch.ui.fragments.main.contact.ContactUsFragment"
         android:label="fragment_contact_us"
         tools:layout="@layout/fragment_contact_us" />
     <fragment
         android:id="@+id/switchIconsFragment"
-        android:name="com.smartouch.ui.fragments.main.home.SwitchIconsFragment"
+        android:name="com.dellainfotech.smartTouch.ui.fragments.main.home.SwitchIconsFragment"
         android:label="fragment_switch_icons"
         tools:layout="@layout/fragment_switch_icons" >
         <action
@@ -103,12 +103,12 @@
     </fragment>
     <fragment
         android:id="@+id/switchIconsDetailFragment"
-        android:name="com.smartouch.ui.fragments.main.home.SwitchIconsDetailFragment"
+        android:name="com.dellainfotech.smartTouch.ui.fragments.main.home.SwitchIconsDetailFragment"
         android:label="fragment_switch_icons_detail"
         tools:layout="@layout/fragment_switch_icons_detail" />
     <fragment
         android:id="@+id/userManagementFragment"
-        android:name="com.smartouch.ui.fragments.main.usermanagement.UserManagementFragment"
+        android:name="com.dellainfotech.smartTouch.ui.fragments.main.usermanagement.UserManagementFragment"
         android:label="fragment_user_management"
         tools:layout="@layout/fragment_user_management" >
         <action
@@ -117,12 +117,12 @@
     </fragment>
     <fragment
         android:id="@+id/addUserFragment"
-        android:name="com.smartouch.ui.fragments.main.usermanagement.AddUserFragment"
+        android:name="com.dellainfotech.smartTouch.ui.fragments.main.usermanagement.AddUserFragment"
         android:label="fragment_add_user"
         tools:layout="@layout/fragment_add_user" />
     <fragment
         android:id="@+id/deviceSettingsFragment"
-        android:name="com.smartouch.ui.fragments.main.home.DeviceSettingsFragment"
+        android:name="com.dellainfotech.smartTouch.ui.fragments.main.home.DeviceSettingsFragment"
         android:label="fragment_device_settings"
         tools:layout="@layout/fragment_device_settings" /><action android:id="@+id/action_global_userManagementFragment" app:destination="@id/userManagementFragment"/><action android:id="@+id/action_global_contactUsFragment" app:destination="@id/contactUsFragment"/><action android:id="@+id/action_global_controlModeFragment" app:destination="@id/controlModeFragment"/>
 </navigation>

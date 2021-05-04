@@ -6,9 +6,11 @@
     <string name="google_client_id">254538999523-d0dfbtkuegliqtupjfjid8bjkduom0o2.apps.googleusercontent.com</string>
     <string name="google_client_secret">Q-x9vJg8UGTX-VNma3F7ZKHm</string>
 
-    <string name="facebook_app_id">447085073257901</string>
-    <string name="fb_login_protocol_scheme">fb447085073257901</string>
+<!--    <string name="facebook_app_id">447085073257901</string>
+    <string name="fb_login_protocol_scheme">fb447085073257901</string>-->
 
+    <string name="facebook_app_id">936958483772800</string>
+    <string name="fb_login_protocol_scheme">fb936958483772800</string>
 
     <string name="welcome"><font fgcolor='#1A8EFF'>Welcome to</font> \n<font fgcolor='#011B25'> Smartouch</font></string>
 

@@ -7,17 +7,17 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:254538999523:android:e5620b42d2c9586c69c7d6",
+        "mobilesdk_app_id": "1:254538999523:android:740304b23773e01f69c7d6",
         "android_client_info": {
-          "package_name": "com.smartouch"
+          "package_name": "com.dellainfotech.smartTouch"
         }
       },
       "oauth_client": [
         {
-          "client_id": "254538999523-b47ep57nce9upe14lia26i01fv1l750p.apps.googleusercontent.com",
+          "client_id": "254538999523-1ptirr0859da5k93nck448tvso474la3.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.smartouch",
+            "package_name": "com.dellainfotech.smartTouch",
             "certificate_hash": "fee262586124b9fdc8651918047aeacc5f77e311"
           }
         },

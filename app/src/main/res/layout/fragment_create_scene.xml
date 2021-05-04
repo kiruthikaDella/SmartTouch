@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".ui.fragments.main.home.CreateSceneFragment"
+    tools:context="com.dellainfotech.smartTouch.ui.fragments.main.home.CreateSceneFragment"
     android:orientation="vertical"
     android:background="@color/app_background_color">
 

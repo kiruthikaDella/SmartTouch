@@ -10,7 +10,7 @@
     app:umanoDragView="@id/drag_upload_image"
     app:umanoOverlay="true"
     app:umanoPanelHeight="0dp"
-    tools:context=".ui.fragments.main.home.DeviceCustomizationFragment">
+    tools:context="com.dellainfotech.smartTouch.ui.fragments.main.home.DeviceCustomizationFragment">
 
     <LinearLayout
         android:layout_width="match_parent"

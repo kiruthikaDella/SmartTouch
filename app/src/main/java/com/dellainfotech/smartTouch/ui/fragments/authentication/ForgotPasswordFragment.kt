@@ -1,0 +1,39 @@
+package com.dellainfotech.smartTouch.ui.fragments.authentication
+
+import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import androidx.navigation.fragment.findNavController
+import com.dellainfotech.smartTouch.databinding.FragmentForgotPasswordBinding
+import com.dellainfotech.smartTouch.ui.fragments.BaseFragment
+
+/**
+ * Created by Jignesh Dangar on 09-04-2021.
+ */
+
+class ForgotPasswordFragment : BaseFragment() {
+
+    private lateinit var binding: FragmentForgotPasswordBinding
+
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        binding = FragmentForgotPasswordBinding.inflate(inflater,container,false)
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        binding.ivBack.setOnClickListener {
+            findNavController().navigateUp()
+        }
+
+        binding.tvLogin.setOnClickListener {
+            findNavController().navigateUp()
+        }
+    }
+
+}

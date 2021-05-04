@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@color/catskill_white"
     android:orientation="vertical"
-    tools:context=".ui.fragments.main.contact.ContactUsFragment">
+    tools:context="com.dellainfotech.smartTouch.ui.fragments.main.contact.ContactUsFragment">
 
     <RelativeLayout
         android:layout_width="match_parent"

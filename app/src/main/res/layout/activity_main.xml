@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:clipChildren="false"
-    tools:context=".ui.activities.MainActivity"
+    tools:context="com.dellainfotech.smartTouch.ui.activities.MainActivity"
     android:gravity="bottom"
     app:umanoDragView="@id/drag_add_room"
     app:umanoOverlay="true"
