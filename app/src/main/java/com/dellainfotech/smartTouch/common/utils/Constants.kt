@@ -16,4 +16,7 @@ object Constants {
     val isScreenLayoutLocked = "isScreenLayoutLocked"
     val DEFAULT_SWITCH_ICONS_LOCK_STATUS = false
     val isSwitchIconsLocked = "isSwitchIconsLocked"
+
+    val SECRET_KEY="PXGuKjNtjzLiyLRE0GzykvGcaZO5uWE0"
+    val PRIVATE_KEY="4AF8AC8E124B6484BDDC5A9EB3D49"
 }

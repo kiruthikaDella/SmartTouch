@@ -7,41 +7,39 @@ import android.util.Patterns
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.navigation.fragment.findNavController
 import com.dellainfotech.smartTouch.R
-import com.google.android.gms.auth.api.signin.GoogleSignIn
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount
-import com.google.android.gms.auth.api.signin.GoogleSignInClient
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions
-import com.google.android.gms.common.api.ApiException
+import com.dellainfotech.smartTouch.api.Resource
+import com.dellainfotech.smartTouch.api.body.BodyLogin
+import com.dellainfotech.smartTouch.api.repository.AuthRepository
+import com.dellainfotech.smartTouch.common.utils.DialogUtil
 import com.dellainfotech.smartTouch.common.utils.Utils
 import com.dellainfotech.smartTouch.common.utils.Utils.isNetworkConnectivityAvailable
 import com.dellainfotech.smartTouch.common.utils.Utils.showAlertDialog
 import com.dellainfotech.smartTouch.databinding.FragmentLoginBinding
 import com.dellainfotech.smartTouch.ui.activities.AuthenticationActivity
 import com.dellainfotech.smartTouch.ui.activities.MainActivity
-import com.dellainfotech.smartTouch.ui.fragments.BaseFragment
+import com.dellainfotech.smartTouch.ui.fragments.APIBaseFragment
+import com.dellainfotech.smartTouch.ui.viewmodel.AuthViewModel
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount
+import com.google.android.gms.auth.api.signin.GoogleSignInClient
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.android.gms.common.api.ApiException
+import java.util.*
 
 /**
  * Created by Jignesh Dangar on 09-04-2021.
  */
 
-class LoginFragment : BaseFragment() {
+class LoginFragment : APIBaseFragment<AuthViewModel, FragmentLoginBinding, AuthRepository>() {
 
-    private lateinit var binding: FragmentLoginBinding
     private val logTag = this::class.java.simpleName
 
     //Google SignIn
     private val GOOGLE_SIGN_IN_REQUEST = 1
     private var mGoogleSingInClient: GoogleSignInClient? = null
-
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        binding = FragmentLoginBinding.inflate(inflater, container, false)
-        return binding.root
-    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -60,11 +58,14 @@ class LoginFragment : BaseFragment() {
             findNavController().navigate(LoginFragmentDirections.actionLoginFragmentToForgotPasswordFragment())
         }
 
+        binding.edtEmail.setText("archit.ghetiya@teksun.com")
+        binding.edtPassword.setText("12345")
+
         binding.btnLogin.setOnClickListener {
-//            validateUserInformation()
-            context?.let {
+            validateUserInformation()
+            /*context?.let {
                 startActivity(Intent(it, MainActivity::class.java))
-            }
+            }*/
         }
 
         binding.linearGoogle.setOnClickListener {
@@ -99,17 +100,48 @@ class LoginFragment : BaseFragment() {
                 }
             }
         }
+
+        viewModel.loginResponse.observe(viewLifecycleOwner, { response ->
+            when (response) {
+                is Resource.Success -> {
+                    DialogUtil.hideDialog()
+                    Log.e(logTag,"code ${response.values.code}")
+                    if (response.values.status) {
+                        activity?.let {
+                            startActivity(Intent(it, MainActivity::class.java))
+                            it.finishAffinity()
+                        }
+                    } else {
+                        context?.let {
+                            Toast.makeText(it, response.values.message,Toast.LENGTH_SHORT).show()
+                        }
+                    }
+                }
+                is Resource.Failure -> {
+                    DialogUtil.hideDialog()
+                    Log.e(logTag, "login error")
+                }
+            }
+        })
     }
 
     private fun validateUserInformation() {
-        if (binding.edtEmail.text.toString().isEmpty()) {
+        val email = binding.edtEmail.text.toString().trim()
+        val password = binding.edtPassword.text.toString().trim()
+        val uuid: String = UUID.randomUUID().toString()
+
+        if (email.isEmpty()) {
             binding.edtEmail.error = getString(R.string.error_text_email)
-        } else if (!Patterns.EMAIL_ADDRESS.matcher(binding.edtEmail.text.toString()).matches()) {
+        } else if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
             binding.edtEmail.error = getString(R.string.error_text_valid_email)
-        } else if (binding.edtPassword.text.toString().isEmpty()) {
+        } else if (password.isEmpty()) {
             binding.edtPassword.error = getString(R.string.error_text_password)
         } else {
             Log.e(logTag, "Valid")
+            activity?.let {
+                DialogUtil.loadingAlert(it, isCancelable = false)
+            }
+            viewModel.login(BodyLogin(email, password, uuid))
         }
     }
 
@@ -149,4 +181,13 @@ class LoginFragment : BaseFragment() {
             }
         }
     }
+
+    override fun getViewModel(): Class<AuthViewModel> = AuthViewModel::class.java
+
+    override fun getFragmentBinding(
+        inflater: LayoutInflater,
+        container: ViewGroup?
+    ): FragmentLoginBinding = FragmentLoginBinding.inflate(inflater, container, false)
+
+    override fun getFragmentRepository(): AuthRepository = AuthRepository(networkModel)
 }

@@ -10,10 +10,14 @@ import android.util.Log
 import androidx.appcompat.app.AlertDialog
 import com.dellainfotech.smartTouch.AppDelegate
 import com.dellainfotech.smartTouch.common.interfaces.DialogShowListener
+import com.facebook.appevents.internal.AppEventUtility.bytesToHex
 import java.net.InetSocketAddress
 import java.net.Socket
 import java.net.SocketAddress
 import java.security.MessageDigest
+import java.util.*
+import javax.crypto.Mac
+import javax.crypto.spec.SecretKeySpec
 
 /**
  * Created by Jignesh Dangar on 13-04-2021.
@@ -97,5 +101,33 @@ object Utils {
             Log.e("AppLog", "error:", e)
         }
 
+    }
+
+    fun getToken(nonce: String, time: String): String {
+        val data = Constants.SECRET_KEY + time + nonce
+        return encode(Constants.PRIVATE_KEY, data)
+    }
+
+    @Throws(java.lang.Exception::class)
+    fun encode(key: String, data: String): String {
+        val sha256Hmac = Mac.getInstance("HmacSHA256")
+        val secretKey = SecretKeySpec(key.toByteArray(charset("UTF-8")), "HmacSHA256")
+        sha256Hmac.init(secretKey)
+        return bytesToHex(sha256Hmac.doFinal(data.toByteArray(charset("UTF-8"))))
+    }
+
+    fun getTimeZone(): Long {
+        return System.currentTimeMillis() / 1000
+    }
+
+    fun nonce(): String {
+        val chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890"
+        val salt = StringBuilder()
+        val rnd = Random()
+        while (salt.length < 6) { // length of the random string.
+            val index = (rnd.nextFloat() * chars.length).toInt()
+            salt.append(chars[index])
+        }
+        return salt.toString()
     }
 }

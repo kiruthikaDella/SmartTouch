@@ -7,6 +7,7 @@ import android.graphics.drawable.ColorDrawable
 import android.util.DisplayMetrics
 import android.widget.EditText
 import android.widget.TextView
+import androidx.core.view.isVisible
 import com.dellainfotech.smartTouch.R
 import com.google.android.material.button.MaterialButton
 import com.dellainfotech.smartTouch.common.interfaces.DialogAskListener
@@ -104,7 +105,7 @@ object DialogUtil {
 
     fun loadingAlert(
         activity: Activity,
-        title: String,
+        title: String? = null,
         isCancelable: Boolean = false
     ) {
 
@@ -115,7 +116,11 @@ object DialogUtil {
 
         val tvTitle = dialog?.findViewById(R.id.tv_dialog_title) as TextView
 
-        tvTitle.text = title
+       if (title == null){
+           tvTitle.isVisible = false
+       }else{
+           tvTitle.text = title
+       }
 
         val displayMetrics = DisplayMetrics()
         activity.windowManager?.defaultDisplay?.getMetrics(displayMetrics)
