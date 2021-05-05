@@ -9,8 +9,11 @@
 <!--    <string name="facebook_app_id">447085073257901</string>
     <string name="fb_login_protocol_scheme">fb447085073257901</string>-->
 
-    <string name="facebook_app_id">936958483772800</string>
-    <string name="fb_login_protocol_scheme">fb936958483772800</string>
+<!--    <string name="facebook_app_id">936958483772800</string>
+    <string name="fb_login_protocol_scheme">fb936958483772800</string>-->
+
+    <string name="facebook_app_id">1351754321872545</string>
+    <string name="fb_login_protocol_scheme">fb1351754321872545</string>
 
     <string name="welcome"><font fgcolor='#1A8EFF'>Welcome to</font> \n<font fgcolor='#011B25'> Smartouch</font></string>
 

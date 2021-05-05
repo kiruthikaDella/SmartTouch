@@ -20,7 +20,7 @@ import com.dellainfotech.smartTouch.common.utils.Utils.showAlertDialog
 import com.dellainfotech.smartTouch.databinding.FragmentLoginBinding
 import com.dellainfotech.smartTouch.ui.activities.AuthenticationActivity
 import com.dellainfotech.smartTouch.ui.activities.MainActivity
-import com.dellainfotech.smartTouch.ui.fragments.APIBaseFragment
+import com.dellainfotech.smartTouch.ui.fragments.ModelBaseFragment
 import com.dellainfotech.smartTouch.ui.viewmodel.AuthViewModel
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
@@ -33,7 +33,7 @@ import java.util.*
  * Created by Jignesh Dangar on 09-04-2021.
  */
 
-class LoginFragment : APIBaseFragment<AuthViewModel, FragmentLoginBinding, AuthRepository>() {
+class LoginFragment : ModelBaseFragment<AuthViewModel, FragmentLoginBinding, AuthRepository>() {
 
     private val logTag = this::class.java.simpleName
 
@@ -62,10 +62,10 @@ class LoginFragment : APIBaseFragment<AuthViewModel, FragmentLoginBinding, AuthR
         binding.edtPassword.setText("12345")
 
         binding.btnLogin.setOnClickListener {
-            validateUserInformation()
-            /*context?.let {
+//            validateUserInformation()
+            context?.let {
                 startActivity(Intent(it, MainActivity::class.java))
-            }*/
+            }
         }
 
         binding.linearGoogle.setOnClickListener {

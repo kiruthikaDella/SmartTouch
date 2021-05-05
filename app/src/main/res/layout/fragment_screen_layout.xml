@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -9,6 +9,7 @@
     tools:context="com.dellainfotech.smartTouch.ui.fragments.main.home.ScreenLayoutFragment">
 
     <RelativeLayout
+        android:id="@+id/relative_header"
         android:layout_width="match_parent"
         android:layout_height="?actionBarSize"
         android:orientation="horizontal">
@@ -39,8 +40,10 @@
     </RelativeLayout>
 
     <LinearLayout
+        android:id="@+id/linear_tab"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/relative_header"
         android:layout_marginStart="@dimen/screen_start_margin"
         android:layout_marginEnd="@dimen/screen_end_margin"
         android:orientation="vertical">
@@ -192,7 +195,8 @@
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/linear_tab">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -366,4 +370,13 @@
 
     </ScrollView>
 
-</LinearLayout>
+    <RelativeLayout
+        android:id="@+id/relative_lock"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/relative_header"
+        android:clickable="true"
+        android:focusable="true"
+        android:visibility="gone" />
+
+</RelativeLayout>

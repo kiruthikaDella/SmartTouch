@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.navigation.fragment.findNavController
 import com.appizona.yehiahd.fastsave.FastSave
 import com.dellainfotech.smartTouch.R
@@ -78,29 +79,11 @@ class ScreenLayoutFragment : BaseFragment() {
     }
 
     private fun lockScreen() {
-        binding.linearEightIconsView.isEnabled = false
-        binding.linearSixIconsView.isEnabled = false
-        binding.linearFourIconsView.isEnabled = false
-        binding.ivLeftMost.isEnabled = false
-        binding.ivRightMost.isEnabled = false
-        binding.ivLeftRight.isEnabled = false
-        binding.ivMiddleCenter.isEnabled = false
-        binding.ivTopCenter.isEnabled = false
-        binding.ivBottomCenter.isEnabled = false
-        binding.btnSynchronize.isEnabled = false
+        binding.relativeLock.isVisible = true
     }
 
     private fun unlockScreen() {
-        binding.linearEightIconsView.isEnabled = true
-        binding.linearSixIconsView.isEnabled = true
-        binding.linearFourIconsView.isEnabled = true
-        binding.ivLeftMost.isEnabled = true
-        binding.ivRightMost.isEnabled = true
-        binding.ivLeftRight.isEnabled = true
-        binding.ivMiddleCenter.isEnabled = true
-        binding.ivTopCenter.isEnabled = true
-        binding.ivBottomCenter.isEnabled = true
-        binding.btnSynchronize.isEnabled = true
+        binding.relativeLock.isVisible = false
     }
 
 }

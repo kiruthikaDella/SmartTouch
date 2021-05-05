@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.navigation.fragment.findNavController
 import com.appizona.yehiahd.fastsave.FastSave
 import com.dellainfotech.smartTouch.R
@@ -98,10 +99,12 @@ class SwitchIconsFragment : BaseFragment() {
 
     private fun lockScreen() {
         binding.btnSynchronize.isEnabled = false
+        binding.relativeLock.isVisible = true
     }
 
     private fun unlockScreen() {
         binding.btnSynchronize.isEnabled = true
+        binding.relativeLock.isVisible = false
     }
 
 }

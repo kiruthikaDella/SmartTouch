@@ -5,24 +5,17 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
+import com.dellainfotech.smartTouch.api.repository.AuthRepository
 import com.dellainfotech.smartTouch.databinding.FragmentForgotPasswordBinding
-import com.dellainfotech.smartTouch.ui.fragments.BaseFragment
+import com.dellainfotech.smartTouch.ui.fragments.ModelBaseFragment
+import com.dellainfotech.smartTouch.ui.viewmodel.AuthViewModel
 
 /**
  * Created by Jignesh Dangar on 09-04-2021.
  */
 
-class ForgotPasswordFragment : BaseFragment() {
-
-    private lateinit var binding: FragmentForgotPasswordBinding
-
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        binding = FragmentForgotPasswordBinding.inflate(inflater,container,false)
-        return binding.root
-    }
+class ForgotPasswordFragment :
+    ModelBaseFragment<AuthViewModel, FragmentForgotPasswordBinding, AuthRepository>() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -35,5 +28,15 @@ class ForgotPasswordFragment : BaseFragment() {
             findNavController().navigateUp()
         }
     }
+
+    override fun getViewModel(): Class<AuthViewModel> = AuthViewModel::class.java
+
+    override fun getFragmentBinding(
+        inflater: LayoutInflater,
+        container: ViewGroup?
+    ): FragmentForgotPasswordBinding =
+        FragmentForgotPasswordBinding.inflate(inflater, container, false)
+
+    override fun getFragmentRepository(): AuthRepository = AuthRepository(networkModel)
 
 }

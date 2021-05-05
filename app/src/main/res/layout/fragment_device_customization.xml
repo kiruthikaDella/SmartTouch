@@ -12,7 +12,7 @@
     app:umanoPanelHeight="0dp"
     tools:context="com.dellainfotech.smartTouch.ui.fragments.main.home.DeviceCustomizationFragment">
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
@@ -50,7 +50,8 @@
 
         <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/relative_header">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -426,7 +427,16 @@
             </LinearLayout>
         </ScrollView>
 
-    </LinearLayout>
+        <RelativeLayout
+            android:id="@+id/relative_lock"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/relative_header"
+            android:clickable="true"
+            android:focusable="true"
+            android:visibility="gone"/>
+
+    </RelativeLayout>
 
     <com.jcminarro.roundkornerlayout.RoundKornerLinearLayout
         android:id="@+id/drag_upload_image"

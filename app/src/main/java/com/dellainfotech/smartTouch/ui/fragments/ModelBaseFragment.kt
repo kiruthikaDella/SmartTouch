@@ -11,7 +11,7 @@ import com.dellainfotech.smartTouch.api.NetworkModule
 import com.dellainfotech.smartTouch.api.repository.BaseRepository
 import com.dellainfotech.smartTouch.ui.viewmodel.ViewModelFactory
 
-abstract class APIBaseFragment<VM : ViewModel, B : ViewBinding, R : BaseRepository> :
+abstract class ModelBaseFragment<VM : ViewModel, B : ViewBinding, R : BaseRepository> :
     BaseFragment() {
 
     protected lateinit var binding: B

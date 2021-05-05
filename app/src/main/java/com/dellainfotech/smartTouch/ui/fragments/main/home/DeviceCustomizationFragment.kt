@@ -215,27 +215,11 @@ class DeviceCustomizationFragment : BaseFragment() {
     }
 
     private fun lockScreen() {
-        binding.ivScreenLayoutSettings.isEnabled = false
-        binding.ivUploadImageSettings.isEnabled = false
-        binding.ivSwitchIconsSettings.isEnabled = false
-        binding.spinnerIconSize.isEnabled = false
-        binding.cbSwitchNameSettings.isEnabled = false
-        binding.ivTextStyleSettings.isEnabled = false
-        binding.ivTextColorSettings.isEnabled = false
-        binding.spinnerTextSize.isEnabled = false
-        binding.btnSynchronize.isEnabled = false
+        binding.relativeLock.isVisible = true
     }
 
     private fun unLockScreen() {
-        binding.ivScreenLayoutSettings.isEnabled = true
-        binding.ivUploadImageSettings.isEnabled = true
-        binding.ivSwitchIconsSettings.isEnabled = true
-        binding.spinnerIconSize.isEnabled = true
-        binding.cbSwitchNameSettings.isEnabled = true
-        binding.ivTextStyleSettings.isEnabled = true
-        binding.ivTextColorSettings.isEnabled = true
-        binding.spinnerTextSize.isEnabled = true
-        binding.btnSynchronize.isEnabled = true
+        binding.relativeLock.isVisible = false
     }
 
 }
