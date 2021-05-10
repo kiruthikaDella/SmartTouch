@@ -4,6 +4,7 @@ import com.dellainfotech.smartTouch.api.SmartTouchApi
 import com.dellainfotech.smartTouch.api.body.BodyForgotPassword
 import com.dellainfotech.smartTouch.api.body.BodyLogin
 import com.dellainfotech.smartTouch.api.body.BodySignUp
+import com.dellainfotech.smartTouch.api.body.BodySocialLogin
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -17,4 +18,6 @@ class AuthRepository @Inject constructor(
     suspend fun signUp(bodySignUp: BodySignUp) = safeApiCall { smartTouchApi.signUpUser(bodySignUp) }
 
     suspend fun forgotPassword(bodyForgotPassword: BodyForgotPassword) = safeApiCall { smartTouchApi.forgotPassword(bodyForgotPassword) }
+
+    suspend fun socialLogin(bodySocialLogin: BodySocialLogin) = safeApiCall { smartTouchApi.socialLogin(bodySocialLogin) }
 }

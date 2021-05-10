@@ -9,15 +9,20 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.navigation.fragment.findNavController
+import com.appizona.yehiahd.fastsave.FastSave
 import com.dellainfotech.smartTouch.R
 import com.dellainfotech.smartTouch.api.Resource
 import com.dellainfotech.smartTouch.api.body.BodyLogin
+import com.dellainfotech.smartTouch.api.body.BodySocialLogin
+import com.dellainfotech.smartTouch.api.model.UserProfile
 import com.dellainfotech.smartTouch.api.repository.AuthRepository
+import com.dellainfotech.smartTouch.common.utils.Constants
 import com.dellainfotech.smartTouch.common.utils.DialogUtil
 import com.dellainfotech.smartTouch.common.utils.Utils
 import com.dellainfotech.smartTouch.common.utils.Utils.isNetworkConnectivityAvailable
 import com.dellainfotech.smartTouch.common.utils.Utils.showAlertDialog
 import com.dellainfotech.smartTouch.databinding.FragmentLoginBinding
+import com.dellainfotech.smartTouch.mqtt.AwsMqttSingleton
 import com.dellainfotech.smartTouch.ui.activities.AuthenticationActivity
 import com.dellainfotech.smartTouch.ui.activities.MainActivity
 import com.dellainfotech.smartTouch.ui.fragments.ModelBaseFragment
@@ -58,14 +63,17 @@ class LoginFragment : ModelBaseFragment<AuthViewModel, FragmentLoginBinding, Aut
             findNavController().navigate(LoginFragmentDirections.actionLoginFragmentToForgotPasswordFragment())
         }
 
-        binding.edtEmail.setText("archit.ghetiya@teksun.com")
-        binding.edtPassword.setText("12345")
+        binding.edtEmail.setText("jignesh.dangar@teksun.com")
+        binding.edtPassword.setText("123456")
 
+        binding.checkboxRemember.isChecked = FastSave.getInstance()
+            .getBoolean(Constants.IS_REMEMBER, Constants.DEFAULT_REMEMBER_STATUS)
+
+        binding.checkboxRemember.setOnCheckedChangeListener { _, isChecked ->
+            FastSave.getInstance().saveBoolean(Constants.IS_REMEMBER, isChecked)
+        }
         binding.btnLogin.setOnClickListener {
-//            validateUserInformation()
-            context?.let {
-                startActivity(Intent(it, MainActivity::class.java))
-            }
+            validateUserInformation()
         }
 
         binding.linearGoogle.setOnClickListener {
@@ -105,21 +113,74 @@ class LoginFragment : ModelBaseFragment<AuthViewModel, FragmentLoginBinding, Aut
             when (response) {
                 is Resource.Success -> {
                     DialogUtil.hideDialog()
-                    Log.e(logTag,"code ${response.values.code}")
-                    if (response.values.status) {
-                        activity?.let {
-                            startActivity(Intent(it, MainActivity::class.java))
-                            it.finishAffinity()
+                    Log.e(logTag, "code ${response.values.code}")
+                    if (response.values.status && response.values.code == Constants.API_SUCCESS_CODE) {
+
+                        val userProfile: UserProfile? = response.values.data?.user_data
+                        userProfile?.let { userData ->
+                            FastSave.getInstance().saveString(Constants.USER_ID, userData.iUserId)
+                            FastSave.getInstance()
+                                .saveString(Constants.USER_FULL_NAME, userData.vFullName)
+                            FastSave.getInstance()
+                                .saveString(Constants.USERNAME, userData.vUserName)
+                            FastSave.getInstance().saveString(Constants.USER_EMAIL, userData.vEmail)
+                            FastSave.getInstance()
+                                .saveString(Constants.USER_PHONE_NUMBER, userData.bPhoneNumber)
+                            activity?.let {
+                                startActivity(Intent(it, MainActivity::class.java))
+                                it.finishAffinity()
+                            }
                         }
+                        FastSave.getInstance()
+                            .saveString(Constants.ACCESS_TOKEN, response.values.data?.accessToken)
+
                     } else {
                         context?.let {
-                            Toast.makeText(it, response.values.message,Toast.LENGTH_SHORT).show()
+                            Toast.makeText(it, response.values.message, Toast.LENGTH_SHORT).show()
                         }
                     }
                 }
                 is Resource.Failure -> {
                     DialogUtil.hideDialog()
-                    Log.e(logTag, "login error")
+                    Log.e(logTag, "login error ${response.errorBody}")
+                }
+            }
+        })
+
+        viewModel.socialLoginResponse.observe(viewLifecycleOwner, { response ->
+            when (response) {
+                is Resource.Success -> {
+                    DialogUtil.hideDialog()
+                    Log.e(logTag, "code ${response.values.code}")
+                    if (response.values.status && response.values.code == Constants.API_SUCCESS_CODE) {
+
+                        val userProfile: UserProfile? = response.values.data?.user_data
+                        userProfile?.let { userData ->
+                            FastSave.getInstance().saveString(Constants.USER_ID, userData.iUserId)
+                            FastSave.getInstance()
+                                .saveString(Constants.USER_FULL_NAME, userData.vFullName)
+                            FastSave.getInstance()
+                                .saveString(Constants.USERNAME, userData.vUserName)
+                            FastSave.getInstance().saveString(Constants.USER_EMAIL, userData.vEmail)
+                            FastSave.getInstance()
+                                .saveString(Constants.USER_PHONE_NUMBER, userData.bPhoneNumber)
+                            activity?.let {
+                                startActivity(Intent(it, MainActivity::class.java))
+                                it.finishAffinity()
+                            }
+                        }
+                        FastSave.getInstance()
+                            .saveString(Constants.ACCESS_TOKEN, response.values.data?.accessToken)
+
+                    } else {
+                        context?.let {
+                            Toast.makeText(it, response.values.message, Toast.LENGTH_SHORT).show()
+                        }
+                    }
+                }
+                is Resource.Failure -> {
+                    DialogUtil.hideDialog()
+                    Log.e(logTag, "login error ${response.errorBody}")
                 }
             }
         })
@@ -129,6 +190,8 @@ class LoginFragment : ModelBaseFragment<AuthViewModel, FragmentLoginBinding, Aut
         val email = binding.edtEmail.text.toString().trim()
         val password = binding.edtPassword.text.toString().trim()
         val uuid: String = UUID.randomUUID().toString()
+
+        FastSave.getInstance().saveString(Constants.MOBILE_UUID, uuid)
 
         if (email.isEmpty()) {
             binding.edtEmail.error = getString(R.string.error_text_email)
@@ -166,12 +229,29 @@ class LoginFragment : ModelBaseFragment<AuthViewModel, FragmentLoginBinding, Aut
 
                     account?.let {
 
-                        Log.d(logTag, "Success Login User Id ${it.id} ")
+                        Log.d(logTag, "Success Login User Id ${it.id} email ${it.email}")
 
                         val name = it.displayName?.split(" ")
                         val firstName = name?.get(0)
                         val lastName = name?.get(1)
+                        val email = it.email ?: ""
                         Log.d(logTag, "account ${it.displayName} ")
+
+                        val uuid: String = UUID.randomUUID().toString()
+                        FastSave.getInstance().saveString(Constants.MOBILE_UUID, uuid)
+
+                        activity?.let { act ->
+                            DialogUtil.loadingAlert(act, isCancelable = false)
+                        }
+
+                        viewModel.socialLogin(
+                            BodySocialLogin(
+                                it.id.toString(),
+                                uuid,
+                                "2",
+                                email
+                            )
+                        )
                     }
                 } else {
                     Log.e(logTag, "Google sign in cancelled")
@@ -182,6 +262,24 @@ class LoginFragment : ModelBaseFragment<AuthViewModel, FragmentLoginBinding, Aut
         }
     }
 
+    fun facebookLogin(id: String) {
+        val uuid: String = UUID.randomUUID().toString()
+        FastSave.getInstance().saveString(Constants.MOBILE_UUID, uuid)
+
+        activity?.let { act ->
+            DialogUtil.loadingAlert(act, isCancelable = false)
+        }
+
+        viewModel.socialLogin(
+            BodySocialLogin(
+                id,
+                uuid,
+                "2",
+                ""
+            )
+        )
+    }
+
     override fun getViewModel(): Class<AuthViewModel> = AuthViewModel::class.java
 
     override fun getFragmentBinding(
@@ -190,4 +288,5 @@ class LoginFragment : ModelBaseFragment<AuthViewModel, FragmentLoginBinding, Aut
     ): FragmentLoginBinding = FragmentLoginBinding.inflate(inflater, container, false)
 
     override fun getFragmentRepository(): AuthRepository = AuthRepository(networkModel)
+
 }

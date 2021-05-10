@@ -91,4 +91,9 @@ dependencies {
     kapt "com.google.dagger:hilt-android-compiler:$hiltVersion"
     implementation "androidx.hilt:hilt-lifecycle-viewmodel:$hiltAndroidXVersion"
     kapt "androidx.hilt:hilt-compiler:$hiltAndroidXVersion"
+
+    //aws mqtt
+    implementation 'com.amazonaws:aws-android-sdk-iot:2.16.5'
+    implementation 'software.amazon.awssdk.crt:aws-crt:0.9.0'
+    implementation 'software.amazon.awssdk.iotdevicesdk:aws-iot-device-sdk:1.2.9'
 }

@@ -97,7 +97,6 @@
                 android:textColor="@color/gull_gray"
                 android:textSize="@dimen/_11ssp"
                 app:layout_constraintBottom_toBottomOf="@+id/tv_switch_one_name"
-                app:layout_constraintEnd_toEndOf="@+id/guideline2"
                 app:layout_constraintStart_toStartOf="@+id/guideline1"
                 app:layout_constraintTop_toTopOf="@+id/tv_switch_one_name" />
 
@@ -151,7 +150,6 @@
                 android:textColor="@color/gull_gray"
                 android:textSize="@dimen/_11ssp"
                 app:layout_constraintBottom_toBottomOf="@+id/tv_switch_two_name"
-                app:layout_constraintEnd_toEndOf="@+id/guideline2"
                 app:layout_constraintStart_toStartOf="@+id/guideline1"
                 app:layout_constraintTop_toTopOf="@+id/tv_switch_two_name" />
 
@@ -205,7 +203,6 @@
                 android:textColor="@color/gull_gray"
                 android:textSize="@dimen/_11ssp"
                 app:layout_constraintBottom_toBottomOf="@+id/tv_switch_three_name"
-                app:layout_constraintEnd_toEndOf="@+id/guideline2"
                 app:layout_constraintStart_toStartOf="@+id/guideline1"
                 app:layout_constraintTop_toTopOf="@+id/tv_switch_three_name" />
 
@@ -259,7 +256,6 @@
                 android:textColor="@color/gull_gray"
                 android:textSize="@dimen/_11ssp"
                 app:layout_constraintBottom_toBottomOf="@+id/tv_switch_four_name"
-                app:layout_constraintEnd_toEndOf="@+id/guideline2"
                 app:layout_constraintStart_toStartOf="@+id/guideline1"
                 app:layout_constraintTop_toTopOf="@+id/tv_switch_four_name" />
 
@@ -312,7 +308,6 @@
                 android:textColor="@color/gull_gray"
                 android:textSize="@dimen/_11ssp"
                 app:layout_constraintBottom_toBottomOf="@+id/tv_switch_five_name"
-                app:layout_constraintEnd_toEndOf="@+id/guideline2"
                 app:layout_constraintStart_toStartOf="@+id/guideline1"
                 app:layout_constraintTop_toTopOf="@+id/tv_switch_five_name" />
 
@@ -367,10 +362,8 @@
                 android:textColor="@color/gull_gray"
                 android:textSize="@dimen/_11ssp"
                 app:layout_constraintBottom_toBottomOf="@+id/tv_switch_six_name"
-                app:layout_constraintEnd_toEndOf="@+id/guideline2"
                 app:layout_constraintStart_toStartOf="@+id/guideline1"
                 app:layout_constraintTop_toTopOf="@+id/tv_switch_six_name" />
-
 
             <com.google.android.material.switchmaterial.SwitchMaterial
                 android:id="@+id/switch_six"
@@ -423,7 +416,6 @@
                 android:textColor="@color/gull_gray"
                 android:textSize="@dimen/_11ssp"
                 app:layout_constraintBottom_toBottomOf="@+id/tv_switch_seven_name"
-                app:layout_constraintEnd_toEndOf="@+id/guideline2"
                 app:layout_constraintStart_toStartOf="@+id/guideline1"
                 app:layout_constraintTop_toTopOf="@+id/tv_switch_seven_name" />
 
@@ -477,7 +469,6 @@
                 android:textColor="@color/gull_gray"
                 android:textSize="@dimen/_11ssp"
                 app:layout_constraintBottom_toBottomOf="@+id/tv_switch_eight_name"
-                app:layout_constraintEnd_toEndOf="@+id/guideline2"
                 app:layout_constraintStart_toStartOf="@+id/guideline1"
                 app:layout_constraintTop_toTopOf="@+id/tv_switch_eight_name" />
 

@@ -7,7 +7,7 @@
     android:padding="@dimen/_25sdp">
 
     <TextView
-        android:id="@+id/tv_name"
+        android:id="@+id/tv_user_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="@dimen/_14ssp"
@@ -16,7 +16,7 @@
         android:textColor="@color/theme_color" />
 
     <TextView
-        android:id="@+id/tv_email"
+        android:id="@+id/tv_user_email"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="@dimen/_12ssp"

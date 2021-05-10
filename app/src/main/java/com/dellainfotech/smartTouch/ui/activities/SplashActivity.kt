@@ -5,7 +5,9 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import androidx.appcompat.app.AppCompatActivity
+import com.appizona.yehiahd.fastsave.FastSave
 import com.dellainfotech.smartTouch.R
+import com.dellainfotech.smartTouch.common.utils.Constants
 
 class SplashActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -17,7 +19,15 @@ class SplashActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         Handler(Looper.getMainLooper()).postDelayed({
-            startActivity(Intent(this@SplashActivity, AuthenticationActivity::class.java))
+
+            if (FastSave.getInstance()
+                    .getBoolean(Constants.IS_REMEMBER, false) && FastSave.getInstance()
+                    .getBoolean(Constants.IS_LOGGED_IN, false)
+            ) {
+                startActivity(Intent(this@SplashActivity, MainActivity::class.java))
+            } else {
+                startActivity(Intent(this@SplashActivity, AuthenticationActivity::class.java))
+            }
         }, 2000)
     }
 }

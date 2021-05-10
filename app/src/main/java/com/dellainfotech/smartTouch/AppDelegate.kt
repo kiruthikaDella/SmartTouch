@@ -7,6 +7,7 @@ import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.OnLifecycleEvent
 import androidx.lifecycle.ProcessLifecycleOwner
 import com.appizona.yehiahd.fastsave.FastSave
+import com.dellainfotech.smartTouch.mqtt.AwsMqttSingleton
 
 /**
  * Created by Jignesh Dangar on 09-04-2021.
@@ -26,6 +27,8 @@ class AppDelegate: Application(), LifecycleObserver {
 
         //Initialize FastSave
         FastSave.init(this)
+
+        AwsMqttSingleton.initializeMQTT()
 
         ProcessLifecycleOwner.get().lifecycle.addObserver(this)
 

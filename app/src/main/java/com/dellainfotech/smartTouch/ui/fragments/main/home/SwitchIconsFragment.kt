@@ -66,7 +66,6 @@ class SwitchIconsFragment : BaseFragment() {
             override fun onItemClick(data: SwitchIconsModel) {
                 findNavController().navigate(SwitchIconsFragmentDirections.actionSwitchIconsFragmentToSwitchIconsDetailFragment())
             }
-
         })
 
         binding.ibLock.setOnClickListener {
@@ -98,12 +97,10 @@ class SwitchIconsFragment : BaseFragment() {
     }
 
     private fun lockScreen() {
-        binding.btnSynchronize.isEnabled = false
         binding.relativeLock.isVisible = true
     }
 
     private fun unlockScreen() {
-        binding.btnSynchronize.isEnabled = true
         binding.relativeLock.isVisible = false
     }
 

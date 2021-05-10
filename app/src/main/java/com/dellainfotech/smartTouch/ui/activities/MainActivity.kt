@@ -38,6 +38,8 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
 
         window?.statusBarColor = getColor(R.color.app_background_color)
 
+        FastSave.getInstance().saveBoolean(Constants.IS_LOGGED_IN,true)
+
         val navHostFragment =
             supportFragmentManager.findFragmentById(R.id.main_fragment_container) as NavHostFragment
 
@@ -94,7 +96,6 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
         )
 
         val roomAdapter = RoomTypeAdapter(this, roomTypeList)
-//        roomAdapter.setDropDownViewResource(R.layout.simple_spinner_dropdown)
         binding.layoutAddRoom.spinnerRoom.adapter = roomAdapter
 
         binding.layoutAddRoom.spinnerRoom.onItemSelectedListener =

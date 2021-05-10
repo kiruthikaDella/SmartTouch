@@ -67,6 +67,7 @@
         android:layout_below="@id/relative_header"
         android:clickable="true"
         android:focusable="true"
-        android:visibility="gone" />
+        android:visibility="gone"
+        android:elevation="8dp"/>
 
 </RelativeLayout>

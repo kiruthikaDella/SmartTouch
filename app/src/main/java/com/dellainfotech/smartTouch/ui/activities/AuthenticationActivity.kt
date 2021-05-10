@@ -99,6 +99,10 @@ class AuthenticationActivity : AppCompatActivity() {
                                 logTag,
                                 "Facebook userId = ${accessToken.userId} firstname = ${it.firstName} lastName = ${it.lastName}"
                             )
+
+                          /*  val loginFragment = LoginFragment()
+                            loginFragment.facebookLogin(accessToken.userId)*/
+
                         } ?: run {
                             performFacebookLogin()
                         }
@@ -121,7 +125,7 @@ class AuthenticationActivity : AppCompatActivity() {
                             Toast.LENGTH_SHORT
                         ).show()
                         Log.i(logTag, "Success Facebook Login onError")
-                        Log.e(logTag,"FacebookException $error")
+                        Log.e(logTag, "FacebookException $error")
                     }
 
                 })

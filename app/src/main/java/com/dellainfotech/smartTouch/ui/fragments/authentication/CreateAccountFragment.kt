@@ -6,9 +6,14 @@ import android.util.Patterns
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.navigation.fragment.findNavController
 import com.dellainfotech.smartTouch.R
+import com.dellainfotech.smartTouch.api.Resource
+import com.dellainfotech.smartTouch.api.body.BodySignUp
 import com.dellainfotech.smartTouch.api.repository.AuthRepository
+import com.dellainfotech.smartTouch.common.utils.Constants
+import com.dellainfotech.smartTouch.common.utils.DialogUtil
 import com.dellainfotech.smartTouch.databinding.FragmentCreateAccountBinding
 import com.dellainfotech.smartTouch.ui.fragments.ModelBaseFragment
 import com.dellainfotech.smartTouch.ui.viewmodel.AuthViewModel
@@ -36,31 +41,65 @@ class CreateAccountFragment :
         binding.btnSignUp.setOnClickListener {
             validateUserInformation()
         }
+
+        viewModel.signUpResponse.observe(viewLifecycleOwner, { response ->
+            when (response) {
+                is Resource.Success -> {
+                    DialogUtil.hideDialog()
+                    if (response.values.status && response.values.code == Constants.API_SUCCESS_CODE) {
+                        context?.let {
+                            Toast.makeText(it, response.values.message, Toast.LENGTH_SHORT).show()
+                        }
+                        findNavController().navigateUp()
+                    } else {
+                        context?.let {
+                            Toast.makeText(it, response.values.message, Toast.LENGTH_SHORT).show()
+                        }
+                    }
+
+                }
+                is Resource.Failure -> {
+                    DialogUtil.hideDialog()
+                    Log.e(logTag, "registration error ${response.errorBody}")
+                }
+            }
+        })
     }
 
     private fun validateUserInformation() {
-        if (binding.edtFullName.text.toString().isEmpty()) {
+
+        val fullName = binding.edtFullName.text.toString()
+        val userName = binding.edtUserName.text.toString()
+        val phoneNumber = binding.edtPhoneNumber.text.toString()
+        val email = binding.edtEmail.text.toString()
+        val password = binding.edtPassword.text.toString()
+        val confirmPassword = binding.edtConfirmPassword.text.toString()
+
+        if (fullName.isEmpty()) {
             binding.edtFullName.error = getString(R.string.error_text_full_name)
-        } else if (binding.edtFullName.text.toString().length < 3) {
+        } else if (fullName.length < 3) {
             binding.edtFullName.error = getString(R.string.error_text_full_name_length)
-        } else if (binding.edtUserName.text.toString().isEmpty()) {
+        } else if (userName.isEmpty()) {
             binding.edtUserName.error = getString(R.string.error_text_user_name)
-        } else if (binding.edtUserName.text.toString().length < 3) {
+        } else if (userName.length < 3) {
             binding.edtUserName.error = getString(R.string.error_text_user_name_length)
-        } else if (binding.edtPhoneNumber.text.toString().isEmpty()) {
+        } else if (phoneNumber.isEmpty()) {
             binding.edtPhoneNumber.error = getString(R.string.error_text_phone_number)
-        } else if (binding.edtEmail.text.toString().isEmpty()) {
+        } else if (email.isEmpty()) {
             binding.edtEmail.error = getString(R.string.error_text_email)
-        } else if (!Patterns.EMAIL_ADDRESS.matcher(binding.edtEmail.text.toString()).matches()) {
+        } else if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
             binding.edtEmail.error = getString(R.string.error_text_valid_email)
-        } else if (binding.edtPassword.text.toString().isEmpty()) {
+        } else if (password.isEmpty()) {
             binding.edtPassword.error = getString(R.string.error_text_password)
-        } else if (binding.edtPassword.text.toString().length < 3) {
+        } else if (password.length < 3) {
             binding.edtPassword.error = getString(R.string.error_text_password_length)
-        } else if (binding.edtPassword.text.toString() != binding.edtConfirmPassword.text.toString()) {
+        } else if (password != confirmPassword) {
             binding.edtConfirmPassword.error = getString(R.string.error_text_confirm_password)
         } else {
-            Log.e(logTag, "Valid")
+            activity?.let {
+                DialogUtil.loadingAlert(it, isCancelable = false)
+            }
+            viewModel.signUp(BodySignUp(fullName,userName,email,password,confirmPassword,phoneNumber))
         }
     }
 

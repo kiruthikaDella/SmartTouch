@@ -2,7 +2,7 @@ package com.dellainfotech.smartTouch.api.model
 
 import com.google.gson.annotations.SerializedName
 
-data class ForgotPasswordResponse(
+data class CommonResponse(
     @SerializedName("status")
     var status: Boolean,
     @SerializedName("code")

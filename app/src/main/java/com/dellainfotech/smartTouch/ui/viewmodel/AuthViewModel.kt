@@ -9,9 +9,9 @@ import com.dellainfotech.smartTouch.api.Resource
 import com.dellainfotech.smartTouch.api.body.BodyForgotPassword
 import com.dellainfotech.smartTouch.api.body.BodyLogin
 import com.dellainfotech.smartTouch.api.body.BodySignUp
-import com.dellainfotech.smartTouch.api.model.ForgotPasswordResponse
+import com.dellainfotech.smartTouch.api.body.BodySocialLogin
+import com.dellainfotech.smartTouch.api.model.CommonResponse
 import com.dellainfotech.smartTouch.api.model.LoginResponse
-import com.dellainfotech.smartTouch.api.model.SignUpResponse
 import com.dellainfotech.smartTouch.api.repository.AuthRepository
 import kotlinx.coroutines.launch
 
@@ -23,19 +23,31 @@ class AuthViewModel @ViewModelInject constructor(
     val loginResponse: LiveData<Resource<LoginResponse>>
         get() = _loginResponse
 
-    private val _signUpResponse: MutableLiveData<Resource<SignUpResponse>> = MutableLiveData()
-    val signUpResponse: LiveData<Resource<SignUpResponse>>
+    private val _signUpResponse: MutableLiveData<Resource<CommonResponse>> = MutableLiveData()
+    val signUpResponse: LiveData<Resource<CommonResponse>>
         get() = _signUpResponse
 
-    private val _forgotPasswordResponse: MutableLiveData<Resource<ForgotPasswordResponse>> = MutableLiveData()
-    val forgotPasswordResponse: LiveData<Resource<ForgotPasswordResponse>>
+    private val _forgotPasswordResponse: MutableLiveData<Resource<CommonResponse>> =
+        MutableLiveData()
+    val forgotPasswordResponse: LiveData<Resource<CommonResponse>>
         get() = _forgotPasswordResponse
+
+    private val _socialLoginResponse: MutableLiveData<Resource<LoginResponse>> = MutableLiveData()
+    val socialLoginResponse: LiveData<Resource<LoginResponse>>
+        get() = _socialLoginResponse
 
     fun login(
         bodyLogin: BodyLogin
     ) = viewModelScope.launch {
         _loginResponse.value = Resource.Loading
         _loginResponse.value = authRepository.login(bodyLogin)
+    }
+
+    fun socialLogin(
+        socialLogin: BodySocialLogin
+    ) = viewModelScope.launch {
+        _socialLoginResponse.value = Resource.Loading
+        _socialLoginResponse.value = authRepository.socialLogin(socialLogin)
     }
 
     fun signUp(
@@ -46,7 +58,7 @@ class AuthViewModel @ViewModelInject constructor(
     }
 
     fun forgotPassword(
-       bodyForgotPassword: BodyForgotPassword
+        bodyForgotPassword: BodyForgotPassword
     ) = viewModelScope.launch {
         _forgotPasswordResponse.value = Resource.Loading
         _forgotPasswordResponse.value = authRepository.forgotPassword(bodyForgotPassword)
