@@ -2,6 +2,7 @@ package com.dellainfotech.smartTouch.ui.fragments.main.controlmode
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -55,10 +56,13 @@ class ControlModeFragment : BaseFragment() {
                     getString(R.string.text_cancel),
                     object : DialogAskListener {
                         override fun onYesClicked() {
+                            Log.e(logTag, " yes clicked")
                             FastSave.getInstance().saveBoolean(Constants.isControlModePinned, true)
+                            Log.e(logTag,"iscontrollpinned ${FastSave.getInstance().getBoolean(Constants.isControlModePinned, Constants.DEFAULT_CONTROL_MODE_STATUS)} ")
                         }
 
                         override fun onNoClicked() {
+                            Log.e(logTag, " no clicked")
                             FastSave.getInstance().saveBoolean(Constants.isControlModePinned, false)
                         }
                     }

@@ -48,7 +48,7 @@ class RoomPanelFragment : BaseFragment() {
             findNavController().navigateUp()
         }
 
-        binding.tvTitle.text = args.roomDetail.title
+        binding.tvTitle.text = args.roomDetail.roomName
 
         panelAdapter = RoomPanelsAdapter(roomList)
         binding.recyclerRoomPanels.adapter = panelAdapter
@@ -96,6 +96,5 @@ class RoomPanelFragment : BaseFragment() {
             binding.layoutSlidingUpPanel.panelState = SlidingUpPanelLayout.PanelState.EXPANDED
         }
     }
-
 
 }

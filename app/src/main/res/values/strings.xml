@@ -3,8 +3,13 @@
     <string name="org_name">Della Electronics Pvt Ltd.</string>
 
     <!--    Google Authentication-->
-    <string name="google_client_id">254538999523-d0dfbtkuegliqtupjfjid8bjkduom0o2.apps.googleusercontent.com</string>
+ <!--   <string name="google_client_id">254538999523-d0dfbtkuegliqtupjfjid8bjkduom0o2.apps.googleusercontent.com</string>
+    <string name="google_client_secret">Q-x9vJg8UGTX-VNma3F7ZKHm</string>-->
+
+    <!--    Google Authentication client-->
+    <string name="google_client_id">432636988700-m2vtfr8vd9kjaiflhmd9tngdu2bj0pr0.apps.googleusercontent.com</string>
     <string name="google_client_secret">Q-x9vJg8UGTX-VNma3F7ZKHm</string>
+    <string name="google_client_api_key">AIzaSyCusFbvoi6knNJnuyZ2o_GYKqFj4e2GXJ4</string>
 
 <!--    <string name="facebook_app_id">447085073257901</string>
     <string name="fb_login_protocol_scheme">fb447085073257901</string>-->

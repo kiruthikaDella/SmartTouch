@@ -30,7 +30,7 @@
         tools:layout="@layout/fragment_room_panel">
         <argument
             android:name="roomDetail"
-            app:argType="com.dellainfotech.smartTouch.model.HomeRoomModel" />
+            app:argType="com.dellainfotech.smartTouch.api.model.GetRoomData" />
         <action
             android:id="@+id/action_roomPanelFragment_to_deviceCustomizationFragment"
             app:destination="@id/deviceCustomizationFragment" />

@@ -56,10 +56,6 @@ class HomeFragment : ModelBaseFragment<HomeViewModel, FragmentHomeBinding, HomeR
         // initializing navigation menu
         setUpNavigationView()
 
-   /*     roomsAdapter = HomeRoomsAdapter(roomList)
-        binding.recyclerRooms.adapter = roomsAdapter
-        roomsAdapter.setCallback(this)*/
-
         apiCall()
     }
 
@@ -100,9 +96,6 @@ class HomeFragment : ModelBaseFragment<HomeViewModel, FragmentHomeBinding, HomeR
                     if (response.values.status && response.values.code == Constants.API_SUCCESS_CODE){
                         roomList = response.values.data!!
 
-                        Log.e(logTag," getRoomResponse values ${response.values.data} ")
-                        Log.e(logTag," getRoomResponse roomList ${roomList} ")
-
                         roomsAdapter = HomeRoomsAdapter(roomList)
                         binding.recyclerRooms.adapter = roomsAdapter
                         roomsAdapter.setCallback(this)
@@ -123,11 +116,11 @@ class HomeFragment : ModelBaseFragment<HomeViewModel, FragmentHomeBinding, HomeR
     }
 
     override fun onItemClick(data: GetRoomData) {
-       /* findNavController().navigate(
+        findNavController().navigate(
             HomeFragmentDirections.actionHomeFragmentToRoomPanelFragment(
                 data
             )
-        )*/
+        )
     }
 
     private fun openOrCloseDrawer() {

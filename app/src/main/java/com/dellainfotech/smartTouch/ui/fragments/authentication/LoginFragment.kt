@@ -74,6 +74,7 @@ class LoginFragment : ModelBaseFragment<AuthViewModel, FragmentLoginBinding, Aut
         }
         binding.btnLogin.setOnClickListener {
             validateUserInformation()
+//            throw RuntimeException("Test Crash")
         }
 
         binding.linearGoogle.setOnClickListener {
@@ -95,7 +96,7 @@ class LoginFragment : ModelBaseFragment<AuthViewModel, FragmentLoginBinding, Aut
 
         binding.linearFacebook.setOnClickListener {
             if (isNetworkConnectivityAvailable()) {
-                (activity as AuthenticationActivity)?.performFacebookLogin()
+                (activity as AuthenticationActivity).performFacebookLogin()
             } else {
                 context?.let {
                     showAlertDialog(
