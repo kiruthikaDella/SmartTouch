@@ -2,7 +2,7 @@ package com.dellainfotech.smartTouch.api.model
 
 import com.google.gson.annotations.SerializedName
 
-data class LoginResponse(
+data class RoomTypeResponse(
     @SerializedName("status")
     var status: Boolean,
     @SerializedName("code")
@@ -10,12 +10,12 @@ data class LoginResponse(
     @SerializedName("message")
     var message: String,
     @SerializedName("data")
-    var data: UserData? = null
+    var data: List<RoomTypeData>? = null
 )
 
-data class UserData(
-    @SerializedName("user_data")
-    var user_data: UserProfile? = null,
-    @SerializedName("access_token")
-    var accessToken: String
+data class RoomTypeData(
+    @SerializedName("_id")
+    var roomTypeId: String,
+    @SerializedName("vName")
+    var roomName: String
 )

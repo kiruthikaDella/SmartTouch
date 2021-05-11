@@ -10,18 +10,18 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.dellainfotech.smartTouch.AppDelegate
 import com.dellainfotech.smartTouch.R
+import com.dellainfotech.smartTouch.api.model.GetRoomData
 import com.dellainfotech.smartTouch.common.interfaces.AdapterItemClickListener
-import com.dellainfotech.smartTouch.model.HomeRoomModel
 import java.util.regex.Pattern
 
 /**
  * Created by Jignesh Dangar on 14-04-2021.
  */
 class HomeRoomsAdapter(
-    private val roomList: List<HomeRoomModel>
+    private val roomList: List<GetRoomData>
 ) : RecyclerView.Adapter<HomeRoomsAdapter.MyViewHolder>() {
 
-    private var roomClickListener: AdapterItemClickListener<HomeRoomModel>? = null
+    private var roomClickListener: AdapterItemClickListener<GetRoomData>? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
         val v = LayoutInflater.from(parent.context)
@@ -34,7 +34,7 @@ class HomeRoomsAdapter(
 
         holder.apply {
             val roomName =
-                data.title.split(Pattern.compile(" "), 2)
+                data.roomName.split(Pattern.compile(" "), 2)
 
             if (roomName.size > 1) {
                 val firstWord = "<B>${roomName[0]}</B> " + roomName[1]
@@ -51,12 +51,12 @@ class HomeRoomsAdapter(
                     tvRoomTitle.text = Html.fromHtml(firstWord)
                 }
             }
-            tvRoomImage.setImageDrawable(
+        /*    tvRoomImage.setImageDrawable(
                 ContextCompat.getDrawable(
                     AppDelegate.instance,
                     data.image
                 )
-            )
+            )*/
 
             tvRoomSettings.setOnClickListener {
                 roomClickListener?.onItemClick(data)
@@ -74,7 +74,7 @@ class HomeRoomsAdapter(
         val tvRoomSettings: ImageView = itemView.findViewById(R.id.iv_room_settings)
     }
 
-    fun setCallback(listener: AdapterItemClickListener<HomeRoomModel>) {
+    fun setCallback(listener: AdapterItemClickListener<GetRoomData>) {
         this.roomClickListener = listener
     }
 }

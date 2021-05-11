@@ -15,6 +15,8 @@ import com.dellainfotech.smartTouch.R
 import com.dellainfotech.smartTouch.adapters.HomeRoomsAdapter
 import com.dellainfotech.smartTouch.api.Resource
 import com.dellainfotech.smartTouch.api.body.BodyLogout
+import com.dellainfotech.smartTouch.api.model.GetRoomData
+import com.dellainfotech.smartTouch.api.model.RoomTypeData
 import com.dellainfotech.smartTouch.api.repository.HomeRepository
 import com.dellainfotech.smartTouch.common.interfaces.AdapterItemClickListener
 import com.dellainfotech.smartTouch.common.utils.Constants
@@ -31,11 +33,11 @@ import com.dellainfotech.smartTouch.ui.viewmodel.HomeViewModel
  */
 
 class HomeFragment : ModelBaseFragment<HomeViewModel, FragmentHomeBinding, HomeRepository>(),
-    AdapterItemClickListener<HomeRoomModel> {
+    AdapterItemClickListener<GetRoomData> {
 
     private val logTag = this::class.java.simpleName
     private lateinit var roomsAdapter: HomeRoomsAdapter
-    private var roomList = arrayListOf<HomeRoomModel>()
+    private var roomList: List<GetRoomData> = ArrayList()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -54,29 +56,20 @@ class HomeFragment : ModelBaseFragment<HomeViewModel, FragmentHomeBinding, HomeR
         // initializing navigation menu
         setUpNavigationView()
 
-        roomList.clear()
-        roomList.add(
-            HomeRoomModel(
-                R.drawable.img_living_room,
-                getString(R.string.text_living_room)
-            )
-        )
-        roomList.add(HomeRoomModel(R.drawable.img_bedroom, getString(R.string.text_bedroom)))
-        roomList.add(HomeRoomModel(R.drawable.img_kitchen, getString(R.string.text_kitchen)))
-        roomList.add(
-            HomeRoomModel(
-                R.drawable.img_master_bedroom,
-                getString(R.string.text_master_bedroom)
-            )
-        )
-        roomsAdapter = HomeRoomsAdapter(roomList)
+   /*     roomsAdapter = HomeRoomsAdapter(roomList)
         binding.recyclerRooms.adapter = roomsAdapter
-        roomsAdapter.setCallback(this)
+        roomsAdapter.setCallback(this)*/
 
         apiCall()
     }
 
     private fun apiCall() {
+        roomList.toMutableList().clear()
+        viewModel.getRoom()
+        activity?.let {
+            DialogUtil.loadingAlert(it,isCancelable = false)
+        }
+
         viewModel.logoutResponse.observe(viewLifecycleOwner, { response ->
             when (response) {
                 is Resource.Success -> {
@@ -99,14 +92,42 @@ class HomeFragment : ModelBaseFragment<HomeViewModel, FragmentHomeBinding, HomeR
                 }
             }
         })
+
+        viewModel.getRoomResponse.observe(viewLifecycleOwner, { response ->
+            when(response){
+                is Resource.Success -> {
+                    DialogUtil.hideDialog()
+                    if (response.values.status && response.values.code == Constants.API_SUCCESS_CODE){
+                        roomList = response.values.data!!
+
+                        Log.e(logTag," getRoomResponse values ${response.values.data} ")
+                        Log.e(logTag," getRoomResponse roomList ${roomList} ")
+
+                        roomsAdapter = HomeRoomsAdapter(roomList)
+                        binding.recyclerRooms.adapter = roomsAdapter
+                        roomsAdapter.setCallback(this)
+                    }else {
+                        context?.let {
+                            Toast.makeText(it,response.values.message,Toast.LENGTH_SHORT).show()
+                        }
+                    }
+                }
+                is Resource.Failure -> {
+                    DialogUtil.hideDialog()
+                    context?.let {
+                        Log.e(logTag,"getRoomResponse Failure ${response.errorBody.toString()} ")
+                    }
+                }
+            }
+        })
     }
 
-    override fun onItemClick(data: HomeRoomModel) {
-        findNavController().navigate(
+    override fun onItemClick(data: GetRoomData) {
+       /* findNavController().navigate(
             HomeFragmentDirections.actionHomeFragmentToRoomPanelFragment(
                 data
             )
-        )
+        )*/
     }
 
     private fun openOrCloseDrawer() {

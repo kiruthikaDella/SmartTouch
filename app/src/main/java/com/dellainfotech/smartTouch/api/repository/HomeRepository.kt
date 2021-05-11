@@ -2,6 +2,7 @@ package com.dellainfotech.smartTouch.api.repository
 
 import com.appizona.yehiahd.fastsave.FastSave
 import com.dellainfotech.smartTouch.api.SmartTouchApi
+import com.dellainfotech.smartTouch.api.body.BodyAddRoom
 import com.dellainfotech.smartTouch.api.body.BodyLogout
 import com.dellainfotech.smartTouch.common.utils.Constants
 import javax.inject.Inject
@@ -18,4 +19,13 @@ class HomeRepository @Inject constructor(
 
     suspend fun logout(bodyLogout: BodyLogout) =
         safeApiCall { smartTouchApi.logout(getAccessKey(), bodyLogout) }
+
+    suspend fun roomType() =
+        safeApiCall { smartTouchApi.roomType(getAccessKey()) }
+
+    suspend fun getRoom() =
+        safeApiCall { smartTouchApi.getRoom(getAccessKey()) }
+
+    suspend fun addRoom(bodyAddRoom: BodyAddRoom) =
+        safeApiCall { smartTouchApi.addRoom(getAccessKey(), bodyAddRoom) }
 }
