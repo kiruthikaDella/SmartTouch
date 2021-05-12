@@ -1,10 +1,9 @@
 package com.dellainfotech.smartTouch.api.repository
 
-import com.appizona.yehiahd.fastsave.FastSave
 import com.dellainfotech.smartTouch.api.SmartTouchApi
 import com.dellainfotech.smartTouch.api.body.BodyAddRoom
+import com.dellainfotech.smartTouch.api.body.BodyFeedback
 import com.dellainfotech.smartTouch.api.body.BodyLogout
-import com.dellainfotech.smartTouch.common.utils.Constants
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -12,10 +11,6 @@ import javax.inject.Singleton
 class HomeRepository @Inject constructor(
     private val smartTouchApi: SmartTouchApi
 ) : BaseRepository() {
-
-    private fun getAccessKey(): String {
-        return FastSave.getInstance().getString(Constants.ACCESS_TOKEN, null)
-    }
 
     suspend fun logout(bodyLogout: BodyLogout) =
         safeApiCall { smartTouchApi.logout(getAccessKey(), bodyLogout) }
@@ -28,4 +23,7 @@ class HomeRepository @Inject constructor(
 
     suspend fun addRoom(bodyAddRoom: BodyAddRoom) =
         safeApiCall { smartTouchApi.addRoom(getAccessKey(), bodyAddRoom) }
+
+    suspend fun getFAQ() =
+        safeApiCall { smartTouchApi.faq(getAccessKey()) }
 }

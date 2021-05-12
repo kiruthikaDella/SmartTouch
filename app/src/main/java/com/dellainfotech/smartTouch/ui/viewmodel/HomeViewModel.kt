@@ -8,10 +8,7 @@ import androidx.lifecycle.viewModelScope
 import com.dellainfotech.smartTouch.api.Resource
 import com.dellainfotech.smartTouch.api.body.BodyAddRoom
 import com.dellainfotech.smartTouch.api.body.BodyLogout
-import com.dellainfotech.smartTouch.api.model.AddRoomResponse
-import com.dellainfotech.smartTouch.api.model.CommonResponse
-import com.dellainfotech.smartTouch.api.model.GetRoomResponse
-import com.dellainfotech.smartTouch.api.model.RoomTypeResponse
+import com.dellainfotech.smartTouch.api.model.*
 import com.dellainfotech.smartTouch.api.repository.HomeRepository
 import kotlinx.coroutines.launch
 
@@ -35,6 +32,10 @@ class HomeViewModel @ViewModelInject constructor(
     val addRoomResponse: LiveData<Resource<AddRoomResponse>>
         get() = _addRoomResponse
 
+    private val _faqResponse: MutableLiveData<Resource<FAQResponse>> = MutableLiveData()
+    val faqResponse: LiveData<Resource<FAQResponse>>
+        get() = _faqResponse
+
     fun logout(
         bodyLogout: BodyLogout
     ) = viewModelScope.launch {
@@ -52,10 +53,14 @@ class HomeViewModel @ViewModelInject constructor(
         _getRoomResponse.value = homeRepository.getRoom()
     }
 
-
     fun addRoom(bodyAddRoom: BodyAddRoom) = viewModelScope.launch {
         _addRoomResponse.value = Resource.Loading
         _addRoomResponse.value = homeRepository.addRoom(bodyAddRoom)
+    }
+
+    fun getFAQ() = viewModelScope.launch {
+        _faqResponse.value = Resource.Loading
+        _faqResponse.value = homeRepository.getFAQ()
     }
 
 }

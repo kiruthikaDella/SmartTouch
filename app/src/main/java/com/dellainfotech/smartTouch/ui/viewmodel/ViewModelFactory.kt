@@ -2,10 +2,7 @@ package com.dellainfotech.smartTouch.ui.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.dellainfotech.smartTouch.api.repository.AuthRepository
-import com.dellainfotech.smartTouch.api.repository.BaseRepository
-import com.dellainfotech.smartTouch.api.repository.HomeRepository
-import java.lang.IllegalArgumentException
+import com.dellainfotech.smartTouch.api.repository.*
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -18,6 +15,12 @@ class ViewModelFactory @Inject constructor(private val repository: BaseRepositor
         return when {
             modelClass.isAssignableFrom(AuthViewModel::class.java) -> AuthViewModel(repository as AuthRepository) as T
             modelClass.isAssignableFrom(HomeViewModel::class.java) -> HomeViewModel(repository as HomeRepository) as T
+            modelClass.isAssignableFrom(ContactUsViewModel::class.java) -> ContactUsViewModel(
+                repository as ContactUsRepository
+            ) as T
+            modelClass.isAssignableFrom(UserManagementViewModel::class.java) -> UserManagementViewModel(
+                repository as UserManagementRepository
+            ) as T
             else -> throw IllegalArgumentException("ViewModelClass not found.")
         }
     }

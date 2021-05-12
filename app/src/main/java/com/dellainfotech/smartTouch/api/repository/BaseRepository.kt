@@ -1,6 +1,8 @@
 package com.dellainfotech.smartTouch.api.repository
 
+import com.appizona.yehiahd.fastsave.FastSave
 import com.dellainfotech.smartTouch.api.Resource
+import com.dellainfotech.smartTouch.common.utils.Constants
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import retrofit2.HttpException
@@ -26,5 +28,9 @@ abstract class BaseRepository {
                 }
             }
         }
+    }
+
+    protected fun getAccessKey(): String {
+        return FastSave.getInstance().getString(Constants.ACCESS_TOKEN, null)
     }
 }

@@ -2,6 +2,10 @@ package com.dellainfotech.smartTouch.api.model
 
 import com.google.gson.annotations.SerializedName
 
+/**
+ * Created by Jignesh Dangar on 11-05-2021.
+ */
+
 data class AddRoomResponse(
     @SerializedName("status")
     var status: Boolean,

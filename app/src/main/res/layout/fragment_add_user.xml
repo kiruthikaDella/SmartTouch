@@ -76,8 +76,8 @@
         android:layout_marginTop="@dimen/_5sdp"
         android:layout_marginEnd="@dimen/screen_end_margin"
         android:background="@drawable/white_background_with_catskill_white_dark_border"
-        android:text="hermione.granger@gmail.com"
         android:inputType="textEmailAddress"
+        android:hint="@string/hint_text_email"
         android:paddingStart="@dimen/_10sdp"
         android:paddingEnd="@dimen/_10sdp"
         android:singleLine="true"
@@ -86,6 +86,7 @@
         android:textSize="@dimen/_12ssp" />
 
     <com.jcminarro.roundkornerlayout.RoundKornerLinearLayout
+        android:id="@+id/btn_add_user"
         android:layout_width="match_parent"
         android:layout_height="@dimen/login_component_height"
         android:orientation="horizontal"

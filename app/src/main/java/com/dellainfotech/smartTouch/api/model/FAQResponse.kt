@@ -3,9 +3,10 @@ package com.dellainfotech.smartTouch.api.model
 import com.google.gson.annotations.SerializedName
 
 /**
- * Created by Jignesh Dangar on 11-05-2021.
+ * Created by Jignesh Dangar on 12-05-2021.
  */
-data class RoomTypeResponse(
+
+data class FAQResponse(
     @SerializedName("status")
     var status: Boolean,
     @SerializedName("code")
@@ -13,12 +14,14 @@ data class RoomTypeResponse(
     @SerializedName("message")
     var message: String,
     @SerializedName("data")
-    var data: List<RoomTypeData>? = null
+    var data: List<FAQResponseData>? = null
 )
 
-data class RoomTypeData(
+data class FAQResponseData(
     @SerializedName("_id")
-    var roomTypeId: String,
-    @SerializedName("vName")
-    var roomName: String
+    var id: String,
+    @SerializedName("vTitle")
+    var title: String,
+    @SerializedName("vDescription")
+    var description: String
 )
