@@ -2,10 +2,8 @@ package com.dellainfotech.smartTouch.api
 
 import com.dellainfotech.smartTouch.api.body.*
 import com.dellainfotech.smartTouch.api.model.*
-import retrofit2.http.Body
-import retrofit2.http.GET
-import retrofit2.http.Header
-import retrofit2.http.POST
+import okhttp3.RequestBody
+import retrofit2.http.*
 
 /**
  * Created by Jignesh Dangar on 04-05-2021.
@@ -27,6 +25,8 @@ interface SmartTouchApi {
         const val API_GET_ROOM = "room/room"
         const val API_ADD_ROOM = "room/room"
         const val API_FAQ = "faq/view"
+        const val API_GET_USER_PROFILE = "user/profile"
+        const val API_UPDATE_USER_PROFILE = "user/profile"
 
         // Contact Us APIs
         const val API_FEEDBACK = "feedback/add"
@@ -34,6 +34,7 @@ interface SmartTouchApi {
         // UserManagement APIs
         const val API_ADD_SUBORDINATE_USER = "user/subordinateuser"
         const val API_GET_SUBORDINATE_USER = "user/subordinateuser"
+        const val API_DELETE_SUBORDINATE_USER = "user/subordinateuser/{id}"
     }
 
     //
@@ -81,6 +82,12 @@ interface SmartTouchApi {
     @GET(API_FAQ)
     suspend fun faq(@Header("access_key") access_key: String): FAQResponse
 
+    @GET(API_GET_USER_PROFILE)
+    suspend fun getUserProfile(@Header("access_key") access_key: String): LoginResponse
+
+    @PUT(API_UPDATE_USER_PROFILE)
+    suspend fun updateUserProfile(@Header("access_key") access_key: String, @Body bodyUpdateUserProfile: BodyUpdateUserProfile): LoginResponse
+
     //
     //endregion
     //
@@ -106,12 +113,18 @@ interface SmartTouchApi {
     @POST(API_ADD_SUBORDINATE_USER)
     suspend fun addSubordinateUser(
         @Header("access_key") access_key: String,
-        @Body bodySubordinateUser: BodySubordinateUser
+        @Body bodyAddSubordinateUser: BodyAddSubordinateUser
     ): CommonResponse
 
-    @POST(API_GET_SUBORDINATE_USER)
+    @GET(API_GET_SUBORDINATE_USER)
     suspend fun getSubordinateUser(
         @Header("access_key") access_key: String
+    ): SubordinateUserResponse
+
+    @DELETE(API_DELETE_SUBORDINATE_USER)
+    suspend fun deleteSubordinateUser(
+        @Header("access_key") access_key: String,
+        @Path("id") subordinateUserId: String
     ): CommonResponse
 
     //

@@ -16,13 +16,11 @@ import com.dellainfotech.smartTouch.adapters.HomeRoomsAdapter
 import com.dellainfotech.smartTouch.api.Resource
 import com.dellainfotech.smartTouch.api.body.BodyLogout
 import com.dellainfotech.smartTouch.api.model.GetRoomData
-import com.dellainfotech.smartTouch.api.model.RoomTypeData
 import com.dellainfotech.smartTouch.api.repository.HomeRepository
 import com.dellainfotech.smartTouch.common.interfaces.AdapterItemClickListener
 import com.dellainfotech.smartTouch.common.utils.Constants
 import com.dellainfotech.smartTouch.common.utils.DialogUtil
 import com.dellainfotech.smartTouch.databinding.FragmentHomeBinding
-import com.dellainfotech.smartTouch.model.HomeRoomModel
 import com.dellainfotech.smartTouch.ui.activities.AuthenticationActivity
 import com.dellainfotech.smartTouch.ui.fragments.ModelBaseFragment
 import com.dellainfotech.smartTouch.ui.viewmodel.HomeViewModel
@@ -37,7 +35,7 @@ class HomeFragment : ModelBaseFragment<HomeViewModel, FragmentHomeBinding, HomeR
 
     private val logTag = this::class.java.simpleName
     private lateinit var roomsAdapter: HomeRoomsAdapter
-    private var roomList: List<GetRoomData> = ArrayList()
+    private var roomList = arrayListOf<GetRoomData>()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -50,8 +48,11 @@ class HomeFragment : ModelBaseFragment<HomeViewModel, FragmentHomeBinding, HomeR
         val navUsername = headerView.findViewById(R.id.tv_user_name) as TextView
         val navUserEmail = headerView.findViewById(R.id.tv_user_email) as TextView
 
-        navUsername.text = FastSave.getInstance().getString(Constants.USER_FULL_NAME,null)
-        navUserEmail.text = FastSave.getInstance().getString(Constants.USER_EMAIL,null)
+        navUsername.text = FastSave.getInstance().getString(Constants.USER_FULL_NAME, null)
+        navUserEmail.text = FastSave.getInstance().getString(Constants.USER_EMAIL, null)
+
+        roomsAdapter = HomeRoomsAdapter(roomList)
+        binding.recyclerRooms.adapter = roomsAdapter
 
         // initializing navigation menu
         setUpNavigationView()
@@ -63,7 +64,7 @@ class HomeFragment : ModelBaseFragment<HomeViewModel, FragmentHomeBinding, HomeR
         roomList.toMutableList().clear()
         viewModel.getRoom()
         activity?.let {
-            DialogUtil.loadingAlert(it,isCancelable = false)
+            DialogUtil.loadingAlert(it, isCancelable = false)
         }
 
         viewModel.logoutResponse.observe(viewLifecycleOwner, { response ->
@@ -90,25 +91,27 @@ class HomeFragment : ModelBaseFragment<HomeViewModel, FragmentHomeBinding, HomeR
         })
 
         viewModel.getRoomResponse.observe(viewLifecycleOwner, { response ->
-            when(response){
+            roomList.clear()
+            when (response) {
                 is Resource.Success -> {
                     DialogUtil.hideDialog()
-                    if (response.values.status && response.values.code == Constants.API_SUCCESS_CODE){
-                        roomList = response.values.data!!
-
-                        roomsAdapter = HomeRoomsAdapter(roomList)
-                        binding.recyclerRooms.adapter = roomsAdapter
-                        roomsAdapter.setCallback(this)
-                    }else {
+                    if (response.values.status && response.values.code == Constants.API_SUCCESS_CODE) {
+                        response.values.data?.let { roomData ->
+                            roomList.addAll(roomData)
+                            roomsAdapter.notifyDataSetChanged()
+                            roomsAdapter.setCallback(this)
+                        }
+                    } else {
+                        roomsAdapter.notifyDataSetChanged()
                         context?.let {
-                            Toast.makeText(it,response.values.message,Toast.LENGTH_SHORT).show()
+                            Toast.makeText(it, response.values.message, Toast.LENGTH_SHORT).show()
                         }
                     }
                 }
                 is Resource.Failure -> {
                     DialogUtil.hideDialog()
                     context?.let {
-                        Log.e(logTag,"getRoomResponse Failure ${response.errorBody.toString()} ")
+                        Log.e(logTag, "getRoomResponse Failure ${response.errorBody.toString()} ")
                     }
                 }
             }

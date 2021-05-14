@@ -8,7 +8,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.navigation.fragment.findNavController
 import com.dellainfotech.smartTouch.api.Resource
-import com.dellainfotech.smartTouch.api.body.BodySubordinateUser
+import com.dellainfotech.smartTouch.api.body.BodyAddSubordinateUser
 import com.dellainfotech.smartTouch.api.repository.UserManagementRepository
 import com.dellainfotech.smartTouch.common.utils.DialogUtil
 import com.dellainfotech.smartTouch.databinding.FragmentAddUserBinding
@@ -59,7 +59,7 @@ class AddUserFragment : ModelBaseFragment<UserManagementViewModel, FragmentAddUs
             } else {
                 activity?.let {
                     DialogUtil.loadingAlert(it)
-                    viewModel.addSubordinateUser(BodySubordinateUser(userName, email))
+                    viewModel.addSubordinateUser(BodyAddSubordinateUser(userName, email))
                 }
             }
         }

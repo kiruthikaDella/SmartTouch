@@ -28,7 +28,7 @@ class FAQAdapter(groups: List<ExpandableGroup<*>?>?) :
         holder: AnswersViewHolder, flatPosition: Int,
         group: ExpandableGroup<*>, childIndex: Int
     ) {
-        val artist: AnswerModel? = (group as QuestionModel).getItems().get(childIndex)
+        val artist: AnswerModel? = (group as QuestionModel).items[childIndex]
         holder.setArtistName(artist?.name)
     }
 

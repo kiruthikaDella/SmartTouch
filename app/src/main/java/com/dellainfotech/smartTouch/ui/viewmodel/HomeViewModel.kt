@@ -36,6 +36,10 @@ class HomeViewModel @ViewModelInject constructor(
     val faqResponse: LiveData<Resource<FAQResponse>>
         get() = _faqResponse
 
+    private val _getUserProfileResponse: MutableLiveData<Resource<LoginResponse>> = MutableLiveData()
+    val getUserProfileResponse: LiveData<Resource<LoginResponse>>
+        get() = _getUserProfileResponse
+
     fun logout(
         bodyLogout: BodyLogout
     ) = viewModelScope.launch {

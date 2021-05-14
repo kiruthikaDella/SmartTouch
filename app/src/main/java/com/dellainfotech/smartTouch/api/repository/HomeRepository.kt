@@ -26,4 +26,7 @@ class HomeRepository @Inject constructor(
 
     suspend fun getFAQ() =
         safeApiCall { smartTouchApi.faq(getAccessKey()) }
+
+    suspend fun getUserProfile() =
+        safeApiCall { smartTouchApi.getUserProfile(getAccessKey()) }
 }

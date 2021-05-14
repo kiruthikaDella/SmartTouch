@@ -7,13 +7,17 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.dellainfotech.smartTouch.R
+import com.dellainfotech.smartTouch.api.model.SubordinateUserData
+import com.dellainfotech.smartTouch.common.interfaces.AdapterItemClickListener
 
 /**
  * Created by Jignesh Dangar on 27-04-2021.
  */
 class UserManagementAdapter(
-    private val userList: List<String>
+    private val userList: List<SubordinateUserData>
 ) : RecyclerView.Adapter<UserManagementAdapter.MyViewHolder>() {
+
+    private var removeUserClickListener: AdapterItemClickListener<SubordinateUserData>? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
         val v = LayoutInflater.from(parent.context)
@@ -24,7 +28,10 @@ class UserManagementAdapter(
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         val data = userList[position]
         holder.apply {
-            tvUserName.text = data
+            tvUserName.text = data.fullName
+            ivRemoveUser.setOnClickListener {
+                removeUserClickListener?.onItemClick(data)
+            }
         }
     }
 
@@ -35,6 +42,10 @@ class UserManagementAdapter(
     inner class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val tvUserName: TextView = itemView.findViewById(R.id.tv_user_name)
         val ivRemoveUser: ImageView = itemView.findViewById(R.id.iv_remove_user)
+    }
+
+    fun setOnRemoveClickListener(listener: AdapterItemClickListener<SubordinateUserData>) {
+        this.removeUserClickListener = listener
     }
 
 }
