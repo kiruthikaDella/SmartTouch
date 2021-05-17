@@ -23,5 +23,7 @@ data class FAQResponseData(
     @SerializedName("vTitle")
     var title: String,
     @SerializedName("vDescription")
-    var description: String
+    var description: String,
+    @SerializedName("tiIsExpand")
+    var isExpand: Int
 )

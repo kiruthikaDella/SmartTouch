@@ -28,8 +28,9 @@ class FaqsFragment : ModelBaseFragment<HomeViewModel, FragmentFaqsBinding, HomeR
 
     private val logTag = this::class.java.simpleName
     private lateinit var faqAdapter: FAQAdapter
-    private var faqList: List<QuestionModel> = ArrayList()
-    private var answerList: List<AnswerModel> = ArrayList()
+
+    private var faqList = arrayListOf<QuestionModel>()
+    private var answerList = arrayListOf<AnswerModel>()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -42,7 +43,7 @@ class FaqsFragment : ModelBaseFragment<HomeViewModel, FragmentFaqsBinding, HomeR
             animator.supportsChangeAnimations = false
         }
 
-        faqList.toMutableList().clear()
+        faqList.clear()
 
         activity?.let {
             DialogUtil.loadingAlert(it)
@@ -57,15 +58,16 @@ class FaqsFragment : ModelBaseFragment<HomeViewModel, FragmentFaqsBinding, HomeR
 
                         response.values.data?.let { faqData ->
                             for ((index, value) in faqData.withIndex()) {
-                                answerList.toMutableList().clear()
-                                answerList.toMutableList()
-                                    .add(0, AnswerModel(value.description, true))
-                                faqList.toMutableList()
-                                    .add(index, QuestionModel(value.title, answerList))
+                                try {
+                                    answerList.clear()
+                                    answerList.add(0, AnswerModel(value.description, true))
+                                    faqList.add(index, QuestionModel(value.title, answerList))
+                                } catch (e: Exception) {
+                                    e.printStackTrace()
+                                }
                             }
 
-                            faqAdapter =
-                                FAQAdapter(faqList)
+                            faqAdapter = FAQAdapter(faqList)
                             binding.recyclerFaq.adapter = faqAdapter
                         }
 
@@ -78,6 +80,9 @@ class FaqsFragment : ModelBaseFragment<HomeViewModel, FragmentFaqsBinding, HomeR
                 is Resource.Failure -> {
                     DialogUtil.hideDialog()
                     Log.e(logTag, "faqResponse error ${response.errorBody}")
+                }
+                else -> {
+                    // We will do nothing here
                 }
             }
         })
