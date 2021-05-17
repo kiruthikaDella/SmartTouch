@@ -2,8 +2,8 @@ package com.dellainfotech.smartTouch.api.repository
 
 import com.dellainfotech.smartTouch.api.SmartTouchApi
 import com.dellainfotech.smartTouch.api.body.BodyAddRoom
-import com.dellainfotech.smartTouch.api.body.BodyFeedback
 import com.dellainfotech.smartTouch.api.body.BodyLogout
+import com.dellainfotech.smartTouch.api.body.BodyUpdateUserProfile
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -29,4 +29,7 @@ class HomeRepository @Inject constructor(
 
     suspend fun getUserProfile() =
         safeApiCall { smartTouchApi.getUserProfile(getAccessKey()) }
+
+    suspend fun updateUserProfile(bodyUpdateUserProfile: BodyUpdateUserProfile) =
+        safeApiCall { smartTouchApi.updateUserProfile(getAccessKey(), bodyUpdateUserProfile) }
 }

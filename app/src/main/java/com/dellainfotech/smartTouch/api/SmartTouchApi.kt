@@ -83,10 +83,10 @@ interface SmartTouchApi {
     suspend fun faq(@Header("access_key") access_key: String): FAQResponse
 
     @GET(API_GET_USER_PROFILE)
-    suspend fun getUserProfile(@Header("access_key") access_key: String): LoginResponse
+    suspend fun getUserProfile(@Header("access_key") access_key: String): GetProfileResponse
 
     @PUT(API_UPDATE_USER_PROFILE)
-    suspend fun updateUserProfile(@Header("access_key") access_key: String, @Body bodyUpdateUserProfile: BodyUpdateUserProfile): LoginResponse
+    suspend fun updateUserProfile(@Header("access_key") access_key: String, @Body bodyUpdateUserProfile: BodyUpdateUserProfile): GetProfileResponse
 
     //
     //endregion

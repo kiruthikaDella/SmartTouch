@@ -69,14 +69,16 @@
                 app:layout_constraintStart_toEndOf="@+id/guideline"
                 app:layout_constraintTop_toTopOf="@+id/iv_name" />
 
-            <TextView
-                android:id="@+id/tv_name"
+            <EditText
+                android:id="@+id/edt_name"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="@dimen/_5sdp"
+                android:background="@android:color/transparent"
+                android:backgroundTint="@null"
+                android:enabled="false"
                 android:fontFamily="@font/roboto_regular"
                 android:singleLine="true"
-                android:text="hermione granger"
                 android:textColor="@color/waikawa_gray"
                 android:textSize="@dimen/_12ssp"
                 app:layout_constraintEnd_toStartOf="@+id/iv_edit_name"
@@ -89,9 +91,9 @@
                 android:layout_height="@dimen/_12sdp"
                 android:layout_marginEnd="@dimen/screen_end_margin"
                 android:src="@drawable/ic_as_edit"
-                app:layout_constraintBottom_toBottomOf="@+id/tv_name"
+                app:layout_constraintBottom_toBottomOf="@+id/edt_name"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/tv_name" />
+                app:layout_constraintTop_toTopOf="@+id/edt_name" />
 
 
             <ImageView
@@ -101,7 +103,7 @@
                 android:layout_marginTop="@dimen/_20sdp"
                 android:src="@drawable/ic_as_email"
                 app:layout_constraintStart_toStartOf="@+id/iv_name"
-                app:layout_constraintTop_toBottomOf="@+id/tv_name" />
+                app:layout_constraintTop_toBottomOf="@+id/edt_name" />
 
             <TextView
                 android:id="@+id/tv_title_email"
@@ -115,14 +117,16 @@
                 app:layout_constraintStart_toEndOf="@+id/guideline"
                 app:layout_constraintTop_toTopOf="@+id/iv_email" />
 
-            <TextView
-                android:id="@+id/tv_email"
+            <EditText
+                android:id="@+id/edt_email"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="@dimen/_5sdp"
+                android:background="@android:color/transparent"
+                android:backgroundTint="@null"
+                android:enabled="false"
                 android:fontFamily="@font/roboto_regular"
                 android:singleLine="true"
-                android:text="hermione.granger@gmail.com"
                 android:textColor="@color/waikawa_gray"
                 android:textSize="@dimen/_12ssp"
                 app:layout_constraintEnd_toStartOf="@+id/iv_edit_email"
@@ -134,9 +138,9 @@
                 android:layout_width="@dimen/_12sdp"
                 android:layout_height="@dimen/_12sdp"
                 android:src="@drawable/ic_as_edit"
-                app:layout_constraintBottom_toBottomOf="@+id/tv_email"
+                app:layout_constraintBottom_toBottomOf="@+id/edt_email"
                 app:layout_constraintStart_toStartOf="@+id/iv_edit_name"
-                app:layout_constraintTop_toTopOf="@+id/tv_email" />
+                app:layout_constraintTop_toTopOf="@+id/edt_email" />
 
 
             <ImageView
@@ -146,7 +150,7 @@
                 android:layout_marginTop="@dimen/_20sdp"
                 android:src="@drawable/ic_as_phone_number"
                 app:layout_constraintStart_toStartOf="@+id/iv_email"
-                app:layout_constraintTop_toBottomOf="@+id/tv_email" />
+                app:layout_constraintTop_toBottomOf="@+id/edt_email" />
 
             <TextView
                 android:id="@+id/tv_title_phone_number"
@@ -160,14 +164,16 @@
                 app:layout_constraintStart_toEndOf="@+id/guideline"
                 app:layout_constraintTop_toTopOf="@+id/iv_phone_number" />
 
-            <TextView
-                android:id="@+id/tv_phone_number"
+            <EditText
+                android:id="@+id/edt_phone_number"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="@dimen/_5sdp"
+                android:background="@android:color/transparent"
+                android:backgroundTint="@null"
+                android:enabled="false"
                 android:fontFamily="@font/roboto_regular"
                 android:singleLine="true"
-                android:text="+91 8012345678"
                 android:textColor="@color/waikawa_gray"
                 android:textSize="@dimen/_12ssp"
                 app:layout_constraintEnd_toStartOf="@+id/iv_edit_phone_number"
@@ -179,9 +185,9 @@
                 android:layout_width="@dimen/_12sdp"
                 android:layout_height="@dimen/_12sdp"
                 android:src="@drawable/ic_as_edit"
-                app:layout_constraintBottom_toBottomOf="@+id/tv_phone_number"
+                app:layout_constraintBottom_toBottomOf="@+id/edt_phone_number"
                 app:layout_constraintStart_toStartOf="@+id/iv_edit_email"
-                app:layout_constraintTop_toTopOf="@+id/tv_phone_number" />
+                app:layout_constraintTop_toTopOf="@+id/edt_phone_number" />
 
 
             <ImageView
@@ -191,7 +197,7 @@
                 android:layout_marginTop="@dimen/_20sdp"
                 android:src="@drawable/ic_as_password"
                 app:layout_constraintStart_toStartOf="@+id/iv_phone_number"
-                app:layout_constraintTop_toBottomOf="@+id/tv_phone_number" />
+                app:layout_constraintTop_toBottomOf="@+id/edt_phone_number" />
 
             <TextView
                 android:id="@+id/tv_title_password"
@@ -206,10 +212,11 @@
                 app:layout_constraintTop_toTopOf="@+id/iv_password" />
 
             <TextView
-                android:id="@+id/tv_password"
+                android:id="@+id/edt_password"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="@dimen/_5sdp"
+                android:enabled="false"
                 android:fontFamily="@font/roboto_regular"
                 android:singleLine="true"
                 android:text="******************"
@@ -224,9 +231,9 @@
                 android:layout_width="@dimen/_12sdp"
                 android:layout_height="@dimen/_12sdp"
                 android:src="@drawable/ic_as_edit"
-                app:layout_constraintBottom_toBottomOf="@+id/tv_password"
+                app:layout_constraintBottom_toBottomOf="@+id/edt_password"
                 app:layout_constraintStart_toStartOf="@+id/iv_edit_phone_number"
-                app:layout_constraintTop_toTopOf="@+id/tv_password" />
+                app:layout_constraintTop_toTopOf="@+id/edt_password" />
 
             <TextView
                 android:id="@+id/tv_ownership_transfer"
@@ -238,7 +245,7 @@
                 android:textColor="@color/daintree"
                 android:textSize="@dimen/_14ssp"
                 app:layout_constraintStart_toStartOf="@+id/iv_password"
-                app:layout_constraintTop_toBottomOf="@+id/tv_password" />
+                app:layout_constraintTop_toBottomOf="@+id/edt_password" />
 
             <ImageView
                 android:layout_width="@dimen/_12sdp"
@@ -283,11 +290,14 @@
                 app:layout_constraintStart_toEndOf="@+id/guideline"
                 app:layout_constraintTop_toTopOf="@+id/iv_master_name" />
 
-            <TextView
-                android:id="@+id/tv_master_name"
+            <EditText
+                android:id="@+id/edt_master_name"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="@dimen/_5sdp"
+                android:background="@android:color/transparent"
+                android:backgroundTint="@null"
+                android:enabled="false"
                 android:fontFamily="@font/roboto_regular"
                 android:singleLine="true"
                 android:text="Not available"
@@ -302,9 +312,9 @@
                 android:layout_width="@dimen/_12sdp"
                 android:layout_height="@dimen/_12sdp"
                 android:src="@drawable/ic_as_edit"
-                app:layout_constraintBottom_toBottomOf="@+id/tv_master_name"
+                app:layout_constraintBottom_toBottomOf="@+id/edt_master_name"
                 app:layout_constraintStart_toStartOf="@+id/iv_edit_password"
-                app:layout_constraintTop_toTopOf="@+id/tv_master_name" />
+                app:layout_constraintTop_toTopOf="@+id/edt_master_name" />
 
             <ImageView
                 android:id="@+id/iv_master_email"
@@ -313,7 +323,7 @@
                 android:layout_marginTop="@dimen/_20sdp"
                 android:src="@drawable/ic_as_email"
                 app:layout_constraintStart_toStartOf="@+id/iv_master_name"
-                app:layout_constraintTop_toBottomOf="@+id/tv_master_name" />
+                app:layout_constraintTop_toBottomOf="@+id/edt_master_name" />
 
             <TextView
                 android:id="@+id/tv_master_title_email"
@@ -327,11 +337,14 @@
                 app:layout_constraintStart_toEndOf="@+id/guideline"
                 app:layout_constraintTop_toTopOf="@+id/iv_master_email" />
 
-            <TextView
-                android:id="@+id/tv_master_email"
+            <EditText
+                android:id="@+id/edt_master_email"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="@dimen/_5sdp"
+                android:background="@android:color/transparent"
+                android:backgroundTint="@null"
+                android:enabled="false"
                 android:fontFamily="@font/roboto_regular"
                 android:singleLine="true"
                 android:text="Not available"
@@ -346,12 +359,12 @@
                 android:layout_width="@dimen/_12sdp"
                 android:layout_height="@dimen/_12sdp"
                 android:src="@drawable/ic_as_edit"
-                app:layout_constraintBottom_toBottomOf="@+id/tv_master_email"
+                app:layout_constraintBottom_toBottomOf="@+id/edt_master_email"
                 app:layout_constraintStart_toStartOf="@+id/iv_master_edit_name"
-                app:layout_constraintTop_toTopOf="@+id/tv_master_email" />
+                app:layout_constraintTop_toTopOf="@+id/edt_master_email" />
 
             <com.google.android.material.button.MaterialButton
-                android:id="@+id/btn_sign_up"
+                android:id="@+id/btn_update"
                 style="@style/DodgerBlueButtonStyle"
                 android:layout_width="0dp"
                 android:layout_height="@dimen/login_component_height"
@@ -365,7 +378,7 @@
                 android:textSize="@dimen/_12ssp"
                 app:layout_constraintEnd_toEndOf="@+id/iv_master_edit_email"
                 app:layout_constraintStart_toStartOf="@+id/iv_master_email"
-                app:layout_constraintTop_toBottomOf="@+id/tv_master_email" />
+                app:layout_constraintTop_toBottomOf="@+id/edt_master_email" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

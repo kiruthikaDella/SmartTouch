@@ -8,6 +8,7 @@ import androidx.lifecycle.viewModelScope
 import com.dellainfotech.smartTouch.api.Resource
 import com.dellainfotech.smartTouch.api.body.BodyAddRoom
 import com.dellainfotech.smartTouch.api.body.BodyLogout
+import com.dellainfotech.smartTouch.api.body.BodyUpdateUserProfile
 import com.dellainfotech.smartTouch.api.model.*
 import com.dellainfotech.smartTouch.api.repository.HomeRepository
 import kotlinx.coroutines.launch
@@ -36,9 +37,13 @@ class HomeViewModel @ViewModelInject constructor(
     val faqResponse: LiveData<Resource<FAQResponse>>
         get() = _faqResponse
 
-    private val _getUserProfileResponse: MutableLiveData<Resource<LoginResponse>> = MutableLiveData()
-    val getUserProfileResponse: LiveData<Resource<LoginResponse>>
+    private val _getUserProfileResponse: MutableLiveData<Resource<GetProfileResponse>> = MutableLiveData()
+    val getUserProfileResponse: LiveData<Resource<GetProfileResponse>>
         get() = _getUserProfileResponse
+
+    private val _updateUserProfileResponse: MutableLiveData<Resource<GetProfileResponse>> = MutableLiveData()
+    val updateUserProfileResponse: LiveData<Resource<GetProfileResponse>>
+        get() = _updateUserProfileResponse
 
     fun logout(
         bodyLogout: BodyLogout
@@ -65,6 +70,16 @@ class HomeViewModel @ViewModelInject constructor(
     fun getFAQ() = viewModelScope.launch {
         _faqResponse.value = Resource.Loading
         _faqResponse.value = homeRepository.getFAQ()
+    }
+
+    fun getUserProfile() = viewModelScope.launch {
+        _getUserProfileResponse.value = Resource.Loading
+        _getUserProfileResponse.value = homeRepository.getUserProfile()
+    }
+
+    fun updateUserProfile(bodyUpdateUserProfile: BodyUpdateUserProfile) = viewModelScope.launch {
+        _updateUserProfileResponse.value = Resource.Loading
+        _updateUserProfileResponse.value = homeRepository.updateUserProfile(bodyUpdateUserProfile)
     }
 
 }

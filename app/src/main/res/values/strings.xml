@@ -196,9 +196,11 @@
     <string name="text_email">Email</string>
     <string name="text_phone_number">Phone Number</string>
     <string name="text_password">Password</string>
+    <string name="text_confirm_password">Confirm Password</string>
     <string name="text_ownership_transfer">Ownership Transfer</string>
     <string name="text_for_master_users">for master users only</string>
     <string name="text_update">Update</string>
+    <string name="text_update_password">Update Password</string>
 
     <!--    Faqs Screen-->
     <string name="title_text_faqs">FAQ\'s</string>

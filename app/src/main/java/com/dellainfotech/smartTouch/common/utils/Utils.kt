@@ -5,6 +5,7 @@ import android.content.pm.PackageManager
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.os.Build
+import android.text.Editable
 import android.util.Base64
 import android.util.Log
 import androidx.appcompat.app.AlertDialog
@@ -130,4 +131,6 @@ object Utils {
         }
         return salt.toString()
     }
+
+    fun String.toEditable(): Editable = Editable.Factory.getInstance().newEditable(this)
 }
