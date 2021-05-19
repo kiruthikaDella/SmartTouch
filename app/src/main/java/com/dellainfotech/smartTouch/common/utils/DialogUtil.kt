@@ -9,8 +9,10 @@ import android.widget.EditText
 import android.widget.TextView
 import androidx.core.view.isVisible
 import com.dellainfotech.smartTouch.R
-import com.google.android.material.button.MaterialButton
 import com.dellainfotech.smartTouch.common.interfaces.DialogAskListener
+import com.dellainfotech.smartTouch.common.interfaces.DialogEditListener
+import com.dellainfotech.smartTouch.common.utils.Utils.toEditable
+import com.google.android.material.button.MaterialButton
 
 /**
  * Created by Jignesh Dangar on 20-04-2021.
@@ -66,7 +68,7 @@ object DialogUtil {
         strEditText: String,
         strYes: String,
         strNo: String,
-        onClick: DialogAskListener? = null
+        onClick: DialogEditListener? = null
     ) {
 
         dialog = Dialog(activity)
@@ -79,7 +81,7 @@ object DialogUtil {
         val editText = dialog?.findViewById(R.id.edt_edit) as EditText
 
         tvTitle.text = title
-        editText.setText(strEditText)
+        editText.text = strEditText.toEditable()
         btnCancel.text = strNo
         btnSave.text = strYes
 
@@ -90,7 +92,7 @@ object DialogUtil {
 
         btnSave.setOnClickListener {
             dialog?.dismiss()
-            onClick?.onYesClicked()
+            onClick?.onYesClicked(editText.text.toString().trim())
         }
 
         val displayMetrics = DisplayMetrics()
@@ -116,11 +118,11 @@ object DialogUtil {
 
         val tvTitle = dialog?.findViewById(R.id.tv_dialog_title) as TextView
 
-       if (title == null){
-           tvTitle.isVisible = false
-       }else{
-           tvTitle.text = title
-       }
+        if (title == null) {
+            tvTitle.isVisible = false
+        } else {
+            tvTitle.text = title
+        }
 
         val displayMetrics = DisplayMetrics()
         activity.windowManager?.defaultDisplay?.getMetrics(displayMetrics)

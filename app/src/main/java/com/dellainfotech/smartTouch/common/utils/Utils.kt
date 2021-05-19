@@ -133,4 +133,8 @@ object Utils {
     }
 
     fun String.toEditable(): Editable = Editable.Factory.getInstance().newEditable(this)
+
+    fun Int.toBoolean(): Boolean = this == 1
+
+    fun Boolean.toInt(): Int = if (this) 1 else 0
 }

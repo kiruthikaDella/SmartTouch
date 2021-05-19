@@ -33,24 +33,30 @@ class HomeRoomsAdapter(
         val data = roomList[position]
 
         holder.apply {
-            val roomName =
-                data.roomName.split(Pattern.compile(" "), 2)
 
-            if (roomName.size > 1) {
-                val firstWord = "<B>${roomName[0]}</B> " + roomName[1]
-                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
-                    tvRoomTitle.text = Html.fromHtml(firstWord, Html.FROM_HTML_MODE_LEGACY)
+
+
+            data.roomName?.let {
+                val roomName =  it.split(Pattern.compile(" "), 2)
+
+                if (roomName.size > 1) {
+                    val firstWord = "<B>${roomName[0]}</B> " + roomName[1]
+                    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+                        tvRoomTitle.text = Html.fromHtml(firstWord, Html.FROM_HTML_MODE_LEGACY)
+                    } else {
+                        tvRoomTitle.text = Html.fromHtml(firstWord)
+                    }
                 } else {
-                    tvRoomTitle.text = Html.fromHtml(firstWord)
-                }
-            } else {
-                val firstWord = "<B>${roomName[0]}</B>"
-                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
-                    tvRoomTitle.text = Html.fromHtml(firstWord, Html.FROM_HTML_MODE_LEGACY)
-                } else {
-                    tvRoomTitle.text = Html.fromHtml(firstWord)
+                    val firstWord = "<B>${roomName[0]}</B>"
+                    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+                        tvRoomTitle.text = Html.fromHtml(firstWord, Html.FROM_HTML_MODE_LEGACY)
+                    } else {
+                        tvRoomTitle.text = Html.fromHtml(firstWord)
+                    }
                 }
             }
+
+
         /*    tvRoomImage.setImageDrawable(
                 ContextCompat.getDrawable(
                     AppDelegate.instance,

@@ -41,7 +41,7 @@
     <string name="hint_confirm_password">Confirm Password</string>
     <string name="text_already_have_account">Already have an account?</string>
 
-    <!--    Sign up validation-->
+    <!--    Error message -->
     <string name="error_text_full_name">Please enter full name</string>
     <string name="error_text_full_name_length">FullName must be more than 3 character</string>
     <string name="error_text_user_name">Please enter user name</string>
@@ -50,8 +50,11 @@
     <string name="error_text_email">Please enter email</string>
     <string name="error_text_valid_email">Please enter valid email</string>
     <string name="error_text_password">Please enter password</string>
+    <string name="error_text_current_password">Please enter current password</string>
     <string name="error_text_password_length">Password is too short. Please enter at least six character</string>
     <string name="error_text_confirm_password">Password does not match</string>
+    <string name="error_text_panel_name">Please enter panel name</string>
+    <string name="error_text_serial_number">Please enter serial number</string>
 
     <!--    Forgot Password-->
     <string name="title_text_forgot_password">Forgot your password?</string>
@@ -201,6 +204,9 @@
     <string name="text_for_master_users">for master users only</string>
     <string name="text_update">Update</string>
     <string name="text_update_password">Update Password</string>
+    <string name="hint_text_current_password">Current Password</string>
+    <string name="hint_text_new_password">New Password</string>
+    <string name="hint_text_confirm_new_password">Confirm New Password</string>
 
     <!--    Faqs Screen-->
     <string name="title_text_faqs">FAQ\'s</string>

@@ -14,30 +14,26 @@ import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import com.appizona.yehiahd.fastsave.FastSave
 import com.dellainfotech.smartTouch.R
+import com.dellainfotech.smartTouch.api.repository.HomeRepository
 import com.dellainfotech.smartTouch.common.interfaces.DialogAskListener
 import com.dellainfotech.smartTouch.common.utils.Constants
 import com.dellainfotech.smartTouch.common.utils.DialogUtil
 import com.dellainfotech.smartTouch.databinding.FragmentDeviceCustomizationBinding
-import com.dellainfotech.smartTouch.ui.fragments.BaseFragment
+import com.dellainfotech.smartTouch.ui.fragments.ModelBaseFragment
+import com.dellainfotech.smartTouch.ui.viewmodel.HomeViewModel
 import com.sothree.slidinguppanel.SlidingUpPanelLayout
 
 /**
  * Created by Jignesh Dangar on 22-04-2021.
  */
 
-class DeviceCustomizationFragment : BaseFragment() {
+class DeviceCustomizationFragment :
+    ModelBaseFragment<HomeViewModel, FragmentDeviceCustomizationBinding, HomeRepository>() {
 
-    private lateinit var binding: FragmentDeviceCustomizationBinding
-
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        binding = FragmentDeviceCustomizationBinding.inflate(inflater, container, false)
-        return binding.root
-    }
+    private val args: DeviceCustomizationFragmentArgs by navArgs()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -221,5 +217,15 @@ class DeviceCustomizationFragment : BaseFragment() {
     private fun unLockScreen() {
         binding.relativeLock.isVisible = false
     }
+
+    override fun getViewModel(): Class<HomeViewModel> = HomeViewModel::class.java
+
+    override fun getFragmentBinding(
+        inflater: LayoutInflater,
+        container: ViewGroup?
+    ): FragmentDeviceCustomizationBinding =
+        FragmentDeviceCustomizationBinding.inflate(inflater, container, false)
+
+    override fun getFragmentRepository(): HomeRepository = HomeRepository(networkModel)
 
 }

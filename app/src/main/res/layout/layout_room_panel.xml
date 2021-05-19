@@ -37,6 +37,7 @@
         android:textSize="@dimen/_12ssp" />
 
     <EditText
+        android:id="@+id/edt_panel_name"
         android:layout_width="match_parent"
         android:layout_height="@dimen/login_component_height"
         android:layout_marginStart="@dimen/screen_start_margin"
@@ -63,6 +64,7 @@
         android:textSize="@dimen/_12ssp" />
 
     <EditText
+        android:id="@+id/edt_serial_number"
         android:layout_width="match_parent"
         android:layout_height="@dimen/login_component_height"
         android:layout_marginStart="@dimen/screen_start_margin"
@@ -78,6 +80,7 @@
         android:textSize="@dimen/_12ssp" />
 
     <com.google.android.material.button.MaterialButton
+        android:id="@+id/btn_add_panel"
         android:layout_width="match_parent"
         android:layout_height="@dimen/login_component_height"
         android:layout_marginStart="@dimen/screen_start_margin"

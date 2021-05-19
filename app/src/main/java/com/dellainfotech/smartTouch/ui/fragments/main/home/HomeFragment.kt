@@ -64,7 +64,7 @@ class HomeFragment : ModelBaseFragment<HomeViewModel, FragmentHomeBinding, HomeR
         roomList.toMutableList().clear()
         viewModel.getRoom()
         activity?.let {
-            DialogUtil.loadingAlert(it, isCancelable = false)
+            DialogUtil.loadingAlert(it)
         }
 
         viewModel.logoutResponse.observe(viewLifecycleOwner, { response ->
@@ -85,7 +85,10 @@ class HomeFragment : ModelBaseFragment<HomeViewModel, FragmentHomeBinding, HomeR
                 }
                 is Resource.Failure -> {
                     DialogUtil.hideDialog()
-                    Log.e(logTag, "logout error ${response.errorBody}")
+                    Log.e(logTag, "logout error ${response.errorBody?.string()}")
+                }
+                else -> {
+                    // We will do nothing here
                 }
             }
         })
@@ -111,8 +114,10 @@ class HomeFragment : ModelBaseFragment<HomeViewModel, FragmentHomeBinding, HomeR
                 is Resource.Failure -> {
                     DialogUtil.hideDialog()
                     context?.let {
-                        Log.e(logTag, "getRoomResponse Failure ${response.errorBody.toString()} ")
+                        Log.e(logTag, "getRoomResponse Failure ${response.errorBody?.string()} ")
                     }
+                }else -> {
+                    // We will do nothing here
                 }
             }
         })
@@ -166,7 +171,7 @@ class HomeFragment : ModelBaseFragment<HomeViewModel, FragmentHomeBinding, HomeR
                 }
                 R.id.nav_logout -> {
                     activity?.let {
-                        DialogUtil.loadingAlert(it, isCancelable = false)
+                        DialogUtil.loadingAlert(it)
                     }
                     viewModel.logout(
                         BodyLogout(

@@ -22,7 +22,6 @@ import com.dellainfotech.smartTouch.common.utils.Utils
 import com.dellainfotech.smartTouch.common.utils.Utils.isNetworkConnectivityAvailable
 import com.dellainfotech.smartTouch.common.utils.Utils.showAlertDialog
 import com.dellainfotech.smartTouch.databinding.FragmentLoginBinding
-import com.dellainfotech.smartTouch.mqtt.AwsMqttSingleton
 import com.dellainfotech.smartTouch.ui.activities.AuthenticationActivity
 import com.dellainfotech.smartTouch.ui.activities.MainActivity
 import com.dellainfotech.smartTouch.ui.fragments.ModelBaseFragment
@@ -74,7 +73,6 @@ class LoginFragment : ModelBaseFragment<AuthViewModel, FragmentLoginBinding, Aut
         }
         binding.btnLogin.setOnClickListener {
             validateUserInformation()
-//            throw RuntimeException("Test Crash")
         }
 
         binding.linearGoogle.setOnClickListener {
@@ -145,6 +143,9 @@ class LoginFragment : ModelBaseFragment<AuthViewModel, FragmentLoginBinding, Aut
                     DialogUtil.hideDialog()
                     Log.e(logTag, "login error ${response.errorBody}")
                 }
+                else -> {
+                    // We will do nothing here
+                }
             }
         })
 
@@ -183,6 +184,9 @@ class LoginFragment : ModelBaseFragment<AuthViewModel, FragmentLoginBinding, Aut
                     DialogUtil.hideDialog()
                     Log.e(logTag, "login error ${response.errorBody}")
                 }
+                else -> {
+                    // We will do nothing here
+                }
             }
         })
     }
@@ -203,7 +207,7 @@ class LoginFragment : ModelBaseFragment<AuthViewModel, FragmentLoginBinding, Aut
         } else {
             Log.e(logTag, "Valid")
             activity?.let {
-                DialogUtil.loadingAlert(it, isCancelable = false)
+                DialogUtil.loadingAlert(it)
             }
             viewModel.login(BodyLogin(email, password, uuid))
         }
@@ -242,7 +246,7 @@ class LoginFragment : ModelBaseFragment<AuthViewModel, FragmentLoginBinding, Aut
                         FastSave.getInstance().saveString(Constants.MOBILE_UUID, uuid)
 
                         activity?.let { act ->
-                            DialogUtil.loadingAlert(act, isCancelable = false)
+                            DialogUtil.loadingAlert(act)
                         }
 
                         viewModel.socialLogin(
@@ -261,24 +265,6 @@ class LoginFragment : ModelBaseFragment<AuthViewModel, FragmentLoginBinding, Aut
                 Log.e(logTag, "${e.printStackTrace()}")
             }
         }
-    }
-
-    fun facebookLogin(id: String) {
-        val uuid: String = UUID.randomUUID().toString()
-        FastSave.getInstance().saveString(Constants.MOBILE_UUID, uuid)
-
-        activity?.let { act ->
-            DialogUtil.loadingAlert(act, isCancelable = false)
-        }
-
-        viewModel.socialLogin(
-            BodySocialLogin(
-                id,
-                uuid,
-                "2",
-                ""
-            )
-        )
     }
 
     override fun getViewModel(): Class<AuthViewModel> = AuthViewModel::class.java

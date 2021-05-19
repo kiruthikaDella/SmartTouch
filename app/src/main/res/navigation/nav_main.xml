@@ -57,6 +57,9 @@
         <action
             android:id="@+id/action_deviceCustomizationFragment_to_switchIconsFragment"
             app:destination="@id/switchIconsFragment" />
+        <argument
+            android:name="deviceDetail"
+            app:argType="com.dellainfotech.smartTouch.api.model.GetDeviceData" />
     </fragment>
     <fragment
         android:id="@+id/screenLayoutFragment"

@@ -24,9 +24,23 @@ interface SmartTouchApi {
         const val API_GET_ROOM_TYPE = "room/room-type"
         const val API_GET_ROOM = "room/room"
         const val API_ADD_ROOM = "room/room"
+        const val API_UPDATE_ROOM = "room/room"
+        const val API_RETAIN_STATE = "room/retain-state"
         const val API_FAQ = "faq/view"
         const val API_GET_USER_PROFILE = "user/profile"
         const val API_UPDATE_USER_PROFILE = "user/profile"
+        const val API_CHANGE_PASSWORD = "user/change-password"
+
+        //Device
+        const val API_ADD_DEVICE = "device/add"
+        const val API_GET_DEVICE_DATA = "device/device-data/{id}"
+        const val API_GET_DEVICE_CUSTOMIZATION_SETTINGS = "device/device-customization-setting/{id}"
+        const val API_GET_DEVICE_FEATURES_SETTINGS = "device/device-feature-setting/{id}"
+        const val API_delete_DEVICE = "device/device/{id}"
+        const val API_UPDATE_DEVICE_NAME = "device/device-name"
+        const val API_UPDATE_CUSTOMIZATION_LOCK = "device/customization-lock"
+        const val API_UPDATE_SWITCH_NAME = "device/switch"
+        const val API_UPDATE_SWITCH_ICON = "device/switch-icon"
 
         // Contact Us APIs
         const val API_FEEDBACK = "feedback/add"
@@ -79,6 +93,18 @@ interface SmartTouchApi {
         @Body bodyAddRoom: BodyAddRoom
     ): AddRoomResponse
 
+    @PUT(API_UPDATE_ROOM)
+    suspend fun updateRoom(
+        @Header("access_key") access_key: String,
+        @Body bodyUpdateRoom: BodyUpdateRoom
+    ): UpdateRoomResponse
+
+    @PUT(API_RETAIN_STATE)
+    suspend fun retainState(
+        @Header("access_key") access_key: String,
+        @Body bodyRetainState: BodyRetainState
+    ): AddRoomResponse
+
     @GET(API_FAQ)
     suspend fun faq(@Header("access_key") access_key: String): FAQResponse
 
@@ -87,6 +113,9 @@ interface SmartTouchApi {
 
     @PUT(API_UPDATE_USER_PROFILE)
     suspend fun updateUserProfile(@Header("access_key") access_key: String, @Body bodyUpdateUserProfile: BodyUpdateUserProfile): GetProfileResponse
+
+    @PUT(API_CHANGE_PASSWORD)
+    suspend fun changePassword(@Header("access_key") access_key: String, @Body bodyChangePassword: BodyChangePassword): CommonResponse
 
     //
     //endregion
@@ -126,6 +155,32 @@ interface SmartTouchApi {
         @Header("access_key") access_key: String,
         @Path("id") subordinateUserId: String
     ): CommonResponse
+
+    //
+    //endregion
+    //
+
+    //
+    //region Device APIs
+    //
+
+    @POST(API_ADD_DEVICE)
+    suspend fun addDevice(
+        @Header("access_key") access_key: String,
+        @Body bodyAddDevice: BodyAddDevice
+    ): AddDeviceResponse
+
+    @GET(API_GET_DEVICE_DATA)
+    suspend fun getDeviceData(
+        @Header("access_key") access_key: String,
+        @Path("id") roomId: String
+    ): GetDeviceResponse
+
+    @GET(API_GET_DEVICE_CUSTOMIZATION_SETTINGS)
+    suspend fun getDeviceCustomizationSettings(
+        @Header("access_key") access_key: String,
+        @Path("id") deviceId: String
+    ): DeviceCustomizationResponse
 
     //
     //endregion

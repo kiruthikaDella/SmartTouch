@@ -38,6 +38,7 @@
                 android:text="@string/title_text_home_screen" />
 
             <ImageButton
+                android:id="@+id/i_btn_edit_room_name"
                 android:layout_width="@dimen/_15sdp"
                 android:layout_height="@dimen/_15sdp"
                 android:layout_alignParentEnd="true"

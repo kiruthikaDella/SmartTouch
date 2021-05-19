@@ -1,6 +1,8 @@
 package com.dellainfotech.smartTouch.ui.activities
 
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.view.MenuItem
 import android.view.View
@@ -18,12 +20,12 @@ import com.dellainfotech.smartTouch.adapters.spinneradapter.RoomTypeAdapter
 import com.dellainfotech.smartTouch.api.NetworkModule
 import com.dellainfotech.smartTouch.api.Resource
 import com.dellainfotech.smartTouch.api.body.BodyAddRoom
-import com.dellainfotech.smartTouch.api.model.GetRoomData
 import com.dellainfotech.smartTouch.api.model.RoomTypeData
 import com.dellainfotech.smartTouch.api.repository.HomeRepository
 import com.dellainfotech.smartTouch.common.utils.Constants
 import com.dellainfotech.smartTouch.common.utils.DialogUtil
 import com.dellainfotech.smartTouch.databinding.ActivityMainBinding
+import com.dellainfotech.smartTouch.ui.fragments.main.home.HomeFragmentDirections
 import com.dellainfotech.smartTouch.ui.viewmodel.HomeViewModel
 import com.dellainfotech.smartTouch.ui.viewmodel.ViewModelFactory
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -75,10 +77,19 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
             }
         }
 
-        Log.e(logTag,"iscontrollpinned ${FastSave.getInstance().getBoolean(Constants.isControlModePinned, Constants.DEFAULT_CONTROL_MODE_STATUS)} ")
+        Log.e(
+            logTag,
+            "iscontrollpinned ${
+                FastSave.getInstance().getBoolean(
+                    Constants.isControlModePinned,
+                    Constants.DEFAULT_CONTROL_MODE_STATUS
+                )
+            } "
+        )
 
 
-        if (FastSave.getInstance().getBoolean(Constants.isControlModePinned, Constants.DEFAULT_CONTROL_MODE_STATUS)
+        if (FastSave.getInstance()
+                .getBoolean(Constants.isControlModePinned, Constants.DEFAULT_CONTROL_MODE_STATUS)
         ) {
             navController.navigate(R.id.controlModeFragment)
             binding.linearBottomNavigationView.visibility = View.GONE
@@ -86,26 +97,28 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
         }
 
         binding.ivAddRoom.setOnClickListener {
-            binding.layoutSlidingUpPanel.panelState = SlidingUpPanelLayout.PanelState.EXPANDED
+            showPanel()
         }
 
         binding.layoutAddRoom.ivHidePanel.setOnClickListener {
-            binding.layoutSlidingUpPanel.panelState = SlidingUpPanelLayout.PanelState.HIDDEN
+            hidePanel()
         }
 
         binding.layoutAddRoom.btnAddRoom.setOnClickListener {
-            Log.e(logTag,"button clicked")
             val roomName = binding.layoutAddRoom.edtRoomName.text.toString()
             when {
                 roomTypeId == null -> {
-                    Toast.makeText(this,"Please select Room Type",Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, "Please select Room Type", Toast.LENGTH_SHORT).show()
                 }
                 roomName.isBlank() -> {
                     binding.layoutAddRoom.edtRoomName.error = "Please enter Room Name"
                 }
                 else -> {
-                    DialogUtil.loadingAlert(this, isCancelable = false)
-                    viewModel.addRoom(BodyAddRoom(roomTypeId!!,roomName))
+                    DialogUtil.loadingAlert(this)
+                    hidePanel()
+                    Handler(Looper.getMainLooper()).postDelayed({
+                        viewModel.addRoom(BodyAddRoom(roomTypeId!!, roomName))
+                    }, 600)
                 }
             }
         }
@@ -120,6 +133,14 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         return item.onNavDestinationSelected(navController) || super.onOptionsItemSelected(item)
+    }
+
+    private fun hidePanel() {
+        binding.layoutSlidingUpPanel.panelState = SlidingUpPanelLayout.PanelState.HIDDEN
+    }
+
+    private fun showPanel() {
+        binding.layoutSlidingUpPanel.panelState = SlidingUpPanelLayout.PanelState.EXPANDED
     }
 
     private fun bottomNavigationClickEvent() {
@@ -214,7 +235,7 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
         }
     }
 
-    private fun apiResponses(){
+    private fun apiResponses() {
         viewModel.roomTypeResponse.observe(this, { response ->
             roomTypeList.toMutableList().clear()
             when (response) {
@@ -244,29 +265,41 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
 
                                 }
                         }
-                    }else {
-                        Toast.makeText(this,response.values.message,Toast.LENGTH_SHORT).show()
+                    } else {
+                        Toast.makeText(this, response.values.message, Toast.LENGTH_SHORT).show()
                     }
                 }
                 is Resource.Failure -> {
-                    Log.e(logTag, " roomTypeResponse error ${response.errorBody.toString()}" )
+                    Log.e(logTag, " roomTypeResponse error ${response.errorBody?.string()}")
+                }
+                else -> {
+                    // We will do nothing here
                 }
             }
         })
 
         viewModel.addRoomResponse.observe(this, { response ->
-            when(response){
+            when (response) {
                 is Resource.Success -> {
                     DialogUtil.hideDialog()
-                    if (response.values.status && response.values.code == Constants.API_SUCCESS_CODE){
-                        //call get room api
-                    }else {
-                        Toast.makeText(this,response.values.message,Toast.LENGTH_SHORT).show()
+                    if (response.values.status && response.values.code == Constants.API_SUCCESS_CODE) {
+                        response.values.data?.let { roomData ->
+                            navController.navigate(
+                                HomeFragmentDirections.actionHomeFragmentToRoomPanelFragment(
+                                    roomData
+                                )
+                            )
+                        }
+                    } else {
+                        Toast.makeText(this, response.values.message, Toast.LENGTH_SHORT).show()
                     }
                 }
                 is Resource.Failure -> {
                     DialogUtil.hideDialog()
                     Log.e(logTag, " addRoomResponse ${response.errorBody.toString()} ")
+                }
+                else -> {
+                    // We will do nothing here
                 }
             }
         })

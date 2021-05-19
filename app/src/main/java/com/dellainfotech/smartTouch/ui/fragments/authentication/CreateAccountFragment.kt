@@ -97,7 +97,7 @@ class CreateAccountFragment :
             binding.edtConfirmPassword.error = getString(R.string.error_text_confirm_password)
         } else {
             activity?.let {
-                DialogUtil.loadingAlert(it, isCancelable = false)
+                DialogUtil.loadingAlert(it)
             }
             viewModel.signUp(BodySignUp(fullName,userName,email,password,confirmPassword,phoneNumber))
         }

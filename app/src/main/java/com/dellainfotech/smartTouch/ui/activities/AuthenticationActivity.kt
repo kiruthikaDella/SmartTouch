@@ -5,11 +5,23 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.ViewModelProvider
+import com.appizona.yehiahd.fastsave.FastSave
 import com.dellainfotech.smartTouch.R
+import com.dellainfotech.smartTouch.api.NetworkModule
+import com.dellainfotech.smartTouch.api.Resource
+import com.dellainfotech.smartTouch.api.body.BodySocialLogin
+import com.dellainfotech.smartTouch.api.model.UserProfile
+import com.dellainfotech.smartTouch.api.repository.HomeRepository
+import com.dellainfotech.smartTouch.common.utils.Constants
+import com.dellainfotech.smartTouch.common.utils.DialogUtil
+import com.dellainfotech.smartTouch.ui.viewmodel.AuthViewModel
+import com.dellainfotech.smartTouch.ui.viewmodel.ViewModelFactory
 import com.facebook.*
 import com.facebook.login.LoginManager
 import com.facebook.login.LoginResult
 import org.json.JSONObject
+import java.util.*
 
 /**
  * Created by Jignesh Dangar on 09-04-2021.
@@ -23,11 +35,56 @@ class AuthenticationActivity : AppCompatActivity() {
     private var profileTracker: ProfileTracker? = null
     private var accessTokenTracker: AccessTokenTracker? = null
 
+    private lateinit var viewModel: AuthViewModel
+    private val networkModel = NetworkModule.provideSmartTouchApi(NetworkModule.provideRetrofit())
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_authentication)
         window?.statusBarColor = getColor(R.color.white)
+
+        val factory = ViewModelFactory(HomeRepository(networkModel))
+        viewModel = ViewModelProvider(this, factory).get(AuthViewModel::class.java)
+
         initFacebookCallback()
+
+        viewModel.socialLoginResponse.observe(this, { response ->
+            when (response) {
+                is Resource.Success -> {
+                    DialogUtil.hideDialog()
+                    Log.e(logTag, "code ${response.values.code}")
+                    if (response.values.status && response.values.code == Constants.API_SUCCESS_CODE) {
+
+                        val userProfile: UserProfile? = response.values.data?.user_data
+                        userProfile?.let { userData ->
+                            FastSave.getInstance().saveString(Constants.USER_ID, userData.iUserId)
+                            FastSave.getInstance()
+                                .saveString(Constants.USER_FULL_NAME, userData.vFullName)
+                            FastSave.getInstance()
+                                .saveString(Constants.USERNAME, userData.vUserName)
+                            FastSave.getInstance().saveString(Constants.USER_EMAIL, userData.vEmail)
+                            FastSave.getInstance()
+                                .saveString(Constants.USER_PHONE_NUMBER, userData.bPhoneNumber)
+
+                            startActivity(Intent(this, MainActivity::class.java))
+                            finishAffinity()
+                        }
+                        FastSave.getInstance()
+                            .saveString(Constants.ACCESS_TOKEN, response.values.data?.accessToken)
+
+                    } else {
+                        Toast.makeText(this, response.values.message, Toast.LENGTH_SHORT).show()
+                    }
+                }
+                is Resource.Failure -> {
+                    DialogUtil.hideDialog()
+                    Log.e(logTag, "login error ${response.errorBody}")
+                }
+                else -> {
+                    // We will do nothing here
+                }
+            }
+        })
     }
 
     fun performFacebookLogin() {
@@ -69,15 +126,15 @@ class AuthenticationActivity : AppCompatActivity() {
                         }
                         profileTracker?.startTracking()
 
-                        var email: String? = null
+                        var email = ""
 
                         val request =
-                            GraphRequest.newMeRequest(result?.accessToken) { _, response ->
+                            GraphRequest.newMeRequest(result.accessToken) { _, response ->
 
                                 response?.let {
                                     val json: JSONObject = it.jsonObject
                                     email = try {
-                                        json.getString("email") ?: null
+                                        json.getString("email") ?: ""
                                     } catch (e: java.lang.Exception) {
                                         ""
                                     }
@@ -100,8 +157,17 @@ class AuthenticationActivity : AppCompatActivity() {
                                 "Facebook userId = ${accessToken.userId} firstname = ${it.firstName} lastName = ${it.lastName}"
                             )
 
-                          /*  val loginFragment = LoginFragment()
-                            loginFragment.facebookLogin(accessToken.userId)*/
+                            val uuid: String = UUID.randomUUID().toString()
+
+                            DialogUtil.loadingAlert(this@AuthenticationActivity)
+                            viewModel.socialLogin(
+                                BodySocialLogin(
+                                    accessToken.userId,
+                                    uuid,
+                                    "2",
+                                    email
+                                )
+                            )
 
                         } ?: run {
                             performFacebookLogin()

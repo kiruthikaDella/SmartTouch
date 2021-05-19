@@ -43,7 +43,7 @@ class ForgotPasswordFragment :
                 binding.edtEmail.error = getString(R.string.error_text_email)
             }else{
                 activity?.let {
-                    DialogUtil.loadingAlert(it, isCancelable = false)
+                    DialogUtil.loadingAlert(it)
                 }
                 viewModel.forgotPassword(BodyForgotPassword(email))
             }
