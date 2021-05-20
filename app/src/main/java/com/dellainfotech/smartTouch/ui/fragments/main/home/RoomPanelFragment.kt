@@ -13,9 +13,8 @@ import androidx.navigation.fragment.navArgs
 import com.dellainfotech.smartTouch.R
 import com.dellainfotech.smartTouch.adapters.RoomPanelsAdapter
 import com.dellainfotech.smartTouch.api.Resource
-import com.dellainfotech.smartTouch.api.body.BodyAddDevice
-import com.dellainfotech.smartTouch.api.body.BodyRetainState
-import com.dellainfotech.smartTouch.api.body.BodyUpdateRoom
+import com.dellainfotech.smartTouch.api.body.*
+import com.dellainfotech.smartTouch.api.model.DeviceSwitchData
 import com.dellainfotech.smartTouch.api.model.GetDeviceData
 import com.dellainfotech.smartTouch.api.repository.HomeRepository
 import com.dellainfotech.smartTouch.common.interfaces.AdapterItemClickListener
@@ -23,6 +22,7 @@ import com.dellainfotech.smartTouch.common.interfaces.DialogEditListener
 import com.dellainfotech.smartTouch.common.utils.Constants
 import com.dellainfotech.smartTouch.common.utils.DialogUtil
 import com.dellainfotech.smartTouch.common.utils.Utils.toBoolean
+import com.dellainfotech.smartTouch.common.utils.Utils.toEditable
 import com.dellainfotech.smartTouch.common.utils.Utils.toInt
 import com.dellainfotech.smartTouch.databinding.FragmentRoomPanelBinding
 import com.dellainfotech.smartTouch.ui.fragments.ModelBaseFragment
@@ -40,6 +40,8 @@ class RoomPanelFragment :
     private val args: RoomPanelFragmentArgs by navArgs()
     private var deviceList = arrayListOf<GetDeviceData>()
     private lateinit var panelAdapter: RoomPanelsAdapter
+    private var devicePosition: Int? = null
+    private var switchPosition: Int? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -57,8 +59,26 @@ class RoomPanelFragment :
             viewModel.retainState(BodyRetainState(args.roomDetail.id, isChecked.toInt()))
         }
 
-        shoLoading()
+        showLoading()
         viewModel.getDevice(args.roomDetail.id)
+
+        panelAdapter = RoomPanelsAdapter(deviceList)
+        binding.recyclerRoomPanels.adapter = panelAdapter
+
+        clickEvents()
+        apiCall()
+    }
+
+    override fun getViewModel(): Class<HomeViewModel> = HomeViewModel::class.java
+
+    override fun getFragmentBinding(
+        inflater: LayoutInflater,
+        container: ViewGroup?
+    ): FragmentRoomPanelBinding = FragmentRoomPanelBinding.inflate(inflater, container, false)
+
+    override fun getFragmentRepository(): HomeRepository = HomeRepository(networkModel)
+
+    private fun clickEvents() {
 
         binding.iBtnEditRoomName.setOnClickListener {
             activity?.let {
@@ -91,46 +111,129 @@ class RoomPanelFragment :
             }
         }
 
-        panelAdapter = RoomPanelsAdapter(deviceList)
-        binding.recyclerRoomPanels.adapter = panelAdapter
-
-        panelAdapter.setOnCustomizationClickListener(object :
-            AdapterItemClickListener<GetDeviceData> {
-            override fun onItemClick(data: GetDeviceData) {
-                findNavController().navigate(RoomPanelFragmentDirections.actionRoomPanelFragmentToDeviceCustomizationFragment(data))
-            }
-        })
-
-        panelAdapter.setOnFeaturesClickListener(object : AdapterItemClickListener<GetDeviceData> {
-            override fun onItemClick(data: GetDeviceData) {
-                findNavController().navigate(RoomPanelFragmentDirections.actionRoomPanelFragmentToDeviceFeaturesFragment())
-            }
-        })
-
-        panelAdapter.setOnEditClickListener(object : AdapterItemClickListener<GetDeviceData> {
-            override fun onItemClick(data: GetDeviceData) {
+        panelAdapter.setOnUpdateDeviceNameClickListener(object :
+            RoomPanelsAdapter.DeviceItemClickListener<GetDeviceData> {
+            override fun onItemClick(data: GetDeviceData, devicePosition: Int) {
                 activity?.let {
                     DialogUtil.editDialog(
                         it,
                         getString(R.string.text_edit),
-                        "Switch 1",
+                        data.deviceName ?: "",
                         getString(R.string.text_save),
-                        getString(R.string.text_cancel)
+                        getString(R.string.text_cancel),
+                        object : DialogEditListener {
+                            override fun onYesClicked(string: String) {
+                                if (string.isEmpty()) {
+                                    Toast.makeText(
+                                        it,
+                                        "DeviceName must not be empty!",
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                } else {
+                                    this@RoomPanelFragment.devicePosition = devicePosition
+                                    DialogUtil.loadingAlert(it)
+                                    viewModel.updateDeviceName(
+                                        BodyUpdateDeviceName(
+                                            data.id,
+                                            string
+                                        )
+                                    )
+                                }
+                            }
+
+                            override fun onNoClicked() {
+
+                            }
+
+                        }
                     )
                 }
             }
 
         })
 
+        panelAdapter.setOnCustomizationClickListener(object :
+            AdapterItemClickListener<GetDeviceData> {
+            override fun onItemClick(data: GetDeviceData) {
+                findNavController().navigate(
+                    RoomPanelFragmentDirections.actionRoomPanelFragmentToDeviceCustomizationFragment(
+                        data
+                    )
+                )
+            }
+        })
+
+        panelAdapter.setOnFeaturesClickListener(object : AdapterItemClickListener<GetDeviceData> {
+            override fun onItemClick(data: GetDeviceData) {
+                findNavController().navigate(
+                    RoomPanelFragmentDirections.actionRoomPanelFragmentToDeviceFeaturesFragment(
+                        data
+                    )
+                )
+            }
+        })
+
+        panelAdapter.setOnEditSwitchNameClickListener(object :
+            RoomPanelsAdapter.SwitchItemClickListener<GetDeviceData> {
+            override fun onItemClick(
+                data: GetDeviceData,
+                devicePosition: Int,
+                switchData: DeviceSwitchData
+            ) {
+                activity?.let {
+                    DialogUtil.editDialog(
+                        it,
+                        getString(R.string.text_edit),
+                        switchData.name,
+                        getString(R.string.text_save),
+                        getString(R.string.text_cancel),
+                        object : DialogEditListener {
+                            override fun onYesClicked(string: String) {
+                                if (string.isEmpty()) {
+                                    Toast.makeText(
+                                        it,
+                                        "DeviceName must not be empty!",
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                } else {
+                                    this@RoomPanelFragment.devicePosition = devicePosition
+                                    switchPosition = switchData.index.toInt() - 1
+                                    DialogUtil.loadingAlert(it)
+                                    viewModel.updateSwitchName(
+                                        BodyUpdateSwitchName(
+                                            switchData.id,
+                                            string
+                                        )
+                                    )
+                                }
+                            }
+
+                            override fun onNoClicked() {
+
+                            }
+
+                        }
+                    )
+
+                }
+            }
+
+
+        })
+
         panelAdapter.setOnSettingsClickListener(object : AdapterItemClickListener<GetDeviceData> {
             override fun onItemClick(data: GetDeviceData) {
-                findNavController().navigate(RoomPanelFragmentDirections.actionRoomPanelFragmentToDeviceSettingsFragment())
+                findNavController().navigate(
+                    RoomPanelFragmentDirections.actionRoomPanelFragmentToDeviceSettingsFragment(
+                        data
+                    )
+                )
             }
 
         })
 
         binding.layoutRoomPanel.ivHidePanel.setOnClickListener {
-            binding.layoutSlidingUpPanel.panelState = SlidingUpPanelLayout.PanelState.HIDDEN
+            hidePanel()
         }
 
         binding.btnAddPanel.setOnClickListener {
@@ -148,27 +251,23 @@ class RoomPanelFragment :
                 binding.layoutRoomPanel.edtSerialNumber.error =
                     getString(R.string.error_text_serial_number)
             } else {
-                binding.layoutSlidingUpPanel.panelState = SlidingUpPanelLayout.PanelState.HIDDEN
+                hidePanel()
                 Handler(Looper.getMainLooper()).postDelayed({
-                    shoLoading()
+                    showLoading()
                     viewModel.addDevice(BodyAddDevice(serialNumber, args.roomDetail.id, deviceName))
                 }, 600)
             }
         }
 
-        apiCall()
     }
 
-    override fun getViewModel(): Class<HomeViewModel> = HomeViewModel::class.java
+    private fun hidePanel() {
+        binding.layoutRoomPanel.edtPanelName.text = "".toEditable()
+        binding.layoutRoomPanel.edtSerialNumber.text = "".toEditable()
+        binding.layoutSlidingUpPanel.panelState = SlidingUpPanelLayout.PanelState.HIDDEN
+    }
 
-    override fun getFragmentBinding(
-        inflater: LayoutInflater,
-        container: ViewGroup?
-    ): FragmentRoomPanelBinding = FragmentRoomPanelBinding.inflate(inflater, container, false)
-
-    override fun getFragmentRepository(): HomeRepository = HomeRepository(networkModel)
-
-    private fun shoLoading() {
+    private fun showLoading() {
         activity?.let {
             DialogUtil.loadingAlert(it)
         }
@@ -204,6 +303,17 @@ class RoomPanelFragment :
                     context?.let {
                         Toast.makeText(it, response.values.message, Toast.LENGTH_SHORT).show()
                     }
+
+                    if (response.values.status && response.values.code == Constants.API_SUCCESS_CODE) {
+                        response.values.data?.let {
+                            deviceList.add(it)
+                            Log.e(
+                                logTag,
+                                " panel != null device ${it.deviceName} size ${deviceList.size} $deviceList"
+                            )
+                            panelAdapter.notifyDataSetChanged()
+                        }
+                    }
                 }
                 is Resource.Failure -> {
                     DialogUtil.hideDialog()
@@ -216,10 +326,10 @@ class RoomPanelFragment :
         })
 
         viewModel.getDeviceResponse.observe(viewLifecycleOwner, { response ->
-            when(response){
+            when (response) {
                 is Resource.Success -> {
                     DialogUtil.hideDialog()
-                    if (response.values.status && response.values.code == Constants.API_SUCCESS_CODE){
+                    if (response.values.status && response.values.code == Constants.API_SUCCESS_CODE) {
                         response.values.data?.let { deviceData ->
                             deviceList.addAll(deviceData)
                             panelAdapter.notifyDataSetChanged()
@@ -227,10 +337,84 @@ class RoomPanelFragment :
                     }
                 }
                 is Resource.Failure -> {
-                    Log.e(logTag,"getDeviceResponse Failure ${response.errorBody?.string()}")
+                    Log.e(logTag, "getDeviceResponse Failure ${response.errorBody?.string()}")
                 }
                 else -> {
                     // We will do nothing here
+                }
+            }
+        })
+
+        viewModel.updateDeviceNameResponse.observe(viewLifecycleOwner, { response ->
+            when (response) {
+                is Resource.Success -> {
+                    DialogUtil.hideDialog()
+                    context?.let { myContext ->
+                        Toast.makeText(myContext, response.values.message, Toast.LENGTH_SHORT)
+                            .show()
+                    }
+                    if (response.values.status && response.values.code == Constants.API_SUCCESS_CODE) {
+
+                        response.values.data?.let { deviceData ->
+
+                            devicePosition?.let { pos ->
+                                deviceList[pos] = deviceData
+                                panelAdapter.notifyDataSetChanged()
+                                devicePosition = null
+                            }
+                        }
+
+                    }
+                }
+                is Resource.Failure -> {
+                    DialogUtil.hideDialog()
+                    Log.e(
+                        logTag,
+                        " updateDeviceNameResponse Failure ${response.errorBody?.string()} "
+                    )
+                }
+                else -> {
+                    //We will do nothing here
+                }
+            }
+        })
+
+        viewModel.updateSwitchNameResponse.observe(viewLifecycleOwner, { response ->
+            when (response) {
+                is Resource.Success -> {
+                    DialogUtil.hideDialog()
+                    response.values.message?.let { msg ->
+                        context?.let { mContext ->
+                            Toast.makeText(mContext, msg, Toast.LENGTH_SHORT).show()
+                        }
+                    }
+                    if (response.values.status && response.values.code == Constants.API_SUCCESS_CODE) {
+
+                        response.values.data?.let { dData ->
+                            devicePosition?.let { dPosition ->
+                                switchPosition?.let { sPosition ->
+                                    deviceList[dPosition].switchData?.let {
+                                        it[sPosition] = dData
+                                        panelAdapter.notifyDataSetChanged()
+                                        devicePosition = null
+                                        switchPosition = null
+                                    }
+
+                                }
+                            }
+                        }
+
+                    }
+                }
+                is Resource.Failure -> {
+                    DialogUtil.hideDialog()
+                    Log.e(
+                        logTag,
+                        " updateSwitchNameResponse Failure ${response.errorBody?.string()} "
+                    )
+                }
+                else -> {
+                    //We will do nothing here
                 }
             }
         })

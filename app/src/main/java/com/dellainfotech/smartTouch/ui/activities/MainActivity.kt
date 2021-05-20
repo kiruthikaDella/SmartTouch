@@ -24,6 +24,7 @@ import com.dellainfotech.smartTouch.api.model.RoomTypeData
 import com.dellainfotech.smartTouch.api.repository.HomeRepository
 import com.dellainfotech.smartTouch.common.utils.Constants
 import com.dellainfotech.smartTouch.common.utils.DialogUtil
+import com.dellainfotech.smartTouch.common.utils.Utils.toEditable
 import com.dellainfotech.smartTouch.databinding.ActivityMainBinding
 import com.dellainfotech.smartTouch.ui.fragments.main.home.HomeFragmentDirections
 import com.dellainfotech.smartTouch.ui.viewmodel.HomeViewModel
@@ -114,9 +115,9 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
                     binding.layoutAddRoom.edtRoomName.error = "Please enter Room Name"
                 }
                 else -> {
-                    DialogUtil.loadingAlert(this)
                     hidePanel()
                     Handler(Looper.getMainLooper()).postDelayed({
+                        DialogUtil.loadingAlert(this)
                         viewModel.addRoom(BodyAddRoom(roomTypeId!!, roomName))
                     }, 600)
                 }
@@ -136,6 +137,7 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
     }
 
     private fun hidePanel() {
+        binding.layoutAddRoom.edtRoomName.text = "".toEditable()
         binding.layoutSlidingUpPanel.panelState = SlidingUpPanelLayout.PanelState.HIDDEN
     }
 

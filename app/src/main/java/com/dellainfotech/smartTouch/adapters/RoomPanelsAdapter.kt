@@ -9,6 +9,7 @@ import android.widget.TextView
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.dellainfotech.smartTouch.R
+import com.dellainfotech.smartTouch.api.model.DeviceSwitchData
 import com.dellainfotech.smartTouch.api.model.GetDeviceData
 import com.dellainfotech.smartTouch.common.interfaces.AdapterItemClickListener
 import com.dellainfotech.smartTouch.common.utils.Utils.toBoolean
@@ -25,7 +26,8 @@ class RoomPanelsAdapter(
     private var customizationClickListener: AdapterItemClickListener<GetDeviceData>? = null
     private var featuresClickListener: AdapterItemClickListener<GetDeviceData>? = null
     private var settingsClickListener: AdapterItemClickListener<GetDeviceData>? = null
-    private var editClickListener: AdapterItemClickListener<GetDeviceData>? = null
+    private var editSwitchNameClickListener: SwitchItemClickListener<GetDeviceData>? = null
+    private var updateDeviceNameClickListener: DeviceItemClickListener<GetDeviceData>? = null
 
     private val EIGHT_PANEL_VIEW = 1
     private val FOUR_PANEL_VIEW = 2
@@ -204,7 +206,6 @@ class RoomPanelsAdapter(
             }
 
 
-
             imgBtnPanelMenu.setOnClickListener {
                 if (linearPanelMenu.isVisible) {
                     linearPanelMenu.visibility = View.GONE
@@ -225,28 +226,28 @@ class RoomPanelsAdapter(
                 settingsClickListener?.onItemClick(device)
             }
 
-            tvSwitchOneEdit.setOnClickListener {
-                editClickListener?.onItemClick(device)
+        /*    tvSwitchOneEdit.setOnClickListener {
+                editSwitchNameClickListener?.onItemClick(device, adapterPosition)
             }
 
             tvSwitchTwoEdit.setOnClickListener {
-                editClickListener?.onItemClick(device)
+                editSwitchNameClickListener?.onItemClick(device, adapterPosition)
             }
             tvSwitchThreeEdit.setOnClickListener {
-                editClickListener?.onItemClick(device)
+                editSwitchNameClickListener?.onItemClick(device, adapterPosition)
             }
             tvSwitchFourEdit.setOnClickListener {
-                editClickListener?.onItemClick(device)
+                editSwitchNameClickListener?.onItemClick(device, adapterPosition)
             }
             tvSwitchFiveEdit.setOnClickListener {
-                editClickListener?.onItemClick(device)
+                editSwitchNameClickListener?.onItemClick(device, adapterPosition)
             }
             tvSwitchSixEdit.setOnClickListener {
-                editClickListener?.onItemClick(device)
+                editSwitchNameClickListener?.onItemClick(device, adapterPosition)
             }
             tvSwitchSevenEdit.setOnClickListener {
-                editClickListener?.onItemClick(device)
-            }
+                editSwitchNameClickListener?.onItemClick(device, adapterPosition)
+            }*/
         }
     }
 
@@ -294,6 +295,10 @@ class RoomPanelsAdapter(
                 }
             }
 
+            imgBtnPanelEdit.setOnClickListener {
+                updateDeviceNameClickListener?.onItemClick(device, adapterPosition)
+            }
+
             linearCustomization.setOnClickListener {
                 customizationClickListener?.onItemClick(device)
             }
@@ -307,20 +312,37 @@ class RoomPanelsAdapter(
             }
 
             tvSwitchOneEdit.setOnClickListener {
-                editClickListener?.onItemClick(device)
+                device.switchData?.let { switchData ->
+                    editSwitchNameClickListener?.onItemClick(device, adapterPosition, switchData[0])
+                }
+
             }
 
             tvSwitchTwoEdit.setOnClickListener {
-                editClickListener?.onItemClick(device)
+                device.switchData?.let { switchData ->
+                    editSwitchNameClickListener?.onItemClick(device, adapterPosition, switchData[1])
+                }
             }
             tvSwitchThreeEdit.setOnClickListener {
-                editClickListener?.onItemClick(device)
+                device.switchData?.let { switchData ->
+                    editSwitchNameClickListener?.onItemClick(device, adapterPosition, switchData[2])
+                }
             }
             tvSwitchFourEdit.setOnClickListener {
-                editClickListener?.onItemClick(device)
+                device.switchData?.let { switchData ->
+                    editSwitchNameClickListener?.onItemClick(device, adapterPosition, switchData[3])
+                }
             }
 
         }
+    }
+
+    interface DeviceItemClickListener<T> {
+        fun onItemClick(data: T, devicePosition: Int)
+    }
+
+    interface SwitchItemClickListener<T> {
+        fun onItemClick(data: T, devicePosition: Int, switchData: DeviceSwitchData)
     }
 
     fun setOnCustomizationClickListener(listener: AdapterItemClickListener<GetDeviceData>) {
@@ -335,7 +357,11 @@ class RoomPanelsAdapter(
         this.settingsClickListener = listener
     }
 
-    fun setOnEditClickListener(listener: AdapterItemClickListener<GetDeviceData>) {
-        this.editClickListener = listener
+    fun setOnEditSwitchNameClickListener(listener: SwitchItemClickListener<GetDeviceData>) {
+        this.editSwitchNameClickListener = listener
+    }
+
+    fun setOnUpdateDeviceNameClickListener(listener: DeviceItemClickListener<GetDeviceData>) {
+        this.updateDeviceNameClickListener = listener
     }
 }

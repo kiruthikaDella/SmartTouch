@@ -35,7 +35,7 @@ data class GetDeviceData(
     @SerializedName("tiDeviceType")
     var deviceType: Int,
     @SerializedName("switchData")
-    var switchData: List<DeviceSwitchData>? = null
+    var switchData: ArrayList<DeviceSwitchData>? = null
 ) : Parcelable, Serializable
 
 @Parcelize

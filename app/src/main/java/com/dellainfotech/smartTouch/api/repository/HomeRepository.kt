@@ -51,6 +51,35 @@ class HomeRepository @Inject constructor(
     suspend fun getDeviceData(roomId: String) =
         safeApiCall { smartTouchApi.getDeviceData(getAccessKey(), roomId) }
 
+    suspend fun getDeviceCustomizationSettings(deviceId: String) =
+        safeApiCall { smartTouchApi.getDeviceCustomizationSettings(getAccessKey(), deviceId) }
+
+    suspend fun getDeviceFeaturesSettings(deviceId: String) =
+        safeApiCall { smartTouchApi.getDeviceFeatureSettings(getAccessKey(), deviceId) }
+
+    suspend fun deleteDevice(deviceId: String) =
+        safeApiCall { smartTouchApi.deleteDevice(getAccessKey(), deviceId) }
+
+    suspend fun updateDeviceName(bodyUpdateDeviceName: BodyUpdateDeviceName) =
+        safeApiCall { smartTouchApi.updateDeviceName(getAccessKey(), bodyUpdateDeviceName) }
+
+    suspend fun updateSwitchName(bodyUpdateSwitchName: BodyUpdateSwitchName) =
+        safeApiCall { smartTouchApi.updateSwitchName(getAccessKey(), bodyUpdateSwitchName) }
+
+    //
+    //endregion
+    //
+
+    //
+    //region ownership transfer
+    //
+
+    suspend fun getOwnership() =
+        safeApiCall { smartTouchApi.getOwnership(getAccessKey()) }
+
+    suspend fun transferOwnership(bodyOwnership: BodyOwnership) =
+        safeApiCall { smartTouchApi.transferOwnership(getAccessKey(), bodyOwnership) }
+
     //
     //endregion
     //

@@ -121,6 +121,26 @@ class HomeViewModel @ViewModelInject constructor(
     val getDeviceResponse: LiveData<Resource<GetDeviceResponse>>
         get() = _getDeviceResponse
 
+    private val _getDeviceCustomizationSettingsResponse: MutableLiveData<Resource<DeviceCustomizationResponse>> = MutableLiveData()
+    val getDeviceCustomizationSettingsResponse: LiveData<Resource<DeviceCustomizationResponse>>
+        get() = _getDeviceCustomizationSettingsResponse
+
+    private val _getDeviceFeatureSettingsResponse: MutableLiveData<Resource<DeviceFeatureResponse>> = MutableLiveData()
+    val getDeviceFeatureSettingsResponse: LiveData<Resource<DeviceFeatureResponse>>
+        get() = _getDeviceFeatureSettingsResponse
+
+    private val _deleteDeviceResponse: MutableLiveData<Resource<CommonResponse>> = MutableLiveData()
+    val deleteDeviceResponse: LiveData<Resource<CommonResponse>>
+        get() = _deleteDeviceResponse
+
+    private val _updateDeviceNameResponse: MutableLiveData<Resource<AddDeviceResponse>> = MutableLiveData()
+    val updateDeviceNameResponse: LiveData<Resource<AddDeviceResponse>>
+        get() = _updateDeviceNameResponse
+
+    private val _updateSwitchNameResponse: MutableLiveData<Resource<UpdateSwitchNameResponse>> = MutableLiveData()
+    val updateSwitchNameResponse: LiveData<Resource<UpdateSwitchNameResponse>>
+        get() = _updateSwitchNameResponse
+
     fun addDevice(bodyAddDevice: BodyAddDevice) = viewModelScope.launch {
         _addDeviceResponse.value = Resource.Loading
         _addDeviceResponse.value = homeRepository.addDevice(bodyAddDevice)
@@ -131,6 +151,57 @@ class HomeViewModel @ViewModelInject constructor(
         _getDeviceResponse.value = homeRepository.getDeviceData(roomId)
     }
 
+    fun getDeviceCustomization(deviceId: String) = viewModelScope.launch {
+        _getDeviceCustomizationSettingsResponse.value = Resource.Loading
+        _getDeviceCustomizationSettingsResponse.value = homeRepository.getDeviceCustomizationSettings(deviceId)
+    }
+
+    fun getDeviceFeatures(deviceId: String) = viewModelScope.launch {
+        _getDeviceFeatureSettingsResponse.value = Resource.Loading
+        _getDeviceFeatureSettingsResponse.value = homeRepository.getDeviceFeaturesSettings(deviceId)
+    }
+
+    fun deleteDevice(deviceId: String) = viewModelScope.launch {
+        _deleteDeviceResponse.value = Resource.Loading
+        _deleteDeviceResponse.value = homeRepository.deleteDevice(deviceId)
+    }
+
+    fun updateDeviceName(bodyUpdateDeviceName: BodyUpdateDeviceName) = viewModelScope.launch {
+        _updateDeviceNameResponse.value = Resource.Loading
+        _updateDeviceNameResponse.value = homeRepository.updateDeviceName(bodyUpdateDeviceName)
+    }
+
+    fun updateSwitchName(bodyUpdateSwitchName: BodyUpdateSwitchName) = viewModelScope.launch {
+        _updateSwitchNameResponse.value = Resource.Loading
+        _updateSwitchNameResponse.value = homeRepository.updateSwitchName(bodyUpdateSwitchName)
+    }
+
+    //
+    //endregion
+    //
+
+
+    //
+    //region ownership transfer
+    //
+
+    private val _getOwnershipResponse: MutableLiveData<Resource<OwnershipResponse>> = MutableLiveData()
+    val getOwnershipResponse: LiveData<Resource<OwnershipResponse>>
+        get() = _getOwnershipResponse
+
+    private val _transferOwnershipResponse: MutableLiveData<Resource<OwnershipResponse>> = MutableLiveData()
+    val transferOwnershipResponse: LiveData<Resource<OwnershipResponse>>
+        get() = _transferOwnershipResponse
+
+    fun getOwnership() = viewModelScope.launch {
+        _getOwnershipResponse.value = Resource.Loading
+        _getOwnershipResponse.value = homeRepository.getOwnership()
+    }
+
+    fun transferOwnership(bodyOwnership: BodyOwnership) = viewModelScope.launch {
+        _transferOwnershipResponse.value = Resource.Loading
+        _transferOwnershipResponse.value = homeRepository.transferOwnership(bodyOwnership)
+    }
 
     //
     //endregion

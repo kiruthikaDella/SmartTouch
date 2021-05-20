@@ -2,7 +2,6 @@ package com.dellainfotech.smartTouch.api
 
 import com.dellainfotech.smartTouch.api.body.*
 import com.dellainfotech.smartTouch.api.model.*
-import okhttp3.RequestBody
 import retrofit2.http.*
 
 /**
@@ -36,11 +35,12 @@ interface SmartTouchApi {
         const val API_GET_DEVICE_DATA = "device/device-data/{id}"
         const val API_GET_DEVICE_CUSTOMIZATION_SETTINGS = "device/device-customization-setting/{id}"
         const val API_GET_DEVICE_FEATURES_SETTINGS = "device/device-feature-setting/{id}"
-        const val API_delete_DEVICE = "device/device/{id}"
+        const val API_DELETE_DEVICE = "device/device/{id}"
         const val API_UPDATE_DEVICE_NAME = "device/device-name"
         const val API_UPDATE_CUSTOMIZATION_LOCK = "device/customization-lock"
         const val API_UPDATE_SWITCH_NAME = "device/switch"
         const val API_UPDATE_SWITCH_ICON = "device/switch-icon"
+        const val API_GET_ICON_LIST = "device/icon-list"
 
         // Contact Us APIs
         const val API_FEEDBACK = "feedback/add"
@@ -49,6 +49,10 @@ interface SmartTouchApi {
         const val API_ADD_SUBORDINATE_USER = "user/subordinateuser"
         const val API_GET_SUBORDINATE_USER = "user/subordinateuser"
         const val API_DELETE_SUBORDINATE_USER = "user/subordinateuser/{id}"
+
+        //Ownership transfer
+        const val API_GET_OWNER_TRANSFER = "owner/owner-transfer"
+        const val API_POST_OWNER_TRANSFER = "owner/owner-transfer"
     }
 
     //
@@ -112,10 +116,16 @@ interface SmartTouchApi {
     suspend fun getUserProfile(@Header("access_key") access_key: String): GetProfileResponse
 
     @PUT(API_UPDATE_USER_PROFILE)
-    suspend fun updateUserProfile(@Header("access_key") access_key: String, @Body bodyUpdateUserProfile: BodyUpdateUserProfile): GetProfileResponse
+    suspend fun updateUserProfile(
+        @Header("access_key") access_key: String,
+        @Body bodyUpdateUserProfile: BodyUpdateUserProfile
+    ): GetProfileResponse
 
     @PUT(API_CHANGE_PASSWORD)
-    suspend fun changePassword(@Header("access_key") access_key: String, @Body bodyChangePassword: BodyChangePassword): CommonResponse
+    suspend fun changePassword(
+        @Header("access_key") access_key: String,
+        @Body bodyChangePassword: BodyChangePassword
+    ): CommonResponse
 
     //
     //endregion
@@ -181,6 +191,55 @@ interface SmartTouchApi {
         @Header("access_key") access_key: String,
         @Path("id") deviceId: String
     ): DeviceCustomizationResponse
+
+    @GET(API_GET_DEVICE_FEATURES_SETTINGS)
+    suspend fun getDeviceFeatureSettings(
+        @Header("access_key") access_key: String,
+        @Path("id") deviceId: String
+    ): DeviceFeatureResponse
+
+    @DELETE(API_DELETE_DEVICE)
+    suspend fun deleteDevice(
+        @Header("access_key") access_key: String,
+        @Path("id") deviceId: String
+    ): CommonResponse
+
+    @PUT(API_UPDATE_DEVICE_NAME)
+    suspend fun updateDeviceName(
+        @Header("access_key") access_key: String,
+        @Body bodyUpdateDeviceName: BodyUpdateDeviceName
+    ): AddDeviceResponse
+
+    @PUT(API_UPDATE_SWITCH_NAME)
+    suspend fun updateSwitchName(
+        @Header("access_key") access_key: String,
+        @Body bodyUpdateSwitchName: BodyUpdateSwitchName
+    ): UpdateSwitchNameResponse
+
+    @GET(API_GET_ICON_LIST)
+    suspend fun getIconList(
+        @Header("access_key") access_key: String
+    ): DeviceFeatureResponse
+
+    //
+    //endregion
+    //
+
+
+    //
+    //region ownership transfer
+    //
+
+    @GET(API_GET_OWNER_TRANSFER)
+    suspend fun getOwnership(
+        @Header("access_key") access_key: String
+    ): OwnershipResponse
+
+    @POST(API_GET_OWNER_TRANSFER)
+    suspend fun transferOwnership(
+        @Header("access_key") access_key: String,
+        @Body bodyOwnership: BodyOwnership
+    ): OwnershipResponse
 
     //
     //endregion

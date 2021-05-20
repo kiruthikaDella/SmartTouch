@@ -4,21 +4,19 @@ import android.app.Dialog
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.util.DisplayMetrics
 import android.util.Log
+import android.util.Patterns
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 import androidx.navigation.fragment.findNavController
 import com.dellainfotech.smartTouch.R
 import com.dellainfotech.smartTouch.api.Resource
-import com.dellainfotech.smartTouch.api.body.BodyAddRoom
 import com.dellainfotech.smartTouch.api.body.BodyChangePassword
+import com.dellainfotech.smartTouch.api.body.BodyOwnership
 import com.dellainfotech.smartTouch.api.body.BodyUpdateUserProfile
 import com.dellainfotech.smartTouch.api.repository.HomeRepository
 import com.dellainfotech.smartTouch.common.utils.Constants
@@ -83,6 +81,36 @@ class AccountSettingsFragment :
             }
         }
 
+        binding.ivMasterEditName.setOnClickListener {
+            binding.edtMasterName.isEnabled = true
+            binding.edtMasterName.requestFocus()
+        }
+
+        binding.ivMasterEditEmail.setOnClickListener {
+            binding.edtMasterEmail.isEnabled = true
+            binding.edtMasterEmail.requestFocus()
+        }
+
+        binding.btnUpdate.setOnClickListener {
+            val name = binding.edtMasterName.text.toString().trim()
+            val email = binding.edtMasterEmail.text.toString().trim()
+
+            if (name.isEmpty()) {
+                binding.edtMasterName.error = getString(R.string.error_text_name)
+            } else if (name.length < 3) {
+                binding.edtMasterName.error = getString(R.string.error_text_full_name_length)
+            } else if (email.isEmpty()) {
+                binding.edtMasterEmail.error = getString(R.string.error_text_email)
+            }else if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+                binding.edtMasterEmail.error = getString(R.string.error_text_valid_email)
+            }else {
+                activity?.let {
+                    DialogUtil.loadingAlert(it)
+                }
+                viewModel.transferOwnership(BodyOwnership(email,name))
+            }
+        }
+
         apiCall()
     }
 
@@ -106,6 +134,7 @@ class AccountSettingsFragment :
             DialogUtil.loadingAlert(it)
         }
         viewModel.getUserProfile()
+        viewModel.getOwnership()
 
         viewModel.getUserProfileResponse.observe(viewLifecycleOwner, { response ->
             when (response) {
@@ -145,7 +174,7 @@ class AccountSettingsFragment :
             when (response) {
                 is Resource.Success -> {
                     DialogUtil.hideDialog()
-                    Log.e(logTag," ${response.values.message} ")
+                    Log.e(logTag, " ${response.values.message} ")
                     activity?.let {
                         Toast.makeText(it, response.values.message, Toast.LENGTH_SHORT).show()
                     }
@@ -176,19 +205,69 @@ class AccountSettingsFragment :
         })
 
         viewModel.changePasswordResponse.observe(viewLifecycleOwner, { response ->
+            when (response) {
+                is Resource.Success -> {
+                    DialogUtil.hideDialog()
+                    context?.let {
+                        Toast.makeText(it, response.values.message, Toast.LENGTH_SHORT).show()
+                    }
+                }
+                is Resource.Failure -> {
+                    DialogUtil.hideDialog()
+                    Log.e(
+                        logTag,
+                        " changePasswordResponse Failure ${response.errorBody?.string()} "
+                    )
+                }
+                else -> {
+                    // We will do nothing here
+                }
+            }
+        })
+
+        viewModel.getOwnershipResponse.observe(viewLifecycleOwner, { response ->
+            when (response) {
+                is Resource.Success -> {
+                    DialogUtil.hideDialog()
+                    if (response.values.status && response.values.code == Constants.API_SUCCESS_CODE) {
+                        response.values.data?.let {
+                            binding.edtMasterName.text = it.name.toEditable()
+                            binding.edtMasterEmail.text = it.email.toEditable()
+                            binding.btnUpdate.isEnabled = false
+                        }
+                    }
+                }
+                is Resource.Failure -> {
+                    DialogUtil.hideDialog()
+                    Log.e(logTag, " getOwnershipResponse Failure ${response.errorBody?.string()} ")
+                }
+                else -> {
+                    //We will do nothing here
+                }
+            }
+        })
+
+        viewModel.transferOwnershipResponse.observe(viewLifecycleOwner, { response ->
             when(response){
                 is Resource.Success -> {
                     DialogUtil.hideDialog()
                     context?.let {
                         Toast.makeText(it,response.values.message,Toast.LENGTH_SHORT).show()
                     }
+                    if (response.values.status && response.values.code == Constants.API_SUCCESS_CODE) {
+                        response.values.data?.let {
+                            binding.edtMasterName.text = it.name.toEditable()
+                            binding.edtMasterEmail.text = it.email.toEditable()
+                            binding.btnUpdate.isEnabled = false
+                        }
+                    }
                 }
                 is Resource.Failure -> {
                     DialogUtil.hideDialog()
-                    Log.e(logTag, " changePasswordResponse Failure ${response.errorBody?.string()} ")
+                    Log.e(logTag, " transferOwnershipResponse Failure ${response.errorBody?.string()} ")
                 }
                 else -> {
-                    // We will do nothing here
+                    //We will do nothing here
                 }
             }
         })
@@ -226,7 +305,7 @@ class AccountSettingsFragment :
                 } else {
                     dialog?.dismiss()
                     DialogUtil.loadingAlert(myActivity)
-                    viewModel.changePassword(BodyChangePassword(currentPassword,newPassword))
+                    viewModel.changePassword(BodyChangePassword(currentPassword, newPassword))
                 }
             }
 

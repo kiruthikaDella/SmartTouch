@@ -74,6 +74,9 @@
         <action
             android:id="@+id/action_deviceFeaturesFragment_to_createSceneFragment"
             app:destination="@id/createSceneFragment" />
+        <argument
+            android:name="deviceDetail"
+            app:argType="com.dellainfotech.smartTouch.api.model.GetDeviceData" />
     </fragment>
     <fragment
         android:id="@+id/createSceneFragment"
@@ -127,5 +130,9 @@
         android:id="@+id/deviceSettingsFragment"
         android:name="com.dellainfotech.smartTouch.ui.fragments.main.home.DeviceSettingsFragment"
         android:label="fragment_device_settings"
-        tools:layout="@layout/fragment_device_settings" /><action android:id="@+id/action_global_userManagementFragment" app:destination="@id/userManagementFragment"/><action android:id="@+id/action_global_contactUsFragment" app:destination="@id/contactUsFragment"/><action android:id="@+id/action_global_controlModeFragment" app:destination="@id/controlModeFragment"/>
+        tools:layout="@layout/fragment_device_settings" >
+        <argument
+            android:name="deviceDetail"
+            app:argType="com.dellainfotech.smartTouch.api.model.GetDeviceData" />
+    </fragment><action android:id="@+id/action_global_userManagementFragment" app:destination="@id/userManagementFragment"/><action android:id="@+id/action_global_contactUsFragment" app:destination="@id/contactUsFragment"/><action android:id="@+id/action_global_controlModeFragment" app:destination="@id/controlModeFragment"/>
 </navigation>

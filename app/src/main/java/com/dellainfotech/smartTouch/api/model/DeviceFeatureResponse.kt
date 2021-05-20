@@ -6,7 +6,7 @@ import kotlinx.android.parcel.Parcelize
 import java.io.Serializable
 
 /**
- * Created by Jignesh Dangar on 11-05-2021.
+ * Created by Jignesh Dangar on 19-05-2021.
  */
 
 data class DeviceFeatureResponse(
@@ -23,7 +23,7 @@ data class DeviceFeatureResponse(
 @Parcelize
 data class DeviceFeatureData(
     @SerializedName("_id")
-    var id: Int,
+    var id: String,
     @SerializedName("tiSleepMode")
     var sleepMode: Int,
     @SerializedName("tiNightMode")
@@ -42,6 +42,6 @@ data class DeviceFeatureData(
     var temperatureUnit: Int,
     @SerializedName("tiDisplayBrightnessMode")
     var displayBrightnessMode: String,
-    @SerializedName("tiDisplayBrignumberhtnessValue")
-    var displayBrignumberhtnessValue: String,
+    @SerializedName("tiDisplayBrightnessValue")
+    var displayBrightnessValue: String,
 ) : Parcelable, Serializable

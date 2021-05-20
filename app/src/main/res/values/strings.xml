@@ -46,7 +46,7 @@
     <string name="error_text_full_name_length">FullName must be more than 3 character</string>
     <string name="error_text_user_name">Please enter user name</string>
     <string name="error_text_user_name_length">UserName must be more than 3 character</string>
-    <string name="error_text_phone_number"><Pl></Pl>ease enter phone number</string>
+    <string name="error_text_phone_number">Please enter phone number</string>
     <string name="error_text_email">Please enter email</string>
     <string name="error_text_valid_email">Please enter valid email</string>
     <string name="error_text_password">Please enter password</string>
@@ -55,6 +55,8 @@
     <string name="error_text_confirm_password">Password does not match</string>
     <string name="error_text_panel_name">Please enter panel name</string>
     <string name="error_text_serial_number">Please enter serial number</string>
+    <string name="error_text_name">Please enter name</string>
+    <string name="error_text_name_length">Name must be more than 3 character</string>
 
     <!--    Forgot Password-->
     <string name="title_text_forgot_password">Forgot your password?</string>

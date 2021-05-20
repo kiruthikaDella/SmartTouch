@@ -10,13 +10,13 @@
         android:id="@+id/iv_room_image"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:src="@drawable/img_living_room"
         android:scaleType="centerCrop" />
 
     <View
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/daintree"
+        android:visibility="gone"
         android:alpha="0.4" />
 
     <TextView

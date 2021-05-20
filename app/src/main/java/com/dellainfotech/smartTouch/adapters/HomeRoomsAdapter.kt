@@ -1,5 +1,6 @@
 package com.dellainfotech.smartTouch.adapters
 
+import android.content.Context
 import android.text.Html
 import android.view.LayoutInflater
 import android.view.View
@@ -8,10 +9,12 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.dellainfotech.smartTouch.AppDelegate
 import com.dellainfotech.smartTouch.R
 import com.dellainfotech.smartTouch.api.model.GetRoomData
 import com.dellainfotech.smartTouch.common.interfaces.AdapterItemClickListener
+import com.squareup.picasso.Picasso
 import java.util.regex.Pattern
 
 /**
@@ -22,10 +25,12 @@ class HomeRoomsAdapter(
 ) : RecyclerView.Adapter<HomeRoomsAdapter.MyViewHolder>() {
 
     private var roomClickListener: AdapterItemClickListener<GetRoomData>? = null
+    private var mContext: Context? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
         val v = LayoutInflater.from(parent.context)
             .inflate(R.layout.item_home_room, parent, false)
+        mContext = parent.context
         return MyViewHolder(v)
     }
 
@@ -33,8 +38,6 @@ class HomeRoomsAdapter(
         val data = roomList[position]
 
         holder.apply {
-
-
 
             data.roomName?.let {
                 val roomName =  it.split(Pattern.compile(" "), 2)
@@ -56,13 +59,13 @@ class HomeRoomsAdapter(
                 }
             }
 
-
-        /*    tvRoomImage.setImageDrawable(
-                ContextCompat.getDrawable(
-                    AppDelegate.instance,
-                    data.image
-                )
-            )*/
+            mContext?.let {
+                Glide
+                    .with(it)
+                    .load(data.roomTypeId?.filePath)
+                    .centerCrop()
+                    .into(ivRoomImage)
+            }
 
             tvRoomSettings.setOnClickListener {
                 roomClickListener?.onItemClick(data)
@@ -76,7 +79,7 @@ class HomeRoomsAdapter(
 
     inner class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val tvRoomTitle: TextView = itemView.findViewById(R.id.tv_room_title)
-        val tvRoomImage: ImageView = itemView.findViewById(R.id.iv_room_image)
+        val ivRoomImage: ImageView = itemView.findViewById(R.id.iv_room_image)
         val tvRoomSettings: ImageView = itemView.findViewById(R.id.iv_room_settings)
     }
 

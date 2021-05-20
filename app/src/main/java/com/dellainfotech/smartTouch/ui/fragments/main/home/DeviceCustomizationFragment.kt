@@ -17,10 +17,12 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.appizona.yehiahd.fastsave.FastSave
 import com.dellainfotech.smartTouch.R
+import com.dellainfotech.smartTouch.api.Resource
 import com.dellainfotech.smartTouch.api.repository.HomeRepository
 import com.dellainfotech.smartTouch.common.interfaces.DialogAskListener
 import com.dellainfotech.smartTouch.common.utils.Constants
 import com.dellainfotech.smartTouch.common.utils.DialogUtil
+import com.dellainfotech.smartTouch.common.utils.Utils.toBoolean
 import com.dellainfotech.smartTouch.databinding.FragmentDeviceCustomizationBinding
 import com.dellainfotech.smartTouch.ui.fragments.ModelBaseFragment
 import com.dellainfotech.smartTouch.ui.viewmodel.HomeViewModel
@@ -34,6 +36,7 @@ class DeviceCustomizationFragment :
     ModelBaseFragment<HomeViewModel, FragmentDeviceCustomizationBinding, HomeRepository>() {
 
     private val args: DeviceCustomizationFragmentArgs by navArgs()
+    private var sizeAdapter: ArrayAdapter<String>? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -53,6 +56,11 @@ class DeviceCustomizationFragment :
         binding.ivBack.setOnClickListener {
             findNavController().navigateUp()
         }
+
+        activity?.let {
+            DialogUtil.loadingAlert(it)
+        }
+        viewModel.getDeviceCustomization(args.deviceDetail.id)
 
         binding.ibLock.setOnClickListener {
             activity?.let {
@@ -114,8 +122,8 @@ class DeviceCustomizationFragment :
 
         context?.let { mContext ->
 
-            val sizeAdapter = ArrayAdapter(mContext, R.layout.simple_spinner_dropdown, sizeList)
-            sizeAdapter.setDropDownViewResource(R.layout.simple_spinner_dropdown)
+            sizeAdapter = ArrayAdapter(mContext, R.layout.simple_spinner_dropdown, sizeList)
+            sizeAdapter?.setDropDownViewResource(R.layout.simple_spinner_dropdown)
             binding.spinnerIconSize.adapter = sizeAdapter
             binding.spinnerTextSize.adapter = sizeAdapter
 
@@ -203,6 +211,8 @@ class DeviceCustomizationFragment :
 
                 }
         }
+
+        apiCall()
     }
 
     override fun onResume() {
@@ -227,5 +237,28 @@ class DeviceCustomizationFragment :
         FragmentDeviceCustomizationBinding.inflate(inflater, container, false)
 
     override fun getFragmentRepository(): HomeRepository = HomeRepository(networkModel)
+
+    private fun apiCall() {
+        viewModel.getDeviceCustomizationSettingsResponse.observe(viewLifecycleOwner, { response ->
+            when (response) {
+                is Resource.Success -> {
+                    DialogUtil.hideDialog()
+                    if (response.values.status && response.values.code == Constants.API_SUCCESS_CODE) {
+                        response.values.data?.let {
+                            binding.spinnerIconSize.setSelection(sizeAdapter?.getPosition(it.switchIconSize)!!)
+                            binding.cbSwitchNameSettings.isChecked = it.switchName.toInt().toBoolean()
+                            binding.spinnerTextSize.setSelection(sizeAdapter?.getPosition(it.textSize)!!)
+                        }
+                    }
+                }
+                is Resource.Failure -> {
+                    DialogUtil.hideDialog()
+                }
+                else -> {
+                    // We will do nothing here
+                }
+            }
+        })
+    }
 
 }

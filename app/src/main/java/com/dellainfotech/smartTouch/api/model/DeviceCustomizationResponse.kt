@@ -6,7 +6,7 @@ import kotlinx.android.parcel.Parcelize
 import java.io.Serializable
 
 /**
- * Created by Jignesh Dangar on 11-05-2021.
+ * Created by Jignesh Dangar on 19-05-2021.
  */
 
 data class DeviceCustomizationResponse(
