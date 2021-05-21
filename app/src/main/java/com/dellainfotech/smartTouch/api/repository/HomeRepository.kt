@@ -66,6 +66,15 @@ class HomeRepository @Inject constructor(
     suspend fun updateSwitchName(bodyUpdateSwitchName: BodyUpdateSwitchName) =
         safeApiCall { smartTouchApi.updateSwitchName(getAccessKey(), bodyUpdateSwitchName) }
 
+    suspend fun customizationLock(bodyCustomizationLock: BodyCustomizationLock) =
+        safeApiCall { smartTouchApi.customizationLock(getAccessKey(), bodyCustomizationLock) }
+
+    suspend fun getIconList() =
+        safeApiCall { smartTouchApi.getIconList(getAccessKey()) }
+
+    suspend fun updateSwitchIcon(bodyUpdateSwitchIcon: BodyUpdateSwitchIcon) =
+        safeApiCall { smartTouchApi.updateSwitchIcon(getAccessKey(),bodyUpdateSwitchIcon) }
+
     //
     //endregion
     //

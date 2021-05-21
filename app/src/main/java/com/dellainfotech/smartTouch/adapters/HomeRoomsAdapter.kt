@@ -62,7 +62,7 @@ class HomeRoomsAdapter(
             mContext?.let {
                 Glide
                     .with(it)
-                    .load(data.roomTypeId?.filePath)
+                    .load(data.roomTypeId?.file)
                     .centerCrop()
                     .into(ivRoomImage)
             }

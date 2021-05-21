@@ -65,7 +65,11 @@
         android:id="@+id/screenLayoutFragment"
         android:name="com.dellainfotech.smartTouch.ui.fragments.main.home.ScreenLayoutFragment"
         android:label="fragment_screen_layout"
-        tools:layout="@layout/fragment_screen_layout" />
+        tools:layout="@layout/fragment_screen_layout" >
+        <argument
+            android:name="deviceCustomizationDetail"
+            app:argType="com.dellainfotech.smartTouch.api.model.DeviceCustomizationData" />
+    </fragment>
     <fragment
         android:id="@+id/deviceFeaturesFragment"
         android:name="com.dellainfotech.smartTouch.ui.fragments.main.home.DeviceFeaturesFragment"
@@ -106,12 +110,19 @@
         <action
             android:id="@+id/action_switchIconsFragment_to_switchIconsDetailFragment"
             app:destination="@id/switchIconsDetailFragment" />
+        <argument
+            android:name="deviceDetail"
+            app:argType="com.dellainfotech.smartTouch.api.model.GetDeviceData" />
     </fragment>
     <fragment
         android:id="@+id/switchIconsDetailFragment"
         android:name="com.dellainfotech.smartTouch.ui.fragments.main.home.SwitchIconsDetailFragment"
         android:label="fragment_switch_icons_detail"
-        tools:layout="@layout/fragment_switch_icons_detail" />
+        tools:layout="@layout/fragment_switch_icons_detail" >
+        <argument
+            android:name="switchDetail"
+            app:argType="com.dellainfotech.smartTouch.api.model.DeviceSwitchData" />
+    </fragment>
     <fragment
         android:id="@+id/userManagementFragment"
         android:name="com.dellainfotech.smartTouch.ui.fragments.main.usermanagement.UserManagementFragment"

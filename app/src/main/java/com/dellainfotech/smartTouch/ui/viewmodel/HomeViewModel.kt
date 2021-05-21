@@ -141,6 +141,18 @@ class HomeViewModel @ViewModelInject constructor(
     val updateSwitchNameResponse: LiveData<Resource<UpdateSwitchNameResponse>>
         get() = _updateSwitchNameResponse
 
+    private val _customizationLockResponse: MutableLiveData<Resource<DeviceCustomizationResponse>> = MutableLiveData()
+    val customizationLockResponse: LiveData<Resource<DeviceCustomizationResponse>>
+        get() = _customizationLockResponse
+
+    private val _iconListResponse: MutableLiveData<Resource<IconListResponse>> = MutableLiveData()
+    val iconListResponse: LiveData<Resource<IconListResponse>>
+        get() = _iconListResponse
+
+    private val _updateSwitchIconResponse: MutableLiveData<Resource<UpdateSwitchIconResponse>> = MutableLiveData()
+    val updateSwitchIconResponse: LiveData<Resource<UpdateSwitchIconResponse>>
+        get() = _updateSwitchIconResponse
+
     fun addDevice(bodyAddDevice: BodyAddDevice) = viewModelScope.launch {
         _addDeviceResponse.value = Resource.Loading
         _addDeviceResponse.value = homeRepository.addDevice(bodyAddDevice)
@@ -174,6 +186,21 @@ class HomeViewModel @ViewModelInject constructor(
     fun updateSwitchName(bodyUpdateSwitchName: BodyUpdateSwitchName) = viewModelScope.launch {
         _updateSwitchNameResponse.value = Resource.Loading
         _updateSwitchNameResponse.value = homeRepository.updateSwitchName(bodyUpdateSwitchName)
+    }
+
+    fun customizationLock(bodyCustomizationLock: BodyCustomizationLock) = viewModelScope.launch {
+        _customizationLockResponse.value = Resource.Loading
+        _customizationLockResponse.value = homeRepository.customizationLock(bodyCustomizationLock)
+    }
+
+    fun iconList() = viewModelScope.launch {
+        _iconListResponse.value = Resource.Loading
+        _iconListResponse.value = homeRepository.getIconList()
+    }
+
+    fun updateSwitchIcon(bodyUpdateSwitchIcon: BodyUpdateSwitchIcon) = viewModelScope.launch {
+        _updateSwitchIconResponse.value = Resource.Loading
+        _updateSwitchIconResponse.value = homeRepository.updateSwitchIcon(bodyUpdateSwitchIcon)
     }
 
     //

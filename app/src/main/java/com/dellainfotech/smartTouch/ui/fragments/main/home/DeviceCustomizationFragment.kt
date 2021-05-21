@@ -4,6 +4,7 @@ import android.graphics.Color
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
@@ -11,6 +12,7 @@ import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.TextView
+import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.navigation.fragment.findNavController
@@ -18,11 +20,14 @@ import androidx.navigation.fragment.navArgs
 import com.appizona.yehiahd.fastsave.FastSave
 import com.dellainfotech.smartTouch.R
 import com.dellainfotech.smartTouch.api.Resource
+import com.dellainfotech.smartTouch.api.body.BodyCustomizationLock
+import com.dellainfotech.smartTouch.api.model.DeviceCustomizationData
 import com.dellainfotech.smartTouch.api.repository.HomeRepository
 import com.dellainfotech.smartTouch.common.interfaces.DialogAskListener
 import com.dellainfotech.smartTouch.common.utils.Constants
 import com.dellainfotech.smartTouch.common.utils.DialogUtil
 import com.dellainfotech.smartTouch.common.utils.Utils.toBoolean
+import com.dellainfotech.smartTouch.common.utils.Utils.toInt
 import com.dellainfotech.smartTouch.databinding.FragmentDeviceCustomizationBinding
 import com.dellainfotech.smartTouch.ui.fragments.ModelBaseFragment
 import com.dellainfotech.smartTouch.ui.viewmodel.HomeViewModel
@@ -35,8 +40,11 @@ import com.sothree.slidinguppanel.SlidingUpPanelLayout
 class DeviceCustomizationFragment :
     ModelBaseFragment<HomeViewModel, FragmentDeviceCustomizationBinding, HomeRepository>() {
 
+    private val logTag = this::class.java.simpleName
     private val args: DeviceCustomizationFragmentArgs by navArgs()
     private var sizeAdapter: ArrayAdapter<String>? = null
+    private var deviceCustomization: DeviceCustomizationData? = null
+    private var isDeviceCustomizationLocked: Boolean = false
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -64,22 +72,33 @@ class DeviceCustomizationFragment :
 
         binding.ibLock.setOnClickListener {
             activity?.let {
+                var msg = ""
+                if (isDeviceCustomizationLocked) {
+                    isDeviceCustomizationLocked = false
+                    msg = getString(R.string.dialog_title_text_unlock)
+                }else {
+                    isDeviceCustomizationLocked = true
+                    msg = getString(R.string.dialog_title_text_lock)
+                }
+
                 DialogUtil.askAlert(
                     it,
-                    getString(R.string.dialog_title_text_lock),
+                    msg,
                     getString(R.string.text_ok),
                     getString(R.string.text_cancel),
                     object : DialogAskListener {
                         override fun onYesClicked() {
-                            FastSave.getInstance()
-                                .saveBoolean(Constants.isDeviceCustomizationLocked, true)
-                            lockScreen()
+                            DialogUtil.loadingAlert(it)
+                            viewModel.customizationLock(
+                                BodyCustomizationLock(
+                                    args.deviceDetail.id,
+                                    isDeviceCustomizationLocked.toInt()
+                                )
+                            )
                         }
 
                         override fun onNoClicked() {
-                            FastSave.getInstance()
-                                .saveBoolean(Constants.isDeviceCustomizationLocked, false)
-                            unLockScreen()
+
                         }
 
                     }
@@ -88,7 +107,13 @@ class DeviceCustomizationFragment :
         }
 
         binding.ivScreenLayoutSettings.setOnClickListener {
-            findNavController().navigate(DeviceCustomizationFragmentDirections.actionDeviceCustomizationFragmentToScreenLayoutFragment())
+            deviceCustomization?.let {
+                findNavController().navigate(
+                    DeviceCustomizationFragmentDirections.actionDeviceCustomizationFragmentToScreenLayoutFragment(
+                        it
+                    )
+                )
+            }
         }
 
         binding.ivUploadImageSettings.setOnClickListener {
@@ -117,7 +142,7 @@ class DeviceCustomizationFragment :
         }
 
         binding.ivSwitchIconsSettings.setOnClickListener {
-            findNavController().navigate(DeviceCustomizationFragmentDirections.actionDeviceCustomizationFragmentToSwitchIconsFragment())
+            findNavController().navigate(DeviceCustomizationFragmentDirections.actionDeviceCustomizationFragmentToSwitchIconsFragment(args.deviceDetail))
         }
 
         context?.let { mContext ->
@@ -245,9 +270,17 @@ class DeviceCustomizationFragment :
                     DialogUtil.hideDialog()
                     if (response.values.status && response.values.code == Constants.API_SUCCESS_CODE) {
                         response.values.data?.let {
+                            deviceCustomization = it
                             binding.spinnerIconSize.setSelection(sizeAdapter?.getPosition(it.switchIconSize)!!)
-                            binding.cbSwitchNameSettings.isChecked = it.switchName.toInt().toBoolean()
+                            binding.cbSwitchNameSettings.isChecked =
+                                it.switchName.toInt().toBoolean()
                             binding.spinnerTextSize.setSelection(sizeAdapter?.getPosition(it.textSize)!!)
+                            isDeviceCustomizationLocked = it.isLock.toBoolean()
+                            if (isDeviceCustomizationLocked) {
+                                lockScreen()
+                            } else {
+                                unLockScreen()
+                            }
                         }
                     }
                 }
@@ -256,6 +289,34 @@ class DeviceCustomizationFragment :
                 }
                 else -> {
                     // We will do nothing here
+                }
+            }
+        })
+
+        viewModel.customizationLockResponse.observe(viewLifecycleOwner, { response ->
+            when (response) {
+                is Resource.Success -> {
+                    DialogUtil.hideDialog()
+                    context?.let {
+                        Toast.makeText(it,response.values.message,Toast.LENGTH_SHORT).show()
+                    }
+                    if (response.values.status && response.values.code == Constants.API_SUCCESS_CODE){
+                        response.values.data?.let {
+                            isDeviceCustomizationLocked = it.isLock.toBoolean()
+                            if (isDeviceCustomizationLocked) {
+                                lockScreen()
+                            } else {
+                                unLockScreen()
+                            }
+                        }
+                    }
+                }
+                is Resource.Failure -> {
+                    DialogUtil.hideDialog()
+                    Log.e(logTag, " customizationLockResponse Failure ${response.errorBody?.string()}")
+                }
+                else -> {
+                    //We will do nothing here
                 }
             }
         })

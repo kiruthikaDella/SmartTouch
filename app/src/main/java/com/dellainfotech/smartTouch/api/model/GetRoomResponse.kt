@@ -42,5 +42,7 @@ data class GetRoomTypeId(
     @SerializedName("vName")
     var roomName: String,
     @SerializedName("vFilePath")
-    var filePath: String
+    var filePath: String,
+    @SerializedName("vFile")
+    var file: String
 ) : Parcelable, Serializable

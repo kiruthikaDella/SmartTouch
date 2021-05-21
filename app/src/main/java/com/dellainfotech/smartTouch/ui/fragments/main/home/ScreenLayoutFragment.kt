@@ -6,30 +6,26 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import com.appizona.yehiahd.fastsave.FastSave
 import com.dellainfotech.smartTouch.R
+import com.dellainfotech.smartTouch.api.repository.HomeRepository
 import com.dellainfotech.smartTouch.common.interfaces.DialogAskListener
 import com.dellainfotech.smartTouch.common.utils.Constants
 import com.dellainfotech.smartTouch.common.utils.DialogUtil
 import com.dellainfotech.smartTouch.databinding.FragmentScreenLayoutBinding
-import com.dellainfotech.smartTouch.ui.fragments.BaseFragment
+import com.dellainfotech.smartTouch.ui.fragments.ModelBaseFragment
+import com.dellainfotech.smartTouch.ui.viewmodel.HomeViewModel
 
 /**
  * Created by Jignesh Dangar on 09-04-2021.
  */
-class ScreenLayoutFragment : BaseFragment() {
+class ScreenLayoutFragment :
+    ModelBaseFragment<HomeViewModel, FragmentScreenLayoutBinding, HomeRepository>() {
 
     private val logTag = this::class.java.simpleName
-    private lateinit var binding: FragmentScreenLayoutBinding
     private var screenLayoutModel: ScreenLayoutModel? = null
-
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        binding = FragmentScreenLayoutBinding.inflate(inflater, container, false)
-        return binding.root
-    }
+    private val args: ScreenLayoutFragmentArgs by navArgs()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -85,5 +81,14 @@ class ScreenLayoutFragment : BaseFragment() {
     private fun unlockScreen() {
         binding.relativeLock.isVisible = false
     }
+
+    override fun getViewModel(): Class<HomeViewModel> = HomeViewModel::class.java
+
+    override fun getFragmentBinding(
+        inflater: LayoutInflater,
+        container: ViewGroup?
+    ): FragmentScreenLayoutBinding = FragmentScreenLayoutBinding.inflate(inflater, container, false)
+
+    override fun getFragmentRepository(): HomeRepository = HomeRepository(networkModel)
 
 }

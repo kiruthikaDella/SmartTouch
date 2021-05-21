@@ -1,33 +1,37 @@
 package com.dellainfotech.smartTouch.ui.fragments.main.home
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.GridLayoutManager
-import com.dellainfotech.smartTouch.R
 import com.dellainfotech.smartTouch.adapters.SwitchIconsDetailAdapter
+import com.dellainfotech.smartTouch.api.Resource
+import com.dellainfotech.smartTouch.api.body.BodyUpdateSwitchIcon
+import com.dellainfotech.smartTouch.api.model.IconListData
+import com.dellainfotech.smartTouch.api.repository.HomeRepository
+import com.dellainfotech.smartTouch.common.interfaces.AdapterItemClickListener
+import com.dellainfotech.smartTouch.common.utils.Constants
+import com.dellainfotech.smartTouch.common.utils.DialogUtil
 import com.dellainfotech.smartTouch.databinding.FragmentSwitchIconsDetailBinding
-import com.dellainfotech.smartTouch.model.SwitchIconsDetailModel
-import com.dellainfotech.smartTouch.ui.fragments.BaseFragment
+import com.dellainfotech.smartTouch.ui.fragments.ModelBaseFragment
+import com.dellainfotech.smartTouch.ui.viewmodel.HomeViewModel
 
 /**
  * Created by Jignesh Dangar on 27-04-2021.
  */
-class SwitchIconsDetailFragment : BaseFragment() {
+class SwitchIconsDetailFragment :
+    ModelBaseFragment<HomeViewModel, FragmentSwitchIconsDetailBinding, HomeRepository>() {
 
-    private lateinit var binding: FragmentSwitchIconsDetailBinding
+    private val logTag = this::class.java.simpleName
+    private val args: SwitchIconsDetailFragmentArgs by navArgs()
     private lateinit var adapter: SwitchIconsDetailAdapter
-    private var switchIconList = arrayListOf<SwitchIconsDetailModel>()
-
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        binding = FragmentSwitchIconsDetailBinding.inflate(inflater, container, false)
-        return binding.root
-    }
+    private var switchIconList = arrayListOf<IconListData>()
+    private var iconData: IconListData? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -35,31 +39,14 @@ class SwitchIconsDetailFragment : BaseFragment() {
             findNavController().navigateUp()
         }
 
-        switchIconList.add(SwitchIconsDetailModel(R.drawable.ic_fan, "Fan"))
-        switchIconList.add(SwitchIconsDetailModel(R.drawable.ic_bulb, "Bulb"))
-        switchIconList.add(SwitchIconsDetailModel(R.drawable.ic_usb_type_a, "USB Type A"))
-        switchIconList.add(SwitchIconsDetailModel(R.drawable.ic_usb_type_c, "USB Type C"))
-        switchIconList.add(SwitchIconsDetailModel(R.drawable.ic_chandelier, "Chandelier"))
-        switchIconList.add(SwitchIconsDetailModel(R.drawable.ic_table_lamp, "Table Lamp"))
-        switchIconList.add(SwitchIconsDetailModel(R.drawable.ic_floor_lamp, "Floor Lamp"))
-        switchIconList.add(SwitchIconsDetailModel(R.drawable.ic_night_lamp, "Night Lamp"))
-        switchIconList.add(SwitchIconsDetailModel(R.drawable.ic_ac, "AC"))
-        switchIconList.add(SwitchIconsDetailModel(R.drawable.ic_ceiling_light, "Ceiling Light"))
-        switchIconList.add(SwitchIconsDetailModel(R.drawable.ic_exhaust_fan, "Exhaust Fan"))
-        switchIconList.add(SwitchIconsDetailModel(R.drawable.ic_wall_sconces, "Wall Sconces"))
-        switchIconList.add(SwitchIconsDetailModel(R.drawable.ic_valance_light, "Valance Light"))
-        switchIconList.add(SwitchIconsDetailModel(R.drawable.ic_spotlight, "Spotlight"))
-        switchIconList.add(SwitchIconsDetailModel(R.drawable.ic_cove_light, "Cove Light"))
-        switchIconList.add(SwitchIconsDetailModel(R.drawable.ic_pendant, "Pendant"))
-        switchIconList.add(SwitchIconsDetailModel(R.drawable.ic_geyser, "Geyser"))
-        switchIconList.add(SwitchIconsDetailModel(R.drawable.ic_track_light, "Track Light"))
-        switchIconList.add(SwitchIconsDetailModel(R.drawable.ic_vanity_light, "Vanity Light"))
-        switchIconList.add(SwitchIconsDetailModel(R.drawable.ic_under_cabinet, "Under Cabinet"))
-        switchIconList.add(SwitchIconsDetailModel(R.drawable.ic_wall_grazer, "Wall Grazer"))
-        switchIconList.add(SwitchIconsDetailModel(R.drawable.ic_wall_washer, "Wall Washer"))
-        switchIconList.add(SwitchIconsDetailModel(R.drawable.ic_foot_light, "Foot Light"))
+        binding.tvTitle.text = args.switchDetail.name
 
-        adapter = SwitchIconsDetailAdapter(switchIconList)
+        activity?.let {
+            DialogUtil.loadingAlert(it)
+        }
+        viewModel.iconList()
+
+        adapter = SwitchIconsDetailAdapter(switchIconList,args.switchDetail)
         context?.let {
             binding.recyclerSwitchIcons.layoutManager = GridLayoutManager(it, 4)
         }
@@ -68,6 +55,80 @@ class SwitchIconsDetailFragment : BaseFragment() {
         binding.ibSwitch.setOnClickListener {
             findNavController().navigateUp()
         }
+
+        binding.btnSynchronize.setOnClickListener {
+            iconData?.let {
+                activity?.let { mActivity ->
+                    DialogUtil.loadingAlert(mActivity)
+                    viewModel.updateSwitchIcon(BodyUpdateSwitchIcon(args.switchDetail.id,it.iconFile))
+                }
+
+            }?: kotlin.run {
+                context?.let {
+                    Toast.makeText(it,"Please select icon",Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+
+        viewModel.iconListResponse.observe(viewLifecycleOwner, { response ->
+            when (response) {
+                is Resource.Success -> {
+                    DialogUtil.hideDialog()
+                    if (response.values.status && response.values.code == Constants.API_SUCCESS_CODE) {
+                        response.values.data?.let {
+                            switchIconList.addAll(it)
+                            adapter.notifyDataSetChanged()
+                            adapter.setOnSwitchClickListener(object : AdapterItemClickListener<IconListData> {
+                                override fun onItemClick(data: IconListData) {
+                                    iconData = data
+                                }
+
+                            })
+                        }
+                    }
+                }
+                is Resource.Failure -> {
+                    DialogUtil.hideDialog()
+                    Log.e(logTag, " iconListResponse Failure ${response.errorBody?.string()} ")
+                }
+                else -> {
+                    //We will do nothing here
+                }
+            }
+        })
+
+        viewModel.updateSwitchIconResponse.observe(viewLifecycleOwner, { response ->
+            when(response){
+                is Resource.Success -> {
+                    DialogUtil.hideDialog()
+                    context?.let {
+                        Toast.makeText(it,response.values.message,Toast.LENGTH_SHORT).show()
+                    }
+                    if (response.values.status && response.values.code == Constants.API_SUCCESS_CODE){
+                        response.values.data?.let {
+                            args.switchDetail.icon = it.icon
+                        }
+                    }
+                }
+                is Resource.Failure -> {
+                    DialogUtil.hideDialog()
+                    Log.e(logTag, " updateSwitchIconResponse Failure ${response.errorBody?.string()} ")
+                }
+                else -> {
+                    //We will do nothing here
+                }
+            }
+        })
     }
+
+    override fun getViewModel(): Class<HomeViewModel> = HomeViewModel::class.java
+
+    override fun getFragmentBinding(
+        inflater: LayoutInflater,
+        container: ViewGroup?
+    ): FragmentSwitchIconsDetailBinding =
+        FragmentSwitchIconsDetailBinding.inflate(inflater, container, false)
+
+    override fun getFragmentRepository(): HomeRepository = HomeRepository(networkModel)
 
 }

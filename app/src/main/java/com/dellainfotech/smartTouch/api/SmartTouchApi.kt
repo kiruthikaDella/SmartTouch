@@ -219,7 +219,19 @@ interface SmartTouchApi {
     @GET(API_GET_ICON_LIST)
     suspend fun getIconList(
         @Header("access_key") access_key: String
-    ): DeviceFeatureResponse
+    ): IconListResponse
+
+    @PUT(API_UPDATE_CUSTOMIZATION_LOCK)
+    suspend fun customizationLock(
+        @Header("access_key") access_key: String,
+        @Body bodyCustomizationLock: BodyCustomizationLock
+    ): DeviceCustomizationResponse
+
+    @PUT(API_UPDATE_SWITCH_ICON)
+    suspend fun updateSwitchIcon(
+        @Header("access_key") access_key: String,
+        @Body bodyUpdateSwitchIcon: BodyUpdateSwitchIcon
+    ): UpdateSwitchIconResponse
 
     //
     //endregion

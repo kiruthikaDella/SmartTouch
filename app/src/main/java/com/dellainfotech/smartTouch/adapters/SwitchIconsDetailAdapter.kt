@@ -1,5 +1,6 @@
 package com.dellainfotech.smartTouch.adapters
 
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -7,20 +8,24 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
-import com.dellainfotech.smartTouch.AppDelegate
+import com.bumptech.glide.Glide
 import com.dellainfotech.smartTouch.R
+import com.dellainfotech.smartTouch.api.model.DeviceSwitchData
+import com.dellainfotech.smartTouch.api.model.IconListData
 import com.dellainfotech.smartTouch.common.interfaces.AdapterItemClickListener
-import com.dellainfotech.smartTouch.model.SwitchIconsDetailModel
 
 /**
  * Created by Jignesh Dangar on 27-04-2021.
  */
 
 class SwitchIconsDetailAdapter(
-    private val switchList: List<SwitchIconsDetailModel>
+    private val switchList: ArrayList<IconListData>,
+    private val switchData: DeviceSwitchData
 ) : RecyclerView.Adapter<SwitchIconsDetailAdapter.MyViewHolder>() {
 
-    private var switchClickListener: AdapterItemClickListener<SwitchIconsDetailModel>? = null
+    private var mContext: Context? = null
+    private var switchClickListener: AdapterItemClickListener<IconListData>? = null
+    private var rowIndex = -1
 
     inner class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val tvSwitchName: TextView = itemView.findViewById(R.id.tv_switch)
@@ -30,6 +35,7 @@ class SwitchIconsDetailAdapter(
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
         val v = LayoutInflater.from(parent.context)
             .inflate(R.layout.item_switch_icons_detail, parent, false)
+        mContext = parent.context
         return MyViewHolder(v)
     }
 
@@ -41,21 +47,37 @@ class SwitchIconsDetailAdapter(
         val data = switchList[position]
 
         holder.apply {
-            tvSwitchName.text = data.title
-            ivSwitch.setImageDrawable(
-                ContextCompat.getDrawable(
-                    AppDelegate.instance,
-                    data.image
-                )
-            )
+            tvSwitchName.text = data.iconName
+
+            mContext?.let {
+                Glide
+                    .with(it)
+                    .load(data.icon)
+                    .centerCrop()
+                    .into(ivSwitch)
+            }
 
             itemView.setOnClickListener {
+                rowIndex = position
                 switchClickListener?.onItemClick(data)
+                notifyDataSetChanged()
+            }
+
+            if (rowIndex == position){
+                mContext?.let { ctx ->
+                    ivSwitch.setColorFilter(ctx.getColor(R.color.white))
+                    ivSwitch.backgroundTintList = ContextCompat.getColorStateList(ctx,R.color.theme_color)
+                }
+            }else {
+                mContext?.let { ctx ->
+                    ivSwitch.setColorFilter(ctx.getColor(R.color.theme_color))
+                    ivSwitch.backgroundTintList = ContextCompat.getColorStateList(ctx,R.color.white)
+                }
             }
         }
     }
 
-    fun setOnSwitchClickListener(listener: AdapterItemClickListener<SwitchIconsDetailModel>) {
+    fun setOnSwitchClickListener(listener: AdapterItemClickListener<IconListData>) {
         this.switchClickListener = listener
     }
 }

@@ -6,33 +6,32 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import com.appizona.yehiahd.fastsave.FastSave
 import com.dellainfotech.smartTouch.R
 import com.dellainfotech.smartTouch.adapters.SwitchIconsAdapter
+import com.dellainfotech.smartTouch.api.model.DeviceSwitchData
+import com.dellainfotech.smartTouch.api.repository.HomeRepository
 import com.dellainfotech.smartTouch.common.interfaces.AdapterItemClickListener
 import com.dellainfotech.smartTouch.common.interfaces.DialogAskListener
 import com.dellainfotech.smartTouch.common.utils.Constants
 import com.dellainfotech.smartTouch.common.utils.DialogUtil
+import com.dellainfotech.smartTouch.databinding.FragmentDeviceCustomizationBinding
 import com.dellainfotech.smartTouch.databinding.FragmentSwitchIconsBinding
 import com.dellainfotech.smartTouch.model.SwitchIconsModel
 import com.dellainfotech.smartTouch.ui.fragments.BaseFragment
+import com.dellainfotech.smartTouch.ui.fragments.ModelBaseFragment
+import com.dellainfotech.smartTouch.ui.viewmodel.HomeViewModel
 
 /**
  * Created by Jignesh Dangar on 27-04-2021.
  */
-class SwitchIconsFragment : BaseFragment() {
+class SwitchIconsFragment : ModelBaseFragment<HomeViewModel, FragmentSwitchIconsBinding, HomeRepository>() {
 
-    private lateinit var binding: FragmentSwitchIconsBinding
-    private var switchList = arrayListOf<SwitchIconsModel>()
+    private val logTag = this::class.java.simpleName
+    private val args: SwitchIconsFragmentArgs by navArgs()
+    private var switchList = arrayListOf<DeviceSwitchData>()
     private lateinit var adapter: SwitchIconsAdapter
-
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        binding = FragmentSwitchIconsBinding.inflate(inflater, container, false)
-        return binding.root
-    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -49,24 +48,24 @@ class SwitchIconsFragment : BaseFragment() {
         }
 
         switchList.clear()
-        switchList.add(SwitchIconsModel("Switch", "1"))
-        switchList.add(SwitchIconsModel("Switch", "2"))
-        switchList.add(SwitchIconsModel("Switch", "3"))
-        switchList.add(SwitchIconsModel("Switch", "4"))
-        switchList.add(SwitchIconsModel("Switch", "5"))
-        switchList.add(SwitchIconsModel("Switch", "6"))
-        switchList.add(SwitchIconsModel("Switch", "7"))
-        switchList.add(SwitchIconsModel("Switch", "8"))
-        switchList.add(SwitchIconsModel("Switch", "9"))
-        switchList.add(SwitchIconsModel("Switch", "10"))
 
-        adapter = SwitchIconsAdapter(switchList)
-        binding.recyclerSwitchIcons.adapter = adapter
-        adapter.setOnSwitchClickListener(object : AdapterItemClickListener<SwitchIconsModel> {
-            override fun onItemClick(data: SwitchIconsModel) {
-                findNavController().navigate(SwitchIconsFragmentDirections.actionSwitchIconsFragmentToSwitchIconsDetailFragment())
+        args.deviceDetail.switchData?.let {
+
+            for (switch in it){
+                if (switch.typeOfSwitch == 0){
+                    switchList.add(switch)
+                }
             }
-        })
+
+            adapter = SwitchIconsAdapter(switchList)
+            binding.recyclerSwitchIcons.adapter = adapter
+            adapter.setOnSwitchClickListener(object : AdapterItemClickListener<DeviceSwitchData> {
+                override fun onItemClick(data: DeviceSwitchData) {
+                    findNavController().navigate(SwitchIconsFragmentDirections.actionSwitchIconsFragmentToSwitchIconsDetailFragment(data))
+                }
+            })
+        }
+
 
         binding.ibLock.setOnClickListener {
             activity?.let {
@@ -103,5 +102,14 @@ class SwitchIconsFragment : BaseFragment() {
     private fun unlockScreen() {
         binding.relativeLock.isVisible = false
     }
+
+    override fun getViewModel(): Class<HomeViewModel> = HomeViewModel::class.java
+
+    override fun getFragmentBinding(
+        inflater: LayoutInflater,
+        container: ViewGroup?
+    ): FragmentSwitchIconsBinding = FragmentSwitchIconsBinding.inflate(inflater, container, false)
+
+    override fun getFragmentRepository(): HomeRepository = HomeRepository(networkModel)
 
 }

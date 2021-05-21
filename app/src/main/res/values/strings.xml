@@ -147,6 +147,7 @@
     <string name="text_size">Text Size</string>
     <string name="button_text_synchronize">Synchronize</string>
     <string name="dialog_title_text_lock">Do you want to lock customisation with your account?</string>
+    <string name="dialog_title_text_unlock">Do you want to unlock customisation with your account?</string>
     <string name="text_eight_icons_view">8 Icons</string>
     <string name="text_six_icons_view">6 Icons</string>
     <string name="text_four_icons_view">4 Icons</string>
