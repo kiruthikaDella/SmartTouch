@@ -1,9 +1,17 @@
 package com.dellainfotech.smartTouch.ui.fragments.main.home
 
+import android.Manifest
+import android.app.Activity.RESULT_OK
+import android.app.AlertDialog
+import android.content.Intent
 import android.graphics.Color
+import android.net.Uri
 import android.os.Bundle
+import android.os.Environment
 import android.os.Handler
 import android.os.Looper
+import android.provider.MediaStore
+import android.provider.Settings
 import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater
@@ -14,10 +22,12 @@ import android.widget.ArrayAdapter
 import android.widget.TextView
 import android.widget.Toast
 import androidx.core.content.ContextCompat
+import androidx.core.content.FileProvider
 import androidx.core.view.isVisible
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.appizona.yehiahd.fastsave.FastSave
+import com.dellainfotech.smartTouch.BuildConfig
 import com.dellainfotech.smartTouch.R
 import com.dellainfotech.smartTouch.api.Resource
 import com.dellainfotech.smartTouch.api.body.BodyCustomizationLock
@@ -26,12 +36,26 @@ import com.dellainfotech.smartTouch.api.repository.HomeRepository
 import com.dellainfotech.smartTouch.common.interfaces.DialogAskListener
 import com.dellainfotech.smartTouch.common.utils.Constants
 import com.dellainfotech.smartTouch.common.utils.DialogUtil
+import com.dellainfotech.smartTouch.common.utils.FileHelper.getRealPathFromUri
 import com.dellainfotech.smartTouch.common.utils.Utils.toBoolean
 import com.dellainfotech.smartTouch.common.utils.Utils.toInt
 import com.dellainfotech.smartTouch.databinding.FragmentDeviceCustomizationBinding
 import com.dellainfotech.smartTouch.ui.fragments.ModelBaseFragment
 import com.dellainfotech.smartTouch.ui.viewmodel.HomeViewModel
+import com.karumi.dexter.Dexter
+import com.karumi.dexter.MultiplePermissionsReport
+import com.karumi.dexter.PermissionToken
+import com.karumi.dexter.listener.PermissionRequest
+import com.karumi.dexter.listener.multi.MultiplePermissionsListener
 import com.sothree.slidinguppanel.SlidingUpPanelLayout
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.MultipartBody
+import okhttp3.RequestBody.Companion.asRequestBody
+import okhttp3.RequestBody.Companion.toRequestBody
+import java.io.File
+import java.text.SimpleDateFormat
+import java.util.*
+
 
 /**
  * Created by Jignesh Dangar on 22-04-2021.
@@ -46,8 +70,15 @@ class DeviceCustomizationFragment :
     private var deviceCustomization: DeviceCustomizationData? = null
     private var isDeviceCustomizationLocked: Boolean = false
 
+    private var imageParts: MutableList<MultipartBody.Part> = ArrayList<MultipartBody.Part>()
+    private var imagePath = ""
+    private var imageName = ""
+    private var mProfileFile: File? = null
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        Log.e(logTag, " onViewCreated ")
 
         val sizeList = arrayOf("1", "2", "3", "4", "5", "6", "7", "8", "9", "10")
         val fontNames =
@@ -76,7 +107,7 @@ class DeviceCustomizationFragment :
                 if (isDeviceCustomizationLocked) {
                     isDeviceCustomizationLocked = false
                     msg = getString(R.string.dialog_title_text_unlock)
-                }else {
+                } else {
                     isDeviceCustomizationLocked = true
                     msg = getString(R.string.dialog_title_text_lock)
                 }
@@ -121,13 +152,19 @@ class DeviceCustomizationFragment :
             binding.layoutTextStyle.linearTextStyle.isVisible = false
             binding.layoutUploadImage.linearUploadImage.isVisible = true
 
-            Handler(Looper.getMainLooper()).postDelayed({
-                binding.layoutSlidingUpPanel.panelState = SlidingUpPanelLayout.PanelState.EXPANDED
-            }, 600)
+            showPanel()
         }
 
         binding.ivHideUploadImagePanel.setOnClickListener {
-            binding.layoutSlidingUpPanel.panelState = SlidingUpPanelLayout.PanelState.HIDDEN
+            hidePanel()
+        }
+
+        binding.layoutUploadImage.ivPhoto.setOnClickListener {
+            checkPermission(true)
+        }
+
+        binding.layoutUploadImage.ivGallery.setOnClickListener {
+            checkPermission(false)
         }
 
         binding.ivTextStyleSettings.setOnClickListener {
@@ -135,14 +172,16 @@ class DeviceCustomizationFragment :
             binding.layoutUploadImage.linearUploadImage.isVisible = false
             binding.layoutTextStyle.linearTextStyle.isVisible = true
 
-            Handler(Looper.getMainLooper()).postDelayed({
-                binding.layoutSlidingUpPanel.panelState = SlidingUpPanelLayout.PanelState.EXPANDED
-            }, 600)
+            showPanel()
 
         }
 
         binding.ivSwitchIconsSettings.setOnClickListener {
-            findNavController().navigate(DeviceCustomizationFragmentDirections.actionDeviceCustomizationFragmentToSwitchIconsFragment(args.deviceDetail))
+            findNavController().navigate(
+                DeviceCustomizationFragmentDirections.actionDeviceCustomizationFragmentToSwitchIconsFragment(
+                    args.deviceDetail
+                )
+            )
         }
 
         context?.let { mContext ->
@@ -237,21 +276,44 @@ class DeviceCustomizationFragment :
                 }
         }
 
+        binding.layoutUploadImage.linearUploadImage.setOnClickListener {
+            imageParts.clear()
+
+            activity?.let {
+                DialogUtil.loadingAlert(it)
+            }
+
+            Log.e(logTag, " mProfileFile $mProfileFile ")
+            Log.e(logTag, " imagePath $imagePath ")
+            Log.e(logTag, " imageName $imageName ")
+
+            imageParts.add(
+                MultipartBody.Part.createFormData(
+                    "image", imageName,
+                    mProfileFile!!.asRequestBody("image/*".toMediaTypeOrNull())
+                )
+            )
+
+            viewModel.imageUpload(
+                args.deviceDetail.id.toRequestBody("text/plain".toMediaTypeOrNull()),
+                imageParts
+            )
+
+        }
+
         apiCall()
     }
 
-    override fun onResume() {
-        super.onResume()
+    private fun showPanel() {
+        Handler(Looper.getMainLooper()).postDelayed({
+            binding.layoutSlidingUpPanel.panelState = SlidingUpPanelLayout.PanelState.EXPANDED
+        }, 600)
+    }
+
+    private fun hidePanel() {
         binding.layoutSlidingUpPanel.panelState = SlidingUpPanelLayout.PanelState.HIDDEN
     }
 
-    private fun lockScreen() {
-        binding.relativeLock.isVisible = true
-    }
-
-    private fun unLockScreen() {
-        binding.relativeLock.isVisible = false
-    }
 
     override fun getViewModel(): Class<HomeViewModel> = HomeViewModel::class.java
 
@@ -262,6 +324,44 @@ class DeviceCustomizationFragment :
         FragmentDeviceCustomizationBinding.inflate(inflater, container, false)
 
     override fun getFragmentRepository(): HomeRepository = HomeRepository(networkModel)
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if (resultCode == RESULT_OK) {
+            if (requestCode == Constants.REQUEST_IMAGE_CAPTURE) {
+                try {
+//                    mPhotoFile = mCompressor.compressToFile(mPhotoFile)
+                    Log.e(logTag, " camera mProfileFile $mProfileFile ")
+                    Log.e(logTag, " camera imagePath $imagePath ")
+                    Log.e(logTag, " camera imageName $imageName ")
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                }
+
+            } else if (requestCode == Constants.REQUEST_GALLERY_IMAGE) {
+                val selectedImage: Uri? = data?.data
+                try {
+                    selectedImage?.let { uri ->
+                        getRealPathFromUri(uri)?.let {
+                            mProfileFile = File(it)
+                            imagePath = mProfileFile!!.absolutePath
+                            imageName = imagePath.substring(imagePath.lastIndexOf("/") + 1)
+
+                            Log.e(logTag, " mProfileFile $mProfileFile ")
+                            Log.e(logTag, " imagePath $imagePath ")
+                            Log.e(logTag, " imageName $imageName ")
+
+                        }
+                    }
+
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                }
+            }
+        }
+
+    }
 
     private fun apiCall() {
         viewModel.getDeviceCustomizationSettingsResponse.observe(viewLifecycleOwner, { response ->
@@ -298,9 +398,9 @@ class DeviceCustomizationFragment :
                 is Resource.Success -> {
                     DialogUtil.hideDialog()
                     context?.let {
-                        Toast.makeText(it,response.values.message,Toast.LENGTH_SHORT).show()
+                        Toast.makeText(it, response.values.message, Toast.LENGTH_SHORT).show()
                     }
-                    if (response.values.status && response.values.code == Constants.API_SUCCESS_CODE){
+                    if (response.values.status && response.values.code == Constants.API_SUCCESS_CODE) {
                         response.values.data?.let {
                             isDeviceCustomizationLocked = it.isLock.toBoolean()
                             if (isDeviceCustomizationLocked) {
@@ -313,13 +413,160 @@ class DeviceCustomizationFragment :
                 }
                 is Resource.Failure -> {
                     DialogUtil.hideDialog()
-                    Log.e(logTag, " customizationLockResponse Failure ${response.errorBody?.string()}")
+                    Log.e(
+                        logTag,
+                        " customizationLockResponse Failure ${response.errorBody?.string()}"
+                    )
                 }
                 else -> {
                     //We will do nothing here
                 }
             }
         })
+
+        viewModel.imageUploadResponse.observe(viewLifecycleOwner, { response ->
+            when (response) {
+                is Resource.Success -> {
+                    DialogUtil.hideDialog()
+                }
+                is Resource.Failure -> {
+                    DialogUtil.hideDialog()
+                }
+                else -> {
+                    //We will do nothing here
+                }
+            }
+        })
+    }
+
+    //
+    //region Image Settings
+    //
+
+    private fun checkPermission(isCamera: Boolean) {
+        activity?.let {
+
+            Dexter.withActivity(it)
+                .withPermissions(
+                    Manifest.permission.READ_EXTERNAL_STORAGE,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                    Manifest.permission.CAMERA
+                )
+                .withListener(object : MultiplePermissionsListener {
+                    override fun onPermissionsChecked(report: MultiplePermissionsReport?) {
+                        report?.let { rep ->
+                            if (rep.areAllPermissionsGranted()) {
+                                if (isCamera) {
+                                    dispatchTakePictureIntent()
+                                } else {
+                                    dispatchGalleryIntent()
+                                }
+                            }
+                            // check for permanent denial of any permission
+                            if (rep.isAnyPermissionPermanentlyDenied) {
+                                // show alert dialog navigating to Settings
+                                showSettingsDialog();
+                            }
+                        }
+
+                    }
+
+                    override fun onPermissionRationaleShouldBeShown(
+                        permissions: MutableList<PermissionRequest>?,
+                        token: PermissionToken?
+                    ) {
+                        token?.continuePermissionRequest()
+                    }
+
+                })
+                .withErrorListener { error ->
+                    Log.e(logTag, " error $error")
+                    Toast.makeText(it, " Error occurred! ", Toast.LENGTH_SHORT).show()
+                }
+                .onSameThread()
+                .check()
+        }
+    }
+
+    private fun showSettingsDialog() {
+        activity?.let {
+            val builder: AlertDialog.Builder = AlertDialog.Builder(it)
+            builder.setTitle("Need Permissions")
+            builder.setMessage(
+                "This app needs permission to use this feature. You can grant them in app settings."
+            )
+            builder.setPositiveButton("GOTO SETTINGS") { dialog, which ->
+                dialog.cancel()
+                openSettings()
+            }
+            builder.setNegativeButton("Cancel") { dialog, which -> dialog.cancel() }
+            builder.show()
+        }
+
+    }
+
+    private fun openSettings() {
+        val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
+        val uri: Uri = Uri.fromParts("package", context?.packageName, null)
+        intent.data = uri
+        startActivityForResult(intent, Constants.REQUEST_OPEN_SETTINGS)
+    }
+
+    private fun createImageFile(): File? {
+        // Create an image file name
+        val timeStamp: String = SimpleDateFormat("yyyyMMddHHmmss", Locale.US).format(Date())
+        val mFileName = "JPEG_" + timeStamp + "_"
+        val storageDir: File? = context?.getExternalFilesDir(Environment.DIRECTORY_PICTURES)
+        return File.createTempFile(mFileName, ".jpg", storageDir)
+    }
+
+    private fun dispatchTakePictureIntent() {
+        val takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+        context?.let {
+            if (takePictureIntent.resolveActivity(it.packageManager) != null) {
+                // Create the File where the photo should go
+                var photoFile: File? = null
+                try {
+                    photoFile = createImageFile()
+                } catch (ex: Exception) {
+                    ex.printStackTrace()
+                    // Error occurred while creating the File
+                }
+                if (photoFile != null) {
+                    val photoURI = FileProvider.getUriForFile(
+                        it, BuildConfig.APPLICATION_ID + ".provider",
+                        photoFile
+                    )
+                    mProfileFile = photoFile
+                    imagePath = mProfileFile!!.absolutePath
+                    imageName = imagePath.substring(imagePath.lastIndexOf("/") + 1)
+                    takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI)
+                    startActivityForResult(takePictureIntent, Constants.REQUEST_IMAGE_CAPTURE)
+                }
+            }
+        }
+
+    }
+
+    private fun dispatchGalleryIntent() {
+        val pickPhoto = Intent(
+            Intent.ACTION_PICK,
+            MediaStore.Images.Media.EXTERNAL_CONTENT_URI
+        )
+        pickPhoto.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+        startActivityForResult(pickPhoto, Constants.REQUEST_GALLERY_IMAGE)
+    }
+
+    //
+    //endregion
+    //
+
+    private fun lockScreen() {
+        binding.relativeLock.isVisible = true
+    }
+
+    private fun unLockScreen() {
+        binding.relativeLock.isVisible = false
     }
 
 }

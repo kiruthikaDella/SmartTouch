@@ -13,6 +13,16 @@ object Constants {
     const val API_SUCCESS_CODE = 200
     const val API_FAILURE_CODE = 401
 
+    const val REQUEST_CAMERA_PERMISSION = 101
+    const val REQUEST_IMAGE_CAPTURE = 102
+    const val REQUEST_GALLERY_IMAGE = 103
+    const val REQUEST_OPEN_SETTINGS = 104
+
+    const val DEVICE_TYPE_EIGHT = 8
+    const val DEVICE_TYPE_FOUR = 4
+
+    const val EXTRA_FILE_PATH = "extra.file_path"
+
     const val DEFAULT_CONTROL_MODE_STATUS = false
     const val isControlModePinned = "isControlModePinned"
     const val DEFAULT_DEVICE_CUSTOMIZATION_LOCK_STATUS = false

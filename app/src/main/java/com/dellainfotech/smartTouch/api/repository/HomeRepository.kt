@@ -2,6 +2,8 @@ package com.dellainfotech.smartTouch.api.repository
 
 import com.dellainfotech.smartTouch.api.SmartTouchApi
 import com.dellainfotech.smartTouch.api.body.*
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -73,7 +75,13 @@ class HomeRepository @Inject constructor(
         safeApiCall { smartTouchApi.getIconList(getAccessKey()) }
 
     suspend fun updateSwitchIcon(bodyUpdateSwitchIcon: BodyUpdateSwitchIcon) =
-        safeApiCall { smartTouchApi.updateSwitchIcon(getAccessKey(),bodyUpdateSwitchIcon) }
+        safeApiCall { smartTouchApi.updateSwitchIcon(getAccessKey(), bodyUpdateSwitchIcon) }
+
+    suspend fun getControl() =
+        safeApiCall { smartTouchApi.getControlList(getAccessKey()) }
+
+    suspend fun imageUpload(deviceId: RequestBody, image: MutableList<MultipartBody.Part>) =
+        safeApiCall { smartTouchApi.imageUpload(getAccessKey(), deviceId, image) }
 
     //
     //endregion

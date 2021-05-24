@@ -50,6 +50,8 @@ data class DeviceSwitchData(
     var index: String,
     @SerializedName("vName")
     var name: String,
+    @SerializedName("vDesc")
+    var desc: String? = null,
     @SerializedName("tiSwitchStatus")
     var switchStatus: Int
 ) : Parcelable, Serializable

@@ -12,6 +12,7 @@ import com.dellainfotech.smartTouch.api.NetworkModule
 import com.dellainfotech.smartTouch.api.Resource
 import com.dellainfotech.smartTouch.api.body.BodySocialLogin
 import com.dellainfotech.smartTouch.api.model.UserProfile
+import com.dellainfotech.smartTouch.api.repository.AuthRepository
 import com.dellainfotech.smartTouch.api.repository.HomeRepository
 import com.dellainfotech.smartTouch.common.utils.Constants
 import com.dellainfotech.smartTouch.common.utils.DialogUtil
@@ -43,7 +44,7 @@ class AuthenticationActivity : AppCompatActivity() {
         setContentView(R.layout.activity_authentication)
         window?.statusBarColor = getColor(R.color.white)
 
-        val factory = ViewModelFactory(HomeRepository(networkModel))
+        val factory = ViewModelFactory(AuthRepository(networkModel))
         viewModel = ViewModelProvider(this, factory).get(AuthViewModel::class.java)
 
         initFacebookCallback()

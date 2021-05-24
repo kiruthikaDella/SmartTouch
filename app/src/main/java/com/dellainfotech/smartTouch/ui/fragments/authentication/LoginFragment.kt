@@ -63,7 +63,7 @@ class LoginFragment : ModelBaseFragment<AuthViewModel, FragmentLoginBinding, Aut
         }
 
         binding.edtEmail.setText("jignesh.dangar@teksun.com")
-        binding.edtPassword.setText("123456")
+        binding.edtPassword.setText("12345")
 
         binding.checkboxRemember.isChecked = FastSave.getInstance()
             .getBoolean(Constants.IS_REMEMBER, Constants.DEFAULT_REMEMBER_STATUS)

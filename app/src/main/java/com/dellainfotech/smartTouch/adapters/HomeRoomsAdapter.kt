@@ -7,14 +7,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.dellainfotech.smartTouch.AppDelegate
 import com.dellainfotech.smartTouch.R
 import com.dellainfotech.smartTouch.api.model.GetRoomData
 import com.dellainfotech.smartTouch.common.interfaces.AdapterItemClickListener
-import com.squareup.picasso.Picasso
 import java.util.regex.Pattern
 
 /**
@@ -40,7 +37,7 @@ class HomeRoomsAdapter(
         holder.apply {
 
             data.roomName?.let {
-                val roomName =  it.split(Pattern.compile(" "), 2)
+                val roomName = it.split(Pattern.compile(" "), 2)
 
                 if (roomName.size > 1) {
                     val firstWord = "<B>${roomName[0]}</B> " + roomName[1]

@@ -2,6 +2,8 @@ package com.dellainfotech.smartTouch.api
 
 import com.dellainfotech.smartTouch.api.body.*
 import com.dellainfotech.smartTouch.api.model.*
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import retrofit2.http.*
 
 /**
@@ -41,6 +43,8 @@ interface SmartTouchApi {
         const val API_UPDATE_SWITCH_NAME = "device/switch"
         const val API_UPDATE_SWITCH_ICON = "device/switch-icon"
         const val API_GET_ICON_LIST = "device/icon-list"
+        const val API_GET_CONTROL_MODE = "device/control"
+        const val API_IMAGE_UPLOAD = "device/image-upload"
 
         // Contact Us APIs
         const val API_FEEDBACK = "feedback/add"
@@ -146,7 +150,7 @@ interface SmartTouchApi {
     //
 
     //
-    //region ContactUs APIs
+    //region UserManagement APIs
     //
 
     @POST(API_ADD_SUBORDINATE_USER)
@@ -232,6 +236,19 @@ interface SmartTouchApi {
         @Header("access_key") access_key: String,
         @Body bodyUpdateSwitchIcon: BodyUpdateSwitchIcon
     ): UpdateSwitchIconResponse
+
+    @GET(API_GET_CONTROL_MODE)
+    suspend fun getControlList(
+        @Header("access_key") access_key: String
+    ): ControlModeResponse
+
+    @Multipart
+    @POST(API_IMAGE_UPLOAD)
+    suspend fun imageUpload(
+        @Header("access_key") access_key: String,
+        @Part("iDeviceId") deviceId: RequestBody,
+        @Part image: List<MultipartBody.Part>
+    ): CommonResponse
 
     //
     //endregion

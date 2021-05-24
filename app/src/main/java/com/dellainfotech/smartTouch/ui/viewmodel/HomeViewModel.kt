@@ -10,6 +10,8 @@ import com.dellainfotech.smartTouch.api.body.*
 import com.dellainfotech.smartTouch.api.model.*
 import com.dellainfotech.smartTouch.api.repository.HomeRepository
 import kotlinx.coroutines.launch
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
 
 class HomeViewModel @ViewModelInject constructor(
     private val homeRepository: HomeRepository
@@ -153,6 +155,14 @@ class HomeViewModel @ViewModelInject constructor(
     val updateSwitchIconResponse: LiveData<Resource<UpdateSwitchIconResponse>>
         get() = _updateSwitchIconResponse
 
+    private val _getControlResponse: MutableLiveData<Resource<ControlModeResponse>> = MutableLiveData()
+    val getControlResponse: LiveData<Resource<ControlModeResponse>>
+        get() = _getControlResponse
+
+    private val _imageUploadResponse: MutableLiveData<Resource<CommonResponse>> = MutableLiveData()
+    val imageUploadResponse: LiveData<Resource<CommonResponse>>
+        get() = _imageUploadResponse
+
     fun addDevice(bodyAddDevice: BodyAddDevice) = viewModelScope.launch {
         _addDeviceResponse.value = Resource.Loading
         _addDeviceResponse.value = homeRepository.addDevice(bodyAddDevice)
@@ -201,6 +211,16 @@ class HomeViewModel @ViewModelInject constructor(
     fun updateSwitchIcon(bodyUpdateSwitchIcon: BodyUpdateSwitchIcon) = viewModelScope.launch {
         _updateSwitchIconResponse.value = Resource.Loading
         _updateSwitchIconResponse.value = homeRepository.updateSwitchIcon(bodyUpdateSwitchIcon)
+    }
+
+    fun getControl() = viewModelScope.launch {
+        _getControlResponse.value = Resource.Loading
+        _getControlResponse.value = homeRepository.getControl()
+    }
+
+    fun imageUpload(deviceId: RequestBody, image: MutableList<MultipartBody.Part>) = viewModelScope.launch {
+        _imageUploadResponse.value = Resource.Loading
+        _imageUploadResponse.value = homeRepository.imageUpload(deviceId,image)
     }
 
     //
