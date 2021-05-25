@@ -45,6 +45,7 @@ interface SmartTouchApi {
         const val API_GET_ICON_LIST = "device/icon-list"
         const val API_GET_CONTROL_MODE = "device/control"
         const val API_IMAGE_UPLOAD = "device/image-upload"
+        const val API_DELETE_IMAGE = "device/image-delete/{device_id}"
 
         // Contact Us APIs
         const val API_FEEDBACK = "feedback/add"
@@ -248,6 +249,12 @@ interface SmartTouchApi {
         @Header("access_key") access_key: String,
         @Part("iDeviceId") deviceId: RequestBody,
         @Part image: List<MultipartBody.Part>
+    ): CommonResponse
+
+    @DELETE(API_DELETE_IMAGE)
+    suspend fun deleteImage(
+        @Header("access_key") access_key: String,
+        @Path("device_id") deviceId: String
     ): CommonResponse
 
     //

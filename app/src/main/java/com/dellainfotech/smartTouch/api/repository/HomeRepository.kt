@@ -83,6 +83,9 @@ class HomeRepository @Inject constructor(
     suspend fun imageUpload(deviceId: RequestBody, image: MutableList<MultipartBody.Part>) =
         safeApiCall { smartTouchApi.imageUpload(getAccessKey(), deviceId, image) }
 
+    suspend fun deleteImage(deviceId: String) =
+        safeApiCall { smartTouchApi.deleteImage(getAccessKey(), deviceId) }
+
     //
     //endregion
     //

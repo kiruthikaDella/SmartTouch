@@ -287,18 +287,46 @@ class DeviceCustomizationFragment :
             Log.e(logTag, " imagePath $imagePath ")
             Log.e(logTag, " imageName $imageName ")
 
+            val fileExtension = mProfileFile!!.extension
+
             imageParts.add(
                 MultipartBody.Part.createFormData(
                     "image", imageName,
-                    mProfileFile!!.asRequestBody("image/*".toMediaTypeOrNull())
+                    mProfileFile!!.asRequestBody("image/$fileExtension".toMediaTypeOrNull())
                 )
             )
 
+            hidePanel()
             viewModel.imageUpload(
                 args.deviceDetail.id.toRequestBody("text/plain".toMediaTypeOrNull()),
                 imageParts
             )
 
+        }
+
+        binding.layoutUploadImage.ivRemove.setOnClickListener {
+
+            activity?.let { mActivity ->
+
+                DialogUtil.askAlert(
+                    mActivity,
+                    getString(R.string.dialog_title_remove_device_image),
+                    getString(R.string.text_ok),
+                    getString(R.string.text_cancel),
+                    object : DialogAskListener {
+                        override fun onYesClicked() {
+                            hidePanel()
+                            DialogUtil.loadingAlert(mActivity)
+                            viewModel.deleteImage(args.deviceDetail.id)
+                        }
+
+                        override fun onNoClicked() {
+
+                        }
+
+                    }
+                )
+            }
         }
 
         apiCall()
@@ -313,7 +341,6 @@ class DeviceCustomizationFragment :
     private fun hidePanel() {
         binding.layoutSlidingUpPanel.panelState = SlidingUpPanelLayout.PanelState.HIDDEN
     }
-
 
     override fun getViewModel(): Class<HomeViewModel> = HomeViewModel::class.java
 
@@ -428,6 +455,26 @@ class DeviceCustomizationFragment :
             when (response) {
                 is Resource.Success -> {
                     DialogUtil.hideDialog()
+                    context?.let {
+                        Toast.makeText(it, response.values.message, Toast.LENGTH_SHORT).show()
+                    }
+                }
+                is Resource.Failure -> {
+                    DialogUtil.hideDialog()
+                }
+                else -> {
+                    //We will do nothing here
+                }
+            }
+        })
+
+        viewModel.deleteImageResponse.observe(viewLifecycleOwner, { response ->
+            when (response) {
+                is Resource.Success -> {
+                    DialogUtil.hideDialog()
+                    context?.let {
+                        Toast.makeText(it, response.values.message, Toast.LENGTH_SHORT).show()
+                    }
                 }
                 is Resource.Failure -> {
                     DialogUtil.hideDialog()
