@@ -1,17 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.jcminarro.roundkornerlayout.RoundKornerLinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="@color/white"
     android:padding="@dimen/_12sdp"
-    android:background="@drawable/white_background_with_catskill_white_dark_border">
+    app:bottom_left_corner_radius="@dimen/corner_radius_4dp"
+    app:bottom_right_corner_radius="@dimen/corner_radius_4dp">
 
     <TextView
         android:id="@+id/tv_answer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:fontFamily="@font/roboto_medium"
         android:text="@string/title_text_answer"
-        android:textSize="@dimen/_12ssp"
         android:textColor="@color/daintree"
-        android:fontFamily="@font/roboto_medium"/>
+        android:textSize="@dimen/_12ssp" />
 
-</LinearLayout>
+</com.jcminarro.roundkornerlayout.RoundKornerLinearLayout>

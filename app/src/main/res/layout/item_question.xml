@@ -1,29 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.jcminarro.roundkornerlayout.RoundKornerRelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginTop="@dimen/_12sdp"
+    android:background="@color/white"
     android:padding="@dimen/_12sdp"
-    android:background="@drawable/white_background_with_catskill_white_dark_border">
-    
+    app:top_left_corner_radius="@dimen/corner_radius_4dp"
+    app:top_right_corner_radius="@dimen/corner_radius_4dp">
+
     <ImageView
         android:id="@+id/iv_arrow"
         android:layout_width="@dimen/_12sdp"
         android:layout_height="@dimen/_12sdp"
-        android:src="@drawable/ic_arrow_down"
-        android:layout_alignParentEnd="true"
         android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:src="@drawable/ic_arrow_down"
         app:tint="@color/daintree" />
 
     <TextView
         android:id="@+id/tv_question"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/que1"
-        android:textSize="@dimen/_13ssp"
-        android:textColor="@color/theme_color"
+        android:layout_toStartOf="@+id/iv_arrow"
         android:fontFamily="@font/roboto_medium"
-        android:layout_toStartOf="@+id/iv_arrow"/>
+        android:text="@string/que1"
+        android:textColor="@color/theme_color"
+        android:textSize="@dimen/_13ssp" />
 
-</RelativeLayout>
+</com.jcminarro.roundkornerlayout.RoundKornerRelativeLayout>
