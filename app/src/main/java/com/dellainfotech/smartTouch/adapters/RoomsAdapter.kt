@@ -17,9 +17,9 @@ import java.util.regex.Pattern
 /**
  * Created by Jignesh Dangar on 14-04-2021.
  */
-class HomeRoomsAdapter(
+class RoomsAdapter(
     private val roomList: List<GetRoomData>
-) : RecyclerView.Adapter<HomeRoomsAdapter.MyViewHolder>() {
+) : RecyclerView.Adapter<RoomsAdapter.MyViewHolder>() {
 
     private var roomClickListener: AdapterItemClickListener<GetRoomData>? = null
     private var mContext: Context? = null

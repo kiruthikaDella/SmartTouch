@@ -21,6 +21,7 @@ import com.dellainfotech.smartTouch.common.utils.DialogUtil
 import com.dellainfotech.smartTouch.common.utils.Utils
 import com.dellainfotech.smartTouch.common.utils.Utils.isNetworkConnectivityAvailable
 import com.dellainfotech.smartTouch.common.utils.Utils.showAlertDialog
+import com.dellainfotech.smartTouch.common.utils.Utils.toBoolean
 import com.dellainfotech.smartTouch.databinding.FragmentLoginBinding
 import com.dellainfotech.smartTouch.ui.activities.AuthenticationActivity
 import com.dellainfotech.smartTouch.ui.activities.MainActivity
@@ -63,7 +64,7 @@ class LoginFragment : ModelBaseFragment<AuthViewModel, FragmentLoginBinding, Aut
         }
 
         binding.edtEmail.setText("jignesh.dangar@teksun.com")
-        binding.edtPassword.setText("12345")
+        binding.edtPassword.setText("123456")
 
         binding.checkboxRemember.isChecked = FastSave.getInstance()
             .getBoolean(Constants.IS_REMEMBER, Constants.DEFAULT_REMEMBER_STATUS)
@@ -125,6 +126,7 @@ class LoginFragment : ModelBaseFragment<AuthViewModel, FragmentLoginBinding, Aut
                             FastSave.getInstance().saveString(Constants.USER_EMAIL, userData.vEmail)
                             FastSave.getInstance()
                                 .saveString(Constants.USER_PHONE_NUMBER, userData.bPhoneNumber)
+                            FastSave.getInstance().saveBoolean(Constants.isControlModePinned, userData.iIsPinStatus!!.toBoolean())
                             activity?.let {
                                 startActivity(Intent(it, MainActivity::class.java))
                                 it.finishAffinity()

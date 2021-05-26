@@ -20,8 +20,8 @@ import com.warkiz.widget.IndicatorSeekBar
 /**
  * Created by Jignesh Dangar on 16-04-2021.
  */
-class RoomPanelsAdapter(
-    private val panelList: List<GetDeviceData>
+class DeviceAdapter(
+    private val deviceList: List<GetDeviceData>
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private var customizationClickListener: AdapterItemClickListener<GetDeviceData>? = null
@@ -49,7 +49,8 @@ class RoomPanelsAdapter(
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        val data = panelList[position]
+        holder.setIsRecyclable(false)
+        val data = deviceList[position]
 
         when (holder.itemViewType) {
             EIGHT_PANEL_VIEW -> {
@@ -65,11 +66,11 @@ class RoomPanelsAdapter(
     }
 
     override fun getItemCount(): Int {
-        return panelList.size
+        return deviceList.size
     }
 
     override fun getItemViewType(position: Int): Int {
-        return if (panelList[position].deviceType == Constants.DEVICE_TYPE_EIGHT) {
+        return if (deviceList[position].deviceType == Constants.DEVICE_TYPE_EIGHT) {
             EIGHT_PANEL_VIEW
         } else {
             FOUR_PANEL_VIEW
@@ -215,6 +216,10 @@ class RoomPanelsAdapter(
                 }
             }
 
+            imgBtnPanelEdit.setOnClickListener {
+                updateDeviceNameClickListener?.onItemClick(device, adapterPosition)
+            }
+
             linearCustomization.setOnClickListener {
                 customizationClickListener?.onItemClick(device)
             }
@@ -227,28 +232,46 @@ class RoomPanelsAdapter(
                 settingsClickListener?.onItemClick(device)
             }
 
-        /*    tvSwitchOneEdit.setOnClickListener {
-                editSwitchNameClickListener?.onItemClick(device, adapterPosition)
+            tvSwitchOneEdit.setOnClickListener {
+                device.switchData?.let { switchData ->
+                    editSwitchNameClickListener?.onItemClick(device, adapterPosition, switchData[0])
+                }
             }
-
             tvSwitchTwoEdit.setOnClickListener {
-                editSwitchNameClickListener?.onItemClick(device, adapterPosition)
+                device.switchData?.let { switchData ->
+                    editSwitchNameClickListener?.onItemClick(device, adapterPosition, switchData[1])
+                }
             }
             tvSwitchThreeEdit.setOnClickListener {
-                editSwitchNameClickListener?.onItemClick(device, adapterPosition)
+                device.switchData?.let { switchData ->
+                    editSwitchNameClickListener?.onItemClick(device, adapterPosition, switchData[2])
+                }
             }
             tvSwitchFourEdit.setOnClickListener {
-                editSwitchNameClickListener?.onItemClick(device, adapterPosition)
+                device.switchData?.let { switchData ->
+                    editSwitchNameClickListener?.onItemClick(device, adapterPosition, switchData[3])
+                }
             }
             tvSwitchFiveEdit.setOnClickListener {
-                editSwitchNameClickListener?.onItemClick(device, adapterPosition)
+                device.switchData?.let { switchData ->
+                    editSwitchNameClickListener?.onItemClick(device, adapterPosition, switchData[4])
+                }
             }
             tvSwitchSixEdit.setOnClickListener {
-                editSwitchNameClickListener?.onItemClick(device, adapterPosition)
+                device.switchData?.let { switchData ->
+                    editSwitchNameClickListener?.onItemClick(device, adapterPosition, switchData[5])
+                }
             }
             tvSwitchSevenEdit.setOnClickListener {
-                editSwitchNameClickListener?.onItemClick(device, adapterPosition)
-            }*/
+                device.switchData?.let { switchData ->
+                    editSwitchNameClickListener?.onItemClick(device, adapterPosition, switchData[6])
+                }
+            }
+            tvSwitchEightEdit.setOnClickListener {
+                device.switchData?.let { switchData ->
+                    editSwitchNameClickListener?.onItemClick(device, adapterPosition, switchData[7])
+                }
+            }
         }
     }
 

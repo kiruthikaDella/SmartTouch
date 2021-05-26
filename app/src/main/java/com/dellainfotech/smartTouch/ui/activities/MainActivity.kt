@@ -78,17 +78,6 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
             }
         }
 
-        Log.e(
-            logTag,
-            "iscontrollpinned ${
-                FastSave.getInstance().getBoolean(
-                    Constants.isControlModePinned,
-                    Constants.DEFAULT_CONTROL_MODE_STATUS
-                )
-            } "
-        )
-
-
         if (FastSave.getInstance()
                 .getBoolean(Constants.isControlModePinned, Constants.DEFAULT_CONTROL_MODE_STATUS)
         ) {

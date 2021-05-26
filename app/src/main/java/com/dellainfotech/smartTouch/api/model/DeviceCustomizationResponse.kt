@@ -26,6 +26,8 @@ data class DeviceCustomizationData(
     var id: String,
     @SerializedName("vUploadImage")
     var uploadImage: String,
+    @SerializedName("vScreenLayoutType")
+    var screenLayoutType: String,
     @SerializedName("vScreenLayout")
     var screenLayout: String,
     @SerializedName("vSwitchName")

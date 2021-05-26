@@ -11,7 +11,7 @@ import android.widget.Toast
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.dellainfotech.smartTouch.R
-import com.dellainfotech.smartTouch.adapters.RoomPanelsAdapter
+import com.dellainfotech.smartTouch.adapters.DeviceAdapter
 import com.dellainfotech.smartTouch.api.Resource
 import com.dellainfotech.smartTouch.api.body.*
 import com.dellainfotech.smartTouch.api.model.DeviceSwitchData
@@ -33,13 +33,13 @@ import com.sothree.slidinguppanel.SlidingUpPanelLayout
  * Created by Jignesh Dangar on 09-04-2021.
  */
 
-class RoomPanelFragment :
+class DeviceFragment :
     ModelBaseFragment<HomeViewModel, FragmentRoomPanelBinding, HomeRepository>() {
 
     private val logTag = this::class.java.simpleName
-    private val args: RoomPanelFragmentArgs by navArgs()
+    private val args: DeviceFragmentArgs by navArgs()
     private var deviceList = arrayListOf<GetDeviceData>()
-    private lateinit var panelAdapter: RoomPanelsAdapter
+    private lateinit var panelAdapter: DeviceAdapter
     private var devicePosition: Int? = null
     private var switchPosition: Int? = null
 
@@ -62,7 +62,7 @@ class RoomPanelFragment :
         showLoading()
         viewModel.getDevice(args.roomDetail.id)
 
-        panelAdapter = RoomPanelsAdapter(deviceList)
+        panelAdapter = DeviceAdapter(deviceList)
         binding.recyclerRoomPanels.adapter = panelAdapter
 
         clickEvents()
@@ -112,7 +112,7 @@ class RoomPanelFragment :
         }
 
         panelAdapter.setOnUpdateDeviceNameClickListener(object :
-            RoomPanelsAdapter.DeviceItemClickListener<GetDeviceData> {
+            DeviceAdapter.DeviceItemClickListener<GetDeviceData> {
             override fun onItemClick(data: GetDeviceData, devicePosition: Int) {
                 activity?.let {
                     DialogUtil.editDialog(
@@ -130,7 +130,7 @@ class RoomPanelFragment :
                                         Toast.LENGTH_SHORT
                                     ).show()
                                 } else {
-                                    this@RoomPanelFragment.devicePosition = devicePosition
+                                    this@DeviceFragment.devicePosition = devicePosition
                                     DialogUtil.loadingAlert(it)
                                     viewModel.updateDeviceName(
                                         BodyUpdateDeviceName(
@@ -156,7 +156,7 @@ class RoomPanelFragment :
             AdapterItemClickListener<GetDeviceData> {
             override fun onItemClick(data: GetDeviceData) {
                 findNavController().navigate(
-                    RoomPanelFragmentDirections.actionRoomPanelFragmentToDeviceCustomizationFragment(
+                    DeviceFragmentDirections.actionRoomPanelFragmentToDeviceCustomizationFragment(
                         data
                     )
                 )
@@ -166,7 +166,7 @@ class RoomPanelFragment :
         panelAdapter.setOnFeaturesClickListener(object : AdapterItemClickListener<GetDeviceData> {
             override fun onItemClick(data: GetDeviceData) {
                 findNavController().navigate(
-                    RoomPanelFragmentDirections.actionRoomPanelFragmentToDeviceFeaturesFragment(
+                    DeviceFragmentDirections.actionRoomPanelFragmentToDeviceFeaturesFragment(
                         data
                     )
                 )
@@ -174,7 +174,7 @@ class RoomPanelFragment :
         })
 
         panelAdapter.setOnEditSwitchNameClickListener(object :
-            RoomPanelsAdapter.SwitchItemClickListener<GetDeviceData> {
+            DeviceAdapter.SwitchItemClickListener<GetDeviceData> {
             override fun onItemClick(
                 data: GetDeviceData,
                 devicePosition: Int,
@@ -196,7 +196,7 @@ class RoomPanelFragment :
                                         Toast.LENGTH_SHORT
                                     ).show()
                                 } else {
-                                    this@RoomPanelFragment.devicePosition = devicePosition
+                                    this@DeviceFragment.devicePosition = devicePosition
                                     switchPosition = switchData.index.toInt() - 1
                                     DialogUtil.loadingAlert(it)
                                     viewModel.updateSwitchName(
@@ -224,7 +224,7 @@ class RoomPanelFragment :
         panelAdapter.setOnSettingsClickListener(object : AdapterItemClickListener<GetDeviceData> {
             override fun onItemClick(data: GetDeviceData) {
                 findNavController().navigate(
-                    RoomPanelFragmentDirections.actionRoomPanelFragmentToDeviceSettingsFragment(
+                    DeviceFragmentDirections.actionRoomPanelFragmentToDeviceSettingsFragment(
                         data
                     )
                 )
@@ -307,10 +307,6 @@ class RoomPanelFragment :
                     if (response.values.status && response.values.code == Constants.API_SUCCESS_CODE) {
                         response.values.data?.let {
                             deviceList.add(it)
-                            Log.e(
-                                logTag,
-                                " panel != null device ${it.deviceName} size ${deviceList.size} $deviceList"
-                            )
                             panelAdapter.notifyDataSetChanged()
                         }
                     }

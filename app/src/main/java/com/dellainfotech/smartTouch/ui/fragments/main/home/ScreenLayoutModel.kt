@@ -14,6 +14,15 @@ class ScreenLayoutModel(context: Context, mBinding: FragmentScreenLayoutBinding)
     private var mContext = context
     private var binding = mBinding
     private var viewType = VIEW_TYPE.EIGHT_ICONS_VIEW
+    val screenLayoutEight = "8"
+    val screenLayoutSix = "6"
+    val screenLayoutFour = "4"
+    val LEFT_MOST = "left_most"
+    val RIGHT_MOST = "right_most"
+    val LEFT_RIGHT = "left_right"
+    val MIDDLE_CENTER = "middle_center"
+    val TOP_CENTER = "top_center"
+    val BOTTOM_CENTER = "bottom_center"
 
     enum class VIEW_TYPE {
         EIGHT_ICONS_VIEW,
@@ -41,7 +50,7 @@ class ScreenLayoutModel(context: Context, mBinding: FragmentScreenLayoutBinding)
         setClickListeners()
     }
 
-    private fun changeViewType(viewType: VIEW_TYPE) {
+    fun changeViewType(viewType: VIEW_TYPE) {
         changeImagesWithViewType(viewType)
         when (viewType) {
             VIEW_TYPE.EIGHT_ICONS_VIEW -> {

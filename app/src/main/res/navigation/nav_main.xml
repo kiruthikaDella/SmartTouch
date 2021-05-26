@@ -25,7 +25,7 @@
         app:destination="@id/homeFragment" />
     <fragment
         android:id="@+id/roomPanelFragment"
-        android:name="com.dellainfotech.smartTouch.ui.fragments.main.home.RoomPanelFragment"
+        android:name="com.dellainfotech.smartTouch.ui.fragments.main.home.DeviceFragment"
         android:label="fragment_room_panel"
         tools:layout="@layout/fragment_room_panel">
         <argument

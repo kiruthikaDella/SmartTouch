@@ -12,7 +12,7 @@ import androidx.core.view.GravityCompat
 import androidx.navigation.fragment.findNavController
 import com.appizona.yehiahd.fastsave.FastSave
 import com.dellainfotech.smartTouch.R
-import com.dellainfotech.smartTouch.adapters.HomeRoomsAdapter
+import com.dellainfotech.smartTouch.adapters.RoomsAdapter
 import com.dellainfotech.smartTouch.api.Resource
 import com.dellainfotech.smartTouch.api.body.BodyLogout
 import com.dellainfotech.smartTouch.api.model.GetRoomData
@@ -34,7 +34,7 @@ class HomeFragment : ModelBaseFragment<HomeViewModel, FragmentHomeBinding, HomeR
     AdapterItemClickListener<GetRoomData> {
 
     private val logTag = this::class.java.simpleName
-    private lateinit var roomsAdapter: HomeRoomsAdapter
+    private lateinit var roomsAdapter: RoomsAdapter
     private var roomList = arrayListOf<GetRoomData>()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -51,7 +51,7 @@ class HomeFragment : ModelBaseFragment<HomeViewModel, FragmentHomeBinding, HomeR
         navUsername.text = FastSave.getInstance().getString(Constants.USER_FULL_NAME, null)
         navUserEmail.text = FastSave.getInstance().getString(Constants.USER_EMAIL, null)
 
-        roomsAdapter = HomeRoomsAdapter(roomList)
+        roomsAdapter = RoomsAdapter(roomList)
         binding.recyclerRooms.adapter = roomsAdapter
 
         // initializing navigation menu

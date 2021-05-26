@@ -12,11 +12,13 @@ import com.appizona.yehiahd.fastsave.FastSave
 import com.dellainfotech.smartTouch.R
 import com.dellainfotech.smartTouch.adapters.controlmodeadapter.ControlModeAdapter
 import com.dellainfotech.smartTouch.api.Resource
+import com.dellainfotech.smartTouch.api.body.BodyPinStatus
 import com.dellainfotech.smartTouch.api.model.ControlModeRoomData
 import com.dellainfotech.smartTouch.api.repository.HomeRepository
 import com.dellainfotech.smartTouch.common.interfaces.DialogAskListener
 import com.dellainfotech.smartTouch.common.utils.Constants
 import com.dellainfotech.smartTouch.common.utils.DialogUtil
+import com.dellainfotech.smartTouch.common.utils.Utils.toInt
 import com.dellainfotech.smartTouch.databinding.FragmentControlModeBinding
 import com.dellainfotech.smartTouch.ui.activities.AuthenticationActivity
 import com.dellainfotech.smartTouch.ui.fragments.ModelBaseFragment
@@ -26,7 +28,8 @@ import com.dellainfotech.smartTouch.ui.viewmodel.HomeViewModel
  * Created by Jignesh Dangar on 19-04-2021.
  */
 
-class ControlModeFragment : ModelBaseFragment<HomeViewModel, FragmentControlModeBinding, HomeRepository>() {
+class ControlModeFragment :
+    ModelBaseFragment<HomeViewModel, FragmentControlModeBinding, HomeRepository>() {
 
     private val logTag = this::class.java.simpleName
     private lateinit var controlModeAdapter: ControlModeAdapter
@@ -49,21 +52,30 @@ class ControlModeFragment : ModelBaseFragment<HomeViewModel, FragmentControlMode
 
         binding.ibPin.setOnClickListener {
             activity?.let {
+                var isPinned = FastSave.getInstance().getBoolean(
+                    Constants.isControlModePinned,
+                    Constants.DEFAULT_CONTROL_MODE_STATUS
+                )
+                val msg: String = if (isPinned) {
+                    isPinned = false
+                    getString(R.string.dialog_title_unpin_control_mode)
+                } else {
+                    isPinned = true
+                    getString(R.string.dialog_title_pin_control_mode)
+                }
                 DialogUtil.askAlert(
                     it,
-                    getString(R.string.dialog_title_pin_control_mode),
+                    msg,
                     getString(R.string.text_ok),
                     getString(R.string.text_cancel),
                     object : DialogAskListener {
                         override fun onYesClicked() {
-                            Log.e(logTag, " yes clicked")
-                            FastSave.getInstance().saveBoolean(Constants.isControlModePinned, true)
-                            Log.e(logTag,"iscontrollpinned ${FastSave.getInstance().getBoolean(Constants.isControlModePinned, Constants.DEFAULT_CONTROL_MODE_STATUS)} ")
+                            DialogUtil.loadingAlert(it)
+                            viewModel.updatePinStatus(BodyPinStatus(isPinned.toInt()))
                         }
 
                         override fun onNoClicked() {
-                            Log.e(logTag, " no clicked")
-                            FastSave.getInstance().saveBoolean(Constants.isControlModePinned, false)
+
                         }
                     }
                 )
@@ -80,14 +92,14 @@ class ControlModeFragment : ModelBaseFragment<HomeViewModel, FragmentControlMode
         roomList.clear()
 
         viewModel.getControlResponse.observe(viewLifecycleOwner, { response ->
-            when(response){
+            when (response) {
                 is Resource.Success -> {
                     DialogUtil.hideDialog()
                     context?.let {
-                        Toast.makeText(it,response.values.message,Toast.LENGTH_SHORT).show()
+                        Toast.makeText(it, response.values.message, Toast.LENGTH_SHORT).show()
                     }
 
-                    if (response.values.status && response.values.code == Constants.API_SUCCESS_CODE){
+                    if (response.values.status && response.values.code == Constants.API_SUCCESS_CODE) {
                         response.values.data?.let { roomDataList ->
                             roomList.addAll(roomDataList)
                             Log.e(logTag, "  roomList ${roomList.size}")
@@ -99,6 +111,24 @@ class ControlModeFragment : ModelBaseFragment<HomeViewModel, FragmentControlMode
                 is Resource.Failure -> {
                     DialogUtil.hideDialog()
                     Log.e(logTag, " getControlResponse Failure ${response.errorBody?.string()} ")
+                }
+                else -> {
+                    //We will do nothing here
+                }
+            }
+        })
+
+        viewModel.updatePinStatusResponse.observe(viewLifecycleOwner, { response ->
+            when (response) {
+                is Resource.Success -> {
+                    DialogUtil.hideDialog()
+                    context?.let {
+                        Toast.makeText(it, response.values.message, Toast.LENGTH_SHORT).show()
+                    }
+                }
+                is Resource.Failure -> {
+                    DialogUtil.hideDialog()
+                    Log.e(logTag, " updatePinStatusResponse Failure $response ")
                 }
                 else -> {
                     //We will do nothing here

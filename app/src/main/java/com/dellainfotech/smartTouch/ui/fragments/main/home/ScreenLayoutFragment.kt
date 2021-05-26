@@ -36,6 +36,39 @@ class ScreenLayoutFragment :
 
         screenLayoutModel?.init()
 
+        when (args.deviceCustomizationDetail.screenLayoutType) {
+            screenLayoutModel?.screenLayoutEight -> {
+                screenLayoutModel?.changeViewType(ScreenLayoutModel.VIEW_TYPE.EIGHT_ICONS_VIEW)
+            }
+            screenLayoutModel?.screenLayoutSix -> {
+                screenLayoutModel?.changeViewType(ScreenLayoutModel.VIEW_TYPE.SIX_ICONS_VIEW)
+            }
+            screenLayoutModel?.screenLayoutFour -> {
+                screenLayoutModel?.changeViewType(ScreenLayoutModel.VIEW_TYPE.FOUR_ICONS_VIEW)
+            }
+        }
+
+        when(args.deviceCustomizationDetail.screenLayout){
+            screenLayoutModel?.LEFT_MOST -> {
+                binding.ivLeftMost.performClick()
+            }
+            screenLayoutModel?.RIGHT_MOST -> {
+                binding.ivRightMost.performClick()
+            }
+            screenLayoutModel?.LEFT_RIGHT -> {
+                binding.ivLeftRight.performClick()
+            }
+            screenLayoutModel?.MIDDLE_CENTER -> {
+                binding.ivMiddleCenter.performClick()
+            }
+            screenLayoutModel?.TOP_CENTER -> {
+                binding.ivTopCenter.performClick()
+            }
+            screenLayoutModel?.BOTTOM_CENTER -> {
+                binding.ivBottomCenter.performClick()
+            }
+        }
+
         if (FastSave.getInstance().getBoolean(
                 Constants.isScreenLayoutLocked,
                 Constants.DEFAULT_SCREEN_LAYOUT_LOCK_STATUS

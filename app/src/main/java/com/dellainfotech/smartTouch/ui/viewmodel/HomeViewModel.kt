@@ -58,6 +58,10 @@ class HomeViewModel @ViewModelInject constructor(
     val changePasswordResponse: LiveData<Resource<CommonResponse>>
         get() = _changePasswordResponse
 
+    private val _updatePinStatusResponse: MutableLiveData<Resource<PinResponse>> = MutableLiveData()
+    val updatePinStatusResponse: LiveData<Resource<PinResponse>>
+        get() = _updatePinStatusResponse
+
     fun logout(
         bodyLogout: BodyLogout
     ) = viewModelScope.launch {
@@ -108,6 +112,11 @@ class HomeViewModel @ViewModelInject constructor(
     fun retainState(bodyRetainState: BodyRetainState) = viewModelScope.launch {
         _retainStateResponse.value = Resource.Loading
         _retainStateResponse.value = homeRepository.retainState(bodyRetainState)
+    }
+
+    fun updatePinStatus(bodyPinStatus: BodyPinStatus) = viewModelScope.launch {
+        _updatePinStatusResponse.value = Resource.Loading
+        _updatePinStatusResponse.value = homeRepository.updatePinStatus(bodyPinStatus)
     }
 
 

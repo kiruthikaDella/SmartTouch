@@ -54,6 +54,8 @@ interface SmartTouchApi {
         const val API_ADD_SUBORDINATE_USER = "user/subordinateuser"
         const val API_GET_SUBORDINATE_USER = "user/subordinateuser"
         const val API_DELETE_SUBORDINATE_USER = "user/subordinateuser/{id}"
+        const val API_GET_PIN_STATUS = "user/pin-status"
+        const val API_POST_PIN_STATUS = "user/pin-status"
 
         //Ownership transfer
         const val API_GET_OWNER_TRANSFER = "owner/owner-transfer"
@@ -131,6 +133,17 @@ interface SmartTouchApi {
         @Header("access_key") access_key: String,
         @Body bodyChangePassword: BodyChangePassword
     ): CommonResponse
+
+    @GET(API_GET_PIN_STATUS)
+    suspend fun getPinStatus(
+        @Header("access_key") access_key: String
+    ): PinResponse
+
+    @POST(API_POST_PIN_STATUS)
+    suspend fun updatePinStatus(
+        @Header("access_key") access_key: String,
+        @Body bodyPinStatus: BodyPinStatus
+    ): PinResponse
 
     //
     //endregion
@@ -271,7 +284,7 @@ interface SmartTouchApi {
         @Header("access_key") access_key: String
     ): OwnershipResponse
 
-    @POST(API_GET_OWNER_TRANSFER)
+    @POST(API_POST_OWNER_TRANSFER)
     suspend fun transferOwnership(
         @Header("access_key") access_key: String,
         @Body bodyOwnership: BodyOwnership

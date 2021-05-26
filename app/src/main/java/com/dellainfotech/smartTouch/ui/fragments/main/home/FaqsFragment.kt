@@ -1,6 +1,8 @@
 package com.dellainfotech.smartTouch.ui.fragments.main.home
 
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -19,6 +21,7 @@ import com.dellainfotech.smartTouch.common.utils.DialogUtil
 import com.dellainfotech.smartTouch.databinding.FragmentFaqsBinding
 import com.dellainfotech.smartTouch.ui.fragments.ModelBaseFragment
 import com.dellainfotech.smartTouch.ui.viewmodel.HomeViewModel
+import java.util.*
 
 /**
  * Created by Jignesh Dangar on 26-04-2021.
@@ -30,6 +33,7 @@ class FaqsFragment : ModelBaseFragment<HomeViewModel, FragmentFaqsBinding, HomeR
     private lateinit var faqAdapter: FAQAdapter
 
     private var faqList = arrayListOf<QuestionModel>()
+    private var filteredItems = arrayListOf<QuestionModel>()
     private var answerList = arrayListOf<AnswerModel>()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -42,6 +46,22 @@ class FaqsFragment : ModelBaseFragment<HomeViewModel, FragmentFaqsBinding, HomeR
         if (animator is DefaultItemAnimator) {
             animator.supportsChangeAnimations = false
         }
+
+        binding.edtSearch.addTextChangedListener(object : TextWatcher{
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+
+            }
+
+            override fun onTextChanged(char: CharSequence?, start: Int, before: Int, count: Int) {
+                char?.let {
+                    filter(it.toString())
+                }
+            }
+
+            override fun afterTextChanged(s: Editable?) {
+            }
+
+        })
 
         faqList.clear()
 
@@ -67,6 +87,7 @@ class FaqsFragment : ModelBaseFragment<HomeViewModel, FragmentFaqsBinding, HomeR
                                 }
                             }
 
+                            filteredItems.addAll(faqList)
                             faqAdapter = FAQAdapter(faqList)
                             binding.recyclerFaq.adapter = faqAdapter
                         }
@@ -96,4 +117,21 @@ class FaqsFragment : ModelBaseFragment<HomeViewModel, FragmentFaqsBinding, HomeR
     ): FragmentFaqsBinding = FragmentFaqsBinding.inflate(inflater, container, false)
 
     override fun getFragmentRepository(): HomeRepository = HomeRepository(networkModel)
+
+    fun filter(string: String) {
+        var charText = string
+        charText = charText.toLowerCase(Locale.getDefault())
+        faqList.clear()
+        if (charText.isEmpty()) {
+            faqList.addAll(filteredItems)
+        } else {
+            for (wp in filteredItems) {
+                if (wp.title.toLowerCase(Locale.getDefault()).contains(charText)) {
+                    faqList.add(wp)
+                }
+            }
+        }
+        faqAdapter.notifyDataSetChanged()
+    }
+
 }

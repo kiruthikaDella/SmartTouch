@@ -6,10 +6,10 @@ import kotlinx.android.parcel.Parcelize
 import java.io.Serializable
 
 /**
- * Created by Jignesh Dangar on 11-05-2021.
+ * Created by Jignesh Dangar on 26-05-2021.
  */
 
-data class UpdateRoomResponse(
+data class PinResponse(
     @SerializedName("status")
     var status: Boolean,
     @SerializedName("code")
@@ -17,17 +17,13 @@ data class UpdateRoomResponse(
     @SerializedName("message")
     var message: String,
     @SerializedName("data")
-    var data: GetRoomData? = null
+    var data: PinData? = null
 )
 
 @Parcelize
-data class UpdateRoomData(
+data class PinData(
     @SerializedName("_id")
     var id: String,
-    @SerializedName("iUserId")
-    var userId: String,
-    @SerializedName("vRoomName")
-    var roomName: String,
-    @SerializedName("iRoomTypeId")
-    var roomTypeId: String
+    @SerializedName("iIsPinStatus")
+    var isPinStatus: Int
 ) : Parcelable, Serializable

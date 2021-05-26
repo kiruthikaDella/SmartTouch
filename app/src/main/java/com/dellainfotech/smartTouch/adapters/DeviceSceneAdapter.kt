@@ -140,6 +140,8 @@ class DeviceSceneAdapter(
         return 3
     }
 
+
+
     inner class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         val spinnerRoom = itemView.findViewById(R.id.spinner_room_name) as Spinner

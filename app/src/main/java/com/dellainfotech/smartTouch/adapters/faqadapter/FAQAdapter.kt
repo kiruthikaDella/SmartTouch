@@ -7,8 +7,11 @@ import com.dellainfotech.smartTouch.R
 import com.thoughtbot.expandablerecyclerview.ExpandableRecyclerViewAdapter
 import com.thoughtbot.expandablerecyclerview.models.ExpandableGroup
 
-class FAQAdapter(groups: List<ExpandableGroup<*>?>?) :
-    ExpandableRecyclerViewAdapter<QuestionViewHolder, AnswersViewHolder>(groups) {
+
+class FAQAdapter(faqList: List<ExpandableGroup<*>?>?) :
+    ExpandableRecyclerViewAdapter<QuestionViewHolder, AnswersViewHolder>(
+        faqList
+    ) {
     override fun onCreateGroupViewHolder(parent: ViewGroup, viewType: Int): QuestionViewHolder {
         val view: View = LayoutInflater.from(parent.context)
             .inflate(R.layout.item_question, parent, false)
@@ -38,4 +41,5 @@ class FAQAdapter(groups: List<ExpandableGroup<*>?>?) :
     ) {
         holder.setQuestion(group)
     }
+
 }

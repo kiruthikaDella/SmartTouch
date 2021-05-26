@@ -11,7 +11,7 @@
     app:umanoOverlay="true"
     app:umanoPanelHeight="0dp"
     android:background="@color/app_background_color"
-    tools:context="com.dellainfotech.smartTouch.ui.fragments.main.home.RoomPanelFragment">
+    tools:context="com.dellainfotech.smartTouch.ui.fragments.main.home.DeviceFragment">
 
     <LinearLayout
         android:layout_width="match_parent"
