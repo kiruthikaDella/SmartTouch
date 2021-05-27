@@ -18,6 +18,7 @@ import com.dellainfotech.smartTouch.api.repository.HomeRepository
 import com.dellainfotech.smartTouch.common.interfaces.DialogAskListener
 import com.dellainfotech.smartTouch.common.utils.Constants
 import com.dellainfotech.smartTouch.common.utils.DialogUtil
+import com.dellainfotech.smartTouch.common.utils.Utils.toBoolean
 import com.dellainfotech.smartTouch.common.utils.Utils.toInt
 import com.dellainfotech.smartTouch.databinding.FragmentControlModeBinding
 import com.dellainfotech.smartTouch.ui.activities.AuthenticationActivity
@@ -124,6 +125,14 @@ class ControlModeFragment :
                     DialogUtil.hideDialog()
                     context?.let {
                         Toast.makeText(it, response.values.message, Toast.LENGTH_SHORT).show()
+                    }
+                    if (response.values.status && response.values.code == Constants.API_SUCCESS_CODE){
+                        response.values.data?.let {
+                            FastSave.getInstance().saveBoolean(
+                                Constants.isControlModePinned,
+                                it.isPinStatus.toBoolean()
+                            )
+                        }
                     }
                 }
                 is Resource.Failure -> {

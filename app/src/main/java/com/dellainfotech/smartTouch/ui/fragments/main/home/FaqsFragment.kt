@@ -118,7 +118,7 @@ class FaqsFragment : ModelBaseFragment<HomeViewModel, FragmentFaqsBinding, HomeR
 
     override fun getFragmentRepository(): HomeRepository = HomeRepository(networkModel)
 
-    fun filter(string: String) {
+    private fun filter(string: String) {
         var charText = string
         charText = charText.toLowerCase(Locale.getDefault())
         faqList.clear()

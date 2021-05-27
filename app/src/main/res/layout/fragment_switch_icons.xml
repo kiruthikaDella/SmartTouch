@@ -32,6 +32,7 @@
             android:layout_width="@dimen/_16sdp"
             android:layout_height="@dimen/_20sdp"
             android:layout_alignParentEnd="true"
+            android:visibility="gone"
             android:layout_centerVertical="true"
             android:layout_marginEnd="@dimen/screen_end_margin"
             android:background="@drawable/ic_lock" />

@@ -34,6 +34,7 @@
             android:layout_height="@dimen/_20sdp"
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
+            android:visibility="gone"
             android:layout_marginEnd="@dimen/screen_end_margin"
             android:background="@drawable/ic_lock" />
 
