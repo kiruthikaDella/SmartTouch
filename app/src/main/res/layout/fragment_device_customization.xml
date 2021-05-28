@@ -475,6 +475,10 @@
             android:id="@+id/layout_text_style"
             layout="@layout/layout_device_customization_text_style" />
 
+        <include
+            android:id="@+id/layout_text_color"
+            layout="@layout/layout_device_customization_text_color" />
+
     </com.jcminarro.roundkornerlayout.RoundKornerLinearLayout>
 
 </com.sothree.slidinguppanel.SlidingUpPanelLayout>

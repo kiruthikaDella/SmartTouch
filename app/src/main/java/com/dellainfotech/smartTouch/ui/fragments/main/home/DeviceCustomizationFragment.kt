@@ -74,6 +74,7 @@ class DeviceCustomizationFragment :
     private var imagePath = ""
     private var imageName = ""
     private var mProfileFile: File? = null
+    private var textColor: Int? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -148,8 +149,12 @@ class DeviceCustomizationFragment :
         }
 
         binding.ivUploadImageSettings.setOnClickListener {
+            context?.let { mContext ->
+                binding.tvBottomViewTitle.setTextColor(ContextCompat.getColor(mContext,R.color.theme_color))
+            }
             binding.tvBottomViewTitle.text = getString(R.string.text_upload_image)
             binding.layoutTextStyle.linearTextStyle.isVisible = false
+            binding.layoutTextColor.linearTextColor.isVisible = false
             binding.layoutUploadImage.linearUploadImage.isVisible = true
 
             showPanel()
@@ -169,11 +174,34 @@ class DeviceCustomizationFragment :
 
         binding.ivTextStyleSettings.setOnClickListener {
             binding.tvBottomViewTitle.text = getString(R.string.text_style)
+            context?.let { mContext ->
+                binding.tvBottomViewTitle.setTextColor(ContextCompat.getColor(mContext,R.color.theme_color))
+            }
             binding.layoutUploadImage.linearUploadImage.isVisible = false
+            binding.layoutTextColor.linearTextColor.isVisible = false
             binding.layoutTextStyle.linearTextStyle.isVisible = true
-
             showPanel()
+        }
 
+        binding.ivTextColorSettings.setOnClickListener {
+            textColor?.let {
+                binding.tvBottomViewTitle.setTextColor(it)
+            }?: kotlin.run {
+                context?.let { mContext ->
+                    binding.tvBottomViewTitle.setTextColor(ContextCompat.getColor(mContext,R.color.theme_color))
+                }
+            }
+            binding.tvBottomViewTitle.text = getString(R.string.text_color)
+            binding.layoutUploadImage.linearUploadImage.isVisible = false
+            binding.layoutTextStyle.linearTextStyle.isVisible = false
+            binding.layoutTextColor.linearTextColor.isVisible = true
+            showPanel()
+        }
+
+        binding.layoutTextColor.colorPicker.setColorListener { color, string ->
+            textColor = color
+            binding.tvBottomViewTitle.setTextColor(color)
+            Log.e(logTag, " color $color string $string")
         }
 
         binding.ivSwitchIconsSettings.setOnClickListener {

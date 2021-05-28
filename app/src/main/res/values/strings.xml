@@ -165,6 +165,7 @@
     <string name="button_text_upload">Upload</string>
     <string name="text_select_font">Select font</string>
     <string name="text_save">Save</string>
+    <string name="text_done">Done</string>
 
 
     <!--    Device Features-->

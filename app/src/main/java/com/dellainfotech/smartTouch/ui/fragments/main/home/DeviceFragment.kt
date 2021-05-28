@@ -81,6 +81,7 @@ class DeviceFragment :
     private fun clickEvents() {
 
         binding.iBtnEditRoomName.setOnClickListener {
+            Log.e(logTag, " edit roomName clicked")
             activity?.let {
                 DialogUtil.editDialog(
                     it,
@@ -98,6 +99,7 @@ class DeviceFragment :
                                 ).show()
                             } else {
                                 DialogUtil.loadingAlert(it)
+                                Log.e(logTag, " edit roomName updateRoom")
                                 viewModel.updateRoom(BodyUpdateRoom(args.roomDetail.id, string))
                             }
                         }
@@ -274,9 +276,12 @@ class DeviceFragment :
     }
 
     private fun apiCall() {
+
         viewModel.updateRoomResponse.observe(viewLifecycleOwner, { response ->
+            Log.e(logTag, " edit roomName updateRoomResponse")
             when (response) {
                 is Resource.Success -> {
+                    viewModel.updateRoomResponse.removeObservers(viewLifecycleOwner)
                     DialogUtil.hideDialog()
                     context?.let {
                         Toast.makeText(it, response.values.message, Toast.LENGTH_SHORT).show()
@@ -287,6 +292,7 @@ class DeviceFragment :
                     }
                 }
                 is Resource.Failure -> {
+                    viewModel.updateRoomResponse.removeObservers(viewLifecycleOwner)
                     DialogUtil.hideDialog()
                     Log.e(logTag, " updateRoomResponse Failure ${response.errorBody?.string()}")
                 }

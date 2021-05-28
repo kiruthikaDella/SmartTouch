@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/linear_text_color"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+   <com.github.dhaval2404.colorpicker.ColorPickerView
+       android:layout_marginTop="@dimen/_15sdp"
+       android:id="@+id/color_picker"
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"/>
+
+    <Button
+        style="@style/DodgerBlueButtonStyle"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/login_component_height"
+        android:layout_marginStart="@dimen/screen_start_margin"
+        android:layout_marginTop="@dimen/_25sdp"
+        android:layout_marginEnd="@dimen/screen_end_margin"
+        android:layout_marginBottom="@dimen/_15sdp"
+        android:text="@string/text_done"
+        android:textAllCaps="false"
+        android:textSize="@dimen/_12ssp" />
+
+</LinearLayout>
