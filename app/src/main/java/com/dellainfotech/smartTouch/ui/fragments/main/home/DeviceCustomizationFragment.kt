@@ -79,11 +79,9 @@ class DeviceCustomizationFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        Log.e(logTag, " onViewCreated ")
-
-        val sizeList = arrayOf("1", "2", "3", "4", "5", "6", "7", "8", "9", "10")
+        val sizeList = arrayOf("Small", "Medium", "Large")
         val fontNames =
-            arrayOf("Times New Roman", "Roboto", "Montserrat", "Lato", "Krona One", "Arial")
+            arrayOf("Times New Roman", "Arial")
 
         if (FastSave.getInstance().getBoolean(
                 Constants.isDeviceCustomizationLocked,
@@ -150,7 +148,12 @@ class DeviceCustomizationFragment :
 
         binding.ivUploadImageSettings.setOnClickListener {
             context?.let { mContext ->
-                binding.tvBottomViewTitle.setTextColor(ContextCompat.getColor(mContext,R.color.theme_color))
+                binding.tvBottomViewTitle.setTextColor(
+                    ContextCompat.getColor(
+                        mContext,
+                        R.color.theme_color
+                    )
+                )
             }
             binding.tvBottomViewTitle.text = getString(R.string.text_upload_image)
             binding.layoutTextStyle.linearTextStyle.isVisible = false
@@ -175,7 +178,12 @@ class DeviceCustomizationFragment :
         binding.ivTextStyleSettings.setOnClickListener {
             binding.tvBottomViewTitle.text = getString(R.string.text_style)
             context?.let { mContext ->
-                binding.tvBottomViewTitle.setTextColor(ContextCompat.getColor(mContext,R.color.theme_color))
+                binding.tvBottomViewTitle.setTextColor(
+                    ContextCompat.getColor(
+                        mContext,
+                        R.color.theme_color
+                    )
+                )
             }
             binding.layoutUploadImage.linearUploadImage.isVisible = false
             binding.layoutTextColor.linearTextColor.isVisible = false
@@ -186,9 +194,14 @@ class DeviceCustomizationFragment :
         binding.ivTextColorSettings.setOnClickListener {
             textColor?.let {
                 binding.tvBottomViewTitle.setTextColor(it)
-            }?: kotlin.run {
+            } ?: kotlin.run {
                 context?.let { mContext ->
-                    binding.tvBottomViewTitle.setTextColor(ContextCompat.getColor(mContext,R.color.theme_color))
+                    binding.tvBottomViewTitle.setTextColor(
+                        ContextCompat.getColor(
+                            mContext,
+                            R.color.theme_color
+                        )
+                    )
                 }
             }
             binding.tvBottomViewTitle.text = getString(R.string.text_color)
@@ -638,10 +651,16 @@ class DeviceCustomizationFragment :
 
     private fun lockScreen() {
         binding.relativeLock.isVisible = true
+        context?.let {
+            binding.ibLock.background = ContextCompat.getDrawable(it, R.drawable.ic_lock)
+        }
     }
 
     private fun unLockScreen() {
         binding.relativeLock.isVisible = false
+        context?.let {
+            binding.ibLock.background = ContextCompat.getDrawable(it, R.drawable.ic_unlock)
+        }
     }
 
 }

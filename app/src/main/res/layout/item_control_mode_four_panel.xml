@@ -302,28 +302,6 @@
                 app:layout_constraintTop_toBottomOf="@+id/switch_four" />
 
             <TextView
-                android:id="@+id/tv_usb_port_a"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/roboto_medium"
-                android:text="@string/text_usb_port_a"
-                android:textColor="@color/daintree"
-                android:textSize="@dimen/_12ssp"
-                app:layout_constraintBottom_toBottomOf="@+id/switch_usb_port_c"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/switch_usb_port_c" />
-
-            <com.google.android.material.switchmaterial.SwitchMaterial
-                android:id="@+id/switch_usb_port_a"
-                style="@style/PanelSwitchColorStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/_5sdp"
-                app:layout_constraintBottom_toBottomOf="@+id/switch_usb_port_c"
-                app:layout_constraintStart_toEndOf="@+id/tv_usb_port_a"
-                app:layout_constraintTop_toTopOf="@+id/switch_usb_port_c" />
-
-            <TextView
                 android:id="@+id/tv_usb_port_c"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

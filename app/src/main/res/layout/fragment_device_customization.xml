@@ -211,7 +211,7 @@
 
                         <RelativeLayout
                             android:id="@+id/rl_switch_icon_size"
-                            android:layout_width="@dimen/_55sdp"
+                            android:layout_width="@dimen/_80sdp"
                             android:layout_height="@dimen/_30sdp"
                             android:layout_marginTop="@dimen/_15sdp"
                             android:background="@drawable/transparent_background_with_catskill_white_dark_border"
@@ -364,7 +364,7 @@
 
                         <RelativeLayout
                             android:id="@+id/rl_text_size_info"
-                            android:layout_width="@dimen/_55sdp"
+                            android:layout_width="@dimen/_80sdp"
                             android:layout_height="@dimen/_30sdp"
                             android:layout_marginTop="@dimen/_15sdp"
                             android:background="@drawable/transparent_background_with_catskill_white_dark_border"
@@ -392,7 +392,6 @@
                                 android:backgroundTint="@color/daintree" />
 
                         </RelativeLayout>
-
 
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -434,7 +433,7 @@
             android:layout_below="@+id/relative_header"
             android:clickable="true"
             android:focusable="true"
-            android:visibility="gone"/>
+            android:visibility="gone" />
 
     </RelativeLayout>
 

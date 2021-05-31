@@ -151,7 +151,6 @@ class DeviceAdapter(
 
         val seekBar = itemView.findViewById(R.id.seek_bar) as IndicatorSeekBar
 
-        val switchPortA = itemView.findViewById(R.id.switch_usb_port_a) as SwitchMaterial
         val switchPortC = itemView.findViewById(R.id.switch_usb_port_c) as SwitchMaterial
     }
 
@@ -300,9 +299,6 @@ class DeviceAdapter(
                         }
                         "5" -> {
                             seekBar.setProgress(value.switchStatus.toFloat())
-                        }
-                        "6" -> {
-                            switchPortA.isChecked = value.switchStatus.toBoolean()
                         }
                         "7" -> {
                             switchPortC.isChecked = value.switchStatus.toBoolean()
