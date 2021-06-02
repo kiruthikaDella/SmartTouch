@@ -422,14 +422,4 @@ class DeviceFragment :
 
     }
 
-    override fun onPause() {
-        super.onPause()
-        Log.e(logTag, "on pause")
-        activity?.viewModelStore?.let {
-            Log.e(logTag, " view model store")
-        }
-        activity?.viewModelStore?.clear()
-
-    }
-
 }

@@ -1,6 +1,8 @@
 package com.dellainfotech.smartTouch.ui.fragments.main.home
 
+import android.app.TimePickerDialog
 import android.os.Bundle
+import android.text.Html
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,6 +13,9 @@ import com.dellainfotech.smartTouch.adapters.DeviceSceneAdapter
 import com.dellainfotech.smartTouch.common.utils.DialogUtil
 import com.dellainfotech.smartTouch.databinding.FragmentCreateSceneBinding
 import com.dellainfotech.smartTouch.ui.fragments.BaseFragment
+import java.text.Format
+import java.text.SimpleDateFormat
+import java.util.*
 
 
 /**
@@ -66,6 +71,62 @@ class CreateSceneFragment : BaseFragment() {
                     )
                 )
             }
+        }
+
+        setTime()
+
+        binding.tvTime.setOnClickListener {
+            context?.let { mContext ->
+                val mTimePicker: TimePickerDialog
+                val mCurrentTime = Calendar.getInstance()
+                val hour = mCurrentTime.get(Calendar.HOUR_OF_DAY)
+                val minute = mCurrentTime.get(Calendar.MINUTE)
+
+                mTimePicker = TimePickerDialog(
+                    mContext,
+                    { _, hourOfDay, min ->
+                        val cal = Calendar.getInstance()
+                        cal[Calendar.HOUR_OF_DAY] = hourOfDay
+                        cal[Calendar.MINUTE] = min
+                        val formatter: Format
+                        formatter = SimpleDateFormat("hh:mm a", Locale.US)
+                        val time = "<font color='#1A8EFF'>${
+                            formatter.format(cal.time).dropLast(3)
+                        }</font><font color='#011B25'> ${
+                            formatter.format(
+                                cal.time
+                            ).takeLast(2).toLowerCase(Locale.getDefault())
+                        }</font>"
+                        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+                            binding.tvTime.text = Html.fromHtml(time, Html.FROM_HTML_MODE_LEGACY)
+                        } else {
+                            binding.tvTime.text = Html.fromHtml(time)
+                        }
+                    },
+                    hour,
+                    minute,
+                    false
+                )
+
+                mTimePicker.show()
+            }
+
+        }
+    }
+
+    private fun setTime() {
+        val formatter = SimpleDateFormat("hh:mm a", Locale.US)
+        val time = "<font color='#1A8EFF'>${
+            formatter.format(Calendar.getInstance().time).dropLast(3)
+        }</font><font color='#011B25'> ${
+            formatter.format(
+                Calendar.getInstance().time
+            ).takeLast(2).toLowerCase(Locale.getDefault())
+        }</font>"
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+            binding.tvTime.text = Html.fromHtml(time, Html.FROM_HTML_MODE_LEGACY)
+        } else {
+            binding.tvTime.text = Html.fromHtml(time)
         }
     }
 

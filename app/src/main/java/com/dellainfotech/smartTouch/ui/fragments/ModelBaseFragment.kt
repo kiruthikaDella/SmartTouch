@@ -30,6 +30,11 @@ abstract class ModelBaseFragment<VM : ViewModel, B : ViewBinding, R : BaseReposi
         return binding.root
     }
 
+    override fun onPause() {
+        super.onPause()
+        viewModelStore.clear()
+    }
+
     abstract fun getViewModel(): Class<VM>
 
     abstract fun getFragmentBinding(inflater: LayoutInflater, container: ViewGroup?): B

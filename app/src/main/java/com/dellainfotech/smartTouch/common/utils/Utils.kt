@@ -1,8 +1,6 @@
 package com.dellainfotech.smartTouch.common.utils
 
-import android.Manifest
 import android.content.Context
-import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
@@ -11,11 +9,9 @@ import android.text.Editable
 import android.util.Base64
 import android.util.Log
 import androidx.appcompat.app.AlertDialog
-import androidx.core.content.ContextCompat
 import com.dellainfotech.smartTouch.AppDelegate
 import com.dellainfotech.smartTouch.common.interfaces.DialogShowListener
 import com.facebook.appevents.internal.AppEventUtility.bytesToHex
-import java.io.File
 import java.net.InetSocketAddress
 import java.net.Socket
 import java.net.SocketAddress
@@ -134,6 +130,14 @@ object Utils {
             salt.append(chars[index])
         }
         return salt.toString()
+    }
+
+    fun convertToHtml(htmlString: String?): String? {
+        val stringBuilder = java.lang.StringBuilder()
+        stringBuilder.append("<![CDATA[")
+        stringBuilder.append(htmlString)
+        stringBuilder.append("]]>")
+        return stringBuilder.toString()
     }
 
     fun String.toEditable(): Editable = Editable.Factory.getInstance().newEditable(this)
