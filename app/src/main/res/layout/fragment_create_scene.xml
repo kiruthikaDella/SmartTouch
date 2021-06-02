@@ -86,7 +86,6 @@
                     android:gravity="center_vertical"
                     android:textColor="@color/daintree"
                     android:textSize="@dimen/_14ssp"
-                    android:text="@string/text_living_room"
                     android:fontFamily="@font/roboto_bold"
                     android:background="@android:color/transparent"
                     android:singleLine="true"

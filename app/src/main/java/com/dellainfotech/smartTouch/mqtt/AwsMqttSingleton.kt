@@ -203,7 +203,7 @@ object AwsMqttSingleton {
         }
     }
 
-    fun publish(msg: String?, topic: String?) {
+    fun publish(msg: String, topic: String) {
         try {
             if (isConnected()) mqttManager!!.publishString(msg, topic, AWSIotMqttQos.QOS0)
         } catch (e: Exception) {

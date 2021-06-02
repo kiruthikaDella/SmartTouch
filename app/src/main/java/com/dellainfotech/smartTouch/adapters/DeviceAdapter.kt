@@ -300,7 +300,7 @@ class DeviceAdapter(
                         "5" -> {
                             seekBar.setProgress(value.switchStatus.toFloat())
                         }
-                        "7" -> {
+                        "6" -> {
                             switchPortC.isChecked = value.switchStatus.toBoolean()
                         }
                     }
@@ -384,4 +384,5 @@ class DeviceAdapter(
     fun setOnUpdateDeviceNameClickListener(listener: DeviceItemClickListener<GetDeviceData>) {
         this.updateDeviceNameClickListener = listener
     }
+
 }

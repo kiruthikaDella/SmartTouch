@@ -29,6 +29,7 @@ import com.dellainfotech.smartTouch.ui.fragments.ModelBaseFragment
 import com.dellainfotech.smartTouch.ui.viewmodel.HomeViewModel
 import com.sothree.slidinguppanel.SlidingUpPanelLayout
 
+
 /**
  * Created by Jignesh Dangar on 09-04-2021.
  */
@@ -81,12 +82,11 @@ class DeviceFragment :
     private fun clickEvents() {
 
         binding.iBtnEditRoomName.setOnClickListener {
-            Log.e(logTag, " edit roomName clicked")
             activity?.let {
                 DialogUtil.editDialog(
                     it,
                     getString(R.string.text_edit),
-                    args.roomDetail.roomName ?: "",
+                    binding.tvTitle.text.toString().trim(),
                     getString(R.string.text_save),
                     getString(R.string.text_cancel),
                     object : DialogEditListener {
@@ -99,7 +99,6 @@ class DeviceFragment :
                                 ).show()
                             } else {
                                 DialogUtil.loadingAlert(it)
-                                Log.e(logTag, " edit roomName updateRoom")
                                 viewModel.updateRoom(BodyUpdateRoom(args.roomDetail.id, string))
                             }
                         }
@@ -278,21 +277,21 @@ class DeviceFragment :
     private fun apiCall() {
 
         viewModel.updateRoomResponse.observe(viewLifecycleOwner, { response ->
-            Log.e(logTag, " edit roomName updateRoomResponse")
             when (response) {
                 is Resource.Success -> {
-                    viewModel.updateRoomResponse.removeObservers(viewLifecycleOwner)
                     DialogUtil.hideDialog()
                     context?.let {
                         Toast.makeText(it, response.values.message, Toast.LENGTH_SHORT).show()
                     }
 
                     if (response.values.status && response.values.code == Constants.API_SUCCESS_CODE) {
-                        binding.tvTitle.text = response.values.data?.roomName
+                        response.values.data?.let {
+                            args.roomDetail.roomName = it.roomName
+                            binding.tvTitle.text = it.roomName
+                        }
                     }
                 }
                 is Resource.Failure -> {
-                    viewModel.updateRoomResponse.removeObservers(viewLifecycleOwner)
                     DialogUtil.hideDialog()
                     Log.e(logTag, " updateRoomResponse Failure ${response.errorBody?.string()}")
                 }
@@ -420,6 +419,16 @@ class DeviceFragment :
                 }
             }
         })
+
+    }
+
+    override fun onPause() {
+        super.onPause()
+        Log.e(logTag, "on pause")
+        activity?.viewModelStore?.let {
+            Log.e(logTag, " view model store")
+        }
+        activity?.viewModelStore?.clear()
 
     }
 

@@ -3,7 +3,7 @@
     <string name="org_name">Della Electronics Pvt Ltd.</string>
 
     <!--    Google Authentication-->
- <!--   <string name="google_client_id">254538999523-d0dfbtkuegliqtupjfjid8bjkduom0o2.apps.googleusercontent.com</string>
+    <!--   <string name="google_client_id">254538999523-d0dfbtkuegliqtupjfjid8bjkduom0o2.apps.googleusercontent.com</string>
     <string name="google_client_secret">Q-x9vJg8UGTX-VNma3F7ZKHm</string>-->
 
     <!--    Google Authentication client-->
@@ -11,10 +11,10 @@
     <string name="google_client_secret">Q-x9vJg8UGTX-VNma3F7ZKHm</string>
     <string name="google_client_api_key">AIzaSyCusFbvoi6knNJnuyZ2o_GYKqFj4e2GXJ4</string>
 
-<!--    <string name="facebook_app_id">447085073257901</string>
+    <!--    <string name="facebook_app_id">447085073257901</string>
     <string name="fb_login_protocol_scheme">fb447085073257901</string>-->
 
-<!--    <string name="facebook_app_id">936958483772800</string>
+    <!--    <string name="facebook_app_id">936958483772800</string>
     <string name="fb_login_protocol_scheme">fb936958483772800</string>-->
 
     <string name="facebook_app_id">1351754321872545</string>
@@ -171,6 +171,7 @@
     <!--    Device Features-->
     <string name="title_text_device_features">Device Features</string>
     <string name="text_create_scene">Create Scene</string>
+    <string name="text_create">Create</string>
     <string name="text_sleep_mode">Sleep Mode</string>
     <string name="text_night_mode">Night Mode</string>
     <string name="text_outdoor_mode">Outdoor Mode</string>
@@ -186,8 +187,11 @@
     <string name="text_display_brightness">Display Brightness</string>
     <string name="text_auto">Auto</string>
     <string name="text_manual">Manual</string>
+    <string name="text_weekly">Weekly</string>
+    <string name="text_monthly">Monthly</string>
 
     <!--    Create Scene   -->
+    <string name="title_text_scene">Scene</string>
     <string name="title_text_create_scene">Create Scene</string>
     <string name="text_scene_name">Scene Name</string>
     <string name="text_room_name">Room Name</string>
@@ -249,5 +253,7 @@
     <string name="text_restart">Restart</string>
     <string name="text_factory_reset">Factory Reset</string>
     <string name="text_verify_update">Verifying Update</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>

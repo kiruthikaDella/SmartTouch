@@ -89,6 +89,9 @@ class HomeRepository @Inject constructor(
     suspend fun deleteImage(deviceId: String) =
         safeApiCall { smartTouchApi.deleteImage(getAccessKey(), deviceId) }
 
+    suspend fun getScene(roomId: String,deviceId: String) =
+        safeApiCall { smartTouchApi.getScene(getAccessKey(), roomId, deviceId) }
+
     //
     //endregion
     //

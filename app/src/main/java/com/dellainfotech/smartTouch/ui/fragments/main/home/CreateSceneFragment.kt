@@ -4,12 +4,14 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.PopupMenu
 import androidx.navigation.fragment.findNavController
 import com.dellainfotech.smartTouch.R
 import com.dellainfotech.smartTouch.adapters.DeviceSceneAdapter
 import com.dellainfotech.smartTouch.common.utils.DialogUtil
 import com.dellainfotech.smartTouch.databinding.FragmentCreateSceneBinding
 import com.dellainfotech.smartTouch.ui.fragments.BaseFragment
+
 
 /**
  * Created by Jignesh Dangar on 23-04-2021.
@@ -40,11 +42,31 @@ class CreateSceneFragment : BaseFragment() {
             binding.recyclerScenes.adapter = deviceSceneAdapter
         }
 
+        binding.tvDaily.setOnClickListener {
+
+            context?.let { ctx ->
+                val popup = PopupMenu(ctx, binding.tvDaily)
+                popup.menuInflater.inflate(R.menu.scene_frequency_menu, popup.menu)
+                popup.setOnMenuItemClickListener { item ->
+                    binding.tvDaily.text = item.title
+                    true
+                }
+                popup.show()
+            }
+
+        }
+
         binding.ivEditCreateScene.setOnClickListener {
             activity?.let {
-                DialogUtil.editDialog(it,getString(R.string.text_scene_name),"Living Room",getString(R.string.text_save),getString(
-                    R.string.text_cancel))
+                DialogUtil.editDialog(
+                    it, getString(R.string.text_scene_name), "Living Room", getString(
+                        R.string.text_save
+                    ), getString(
+                        R.string.text_cancel
+                    )
+                )
             }
         }
     }
+
 }
