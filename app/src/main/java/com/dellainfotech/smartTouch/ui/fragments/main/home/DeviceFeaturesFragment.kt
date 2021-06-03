@@ -36,7 +36,7 @@ class DeviceFeaturesFragment :
         }
 
         binding.ivCreateSceneSettings.setOnClickListener {
-            findNavController().navigate(DeviceFeaturesFragmentDirections.actionDeviceFeaturesFragmentToSceneFragment())
+            findNavController().navigate(DeviceFeaturesFragmentDirections.actionDeviceFeaturesFragmentToSceneFragment(args.deviceDetail,args.roomDetail))
         }
 
         activity?.let {

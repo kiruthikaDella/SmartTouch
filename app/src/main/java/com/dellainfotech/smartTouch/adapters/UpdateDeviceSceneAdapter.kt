@@ -19,12 +19,10 @@ import com.google.android.material.switchmaterial.SwitchMaterial
 /**
  * Created by Jignesh Dangar on 22-04-2021.
  */
-class DeviceSceneAdapter(
+class UpdateDeviceSceneAdapter(
     private val mActivity: Activity,
-    private val bodyScenes: List<BodySceneData>,
-    private val deviceId: String,
-    private val roomId: String
-) : RecyclerView.Adapter<DeviceSceneAdapter.MyViewHolder>() {
+    private val scenes: ArrayList<Scene>
+) : RecyclerView.Adapter<UpdateDeviceSceneAdapter.MyViewHolder>() {
 
     private val roomDataList = arrayListOf<ControlModeRoomData>()
     private val logTag = this::class.java.simpleName
@@ -39,12 +37,12 @@ class DeviceSceneAdapter(
     }
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
-        sceneList.add(BodySceneData("","","",0))
+        sceneList.add(BodySceneData("", "", "", 0))
         setSpinners(holder)
     }
 
     override fun getItemCount(): Int {
-        return bodyScenes.size
+        return scenes.size
     }
 
     inner class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -62,7 +60,10 @@ class DeviceSceneAdapter(
             val switchList = arrayListOf<DeviceSwitchData>()
             val roomAdapter = RoomAdapter(mActivity, roomList)
             spinnerRoom.adapter = roomAdapter
-            spinnerRoom.setSelection(roomAdapter.getPositionById(roomId))
+            scenes[adapterPosition].roomId?.let { roomData ->
+                spinnerRoom.setSelection(roomAdapter.getPositionById(roomData.id))
+            }
+
             spinnerRoom.isEnabled = false
             spinnerDevice.isEnabled = false
 
@@ -83,11 +84,14 @@ class DeviceSceneAdapter(
                                     deviceList.addAll(devices)
                                     val deviceAdapter = DeviceAdapter(mActivity, deviceList)
                                     spinnerDevice.adapter = deviceAdapter
-                                    spinnerDevice.setSelection(
-                                        deviceAdapter.getPositionById(
-                                            deviceId
+                                    scenes[adapterPosition].deviceId?.let { deviceData ->
+                                        spinnerDevice.setSelection(
+                                            deviceAdapter.getPositionById(
+                                                deviceData.id
+                                            )
                                         )
-                                    )
+                                    }
+
                                 }
                                 break
                             }
@@ -165,10 +169,10 @@ class DeviceSceneAdapter(
         }
     }
 
-    fun getScenes(): ArrayList<BodySceneData>{
+    fun getScenes(): ArrayList<BodySceneData> {
         val scenes = arrayListOf<BodySceneData>()
-        for (scene in sceneList){
-            if (scene.deviceId.isNotEmpty()){
+        for (scene in sceneList) {
+            if (scene.deviceId.isNotEmpty()) {
                 scenes.add(scene)
             }
         }

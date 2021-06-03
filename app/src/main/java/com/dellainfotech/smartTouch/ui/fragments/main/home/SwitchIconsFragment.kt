@@ -16,17 +16,15 @@ import com.dellainfotech.smartTouch.common.interfaces.AdapterItemClickListener
 import com.dellainfotech.smartTouch.common.interfaces.DialogAskListener
 import com.dellainfotech.smartTouch.common.utils.Constants
 import com.dellainfotech.smartTouch.common.utils.DialogUtil
-import com.dellainfotech.smartTouch.databinding.FragmentDeviceCustomizationBinding
 import com.dellainfotech.smartTouch.databinding.FragmentSwitchIconsBinding
-import com.dellainfotech.smartTouch.model.SwitchIconsModel
-import com.dellainfotech.smartTouch.ui.fragments.BaseFragment
 import com.dellainfotech.smartTouch.ui.fragments.ModelBaseFragment
 import com.dellainfotech.smartTouch.ui.viewmodel.HomeViewModel
 
 /**
  * Created by Jignesh Dangar on 27-04-2021.
  */
-class SwitchIconsFragment : ModelBaseFragment<HomeViewModel, FragmentSwitchIconsBinding, HomeRepository>() {
+class SwitchIconsFragment :
+    ModelBaseFragment<HomeViewModel, FragmentSwitchIconsBinding, HomeRepository>() {
 
     private val logTag = this::class.java.simpleName
     private val args: SwitchIconsFragmentArgs by navArgs()
@@ -51,8 +49,8 @@ class SwitchIconsFragment : ModelBaseFragment<HomeViewModel, FragmentSwitchIcons
 
         args.deviceDetail.switchData?.let {
 
-            for (switch in it){
-                if (switch.typeOfSwitch == 0){
+            for (switch in it) {
+                if (switch.typeOfSwitch == 0) {
                     switchList.add(switch)
                 }
             }
@@ -61,7 +59,11 @@ class SwitchIconsFragment : ModelBaseFragment<HomeViewModel, FragmentSwitchIcons
             binding.recyclerSwitchIcons.adapter = adapter
             adapter.setOnSwitchClickListener(object : AdapterItemClickListener<DeviceSwitchData> {
                 override fun onItemClick(data: DeviceSwitchData) {
-                    findNavController().navigate(SwitchIconsFragmentDirections.actionSwitchIconsFragmentToSwitchIconsDetailFragment(data))
+                    findNavController().navigate(
+                        SwitchIconsFragmentDirections.actionSwitchIconsFragmentToSwitchIconsDetailFragment(
+                            data
+                        )
+                    )
                 }
             })
         }

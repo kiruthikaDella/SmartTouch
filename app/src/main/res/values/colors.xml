@@ -22,5 +22,6 @@
     <color name="waikawa_gray">#577399</color>
     <color name="ghost_2">#C5CAD1</color>
     <color name="app_background_color">@color/catskill_white</color>
+    <color name="red">#FF0000</color>
 
 </resources>

@@ -38,12 +38,16 @@ class ScreenLayoutFragment :
 
         when (args.deviceCustomizationDetail.screenLayoutType) {
             screenLayoutModel?.screenLayoutEight -> {
+                binding.linearFourIconsView.isVisible = false
                 screenLayoutModel?.changeViewType(ScreenLayoutModel.VIEW_TYPE.EIGHT_ICONS_VIEW)
             }
             screenLayoutModel?.screenLayoutSix -> {
+                binding.linearFourIconsView.isVisible = false
                 screenLayoutModel?.changeViewType(ScreenLayoutModel.VIEW_TYPE.SIX_ICONS_VIEW)
             }
             screenLayoutModel?.screenLayoutFour -> {
+                binding.linearEightIconsView.isVisible = false
+                binding.linearSixIconsView.isVisible = false
                 screenLayoutModel?.changeViewType(ScreenLayoutModel.VIEW_TYPE.FOUR_ICONS_VIEW)
             }
         }
@@ -69,50 +73,12 @@ class ScreenLayoutFragment :
             }
         }
 
-        if (FastSave.getInstance().getBoolean(
-                Constants.isScreenLayoutLocked,
-                Constants.DEFAULT_SCREEN_LAYOUT_LOCK_STATUS
-            )
-        ) {
-            lockScreen()
-        }
 
         binding.ivBack.setOnClickListener {
             findNavController().navigateUp()
         }
 
-        binding.ibLock.setOnClickListener {
-            activity?.let {
-                DialogUtil.askAlert(
-                    it,
-                    getString(R.string.dialog_title_text_lock),
-                    getString(R.string.text_ok),
-                    getString(R.string.text_cancel),
-                    object : DialogAskListener {
-                        override fun onYesClicked() {
-                            FastSave.getInstance().saveBoolean(Constants.isScreenLayoutLocked, true)
-                            lockScreen()
-                        }
 
-                        override fun onNoClicked() {
-                            FastSave.getInstance()
-                                .saveBoolean(Constants.isScreenLayoutLocked, false)
-                            unlockScreen()
-                        }
-
-                    }
-                )
-            }
-        }
-
-    }
-
-    private fun lockScreen() {
-        binding.relativeLock.isVisible = true
-    }
-
-    private fun unlockScreen() {
-        binding.relativeLock.isVisible = false
     }
 
     override fun getViewModel(): Class<HomeViewModel> = HomeViewModel::class.java

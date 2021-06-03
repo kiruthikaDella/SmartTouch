@@ -81,12 +81,29 @@
         <action
             android:id="@+id/action_deviceFeaturesFragment_to_sceneFragment"
             app:destination="@id/sceneFragment" />
+        <argument
+            android:name="roomDetail"
+            app:argType="com.dellainfotech.smartTouch.api.model.GetRoomData" />
     </fragment>
     <fragment
         android:id="@+id/createSceneFragment"
         android:name="com.dellainfotech.smartTouch.ui.fragments.main.home.CreateSceneFragment"
         android:label="fragment_create_scene"
-        tools:layout="@layout/fragment_create_scene" />
+        tools:layout="@layout/fragment_create_scene" >
+        <argument
+            android:name="deviceDetail"
+            app:argType="com.dellainfotech.smartTouch.api.model.GetDeviceData" />
+        <argument
+            android:name="roomDetail"
+            app:argType="com.dellainfotech.smartTouch.api.model.GetRoomData" />
+        <argument
+            android:name="sceneDetail"
+            app:argType="com.dellainfotech.smartTouch.api.model.GetSceneData"
+            app:nullable="true" />
+        <argument
+            android:name="controlModeList"
+            app:argType="com.dellainfotech.smartTouch.api.model.ControlModeRoomData[]" />
+    </fragment>
     <fragment
         android:id="@+id/accountSettingsFragment"
         android:name="com.dellainfotech.smartTouch.ui.fragments.main.home.AccountSettingsFragment"
@@ -154,5 +171,11 @@
         <action
             android:id="@+id/action_sceneFragment_to_createSceneFragment"
             app:destination="@id/createSceneFragment" />
+        <argument
+            android:name="deviceDetail"
+            app:argType="com.dellainfotech.smartTouch.api.model.GetDeviceData" />
+        <argument
+            android:name="roomDetail"
+            app:argType="com.dellainfotech.smartTouch.api.model.GetRoomData" />
     </fragment>
 </navigation>

@@ -4,7 +4,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginStart="@dimen/screen_start_margin"
-    android:layout_marginTop="@dimen/_15sdp"
+    android:layout_marginTop="@dimen/_8sdp"
+    android:layout_marginBottom="@dimen/_8sdp"
     android:layout_marginEnd="@dimen/screen_end_margin"
     android:background="@drawable/white_background_with_catskill_white_dark_border"
     app:cardBackgroundColor="@color/white"
@@ -16,33 +17,25 @@
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/_15sdp">
 
-        <ImageView
-            android:id="@+id/iv_switch"
-            android:layout_width="@dimen/_18sdp"
-            android:layout_height="@dimen/_18sdp"
-            android:src="@drawable/ic_switch" />
-
         <TextView
-            android:id="@+id/tv_switch_name"
+            android:id="@+id/tv_scene_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/_10sdp"
             android:layout_marginEnd="@dimen/_10sdp"
             android:layout_toStartOf="@+id/iv_arrow"
-            android:layout_toEndOf="@+id/iv_switch"
             android:fontFamily="@font/roboto_medium"
             android:text="@string/text_switch"
             android:textColor="@color/daintree"
             android:textSize="@dimen/_12ssp" />
 
-        <ImageView
+        <ImageButton
             android:id="@+id/iv_arrow"
-            android:layout_width="@dimen/_6sdp"
-            android:layout_height="@dimen/_12sdp"
+            android:layout_width="@dimen/_12sdp"
+            android:layout_height="@dimen/_15sdp"
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
-            android:src="@drawable/ic_arrow_switch_icons"
-            app:tint="@color/waikawa_gray" />
+            android:background="@drawable/ic_delete"
+            android:backgroundTint="@color/red" />
 
     </RelativeLayout>
 </androidx.cardview.widget.CardView>

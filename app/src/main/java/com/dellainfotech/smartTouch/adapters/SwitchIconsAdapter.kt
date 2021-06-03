@@ -11,7 +11,6 @@ import com.bumptech.glide.Glide
 import com.dellainfotech.smartTouch.R
 import com.dellainfotech.smartTouch.api.model.DeviceSwitchData
 import com.dellainfotech.smartTouch.common.interfaces.AdapterItemClickListener
-import com.dellainfotech.smartTouch.model.SwitchIconsModel
 
 /**
  * Created by Jignesh Dangar on 27-04-2021.
@@ -26,7 +25,6 @@ class SwitchIconsAdapter(
 
     inner class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val tvSwitchName = itemView.findViewById(R.id.tv_switch_name) as TextView
-        val tvSwitchNumber = itemView.findViewById(R.id.tv_switch_number) as TextView
         val ivSwitch = itemView.findViewById(R.id.iv_switch) as ImageView
     }
 
@@ -46,7 +44,6 @@ class SwitchIconsAdapter(
 
         holder.apply {
             tvSwitchName.text = data.name
-//            tvSwitchNumber.text = data.switchNumber
 
             itemView.setOnClickListener {
                 switchClickListener?.onItemClick(data)

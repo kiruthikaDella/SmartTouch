@@ -29,11 +29,39 @@ data class GetRoomData(
     var userId: String,
     @SerializedName("vRoomName")
     var roomName: String,
-    @SerializedName("vRoomType")
-    var roomType: String,
     @SerializedName("tiRetainState")
     var retainState: Int
-) : Parcelable, Serializable
+) : Parcelable, Serializable {
+    override fun toString(): String {
+        return "GetRoomData(id='$id', roomTypeId=$roomTypeId, userId='$userId', roomName='$roomName', retainState=$retainState)"
+    }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as GetRoomData
+
+        if (id != other.id) return false
+        if (roomTypeId != other.roomTypeId) return false
+        if (userId != other.userId) return false
+        if (roomName != other.roomName) return false
+        if (retainState != other.retainState) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        var result = id.hashCode()
+        result = 31 * result + (roomTypeId?.hashCode() ?: 0)
+        result = 31 * result + userId.hashCode()
+        result = 31 * result + roomName.hashCode()
+        result = 31 * result + retainState
+        return result
+    }
+
+
+}
 
 @Parcelize
 data class GetRoomTypeId(
@@ -45,4 +73,32 @@ data class GetRoomTypeId(
     var filePath: String,
     @SerializedName("vFile")
     var file: String
-) : Parcelable, Serializable
+) : Parcelable, Serializable {
+    override fun toString(): String {
+        return "GetRoomTypeId(id='$id', roomName='$roomName', filePath='$filePath', file='$file')"
+    }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as GetRoomTypeId
+
+        if (id != other.id) return false
+        if (roomName != other.roomName) return false
+        if (filePath != other.filePath) return false
+        if (file != other.file) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        var result = id.hashCode()
+        result = 31 * result + roomName.hashCode()
+        result = 31 * result + filePath.hashCode()
+        result = 31 * result + file.hashCode()
+        return result
+    }
+
+
+}

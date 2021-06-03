@@ -168,7 +168,7 @@ class DeviceFragment :
             override fun onItemClick(data: GetDeviceData) {
                 findNavController().navigate(
                     DeviceFragmentDirections.actionRoomPanelFragmentToDeviceFeaturesFragment(
-                        data
+                        data,args.roomDetail
                     )
                 )
             }

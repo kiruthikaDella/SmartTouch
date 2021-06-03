@@ -176,9 +176,13 @@ class HomeViewModel @ViewModelInject constructor(
     val deleteImageResponse: LiveData<Resource<CommonResponse>>
         get() = _deleteImageResponse
 
-    private val _getSceneResponse: MutableLiveData<Resource<CommonResponse>> = MutableLiveData()
-    val getSceneResponse: LiveData<Resource<CommonResponse>>
+    private val _getSceneResponse: MutableLiveData<Resource<GetSceneResponse>> = MutableLiveData()
+    val getSceneResponse: LiveData<Resource<GetSceneResponse>>
         get() = _getSceneResponse
+
+    private val _addSceneResponse: MutableLiveData<Resource<CommonResponse>> = MutableLiveData()
+    val addSceneResponse: LiveData<Resource<CommonResponse>>
+        get() = _addSceneResponse
 
     fun addDevice(bodyAddDevice: BodyAddDevice) = viewModelScope.launch {
         _addDeviceResponse.value = Resource.Loading
@@ -245,9 +249,14 @@ class HomeViewModel @ViewModelInject constructor(
         _deleteImageResponse.value = homeRepository.deleteImage(deviceId)
     }
 
-    fun getScene(roomId: String,deviceId: String) = viewModelScope.launch {
+    fun getScene(bodyGetScene: BodyGetScene) = viewModelScope.launch {
         _getSceneResponse.value = Resource.Loading
-        _getSceneResponse.value = homeRepository.getScene(roomId, deviceId)
+        _getSceneResponse.value = homeRepository.getScene(bodyGetScene)
+    }
+
+    fun addScene(bodyAddScene: BodyAddScene) = viewModelScope.launch {
+        _addSceneResponse.value = Resource.Loading
+        _addSceneResponse.value = homeRepository.addScene(bodyAddScene)
     }
 
     //

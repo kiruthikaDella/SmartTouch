@@ -34,6 +34,7 @@
                 android:layout_centerInParent="true" />
 
             <ImageButton
+                android:id="@+id/ib_save"
                 android:layout_width="@dimen/_14sdp"
                 android:layout_height="@dimen/_12sdp"
                 android:background="@drawable/ic_check"
@@ -80,7 +81,7 @@
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <EditText
-                    android:id="@+id/edt_create_scene"
+                    android:id="@+id/edt_scene_name"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/login_component_height"
                     android:gravity="center_vertical"
@@ -97,9 +98,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="0.3dp"
                     android:background="@color/nepal"
-                    app:layout_constraintStart_toStartOf="@+id/edt_create_scene"
+                    app:layout_constraintStart_toStartOf="@+id/edt_scene_name"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/edt_create_scene" />
+                    app:layout_constraintTop_toBottomOf="@+id/edt_scene_name" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -238,6 +239,7 @@
             android:gravity="center">
 
             <TextView
+                android:id="@+id/tv_add"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/text_add"

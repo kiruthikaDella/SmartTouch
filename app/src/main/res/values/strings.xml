@@ -57,6 +57,8 @@
     <string name="error_text_serial_number">Please enter serial number</string>
     <string name="error_text_name">Please enter name</string>
     <string name="error_text_name_length">Name must be more than 3 character</string>
+    <string name="error_text_scene_name_empty">SceneName must not be empty</string>
+    <string name="error_text_scene_name_length">SceneName must be more than 3 character</string>
 
     <!--    Forgot Password-->
     <string name="title_text_forgot_password">Forgot your password?</string>

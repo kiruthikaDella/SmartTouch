@@ -3,48 +3,92 @@ package com.dellainfotech.smartTouch.ui.fragments.main.home
 import android.app.TimePickerDialog
 import android.os.Bundle
 import android.text.Html
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.PopupMenu
+import android.widget.Toast
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import com.dellainfotech.smartTouch.R
 import com.dellainfotech.smartTouch.adapters.DeviceSceneAdapter
+import com.dellainfotech.smartTouch.adapters.UpdateDeviceSceneAdapter
+import com.dellainfotech.smartTouch.api.Resource
+import com.dellainfotech.smartTouch.api.body.BodyAddScene
+import com.dellainfotech.smartTouch.api.body.BodySceneData
+import com.dellainfotech.smartTouch.api.model.GetSceneData
+import com.dellainfotech.smartTouch.api.repository.HomeRepository
+import com.dellainfotech.smartTouch.common.utils.Constants
 import com.dellainfotech.smartTouch.common.utils.DialogUtil
+import com.dellainfotech.smartTouch.common.utils.Utils.toEditable
 import com.dellainfotech.smartTouch.databinding.FragmentCreateSceneBinding
-import com.dellainfotech.smartTouch.ui.fragments.BaseFragment
+import com.dellainfotech.smartTouch.ui.fragments.ModelBaseFragment
+import com.dellainfotech.smartTouch.ui.viewmodel.HomeViewModel
 import java.text.Format
 import java.text.SimpleDateFormat
 import java.util.*
-
 
 /**
  * Created by Jignesh Dangar on 23-04-2021.
  */
 
-class CreateSceneFragment : BaseFragment() {
+class CreateSceneFragment : ModelBaseFragment<HomeViewModel, FragmentCreateSceneBinding, HomeRepository>() {
 
-    private lateinit var binding: FragmentCreateSceneBinding
+    private val logTag = this::class.java.simpleName
+    private val args: CreateSceneFragmentArgs by navArgs()
     private lateinit var deviceSceneAdapter: DeviceSceneAdapter
-
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        binding = FragmentCreateSceneBinding.inflate(inflater, container, false)
-        return binding.root
-    }
+    private lateinit var updateDeviceSceneAdapter: UpdateDeviceSceneAdapter
+    private val scenes = arrayListOf<BodySceneData>()
+    private var isUpdatingScene: Boolean = false
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        setTime()
+        clickEvents()
+        apiResponse()
+        args.sceneDetail?.let {
+            isUpdatingScene = true
+            setSceneData(it)
+        }?: kotlin.run {
+            activity?.let {
+                deviceSceneAdapter = DeviceSceneAdapter(it, scenes,args.deviceDetail.id,args.roomDetail.id)
+                deviceSceneAdapter.updateRoomList(args.controlModeList.toList())
+                binding.recyclerScenes.adapter = deviceSceneAdapter
+            }
+        }
+    }
+
+    private fun setTime() {
+        val formatter = SimpleDateFormat("hh:mm a", Locale.US)
+        val time = "<font color='#1A8EFF'>${
+            formatter.format(Calendar.getInstance().time).dropLast(3)
+        }</font><font color='#011B25'> ${
+            formatter.format(
+                Calendar.getInstance().time
+            ).takeLast(2).toLowerCase(Locale.getDefault())
+        }</font>"
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+            binding.tvTime.text = Html.fromHtml(time, Html.FROM_HTML_MODE_LEGACY)
+        } else {
+            binding.tvTime.text = Html.fromHtml(time)
+        }
+    }
+
+    override fun getViewModel(): Class<HomeViewModel> = HomeViewModel::class.java
+
+    override fun getFragmentBinding(
+        inflater: LayoutInflater,
+        container: ViewGroup?
+    ): FragmentCreateSceneBinding = FragmentCreateSceneBinding.inflate(inflater, container, false)
+
+    override fun getFragmentRepository(): HomeRepository = HomeRepository(networkModel)
+
+    private fun clickEvents() {
+
         binding.ivBack.setOnClickListener {
             findNavController().navigateUp()
-        }
-
-        context?.let {
-            deviceSceneAdapter = DeviceSceneAdapter(it)
-            binding.recyclerScenes.adapter = deviceSceneAdapter
         }
 
         binding.tvDaily.setOnClickListener {
@@ -61,6 +105,11 @@ class CreateSceneFragment : BaseFragment() {
 
         }
 
+        binding.tvAdd.setOnClickListener {
+            scenes.add(BodySceneData("","","",0))
+            deviceSceneAdapter.notifyDataSetChanged()
+        }
+
         binding.ivEditCreateScene.setOnClickListener {
             activity?.let {
                 DialogUtil.editDialog(
@@ -72,8 +121,6 @@ class CreateSceneFragment : BaseFragment() {
                 )
             }
         }
-
-        setTime()
 
         binding.tvTime.setOnClickListener {
             context?.let { mContext ->
@@ -112,21 +159,102 @@ class CreateSceneFragment : BaseFragment() {
             }
 
         }
+
+        binding.ibSave.setOnClickListener {
+            val sceneName = binding.edtSceneName.text.toString().trim()
+            val sceneTime = binding.tvTime.text.toString()
+            val sceneFrequency = binding.tvDaily.text.toString()
+            when {
+                sceneName.isEmpty() -> {
+                    context?.let {
+                        Toast.makeText(it,getString(R.string.error_text_scene_name_empty),Toast.LENGTH_LONG).show()
+                    }
+                }
+                sceneName.length < 3 -> {
+                    context?.let {
+                        Toast.makeText(it,getString(R.string.error_text_scene_name_length),Toast.LENGTH_LONG).show()
+                    }
+                }
+                else -> {
+                    activity?.let {
+                        DialogUtil.loadingAlert(it)
+                    }
+                    Log.e(logTag, " BodyScene ${BodyAddScene(sceneName,sceneTime,sceneFrequency,deviceSceneAdapter.getScenes())}")
+                    viewModel.addScene(BodyAddScene(sceneName,sceneTime,sceneFrequency,deviceSceneAdapter.getScenes()))
+                }
+            }
+        }
     }
 
-    private fun setTime() {
-        val formatter = SimpleDateFormat("hh:mm a", Locale.US)
+    private fun apiResponse(){
+       /* viewModel.getControlResponse.observe(viewLifecycleOwner, { response ->
+            when (response) {
+                is Resource.Success -> {
+                    DialogUtil.hideDialog()
+                    if (response.values.status && response.values.code == Constants.API_SUCCESS_CODE) {
+                        response.values.data?.let { roomDataList ->
+                            if (isUpdatingScene){
+                                updateDeviceSceneAdapter.updateRoomList(roomDataList)
+                            }else {
+                                deviceSceneAdapter.updateRoomList(roomDataList)
+                            }
+                        }
+                    }
+                }
+                is Resource.Failure -> {
+                    DialogUtil.hideDialog()
+                    Log.e(logTag, " getControlResponse Failure ${response.errorBody?.string()} ")
+                }
+                else -> {
+                    //We will do nothing here
+                }
+            }
+        })*/
+        viewModel.addSceneResponse.observe(viewLifecycleOwner, { response ->
+            when(response){
+                is Resource.Success -> {
+                    DialogUtil.hideDialog()
+                    context?.let {
+                        Toast.makeText(it,response.values.message,Toast.LENGTH_SHORT).show()
+                    }
+                    if (response.values.status && response.values.code == Constants.API_SUCCESS_CODE){
+                        findNavController().navigateUp()
+                    }
+                }
+                is Resource.Failure -> {
+                    DialogUtil.hideDialog()
+                    Log.e(logTag, " addSceneResponse Failure ${response.errorBody?.string()} ")
+                }
+                else -> {
+                    //We will do nothing here
+                }
+            }
+        })
+    }
+
+    private fun setSceneData(sceneData: GetSceneData){
+        binding.edtSceneName.text = sceneData.sceneName.toEditable()
+
         val time = "<font color='#1A8EFF'>${
-            formatter.format(Calendar.getInstance().time).dropLast(3)
+            sceneData.sceneTime.dropLast(3)
         }</font><font color='#011B25'> ${
-            formatter.format(
-                Calendar.getInstance().time
-            ).takeLast(2).toLowerCase(Locale.getDefault())
+            sceneData.sceneTime.takeLast(2).toLowerCase(Locale.getDefault())
         }</font>"
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
             binding.tvTime.text = Html.fromHtml(time, Html.FROM_HTML_MODE_LEGACY)
         } else {
             binding.tvTime.text = Html.fromHtml(time)
+        }
+
+        binding.tvDaily.text= sceneData.sceneInterval
+
+        activity?.let {mActivity ->
+            sceneData.scene?.let {
+                updateDeviceSceneAdapter = UpdateDeviceSceneAdapter(mActivity,it)
+                binding.recyclerScenes.adapter = updateDeviceSceneAdapter
+                updateDeviceSceneAdapter.updateRoomList(args.controlModeList.toList())
+                updateDeviceSceneAdapter.notifyDataSetChanged()
+            }
         }
     }
 

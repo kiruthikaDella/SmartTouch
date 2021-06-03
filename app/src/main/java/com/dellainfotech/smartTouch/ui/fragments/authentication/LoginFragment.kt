@@ -63,8 +63,8 @@ class LoginFragment : ModelBaseFragment<AuthViewModel, FragmentLoginBinding, Aut
             findNavController().navigate(LoginFragmentDirections.actionLoginFragmentToForgotPasswordFragment())
         }
 
-        binding.edtEmail.setText("jignesh.dangar@teksun.com")
-        binding.edtPassword.setText("123456")
+     /*   binding.edtEmail.setText("jignesh.dangar@teksun.com")
+        binding.edtPassword.setText("123456")*/
 
         binding.checkboxRemember.isChecked = FastSave.getInstance()
             .getBoolean(Constants.IS_REMEMBER, Constants.DEFAULT_REMEMBER_STATUS)
