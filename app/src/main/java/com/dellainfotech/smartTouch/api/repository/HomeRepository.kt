@@ -95,6 +95,15 @@ class HomeRepository @Inject constructor(
     suspend fun addScene(bodyAddScene: BodyAddScene) =
         safeApiCall { smartTouchApi.addScene(getAccessKey(), bodyAddScene) }
 
+    suspend fun updateScene(bodyUpdateScene: BodyUpdateScene) =
+        safeApiCall { smartTouchApi.updateScene(getAccessKey(), bodyUpdateScene) }
+
+    suspend fun deleteScene(sceneId: String) =
+        safeApiCall { smartTouchApi.deleteScene(getAccessKey(), sceneId) }
+
+    suspend fun deleteSceneDetail(sceneDetailId: String) =
+        safeApiCall { smartTouchApi.deleteSceneDetail(getAccessKey(), sceneDetailId) }
+
     //
     //endregion
     //

@@ -17,7 +17,9 @@ import com.dellainfotech.smartTouch.adapters.UpdateDeviceSceneAdapter
 import com.dellainfotech.smartTouch.api.Resource
 import com.dellainfotech.smartTouch.api.body.BodyAddScene
 import com.dellainfotech.smartTouch.api.body.BodySceneData
+import com.dellainfotech.smartTouch.api.body.BodyUpdateScene
 import com.dellainfotech.smartTouch.api.model.GetSceneData
+import com.dellainfotech.smartTouch.api.model.Scene
 import com.dellainfotech.smartTouch.api.repository.HomeRepository
 import com.dellainfotech.smartTouch.common.utils.Constants
 import com.dellainfotech.smartTouch.common.utils.DialogUtil
@@ -39,7 +41,7 @@ class CreateSceneFragment : ModelBaseFragment<HomeViewModel, FragmentCreateScene
     private val args: CreateSceneFragmentArgs by navArgs()
     private lateinit var deviceSceneAdapter: DeviceSceneAdapter
     private lateinit var updateDeviceSceneAdapter: UpdateDeviceSceneAdapter
-    private val scenes = arrayListOf<BodySceneData>()
+    private val createScenesList = arrayListOf<BodySceneData>()
     private var isUpdatingScene: Boolean = false
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -53,7 +55,7 @@ class CreateSceneFragment : ModelBaseFragment<HomeViewModel, FragmentCreateScene
             setSceneData(it)
         }?: kotlin.run {
             activity?.let {
-                deviceSceneAdapter = DeviceSceneAdapter(it, scenes,args.deviceDetail.id,args.roomDetail.id)
+                deviceSceneAdapter = DeviceSceneAdapter(it, createScenesList,args.deviceDetail.id,args.roomDetail.id)
                 deviceSceneAdapter.updateRoomList(args.controlModeList.toList())
                 binding.recyclerScenes.adapter = deviceSceneAdapter
             }
@@ -106,8 +108,12 @@ class CreateSceneFragment : ModelBaseFragment<HomeViewModel, FragmentCreateScene
         }
 
         binding.tvAdd.setOnClickListener {
-            scenes.add(BodySceneData("","","",0))
-            deviceSceneAdapter.notifyDataSetChanged()
+            if (isUpdatingScene){
+                updateDeviceSceneAdapter.addScene()
+            }else{
+                createScenesList.add(BodySceneData("","","",0))
+                deviceSceneAdapter.notifyItemInserted(createScenesList.size)
+            }
         }
 
         binding.ivEditCreateScene.setOnClickListener {
@@ -179,38 +185,41 @@ class CreateSceneFragment : ModelBaseFragment<HomeViewModel, FragmentCreateScene
                     activity?.let {
                         DialogUtil.loadingAlert(it)
                     }
-                    Log.e(logTag, " BodyScene ${BodyAddScene(sceneName,sceneTime,sceneFrequency,deviceSceneAdapter.getScenes())}")
-                    viewModel.addScene(BodyAddScene(sceneName,sceneTime,sceneFrequency,deviceSceneAdapter.getScenes()))
+                    if (isUpdatingScene){
+                        Log.e(logTag, " BodyScene ${BodyUpdateScene(args.sceneDetail!!.id,sceneName,sceneTime,sceneFrequency,updateDeviceSceneAdapter.getScenes())}")
+                        viewModel.updateScene(BodyUpdateScene(args.sceneDetail!!.id,sceneName,sceneTime,sceneFrequency,updateDeviceSceneAdapter.getScenes()))
+                    }else {
+                        Log.e(logTag, " BodyScene ${BodyAddScene(sceneName,sceneTime,sceneFrequency,deviceSceneAdapter.getScenes())}")
+                        viewModel.addScene(BodyAddScene(sceneName,sceneTime,sceneFrequency,deviceSceneAdapter.getScenes()))
+                    }
                 }
             }
         }
     }
 
     private fun apiResponse(){
-       /* viewModel.getControlResponse.observe(viewLifecycleOwner, { response ->
-            when (response) {
+        viewModel.addSceneResponse.observe(viewLifecycleOwner, { response ->
+            when(response){
                 is Resource.Success -> {
                     DialogUtil.hideDialog()
-                    if (response.values.status && response.values.code == Constants.API_SUCCESS_CODE) {
-                        response.values.data?.let { roomDataList ->
-                            if (isUpdatingScene){
-                                updateDeviceSceneAdapter.updateRoomList(roomDataList)
-                            }else {
-                                deviceSceneAdapter.updateRoomList(roomDataList)
-                            }
-                        }
+                    context?.let {
+                        Toast.makeText(it,response.values.message,Toast.LENGTH_SHORT).show()
+                    }
+                    if (response.values.status && response.values.code == Constants.API_SUCCESS_CODE){
+                        findNavController().navigateUp()
                     }
                 }
                 is Resource.Failure -> {
                     DialogUtil.hideDialog()
-                    Log.e(logTag, " getControlResponse Failure ${response.errorBody?.string()} ")
+                    Log.e(logTag, " addSceneResponse Failure ${response.errorBody?.string()} ")
                 }
                 else -> {
                     //We will do nothing here
                 }
             }
-        })*/
-        viewModel.addSceneResponse.observe(viewLifecycleOwner, { response ->
+        })
+
+        viewModel.updateSceneResponse.observe(viewLifecycleOwner, { response ->
             when(response){
                 is Resource.Success -> {
                     DialogUtil.hideDialog()
@@ -250,7 +259,7 @@ class CreateSceneFragment : ModelBaseFragment<HomeViewModel, FragmentCreateScene
 
         activity?.let {mActivity ->
             sceneData.scene?.let {
-                updateDeviceSceneAdapter = UpdateDeviceSceneAdapter(mActivity,it)
+                updateDeviceSceneAdapter = UpdateDeviceSceneAdapter(mActivity,it,args.roomDetail.id,args.deviceDetail.id)
                 binding.recyclerScenes.adapter = updateDeviceSceneAdapter
                 updateDeviceSceneAdapter.updateRoomList(args.controlModeList.toList())
                 updateDeviceSceneAdapter.notifyDataSetChanged()

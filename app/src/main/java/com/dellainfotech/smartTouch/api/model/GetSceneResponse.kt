@@ -18,7 +18,7 @@ data class GetSceneResponse(
     var message: String,
     @SerializedName("data")
     var data: ArrayList<GetSceneData>? = null
-){
+) {
     override fun toString(): String {
         return "GetSceneResponse(status=$status, code=$code, message='$message', data=$data)"
     }
@@ -60,7 +60,7 @@ data class GetSceneData(
     var sceneInterval: String,
     @SerializedName("scene")
     var scene: ArrayList<Scene>? = null
-): Parcelable, Serializable {
+) : Parcelable, Serializable {
     override fun toString(): String {
         return "GetSceneData(id='$id', sceneName='$sceneName', sceneTime='$sceneTime', sceneInterval='$sceneInterval', scene=$scene)"
     }
@@ -89,7 +89,6 @@ data class GetSceneData(
         return result
     }
 
-
 }
 
 @Parcelize
@@ -106,7 +105,7 @@ data class Scene(
     var deviceSwitchId: DeviceSwitchData? = null,
     @SerializedName("tiDeviceSwitchSettingValue")
     var deviceSwitchSettingValue: Int
-): Parcelable, Serializable {
+) : Parcelable, Serializable {
     override fun toString(): String {
         return "Scene(id='$id', sceneId='$sceneId', roomId=$roomId, deviceId=$deviceId, deviceSwitchId=$deviceSwitchId, deviceSwitchSettingValue=$deviceSwitchSettingValue)"
     }
@@ -136,7 +135,6 @@ data class Scene(
         result = 31 * result + deviceSwitchSettingValue
         return result
     }
-
 
 }
 

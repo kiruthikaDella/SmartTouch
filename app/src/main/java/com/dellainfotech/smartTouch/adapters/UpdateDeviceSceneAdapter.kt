@@ -1,6 +1,7 @@
 package com.dellainfotech.smartTouch.adapters
 
 import android.app.Activity
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,7 +13,10 @@ import com.dellainfotech.smartTouch.adapters.spinneradapter.DeviceAdapter
 import com.dellainfotech.smartTouch.adapters.spinneradapter.RoomAdapter
 import com.dellainfotech.smartTouch.adapters.spinneradapter.SwitchAdapter
 import com.dellainfotech.smartTouch.api.body.BodySceneData
+import com.dellainfotech.smartTouch.api.body.BodyUpdateScene
+import com.dellainfotech.smartTouch.api.body.BodyUpdateSceneData
 import com.dellainfotech.smartTouch.api.model.*
+import com.dellainfotech.smartTouch.common.utils.Utils.toBoolean
 import com.dellainfotech.smartTouch.common.utils.Utils.toInt
 import com.google.android.material.switchmaterial.SwitchMaterial
 
@@ -21,14 +25,22 @@ import com.google.android.material.switchmaterial.SwitchMaterial
  */
 class UpdateDeviceSceneAdapter(
     private val mActivity: Activity,
-    private val scenes: ArrayList<Scene>
+    private val scenes: ArrayList<Scene>,
+    private val roomId: String,
+    private val deviceId: String,
 ) : RecyclerView.Adapter<UpdateDeviceSceneAdapter.MyViewHolder>() {
 
     private val roomDataList = arrayListOf<ControlModeRoomData>()
     private val logTag = this::class.java.simpleName
 
     private var roomList = arrayListOf<GetRoomData>()
-    var sceneList = arrayListOf<BodySceneData>()
+    var updateSceneList = arrayListOf<BodyUpdateSceneData>()
+
+    init {
+        for (scene in scenes){
+            updateSceneList.add(BodyUpdateSceneData(null, null, scene.sceneId, scene.deviceSwitchId!!.id,scene.deviceSwitchSettingValue))
+        }
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
         val v = LayoutInflater.from(parent.context)
@@ -37,7 +49,7 @@ class UpdateDeviceSceneAdapter(
     }
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
-        sceneList.add(BodySceneData("", "", "", 0))
+        updateSceneList.add(BodyUpdateSceneData(null, null, null, "",0))
         setSpinners(holder)
     }
 
@@ -60,8 +72,11 @@ class UpdateDeviceSceneAdapter(
             val switchList = arrayListOf<DeviceSwitchData>()
             val roomAdapter = RoomAdapter(mActivity, roomList)
             spinnerRoom.adapter = roomAdapter
+            Log.e(logTag," roomId ${scenes[adapterPosition].roomId}")
             scenes[adapterPosition].roomId?.let { roomData ->
                 spinnerRoom.setSelection(roomAdapter.getPositionById(roomData.id))
+            }?: kotlin.run {
+                spinnerRoom.setSelection(roomAdapter.getPositionById(roomId))
             }
 
             spinnerRoom.isEnabled = false
@@ -76,7 +91,9 @@ class UpdateDeviceSceneAdapter(
                         id: Long
                     ) {
                         val room = parent?.selectedItem as GetRoomData
-                        sceneList[adapterPosition].roomId = room.id
+                        if (updateSceneList[adapterPosition].sceneDetailId == null){
+                            updateSceneList[adapterPosition].roomId = room.id
+                        }
                         for (roomData in roomDataList) {
                             if (roomData.id == room.id) {
                                 roomData.deviceData?.let { devices ->
@@ -88,6 +105,12 @@ class UpdateDeviceSceneAdapter(
                                         spinnerDevice.setSelection(
                                             deviceAdapter.getPositionById(
                                                 deviceData.id
+                                            )
+                                        )
+                                    }?: kotlin.run {
+                                        spinnerDevice.setSelection(
+                                            deviceAdapter.getPositionById(
+                                                deviceId
                                             )
                                         )
                                     }
@@ -113,7 +136,9 @@ class UpdateDeviceSceneAdapter(
                         id: Long
                     ) {
                         val device = parent?.selectedItem as GetDeviceData
-                        sceneList[adapterPosition].deviceId = device.id
+                        if (updateSceneList[adapterPosition].sceneDetailId == null){
+                            updateSceneList[adapterPosition].deviceId = device.id
+                        }
                         for (deviceData in deviceList) {
                             if (deviceData.id == device.id) {
                                 deviceData.switchData?.let { switches ->
@@ -123,9 +148,15 @@ class UpdateDeviceSceneAdapter(
                                             switchList.add(switch)
                                         }
                                     }
-                                    val switchAdapter =
-                                        SwitchAdapter(mActivity, switchList)
+                                    val switchAdapter = SwitchAdapter(mActivity, switchList)
                                     spinnerSwitch.adapter = switchAdapter
+                                    scenes[adapterPosition].deviceSwitchId?.let { switchData ->
+                                        spinnerSwitch.setSelection(
+                                            switchAdapter.getPositionById(
+                                                switchData.id
+                                            )
+                                        )
+                                    }
                                 }
                                 break
                             }
@@ -147,7 +178,7 @@ class UpdateDeviceSceneAdapter(
                         id: Long
                     ) {
                         val switch = parent?.selectedItem as DeviceSwitchData
-                        sceneList[adapterPosition].deviceSwitchId = switch.id
+                        updateSceneList[adapterPosition].deviceSwitchId = switch.id
                     }
 
                     override fun onNothingSelected(parent: AdapterView<*>?) {
@@ -156,10 +187,17 @@ class UpdateDeviceSceneAdapter(
 
                 }
 
+            switch.isChecked = scenes[adapterPosition].deviceSwitchSettingValue.toBoolean()
+
             switch.setOnCheckedChangeListener { buttonView, isChecked ->
-                sceneList[adapterPosition].deviceSwitchSettingValue = isChecked.toInt()
+                updateSceneList[adapterPosition].deviceSwitchSettingValue = isChecked.toInt()
             }
         }
+    }
+
+    fun addScene(){
+        scenes.add(Scene("","",null,null,null,0))
+        notifyDataSetChanged()
     }
 
     fun updateRoomList(controlModeList: List<ControlModeRoomData>) {
@@ -169,10 +207,10 @@ class UpdateDeviceSceneAdapter(
         }
     }
 
-    fun getScenes(): ArrayList<BodySceneData> {
-        val scenes = arrayListOf<BodySceneData>()
-        for (scene in sceneList) {
-            if (scene.deviceId.isNotEmpty()) {
+    fun getScenes(): ArrayList<BodyUpdateSceneData> {
+        val scenes = arrayListOf<BodyUpdateSceneData>()
+        for (scene in updateSceneList) {
+            if (scene.deviceSwitchId.isNotEmpty()) {
                 scenes.add(scene)
             }
         }

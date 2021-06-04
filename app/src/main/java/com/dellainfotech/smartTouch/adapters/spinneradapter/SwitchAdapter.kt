@@ -33,4 +33,15 @@ class SwitchAdapter(private val activity: Activity, private val items: List<Devi
         lbl.text = items[position].name
         return v
     }
+
+    fun getPositionById(deviceId: String): Int{
+        var position: Int = -1
+        for ((index, value) in items.withIndex()) {
+            if (value.id == deviceId){
+                position = index
+                break
+            }
+        }
+        return position
+    }
 }

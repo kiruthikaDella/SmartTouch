@@ -49,6 +49,8 @@ interface SmartTouchApi {
         const val API_GET_SCENE = "device/get-scene"
         const val API_ADD_SCENE = "device/scene"
         const val API_UPDATE_SCENE = "device/scene"
+        const val API_DELETE_SCENE = "device/scene/{scene_id}"
+        const val API_DELETE_SCENE_DETAIL = "device/scene-details/{scene_detail_id}"
 
         // Contact Us APIs
         const val API_FEEDBACK = "feedback/add"
@@ -285,6 +287,23 @@ interface SmartTouchApi {
         @Body bodyAddScene: BodyAddScene
     ): CommonResponse
 
+    @PUT(API_UPDATE_SCENE)
+    suspend fun updateScene(
+        @Header("access_key") access_key: String,
+        @Body bodyUpdateScene: BodyUpdateScene
+    ): CommonResponse
+
+    @DELETE(API_DELETE_SCENE)
+    suspend fun deleteScene(
+        @Header("access_key") access_key: String,
+        @Path("scene_id") sceneId: String
+    ): CommonResponse
+
+    @DELETE(API_DELETE_SCENE_DETAIL)
+    suspend fun deleteSceneDetail(
+        @Header("access_key") access_key: String,
+        @Path("scene_detail_id") sceneDetailId: String
+    ): CommonResponse
 
     //
     //endregion

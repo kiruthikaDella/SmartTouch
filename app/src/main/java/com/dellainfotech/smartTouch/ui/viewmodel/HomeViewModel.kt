@@ -184,6 +184,18 @@ class HomeViewModel @ViewModelInject constructor(
     val addSceneResponse: LiveData<Resource<CommonResponse>>
         get() = _addSceneResponse
 
+    private val _updateSceneResponse: MutableLiveData<Resource<CommonResponse>> = MutableLiveData()
+    val updateSceneResponse: LiveData<Resource<CommonResponse>>
+        get() = _updateSceneResponse
+
+    private val _deleteSceneResponse: MutableLiveData<Resource<CommonResponse>> = MutableLiveData()
+    val deleteSceneResponse: LiveData<Resource<CommonResponse>>
+        get() = _deleteSceneResponse
+
+    private val _deleteSceneDetailResponse: MutableLiveData<Resource<CommonResponse>> = MutableLiveData()
+    val deleteSceneDetailResponse: LiveData<Resource<CommonResponse>>
+        get() = _deleteSceneDetailResponse
+
     fun addDevice(bodyAddDevice: BodyAddDevice) = viewModelScope.launch {
         _addDeviceResponse.value = Resource.Loading
         _addDeviceResponse.value = homeRepository.addDevice(bodyAddDevice)
@@ -257,6 +269,21 @@ class HomeViewModel @ViewModelInject constructor(
     fun addScene(bodyAddScene: BodyAddScene) = viewModelScope.launch {
         _addSceneResponse.value = Resource.Loading
         _addSceneResponse.value = homeRepository.addScene(bodyAddScene)
+    }
+
+    fun updateScene(bodyUpdateScene: BodyUpdateScene) = viewModelScope.launch {
+        _updateSceneResponse.value = Resource.Loading
+        _updateSceneResponse.value = homeRepository.updateScene(bodyUpdateScene)
+    }
+
+    fun deleteScene(sceneId: String) = viewModelScope.launch {
+        _deleteSceneResponse.value = Resource.Loading
+        _deleteSceneResponse.value = homeRepository.deleteScene(sceneId)
+    }
+
+    fun deleteSceneDetail(sceneDetailId: String) = viewModelScope.launch {
+        _deleteSceneDetailResponse.value = Resource.Loading
+        _deleteSceneDetailResponse.value = homeRepository.deleteSceneDetail(sceneDetailId)
     }
 
     //
