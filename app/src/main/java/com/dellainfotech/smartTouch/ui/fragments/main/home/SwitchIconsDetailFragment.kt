@@ -107,6 +107,7 @@ class SwitchIconsDetailFragment :
                     if (response.values.status && response.values.code == Constants.API_SUCCESS_CODE){
                         response.values.data?.let {
                             args.switchDetail.icon = it.icon
+                            findNavController().navigateUp()
                         }
                     }
                 }

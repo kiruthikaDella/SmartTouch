@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
+import android.widget.ImageButton
 import android.widget.Spinner
 import androidx.recyclerview.widget.RecyclerView
 import com.dellainfotech.smartTouch.R
@@ -16,6 +17,9 @@ import com.dellainfotech.smartTouch.api.body.BodySceneData
 import com.dellainfotech.smartTouch.api.body.BodyUpdateScene
 import com.dellainfotech.smartTouch.api.body.BodyUpdateSceneData
 import com.dellainfotech.smartTouch.api.model.*
+import com.dellainfotech.smartTouch.common.interfaces.AdapterItemClickListener
+import com.dellainfotech.smartTouch.common.interfaces.DialogAskListener
+import com.dellainfotech.smartTouch.common.utils.DialogUtil
 import com.dellainfotech.smartTouch.common.utils.Utils.toBoolean
 import com.dellainfotech.smartTouch.common.utils.Utils.toInt
 import com.google.android.material.switchmaterial.SwitchMaterial
@@ -33,12 +37,14 @@ class UpdateDeviceSceneAdapter(
     private val roomDataList = arrayListOf<ControlModeRoomData>()
     private val logTag = this::class.java.simpleName
 
+    private var deleteClickListener: DeleteSceneItemClickListener<Scene>? = null
+
     private var roomList = arrayListOf<GetRoomData>()
     var updateSceneList = arrayListOf<BodyUpdateSceneData>()
 
     init {
         for (scene in scenes){
-            updateSceneList.add(BodyUpdateSceneData(null, null, scene.sceneId, scene.deviceSwitchId!!.id,scene.deviceSwitchSettingValue))
+            updateSceneList.add(BodyUpdateSceneData("", "", scene.id, scene.deviceSwitchId!!.id,scene.deviceSwitchSettingValue))
         }
     }
 
@@ -49,7 +55,7 @@ class UpdateDeviceSceneAdapter(
     }
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
-        updateSceneList.add(BodyUpdateSceneData(null, null, null, "",0))
+        updateSceneList.add(BodyUpdateSceneData("", "", null, "",0))
         setSpinners(holder)
     }
 
@@ -58,12 +64,11 @@ class UpdateDeviceSceneAdapter(
     }
 
     inner class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-
         val spinnerRoom = itemView.findViewById(R.id.spinner_room_name) as Spinner
         val spinnerDevice = itemView.findViewById(R.id.spinner_device_name) as Spinner
         val spinnerSwitch = itemView.findViewById(R.id.spinner_switch_name) as Spinner
         val switch = itemView.findViewById(R.id.switch_status) as SwitchMaterial
-
+        val ibDelete = itemView.findViewById(R.id.ib_delete) as ImageButton
     }
 
     private fun setSpinners(holder: MyViewHolder) {
@@ -72,7 +77,6 @@ class UpdateDeviceSceneAdapter(
             val switchList = arrayListOf<DeviceSwitchData>()
             val roomAdapter = RoomAdapter(mActivity, roomList)
             spinnerRoom.adapter = roomAdapter
-            Log.e(logTag," roomId ${scenes[adapterPosition].roomId}")
             scenes[adapterPosition].roomId?.let { roomData ->
                 spinnerRoom.setSelection(roomAdapter.getPositionById(roomData.id))
             }?: kotlin.run {
@@ -91,9 +95,8 @@ class UpdateDeviceSceneAdapter(
                         id: Long
                     ) {
                         val room = parent?.selectedItem as GetRoomData
-                        if (updateSceneList[adapterPosition].sceneDetailId == null){
-                            updateSceneList[adapterPosition].roomId = room.id
-                        }
+                        updateSceneList[adapterPosition].roomId = room.id
+
                         for (roomData in roomDataList) {
                             if (roomData.id == room.id) {
                                 roomData.deviceData?.let { devices ->
@@ -136,9 +139,8 @@ class UpdateDeviceSceneAdapter(
                         id: Long
                     ) {
                         val device = parent?.selectedItem as GetDeviceData
-                        if (updateSceneList[adapterPosition].sceneDetailId == null){
-                            updateSceneList[adapterPosition].deviceId = device.id
-                        }
+                        updateSceneList[adapterPosition].deviceId = device.id
+
                         for (deviceData in deviceList) {
                             if (deviceData.id == device.id) {
                                 deviceData.switchData?.let { switches ->
@@ -179,6 +181,7 @@ class UpdateDeviceSceneAdapter(
                     ) {
                         val switch = parent?.selectedItem as DeviceSwitchData
                         updateSceneList[adapterPosition].deviceSwitchId = switch.id
+                        scenes[adapterPosition].deviceSwitchId = switch
                     }
 
                     override fun onNothingSelected(parent: AdapterView<*>?) {
@@ -189,10 +192,46 @@ class UpdateDeviceSceneAdapter(
 
             switch.isChecked = scenes[adapterPosition].deviceSwitchSettingValue.toBoolean()
 
-            switch.setOnCheckedChangeListener { buttonView, isChecked ->
+            switch.setOnCheckedChangeListener { _, isChecked ->
                 updateSceneList[adapterPosition].deviceSwitchSettingValue = isChecked.toInt()
             }
+
+            ibDelete.setOnClickListener {
+                DialogUtil.askAlert(
+                    mActivity, mActivity.getString(R.string.dialog_title_delete_scene),
+                    mActivity.getString(R.string.text_yes),
+                    mActivity.getString(R.string.text_no),
+                    object : DialogAskListener {
+                        override fun onYesClicked() {
+                            if (scenes[adapterPosition].id == ""){
+                                scenes.removeAt(adapterPosition)
+                                notifyDataSetChanged()
+                            }else {
+                                deleteClickListener?.onItemClick(scenes[adapterPosition],adapterPosition)
+                            }
+                        }
+
+                        override fun onNoClicked() {
+                        }
+
+                    }
+                )
+            }
         }
+    }
+
+    fun deleteScene(position: Int){
+       /* val id = scenes[position].id
+        for ((index,value) in updateSceneList.withIndex()){
+            if (value.sceneDetailId == id){
+                updateSceneList.removeAt(index)
+                scenes.removeAt(position)
+                notifyDataSetChanged()
+            }
+        }*/
+        updateSceneList.removeAt(position)
+        scenes.removeAt(position)
+        notifyDataSetChanged()
     }
 
     fun addScene(){
@@ -217,4 +256,11 @@ class UpdateDeviceSceneAdapter(
         return scenes
     }
 
+    interface DeleteSceneItemClickListener<T> {
+        fun onItemClick(data: T, scenePosition: Int)
+    }
+
+    fun setOnDeleteClickListener(listener: DeleteSceneItemClickListener<Scene>) {
+        this.deleteClickListener = listener
+    }
 }

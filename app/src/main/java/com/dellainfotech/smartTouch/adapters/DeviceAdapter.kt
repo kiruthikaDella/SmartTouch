@@ -1,5 +1,7 @@
 package com.dellainfotech.smartTouch.adapters
 
+import android.app.Activity
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -8,21 +10,29 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
+import com.amazonaws.mobileconnectors.iot.AWSIotMqttQos
 import com.dellainfotech.smartTouch.R
 import com.dellainfotech.smartTouch.api.model.DeviceSwitchData
 import com.dellainfotech.smartTouch.api.model.GetDeviceData
 import com.dellainfotech.smartTouch.common.interfaces.AdapterItemClickListener
 import com.dellainfotech.smartTouch.common.utils.Constants
 import com.dellainfotech.smartTouch.common.utils.Utils.toBoolean
+import com.dellainfotech.smartTouch.common.utils.Utils.toInt
+import com.dellainfotech.smartTouch.mqtt.AwsMqttSingleton
 import com.google.android.material.switchmaterial.SwitchMaterial
 import com.warkiz.widget.IndicatorSeekBar
+import org.json.JSONObject
+import java.nio.charset.StandardCharsets
 
 /**
  * Created by Jignesh Dangar on 16-04-2021.
  */
 class DeviceAdapter(
-    private val deviceList: List<GetDeviceData>
+    private val mActivity: Activity,
+    private val deviceList: ArrayList<GetDeviceData>
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+
+    private val logTag = this::class.java.simpleName
 
     private var customizationClickListener: AdapterItemClickListener<GetDeviceData>? = null
     private var featuresClickListener: AdapterItemClickListener<GetDeviceData>? = null
@@ -30,12 +40,12 @@ class DeviceAdapter(
     private var editSwitchNameClickListener: SwitchItemClickListener<GetDeviceData>? = null
     private var updateDeviceNameClickListener: DeviceItemClickListener<GetDeviceData>? = null
 
-    private val EIGHT_PANEL_VIEW = 1
-    private val FOUR_PANEL_VIEW = 2
+    private val eightPanelView = 1
+    private val fourPanelView = 2
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return when (viewType) {
-            EIGHT_PANEL_VIEW -> {
+            eightPanelView -> {
                 val v = LayoutInflater.from(parent.context)
                     .inflate(R.layout.item_room_eight_panel, parent, false)
                 EightPanelViewHolder(v)
@@ -52,12 +62,14 @@ class DeviceAdapter(
         holder.setIsRecyclable(false)
         val data = deviceList[position]
 
+        subscribeToDevice(data.id)
+
         when (holder.itemViewType) {
-            EIGHT_PANEL_VIEW -> {
+            eightPanelView -> {
                 val eightPanelViewHolder: EightPanelViewHolder = holder as EightPanelViewHolder
                 setEightSwitchViewHolder(eightPanelViewHolder, data)
             }
-            FOUR_PANEL_VIEW -> {
+            fourPanelView -> {
                 val fourPanelViewHolder: FourPanelViewHolder = holder as FourPanelViewHolder
                 setFourSwitchViewHolder(fourPanelViewHolder, data)
             }
@@ -71,9 +83,9 @@ class DeviceAdapter(
 
     override fun getItemViewType(position: Int): Int {
         return if (deviceList[position].deviceType == Constants.DEVICE_TYPE_EIGHT) {
-            EIGHT_PANEL_VIEW
+            eightPanelView
         } else {
-            FOUR_PANEL_VIEW
+            fourPanelView
         }
     }
 
@@ -354,8 +366,132 @@ class DeviceAdapter(
                 }
             }
 
+            switchOne.setOnCheckedChangeListener { _, isChecked ->
+                publish(device.id, Constants.AWS_SWITCH_1, isChecked.toInt().toString())
+            }
+            switchTwo.setOnCheckedChangeListener { _, isChecked ->
+                publish(device.id, Constants.AWS_SWITCH_2, isChecked.toInt().toString())
+            }
+            switchThree.setOnCheckedChangeListener { _, isChecked ->
+                publish(device.id, Constants.AWS_SWITCH_3, isChecked.toInt().toString())
+            }
+            switchFour.setOnCheckedChangeListener { _, isChecked ->
+                publish(device.id, Constants.AWS_SWITCH_4, isChecked.toInt().toString())
+            }
+            switchPortC.setOnCheckedChangeListener { _, isChecked ->
+                publish(device.id, Constants.AWS_USB_PORT_C, isChecked.toInt().toString())
+            }
         }
     }
+
+    //
+    //region MQTT Methods
+    //
+
+    private fun subscribeToDevice(deviceId: String) {
+        try {
+            AwsMqttSingleton.mqttManager!!.subscribeToTopic(
+                Constants.Control_Device_Switches.replace(Constants.AWS_DEVICE_ID, deviceId),
+                AWSIotMqttQos.QOS0
+            ) { topic, data ->
+                mActivity.runOnUiThread {
+
+                    val message = String(data, StandardCharsets.UTF_8)
+                    Log.d("$logTag ReceivedData", "$topic    $message")
+
+                    if (topic.contains("/control/")) {
+                        val topic1 = topic.split("/")
+                        // topic [0] = ''
+                        // topic [1] = smarttouch
+                        // topic [2] = deviceId
+                        // topic [3] = control
+
+                        val deviceData = deviceList.find { it.id == topic1[2] }
+
+                        val jsonObject = JSONObject(message)
+                        if (jsonObject.has(Constants.AWS_SWITCH_1)) {
+                            deviceData?.switchData?.get(0)?.switchStatus =
+                                jsonObject.getString(Constants.AWS_SWITCH_1).toInt()
+                        }
+                        if (jsonObject.has(Constants.AWS_SWITCH_2)) {
+                            deviceData?.switchData?.get(1)?.switchStatus =
+                                jsonObject.getString(Constants.AWS_SWITCH_2).toInt()
+                        }
+                        if (jsonObject.has(Constants.AWS_SWITCH_3)) {
+                            deviceData?.switchData?.get(2)?.switchStatus =
+                                jsonObject.getString(Constants.AWS_SWITCH_3).toInt()
+                        }
+                        if (jsonObject.has(Constants.AWS_SWITCH_4)) {
+                            deviceData?.switchData?.get(3)?.switchStatus =
+                                jsonObject.getString(Constants.AWS_SWITCH_4).toInt()
+                        }
+                        if (jsonObject.has(Constants.AWS_SWITCH_5)) {
+                            deviceData?.switchData?.get(4)?.switchStatus =
+                                jsonObject.getString(Constants.AWS_SWITCH_5).toInt()
+                        }
+                        if (jsonObject.has(Constants.AWS_SWITCH_6)) {
+                            deviceData?.switchData?.get(5)?.switchStatus =
+                                jsonObject.getString(Constants.AWS_SWITCH_6).toInt()
+                        }
+                        if (jsonObject.has(Constants.AWS_SWITCH_7)) {
+                            deviceData?.switchData?.get(6)?.switchStatus =
+                                jsonObject.getString(Constants.AWS_SWITCH_7).toInt()
+                        }
+                        if (jsonObject.has(Constants.AWS_SWITCH_8)) {
+                            deviceData?.switchData?.get(7)?.switchStatus =
+                                jsonObject.getString(Constants.AWS_SWITCH_8).toInt()
+                        }
+                        if (jsonObject.has(Constants.AWS_USB_PORT_A)) {
+                            if (deviceData?.deviceType == Constants.DEVICE_TYPE_EIGHT) {
+                                deviceData.switchData?.get(9)?.switchStatus =
+                                    jsonObject.getString(Constants.AWS_USB_PORT_A).toInt()
+                            }
+
+                        }
+                        if (jsonObject.has(Constants.AWS_USB_PORT_C)) {
+                            if (deviceData?.deviceType == Constants.DEVICE_TYPE_EIGHT) {
+                                deviceData.switchData?.get(10)?.switchStatus =
+                                    jsonObject.getString(Constants.AWS_USB_PORT_C).toInt()
+                            } else {
+                                deviceData?.switchData?.get(5)?.switchStatus =
+                                    jsonObject.getString(Constants.AWS_USB_PORT_C).toInt()
+                            }
+
+                        }
+
+                        for ((index, value) in deviceList.withIndex()) {
+                            if (value.id == deviceData?.id) {
+                                deviceList[index] = deviceData
+                                break
+                            }
+                        }
+                        notifyDataSetChanged()
+                    }
+                }
+            }
+        } catch (e: Exception) {
+            Log.e(AwsMqttSingleton.logTag, "Subscription error.", e)
+        }
+    }
+
+    private fun publish(deviceId: String, switchIndex: String, switchValue: String) {
+        val payload = JSONObject()
+        payload.put(switchIndex, switchValue)
+        AwsMqttSingleton.publish(
+            Constants.Control_Device_Switches.replace(
+                Constants.AWS_DEVICE_ID,
+                deviceId
+            ), payload.toString()
+        )
+    }
+
+    //
+    //endregion
+    //
+
+    //
+    //region interface
+    //
 
     interface DeviceItemClickListener<T> {
         fun onItemClick(data: T, devicePosition: Int)
@@ -364,6 +500,14 @@ class DeviceAdapter(
     interface SwitchItemClickListener<T> {
         fun onItemClick(data: T, devicePosition: Int, switchData: DeviceSwitchData)
     }
+
+    //
+    //endregion
+    //
+
+    //
+    //region clicklistener
+    //
 
     fun setOnCustomizationClickListener(listener: AdapterItemClickListener<GetDeviceData>) {
         this.customizationClickListener = listener
@@ -385,4 +529,7 @@ class DeviceAdapter(
         this.updateDeviceNameClickListener = listener
     }
 
+    //
+    //endregion
+    //
 }

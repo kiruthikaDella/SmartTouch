@@ -25,6 +25,7 @@ import com.dellainfotech.smartTouch.common.utils.Utils.toBoolean
 import com.dellainfotech.smartTouch.common.utils.Utils.toEditable
 import com.dellainfotech.smartTouch.common.utils.Utils.toInt
 import com.dellainfotech.smartTouch.databinding.FragmentRoomPanelBinding
+import com.dellainfotech.smartTouch.mqtt.AwsMqttSingleton
 import com.dellainfotech.smartTouch.ui.fragments.ModelBaseFragment
 import com.dellainfotech.smartTouch.ui.viewmodel.HomeViewModel
 import com.sothree.slidinguppanel.SlidingUpPanelLayout
@@ -63,8 +64,10 @@ class DeviceFragment :
         showLoading()
         viewModel.getDevice(args.roomDetail.id)
 
-        panelAdapter = DeviceAdapter(deviceList)
-        binding.recyclerRoomPanels.adapter = panelAdapter
+        activity?.let {
+            panelAdapter = DeviceAdapter(it,deviceList)
+            binding.recyclerRoomPanels.adapter = panelAdapter
+        }
 
         clickEvents()
         apiCall()

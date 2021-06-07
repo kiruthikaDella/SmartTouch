@@ -1,7 +1,6 @@
 package com.dellainfotech.smartTouch.adapters
 
 import android.app.Activity
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,7 +13,10 @@ import com.dellainfotech.smartTouch.adapters.spinneradapter.DeviceAdapter
 import com.dellainfotech.smartTouch.adapters.spinneradapter.RoomAdapter
 import com.dellainfotech.smartTouch.adapters.spinneradapter.SwitchAdapter
 import com.dellainfotech.smartTouch.api.body.BodySceneData
-import com.dellainfotech.smartTouch.api.model.*
+import com.dellainfotech.smartTouch.api.model.ControlModeRoomData
+import com.dellainfotech.smartTouch.api.model.DeviceSwitchData
+import com.dellainfotech.smartTouch.api.model.GetDeviceData
+import com.dellainfotech.smartTouch.api.model.GetRoomData
 import com.dellainfotech.smartTouch.common.interfaces.DialogAskListener
 import com.dellainfotech.smartTouch.common.utils.DialogUtil
 import com.dellainfotech.smartTouch.common.utils.Utils.toInt
@@ -50,9 +52,8 @@ class DeviceSceneAdapter(
                 mActivity.getString(R.string.text_no),
                 object : DialogAskListener {
                     override fun onYesClicked() {
-                        Log.e(logTag, " removed $position")
-//                        bodyScenes.removeAt(position)
-//                        notifyDataSetChanged()
+                        bodyScenes.removeAt(position)
+                        notifyDataSetChanged()
                     }
 
                     override fun onNoClicked() {
@@ -85,7 +86,11 @@ class DeviceSceneAdapter(
             val switchList = arrayListOf<DeviceSwitchData>()
             val roomAdapter = RoomAdapter(mActivity, roomList)
             spinnerRoom.adapter = roomAdapter
-            spinnerRoom.setSelection(roomAdapter.getPositionById(roomId))
+            if (bodyScenes[adapterPosition].deviceSwitchId == "") {
+                spinnerRoom.setSelection(roomAdapter.getPositionById(roomId))
+            } else {
+                spinnerRoom.setSelection(roomAdapter.getPositionById(bodyScenes[adapterPosition].roomId))
+            }
             spinnerRoom.isEnabled = false
             spinnerDevice.isEnabled = false
 
@@ -106,11 +111,22 @@ class DeviceSceneAdapter(
                                     deviceList.addAll(devices)
                                     val deviceAdapter = DeviceAdapter(mActivity, deviceList)
                                     spinnerDevice.adapter = deviceAdapter
-                                    spinnerDevice.setSelection(
-                                        deviceAdapter.getPositionById(
-                                            deviceId
+
+                                    if (bodyScenes[adapterPosition].deviceId == "") {
+                                        spinnerDevice.setSelection(
+                                            deviceAdapter.getPositionById(
+                                                deviceId
+                                            )
                                         )
-                                    )
+                                    } else {
+                                        spinnerRoom.setSelection(
+                                            roomAdapter.getPositionById(
+                                                bodyScenes[adapterPosition].deviceId
+                                            )
+                                        )
+                                    }
+
+
                                 }
                                 break
                             }
@@ -145,6 +161,14 @@ class DeviceSceneAdapter(
                                     val switchAdapter =
                                         SwitchAdapter(mActivity, switchList)
                                     spinnerSwitch.adapter = switchAdapter
+
+                                    if (bodyScenes[adapterPosition].deviceSwitchId != "") {
+                                        spinnerSwitch.setSelection(
+                                            switchAdapter.getPositionById(
+                                                bodyScenes[adapterPosition].deviceSwitchId
+                                            )
+                                        )
+                                    }
                                 }
                                 break
                             }

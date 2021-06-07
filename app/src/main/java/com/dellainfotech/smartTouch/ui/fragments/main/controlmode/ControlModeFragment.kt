@@ -96,9 +96,6 @@ class ControlModeFragment :
             when (response) {
                 is Resource.Success -> {
                     DialogUtil.hideDialog()
-                    context?.let {
-                        Toast.makeText(it, response.values.message, Toast.LENGTH_SHORT).show()
-                    }
 
                     if (response.values.status && response.values.code == Constants.API_SUCCESS_CODE) {
                         response.values.data?.let { roomDataList ->
@@ -106,6 +103,10 @@ class ControlModeFragment :
                             Log.e(logTag, "  roomList ${roomList.size}")
                             controlModeAdapter = ControlModeAdapter(roomList)
                             binding.recyclerControlModes.adapter = controlModeAdapter
+                        }
+                    }else {
+                        context?.let {
+                            Toast.makeText(it, response.values.message, Toast.LENGTH_SHORT).show()
                         }
                     }
                 }

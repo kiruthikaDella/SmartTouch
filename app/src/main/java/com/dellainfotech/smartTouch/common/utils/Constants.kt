@@ -57,4 +57,22 @@ object Constants {
     const val DEFAULT_REMEMBER_STATUS = false
     const val IS_REMEMBER = "is_remember"
     const val IS_LOGGED_IN = "is_logged_in"
+
+    //MQTT TOPIC
+    const val AWS_DEVICE_ID = "{deviceid}"
+    const val Control_Device_Switches = "/smarttouch/$AWS_DEVICE_ID/control/"
+
+
+    //MQTT Parameter
+    const val AWS_SWITCH_1 = "SW01"
+    const val AWS_SWITCH_2 = "SW02"
+    const val AWS_SWITCH_3 = "SW03"
+    const val AWS_SWITCH_4 = "SW04"
+    const val AWS_SWITCH_5 = "SW05"
+    const val AWS_SWITCH_6 = "SW06"
+    const val AWS_SWITCH_7 = "SW07"
+    const val AWS_SWITCH_8 = "SW08"
+    const val AWS_USB_PORT_A = "USB_PORT_A"
+    const val AWS_USB_PORT_C = "USB_PORT_C"
+    const val AWS_DIMMER = "DIMMER"
 }

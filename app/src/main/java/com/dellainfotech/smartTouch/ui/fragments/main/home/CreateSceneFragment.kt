@@ -43,6 +43,7 @@ class CreateSceneFragment : ModelBaseFragment<HomeViewModel, FragmentCreateScene
     private lateinit var updateDeviceSceneAdapter: UpdateDeviceSceneAdapter
     private val createScenesList = arrayListOf<BodySceneData>()
     private var isUpdatingScene: Boolean = false
+    private var itemPosition: Int? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -232,7 +233,30 @@ class CreateSceneFragment : ModelBaseFragment<HomeViewModel, FragmentCreateScene
                 }
                 is Resource.Failure -> {
                     DialogUtil.hideDialog()
-                    Log.e(logTag, " addSceneResponse Failure ${response.errorBody?.string()} ")
+                    Log.e(logTag, " updateSceneResponse Failure ${response.errorBody?.string()} ")
+                }
+                else -> {
+                    //We will do nothing here
+                }
+            }
+        })
+
+        viewModel.deleteSceneDetailResponse.observe(viewLifecycleOwner, { response ->
+            when(response){
+                is Resource.Success -> {
+                    DialogUtil.hideDialog()
+                    context?.let {
+                        Toast.makeText(it,response.values.message,Toast.LENGTH_SHORT).show()
+                    }
+                    if (response.values.status && response.values.code == Constants.API_SUCCESS_CODE){
+                        itemPosition?.let {
+                            updateDeviceSceneAdapter.deleteScene(it)
+                        }
+                    }
+                }
+                is Resource.Failure -> {
+                    DialogUtil.hideDialog()
+                    Log.e(logTag, " deleteSceneDetailResponse Failure ${response.errorBody?.string()} ")
                 }
                 else -> {
                     //We will do nothing here
@@ -263,6 +287,16 @@ class CreateSceneFragment : ModelBaseFragment<HomeViewModel, FragmentCreateScene
                 binding.recyclerScenes.adapter = updateDeviceSceneAdapter
                 updateDeviceSceneAdapter.updateRoomList(args.controlModeList.toList())
                 updateDeviceSceneAdapter.notifyDataSetChanged()
+
+                updateDeviceSceneAdapter.setOnDeleteClickListener(object : UpdateDeviceSceneAdapter.DeleteSceneItemClickListener<Scene> {
+                    override fun onItemClick(data: Scene, scenePosition: Int) {
+                        DialogUtil.loadingAlert(mActivity)
+                        viewModel.deleteSceneDetail(data.id)
+                        itemPosition = scenePosition
+                    }
+
+                })
+
             }
         }
     }

@@ -142,7 +142,11 @@ object Utils {
 
     fun String.toEditable(): Editable = Editable.Factory.getInstance().newEditable(this)
 
-    fun Int.toBoolean(): Boolean = this == 1
+    fun Int.toBoolean(): Boolean = this == 1 // return true if value is 1 else false
 
-    fun Boolean.toInt(): Int = if (this) 1 else 0
+    fun Boolean.toInt(): Int = if (this) 1 else 0 //
+
+    fun Boolean.toReverseInt(): Int = if (this) 0 else 1
+
+    fun Int.toReverseInt(): Int = if (this == 1) 0 else 1
 }

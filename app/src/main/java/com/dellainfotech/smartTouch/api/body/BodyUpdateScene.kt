@@ -39,8 +39,8 @@ class BodyUpdateScene(
 }
 
 class BodyUpdateSceneData(
-    @SerializedName("iRoomId") var roomId: String? = null,
-    @SerializedName("iDeviceId") var deviceId: String? = null,
+    @SerializedName("iRoomId") var roomId: String,
+    @SerializedName("iDeviceId") var deviceId: String,
     @SerializedName("iSceneDetailId") var sceneDetailId: String? = null,
     @SerializedName("iDeviceSwitchId") var deviceSwitchId: String,
     @SerializedName("tiDeviceSwitchSettingValue") var deviceSwitchSettingValue: Int

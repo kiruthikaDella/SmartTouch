@@ -91,7 +91,7 @@ class CreateAccountFragment :
             binding.edtEmail.error = getString(R.string.error_text_valid_email)
         } else if (password.isEmpty()) {
             binding.edtPassword.error = getString(R.string.error_text_password)
-        } else if (password.length < 3) {
+        } else if (password.length < 6) {
             binding.edtPassword.error = getString(R.string.error_text_password_length)
         } else if (password != confirmPassword) {
             binding.edtConfirmPassword.error = getString(R.string.error_text_confirm_password)
