@@ -27,7 +27,7 @@
         android:id="@+id/roomPanelFragment"
         android:name="com.dellainfotech.smartTouch.ui.fragments.main.home.DeviceFragment"
         android:label="fragment_room_panel"
-        tools:layout="@layout/fragment_room_panel">
+        tools:layout="@layout/fragment_device">
         <argument
             android:name="roomDetail"
             app:argType="com.dellainfotech.smartTouch.api.model.GetRoomData" />

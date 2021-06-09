@@ -42,6 +42,9 @@ object Constants {
     const val CUSTOMER_SPECIFIC_ENDPOINT = "a3gjsr00gjuzw5-ats.iot.us-west-1.amazonaws.com"
     const val topicForExerciseName = ""
 
+    const val PASSWORD_LENGTH = 6
+    const val SOCIAL_LOGIN = "2"
+
     //Swagger
     const val SECRET_KEY = "PXGuKjNtjzLiyLRE0GzykvGcaZO5uWE0"
     const val PRIVATE_KEY = "4AF8AC8E124B6484BDDC5A9EB3D49"
@@ -51,6 +54,7 @@ object Constants {
     const val USERNAME = "username"
     const val USER_EMAIL = "user_email"
     const val USER_PHONE_NUMBER = "user_phone_number"
+    const val SOCIAL_ID = "social_id"
     const val ACCESS_TOKEN = "access_token"
 
     const val MOBILE_UUID = "mobile_uuid"

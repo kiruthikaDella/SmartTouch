@@ -33,6 +33,7 @@
         android:padding="@dimen/_10sdp"
         android:singleLine="true"
         android:text="Switch 1"
+        android:maxLength="20"
         android:textColor="@color/daintree"
         android:textColorHint="@color/ghost_2"
         android:textSize="@dimen/_12ssp" />

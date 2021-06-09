@@ -11,6 +11,7 @@ import android.widget.Toast
 import androidx.core.view.GravityCompat
 import androidx.navigation.fragment.findNavController
 import com.appizona.yehiahd.fastsave.FastSave
+import com.dellainfotech.smartTouch.BuildConfig
 import com.dellainfotech.smartTouch.R
 import com.dellainfotech.smartTouch.adapters.RoomsAdapter
 import com.dellainfotech.smartTouch.api.Resource
@@ -53,6 +54,8 @@ class HomeFragment : ModelBaseFragment<HomeViewModel, FragmentHomeBinding, HomeR
 
         roomsAdapter = RoomsAdapter(roomList)
         binding.recyclerRooms.adapter = roomsAdapter
+
+        binding.tvAppVersion.text = "Version - ${BuildConfig.VERSION_NAME}"
 
         // initializing navigation menu
         setUpNavigationView()

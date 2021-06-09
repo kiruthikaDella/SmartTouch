@@ -4,13 +4,15 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@color/white"
+    android:clickable="true"
+    android:focusable="true"
     android:orientation="vertical">
 
-   <com.github.dhaval2404.colorpicker.ColorPickerView
-       android:layout_marginTop="@dimen/_15sdp"
-       android:id="@+id/color_picker"
-       android:layout_width="wrap_content"
-       android:layout_height="wrap_content"/>
+    <com.github.dhaval2404.colorpicker.ColorPickerView
+        android:id="@+id/color_picker"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_15sdp" />
 
     <Button
         style="@style/DodgerBlueButtonStyle"

@@ -15,6 +15,7 @@ import com.dellainfotech.smartTouch.api.model.UserProfile
 import com.dellainfotech.smartTouch.api.repository.AuthRepository
 import com.dellainfotech.smartTouch.common.utils.Constants
 import com.dellainfotech.smartTouch.common.utils.DialogUtil
+import com.dellainfotech.smartTouch.common.utils.Utils.toBoolean
 import com.dellainfotech.smartTouch.ui.viewmodel.AuthViewModel
 import com.dellainfotech.smartTouch.ui.viewmodel.ViewModelFactory
 import com.facebook.*
@@ -65,6 +66,8 @@ class AuthenticationActivity : AppCompatActivity() {
                             FastSave.getInstance().saveString(Constants.USER_EMAIL, userData.vEmail)
                             FastSave.getInstance()
                                 .saveString(Constants.USER_PHONE_NUMBER, userData.bPhoneNumber)
+                            FastSave.getInstance().saveString(Constants.SOCIAL_ID, userData.socialId)
+                            FastSave.getInstance().saveBoolean(Constants.isControlModePinned, userData.iIsPinStatus!!.toBoolean())
 
                             startActivity(Intent(this, MainActivity::class.java))
                             finishAffinity()
@@ -164,7 +167,7 @@ class AuthenticationActivity : AppCompatActivity() {
                                 BodySocialLogin(
                                     accessToken.userId,
                                     uuid,
-                                    "2",
+                                    Constants.SOCIAL_LOGIN,
                                     email
                                 )
                             )

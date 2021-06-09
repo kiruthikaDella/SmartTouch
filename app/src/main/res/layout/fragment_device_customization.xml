@@ -443,6 +443,8 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
         android:background="@color/white"
+        android:clickable="true"
+        android:focusable="true"
         android:orientation="vertical"
         app:top_left_corner_radius="@dimen/_20sdp"
         app:top_right_corner_radius="@dimen/_20sdp">

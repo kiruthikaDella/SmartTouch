@@ -3,6 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:clickable="true"
+    android:focusable="true"
     android:orientation="vertical">
 
     <ImageButton
@@ -43,6 +45,7 @@
         android:layout_marginEnd="@dimen/screen_end_margin"
         android:background="@drawable/catskill_white_background"
         android:hint="@string/hint_text_room_name"
+        android:maxLength="20"
         android:paddingStart="@dimen/_10sdp"
         android:paddingEnd="@dimen/_10sdp"
         android:textColor="@color/daintree"

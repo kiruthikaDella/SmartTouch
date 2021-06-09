@@ -19,8 +19,7 @@ import com.dellainfotech.smartTouch.common.interfaces.AdapterItemClickListener
  */
 
 class SwitchIconsDetailAdapter(
-    private val switchList: ArrayList<IconListData>,
-    private val switchData: DeviceSwitchData
+    private val iconList: ArrayList<IconListData>
 ) : RecyclerView.Adapter<SwitchIconsDetailAdapter.MyViewHolder>() {
 
     private var mContext: Context? = null
@@ -40,11 +39,11 @@ class SwitchIconsDetailAdapter(
     }
 
     override fun getItemCount(): Int {
-        return switchList.size
+        return iconList.size
     }
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
-        val data = switchList[position]
+        val data = iconList[position]
 
         holder.apply {
             tvSwitchName.text = data.iconName
@@ -63,18 +62,33 @@ class SwitchIconsDetailAdapter(
                 notifyDataSetChanged()
             }
 
-            if (rowIndex == position){
+            if (rowIndex == position) {
                 mContext?.let { ctx ->
                     ivSwitch.setColorFilter(ctx.getColor(R.color.white))
-                    ivSwitch.backgroundTintList = ContextCompat.getColorStateList(ctx,R.color.theme_color)
+                    ivSwitch.backgroundTintList =
+                        ContextCompat.getColorStateList(ctx, R.color.theme_color)
                 }
-            }else {
+            } else {
                 mContext?.let { ctx ->
                     ivSwitch.setColorFilter(ctx.getColor(R.color.theme_color))
-                    ivSwitch.backgroundTintList = ContextCompat.getColorStateList(ctx,R.color.white)
+                    ivSwitch.backgroundTintList =
+                        ContextCompat.getColorStateList(ctx, R.color.white)
                 }
             }
         }
+    }
+
+    fun selectIcon(switchData: DeviceSwitchData): IconListData? {
+        var iconData: IconListData? = null
+        for ((index, value) in iconList.withIndex()) {
+            if (value.icon == switchData.icon) {
+                rowIndex = index
+                iconData = value
+                break
+            }
+        }
+        notifyDataSetChanged()
+        return iconData
     }
 
     fun setOnSwitchClickListener(listener: AdapterItemClickListener<IconListData>) {

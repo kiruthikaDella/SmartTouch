@@ -1,30 +1,40 @@
 package com.dellainfotech.smartTouch.ui.fragments.main.home
 
+import android.annotation.SuppressLint
 import android.app.Dialog
+import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.text.method.HideReturnsTransformationMethod
+import android.text.method.PasswordTransformationMethod
 import android.util.DisplayMetrics
 import android.util.Log
 import android.util.Patterns
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import androidx.navigation.fragment.findNavController
+import com.appizona.yehiahd.fastsave.FastSave
 import com.dellainfotech.smartTouch.R
 import com.dellainfotech.smartTouch.api.Resource
 import com.dellainfotech.smartTouch.api.body.BodyChangePassword
 import com.dellainfotech.smartTouch.api.body.BodyOwnership
 import com.dellainfotech.smartTouch.api.body.BodyUpdateUserProfile
+import com.dellainfotech.smartTouch.api.model.UserProfile
 import com.dellainfotech.smartTouch.api.repository.HomeRepository
 import com.dellainfotech.smartTouch.common.utils.Constants
 import com.dellainfotech.smartTouch.common.utils.DialogUtil
 import com.dellainfotech.smartTouch.common.utils.Utils.toEditable
 import com.dellainfotech.smartTouch.databinding.FragmentAccountSettingsBinding
+import com.dellainfotech.smartTouch.ui.activities.MainActivity
 import com.dellainfotech.smartTouch.ui.fragments.ModelBaseFragment
 import com.dellainfotech.smartTouch.ui.viewmodel.HomeViewModel
+import com.github.dhaval2404.colorpicker.util.setVisibility
 import com.google.android.material.button.MaterialButton
 
 /**
@@ -111,6 +121,13 @@ class AccountSettingsFragment :
             }
         }
 
+        if (FastSave.getInstance().getString(Constants.SOCIAL_ID, null) != "0"){
+            binding.ivPassword.visibility = View.INVISIBLE
+            binding.tvTitlePassword.visibility = View.INVISIBLE
+            binding.edtPassword.visibility = View.INVISIBLE
+            binding.ivEditPassword.visibility = View.INVISIBLE
+        }
+
         apiCall()
     }
 
@@ -190,6 +207,16 @@ class AccountSettingsFragment :
                             userData.bPhoneNumber?.let {
                                 binding.edtPhoneNumber.text = it.toEditable()
                             }
+
+                            FastSave.getInstance().saveString(Constants.USER_ID, userData.iUserId)
+                            FastSave.getInstance()
+                                .saveString(Constants.USER_FULL_NAME, userData.vFullName)
+                            FastSave.getInstance()
+                                .saveString(Constants.USERNAME, userData.vUserName)
+                            FastSave.getInstance().saveString(Constants.USER_EMAIL, userData.vEmail)
+                            FastSave.getInstance()
+                                .saveString(Constants.USER_PHONE_NUMBER, userData.bPhoneNumber)
+
                         }
 
                     }
@@ -273,17 +300,104 @@ class AccountSettingsFragment :
         })
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     private fun dialogUpdatePassword() {
         activity?.let { myActivity ->
             dialog = Dialog(myActivity)
             dialog?.setContentView(R.layout.dialog_password)
             dialog?.setCancelable(true)
 
+            var isCurrentPasswordVisible = false
+            var isPasswordVisible = false
+            var isConfirmPasswordVisible = false
+
             val edtCurrentPassword = dialog?.findViewById(R.id.edt_current_password) as EditText
             val edtPassword = dialog?.findViewById(R.id.edt_password) as EditText
             val edtConfirmPassword = dialog?.findViewById(R.id.edt_confirm_password) as EditText
             val btnSave = dialog?.findViewById(R.id.btn_save) as MaterialButton
             val btnCancel = dialog?.findViewById(R.id.btn_cancel) as MaterialButton
+
+
+            edtCurrentPassword.setOnTouchListener { _, event ->
+                val DRAWABLE_END  = 2
+
+                if(event.action == MotionEvent.ACTION_UP) {
+                    if(event.rawX >= (edtCurrentPassword.right - edtCurrentPassword.compoundDrawables[DRAWABLE_END].bounds.width())) {
+                        if (isCurrentPasswordVisible){
+                            isCurrentPasswordVisible = false
+                            context?.let {
+                                edtCurrentPassword.setCompoundDrawablesWithIntrinsicBounds(null,null,
+                                    ContextCompat.getDrawable(it,R.drawable.ic_password_visible),null)
+                                edtCurrentPassword.transformationMethod = HideReturnsTransformationMethod.getInstance()
+                            }
+                        }else {
+                            isCurrentPasswordVisible = true
+                            context?.let {
+                                edtCurrentPassword.setCompoundDrawablesWithIntrinsicBounds(null,null,
+                                    ContextCompat.getDrawable(it,R.drawable.ic_password_hidden),null)
+                                edtCurrentPassword.transformationMethod = PasswordTransformationMethod.getInstance()
+                            }
+                        }
+
+                        true
+                    }
+                }
+                false
+            }
+
+            edtPassword.setOnTouchListener { _, event ->
+                val DRAWABLE_END  = 2
+
+                if(event.action == MotionEvent.ACTION_UP) {
+                    if(event.rawX >= (edtPassword.right - edtPassword.compoundDrawables[DRAWABLE_END].bounds.width())) {
+                        if (isPasswordVisible){
+                            isPasswordVisible = false
+                            context?.let {
+                                edtPassword.setCompoundDrawablesWithIntrinsicBounds(null,null,
+                                    ContextCompat.getDrawable(it,R.drawable.ic_password_visible),null)
+                                edtPassword.transformationMethod = HideReturnsTransformationMethod.getInstance()
+                            }
+                        }else {
+                            isPasswordVisible = true
+                            context?.let {
+                                edtPassword.setCompoundDrawablesWithIntrinsicBounds(null,null,
+                                    ContextCompat.getDrawable(it,R.drawable.ic_password_hidden),null)
+                                edtPassword.transformationMethod = PasswordTransformationMethod.getInstance()
+                            }
+                        }
+
+                        true
+                    }
+                }
+                false
+            }
+
+            edtConfirmPassword.setOnTouchListener { _, event ->
+                val DRAWABLE_END  = 2
+
+                if(event.action == MotionEvent.ACTION_UP) {
+                    if(event.rawX >= (edtConfirmPassword.right - edtConfirmPassword.compoundDrawables[DRAWABLE_END].bounds.width())) {
+                        if (isConfirmPasswordVisible){
+                            isConfirmPasswordVisible = false
+                            context?.let {
+                                edtConfirmPassword.setCompoundDrawablesWithIntrinsicBounds(null,null,
+                                    ContextCompat.getDrawable(it,R.drawable.ic_password_visible),null)
+                                edtConfirmPassword.transformationMethod = HideReturnsTransformationMethod.getInstance()
+                            }
+                        }else {
+                            isConfirmPasswordVisible = true
+                            context?.let {
+                                edtConfirmPassword.setCompoundDrawablesWithIntrinsicBounds(null,null,
+                                    ContextCompat.getDrawable(it,R.drawable.ic_password_hidden),null)
+                                edtConfirmPassword.transformationMethod = PasswordTransformationMethod.getInstance()
+                            }
+                        }
+
+                        true
+                    }
+                }
+                false
+            }
 
             btnCancel.setOnClickListener {
                 dialog?.dismiss()
@@ -298,7 +412,7 @@ class AccountSettingsFragment :
                     edtCurrentPassword.error = getString(R.string.error_text_current_password)
                 } else if (newPassword.isEmpty()) {
                     edtPassword.error = getString(R.string.error_text_password)
-                } else if (newPassword.length < 3) {
+                } else if (newPassword.length < Constants.PASSWORD_LENGTH) {
                     edtPassword.error = getString(R.string.error_text_password_length)
                 } else if (newPassword != confirmPassword) {
                     edtConfirmPassword.error = getString(R.string.error_text_confirm_password)

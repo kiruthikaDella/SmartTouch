@@ -21,11 +21,11 @@ import com.dellainfotech.smartTouch.common.interfaces.AdapterItemClickListener
 import com.dellainfotech.smartTouch.common.interfaces.DialogEditListener
 import com.dellainfotech.smartTouch.common.utils.Constants
 import com.dellainfotech.smartTouch.common.utils.DialogUtil
+import com.dellainfotech.smartTouch.common.utils.Utils.clearError
 import com.dellainfotech.smartTouch.common.utils.Utils.toBoolean
 import com.dellainfotech.smartTouch.common.utils.Utils.toEditable
 import com.dellainfotech.smartTouch.common.utils.Utils.toInt
-import com.dellainfotech.smartTouch.databinding.FragmentRoomPanelBinding
-import com.dellainfotech.smartTouch.mqtt.AwsMqttSingleton
+import com.dellainfotech.smartTouch.databinding.FragmentDeviceBinding
 import com.dellainfotech.smartTouch.ui.fragments.ModelBaseFragment
 import com.dellainfotech.smartTouch.ui.viewmodel.HomeViewModel
 import com.sothree.slidinguppanel.SlidingUpPanelLayout
@@ -36,7 +36,7 @@ import com.sothree.slidinguppanel.SlidingUpPanelLayout
  */
 
 class DeviceFragment :
-    ModelBaseFragment<HomeViewModel, FragmentRoomPanelBinding, HomeRepository>() {
+    ModelBaseFragment<HomeViewModel, FragmentDeviceBinding, HomeRepository>() {
 
     private val logTag = this::class.java.simpleName
     private val args: DeviceFragmentArgs by navArgs()
@@ -65,7 +65,7 @@ class DeviceFragment :
         viewModel.getDevice(args.roomDetail.id)
 
         activity?.let {
-            panelAdapter = DeviceAdapter(it,deviceList)
+            panelAdapter = DeviceAdapter(it, deviceList)
             binding.recyclerRoomPanels.adapter = panelAdapter
         }
 
@@ -78,11 +78,36 @@ class DeviceFragment :
     override fun getFragmentBinding(
         inflater: LayoutInflater,
         container: ViewGroup?
-    ): FragmentRoomPanelBinding = FragmentRoomPanelBinding.inflate(inflater, container, false)
+    ): FragmentDeviceBinding = FragmentDeviceBinding.inflate(inflater, container, false)
 
     override fun getFragmentRepository(): HomeRepository = HomeRepository(networkModel)
 
+    override fun onPause() {
+        super.onPause()
+        viewModelStore.clear()
+    }
+
     private fun clickEvents() {
+
+        binding.layoutSlidingUpPanel.addPanelSlideListener(object :
+            SlidingUpPanelLayout.PanelSlideListener {
+            override fun onPanelSlide(panel: View?, slideOffset: Float) {
+
+            }
+
+            override fun onPanelStateChanged(
+                panel: View?,
+                previousState: SlidingUpPanelLayout.PanelState?,
+                newState: SlidingUpPanelLayout.PanelState?
+            ) {
+                if (newState == SlidingUpPanelLayout.PanelState.COLLAPSED) {
+                    binding.layoutRoomPanel.edtPanelName.text = "".toEditable()
+                    binding.layoutRoomPanel.edtSerialNumber.text = "".toEditable()
+                    binding.layoutRoomPanel.edtPanelName.clearError()
+                    binding.layoutRoomPanel.edtSerialNumber.clearError()
+                }
+            }
+        })
 
         binding.iBtnEditRoomName.setOnClickListener {
             activity?.let {
@@ -97,17 +122,18 @@ class DeviceFragment :
                             if (string.isEmpty()) {
                                 Toast.makeText(
                                     it,
-                                    "RoomName must not be empty!",
+                                    "Room name must not be empty!",
                                     Toast.LENGTH_SHORT
                                 ).show()
                             } else {
+                                DialogUtil.hideDialog()
                                 DialogUtil.loadingAlert(it)
                                 viewModel.updateRoom(BodyUpdateRoom(args.roomDetail.id, string))
                             }
                         }
 
                         override fun onNoClicked() {
-
+                            DialogUtil.hideDialog()
                         }
 
                     }
@@ -130,10 +156,11 @@ class DeviceFragment :
                                 if (string.isEmpty()) {
                                     Toast.makeText(
                                         it,
-                                        "DeviceName must not be empty!",
+                                        "Device name must not be empty!",
                                         Toast.LENGTH_SHORT
                                     ).show()
                                 } else {
+                                    DialogUtil.hideDialog()
                                     this@DeviceFragment.devicePosition = devicePosition
                                     DialogUtil.loadingAlert(it)
                                     viewModel.updateDeviceName(
@@ -146,7 +173,7 @@ class DeviceFragment :
                             }
 
                             override fun onNoClicked() {
-
+                                DialogUtil.hideDialog()
                             }
 
                         }
@@ -171,7 +198,7 @@ class DeviceFragment :
             override fun onItemClick(data: GetDeviceData) {
                 findNavController().navigate(
                     DeviceFragmentDirections.actionRoomPanelFragmentToDeviceFeaturesFragment(
-                        data,args.roomDetail
+                        data, args.roomDetail
                     )
                 )
             }
@@ -196,10 +223,11 @@ class DeviceFragment :
                                 if (string.isEmpty()) {
                                     Toast.makeText(
                                         it,
-                                        "DeviceName must not be empty!",
+                                        "Switch name must not be empty!",
                                         Toast.LENGTH_SHORT
                                     ).show()
                                 } else {
+                                    DialogUtil.hideDialog()
                                     this@DeviceFragment.devicePosition = devicePosition
                                     switchPosition = switchData.index.toInt() - 1
                                     DialogUtil.loadingAlert(it)
@@ -213,7 +241,7 @@ class DeviceFragment :
                             }
 
                             override fun onNoClicked() {
-
+                                DialogUtil.hideDialog()
                             }
 
                         }
@@ -266,8 +294,6 @@ class DeviceFragment :
     }
 
     private fun hidePanel() {
-        binding.layoutRoomPanel.edtPanelName.text = "".toEditable()
-        binding.layoutRoomPanel.edtSerialNumber.text = "".toEditable()
         binding.layoutSlidingUpPanel.panelState = SlidingUpPanelLayout.PanelState.HIDDEN
     }
 
@@ -360,14 +386,12 @@ class DeviceFragment :
                     if (response.values.status && response.values.code == Constants.API_SUCCESS_CODE) {
 
                         response.values.data?.let { deviceData ->
-
                             devicePosition?.let { pos ->
                                 deviceList[pos] = deviceData
                                 panelAdapter.notifyDataSetChanged()
                                 devicePosition = null
                             }
                         }
-
                     }
                 }
                 is Resource.Failure -> {

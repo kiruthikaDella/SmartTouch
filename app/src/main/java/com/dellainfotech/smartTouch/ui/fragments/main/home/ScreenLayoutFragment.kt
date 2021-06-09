@@ -1,18 +1,14 @@
 package com.dellainfotech.smartTouch.ui.fragments.main.home
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import com.appizona.yehiahd.fastsave.FastSave
-import com.dellainfotech.smartTouch.R
 import com.dellainfotech.smartTouch.api.repository.HomeRepository
-import com.dellainfotech.smartTouch.common.interfaces.DialogAskListener
-import com.dellainfotech.smartTouch.common.utils.Constants
-import com.dellainfotech.smartTouch.common.utils.DialogUtil
 import com.dellainfotech.smartTouch.databinding.FragmentScreenLayoutBinding
 import com.dellainfotech.smartTouch.ui.fragments.ModelBaseFragment
 import com.dellainfotech.smartTouch.ui.viewmodel.HomeViewModel
@@ -24,6 +20,7 @@ class ScreenLayoutFragment :
     ModelBaseFragment<HomeViewModel, FragmentScreenLayoutBinding, HomeRepository>() {
 
     private val logTag = this::class.java.simpleName
+
     private var screenLayoutModel: ScreenLayoutModel? = null
     private val args: ScreenLayoutFragmentArgs by navArgs()
 
@@ -32,27 +29,26 @@ class ScreenLayoutFragment :
 
         context?.let {
             screenLayoutModel = ScreenLayoutModel(it, binding)
+            screenLayoutModel?.init()
         }
-
-        screenLayoutModel?.init()
 
         when (args.deviceCustomizationDetail.screenLayoutType) {
             screenLayoutModel?.screenLayoutEight -> {
                 binding.linearFourIconsView.isVisible = false
-                screenLayoutModel?.changeViewType(ScreenLayoutModel.VIEW_TYPE.EIGHT_ICONS_VIEW)
+                binding.linearEightIconsView.performClick()
             }
             screenLayoutModel?.screenLayoutSix -> {
                 binding.linearFourIconsView.isVisible = false
-                screenLayoutModel?.changeViewType(ScreenLayoutModel.VIEW_TYPE.SIX_ICONS_VIEW)
+                binding.linearSixIconsView.performClick()
             }
             screenLayoutModel?.screenLayoutFour -> {
                 binding.linearEightIconsView.isVisible = false
                 binding.linearSixIconsView.isVisible = false
-                screenLayoutModel?.changeViewType(ScreenLayoutModel.VIEW_TYPE.FOUR_ICONS_VIEW)
+                binding.linearFourIconsView.performClick()
             }
         }
 
-        when(args.deviceCustomizationDetail.screenLayout){
+        when (args.deviceCustomizationDetail.screenLayout) {
             screenLayoutModel?.LEFT_MOST -> {
                 binding.ivLeftMost.performClick()
             }
@@ -77,7 +73,6 @@ class ScreenLayoutFragment :
         binding.ivBack.setOnClickListener {
             findNavController().navigateUp()
         }
-
 
     }
 
