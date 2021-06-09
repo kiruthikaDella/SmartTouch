@@ -17,10 +17,12 @@ import com.dellainfotech.smartTouch.adapters.UpdateDeviceSceneAdapter
 import com.dellainfotech.smartTouch.api.Resource
 import com.dellainfotech.smartTouch.api.body.BodyAddScene
 import com.dellainfotech.smartTouch.api.body.BodySceneData
+import com.dellainfotech.smartTouch.api.body.BodyUpdateRoom
 import com.dellainfotech.smartTouch.api.body.BodyUpdateScene
 import com.dellainfotech.smartTouch.api.model.GetSceneData
 import com.dellainfotech.smartTouch.api.model.Scene
 import com.dellainfotech.smartTouch.api.repository.HomeRepository
+import com.dellainfotech.smartTouch.common.interfaces.DialogEditListener
 import com.dellainfotech.smartTouch.common.utils.Constants
 import com.dellainfotech.smartTouch.common.utils.DialogUtil
 import com.dellainfotech.smartTouch.common.utils.Utils.toEditable
@@ -120,11 +122,29 @@ class CreateSceneFragment : ModelBaseFragment<HomeViewModel, FragmentCreateScene
         binding.ivEditCreateScene.setOnClickListener {
             activity?.let {
                 DialogUtil.editDialog(
-                    it, getString(R.string.text_scene_name), "Living Room", getString(
+                    it, getString(R.string.text_scene_name), binding.edtSceneName.text.toString().trim(), getString(
                         R.string.text_save
                     ), getString(
                         R.string.text_cancel
-                    )
+                    ), object : DialogEditListener{
+                        override fun onYesClicked(string: String) {
+                            if (string.isEmpty()) {
+                                Toast.makeText(
+                                    it,
+                                    "Scene name must not be empty!",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            } else {
+                                DialogUtil.hideDialog()
+                                binding.edtSceneName.text = string.toEditable()
+                            }
+                        }
+
+                        override fun onNoClicked() {
+                            DialogUtil.hideDialog()
+                        }
+
+                    }
                 )
             }
         }

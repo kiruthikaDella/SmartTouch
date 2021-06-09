@@ -56,7 +56,6 @@ import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
 
-
 /**
  * Created by Jignesh Dangar on 22-04-2021.
  */
@@ -67,6 +66,7 @@ class DeviceCustomizationFragment :
     private val logTag = this::class.java.simpleName
     private val args: DeviceCustomizationFragmentArgs by navArgs()
     private var sizeAdapter: ArrayAdapter<String>? = null
+    private var textStyleAdapter: ArrayAdapter<String>? = null
     private var deviceCustomization: DeviceCustomizationData? = null
     private var isDeviceCustomizationLocked: Boolean = false
 
@@ -81,7 +81,7 @@ class DeviceCustomizationFragment :
 
         val sizeList = arrayOf("Small", "Medium", "Large")
         val fontNames =
-            arrayOf("Times New Roman", "Arial")
+            arrayOf("Times New Roman", "Arial", "Roman")
 
         if (FastSave.getInstance().getBoolean(
                 Constants.isDeviceCustomizationLocked,
@@ -91,14 +91,112 @@ class DeviceCustomizationFragment :
             lockScreen()
         }
 
-        binding.ivBack.setOnClickListener {
-            findNavController().navigateUp()
+        context?.let { mContext ->
+
+            sizeAdapter = ArrayAdapter(mContext, R.layout.simple_spinner_dropdown, sizeList)
+            sizeAdapter?.setDropDownViewResource(R.layout.simple_spinner_dropdown)
+            binding.spinnerIconSize.adapter = sizeAdapter
+            binding.spinnerTextSize.adapter = sizeAdapter
+
+            binding.spinnerIconSize.onItemSelectedListener =
+                object : AdapterView.OnItemSelectedListener {
+                    override fun onItemSelected(
+                        parent: AdapterView<*>?,
+                        view: View?,
+                        position: Int,
+                        id: Long
+                    ) {
+                        parent?.getChildAt(0)?.let { mView ->
+                            val textView = mView as TextView
+                            textView.setTextColor(
+                                ContextCompat.getColor(
+                                    mContext,
+                                    R.color.theme_color
+                                )
+                            )
+                            textView.gravity = Gravity.CENTER
+                        }
+                    }
+
+                    override fun onNothingSelected(parent: AdapterView<*>?) {
+
+                    }
+
+                }
+
+            binding.spinnerTextSize.onItemSelectedListener =
+                object : AdapterView.OnItemSelectedListener {
+                    override fun onItemSelected(
+                        parent: AdapterView<*>?,
+                        view: View?,
+                        position: Int,
+                        id: Long
+                    ) {
+                        parent?.getChildAt(0)?.let { mView ->
+                            val textView = mView as TextView
+                            textView.setTextColor(
+                                ContextCompat.getColor(
+                                    mContext,
+                                    R.color.theme_color
+                                )
+                            )
+                            textView.gravity = Gravity.CENTER
+                        }
+                    }
+
+                    override fun onNothingSelected(parent: AdapterView<*>?) {
+
+                    }
+
+                }
+
+            textStyleAdapter = ArrayAdapter(mContext, R.layout.simple_spinner_dropdown, fontNames)
+            textStyleAdapter?.setDropDownViewResource(R.layout.simple_spinner_dropdown)
+            binding.layoutTextStyle.spinnerFonts.adapter = textStyleAdapter
+
+            binding.layoutTextStyle.spinnerFonts.onItemSelectedListener =
+                object : AdapterView.OnItemSelectedListener {
+                    override fun onItemSelected(
+                        parent: AdapterView<*>?,
+                        view: View?,
+                        position: Int,
+                        id: Long
+                    ) {
+                        parent?.getChildAt(0)?.let { mView ->
+                            val textView = mView as TextView
+                            textView.setTextColor(
+                                ContextCompat.getColor(
+                                    mContext,
+                                    R.color.theme_color
+                                )
+                            )
+                            textView.gravity = Gravity.CENTER
+                            textView.setBackgroundColor(Color.TRANSPARENT)
+                        }
+
+                    }
+
+                    override fun onNothingSelected(parent: AdapterView<*>?) {
+
+                    }
+
+                }
         }
 
         activity?.let {
             DialogUtil.loadingAlert(it)
         }
         viewModel.getDeviceCustomization(args.deviceDetail.id)
+
+        clickEvents()
+
+        apiCall()
+    }
+
+    private fun clickEvents() {
+        binding.ivBack.setOnClickListener {
+            findNavController().navigateUp()
+        }
 
         binding.ibLock.setOnClickListener {
             activity?.let {
@@ -188,6 +286,10 @@ class DeviceCustomizationFragment :
             binding.layoutUploadImage.linearUploadImage.isVisible = false
             binding.layoutTextColor.linearTextColor.isVisible = false
             binding.layoutTextStyle.linearTextStyle.isVisible = true
+
+            val pos = textStyleAdapter?.getPosition(deviceCustomization?.textStyle) ?: 0
+            binding.layoutTextStyle.spinnerFonts.setSelection(pos)
+
             showPanel()
         }
 
@@ -225,124 +327,38 @@ class DeviceCustomizationFragment :
             )
         }
 
-        context?.let { mContext ->
-
-            sizeAdapter = ArrayAdapter(mContext, R.layout.simple_spinner_dropdown, sizeList)
-            sizeAdapter?.setDropDownViewResource(R.layout.simple_spinner_dropdown)
-            binding.spinnerIconSize.adapter = sizeAdapter
-            binding.spinnerTextSize.adapter = sizeAdapter
-
-            binding.spinnerIconSize.onItemSelectedListener =
-                object : AdapterView.OnItemSelectedListener {
-                    override fun onItemSelected(
-                        parent: AdapterView<*>?,
-                        view: View?,
-                        position: Int,
-                        id: Long
-                    ) {
-                        parent?.getChildAt(0)?.let { mView ->
-                            val textView = mView as TextView
-                            textView.setTextColor(
-                                ContextCompat.getColor(
-                                    mContext,
-                                    R.color.theme_color
-                                )
-                            )
-                            textView.gravity = Gravity.CENTER
-                        }
-                    }
-
-                    override fun onNothingSelected(parent: AdapterView<*>?) {
-
-                    }
-
-                }
-
-            binding.spinnerTextSize.onItemSelectedListener =
-                object : AdapterView.OnItemSelectedListener {
-                    override fun onItemSelected(
-                        parent: AdapterView<*>?,
-                        view: View?,
-                        position: Int,
-                        id: Long
-                    ) {
-                        parent?.getChildAt(0)?.let { mView ->
-                            val textView = mView as TextView
-                            textView.setTextColor(
-                                ContextCompat.getColor(
-                                    mContext,
-                                    R.color.theme_color
-                                )
-                            )
-                            textView.gravity = Gravity.CENTER
-                        }
-                    }
-
-                    override fun onNothingSelected(parent: AdapterView<*>?) {
-
-                    }
-
-                }
-
-            val roomAdapter = ArrayAdapter(mContext, R.layout.simple_spinner_dropdown, fontNames)
-            roomAdapter.setDropDownViewResource(R.layout.simple_spinner_dropdown)
-            binding.layoutTextStyle.spinnerFonts.adapter = roomAdapter
-
-            binding.layoutTextStyle.spinnerFonts.onItemSelectedListener =
-                object : AdapterView.OnItemSelectedListener {
-                    override fun onItemSelected(
-                        parent: AdapterView<*>?,
-                        view: View?,
-                        position: Int,
-                        id: Long
-                    ) {
-                        parent?.getChildAt(0)?.let { mView ->
-                            val textView = mView as TextView
-                            textView.setTextColor(
-                                ContextCompat.getColor(
-                                    mContext,
-                                    R.color.theme_color
-                                )
-                            )
-                            textView.gravity = Gravity.CENTER
-                            textView.setBackgroundColor(Color.TRANSPARENT)
-                        }
-
-                    }
-
-                    override fun onNothingSelected(parent: AdapterView<*>?) {
-
-                    }
-
-                }
-        }
-
         binding.layoutUploadImage.linearUploadImage.setOnClickListener {
-            imageParts.clear()
 
-            activity?.let {
-                DialogUtil.loadingAlert(it)
-            }
+            if (mProfileFile == null){
+                context?.let { mContext->
+                    Toast.makeText(mContext, "Please select image.", Toast.LENGTH_SHORT).show()
+                }
+            }else {
+                imageParts.clear()
 
-            Log.e(logTag, " mProfileFile $mProfileFile ")
-            Log.e(logTag, " imagePath $imagePath ")
-            Log.e(logTag, " imageName $imageName ")
+                activity?.let {
+                    DialogUtil.loadingAlert(it)
+                }
 
-            val fileExtension = mProfileFile!!.extension
+                Log.e(logTag, " mProfileFile $mProfileFile ")
+                Log.e(logTag, " imagePath $imagePath ")
+                Log.e(logTag, " imageName $imageName ")
 
-            imageParts.add(
-                MultipartBody.Part.createFormData(
-                    "image", imageName,
-                    mProfileFile!!.asRequestBody("image/$fileExtension".toMediaTypeOrNull())
+                val fileExtension = mProfileFile!!.extension
+
+                imageParts.add(
+                    MultipartBody.Part.createFormData(
+                        "image", imageName,
+                        mProfileFile!!.asRequestBody("image/$fileExtension".toMediaTypeOrNull())
+                    )
                 )
-            )
 
-            hidePanel()
-            viewModel.imageUpload(
-                args.deviceDetail.id.toRequestBody("text/plain".toMediaTypeOrNull()),
-                imageParts
-            )
-
+                hidePanel()
+                viewModel.imageUpload(
+                    args.deviceDetail.id.toRequestBody("text/plain".toMediaTypeOrNull()),
+                    imageParts
+                )
+            }
         }
 
         binding.layoutUploadImage.ivRemove.setOnClickListener {
@@ -370,7 +386,10 @@ class DeviceCustomizationFragment :
             }
         }
 
-        apiCall()
+        binding.layoutTextStyle.btnSave.setOnClickListener {
+            deviceCustomization?.textStyle = binding.layoutTextStyle.spinnerFonts.selectedItem.toString()
+            hidePanel()
+        }
     }
 
     private fun showPanel() {

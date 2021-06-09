@@ -4,6 +4,7 @@ import android.app.Activity
 import android.app.Dialog
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
+import android.text.InputFilter
 import android.util.DisplayMetrics
 import android.widget.EditText
 import android.widget.TextView
@@ -86,12 +87,10 @@ object DialogUtil {
         btnSave.text = strYes
 
         btnCancel.setOnClickListener {
-            dialog?.dismiss()
             onClick?.onNoClicked()
         }
 
         btnSave.setOnClickListener {
-            dialog?.dismiss()
             onClick?.onYesClicked(editText.text.toString().trim())
         }
 

@@ -24,6 +24,7 @@ import com.dellainfotech.smartTouch.api.model.RoomTypeData
 import com.dellainfotech.smartTouch.api.repository.HomeRepository
 import com.dellainfotech.smartTouch.common.utils.Constants
 import com.dellainfotech.smartTouch.common.utils.DialogUtil
+import com.dellainfotech.smartTouch.common.utils.Utils.clearError
 import com.dellainfotech.smartTouch.common.utils.Utils.toEditable
 import com.dellainfotech.smartTouch.databinding.ActivityMainBinding
 import com.dellainfotech.smartTouch.ui.fragments.main.home.HomeFragmentDirections
@@ -94,6 +95,10 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
             hidePanel()
         }
 
+        binding.layoutAddRoom.ivDown.setOnClickListener {
+            binding.layoutAddRoom.spinnerRoom.performClick()
+        }
+
         binding.layoutAddRoom.btnAddRoom.setOnClickListener {
             val roomName = binding.layoutAddRoom.edtRoomName.text.toString()
             when {
@@ -113,6 +118,23 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
             }
         }
 
+        binding.layoutSlidingUpPanel.addPanelSlideListener(object :
+            SlidingUpPanelLayout.PanelSlideListener {
+            override fun onPanelSlide(panel: View?, slideOffset: Float) {
+
+            }
+
+            override fun onPanelStateChanged(
+                panel: View?,
+                previousState: SlidingUpPanelLayout.PanelState?,
+                newState: SlidingUpPanelLayout.PanelState?
+            ) {
+                if (newState == SlidingUpPanelLayout.PanelState.COLLAPSED) {
+                    binding.layoutAddRoom.edtRoomName.text = "".toEditable()
+                    binding.layoutAddRoom.edtRoomName.clearError()
+                }
+            }
+        })
 
         roomTypeList.toMutableList().clear()
         viewModel.roomType()
@@ -126,11 +148,12 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
     }
 
     private fun hidePanel() {
-        binding.layoutAddRoom.edtRoomName.text = "".toEditable()
         binding.layoutSlidingUpPanel.panelState = SlidingUpPanelLayout.PanelState.HIDDEN
     }
 
     private fun showPanel() {
+        binding.layoutAddRoom.edtRoomName.text = "".toEditable()
+        binding.layoutAddRoom.spinnerRoom.setSelection(0)
         binding.layoutSlidingUpPanel.panelState = SlidingUpPanelLayout.PanelState.EXPANDED
     }
 

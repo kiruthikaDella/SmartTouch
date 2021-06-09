@@ -46,7 +46,7 @@ class SwitchIconsDetailFragment :
         }
         viewModel.iconList()
 
-        adapter = SwitchIconsDetailAdapter(switchIconList,args.switchDetail)
+        adapter = SwitchIconsDetailAdapter(switchIconList)
         context?.let {
             binding.recyclerSwitchIcons.layoutManager = GridLayoutManager(it, 4)
         }
@@ -60,12 +60,16 @@ class SwitchIconsDetailFragment :
             iconData?.let {
                 activity?.let { mActivity ->
                     DialogUtil.loadingAlert(mActivity)
-                    viewModel.updateSwitchIcon(BodyUpdateSwitchIcon(args.switchDetail.id,it.iconFile))
+                    viewModel.updateSwitchIcon(
+                        BodyUpdateSwitchIcon(
+                            args.switchDetail.id,
+                            it.iconFile
+                        )
+                    )
                 }
-
-            }?: kotlin.run {
+            } ?: kotlin.run {
                 context?.let {
-                    Toast.makeText(it,"Please select icon",Toast.LENGTH_SHORT).show()
+                    Toast.makeText(it, "Please select icon", Toast.LENGTH_SHORT).show()
                 }
             }
         }
@@ -78,7 +82,9 @@ class SwitchIconsDetailFragment :
                         response.values.data?.let {
                             switchIconList.addAll(it)
                             adapter.notifyDataSetChanged()
-                            adapter.setOnSwitchClickListener(object : AdapterItemClickListener<IconListData> {
+                            iconData = adapter.selectIcon(args.switchDetail)
+                            adapter.setOnSwitchClickListener(object :
+                                AdapterItemClickListener<IconListData> {
                                 override fun onItemClick(data: IconListData) {
                                     iconData = data
                                 }
@@ -98,13 +104,13 @@ class SwitchIconsDetailFragment :
         })
 
         viewModel.updateSwitchIconResponse.observe(viewLifecycleOwner, { response ->
-            when(response){
+            when (response) {
                 is Resource.Success -> {
                     DialogUtil.hideDialog()
                     context?.let {
-                        Toast.makeText(it,response.values.message,Toast.LENGTH_SHORT).show()
+                        Toast.makeText(it, response.values.message, Toast.LENGTH_SHORT).show()
                     }
-                    if (response.values.status && response.values.code == Constants.API_SUCCESS_CODE){
+                    if (response.values.status && response.values.code == Constants.API_SUCCESS_CODE) {
                         response.values.data?.let {
                             args.switchDetail.icon = it.icon
                             findNavController().navigateUp()
@@ -113,7 +119,10 @@ class SwitchIconsDetailFragment :
                 }
                 is Resource.Failure -> {
                     DialogUtil.hideDialog()
-                    Log.e(logTag, " updateSwitchIconResponse Failure ${response.errorBody?.string()} ")
+                    Log.e(
+                        logTag,
+                        " updateSwitchIconResponse Failure ${response.errorBody?.string()} "
+                    )
                 }
                 else -> {
                     //We will do nothing here

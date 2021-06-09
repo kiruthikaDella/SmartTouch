@@ -1,29 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/linear_text_style"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
     android:background="@color/white"
-    android:id="@+id/linear_text_style">
+    android:clickable="true"
+    android:focusable="true"
+    android:orientation="vertical">
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/text_select_font"
-        android:textColor="@color/daintree"
-        android:textSize="@dimen/_12ssp"
-        android:fontFamily="@font/roboto_medium"
+        android:layout_gravity="start"
         android:layout_marginStart="@dimen/screen_start_margin"
         android:layout_marginTop="@dimen/_20sdp"
-        android:layout_gravity="start" />
+        android:fontFamily="@font/roboto_medium"
+        android:text="@string/text_select_font"
+        android:textColor="@color/daintree"
+        android:textSize="@dimen/_12ssp" />
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="@dimen/login_component_height"
         android:layout_marginStart="@dimen/screen_start_margin"
-        android:layout_marginEnd="@dimen/screen_end_margin"
         android:layout_marginTop="@dimen/_5sdp"
+        android:layout_marginEnd="@dimen/screen_end_margin"
         android:background="@drawable/catskill_white_background">
 
         <Spinner
@@ -31,34 +33,35 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginStart="@dimen/_5sdp"
+            android:layout_marginEnd="@dimen/_5sdp"
+            android:layout_toStartOf="@+id/iv_down"
             android:background="@android:color/transparent"
             android:gravity="center"
-            android:spinnerMode="dropdown"
-            android:layout_toStartOf="@+id/iv_down"
-            android:layout_marginEnd="@dimen/_5sdp" />
+            android:spinnerMode="dropdown" />
 
         <ImageButton
             android:id="@+id/iv_down"
             android:layout_width="@dimen/_12sdp"
             android:layout_height="@dimen/_7sdp"
-            android:background="@drawable/ic_arrow_down"
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
             android:layout_marginEnd="@dimen/_12sdp"
+            android:background="@drawable/ic_arrow_down"
             android:backgroundTint="@color/daintree" />
 
     </RelativeLayout>
 
     <com.jcminarro.roundkornerlayout.RoundKornerLinearLayout
+        android:id="@+id/btn_save"
         android:layout_width="match_parent"
         android:layout_height="@dimen/login_component_height"
-        android:orientation="horizontal"
-        android:background="@color/dodger_blue"
         android:layout_marginStart="@dimen/screen_start_margin"
+        android:layout_marginTop="@dimen/_25sdp"
         android:layout_marginEnd="@dimen/screen_end_margin"
         android:layout_marginBottom="@dimen/_15sdp"
-        android:layout_marginTop="@dimen/_25sdp"
+        android:background="@color/dodger_blue"
         android:gravity="center"
+        android:orientation="horizontal"
         app:corner_radius="@dimen/corner_radius_6dp">
 
         <ImageView
@@ -69,11 +72,11 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_5sdp"
+            android:fontFamily="@font/roboto_medium"
             android:text="@string/text_save"
             android:textColor="@color/white"
-            android:fontFamily="@font/roboto_medium"
-            android:textSize="@dimen/_12ssp"
-            android:layout_marginStart="@dimen/_5sdp" />
+            android:textSize="@dimen/_12ssp" />
     </com.jcminarro.roundkornerlayout.RoundKornerLinearLayout>
 
 </LinearLayout>

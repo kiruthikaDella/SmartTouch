@@ -8,6 +8,7 @@ import android.os.Build
 import android.text.Editable
 import android.util.Base64
 import android.util.Log
+import android.widget.EditText
 import androidx.appcompat.app.AlertDialog
 import com.dellainfotech.smartTouch.AppDelegate
 import com.dellainfotech.smartTouch.common.interfaces.DialogShowListener
@@ -142,11 +143,15 @@ object Utils {
 
     fun String.toEditable(): Editable = Editable.Factory.getInstance().newEditable(this)
 
-    fun Int.toBoolean(): Boolean = this == 1 // return true if value is 1 else false
+    fun Int.toBoolean(): Boolean = this == 1 // return true if value is 1, else return false
 
-    fun Boolean.toInt(): Int = if (this) 1 else 0 //
+    fun Boolean.toInt(): Int = if (this) 1 else 0 // return 1 if true, else return 0
 
-    fun Boolean.toReverseInt(): Int = if (this) 0 else 1
+    fun Boolean.toReverseInt(): Int = if (this) 0 else 1 // return 0 if true, else return 1
 
-    fun Int.toReverseInt(): Int = if (this == 1) 0 else 1
+    fun Int.toReverseInt(): Int = if (this == 1) 0 else 1 // return 0 if 1, else return 1
+
+    fun EditText.clearError() {
+        error = null
+    }
 }

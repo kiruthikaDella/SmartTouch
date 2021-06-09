@@ -33,7 +33,12 @@
                 style="@style/ScreenTitleHomeStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:gravity="center"
+                android:layout_marginStart="@dimen/_5sdp"
+                android:layout_marginEnd="@dimen/_5sdp"
                 android:layout_centerInParent="true"
+                android:layout_toEndOf="@+id/iv_back"
+                android:layout_toStartOf="@+id/i_btn_edit_room_name"
                 android:layout_gravity="center_horizontal"
                 android:text="@string/title_text_home_screen" />
 

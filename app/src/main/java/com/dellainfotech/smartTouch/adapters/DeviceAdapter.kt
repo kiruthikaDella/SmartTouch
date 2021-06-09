@@ -62,7 +62,7 @@ class DeviceAdapter(
         holder.setIsRecyclable(false)
         val data = deviceList[position]
 
-        subscribeToDevice(data.id)
+        subscribeToDevice(data.deviceSerialNo)
 
         when (holder.itemViewType) {
             eightPanelView -> {
@@ -174,35 +174,43 @@ class DeviceAdapter(
                 for (value in switchData) {
                     when (value.index) {
                         "1" -> {
-                            tvSwitchNameOne.text = value.name
+                            val switchName = value.name
+                            tvSwitchNameOne.text = switchName
                             switchOne.isChecked = value.switchStatus.toBoolean()
                         }
                         "2" -> {
-                            tvSwitchNameTwo.text = value.name
+                            val switchName = value.name
+                            tvSwitchNameTwo.text = switchName
                             switchTwo.isChecked = value.switchStatus.toBoolean()
                         }
                         "3" -> {
-                            tvSwitchNameThree.text = value.name
+                            val switchName = value.name
+                            tvSwitchNameThree.text = switchName
                             switchThree.isChecked = value.switchStatus.toBoolean()
                         }
                         "4" -> {
-                            tvSwitchNameFour.text = value.name
+                            val switchName = value.name
+                            tvSwitchNameFour.text = switchName
                             switchFour.isChecked = value.switchStatus.toBoolean()
                         }
                         "5" -> {
-                            tvSwitchNameFive.text = value.name
+                            val switchName = value.name
+                            tvSwitchNameFive.text = switchName
                             switchFive.isChecked = value.switchStatus.toBoolean()
                         }
                         "6" -> {
-                            tvSwitchNameSix.text = value.name
+                            val switchName = value.name
+                            tvSwitchNameSix.text = switchName
                             switchSix.isChecked = value.switchStatus.toBoolean()
                         }
                         "7" -> {
-                            tvSwitchNameSeven.text = value.name
+                            val switchName = value.name
+                            tvSwitchNameSeven.text = switchName
                             switchSeven.isChecked = value.switchStatus.toBoolean()
                         }
                         "8" -> {
-                            tvSwitchNameEight.text = value.name
+                            val switchName = value.name
+                            tvSwitchNameEight.text = switchName
                             switchEight.isChecked = value.switchStatus.toBoolean()
                         }
                         "9" -> {
@@ -217,7 +225,6 @@ class DeviceAdapter(
                     }
                 }
             }
-
 
             imgBtnPanelMenu.setOnClickListener {
                 if (linearPanelMenu.isVisible) {
@@ -294,19 +301,23 @@ class DeviceAdapter(
                 for (value in switchData) {
                     when (value.index) {
                         "1" -> {
-                            tvSwitchNameOne.text = value.name
+                            val switchName = value.name
+                            tvSwitchNameOne.text = switchName
                             switchOne.isChecked = value.switchStatus.toBoolean()
                         }
                         "2" -> {
-                            tvSwitchNameTwo.text = value.name
+                            val switchName = value.name
+                            tvSwitchNameTwo.text = switchName
                             switchTwo.isChecked = value.switchStatus.toBoolean()
                         }
                         "3" -> {
-                            tvSwitchNameThree.text = value.name
+                            val switchName = value.name
+                            tvSwitchNameThree.text = switchName
                             switchThree.isChecked = value.switchStatus.toBoolean()
                         }
                         "4" -> {
-                            tvSwitchNameFour.text = value.name
+                            val switchName = value.name
+                            tvSwitchNameFour.text = switchName
                             switchFour.isChecked = value.switchStatus.toBoolean()
                         }
                         "5" -> {
@@ -367,19 +378,19 @@ class DeviceAdapter(
             }
 
             switchOne.setOnCheckedChangeListener { _, isChecked ->
-                publish(device.id, Constants.AWS_SWITCH_1, isChecked.toInt().toString())
+                publish(device.deviceSerialNo, Constants.AWS_SWITCH_1, isChecked.toInt().toString())
             }
             switchTwo.setOnCheckedChangeListener { _, isChecked ->
-                publish(device.id, Constants.AWS_SWITCH_2, isChecked.toInt().toString())
+                publish(device.deviceSerialNo, Constants.AWS_SWITCH_2, isChecked.toInt().toString())
             }
             switchThree.setOnCheckedChangeListener { _, isChecked ->
-                publish(device.id, Constants.AWS_SWITCH_3, isChecked.toInt().toString())
+                publish(device.deviceSerialNo, Constants.AWS_SWITCH_3, isChecked.toInt().toString())
             }
             switchFour.setOnCheckedChangeListener { _, isChecked ->
-                publish(device.id, Constants.AWS_SWITCH_4, isChecked.toInt().toString())
+                publish(device.deviceSerialNo, Constants.AWS_SWITCH_4, isChecked.toInt().toString())
             }
             switchPortC.setOnCheckedChangeListener { _, isChecked ->
-                publish(device.id, Constants.AWS_USB_PORT_C, isChecked.toInt().toString())
+                publish(device.deviceSerialNo, Constants.AWS_USB_PORT_C, isChecked.toInt().toString())
             }
         }
     }

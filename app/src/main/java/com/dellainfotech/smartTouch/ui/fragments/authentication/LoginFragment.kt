@@ -1,13 +1,18 @@
 package com.dellainfotech.smartTouch.ui.fragments.authentication
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
+import android.text.method.HideReturnsTransformationMethod
+import android.text.method.PasswordTransformationMethod
 import android.util.Log
 import android.util.Patterns
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import androidx.navigation.fragment.findNavController
 import com.appizona.yehiahd.fastsave.FastSave
 import com.dellainfotech.smartTouch.R
@@ -41,11 +46,13 @@ import java.util.*
 class LoginFragment : ModelBaseFragment<AuthViewModel, FragmentLoginBinding, AuthRepository>() {
 
     private val logTag = this::class.java.simpleName
+    private var isPasswordVisible = false
 
     //Google SignIn
     private val GOOGLE_SIGN_IN_REQUEST = 1
     private var mGoogleSingInClient: GoogleSignInClient? = null
 
+    @SuppressLint("ClickableViewAccessibility")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -55,6 +62,16 @@ class LoginFragment : ModelBaseFragment<AuthViewModel, FragmentLoginBinding, Aut
             Utils.generateSSHKey(it)
         }
 
+        binding.checkboxRemember.isChecked = FastSave.getInstance()
+            .getBoolean(Constants.IS_REMEMBER, Constants.DEFAULT_REMEMBER_STATUS)
+
+        clickEvents()
+        apiCall()
+    }
+
+    @SuppressLint("ClickableViewAccessibility")
+    private fun clickEvents(){
+
         binding.tvSignUp.setOnClickListener {
             findNavController().navigate(LoginFragmentDirections.actionLoginFragmentToSignUpFragment())
         }
@@ -62,12 +79,6 @@ class LoginFragment : ModelBaseFragment<AuthViewModel, FragmentLoginBinding, Aut
         binding.tvForgotPassword.setOnClickListener {
             findNavController().navigate(LoginFragmentDirections.actionLoginFragmentToForgotPasswordFragment())
         }
-
-     /*   binding.edtEmail.setText("jignesh.dangar@teksun.com")
-        binding.edtPassword.setText("123456")*/
-
-        binding.checkboxRemember.isChecked = FastSave.getInstance()
-            .getBoolean(Constants.IS_REMEMBER, Constants.DEFAULT_REMEMBER_STATUS)
 
         binding.checkboxRemember.setOnCheckedChangeListener { _, isChecked ->
             FastSave.getInstance().saveBoolean(Constants.IS_REMEMBER, isChecked)
@@ -109,6 +120,35 @@ class LoginFragment : ModelBaseFragment<AuthViewModel, FragmentLoginBinding, Aut
             }
         }
 
+        binding.edtPassword.setOnTouchListener { _, event ->
+            val DRAWABLE_END  = 2
+
+            if(event.action == MotionEvent.ACTION_UP) {
+                if(event.rawX >= (binding.edtPassword.right - binding.edtPassword.compoundDrawables[DRAWABLE_END].bounds.width())) {
+                    if (isPasswordVisible){
+                        isPasswordVisible = false
+                        context?.let {
+                            binding.edtPassword.setCompoundDrawablesWithIntrinsicBounds(null,null,
+                                ContextCompat.getDrawable(it,R.drawable.ic_password_visible),null)
+                            binding.edtPassword.transformationMethod = HideReturnsTransformationMethod.getInstance()
+                        }
+                    }else {
+                        isPasswordVisible = true
+                        context?.let {
+                            binding.edtPassword.setCompoundDrawablesWithIntrinsicBounds(null,null,
+                                ContextCompat.getDrawable(it,R.drawable.ic_password_hidden),null)
+                            binding.edtPassword.transformationMethod = PasswordTransformationMethod.getInstance()
+                        }
+                    }
+
+                    true
+                }
+            }
+            false
+        }
+    }
+
+    private fun apiCall(){
         viewModel.loginResponse.observe(viewLifecycleOwner, { response ->
             when (response) {
                 is Resource.Success -> {
@@ -126,6 +166,7 @@ class LoginFragment : ModelBaseFragment<AuthViewModel, FragmentLoginBinding, Aut
                             FastSave.getInstance().saveString(Constants.USER_EMAIL, userData.vEmail)
                             FastSave.getInstance()
                                 .saveString(Constants.USER_PHONE_NUMBER, userData.bPhoneNumber)
+                            FastSave.getInstance().saveString(Constants.SOCIAL_ID, userData.socialId)
                             FastSave.getInstance().saveBoolean(Constants.isControlModePinned, userData.iIsPinStatus!!.toBoolean())
                             activity?.let {
                                 startActivity(Intent(it, MainActivity::class.java))
@@ -168,6 +209,9 @@ class LoginFragment : ModelBaseFragment<AuthViewModel, FragmentLoginBinding, Aut
                             FastSave.getInstance().saveString(Constants.USER_EMAIL, userData.vEmail)
                             FastSave.getInstance()
                                 .saveString(Constants.USER_PHONE_NUMBER, userData.bPhoneNumber)
+                            FastSave.getInstance().saveString(Constants.SOCIAL_ID, userData.socialId)
+                            FastSave.getInstance().saveBoolean(Constants.isControlModePinned, userData.iIsPinStatus!!.toBoolean())
+
                             activity?.let {
                                 startActivity(Intent(it, MainActivity::class.java))
                                 it.finishAffinity()
@@ -184,7 +228,7 @@ class LoginFragment : ModelBaseFragment<AuthViewModel, FragmentLoginBinding, Aut
                 }
                 is Resource.Failure -> {
                     DialogUtil.hideDialog()
-                    Log.e(logTag, "login error ${response.errorBody}")
+                    Log.e(logTag, "login error ${response.errorBody?.string()}")
                 }
                 else -> {
                     // We will do nothing here
@@ -255,7 +299,7 @@ class LoginFragment : ModelBaseFragment<AuthViewModel, FragmentLoginBinding, Aut
                             BodySocialLogin(
                                 it.id.toString(),
                                 uuid,
-                                "2",
+                                Constants.SOCIAL_LOGIN,
                                 email
                             )
                         )

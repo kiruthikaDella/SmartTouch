@@ -1,6 +1,7 @@
 package com.dellainfotech.smartTouch.ui.fragments.main.home
 
 import android.content.Context
+import android.util.Log
 import android.view.View
 import androidx.core.content.ContextCompat
 import com.dellainfotech.smartTouch.R
@@ -10,6 +11,8 @@ import com.dellainfotech.smartTouch.databinding.FragmentScreenLayoutBinding
  * Created by Jignesh Dangar on 21-04-2021.
  */
 class ScreenLayoutModel(context: Context, mBinding: FragmentScreenLayoutBinding) {
+
+    private val logTag = this::class.java.simpleName
 
     private var mContext = context
     private var binding = mBinding
@@ -137,7 +140,7 @@ class ScreenLayoutModel(context: Context, mBinding: FragmentScreenLayoutBinding)
         }
     }
 
-    private fun setClickListeners(){
+   private fun setClickListeners(){
         binding.ivLeftMost.setOnClickListener {
             when (viewType) {
                 VIEW_TYPE.EIGHT_ICONS_VIEW -> {
