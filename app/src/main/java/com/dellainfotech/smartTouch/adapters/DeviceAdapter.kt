@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.LinearLayout
+import android.widget.RelativeLayout
 import android.widget.TextView
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
@@ -16,6 +17,7 @@ import com.dellainfotech.smartTouch.api.model.DeviceSwitchData
 import com.dellainfotech.smartTouch.api.model.GetDeviceData
 import com.dellainfotech.smartTouch.common.interfaces.AdapterItemClickListener
 import com.dellainfotech.smartTouch.common.utils.Constants
+import com.dellainfotech.smartTouch.common.utils.MQTTConstants
 import com.dellainfotech.smartTouch.common.utils.Utils.toBoolean
 import com.dellainfotech.smartTouch.common.utils.Utils.toInt
 import com.dellainfotech.smartTouch.mqtt.AwsMqttSingleton
@@ -31,6 +33,10 @@ class DeviceAdapter(
     private val mActivity: Activity,
     private val deviceList: ArrayList<GetDeviceData>
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+
+    //
+    //region Adapter
+    //
 
     private val logTag = this::class.java.simpleName
 
@@ -96,6 +102,9 @@ class DeviceAdapter(
         val tvPanelName = itemView.findViewById(R.id.tv_panel_name) as TextView
         val linearPanelMenu = itemView.findViewById(R.id.linear_panel_menu) as LinearLayout
 
+        val constraintLayout = itemView.findViewById(R.id.relative_main) as RelativeLayout
+        val relativeLayout = itemView.findViewById(R.id.relative_layout) as RelativeLayout
+
         val linearCustomization = itemView.findViewById(R.id.linear_customization) as LinearLayout
         val linearFeature = itemView.findViewById(R.id.linear_features) as LinearLayout
         val linearDeviceSettings =
@@ -140,6 +149,8 @@ class DeviceAdapter(
         val imgBtnPanelEdit = itemView.findViewById(R.id.img_panel_edit) as ImageButton
         val tvPanelName = itemView.findViewById(R.id.tv_panel_name) as TextView
         val linearPanelMenu = itemView.findViewById(R.id.linear_panel_menu) as LinearLayout
+        val constraintLayout = itemView.findViewById(R.id.relative_main) as RelativeLayout
+        val relativeLayout = itemView.findViewById(R.id.relative_layout) as RelativeLayout
 
         val linearCustomization = itemView.findViewById(R.id.linear_customization) as LinearLayout
         val linearFeature = itemView.findViewById(R.id.linear_features) as LinearLayout
@@ -168,7 +179,25 @@ class DeviceAdapter(
 
     private fun setEightSwitchViewHolder(holder: EightPanelViewHolder, device: GetDeviceData) {
         holder.apply {
+
+            try {
+                val wrapSpec = View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED)
+                constraintLayout.measure(wrapSpec, wrapSpec)
+
+                val relativeParams = relativeLayout.layoutParams as RelativeLayout.LayoutParams
+
+                relativeParams.height = constraintLayout.measuredHeight
+                relativeParams.width = RelativeLayout.LayoutParams.MATCH_PARENT
+
+                relativeLayout.layoutParams = relativeParams
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+
             tvPanelName.text = device.deviceName
+            if (device.isDeviceAvailable == "0"){
+                relativeLayout.visibility = View.VISIBLE
+            }
 
             device.switchData?.let { switchData ->
                 for (value in switchData) {
@@ -295,7 +324,26 @@ class DeviceAdapter(
 
     private fun setFourSwitchViewHolder(holder: FourPanelViewHolder, device: GetDeviceData) {
         holder.apply {
+
+            try {
+
+                val wrapSpec = View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED)
+                constraintLayout.measure(wrapSpec, wrapSpec)
+
+                val relativeParams = relativeLayout.layoutParams as RelativeLayout.LayoutParams
+
+                relativeParams.height = constraintLayout.measuredHeight
+                relativeParams.width = RelativeLayout.LayoutParams.MATCH_PARENT
+
+                relativeLayout.layoutParams = relativeParams
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+
             tvPanelName.text = device.deviceName
+            if (device.isDeviceAvailable == "0"){
+                relativeLayout.visibility = View.VISIBLE
+            }
 
             device.switchData?.let { switchData ->
                 for (value in switchData) {
@@ -378,22 +426,30 @@ class DeviceAdapter(
             }
 
             switchOne.setOnCheckedChangeListener { _, isChecked ->
-                publish(device.deviceSerialNo, Constants.AWS_SWITCH_1, isChecked.toInt().toString())
+                publish(device.deviceSerialNo, MQTTConstants.AWS_SWITCH_1, isChecked.toInt().toString())
             }
             switchTwo.setOnCheckedChangeListener { _, isChecked ->
-                publish(device.deviceSerialNo, Constants.AWS_SWITCH_2, isChecked.toInt().toString())
+                publish(device.deviceSerialNo, MQTTConstants.AWS_SWITCH_2, isChecked.toInt().toString())
             }
             switchThree.setOnCheckedChangeListener { _, isChecked ->
-                publish(device.deviceSerialNo, Constants.AWS_SWITCH_3, isChecked.toInt().toString())
+                publish(device.deviceSerialNo, MQTTConstants.AWS_SWITCH_3, isChecked.toInt().toString())
             }
             switchFour.setOnCheckedChangeListener { _, isChecked ->
-                publish(device.deviceSerialNo, Constants.AWS_SWITCH_4, isChecked.toInt().toString())
+                publish(device.deviceSerialNo, MQTTConstants.AWS_SWITCH_4, isChecked.toInt().toString())
             }
             switchPortC.setOnCheckedChangeListener { _, isChecked ->
-                publish(device.deviceSerialNo, Constants.AWS_USB_PORT_C, isChecked.toInt().toString())
+                publish(
+                    device.deviceSerialNo,
+                    MQTTConstants.AWS_USB_PORT_C,
+                    isChecked.toInt().toString()
+                )
             }
         }
     }
+
+    //
+    //endregion
+    //
 
     //
     //region MQTT Methods
@@ -401,8 +457,89 @@ class DeviceAdapter(
 
     private fun subscribeToDevice(deviceId: String) {
         try {
+
+            //Response of Get Switch status
             AwsMqttSingleton.mqttManager!!.subscribeToTopic(
-                Constants.Control_Device_Switches.replace(Constants.AWS_DEVICE_ID, deviceId),
+                MQTTConstants.CONTROL_DEVICE_SWITCHES.replace(MQTTConstants.AWS_DEVICE_ID, deviceId),
+                AWSIotMqttQos.QOS0
+            ) { topic, data ->
+                mActivity.runOnUiThread {
+
+                    val message = String(data, StandardCharsets.UTF_8)
+                    Log.d("$logTag ReceivedData", "$topic $message")
+
+                    val topic1 = topic.split("/")
+                    // topic [0] = ''
+                    // topic [1] = smarttouch
+                    // topic [2] = deviceId
+                    // topic [3] = control
+
+                    val deviceData = deviceList.find { it.deviceSerialNo == topic1[2] }
+
+                    val jsonObject = JSONObject(message)
+                    if (jsonObject.has(MQTTConstants.AWS_SWITCH_1)) {
+                        deviceData?.switchData?.get(0)?.switchStatus =
+                            jsonObject.getString(MQTTConstants.AWS_SWITCH_1).toInt()
+                    }
+                    if (jsonObject.has(MQTTConstants.AWS_SWITCH_2)) {
+                        deviceData?.switchData?.get(1)?.switchStatus =
+                            jsonObject.getString(MQTTConstants.AWS_SWITCH_2).toInt()
+                    }
+                    if (jsonObject.has(MQTTConstants.AWS_SWITCH_3)) {
+                        deviceData?.switchData?.get(2)?.switchStatus =
+                            jsonObject.getString(MQTTConstants.AWS_SWITCH_3).toInt()
+                    }
+                    if (jsonObject.has(MQTTConstants.AWS_SWITCH_4)) {
+                        deviceData?.switchData?.get(3)?.switchStatus =
+                            jsonObject.getString(MQTTConstants.AWS_SWITCH_4).toInt()
+                    }
+                    if (jsonObject.has(MQTTConstants.AWS_SWITCH_5)) {
+                        deviceData?.switchData?.get(4)?.switchStatus =
+                            jsonObject.getString(MQTTConstants.AWS_SWITCH_5).toInt()
+                    }
+                    if (jsonObject.has(MQTTConstants.AWS_SWITCH_6)) {
+                        deviceData?.switchData?.get(5)?.switchStatus =
+                            jsonObject.getString(MQTTConstants.AWS_SWITCH_6).toInt()
+                    }
+                    if (jsonObject.has(MQTTConstants.AWS_SWITCH_7)) {
+                        deviceData?.switchData?.get(6)?.switchStatus =
+                            jsonObject.getString(MQTTConstants.AWS_SWITCH_7).toInt()
+                    }
+                    if (jsonObject.has(MQTTConstants.AWS_SWITCH_8)) {
+                        deviceData?.switchData?.get(7)?.switchStatus =
+                            jsonObject.getString(MQTTConstants.AWS_SWITCH_8).toInt()
+                    }
+                    if (jsonObject.has(MQTTConstants.AWS_USB_PORT_A)) {
+                        if (deviceData?.deviceType == Constants.DEVICE_TYPE_EIGHT) {
+                            deviceData.switchData?.get(9)?.switchStatus =
+                                jsonObject.getString(MQTTConstants.AWS_USB_PORT_A).toInt()
+                        }
+
+                    }
+                    if (jsonObject.has(MQTTConstants.AWS_USB_PORT_C)) {
+                        if (deviceData?.deviceType == Constants.DEVICE_TYPE_EIGHT) {
+                            deviceData.switchData?.get(10)?.switchStatus =
+                                jsonObject.getString(MQTTConstants.AWS_USB_PORT_C).toInt()
+                        } else {
+                            deviceData?.switchData?.get(5)?.switchStatus =
+                                jsonObject.getString(MQTTConstants.AWS_USB_PORT_C).toInt()
+                        }
+
+                    }
+
+                    for ((index, value) in deviceList.withIndex()) {
+                        if (value.id == deviceData?.id) {
+                            deviceList[index] = deviceData
+                            break
+                        }
+                    }
+                    notifyDataSetChanged()
+                }
+            }
+
+            //Current Device Status Update - Online/Offline
+            AwsMqttSingleton.mqttManager!!.subscribeToTopic(
+                MQTTConstants.DEVICE_STATUS.replace(MQTTConstants.AWS_DEVICE_ID, deviceId),
                 AWSIotMqttQos.QOS0
             ) { topic, data ->
                 mActivity.runOnUiThread {
@@ -410,68 +547,20 @@ class DeviceAdapter(
                     val message = String(data, StandardCharsets.UTF_8)
                     Log.d("$logTag ReceivedData", "$topic    $message")
 
-                    if (topic.contains("/control/")) {
-                        val topic1 = topic.split("/")
-                        // topic [0] = ''
-                        // topic [1] = smarttouch
-                        // topic [2] = deviceId
-                        // topic [3] = control
+                    val topic1 = topic.split("/")
+                    // topic [0] = ''
+                    // topic [1] = smarttouch
+                    // topic [2] = deviceId
+                    // topic [3] = status
 
-                        val deviceData = deviceList.find { it.id == topic1[2] }
+                    val deviceData = deviceList.find { it.deviceSerialNo == topic1[2] }
 
-                        val jsonObject = JSONObject(message)
-                        if (jsonObject.has(Constants.AWS_SWITCH_1)) {
-                            deviceData?.switchData?.get(0)?.switchStatus =
-                                jsonObject.getString(Constants.AWS_SWITCH_1).toInt()
-                        }
-                        if (jsonObject.has(Constants.AWS_SWITCH_2)) {
-                            deviceData?.switchData?.get(1)?.switchStatus =
-                                jsonObject.getString(Constants.AWS_SWITCH_2).toInt()
-                        }
-                        if (jsonObject.has(Constants.AWS_SWITCH_3)) {
-                            deviceData?.switchData?.get(2)?.switchStatus =
-                                jsonObject.getString(Constants.AWS_SWITCH_3).toInt()
-                        }
-                        if (jsonObject.has(Constants.AWS_SWITCH_4)) {
-                            deviceData?.switchData?.get(3)?.switchStatus =
-                                jsonObject.getString(Constants.AWS_SWITCH_4).toInt()
-                        }
-                        if (jsonObject.has(Constants.AWS_SWITCH_5)) {
-                            deviceData?.switchData?.get(4)?.switchStatus =
-                                jsonObject.getString(Constants.AWS_SWITCH_5).toInt()
-                        }
-                        if (jsonObject.has(Constants.AWS_SWITCH_6)) {
-                            deviceData?.switchData?.get(5)?.switchStatus =
-                                jsonObject.getString(Constants.AWS_SWITCH_6).toInt()
-                        }
-                        if (jsonObject.has(Constants.AWS_SWITCH_7)) {
-                            deviceData?.switchData?.get(6)?.switchStatus =
-                                jsonObject.getString(Constants.AWS_SWITCH_7).toInt()
-                        }
-                        if (jsonObject.has(Constants.AWS_SWITCH_8)) {
-                            deviceData?.switchData?.get(7)?.switchStatus =
-                                jsonObject.getString(Constants.AWS_SWITCH_8).toInt()
-                        }
-                        if (jsonObject.has(Constants.AWS_USB_PORT_A)) {
-                            if (deviceData?.deviceType == Constants.DEVICE_TYPE_EIGHT) {
-                                deviceData.switchData?.get(9)?.switchStatus =
-                                    jsonObject.getString(Constants.AWS_USB_PORT_A).toInt()
-                            }
+                    val jsonObject = JSONObject(message)
 
-                        }
-                        if (jsonObject.has(Constants.AWS_USB_PORT_C)) {
-                            if (deviceData?.deviceType == Constants.DEVICE_TYPE_EIGHT) {
-                                deviceData.switchData?.get(10)?.switchStatus =
-                                    jsonObject.getString(Constants.AWS_USB_PORT_C).toInt()
-                            } else {
-                                deviceData?.switchData?.get(5)?.switchStatus =
-                                    jsonObject.getString(Constants.AWS_USB_PORT_C).toInt()
-                            }
-
-                        }
-
+                    if (jsonObject.has(MQTTConstants.AWS_ST)){
+                        deviceData?.isDeviceAvailable = jsonObject.getInt(MQTTConstants.AWS_ST).toString()
                         for ((index, value) in deviceList.withIndex()) {
-                            if (value.id == deviceData?.id) {
+                            if (value.deviceSerialNo == deviceData?.deviceSerialNo) {
                                 deviceList[index] = deviceData
                                 break
                             }
@@ -481,7 +570,7 @@ class DeviceAdapter(
                 }
             }
         } catch (e: Exception) {
-            Log.e(AwsMqttSingleton.logTag, "Subscription error.", e)
+            Log.e(logTag, "Subscription error.", e)
         }
     }
 
@@ -489,8 +578,8 @@ class DeviceAdapter(
         val payload = JSONObject()
         payload.put(switchIndex, switchValue)
         AwsMqttSingleton.publish(
-            Constants.Control_Device_Switches.replace(
-                Constants.AWS_DEVICE_ID,
+            MQTTConstants.CONTROL_DEVICE_SWITCHES.replace(
+                MQTTConstants.AWS_DEVICE_ID,
                 deviceId
             ), payload.toString()
         )
@@ -517,7 +606,7 @@ class DeviceAdapter(
     //
 
     //
-    //region clicklistener
+    //region clickListener
     //
 
     fun setOnCustomizationClickListener(listener: AdapterItemClickListener<GetDeviceData>) {

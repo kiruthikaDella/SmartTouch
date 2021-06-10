@@ -122,7 +122,7 @@ class CreateSceneFragment : ModelBaseFragment<HomeViewModel, FragmentCreateScene
         binding.ivEditCreateScene.setOnClickListener {
             activity?.let {
                 DialogUtil.editDialog(
-                    it, getString(R.string.text_scene_name), binding.edtSceneName.text.toString().trim(), getString(
+                    it, "Edit Scene name", binding.edtSceneName.text.toString().trim(), getString(
                         R.string.text_save
                     ), getString(
                         R.string.text_cancel

@@ -10,6 +10,7 @@ import com.amazonaws.services.iot.model.CreateKeysAndCertificateRequest
 import com.amazonaws.services.iot.model.CreateKeysAndCertificateResult
 import com.dellainfotech.smartTouch.AppDelegate.Companion.instance
 import com.dellainfotech.smartTouch.common.utils.Constants
+import com.dellainfotech.smartTouch.common.utils.MQTTConstants
 import java.nio.charset.StandardCharsets
 import java.security.KeyStore
 import java.util.*
@@ -18,20 +19,20 @@ import javax.inject.Singleton
 @Singleton
 object AwsMqttSingleton {
 
-    val logTag = this::class.java.simpleName
-    var clientId: String? = null
-    var certificateId: String? = null
+    private val logTag = this::class.java.simpleName
+    private var clientId: String? = null
+    private var certificateId: String? = null
 
     var clientKeyStore: KeyStore? = null
     var credentialsProvider: CognitoCachingCredentialsProvider? = null
     var mqttManager: AWSIotMqttManager? = null
-    var mqttStatus = MQTTConnectionStatus.DISCONNECTED
+    private var mqttStatus = MQTTConnectionStatus.DISCONNECTED
 
     var mIotAndroidClient: AWSIotClient? = null
 
-    var keystorePath: String? = null
-    var keystoreName: String? = null
-    var keystorePassword: String? = null
+    private var keystorePath: String? = null
+    private var keystoreName: String? = null
+    private var keystorePassword: String? = null
 
     private fun connectAWS() {
         Log.d("Aws connection", "clientId = $clientId")
@@ -41,7 +42,8 @@ object AwsMqttSingleton {
         } else {
             try {
 
-                mqttManager?.connect(credentialsProvider
+                mqttManager?.connect(
+                    credentialsProvider
                 ) { status, throwable ->
                     when (status) {
                         AWSIotMqttClientStatusCallback.AWSIotMqttClientStatus.Connecting -> {
@@ -86,10 +88,10 @@ object AwsMqttSingleton {
         clientId = UUID.randomUUID().toString()
 
         credentialsProvider = CognitoCachingCredentialsProvider(
-            instance, Constants.COGNITO_POOL_ID, Constants.MY_REGION
+            instance, MQTTConstants.COGNITO_POOL_ID, MQTTConstants.MY_REGION
         )
 
-        mqttManager = AWSIotMqttManager(clientId, Constants.CUSTOMER_SPECIFIC_ENDPOINT)
+        mqttManager = AWSIotMqttManager(clientId, MQTTConstants.CUSTOMER_SPECIFIC_ENDPOINT)
         mqttManager!!.keepAlive = 10
 
         mqttManager!!.mqttLastWillAndTestament = AWSIotMqttLastWillAndTestament(
@@ -98,12 +100,12 @@ object AwsMqttSingleton {
         )
 
         mIotAndroidClient = AWSIotClient(credentialsProvider)
-        mIotAndroidClient!!.setRegion(Region.getRegion(Constants.MY_REGION))
+        mIotAndroidClient!!.setRegion(Region.getRegion(MQTTConstants.MY_REGION))
 
         keystorePath = instance.filesDir.path
-        keystoreName = Constants.KEYSTORE_NAME
-        keystorePassword = Constants.KEYSTORE_PASSWORD
-        certificateId = Constants.CERTIFICATE_ID
+        keystoreName = MQTTConstants.KEYSTORE_NAME
+        keystorePassword = MQTTConstants.KEYSTORE_PASSWORD
+        certificateId = MQTTConstants.CERTIFICATE_ID
 
         // To load cert/key from keystore on filesystem
         try {
@@ -170,7 +172,7 @@ object AwsMqttSingleton {
 
                     val policyAttachRequest =
                         AttachPrincipalPolicyRequest()
-                    policyAttachRequest.policyName = Constants.AWS_IOT_POLICY_NAME
+                    policyAttachRequest.policyName = MQTTConstants.AWS_IOT_POLICY_NAME
                     policyAttachRequest.principal = createKeysAndCertificateResult
                         .certificateArn
                     mIotAndroidClient!!.attachPrincipalPolicy(policyAttachRequest)
@@ -194,9 +196,9 @@ object AwsMqttSingleton {
         try {
             mqttManager!!.subscribeToTopic(
                 topic, AWSIotMqttQos.QOS0
-            ) { topic, data ->
+            ) { topicName, data ->
                 val message = String(data, StandardCharsets.UTF_8)
-                Log.d("ReceivedData", "$topic    $message")
+                Log.d("ReceivedData", "$topicName    $message")
             }
         } catch (e: Exception) {
             Log.e(logTag, "Subscription error.", e)

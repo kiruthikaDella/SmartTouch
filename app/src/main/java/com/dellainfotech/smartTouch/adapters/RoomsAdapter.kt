@@ -61,6 +61,7 @@ class RoomsAdapter(
                     .with(it)
                     .load(data.roomTypeId?.file)
                     .centerCrop()
+                    .placeholder(R.drawable.ic_room_placeholder)
                     .into(ivRoomImage)
             }
 

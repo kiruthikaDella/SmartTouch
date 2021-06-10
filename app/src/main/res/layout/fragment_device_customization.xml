@@ -398,6 +398,7 @@
                 </androidx.cardview.widget.CardView>
 
                 <androidx.cardview.widget.CardView
+                    android:id="@+id/card_view_synchronize"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/login_component_height"
                     android:layout_marginStart="@dimen/screen_start_margin"
