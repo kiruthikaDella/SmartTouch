@@ -90,6 +90,7 @@
                     android:fontFamily="@font/roboto_bold"
                     android:background="@android:color/transparent"
                     android:singleLine="true"
+                    android:maxLength="20"
                     app:layout_constraintStart_toStartOf="@+id/tv_scene_name"
                     app:layout_constraintTop_toBottomOf="@+id/tv_scene_name"
                     app:layout_constraintEnd_toStartOf="@+id/iv_edit_create_scene" />

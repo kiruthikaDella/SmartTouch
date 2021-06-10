@@ -4,7 +4,6 @@ import android.app.Activity
 import android.app.Dialog
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
-import android.text.InputFilter
 import android.util.DisplayMetrics
 import android.widget.EditText
 import android.widget.TextView
@@ -12,6 +11,7 @@ import androidx.core.view.isVisible
 import com.dellainfotech.smartTouch.R
 import com.dellainfotech.smartTouch.common.interfaces.DialogAskListener
 import com.dellainfotech.smartTouch.common.interfaces.DialogEditListener
+import com.dellainfotech.smartTouch.common.interfaces.DialogShowListener
 import com.dellainfotech.smartTouch.common.utils.Utils.toEditable
 import com.google.android.material.button.MaterialButton
 
@@ -51,6 +51,32 @@ object DialogUtil {
         btnOk.setOnClickListener {
             dialog?.dismiss()
             onClick?.onYesClicked()
+        }
+
+        val displayMetrics = DisplayMetrics()
+        activity.windowManager?.defaultDisplay?.getMetrics(displayMetrics)
+        val width = (displayMetrics.widthPixels * Constants.COMMON_DIALOG_WIDTH)
+        val height = (displayMetrics.heightPixels * Constants.COMMON_DIALOG_HEIGHT)
+
+        dialog?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        dialog?.window?.setLayout(width.toInt(), height.toInt())
+        dialog?.show()
+    }
+
+    fun deviceOfflineAlert(
+        activity: Activity,
+        onClick: DialogShowListener?
+    ) {
+
+        hideDialog()
+        dialog = Dialog(activity)
+        dialog?.setContentView(R.layout.dialog_layout_device_offline)
+        dialog?.setCancelable(false)
+
+        val btnOk = dialog?.findViewById(R.id.tv_ok) as TextView
+
+        btnOk.setOnClickListener {
+            onClick?.onClick()
         }
 
         val displayMetrics = DisplayMetrics()

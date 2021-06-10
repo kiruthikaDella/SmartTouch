@@ -26,6 +26,7 @@ import androidx.core.content.FileProvider
 import androidx.core.view.isVisible
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import com.amazonaws.mobileconnectors.iot.AWSIotMqttQos
 import com.appizona.yehiahd.fastsave.FastSave
 import com.dellainfotech.smartTouch.BuildConfig
 import com.dellainfotech.smartTouch.R
@@ -37,9 +38,11 @@ import com.dellainfotech.smartTouch.common.interfaces.DialogAskListener
 import com.dellainfotech.smartTouch.common.utils.Constants
 import com.dellainfotech.smartTouch.common.utils.DialogUtil
 import com.dellainfotech.smartTouch.common.utils.FileHelper.getRealPathFromUri
+import com.dellainfotech.smartTouch.common.utils.MQTTConstants
 import com.dellainfotech.smartTouch.common.utils.Utils.toBoolean
 import com.dellainfotech.smartTouch.common.utils.Utils.toInt
 import com.dellainfotech.smartTouch.databinding.FragmentDeviceCustomizationBinding
+import com.dellainfotech.smartTouch.mqtt.AwsMqttSingleton
 import com.dellainfotech.smartTouch.ui.fragments.ModelBaseFragment
 import com.dellainfotech.smartTouch.ui.viewmodel.HomeViewModel
 import com.karumi.dexter.Dexter
@@ -52,7 +55,9 @@ import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
+import org.json.JSONObject
 import java.io.File
+import java.nio.charset.StandardCharsets
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -90,6 +95,8 @@ class DeviceCustomizationFragment :
         ) {
             lockScreen()
         }
+
+        subscribeToDevice(args.deviceDetail.deviceSerialNo)
 
         context?.let { mContext ->
 
@@ -329,11 +336,11 @@ class DeviceCustomizationFragment :
 
         binding.layoutUploadImage.linearUploadImage.setOnClickListener {
 
-            if (mProfileFile == null){
-                context?.let { mContext->
+            if (mProfileFile == null) {
+                context?.let { mContext ->
                     Toast.makeText(mContext, "Please select image.", Toast.LENGTH_SHORT).show()
                 }
-            }else {
+            } else {
                 imageParts.clear()
 
                 activity?.let {
@@ -358,6 +365,10 @@ class DeviceCustomizationFragment :
                     args.deviceDetail.id.toRequestBody("text/plain".toMediaTypeOrNull()),
                     imageParts
                 )
+
+                imagePath = ""
+                imageName = ""
+                mProfileFile = null
             }
         }
 
@@ -387,7 +398,8 @@ class DeviceCustomizationFragment :
         }
 
         binding.layoutTextStyle.btnSave.setOnClickListener {
-            deviceCustomization?.textStyle = binding.layoutTextStyle.spinnerFonts.selectedItem.toString()
+            deviceCustomization?.textStyle =
+                binding.layoutTextStyle.spinnerFonts.selectedItem.toString()
             hidePanel()
         }
     }
@@ -682,4 +694,44 @@ class DeviceCustomizationFragment :
         }
     }
 
+    //
+    //region MQTT
+    //
+
+    private fun subscribeToDevice(deviceId: String) {
+        try {
+
+            //Current Device Status Update - Online/Offline
+            AwsMqttSingleton.mqttManager!!.subscribeToTopic(
+                MQTTConstants.DEVICE_STATUS.replace(MQTTConstants.AWS_DEVICE_ID, deviceId),
+                AWSIotMqttQos.QOS0
+            ) { topic, data ->
+                activity?.let {
+                    it.runOnUiThread {
+
+                        val message = String(data, StandardCharsets.UTF_8)
+                        Log.d("$logTag ReceivedData", "$topic    $message")
+
+                        val jsonObject = JSONObject(message)
+
+                        if (jsonObject.has(MQTTConstants.AWS_ST)) {
+                            if (jsonObject.getInt(MQTTConstants.AWS_ST) == 1){
+                                binding.cardViewSynchronize.setCardBackgroundColor(ContextCompat.getColor(it,R.color.theme_color))
+                                binding.btnSynchronize.isEnabled = true
+                            }else {
+                                binding.cardViewSynchronize.setCardBackgroundColor(ContextCompat.getColor(it,R.color.gray))
+                                binding.btnSynchronize.isEnabled = false
+                            }
+                        }
+                    }
+                }
+            }
+        } catch (e: Exception) {
+            Log.e(logTag, "Subscription error.", e)
+        }
+    }
+
+    //
+    //endregion
+    //
 }

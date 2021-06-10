@@ -113,7 +113,7 @@ class DeviceFragment :
             activity?.let {
                 DialogUtil.editDialog(
                     it,
-                    getString(R.string.text_edit),
+                    "Edit Room name",
                     binding.tvTitle.text.toString().trim(),
                     getString(R.string.text_save),
                     getString(R.string.text_cancel),
@@ -147,7 +147,7 @@ class DeviceFragment :
                 activity?.let {
                     DialogUtil.editDialog(
                         it,
-                        getString(R.string.text_edit),
+                        "Edit Panel name",
                         data.deviceName ?: "",
                         getString(R.string.text_save),
                         getString(R.string.text_cancel),
@@ -214,7 +214,7 @@ class DeviceFragment :
                 activity?.let {
                     DialogUtil.editDialog(
                         it,
-                        getString(R.string.text_edit),
+                        "Edit Switch name",
                         switchData.name,
                         getString(R.string.text_save),
                         getString(R.string.text_cancel),
