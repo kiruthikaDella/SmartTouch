@@ -147,7 +147,7 @@ class DeviceFragment :
                 activity?.let {
                     DialogUtil.editDialog(
                         it,
-                        "Edit Device name",
+                        "Edit Panel name",
                         data.deviceName ?: "",
                         getString(R.string.text_save),
                         getString(R.string.text_cancel),
