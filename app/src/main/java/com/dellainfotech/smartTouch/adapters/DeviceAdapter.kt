@@ -68,7 +68,9 @@ class DeviceAdapter(
         holder.setIsRecyclable(false)
         val data = deviceList[position]
 
-        subscribeToDevice(data.deviceSerialNo)
+        if (AwsMqttSingleton.isConnected()) {
+            subscribeToDevice(data.deviceSerialNo)
+        }
 
         when (holder.itemViewType) {
             eightPanelView -> {
@@ -195,7 +197,7 @@ class DeviceAdapter(
             }
 
             tvPanelName.text = device.deviceName
-            if (device.isDeviceAvailable == "0"){
+            if (device.isDeviceAvailable == "0") {
                 relativeLayout.visibility = View.VISIBLE
             }
 
@@ -341,7 +343,7 @@ class DeviceAdapter(
             }
 
             tvPanelName.text = device.deviceName
-            if (device.isDeviceAvailable == "0"){
+            if (device.isDeviceAvailable == "0") {
                 relativeLayout.visibility = View.VISIBLE
             }
 
@@ -426,16 +428,32 @@ class DeviceAdapter(
             }
 
             switchOne.setOnCheckedChangeListener { _, isChecked ->
-                publish(device.deviceSerialNo, MQTTConstants.AWS_SWITCH_1, isChecked.toInt().toString())
+                publish(
+                    device.deviceSerialNo,
+                    MQTTConstants.AWS_SWITCH_1,
+                    isChecked.toInt().toString()
+                )
             }
             switchTwo.setOnCheckedChangeListener { _, isChecked ->
-                publish(device.deviceSerialNo, MQTTConstants.AWS_SWITCH_2, isChecked.toInt().toString())
+                publish(
+                    device.deviceSerialNo,
+                    MQTTConstants.AWS_SWITCH_2,
+                    isChecked.toInt().toString()
+                )
             }
             switchThree.setOnCheckedChangeListener { _, isChecked ->
-                publish(device.deviceSerialNo, MQTTConstants.AWS_SWITCH_3, isChecked.toInt().toString())
+                publish(
+                    device.deviceSerialNo,
+                    MQTTConstants.AWS_SWITCH_3,
+                    isChecked.toInt().toString()
+                )
             }
             switchFour.setOnCheckedChangeListener { _, isChecked ->
-                publish(device.deviceSerialNo, MQTTConstants.AWS_SWITCH_4, isChecked.toInt().toString())
+                publish(
+                    device.deviceSerialNo,
+                    MQTTConstants.AWS_SWITCH_4,
+                    isChecked.toInt().toString()
+                )
             }
             switchPortC.setOnCheckedChangeListener { _, isChecked ->
                 publish(
@@ -460,7 +478,10 @@ class DeviceAdapter(
 
             //Response of Get Switch status
             AwsMqttSingleton.mqttManager!!.subscribeToTopic(
-                MQTTConstants.CONTROL_DEVICE_SWITCHES.replace(MQTTConstants.AWS_DEVICE_ID, deviceId),
+                MQTTConstants.CONTROL_DEVICE_SWITCHES.replace(
+                    MQTTConstants.AWS_DEVICE_ID,
+                    deviceId
+                ),
                 AWSIotMqttQos.QOS0
             ) { topic, data ->
                 mActivity.runOnUiThread {
@@ -557,8 +578,9 @@ class DeviceAdapter(
 
                     val jsonObject = JSONObject(message)
 
-                    if (jsonObject.has(MQTTConstants.AWS_ST)){
-                        deviceData?.isDeviceAvailable = jsonObject.getInt(MQTTConstants.AWS_ST).toString()
+                    if (jsonObject.has(MQTTConstants.AWS_ST)) {
+                        deviceData?.isDeviceAvailable =
+                            jsonObject.getInt(MQTTConstants.AWS_ST).toString()
                         for ((index, value) in deviceList.withIndex()) {
                             if (value.deviceSerialNo == deviceData?.deviceSerialNo) {
                                 deviceList[index] = deviceData
@@ -577,6 +599,7 @@ class DeviceAdapter(
     private fun publish(deviceId: String, switchIndex: String, switchValue: String) {
         val payload = JSONObject()
         payload.put(switchIndex, switchValue)
+
         AwsMqttSingleton.publish(
             MQTTConstants.CONTROL_DEVICE_SWITCHES.replace(
                 MQTTConstants.AWS_DEVICE_ID,

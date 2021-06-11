@@ -49,22 +49,24 @@ object AwsMqttSingleton {
                         AWSIotMqttClientStatusCallback.AWSIotMqttClientStatus.Connecting -> {
                             Log.e(logTag, "Connecting.", throwable)
                             mqttStatus = MQTTConnectionStatus.CONNECTING
+                            NotifyManager.getMQTTConnectionInfo().onNext(MQTTConnectionStatus.CONNECTING)
                         }
                         AWSIotMqttClientStatusCallback.AWSIotMqttClientStatus.Connected -> {
                             Log.e(logTag, "Connected.", throwable)
                             mqttStatus = MQTTConnectionStatus.CONNECTED
-
-                            subscribe("test")
+                            NotifyManager.getMQTTConnectionInfo().onNext(MQTTConnectionStatus.CONNECTED)
                         }
 
                         AWSIotMqttClientStatusCallback.AWSIotMqttClientStatus.Reconnecting -> {
                             Log.e(logTag, "Reconnecting error.", throwable)
                             mqttStatus = MQTTConnectionStatus.RECONNECTING
+                            NotifyManager.getMQTTConnectionInfo().onNext(MQTTConnectionStatus.RECONNECTING)
                         }
 
                         AWSIotMqttClientStatusCallback.AWSIotMqttClientStatus.ConnectionLost -> {
                             Log.e(logTag, "ConnectionLost error.", throwable)
                             mqttStatus = MQTTConnectionStatus.CONNECTION_LOST
+                            NotifyManager.getMQTTConnectionInfo().onNext(MQTTConnectionStatus.CONNECTION_LOST)
                         }
                         else -> {
                             Log.d(
@@ -72,6 +74,7 @@ object AwsMqttSingleton {
                                 "Status = Disconnected "
                             )
                             mqttStatus = MQTTConnectionStatus.DISCONNECTED
+                            NotifyManager.getMQTTConnectionInfo().onNext(MQTTConnectionStatus.DISCONNECTED)
                         }
                     }
                 }

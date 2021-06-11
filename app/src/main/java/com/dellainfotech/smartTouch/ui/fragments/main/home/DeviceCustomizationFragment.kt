@@ -35,6 +35,7 @@ import com.dellainfotech.smartTouch.api.body.BodyCustomizationLock
 import com.dellainfotech.smartTouch.api.model.DeviceCustomizationData
 import com.dellainfotech.smartTouch.api.repository.HomeRepository
 import com.dellainfotech.smartTouch.common.interfaces.DialogAskListener
+import com.dellainfotech.smartTouch.common.interfaces.DialogShowListener
 import com.dellainfotech.smartTouch.common.utils.Constants
 import com.dellainfotech.smartTouch.common.utils.DialogUtil
 import com.dellainfotech.smartTouch.common.utils.FileHelper.getRealPathFromUri
@@ -43,6 +44,8 @@ import com.dellainfotech.smartTouch.common.utils.Utils.toBoolean
 import com.dellainfotech.smartTouch.common.utils.Utils.toInt
 import com.dellainfotech.smartTouch.databinding.FragmentDeviceCustomizationBinding
 import com.dellainfotech.smartTouch.mqtt.AwsMqttSingleton
+import com.dellainfotech.smartTouch.mqtt.MQTTConnectionStatus
+import com.dellainfotech.smartTouch.mqtt.NotifyManager
 import com.dellainfotech.smartTouch.ui.fragments.ModelBaseFragment
 import com.dellainfotech.smartTouch.ui.viewmodel.HomeViewModel
 import com.karumi.dexter.Dexter
@@ -51,6 +54,8 @@ import com.karumi.dexter.PermissionToken
 import com.karumi.dexter.listener.PermissionRequest
 import com.karumi.dexter.listener.multi.MultiplePermissionsListener
 import com.sothree.slidinguppanel.SlidingUpPanelLayout
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.Disposable
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
@@ -75,6 +80,8 @@ class DeviceCustomizationFragment :
     private var deviceCustomization: DeviceCustomizationData? = null
     private var isDeviceCustomizationLocked: Boolean = false
 
+    private var mqttConnectionDisposable: Disposable? = null
+
     private var imageParts: MutableList<MultipartBody.Part> = ArrayList<MultipartBody.Part>()
     private var imagePath = ""
     private var imageName = ""
@@ -96,7 +103,15 @@ class DeviceCustomizationFragment :
             lockScreen()
         }
 
-        subscribeToDevice(args.deviceDetail.deviceSerialNo)
+        mqttConnectionDisposable = NotifyManager.getMQTTConnectionInfo().observeOn(AndroidSchedulers.mainThread()).subscribe{
+            Log.e(logTag, " MQTTConnectionStatus = $it ")
+            when(it){
+                MQTTConnectionStatus.CONNECTED -> {
+                    Log.e(logTag, " MQTTConnectionStatus.CONNECTED ")
+                    subscribeToDevice(args.deviceDetail.deviceSerialNo)
+                }
+            }
+        }
 
         context?.let { mContext ->
 
@@ -200,6 +215,11 @@ class DeviceCustomizationFragment :
         apiCall()
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        mqttConnectionDisposable?.dispose()
+    }
+
     private fun clickEvents() {
         binding.ivBack.setOnClickListener {
             findNavController().navigateUp()
@@ -245,7 +265,7 @@ class DeviceCustomizationFragment :
             deviceCustomization?.let {
                 findNavController().navigate(
                     DeviceCustomizationFragmentDirections.actionDeviceCustomizationFragmentToScreenLayoutFragment(
-                        it
+                        it,args.deviceDetail,args.roomDetail
                     )
                 )
             }
@@ -329,7 +349,7 @@ class DeviceCustomizationFragment :
         binding.ivSwitchIconsSettings.setOnClickListener {
             findNavController().navigate(
                 DeviceCustomizationFragmentDirections.actionDeviceCustomizationFragmentToSwitchIconsFragment(
-                    args.deviceDetail
+                    args.deviceDetail,args.roomDetail
                 )
             )
         }
@@ -715,12 +735,16 @@ class DeviceCustomizationFragment :
                         val jsonObject = JSONObject(message)
 
                         if (jsonObject.has(MQTTConstants.AWS_ST)) {
-                            if (jsonObject.getInt(MQTTConstants.AWS_ST) == 1){
-                                binding.cardViewSynchronize.setCardBackgroundColor(ContextCompat.getColor(it,R.color.theme_color))
-                                binding.btnSynchronize.isEnabled = true
+                            val deviceStatus = jsonObject.getInt(MQTTConstants.AWS_ST)
+                            if (deviceStatus == 1){
+                                DialogUtil.hideDialog()
                             }else {
-                                binding.cardViewSynchronize.setCardBackgroundColor(ContextCompat.getColor(it,R.color.gray))
-                                binding.btnSynchronize.isEnabled = false
+                                DialogUtil.deviceOfflineAlert(it, object : DialogShowListener{
+                                    override fun onClick() {
+                                        findNavController().navigateUp()
+                                    }
+
+                                })
                             }
                         }
                     }
