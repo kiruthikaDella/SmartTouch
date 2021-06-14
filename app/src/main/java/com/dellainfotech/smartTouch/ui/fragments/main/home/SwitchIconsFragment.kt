@@ -166,7 +166,7 @@ class SwitchIconsFragment :
                             if (deviceStatus == 1){
                                 DialogUtil.hideDialog()
                             }else {
-                                DialogUtil.deviceOfflineAlert(it, object : DialogShowListener {
+                                DialogUtil.deviceOfflineAlert(it, onClick = object : DialogShowListener {
                                     override fun onClick() {
                                         findNavController().navigate(SwitchIconsFragmentDirections.actionSwitchIconsFragmentToRoomPanelFragment(args.roomDetail))
                                     }

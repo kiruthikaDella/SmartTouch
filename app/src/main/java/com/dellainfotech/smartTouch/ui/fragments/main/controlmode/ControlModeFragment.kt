@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.view.isVisible
+import androidx.lifecycle.observe
 import com.appizona.yehiahd.fastsave.FastSave
 import com.dellainfotech.smartTouch.R
 import com.dellainfotech.smartTouch.adapters.controlmodeadapter.ControlModeAdapter
@@ -21,6 +22,7 @@ import com.dellainfotech.smartTouch.common.utils.DialogUtil
 import com.dellainfotech.smartTouch.common.utils.Utils.toBoolean
 import com.dellainfotech.smartTouch.common.utils.Utils.toInt
 import com.dellainfotech.smartTouch.databinding.FragmentControlModeBinding
+import com.dellainfotech.smartTouch.mqtt.NetworkConnectionLiveData
 import com.dellainfotech.smartTouch.ui.activities.AuthenticationActivity
 import com.dellainfotech.smartTouch.ui.fragments.ModelBaseFragment
 import com.dellainfotech.smartTouch.ui.viewmodel.HomeViewModel
@@ -39,17 +41,23 @@ class ControlModeFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        activity?.let {
-            DialogUtil.loadingAlert(it)
-        }
-        viewModel.getControl()
-
         if (FastSave.getInstance()
                 .getBoolean(Constants.isControlModePinned, Constants.DEFAULT_CONTROL_MODE_STATUS)
         ) {
             binding.ibLogout.isVisible = true
             binding.ibPin.rotation = -45f
         }
+
+        NetworkConnectionLiveData().observe(viewLifecycleOwner, { isConnected ->
+            if (isConnected) {
+                activity?.let {
+                    DialogUtil.loadingAlert(it)
+                }
+                viewModel.getControl()
+            } else {
+                Log.e(logTag, " internet is not available")
+            }
+        })
 
         binding.ibPin.setOnClickListener {
             activity?.let {
@@ -104,7 +112,7 @@ class ControlModeFragment :
                             controlModeAdapter = ControlModeAdapter(roomList)
                             binding.recyclerControlModes.adapter = controlModeAdapter
                         }
-                    }else {
+                    } else {
                         context?.let {
                             Toast.makeText(it, response.values.message, Toast.LENGTH_SHORT).show()
                         }
@@ -127,7 +135,7 @@ class ControlModeFragment :
                     context?.let {
                         Toast.makeText(it, response.values.message, Toast.LENGTH_SHORT).show()
                     }
-                    if (response.values.status && response.values.code == Constants.API_SUCCESS_CODE){
+                    if (response.values.status && response.values.code == Constants.API_SUCCESS_CODE) {
                         response.values.data?.let {
                             FastSave.getInstance().saveBoolean(
                                 Constants.isControlModePinned,

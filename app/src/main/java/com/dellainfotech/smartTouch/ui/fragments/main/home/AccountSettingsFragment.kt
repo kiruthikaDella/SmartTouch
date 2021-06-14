@@ -18,6 +18,7 @@ import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.Toast
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.observe
 import androidx.navigation.fragment.findNavController
 import com.appizona.yehiahd.fastsave.FastSave
 import com.dellainfotech.smartTouch.R
@@ -31,6 +32,7 @@ import com.dellainfotech.smartTouch.common.utils.Constants
 import com.dellainfotech.smartTouch.common.utils.DialogUtil
 import com.dellainfotech.smartTouch.common.utils.Utils.toEditable
 import com.dellainfotech.smartTouch.databinding.FragmentAccountSettingsBinding
+import com.dellainfotech.smartTouch.mqtt.NetworkConnectionLiveData
 import com.dellainfotech.smartTouch.ui.activities.MainActivity
 import com.dellainfotech.smartTouch.ui.fragments.ModelBaseFragment
 import com.dellainfotech.smartTouch.ui.viewmodel.HomeViewModel
@@ -147,11 +149,18 @@ class AccountSettingsFragment :
     }
 
     private fun apiCall() {
-        activity?.let {
-            DialogUtil.loadingAlert(it)
-        }
-        viewModel.getUserProfile()
-        viewModel.getOwnership()
+
+        NetworkConnectionLiveData().observe(viewLifecycleOwner, { isConnected ->
+            if (isConnected){
+                activity?.let {
+                    DialogUtil.loadingAlert(it)
+                }
+                viewModel.getUserProfile()
+                viewModel.getOwnership()
+            }else {
+                Log.e(logTag, " internet is not available")
+            }
+        })
 
         viewModel.getUserProfileResponse.observe(viewLifecycleOwner, { response ->
             when (response) {

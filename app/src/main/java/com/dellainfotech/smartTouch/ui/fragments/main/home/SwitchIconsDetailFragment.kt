@@ -6,12 +6,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.lifecycle.observe
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.GridLayoutManager
 import com.amazonaws.mobileconnectors.iot.AWSIotMqttQos
 import com.dellainfotech.smartTouch.adapters.SwitchIconsDetailAdapter
 import com.dellainfotech.smartTouch.api.Resource
+import com.dellainfotech.smartTouch.api.body.BodyGetScene
 import com.dellainfotech.smartTouch.api.body.BodyUpdateSwitchIcon
 import com.dellainfotech.smartTouch.api.model.IconListData
 import com.dellainfotech.smartTouch.api.repository.HomeRepository
@@ -23,6 +25,7 @@ import com.dellainfotech.smartTouch.common.utils.MQTTConstants
 import com.dellainfotech.smartTouch.databinding.FragmentSwitchIconsDetailBinding
 import com.dellainfotech.smartTouch.mqtt.AwsMqttSingleton
 import com.dellainfotech.smartTouch.mqtt.MQTTConnectionStatus
+import com.dellainfotech.smartTouch.mqtt.NetworkConnectionLiveData
 import com.dellainfotech.smartTouch.mqtt.NotifyManager
 import com.dellainfotech.smartTouch.ui.fragments.ModelBaseFragment
 import com.dellainfotech.smartTouch.ui.viewmodel.HomeViewModel
@@ -62,10 +65,16 @@ class SwitchIconsDetailFragment :
             }
         }
 
-        activity?.let {
-            DialogUtil.loadingAlert(it)
-        }
-        viewModel.iconList()
+        NetworkConnectionLiveData().observe(viewLifecycleOwner, { isConnected ->
+            if (isConnected){
+                activity?.let {
+                    DialogUtil.loadingAlert(it)
+                }
+                viewModel.iconList()
+            }else {
+                Log.e(logTag, " internet is not available")
+            }
+        })
 
         adapter = SwitchIconsDetailAdapter(switchIconList)
         context?.let {
@@ -192,7 +201,7 @@ class SwitchIconsDetailFragment :
                             if (deviceStatus == 1){
                                 DialogUtil.hideDialog()
                             }else {
-                                DialogUtil.deviceOfflineAlert(it, object : DialogShowListener {
+                                DialogUtil.deviceOfflineAlert(it, onClick = object : DialogShowListener {
                                     override fun onClick() {
                                         findNavController().navigate(SwitchIconsDetailFragmentDirections.actionSwitchIconsDetailFragmentToRoomPanelFragment(args.roomDetail))
                                     }

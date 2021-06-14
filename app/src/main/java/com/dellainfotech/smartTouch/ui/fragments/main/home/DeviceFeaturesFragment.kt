@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.view.get
+import androidx.lifecycle.observe
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.amazonaws.mobileconnectors.iot.AWSIotMqttQos
@@ -17,9 +18,11 @@ import com.dellainfotech.smartTouch.common.utils.Constants
 import com.dellainfotech.smartTouch.common.utils.DialogUtil
 import com.dellainfotech.smartTouch.common.utils.MQTTConstants
 import com.dellainfotech.smartTouch.common.utils.Utils.toBoolean
+import com.dellainfotech.smartTouch.common.utils.Utils.toInt
 import com.dellainfotech.smartTouch.databinding.FragmentDeviceFeaturesBinding
 import com.dellainfotech.smartTouch.mqtt.AwsMqttSingleton
 import com.dellainfotech.smartTouch.mqtt.MQTTConnectionStatus
+import com.dellainfotech.smartTouch.mqtt.NetworkConnectionLiveData
 import com.dellainfotech.smartTouch.mqtt.NotifyManager
 import com.dellainfotech.smartTouch.ui.fragments.ModelBaseFragment
 import com.dellainfotech.smartTouch.ui.viewmodel.HomeViewModel
@@ -60,10 +63,16 @@ class DeviceFeaturesFragment :
             }
         }
 
-        activity?.let {
-            DialogUtil.loadingAlert(it)
-        }
-        viewModel.getDeviceFeatures(args.deviceDetail.id)
+        NetworkConnectionLiveData().observe(viewLifecycleOwner, { isConnected ->
+            if (isConnected){
+                activity?.let {
+                    DialogUtil.loadingAlert(it)
+                }
+                viewModel.getDeviceFeatures(args.deviceDetail.id)
+            }else {
+                Log.e(logTag, " internet is not available")
+            }
+        })
 
         viewModel.getDeviceFeatureSettingsResponse.observe(viewLifecycleOwner, { response ->
             when (response) {
@@ -98,6 +107,32 @@ class DeviceFeaturesFragment :
                 }
             }
         })
+
+        binding.btnSynchronize.setOnClickListener {
+            if (AwsMqttSingleton.isConnected()){
+                try {
+                    val payload = JSONObject()
+                    payload.put(MQTTConstants.AWS_SM,binding.switchSleepMode.isChecked.toInt())
+                    payload.put(MQTTConstants.AWS_NM,binding.switchNightMode.isChecked.toInt())
+                    payload.put(MQTTConstants.AWS_OM,binding.switchOutdoorMode.isChecked.toInt())
+                    payload.put(MQTTConstants.AWS_TI,binding.switchTime.isChecked.toInt())
+                    payload.put(MQTTConstants.AWS_TF,binding.rgTimeFormat.indexOfChild(activity?.findViewById(binding.rgTimeFormat.checkedRadioButtonId)))
+                    payload.put(MQTTConstants.AWS_WR,binding.switchWeatherReport.isChecked.toInt())
+                    payload.put(MQTTConstants.AWS_RT,binding.switchRoomTemperature.isChecked.toInt())
+                    payload.put(MQTTConstants.AWS_TU,binding.rgTemperatureUnit.indexOfChild(activity?.findViewById(binding.rgTemperatureUnit.checkedRadioButtonId)))
+                    payload.put(MQTTConstants.AWS_BM,binding.rgDisplayBrightness.indexOfChild(activity?.findViewById(binding.rgDisplayBrightness.checkedRadioButtonId)))
+                    payload.put(MQTTConstants.AWS_BV,binding.seekBarBrightness.progress)
+
+                    publish(payload.toString())
+                }catch (e: Exception){
+                    e.printStackTrace()
+                }
+            }else{
+                context?.let {
+                    Toast.makeText(it,"Please try again later!",Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
     }
 
     override fun getViewModel(): Class<HomeViewModel> = HomeViewModel::class.java
@@ -140,7 +175,7 @@ class DeviceFeaturesFragment :
                             if (deviceStatus == 1){
                                 DialogUtil.hideDialog()
                             }else {
-                                DialogUtil.deviceOfflineAlert(it, object : DialogShowListener {
+                                DialogUtil.deviceOfflineAlert(it, onClick = object : DialogShowListener {
                                     override fun onClick() {
                                         findNavController().navigateUp()
                                     }
@@ -154,6 +189,16 @@ class DeviceFeaturesFragment :
         } catch (e: Exception) {
             Log.e(logTag, "Subscription error.", e)
         }
+    }
+
+    private fun publish(payload: String) {
+
+        AwsMqttSingleton.publish(
+            MQTTConstants.UPDATE_DEVICE_FEATURE.replace(
+                MQTTConstants.AWS_DEVICE_ID,
+                args.deviceDetail.deviceSerialNo
+            ), payload
+        )
     }
 
     //

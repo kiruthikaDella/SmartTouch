@@ -16,8 +16,10 @@ object MQTTConstants {
 
     //MQTT TOPIC
     const val AWS_DEVICE_ID = "{deviceid}"
-    const val DEVICE_STATUS = "/smarttouch/$AWS_DEVICE_ID/status/"
-    const val CONTROL_DEVICE_SWITCHES = "/smarttouch/$AWS_DEVICE_ID/control/"
+    const val DEVICE_STATUS = "/smarttouch/$AWS_DEVICE_ID/status/" // Current Status Update - Online/Offline
+    const val CONTROL_DEVICE_SWITCHES = "/smarttouch/$AWS_DEVICE_ID/control/"  //Control Device Switches
+    const val GET_SWITCH_STATUS = "/smarttouch/$AWS_DEVICE_ID/swstatus/" // Responce of Get Switch status
+    const val UPDATE_DEVICE_FEATURE = "/smarttouch/$AWS_DEVICE_ID/features-settings/" // Update Device Feature Settings
 
 
     //MQTT Parameter
@@ -33,5 +35,24 @@ object MQTTConstants {
     const val AWS_USB_PORT_C = "USB_PORT_C"
     const val AWS_DIMMER = "DIMMER"
 
-    const val AWS_ST = "st"
+    //Device
+    const val AWS_ST = "st" //Status
+    const val AWS_DT = "DT" //Device Type
+    const val AWS_SW = "SW" //Switch
+    const val AWS_U1 = "U1" //USB A
+    const val AWS_U2 = "U2" //USB C
+    const val AWS_D = "D"   //DMR
+
+    //Features
+    const val AWS_SM = "sm"   //Sleep Mode
+    const val AWS_NM = "nm"   //Night Mode
+    const val AWS_TI = "ti"   //Time Display
+    const val AWS_TF = "tf"   //Time Format
+    const val AWS_OM = "om"   //Outdoor Mode
+    const val AWS_WR = "wr"   //weather Report Display
+    const val AWS_RT = "rt"   //Room Temperature Display
+    const val AWS_TU = "tu"   //Temperature Unit
+    const val AWS_BM = "bm"   //Brightness Model
+    const val AWS_BV = "bv"   //Brightness value
+
 }

@@ -24,6 +24,7 @@ import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.core.view.isVisible
+import androidx.lifecycle.observe
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.amazonaws.mobileconnectors.iot.AWSIotMqttQos
@@ -45,6 +46,7 @@ import com.dellainfotech.smartTouch.common.utils.Utils.toInt
 import com.dellainfotech.smartTouch.databinding.FragmentDeviceCustomizationBinding
 import com.dellainfotech.smartTouch.mqtt.AwsMqttSingleton
 import com.dellainfotech.smartTouch.mqtt.MQTTConnectionStatus
+import com.dellainfotech.smartTouch.mqtt.NetworkConnectionLiveData
 import com.dellainfotech.smartTouch.mqtt.NotifyManager
 import com.dellainfotech.smartTouch.ui.fragments.ModelBaseFragment
 import com.dellainfotech.smartTouch.ui.viewmodel.HomeViewModel
@@ -205,10 +207,16 @@ class DeviceCustomizationFragment :
                 }
         }
 
-        activity?.let {
-            DialogUtil.loadingAlert(it)
-        }
-        viewModel.getDeviceCustomization(args.deviceDetail.id)
+        NetworkConnectionLiveData().observe(viewLifecycleOwner, { isConnected ->
+            if (isConnected){
+                activity?.let {
+                    DialogUtil.loadingAlert(it)
+                }
+                viewModel.getDeviceCustomization(args.deviceDetail.id)
+            }else {
+                Log.e(logTag, " internet is not available")
+            }
+        })
 
         clickEvents()
 
@@ -495,6 +503,7 @@ class DeviceCustomizationFragment :
                                 it.switchName.toInt().toBoolean()
                             binding.spinnerTextSize.setSelection(sizeAdapter?.getPosition(it.textSize)!!)
                             isDeviceCustomizationLocked = it.isLock.toBoolean()
+                            binding.layoutTextColor.colorPicker.setColor(Color.parseColor(it.textColor))
                             if (isDeviceCustomizationLocked) {
                                 lockScreen()
                             } else {
@@ -739,7 +748,7 @@ class DeviceCustomizationFragment :
                             if (deviceStatus == 1){
                                 DialogUtil.hideDialog()
                             }else {
-                                DialogUtil.deviceOfflineAlert(it, object : DialogShowListener{
+                                DialogUtil.deviceOfflineAlert(it, onClick = object : DialogShowListener{
                                     override fun onClick() {
                                         findNavController().navigateUp()
                                     }

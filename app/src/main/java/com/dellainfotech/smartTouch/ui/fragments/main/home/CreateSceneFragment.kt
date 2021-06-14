@@ -372,7 +372,7 @@ class CreateSceneFragment : ModelBaseFragment<HomeViewModel, FragmentCreateScene
                             if (deviceStatus == 1){
                                 DialogUtil.hideDialog()
                             }else {
-                                DialogUtil.deviceOfflineAlert(it, object : DialogShowListener {
+                                DialogUtil.deviceOfflineAlert(it, onClick =  object : DialogShowListener {
                                     override fun onClick() {
                                         findNavController().navigate(CreateSceneFragmentDirections.actionCreateSceneFragmentToRoomPanelFragment(args.roomDetail))
                                     }

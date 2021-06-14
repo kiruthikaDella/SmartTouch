@@ -67,7 +67,7 @@
     <string name="text_remember_password">Remember password?</string>
 
     <!--    Dialog Strings-->
-    <string name="text_no_internet_available">No internet available</string>
+    <string name="text_no_internet_available">Internet not available</string>
     <string name="text_ok">OK</string>
     <string name="text_cancel">Cancel</string>
     <string name="text_yes">Yes</string>

@@ -141,8 +141,11 @@ class DeviceAdapter(
 
         var seekBar = itemView.findViewById(R.id.seek_bar) as IndicatorSeekBar
 
-        val tvSwitchPortA = itemView.findViewById(R.id.switch_usb_port_a) as SwitchMaterial
-        val tvSwitchPortC = itemView.findViewById(R.id.switch_usb_port_c) as SwitchMaterial
+        val switchPortA = itemView.findViewById(R.id.switch_usb_port_a) as SwitchMaterial
+        val switchPortC = itemView.findViewById(R.id.switch_usb_port_c) as SwitchMaterial
+
+        val tvSwitchPortA = itemView.findViewById(R.id.tv_usb_port_a) as TextView
+        val tvSwitchPortC = itemView.findViewById(R.id.tv_usb_port_c) as TextView
 
     }
 
@@ -177,6 +180,7 @@ class DeviceAdapter(
         val seekBar = itemView.findViewById(R.id.seek_bar) as IndicatorSeekBar
 
         val switchPortC = itemView.findViewById(R.id.switch_usb_port_c) as SwitchMaterial
+        val tvSwitchPortC = itemView.findViewById(R.id.tv_usb_port_c) as TextView
     }
 
     private fun setEightSwitchViewHolder(holder: EightPanelViewHolder, device: GetDeviceData) {
@@ -248,10 +252,14 @@ class DeviceAdapter(
                             seekBar.setProgress(value.switchStatus.toFloat())
                         }
                         "10" -> {
-                            tvSwitchPortA.isChecked = value.switchStatus.toBoolean()
+                            val switchName = value.name
+                            tvSwitchPortA.text = switchName
+                            switchPortA.isChecked = value.switchStatus.toBoolean()
                         }
                         "11" -> {
-                            tvSwitchPortC.isChecked = value.switchStatus.toBoolean()
+                            val switchName = value.name
+                            tvSwitchPortC.text = switchName
+                            switchPortC.isChecked = value.switchStatus.toBoolean()
                         }
                     }
                 }
@@ -374,6 +382,8 @@ class DeviceAdapter(
                             seekBar.setProgress(value.switchStatus.toFloat())
                         }
                         "6" -> {
+                            val switchName = value.name
+                            tvSwitchPortC.text = switchName
                             switchPortC.isChecked = value.switchStatus.toBoolean()
                         }
                     }
@@ -478,7 +488,7 @@ class DeviceAdapter(
 
             //Response of Get Switch status
             AwsMqttSingleton.mqttManager!!.subscribeToTopic(
-                MQTTConstants.CONTROL_DEVICE_SWITCHES.replace(
+                MQTTConstants.GET_SWITCH_STATUS.replace(
                     MQTTConstants.AWS_DEVICE_ID,
                     deviceId
                 ),
@@ -489,72 +499,62 @@ class DeviceAdapter(
                     val message = String(data, StandardCharsets.UTF_8)
                     Log.d("$logTag ReceivedData", "$topic $message")
 
-                    val topic1 = topic.split("/")
-                    // topic [0] = ''
-                    // topic [1] = smarttouch
-                    // topic [2] = deviceId
-                    // topic [3] = control
+                    try {
+                        val topic1 = topic.split("/")
+                        // topic [0] = ''
+                        // topic [1] = smarttouch
+                        // topic [2] = deviceId
+                        // topic [3] = swstatus
 
-                    val deviceData = deviceList.find { it.deviceSerialNo == topic1[2] }
+                        val deviceData = deviceList.find { it.deviceSerialNo == topic1[2] }
 
-                    val jsonObject = JSONObject(message)
-                    if (jsonObject.has(MQTTConstants.AWS_SWITCH_1)) {
-                        deviceData?.switchData?.get(0)?.switchStatus =
-                            jsonObject.getString(MQTTConstants.AWS_SWITCH_1).toInt()
-                    }
-                    if (jsonObject.has(MQTTConstants.AWS_SWITCH_2)) {
-                        deviceData?.switchData?.get(1)?.switchStatus =
-                            jsonObject.getString(MQTTConstants.AWS_SWITCH_2).toInt()
-                    }
-                    if (jsonObject.has(MQTTConstants.AWS_SWITCH_3)) {
-                        deviceData?.switchData?.get(2)?.switchStatus =
-                            jsonObject.getString(MQTTConstants.AWS_SWITCH_3).toInt()
-                    }
-                    if (jsonObject.has(MQTTConstants.AWS_SWITCH_4)) {
-                        deviceData?.switchData?.get(3)?.switchStatus =
-                            jsonObject.getString(MQTTConstants.AWS_SWITCH_4).toInt()
-                    }
-                    if (jsonObject.has(MQTTConstants.AWS_SWITCH_5)) {
-                        deviceData?.switchData?.get(4)?.switchStatus =
-                            jsonObject.getString(MQTTConstants.AWS_SWITCH_5).toInt()
-                    }
-                    if (jsonObject.has(MQTTConstants.AWS_SWITCH_6)) {
-                        deviceData?.switchData?.get(5)?.switchStatus =
-                            jsonObject.getString(MQTTConstants.AWS_SWITCH_6).toInt()
-                    }
-                    if (jsonObject.has(MQTTConstants.AWS_SWITCH_7)) {
-                        deviceData?.switchData?.get(6)?.switchStatus =
-                            jsonObject.getString(MQTTConstants.AWS_SWITCH_7).toInt()
-                    }
-                    if (jsonObject.has(MQTTConstants.AWS_SWITCH_8)) {
-                        deviceData?.switchData?.get(7)?.switchStatus =
-                            jsonObject.getString(MQTTConstants.AWS_SWITCH_8).toInt()
-                    }
-                    if (jsonObject.has(MQTTConstants.AWS_USB_PORT_A)) {
-                        if (deviceData?.deviceType == Constants.DEVICE_TYPE_EIGHT) {
-                            deviceData.switchData?.get(9)?.switchStatus =
-                                jsonObject.getString(MQTTConstants.AWS_USB_PORT_A).toInt()
+                        val jsonObject = JSONObject(message)
+
+                        if (jsonObject.has(MQTTConstants.AWS_SW)){
+                            val switchStatus = jsonObject.getString(MQTTConstants.AWS_SW).split(",")
+
+                            // topic [0] = ''
+                            // topic [1] = Switch 1 Status
+                            // topic [2] = Switch 2 Status
+                            // topic [3] = Switch 3 Status
+                            // topic [4] = Switch 4 Status
+                            // topic [5] = Switch 5 Status (if DT = 8)
+                            // topic [6] = Switch 6 Status (if DT = 8)
+                            // topic [7] = Switch 7 Status (if DT = 8)
+                            // topic [8] = Switch 8 Status (if DT = 8)
+
+                            deviceData?.switchData?.get(0)?.switchStatus = switchStatus[0].toInt()
+                            deviceData?.switchData?.get(1)?.switchStatus = switchStatus[1].toInt()
+                            deviceData?.switchData?.get(2)?.switchStatus = switchStatus[2].toInt()
+                            deviceData?.switchData?.get(3)?.switchStatus = switchStatus[3].toInt()
+
+                            if (jsonObject.has(MQTTConstants.AWS_DT)){
+                                if (jsonObject.getInt(MQTTConstants.AWS_DT) == 8){
+                                    deviceData?.switchData?.get(4)?.switchStatus = switchStatus[4].toInt()
+                                    deviceData?.switchData?.get(5)?.switchStatus = switchStatus[5].toInt()
+                                    deviceData?.switchData?.get(6)?.switchStatus = switchStatus[6].toInt()
+                                    deviceData?.switchData?.get(7)?.switchStatus = switchStatus[7].toInt()
+                                    deviceData?.switchData?.get(8)?.switchStatus = jsonObject.getInt(MQTTConstants.AWS_D) //Dimmer
+                                    deviceData?.switchData?.get(9)?.switchStatus = jsonObject.getInt(MQTTConstants.AWS_U1) //USB A
+                                    deviceData?.switchData?.get(10)?.switchStatus = jsonObject.getInt(MQTTConstants.AWS_U2) //USB C
+                                }else {
+                                    deviceData?.switchData?.get(4)?.switchStatus = jsonObject.getInt(MQTTConstants.AWS_D) //Dimmer
+                                    deviceData?.switchData?.get(5)?.switchStatus = jsonObject.getInt(MQTTConstants.AWS_U2) //USB C
+                                }
+                            }
                         }
 
-                    }
-                    if (jsonObject.has(MQTTConstants.AWS_USB_PORT_C)) {
-                        if (deviceData?.deviceType == Constants.DEVICE_TYPE_EIGHT) {
-                            deviceData.switchData?.get(10)?.switchStatus =
-                                jsonObject.getString(MQTTConstants.AWS_USB_PORT_C).toInt()
-                        } else {
-                            deviceData?.switchData?.get(5)?.switchStatus =
-                                jsonObject.getString(MQTTConstants.AWS_USB_PORT_C).toInt()
+                        for ((index, value) in deviceList.withIndex()) {
+                            if (value.id == deviceData?.id) {
+                                deviceList[index] = deviceData
+                                break
+                            }
                         }
-
+                        notifyDataSetChanged()
+                    }catch (e: Exception){
+                        e.printStackTrace()
                     }
 
-                    for ((index, value) in deviceList.withIndex()) {
-                        if (value.id == deviceData?.id) {
-                            deviceList[index] = deviceData
-                            break
-                        }
-                    }
-                    notifyDataSetChanged()
                 }
             }
 
@@ -568,27 +568,33 @@ class DeviceAdapter(
                     val message = String(data, StandardCharsets.UTF_8)
                     Log.d("$logTag ReceivedData", "$topic    $message")
 
-                    val topic1 = topic.split("/")
-                    // topic [0] = ''
-                    // topic [1] = smarttouch
-                    // topic [2] = deviceId
-                    // topic [3] = status
+                    try {
+                        val topic1 = topic.split("/")
+                        // topic [0] = ''
+                        // topic [1] = smarttouch
+                        // topic [2] = deviceId
+                        // topic [3] = status
 
-                    val deviceData = deviceList.find { it.deviceSerialNo == topic1[2] }
+                        val deviceData = deviceList.find { it.deviceSerialNo == topic1[2] }
 
-                    val jsonObject = JSONObject(message)
+                        val jsonObject = JSONObject(message)
 
-                    if (jsonObject.has(MQTTConstants.AWS_ST)) {
-                        deviceData?.isDeviceAvailable =
-                            jsonObject.getInt(MQTTConstants.AWS_ST).toString()
-                        for ((index, value) in deviceList.withIndex()) {
-                            if (value.deviceSerialNo == deviceData?.deviceSerialNo) {
-                                deviceList[index] = deviceData
-                                break
+                        if (jsonObject.has(MQTTConstants.AWS_ST)) {
+                            deviceData?.isDeviceAvailable =
+                                jsonObject.getInt(MQTTConstants.AWS_ST).toString()
+                            for ((index, value) in deviceList.withIndex()) {
+                                if (value.deviceSerialNo == deviceData?.deviceSerialNo) {
+                                    deviceList[index] = deviceData
+                                    break
+                                }
                             }
+                            notifyDataSetChanged()
                         }
-                        notifyDataSetChanged()
+
+                    }catch (e: Exception){
+                        e.printStackTrace()
                     }
+
                 }
             }
         } catch (e: Exception) {

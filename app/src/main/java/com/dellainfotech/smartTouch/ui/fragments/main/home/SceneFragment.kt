@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.lifecycle.observe
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.amazonaws.mobileconnectors.iot.AWSIotMqttQos
@@ -25,6 +26,7 @@ import com.dellainfotech.smartTouch.common.utils.MQTTConstants
 import com.dellainfotech.smartTouch.databinding.FragmentSceneBinding
 import com.dellainfotech.smartTouch.mqtt.AwsMqttSingleton
 import com.dellainfotech.smartTouch.mqtt.MQTTConnectionStatus
+import com.dellainfotech.smartTouch.mqtt.NetworkConnectionLiveData
 import com.dellainfotech.smartTouch.mqtt.NotifyManager
 import com.dellainfotech.smartTouch.ui.fragments.ModelBaseFragment
 import com.dellainfotech.smartTouch.ui.viewmodel.HomeViewModel
@@ -115,11 +117,17 @@ class SceneFragment : ModelBaseFragment<HomeViewModel, FragmentSceneBinding, Hom
 
         })
 
-        activity?.let {
-            DialogUtil.loadingAlert(it)
-        }
-        viewModel.getScene(BodyGetScene(args.roomDetail.id, args.deviceDetail.id))
-        viewModel.getControl()
+        NetworkConnectionLiveData().observe(viewLifecycleOwner, { isConnected ->
+            if (isConnected){
+                activity?.let {
+                    DialogUtil.loadingAlert(it)
+                }
+                viewModel.getScene(BodyGetScene(args.roomDetail.id, args.deviceDetail.id))
+                viewModel.getControl()
+            }else {
+                Log.e(logTag, " internet is not available")
+            }
+        })
 
         apiResponse()
     }
@@ -229,7 +237,7 @@ class SceneFragment : ModelBaseFragment<HomeViewModel, FragmentSceneBinding, Hom
                             if (deviceStatus == 1){
                                 DialogUtil.hideDialog()
                             }else {
-                                DialogUtil.deviceOfflineAlert(it, object : DialogShowListener {
+                                DialogUtil.deviceOfflineAlert(it, onClick = object : DialogShowListener {
                                     override fun onClick() {
                                         findNavController().navigate(SceneFragmentDirections.actionSceneFragmentToRoomPanelFragment(args.roomDetail))
                                     }
