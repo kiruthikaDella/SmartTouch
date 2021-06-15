@@ -16,7 +16,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <ImageButton
+        <ImageView
             android:id="@+id/iv_back"
             style="@style/BackImageStyle"
             android:layout_centerVertical="true" />
@@ -87,8 +87,9 @@
 
             <ImageView
                 android:id="@+id/iv_edit_name"
-                android:layout_width="@dimen/_12sdp"
-                android:layout_height="@dimen/_12sdp"
+                android:layout_width="@dimen/_20sdp"
+                android:layout_height="@dimen/_20sdp"
+                android:padding="@dimen/_4sdp"
                 android:layout_marginEnd="@dimen/screen_end_margin"
                 android:src="@drawable/ic_as_edit"
                 app:layout_constraintBottom_toBottomOf="@+id/edt_name"
@@ -135,8 +136,9 @@
 
             <ImageView
                 android:id="@+id/iv_edit_email"
-                android:layout_width="@dimen/_12sdp"
-                android:layout_height="@dimen/_12sdp"
+                android:layout_width="@dimen/_20sdp"
+                android:layout_height="@dimen/_20sdp"
+                android:padding="@dimen/_4sdp"
                 android:src="@drawable/ic_as_edit"
                 app:layout_constraintBottom_toBottomOf="@+id/edt_email"
                 app:layout_constraintStart_toStartOf="@+id/iv_edit_name"
@@ -183,8 +185,9 @@
 
             <ImageView
                 android:id="@+id/iv_edit_phone_number"
-                android:layout_width="@dimen/_12sdp"
-                android:layout_height="@dimen/_12sdp"
+                android:layout_width="@dimen/_20sdp"
+                android:layout_height="@dimen/_20sdp"
+                android:padding="@dimen/_4sdp"
                 android:src="@drawable/ic_as_edit"
                 app:layout_constraintBottom_toBottomOf="@+id/edt_phone_number"
                 app:layout_constraintStart_toStartOf="@+id/iv_edit_email"
@@ -229,8 +232,9 @@
 
             <ImageView
                 android:id="@+id/iv_edit_password"
-                android:layout_width="@dimen/_12sdp"
-                android:layout_height="@dimen/_12sdp"
+                android:layout_width="@dimen/_20sdp"
+                android:layout_height="@dimen/_20sdp"
+                android:padding="@dimen/_4sdp"
                 android:src="@drawable/ic_as_edit"
                 app:layout_constraintBottom_toBottomOf="@+id/edt_password"
                 app:layout_constraintStart_toStartOf="@+id/iv_edit_phone_number"
@@ -326,8 +330,9 @@
 
             <ImageView
                 android:id="@+id/iv_master_edit_name"
-                android:layout_width="@dimen/_12sdp"
-                android:layout_height="@dimen/_12sdp"
+                android:layout_width="@dimen/_20sdp"
+                android:layout_height="@dimen/_20sdp"
+                android:padding="@dimen/_4sdp"
                 android:src="@drawable/ic_as_edit"
                 app:layout_constraintBottom_toBottomOf="@+id/edt_master_name"
                 app:layout_constraintStart_toStartOf="@+id/iv_edit_password"
@@ -372,8 +377,9 @@
 
             <ImageView
                 android:id="@+id/iv_master_edit_email"
-                android:layout_width="@dimen/_12sdp"
-                android:layout_height="@dimen/_12sdp"
+                android:layout_width="@dimen/_20sdp"
+                android:layout_height="@dimen/_20sdp"
+                android:padding="@dimen/_4sdp"
                 android:src="@drawable/ic_as_edit"
                 app:layout_constraintBottom_toBottomOf="@+id/edt_master_email"
                 app:layout_constraintStart_toStartOf="@+id/iv_master_edit_name"

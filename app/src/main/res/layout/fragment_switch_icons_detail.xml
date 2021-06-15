@@ -14,7 +14,7 @@
         android:layout_height="?actionBarSize"
         android:orientation="horizontal">
 
-        <ImageButton
+        <ImageView
             android:id="@+id/iv_back"
             style="@style/BackImageStyle"
             android:layout_centerVertical="true" />
@@ -28,15 +28,15 @@
             android:layout_gravity="center_horizontal"
             android:text="@string/switch_one" />
 
-        <ImageButton
+        <ImageView
             android:id="@+id/ib_switch"
-            android:layout_width="@dimen/_18sdp"
-            android:layout_height="@dimen/_18sdp"
+            android:layout_width="@dimen/_30sdp"
+            android:layout_height="@dimen/_30sdp"
+            android:padding="@dimen/_8sdp"
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
-            android:layout_marginEnd="@dimen/screen_end_margin"
-            android:background="@drawable/ic_switch"
-            android:backgroundTint="@color/daintree" />
+            android:src="@drawable/ic_switch"
+            app:tint="@color/daintree" />
 
     </RelativeLayout>
 
@@ -45,19 +45,19 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@+id/relative_header"
-        android:layout_above="@+id/btn_synchronize"
+        android:layout_above="@+id/btn_submit"
         android:overScrollMode="never"
         android:layout_marginStart="@dimen/screen_start_margin"
         android:layout_marginEnd="@dimen/screen_end_margin"/>
 
     <com.google.android.material.button.MaterialButton
-        android:id="@+id/btn_synchronize"
+        android:id="@+id/btn_submit"
         android:layout_width="match_parent"
         android:layout_height="@dimen/login_component_height"
         android:layout_alignParentBottom="true"
         android:background="@color/theme_color"
         android:fontFamily="@font/roboto_medium"
-        android:text="@string/button_text_synchronize"
+        android:text="@string/button_text_submit"
         android:textAllCaps="true"
         android:textColor="@color/white"
         android:textSize="@dimen/_12ssp"

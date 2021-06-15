@@ -4,6 +4,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.dellainfotech.smartTouch.R
@@ -23,7 +24,7 @@ class ScenesAdapter(
 
     inner class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val tvSceneName = itemView.findViewById(R.id.tv_scene_name) as TextView
-        val ibDeleteScene = itemView.findViewById(R.id.ib_delete) as ImageButton
+        val ibDeleteScene = itemView.findViewById(R.id.ib_delete) as ImageView
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {

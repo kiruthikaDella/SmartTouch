@@ -13,7 +13,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/_15sdp">
+        android:layout_margin="@dimen/_10sdp">
 
         <ImageView
             android:id="@+id/iv_active_user"
@@ -28,6 +28,7 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_marginStart="@dimen/_8sdp"
+            android:singleLine="true"
             android:layout_marginEnd="@dimen/_8sdp"
             android:layout_toStartOf="@+id/iv_remove_user"
             android:layout_toEndOf="@+id/iv_active_user"
@@ -38,10 +39,11 @@
 
         <ImageView
             android:id="@+id/iv_remove_user"
-            android:layout_width="@dimen/_14sdp"
-            android:layout_height="@dimen/_14sdp"
+            android:layout_width="@dimen/_20sdp"
+            android:layout_height="@dimen/_20sdp"
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
+            android:padding="@dimen/_3sdp"
             android:src="@drawable/ic_remove_user" />
     </RelativeLayout>
 

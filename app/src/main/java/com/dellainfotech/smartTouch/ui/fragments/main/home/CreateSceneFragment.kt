@@ -18,7 +18,6 @@ import com.dellainfotech.smartTouch.adapters.UpdateDeviceSceneAdapter
 import com.dellainfotech.smartTouch.api.Resource
 import com.dellainfotech.smartTouch.api.body.BodyAddScene
 import com.dellainfotech.smartTouch.api.body.BodySceneData
-import com.dellainfotech.smartTouch.api.body.BodyUpdateRoom
 import com.dellainfotech.smartTouch.api.body.BodyUpdateScene
 import com.dellainfotech.smartTouch.api.model.GetSceneData
 import com.dellainfotech.smartTouch.api.model.Scene
@@ -27,7 +26,7 @@ import com.dellainfotech.smartTouch.common.interfaces.DialogEditListener
 import com.dellainfotech.smartTouch.common.interfaces.DialogShowListener
 import com.dellainfotech.smartTouch.common.utils.Constants
 import com.dellainfotech.smartTouch.common.utils.DialogUtil
-import com.dellainfotech.smartTouch.common.utils.MQTTConstants
+import com.dellainfotech.smartTouch.mqtt.MQTTConstants
 import com.dellainfotech.smartTouch.common.utils.Utils.toEditable
 import com.dellainfotech.smartTouch.databinding.FragmentCreateSceneBinding
 import com.dellainfotech.smartTouch.mqtt.AwsMqttSingleton
@@ -229,15 +228,31 @@ class CreateSceneFragment : ModelBaseFragment<HomeViewModel, FragmentCreateScene
                     }
                 }
                 else -> {
-                    activity?.let {
-                        DialogUtil.loadingAlert(it)
-                    }
                     if (isUpdatingScene){
-                        Log.e(logTag, " BodyScene ${BodyUpdateScene(args.sceneDetail!!.id,sceneName,sceneTime,sceneFrequency,updateDeviceSceneAdapter.getScenes())}")
-                        viewModel.updateScene(BodyUpdateScene(args.sceneDetail!!.id,sceneName,sceneTime,sceneFrequency,updateDeviceSceneAdapter.getScenes()))
-                    }else {
-                        Log.e(logTag, " BodyScene ${BodyAddScene(sceneName,sceneTime,sceneFrequency,deviceSceneAdapter.getScenes())}")
-                        viewModel.addScene(BodyAddScene(sceneName,sceneTime,sceneFrequency,deviceSceneAdapter.getScenes()))
+                        if (updateDeviceSceneAdapter.isDuplicateSwitchFound()){
+                            context?.let { mContext ->
+                                Toast.makeText(mContext,getString(R.string.error_text_duplicate_scene),Toast.LENGTH_SHORT).show()
+                            }
+                        }else{
+                            activity?.let {
+                                DialogUtil.loadingAlert(it)
+                            }
+                            Log.e(logTag, " BodyScene ${BodyUpdateScene(args.sceneDetail!!.id,sceneName,sceneTime,sceneFrequency,updateDeviceSceneAdapter.getScenes())}")
+                            viewModel.updateScene(BodyUpdateScene(args.sceneDetail!!.id,sceneName,sceneTime,sceneFrequency,updateDeviceSceneAdapter.getScenes()))
+                        }
+                   }else {
+                       if (deviceSceneAdapter.isDuplicateSwitchFound()){
+                           context?.let { mContext ->
+                               Toast.makeText(mContext,getString(R.string.error_text_duplicate_scene),Toast.LENGTH_SHORT).show()
+                           }
+                       }else{
+                           activity?.let {
+                               DialogUtil.loadingAlert(it)
+                           }
+                           Log.e(logTag, " BodyScene ${BodyAddScene(sceneName,sceneTime,sceneFrequency,deviceSceneAdapter.getScenes())}")
+                           viewModel.addScene(BodyAddScene(sceneName,sceneTime,sceneFrequency,deviceSceneAdapter.getScenes()))
+                       }
+
                     }
                 }
             }
@@ -367,8 +382,8 @@ class CreateSceneFragment : ModelBaseFragment<HomeViewModel, FragmentCreateScene
 
                         val jsonObject = JSONObject(message)
 
-                        if (jsonObject.has(MQTTConstants.AWS_ST)) {
-                            val deviceStatus = jsonObject.getInt(MQTTConstants.AWS_ST)
+                        if (jsonObject.has(MQTTConstants.AWS_STATUS)) {
+                            val deviceStatus = jsonObject.getInt(MQTTConstants.AWS_STATUS)
                             if (deviceStatus == 1){
                                 DialogUtil.hideDialog()
                             }else {

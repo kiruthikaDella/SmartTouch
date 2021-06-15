@@ -13,7 +13,6 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.amazonaws.mobileconnectors.iot.AWSIotMqttQos
 import com.dellainfotech.smartTouch.adapters.SwitchIconsDetailAdapter
 import com.dellainfotech.smartTouch.api.Resource
-import com.dellainfotech.smartTouch.api.body.BodyGetScene
 import com.dellainfotech.smartTouch.api.body.BodyUpdateSwitchIcon
 import com.dellainfotech.smartTouch.api.model.IconListData
 import com.dellainfotech.smartTouch.api.repository.HomeRepository
@@ -21,7 +20,7 @@ import com.dellainfotech.smartTouch.common.interfaces.AdapterItemClickListener
 import com.dellainfotech.smartTouch.common.interfaces.DialogShowListener
 import com.dellainfotech.smartTouch.common.utils.Constants
 import com.dellainfotech.smartTouch.common.utils.DialogUtil
-import com.dellainfotech.smartTouch.common.utils.MQTTConstants
+import com.dellainfotech.smartTouch.mqtt.MQTTConstants
 import com.dellainfotech.smartTouch.databinding.FragmentSwitchIconsDetailBinding
 import com.dellainfotech.smartTouch.mqtt.AwsMqttSingleton
 import com.dellainfotech.smartTouch.mqtt.MQTTConnectionStatus
@@ -82,11 +81,7 @@ class SwitchIconsDetailFragment :
         }
         binding.recyclerSwitchIcons.adapter = adapter
 
-        binding.ibSwitch.setOnClickListener {
-            findNavController().navigateUp()
-        }
-
-        binding.btnSynchronize.setOnClickListener {
+        binding.btnSubmit.setOnClickListener {
             iconData?.let {
                 activity?.let { mActivity ->
                     DialogUtil.loadingAlert(mActivity)
@@ -196,8 +191,8 @@ class SwitchIconsDetailFragment :
 
                         val jsonObject = JSONObject(message)
 
-                        if (jsonObject.has(MQTTConstants.AWS_ST)) {
-                            val deviceStatus = jsonObject.getInt(MQTTConstants.AWS_ST)
+                        if (jsonObject.has(MQTTConstants.AWS_STATUS)) {
+                            val deviceStatus = jsonObject.getInt(MQTTConstants.AWS_STATUS)
                             if (deviceStatus == 1){
                                 DialogUtil.hideDialog()
                             }else {

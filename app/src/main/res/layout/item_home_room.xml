@@ -23,6 +23,9 @@
         android:id="@+id/tv_room_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_toStartOf="@+id/iv_room_settings"
+        android:layout_alignParentStart="true"
+        android:gravity="start"
         android:textSize="@dimen/_12ssp"
         android:layout_marginStart="@dimen/_13sdp"
         android:layout_marginTop="@dimen/_13sdp"
@@ -31,11 +34,12 @@
 
     <ImageView
         android:id="@+id/iv_room_settings"
-        android:layout_width="@dimen/_12sdp"
-        android:layout_height="@dimen/_12sdp"
-        android:background="@drawable/ic_home_room_settings"
+        android:layout_width="@dimen/_30sdp"
+        android:layout_height="@dimen/_30sdp"
+        android:padding="@dimen/_8sdp"
+        android:layout_marginTop="@dimen/_5sdp"
+        android:src="@drawable/ic_home_room_settings"
         android:layout_alignParentEnd="true"
-        android:layout_marginTop="@dimen/_18sdp"
-        android:layout_marginEnd="@dimen/_15sdp" />
+        android:layout_marginEnd="@dimen/_5sdp" />
 
 </com.jcminarro.roundkornerlayout.RoundKornerRelativeLayout>

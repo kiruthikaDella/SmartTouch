@@ -19,7 +19,7 @@ import com.dellainfotech.smartTouch.common.interfaces.DialogAskListener
 import com.dellainfotech.smartTouch.common.interfaces.DialogShowListener
 import com.dellainfotech.smartTouch.common.utils.Constants
 import com.dellainfotech.smartTouch.common.utils.DialogUtil
-import com.dellainfotech.smartTouch.common.utils.MQTTConstants
+import com.dellainfotech.smartTouch.mqtt.MQTTConstants
 import com.dellainfotech.smartTouch.databinding.FragmentSwitchIconsBinding
 import com.dellainfotech.smartTouch.mqtt.AwsMqttSingleton
 import com.dellainfotech.smartTouch.mqtt.MQTTConnectionStatus
@@ -47,14 +47,6 @@ class SwitchIconsFragment :
         super.onViewCreated(view, savedInstanceState)
         binding.ivBack.setOnClickListener {
             findNavController().navigateUp()
-        }
-
-        if (FastSave.getInstance().getBoolean(
-                Constants.isSwitchIconsLocked,
-                Constants.DEFAULT_SWITCH_ICONS_LOCK_STATUS
-            )
-        ) {
-            lockScreen()
         }
 
         mqttConnectionDisposable = NotifyManager.getMQTTConnectionInfo().observeOn(AndroidSchedulers.mainThread()).subscribe{
@@ -91,40 +83,6 @@ class SwitchIconsFragment :
         }
 
 
-        binding.ibLock.setOnClickListener {
-            activity?.let {
-                DialogUtil.askAlert(
-                    it,
-                    getString(R.string.dialog_title_text_lock),
-                    getString(R.string.text_ok),
-                    getString(R.string.text_cancel),
-                    object : DialogAskListener {
-                        override fun onYesClicked() {
-                            FastSave.getInstance().saveBoolean(Constants.isSwitchIconsLocked, true)
-                            lockScreen()
-                        }
-
-                        override fun onNoClicked() {
-                            FastSave.getInstance().saveBoolean(Constants.isSwitchIconsLocked, false)
-                            unlockScreen()
-                        }
-
-                    }
-                )
-            }
-        }
-
-        binding.btnSynchronize.setOnClickListener {
-            findNavController().navigateUp()
-        }
-    }
-
-    private fun lockScreen() {
-        binding.relativeLock.isVisible = true
-    }
-
-    private fun unlockScreen() {
-        binding.relativeLock.isVisible = false
     }
 
     override fun getViewModel(): Class<HomeViewModel> = HomeViewModel::class.java
@@ -161,8 +119,8 @@ class SwitchIconsFragment :
 
                         val jsonObject = JSONObject(message)
 
-                        if (jsonObject.has(MQTTConstants.AWS_ST)) {
-                            val deviceStatus = jsonObject.getInt(MQTTConstants.AWS_ST)
+                        if (jsonObject.has(MQTTConstants.AWS_STATUS)) {
+                            val deviceStatus = jsonObject.getInt(MQTTConstants.AWS_STATUS)
                             if (deviceStatus == 1){
                                 DialogUtil.hideDialog()
                             }else {

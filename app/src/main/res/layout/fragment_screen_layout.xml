@@ -14,7 +14,7 @@
         android:layout_height="?actionBarSize"
         android:orientation="horizontal">
 
-        <ImageButton
+        <ImageView
             android:id="@+id/iv_back"
             style="@style/BackImageStyle"
             android:layout_centerVertical="true" />
@@ -196,7 +196,7 @@
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_below="@+id/linear_tab">
 
         <LinearLayout
@@ -355,14 +355,14 @@
             </androidx.cardview.widget.CardView>
 
             <com.google.android.material.button.MaterialButton
-                android:id="@+id/btn_synchronize"
+                android:id="@+id/btn_save"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/login_component_height"
                 android:layout_marginStart="@dimen/screen_start_margin"
                 android:layout_marginEnd="@dimen/screen_end_margin"
                 android:background="@drawable/dodger_blue_background"
-                android:text="@string/button_text_synchronize"
-                android:textAllCaps="true"
+                android:text="@string/text_save"
+                android:textAllCaps="false"
                 android:textColor="@color/white"
                 android:textSize="@dimen/_13ssp"
                 app:backgroundTint="@null" />

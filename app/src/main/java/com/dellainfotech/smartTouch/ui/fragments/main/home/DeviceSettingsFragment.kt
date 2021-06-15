@@ -77,7 +77,7 @@ class DeviceSettingsFragment :
             }
         }
 
-        binding.tvUpdate.setOnClickListener {
+      /*  binding.tvUpdate.setOnClickListener {
             activity?.let {
                 DialogUtil.loadingAlert(
                     it,
@@ -85,7 +85,7 @@ class DeviceSettingsFragment :
                     true
                 )
             }
-        }
+        }*/
 
         viewModel.deleteDeviceResponse.observe(viewLifecycleOwner, { response ->
             when (response) {

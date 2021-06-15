@@ -52,9 +52,6 @@
         android:label="fragment_device_customization"
         tools:layout="@layout/fragment_device_customization" >
         <action
-            android:id="@+id/action_deviceCustomizationFragment_to_screenLayoutFragment"
-            app:destination="@id/screenLayoutFragment" />
-        <action
             android:id="@+id/action_deviceCustomizationFragment_to_switchIconsFragment"
             app:destination="@id/switchIconsFragment" />
         <argument
@@ -63,8 +60,11 @@
         <argument
             android:name="roomDetail"
             app:argType="com.dellainfotech.smartTouch.api.model.GetRoomData" />
+        <action
+            android:id="@+id/action_deviceCustomizationFragment_to_screenLayoutFragment"
+            app:destination="@id/screenLayoutFragment" />
     </fragment>
-    <fragment
+    <dialog
         android:id="@+id/screenLayoutFragment"
         android:name="com.dellainfotech.smartTouch.ui.fragments.main.home.ScreenLayoutFragment"
         android:label="fragment_screen_layout"
@@ -83,7 +83,7 @@
             app:destination="@id/roomPanelFragment"
             app:popUpTo="@id/roomPanelFragment"
             app:popUpToInclusive="true" />
-    </fragment>
+    </dialog>
     <fragment
         android:id="@+id/deviceFeaturesFragment"
         android:name="com.dellainfotech.smartTouch.ui.fragments.main.home.DeviceFeaturesFragment"

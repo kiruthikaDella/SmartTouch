@@ -1,11 +1,13 @@
 package com.dellainfotech.smartTouch.adapters
 
 import android.app.Activity
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ImageButton
+import android.widget.ImageView
 import android.widget.Spinner
 import androidx.recyclerview.widget.RecyclerView
 import com.dellainfotech.smartTouch.R
@@ -76,7 +78,7 @@ class DeviceSceneAdapter(
         val spinnerDevice = itemView.findViewById(R.id.spinner_device_name) as Spinner
         val spinnerSwitch = itemView.findViewById(R.id.spinner_switch_name) as Spinner
         val switch = itemView.findViewById(R.id.switch_status) as SwitchMaterial
-        val ibDelete = itemView.findViewById(R.id.ib_delete) as ImageButton
+        val ibDelete = itemView.findViewById(R.id.ib_delete) as ImageView
 
     }
 
@@ -210,6 +212,15 @@ class DeviceSceneAdapter(
         for (roomData in roomDataList) {
             roomList.add(GetRoomData(roomData.id, null, roomData.userId, roomData.roomName, 1))
         }
+    }
+
+    fun isDuplicateSwitchFound(): Boolean{
+        val switchList = arrayListOf<String>()
+        for (switch in bodyScenes){
+            switchList.add(switch.deviceSwitchId)
+        }
+        Log.e(logTag, " switchList $switchList ")
+        return switchList.size != switchList.distinct().count()
     }
 
     fun getScenes(): ArrayList<BodySceneData> = bodyScenes

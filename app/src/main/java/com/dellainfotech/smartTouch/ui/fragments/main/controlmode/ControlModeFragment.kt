@@ -98,9 +98,8 @@ class ControlModeFragment :
             }
         }
 
-        roomList.clear()
-
         viewModel.getControlResponse.observe(viewLifecycleOwner, { response ->
+            roomList.clear()
             when (response) {
                 is Resource.Success -> {
                     DialogUtil.hideDialog()
@@ -108,9 +107,12 @@ class ControlModeFragment :
                     if (response.values.status && response.values.code == Constants.API_SUCCESS_CODE) {
                         response.values.data?.let { roomDataList ->
                             roomList.addAll(roomDataList)
-                            Log.e(logTag, "  roomList ${roomList.size}")
-                            controlModeAdapter = ControlModeAdapter(roomList)
-                            binding.recyclerControlModes.adapter = controlModeAdapter
+                            activity?.let { mActivity ->
+                                Log.e(logTag, "  roomList ${roomList.size}")
+                                controlModeAdapter = ControlModeAdapter(mActivity,roomList)
+                                binding.recyclerControlModes.adapter = controlModeAdapter
+                            }
+
                         }
                     } else {
                         context?.let {

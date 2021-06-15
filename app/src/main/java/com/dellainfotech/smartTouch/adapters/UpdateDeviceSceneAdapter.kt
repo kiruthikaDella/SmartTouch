@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ImageButton
+import android.widget.ImageView
 import android.widget.Spinner
 import androidx.recyclerview.widget.RecyclerView
 import com.dellainfotech.smartTouch.R
@@ -23,6 +24,8 @@ import com.dellainfotech.smartTouch.common.utils.DialogUtil
 import com.dellainfotech.smartTouch.common.utils.Utils.toBoolean
 import com.dellainfotech.smartTouch.common.utils.Utils.toInt
 import com.google.android.material.switchmaterial.SwitchMaterial
+import java.util.*
+import kotlin.collections.ArrayList
 
 /**
  * Created by Jignesh Dangar on 22-04-2021.
@@ -68,7 +71,7 @@ class UpdateDeviceSceneAdapter(
         val spinnerDevice = itemView.findViewById(R.id.spinner_device_name) as Spinner
         val spinnerSwitch = itemView.findViewById(R.id.spinner_switch_name) as Spinner
         val switch = itemView.findViewById(R.id.switch_status) as SwitchMaterial
-        val ibDelete = itemView.findViewById(R.id.ib_delete) as ImageButton
+        val ibDelete = itemView.findViewById(R.id.ib_delete) as ImageView
     }
 
     private fun setSpinners(holder: MyViewHolder) {
@@ -254,6 +257,23 @@ class UpdateDeviceSceneAdapter(
             }
         }
         return scenes
+    }
+
+    fun isDuplicateSwitchFound(): Boolean{
+
+        val scenes = arrayListOf<BodyUpdateSceneData>()
+        for (scene in updateSceneList) {
+            if (scene.deviceSwitchId.isNotEmpty()) {
+                scenes.add(scene)
+            }
+        }
+
+        val switchList = arrayListOf<String>()
+        for (switch in scenes){
+            switchList.add(switch.deviceSwitchId)
+        }
+        switchList.removeAll(listOf(null,""))
+        return switchList.size != switchList.distinct().count()
     }
 
     interface DeleteSceneItemClickListener<T> {

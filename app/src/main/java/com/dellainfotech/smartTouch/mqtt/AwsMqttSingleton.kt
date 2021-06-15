@@ -9,8 +9,6 @@ import com.amazonaws.services.iot.model.AttachPrincipalPolicyRequest
 import com.amazonaws.services.iot.model.CreateKeysAndCertificateRequest
 import com.amazonaws.services.iot.model.CreateKeysAndCertificateResult
 import com.dellainfotech.smartTouch.AppDelegate.Companion.instance
-import com.dellainfotech.smartTouch.common.utils.Constants
-import com.dellainfotech.smartTouch.common.utils.MQTTConstants
 import java.nio.charset.StandardCharsets
 import java.security.KeyStore
 import java.util.*

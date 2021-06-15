@@ -21,13 +21,14 @@
             android:layout_marginTop="@dimen/_10sdp"
             android:orientation="horizontal">
 
-            <ImageButton
+            <ImageView
                 android:id="@+id/iv_side_navigation"
-                android:layout_width="@dimen/_23sdp"
-                android:layout_height="@dimen/_17sdp"
+                android:layout_width="@dimen/_40sdp"
+                android:layout_height="match_parent"
+                android:padding="@dimen/_9sdp"
                 android:layout_centerVertical="true"
-                android:layout_marginStart="@dimen/screen_start_margin"
-                android:background="@drawable/ic_side_navigation" />
+                android:layout_marginStart="@dimen/_6sdp"
+                android:src="@drawable/ic_side_navigation" />
 
             <TextView
                 android:id="@+id/tv_title"

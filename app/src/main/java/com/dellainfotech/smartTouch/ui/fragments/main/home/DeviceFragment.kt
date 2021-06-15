@@ -91,11 +91,6 @@ class DeviceFragment :
 
     override fun getFragmentRepository(): HomeRepository = HomeRepository(networkModel)
 
-    override fun onPause() {
-        super.onPause()
-        viewModelStore.clear()
-    }
-
     private fun clickEvents() {
 
         binding.layoutSlidingUpPanel.addPanelSlideListener(object :

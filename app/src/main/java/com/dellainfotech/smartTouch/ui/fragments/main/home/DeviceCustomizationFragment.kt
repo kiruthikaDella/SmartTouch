@@ -13,13 +13,9 @@ import android.os.Looper
 import android.provider.MediaStore
 import android.provider.Settings
 import android.util.Log
-import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView
-import android.widget.ArrayAdapter
-import android.widget.TextView
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
@@ -31,6 +27,7 @@ import com.amazonaws.mobileconnectors.iot.AWSIotMqttQos
 import com.appizona.yehiahd.fastsave.FastSave
 import com.dellainfotech.smartTouch.BuildConfig
 import com.dellainfotech.smartTouch.R
+import com.dellainfotech.smartTouch.adapters.spinneradapter.SpinnerAdapter
 import com.dellainfotech.smartTouch.api.Resource
 import com.dellainfotech.smartTouch.api.body.BodyCustomizationLock
 import com.dellainfotech.smartTouch.api.model.DeviceCustomizationData
@@ -40,14 +37,10 @@ import com.dellainfotech.smartTouch.common.interfaces.DialogShowListener
 import com.dellainfotech.smartTouch.common.utils.Constants
 import com.dellainfotech.smartTouch.common.utils.DialogUtil
 import com.dellainfotech.smartTouch.common.utils.FileHelper.getRealPathFromUri
-import com.dellainfotech.smartTouch.common.utils.MQTTConstants
 import com.dellainfotech.smartTouch.common.utils.Utils.toBoolean
 import com.dellainfotech.smartTouch.common.utils.Utils.toInt
 import com.dellainfotech.smartTouch.databinding.FragmentDeviceCustomizationBinding
-import com.dellainfotech.smartTouch.mqtt.AwsMqttSingleton
-import com.dellainfotech.smartTouch.mqtt.MQTTConnectionStatus
-import com.dellainfotech.smartTouch.mqtt.NetworkConnectionLiveData
-import com.dellainfotech.smartTouch.mqtt.NotifyManager
+import com.dellainfotech.smartTouch.mqtt.*
 import com.dellainfotech.smartTouch.ui.fragments.ModelBaseFragment
 import com.dellainfotech.smartTouch.ui.viewmodel.HomeViewModel
 import com.karumi.dexter.Dexter
@@ -77,8 +70,8 @@ class DeviceCustomizationFragment :
 
     private val logTag = this::class.java.simpleName
     private val args: DeviceCustomizationFragmentArgs by navArgs()
-    private var sizeAdapter: ArrayAdapter<String>? = null
-    private var textStyleAdapter: ArrayAdapter<String>? = null
+    private lateinit var sizeAdapter: SpinnerAdapter
+    private lateinit var textStyleAdapter: SpinnerAdapter
     private var deviceCustomization: DeviceCustomizationData? = null
     private var isDeviceCustomizationLocked: Boolean = false
 
@@ -88,7 +81,6 @@ class DeviceCustomizationFragment :
     private var imagePath = ""
     private var imageName = ""
     private var mProfileFile: File? = null
-    private var textColor: Int? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -105,115 +97,35 @@ class DeviceCustomizationFragment :
             lockScreen()
         }
 
-        mqttConnectionDisposable = NotifyManager.getMQTTConnectionInfo().observeOn(AndroidSchedulers.mainThread()).subscribe{
-            Log.e(logTag, " MQTTConnectionStatus = $it ")
-            when(it){
-                MQTTConnectionStatus.CONNECTED -> {
-                    Log.e(logTag, " MQTTConnectionStatus.CONNECTED ")
-                    subscribeToDevice(args.deviceDetail.deviceSerialNo)
+        mqttConnectionDisposable =
+            NotifyManager.getMQTTConnectionInfo().observeOn(AndroidSchedulers.mainThread())
+                .subscribe {
+                    Log.e(logTag, " MQTTConnectionStatus = $it ")
+                    when (it) {
+                        MQTTConnectionStatus.CONNECTED -> {
+                            subscribeToDevice(args.deviceDetail.deviceSerialNo)
+                        }
+                    }
                 }
-            }
-        }
 
-        context?.let { mContext ->
+        activity?.let { mActivity ->
 
-            sizeAdapter = ArrayAdapter(mContext, R.layout.simple_spinner_dropdown, sizeList)
-            sizeAdapter?.setDropDownViewResource(R.layout.simple_spinner_dropdown)
+            sizeAdapter = SpinnerAdapter(mActivity, sizeList.toMutableList())
             binding.spinnerIconSize.adapter = sizeAdapter
             binding.spinnerTextSize.adapter = sizeAdapter
 
-            binding.spinnerIconSize.onItemSelectedListener =
-                object : AdapterView.OnItemSelectedListener {
-                    override fun onItemSelected(
-                        parent: AdapterView<*>?,
-                        view: View?,
-                        position: Int,
-                        id: Long
-                    ) {
-                        parent?.getChildAt(0)?.let { mView ->
-                            val textView = mView as TextView
-                            textView.setTextColor(
-                                ContextCompat.getColor(
-                                    mContext,
-                                    R.color.theme_color
-                                )
-                            )
-                            textView.gravity = Gravity.CENTER
-                        }
-                    }
-
-                    override fun onNothingSelected(parent: AdapterView<*>?) {
-
-                    }
-
-                }
-
-            binding.spinnerTextSize.onItemSelectedListener =
-                object : AdapterView.OnItemSelectedListener {
-                    override fun onItemSelected(
-                        parent: AdapterView<*>?,
-                        view: View?,
-                        position: Int,
-                        id: Long
-                    ) {
-                        parent?.getChildAt(0)?.let { mView ->
-                            val textView = mView as TextView
-                            textView.setTextColor(
-                                ContextCompat.getColor(
-                                    mContext,
-                                    R.color.theme_color
-                                )
-                            )
-                            textView.gravity = Gravity.CENTER
-                        }
-                    }
-
-                    override fun onNothingSelected(parent: AdapterView<*>?) {
-
-                    }
-
-                }
-
-            textStyleAdapter = ArrayAdapter(mContext, R.layout.simple_spinner_dropdown, fontNames)
-            textStyleAdapter?.setDropDownViewResource(R.layout.simple_spinner_dropdown)
+            textStyleAdapter = SpinnerAdapter(mActivity, fontNames.toMutableList())
             binding.layoutTextStyle.spinnerFonts.adapter = textStyleAdapter
 
-            binding.layoutTextStyle.spinnerFonts.onItemSelectedListener =
-                object : AdapterView.OnItemSelectedListener {
-                    override fun onItemSelected(
-                        parent: AdapterView<*>?,
-                        view: View?,
-                        position: Int,
-                        id: Long
-                    ) {
-                        parent?.getChildAt(0)?.let { mView ->
-                            val textView = mView as TextView
-                            textView.setTextColor(
-                                ContextCompat.getColor(
-                                    mContext,
-                                    R.color.theme_color
-                                )
-                            )
-                            textView.gravity = Gravity.CENTER
-                            textView.setBackgroundColor(Color.TRANSPARENT)
-                        }
-
-                    }
-
-                    override fun onNothingSelected(parent: AdapterView<*>?) {
-
-                    }
-
-                }
         }
 
         NetworkConnectionLiveData().observe(viewLifecycleOwner, { isConnected ->
-            if (isConnected){
+            if (isConnected) {
                 activity?.let {
                     DialogUtil.loadingAlert(it)
                 }
                 viewModel.getDeviceCustomization(args.deviceDetail.id)
-            }else {
+            } else {
                 Log.e(logTag, " internet is not available")
             }
         })
@@ -273,7 +185,7 @@ class DeviceCustomizationFragment :
             deviceCustomization?.let {
                 findNavController().navigate(
                     DeviceCustomizationFragmentDirections.actionDeviceCustomizationFragmentToScreenLayoutFragment(
-                        it,args.deviceDetail,args.roomDetail
+                        it, args.deviceDetail, args.roomDetail
                     )
                 )
             }
@@ -329,18 +241,7 @@ class DeviceCustomizationFragment :
         }
 
         binding.ivTextColorSettings.setOnClickListener {
-            textColor?.let {
-                binding.tvBottomViewTitle.setTextColor(it)
-            } ?: kotlin.run {
-                context?.let { mContext ->
-                    binding.tvBottomViewTitle.setTextColor(
-                        ContextCompat.getColor(
-                            mContext,
-                            R.color.theme_color
-                        )
-                    )
-                }
-            }
+            binding.layoutTextColor.colorPicker.setColor(Color.parseColor(deviceCustomization?.textColor))
             binding.tvBottomViewTitle.text = getString(R.string.text_color)
             binding.layoutUploadImage.linearUploadImage.isVisible = false
             binding.layoutTextStyle.linearTextStyle.isVisible = false
@@ -349,15 +250,21 @@ class DeviceCustomizationFragment :
         }
 
         binding.layoutTextColor.colorPicker.setColorListener { color, string ->
-            textColor = color
             binding.tvBottomViewTitle.setTextColor(color)
-            Log.e(logTag, " color $color string $string")
+        }
+
+        binding.layoutTextColor.btnColorPickerDone.setOnClickListener {
+            deviceCustomization?.textColor = java.lang.String.format(
+                "#%06X",
+                0xFFFFFF and binding.layoutTextColor.colorPicker.getColor()
+            )
+            hidePanel()
         }
 
         binding.ivSwitchIconsSettings.setOnClickListener {
             findNavController().navigate(
                 DeviceCustomizationFragmentDirections.actionDeviceCustomizationFragmentToSwitchIconsFragment(
-                    args.deviceDetail,args.roomDetail
+                    args.deviceDetail, args.roomDetail
                 )
             )
         }
@@ -429,6 +336,39 @@ class DeviceCustomizationFragment :
             deviceCustomization?.textStyle =
                 binding.layoutTextStyle.spinnerFonts.selectedItem.toString()
             hidePanel()
+        }
+
+        binding.btnSynchronize.setOnClickListener {
+            try {
+                val payload = JSONObject()
+                payload.put(MQTTConstants.AWS_UPLOAD_IMAGE, deviceCustomization?.uploadImage)
+                payload.put(
+                    MQTTConstants.AWS_SCREEN_LAYOUT_TYPE,
+                    deviceCustomization?.screenLayoutType
+                )
+                payload.put(MQTTConstants.AWS_SCREEN_LAYOUT, deviceCustomization?.screenLayout)
+                payload.put(
+                    MQTTConstants.AWS_SWITCH_NAME,
+                    binding.cbSwitchNameSettings.isChecked.toInt()
+                )
+                payload.put(
+                    MQTTConstants.AWS_SWITCH_ICON_SIZE,
+                    binding.spinnerIconSize.selectedItem
+                )
+                payload.put(MQTTConstants.AWS_TEXT_STYLE, deviceCustomization?.textStyle)
+                payload.put(MQTTConstants.AWS_TEXT_COLOR, deviceCustomization?.textColor)
+                payload.put(MQTTConstants.AWS_TEXT_SIZE, binding.spinnerTextSize.selectedItem)
+                payload.put(
+                    MQTTConstants.AWS_CUSTOMIZATION_LOCK,
+                    isDeviceCustomizationLocked.toInt()
+                )
+                Log.e(logTag, " payload $payload")
+                if (AwsMqttSingleton.isConnected()) {
+                    publish(payload.toString())
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
         }
     }
 
@@ -559,6 +499,12 @@ class DeviceCustomizationFragment :
                     context?.let {
                         Toast.makeText(it, response.values.message, Toast.LENGTH_SHORT).show()
                     }
+
+                    if (response.values.status && response.values.code == Constants.API_SUCCESS_CODE) {
+                        response.values.data?.let {
+                            deviceCustomization?.uploadImage = it.uploadImage
+                        }
+                    }
                 }
                 is Resource.Failure -> {
                     DialogUtil.hideDialog()
@@ -576,6 +522,9 @@ class DeviceCustomizationFragment :
                     context?.let {
                         Toast.makeText(it, response.values.message, Toast.LENGTH_SHORT).show()
                     }
+                    if (response.values.status && response.values.code == Constants.API_SUCCESS_CODE) {
+                        deviceCustomization?.uploadImage = ""
+                    }
                 }
                 is Resource.Failure -> {
                     DialogUtil.hideDialog()
@@ -588,7 +537,7 @@ class DeviceCustomizationFragment :
     }
 
     //
-    //region Image Settings
+    //region ImageSettings
     //
 
     private fun checkPermission(isCamera: Boolean) {
@@ -712,14 +661,14 @@ class DeviceCustomizationFragment :
     private fun lockScreen() {
         binding.relativeLock.isVisible = true
         context?.let {
-            binding.ibLock.background = ContextCompat.getDrawable(it, R.drawable.ic_lock)
+            binding.ibLock.setImageDrawable(ContextCompat.getDrawable(it, R.drawable.ic_lock))
         }
     }
 
     private fun unLockScreen() {
         binding.relativeLock.isVisible = false
         context?.let {
-            binding.ibLock.background = ContextCompat.getDrawable(it, R.drawable.ic_unlock)
+            binding.ibLock.setImageDrawable(ContextCompat.getDrawable(it, R.drawable.ic_unlock))
         }
     }
 
@@ -743,25 +692,132 @@ class DeviceCustomizationFragment :
 
                         val jsonObject = JSONObject(message)
 
-                        if (jsonObject.has(MQTTConstants.AWS_ST)) {
-                            val deviceStatus = jsonObject.getInt(MQTTConstants.AWS_ST)
-                            if (deviceStatus == 1){
+                        if (jsonObject.has(MQTTConstants.AWS_STATUS)) {
+                            val deviceStatus = jsonObject.getInt(MQTTConstants.AWS_STATUS)
+                            if (deviceStatus == 1) {
                                 DialogUtil.hideDialog()
-                            }else {
-                                DialogUtil.deviceOfflineAlert(it, onClick = object : DialogShowListener{
-                                    override fun onClick() {
-                                        findNavController().navigateUp()
-                                    }
+                            } else {
+                                DialogUtil.deviceOfflineAlert(
+                                    it,
+                                    onClick = object : DialogShowListener {
+                                        override fun onClick() {
+                                            findNavController().navigateUp()
+                                        }
 
-                                })
+                                    })
                             }
                         }
+                    }
+                }
+            }
+
+            //Current Device Status Update - Online/Offline
+            AwsMqttSingleton.mqttManager!!.subscribeToTopic(
+                MQTTConstants.DEVICE_CUSTOMIZATION_ACK.replace(
+                    MQTTConstants.AWS_DEVICE_ID,
+                    deviceId
+                ),
+                AWSIotMqttQos.QOS0
+            ) { topic, data ->
+                activity?.let {
+
+                    it.runOnUiThread {
+
+                        Toast.makeText(
+                            it,
+                            getString(R.string.toast_text_device_synchronized),
+                            Toast.LENGTH_SHORT
+                        ).show()
+
+                        val message = String(data, StandardCharsets.UTF_8)
+                        Log.d("$logTag ReceivedData", "$topic    $message")
+
+                        try {
+                            val jsonObject = JSONObject(message)
+
+                            if (jsonObject.has(MQTTConstants.AWS_UPLOAD_IMAGE)) {
+                                deviceCustomization?.uploadImage =
+                                    jsonObject.getString(MQTTConstants.AWS_UPLOAD_IMAGE)
+                            }
+                            if (jsonObject.has(MQTTConstants.AWS_SCREEN_LAYOUT_TYPE)) {
+                                deviceCustomization?.screenLayoutType =
+                                    jsonObject.getString(MQTTConstants.AWS_SCREEN_LAYOUT_TYPE)
+                            }
+                            if (jsonObject.has(MQTTConstants.AWS_SCREEN_LAYOUT)) {
+                                deviceCustomization?.screenLayout =
+                                    jsonObject.getString(MQTTConstants.AWS_SCREEN_LAYOUT)
+                            }
+                            if (jsonObject.has(MQTTConstants.AWS_SWITCH_NAME)) {
+                                deviceCustomization?.switchName =
+                                    jsonObject.getInt(MQTTConstants.AWS_SWITCH_NAME).toString()
+                            }
+                            if (jsonObject.has(MQTTConstants.AWS_SWITCH_ICON_SIZE)) {
+                                deviceCustomization?.switchIconSize =
+                                    jsonObject.getString(MQTTConstants.AWS_SWITCH_ICON_SIZE)
+                            }
+                            if (jsonObject.has(MQTTConstants.AWS_TEXT_STYLE)) {
+                                deviceCustomization?.textStyle =
+                                    jsonObject.getString(MQTTConstants.AWS_TEXT_STYLE)
+                            }
+                            if (jsonObject.has(MQTTConstants.AWS_TEXT_COLOR)) {
+                                deviceCustomization?.textColor =
+                                    jsonObject.getString(MQTTConstants.AWS_TEXT_COLOR)
+                            }
+                            if (jsonObject.has(MQTTConstants.AWS_TEXT_SIZE)) {
+                                deviceCustomization?.textSize =
+                                    jsonObject.getString(MQTTConstants.AWS_TEXT_SIZE)
+                            }
+                            if (jsonObject.has(MQTTConstants.AWS_CUSTOMIZATION_LOCK)) {
+                                deviceCustomization?.isLock =
+                                    jsonObject.getInt(MQTTConstants.AWS_CUSTOMIZATION_LOCK)
+                            }
+
+                            deviceCustomization?.let { customization ->
+                                binding.spinnerIconSize.setSelection(
+                                    sizeAdapter.getPosition(
+                                        customization.switchIconSize
+                                    )
+                                )
+                                binding.cbSwitchNameSettings.isChecked =
+                                    customization.switchName.toInt().toBoolean()
+                                binding.spinnerTextSize.setSelection(
+                                    sizeAdapter.getPosition(
+                                        customization.textSize
+                                    )
+                                )
+                                isDeviceCustomizationLocked = customization.isLock.toBoolean()
+                                binding.layoutTextColor.colorPicker.setColor(
+                                    Color.parseColor(
+                                        customization.textColor
+                                    )
+                                )
+                                if (isDeviceCustomizationLocked) {
+                                    lockScreen()
+                                } else {
+                                    unLockScreen()
+                                }
+                            }
+
+                        } catch (e: Exception) {
+                            e.printStackTrace()
+                        }
+
                     }
                 }
             }
         } catch (e: Exception) {
             Log.e(logTag, "Subscription error.", e)
         }
+    }
+
+    private fun publish(payload: String) {
+
+        AwsMqttSingleton.publish(
+            MQTTConstants.UPDATE_DEVICE_CUSTOMIZATION.replace(
+                MQTTConstants.AWS_DEVICE_ID,
+                args.deviceDetail.deviceSerialNo
+            ), payload
+        )
     }
 
     //

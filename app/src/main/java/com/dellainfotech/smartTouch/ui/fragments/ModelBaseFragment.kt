@@ -30,9 +30,9 @@ abstract class ModelBaseFragment<VM : ViewModel, B : ViewBinding, R : BaseReposi
         return binding.root
     }
 
-    override fun onPause() {
-        super.onPause()
-//        viewModelStore.clear()
+    override fun onDestroyView() {
+        super.onDestroyView()
+        viewModelStore.clear()
     }
 
     abstract fun getViewModel(): Class<VM>
