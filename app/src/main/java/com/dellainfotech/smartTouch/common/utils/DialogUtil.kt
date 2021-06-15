@@ -65,7 +65,8 @@ object DialogUtil {
 
     fun deviceOfflineAlert(
         activity: Activity,
-        onClick: DialogShowListener?
+        title: String? = null,
+        onClick: DialogShowListener? = null
     ) {
 
         hideDialog()
@@ -73,10 +74,19 @@ object DialogUtil {
         dialog?.setContentView(R.layout.dialog_layout_device_offline)
         dialog?.setCancelable(false)
 
+        val tvTitle = dialog?.findViewById(R.id.tv_dialog_title) as TextView
         val btnOk = dialog?.findViewById(R.id.tv_ok) as TextView
 
+        title?.let {
+            tvTitle.text = it
+        }
+
         btnOk.setOnClickListener {
-            onClick?.onClick()
+            if (onClick == null){
+                hideDialog()
+            }else{
+                onClick.onClick()
+            }
         }
 
         val displayMetrics = DisplayMetrics()

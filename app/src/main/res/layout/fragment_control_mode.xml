@@ -33,14 +33,14 @@
             android:layout_gravity="center_horizontal"
             android:text="@string/title_text_home_screen" />
 
-        <ImageButton
+        <ImageView
             android:id="@+id/ib_pin"
-            android:layout_width="@dimen/_15sdp"
-            android:layout_height="@dimen/_15sdp"
+            android:layout_width="@dimen/_30sdp"
+            android:layout_height="match_parent"
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
-            android:layout_marginEnd="@dimen/screen_end_margin"
-            android:background="@drawable/ic_pin"/>
+            android:padding="@dimen/_8sdp"
+            android:src="@drawable/ic_pin"/>
 
     </RelativeLayout>
 

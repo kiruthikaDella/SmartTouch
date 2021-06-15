@@ -7,7 +7,7 @@
     android:orientation="vertical"
     tools:context="com.dellainfotech.smartTouch.ui.fragments.authentication.CreateAccountFragment">
 
-    <ImageButton
+    <ImageView
         android:id="@+id/iv_back"
         style="@style/BackArrowImageStyle" />
 

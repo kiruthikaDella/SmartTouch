@@ -1,5 +1,6 @@
 package com.dellainfotech.smartTouch.adapters.controlmodeadapter
 
+import android.app.Activity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,6 +13,7 @@ import com.dellainfotech.smartTouch.api.model.ControlModeRoomData
  * Created by Jignesh Dangar on 19-04-2021.
  */
 class ControlModeAdapter(
+    private val mActivity: Activity,
     private val panelList: List<ControlModeRoomData>
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
@@ -29,7 +31,7 @@ class ControlModeAdapter(
         sectionViewHolder.apply {
             tvRoomName.text = data.roomName
             data.deviceData?.let { deviceData ->
-                recyclerDevices.adapter = ControlModeDeviceAdapter(deviceData)
+                recyclerDevices.adapter = ControlModeDeviceAdapter(mActivity,deviceData)
             }
         }
 

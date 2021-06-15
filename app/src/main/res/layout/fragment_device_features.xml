@@ -13,7 +13,7 @@
         android:layout_height="?actionBarSize"
         android:orientation="horizontal">
 
-        <ImageButton
+        <ImageView
             android:id="@+id/iv_back"
             style="@style/BackImageStyle"
             android:layout_centerVertical="true" />
@@ -485,6 +485,7 @@
             </androidx.cardview.widget.CardView>
 
             <androidx.cardview.widget.CardView
+                android:id="@+id/btn_synchronize"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/login_component_height"
                 android:layout_marginStart="@dimen/screen_start_margin"
@@ -500,6 +501,8 @@
                     android:layout_height="match_parent"
                     android:background="@android:color/transparent"
                     android:fontFamily="@font/roboto_medium"
+                    android:clickable="false"
+                    android:focusable="false"
                     android:text="@string/button_text_synchronize"
                     android:textColor="@color/white"
                     android:textSize="@dimen/_12ssp"

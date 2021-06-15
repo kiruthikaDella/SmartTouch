@@ -67,7 +67,7 @@
     <string name="text_remember_password">Remember password?</string>
 
     <!--    Dialog Strings-->
-    <string name="text_no_internet_available">No internet available</string>
+    <string name="text_no_internet_available">Internet not available</string>
     <string name="text_ok">OK</string>
     <string name="text_cancel">Cancel</string>
     <string name="text_yes">Yes</string>
@@ -152,6 +152,8 @@
     <string name="text_color">Text Color</string>
     <string name="text_size">Text Size</string>
     <string name="button_text_synchronize">Synchronize</string>
+    <string name="button_text_submit">Submit</string>
+    <string name="toast_text_device_synchronized">Device synchronized successful</string>
     <string name="dialog_title_text_lock">Do you want to lock customisation with your account?</string>
     <string name="dialog_title_text_unlock">Do you want to unlock customisation with your account?</string>
     <string name="text_eight_icons_view">8 Icons</string>
@@ -193,6 +195,7 @@
     <string name="text_manual">Manual</string>
     <string name="text_weekly">Weekly</string>
     <string name="text_monthly">Monthly</string>
+    <string name="error_text_duplicate_scene">Duplicate switch is not allowed</string>
 
     <!--    Create Scene   -->
     <string name="title_text_scene">Scene</string>

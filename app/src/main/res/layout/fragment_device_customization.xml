@@ -23,7 +23,7 @@
             android:layout_height="?actionBarSize"
             android:orientation="horizontal">
 
-            <ImageButton
+            <ImageView
                 android:id="@+id/iv_back"
                 style="@style/BackImageStyle"
                 android:layout_centerVertical="true" />
@@ -37,14 +37,15 @@
                 android:layout_gravity="center_horizontal"
                 android:text="@string/title_text_device_customization" />
 
-            <ImageButton
+            <ImageView
                 android:id="@+id/ib_lock"
-                android:layout_width="@dimen/_16sdp"
-                android:layout_height="@dimen/_20sdp"
+                android:layout_width="@dimen/_30sdp"
+                android:layout_height="match_parent"
                 android:layout_alignParentEnd="true"
                 android:layout_centerVertical="true"
                 android:layout_marginEnd="@dimen/screen_end_margin"
-                android:background="@drawable/ic_lock" />
+                android:padding="@dimen/_8sdp"
+                android:src="@drawable/ic_lock" />
 
         </RelativeLayout>
 

@@ -11,6 +11,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.observe
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.onNavDestinationSelected
@@ -27,6 +28,7 @@ import com.dellainfotech.smartTouch.common.utils.DialogUtil
 import com.dellainfotech.smartTouch.common.utils.Utils.clearError
 import com.dellainfotech.smartTouch.common.utils.Utils.toEditable
 import com.dellainfotech.smartTouch.databinding.ActivityMainBinding
+import com.dellainfotech.smartTouch.mqtt.NetworkConnectionLiveData
 import com.dellainfotech.smartTouch.ui.fragments.main.home.HomeFragmentDirections
 import com.dellainfotech.smartTouch.ui.viewmodel.HomeViewModel
 import com.dellainfotech.smartTouch.ui.viewmodel.ViewModelFactory
@@ -136,8 +138,15 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
             }
         })
 
-        roomTypeList.toMutableList().clear()
-        viewModel.roomType()
+        NetworkConnectionLiveData().observe(this, { isConnected ->
+            if (isConnected){
+                roomTypeList.toMutableList().clear()
+                viewModel.roomType()
+            }else {
+                DialogUtil.deviceOfflineAlert(this,title = getString(R.string.text_no_internet_available))
+            }
+        })
+
 
         bottomNavigationClickEvent()
         apiResponses()

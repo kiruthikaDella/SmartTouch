@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.lifecycle.observe
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.dellainfotech.smartTouch.R
@@ -26,6 +27,7 @@ import com.dellainfotech.smartTouch.common.utils.Utils.toBoolean
 import com.dellainfotech.smartTouch.common.utils.Utils.toEditable
 import com.dellainfotech.smartTouch.common.utils.Utils.toInt
 import com.dellainfotech.smartTouch.databinding.FragmentDeviceBinding
+import com.dellainfotech.smartTouch.mqtt.NetworkConnectionLiveData
 import com.dellainfotech.smartTouch.ui.fragments.ModelBaseFragment
 import com.dellainfotech.smartTouch.ui.viewmodel.HomeViewModel
 import com.sothree.slidinguppanel.SlidingUpPanelLayout
@@ -61,8 +63,15 @@ class DeviceFragment :
             viewModel.retainState(BodyRetainState(args.roomDetail.id, isChecked.toInt()))
         }
 
-        showLoading()
-        viewModel.getDevice(args.roomDetail.id)
+        NetworkConnectionLiveData().observe(viewLifecycleOwner, { isConnected ->
+            if (isConnected){
+                deviceList.clear()
+                showLoading()
+                viewModel.getDevice(args.roomDetail.id)
+            }else {
+                Log.e(logTag, " internet is not available")
+            }
+        })
 
         activity?.let {
             panelAdapter = DeviceAdapter(it, deviceList)
@@ -81,11 +90,6 @@ class DeviceFragment :
     ): FragmentDeviceBinding = FragmentDeviceBinding.inflate(inflater, container, false)
 
     override fun getFragmentRepository(): HomeRepository = HomeRepository(networkModel)
-
-    override fun onPause() {
-        super.onPause()
-        viewModelStore.clear()
-    }
 
     private fun clickEvents() {
 
@@ -188,7 +192,7 @@ class DeviceFragment :
             override fun onItemClick(data: GetDeviceData) {
                 findNavController().navigate(
                     DeviceFragmentDirections.actionRoomPanelFragmentToDeviceCustomizationFragment(
-                        data
+                        data,args.roomDetail
                     )
                 )
             }

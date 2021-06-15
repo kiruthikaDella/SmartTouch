@@ -13,7 +13,7 @@
         android:layout_height="?actionBarSize"
         android:orientation="horizontal">
 
-        <ImageButton
+        <ImageView
             android:id="@+id/iv_back"
             style="@style/BackImageStyle"
             android:layout_centerVertical="true" />
@@ -43,32 +43,8 @@
         android:id="@+id/recycler_switch_icons"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@+id/btn_synchronize"
         android:layout_below="@+id/relative_header"
         android:overScrollMode="never"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
-
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/btn_synchronize"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/login_component_height"
-        android:layout_alignParentBottom="true"
-        android:background="@color/theme_color"
-        android:fontFamily="@font/roboto_medium"
-        android:text="@string/button_text_synchronize"
-        android:textAllCaps="true"
-        android:textColor="@color/white"
-        android:textSize="@dimen/_12ssp"
-        app:backgroundTint="@null" />
-
-    <RelativeLayout
-        android:id="@+id/relative_lock"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@id/relative_header"
-        android:clickable="true"
-        android:focusable="true"
-        android:visibility="gone"
-        android:elevation="8dp"/>
 
 </RelativeLayout>

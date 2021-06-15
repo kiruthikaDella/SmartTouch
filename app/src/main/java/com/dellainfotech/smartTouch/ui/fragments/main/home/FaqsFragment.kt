@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.lifecycle.observe
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.RecyclerView
@@ -19,6 +20,7 @@ import com.dellainfotech.smartTouch.api.repository.HomeRepository
 import com.dellainfotech.smartTouch.common.utils.Constants
 import com.dellainfotech.smartTouch.common.utils.DialogUtil
 import com.dellainfotech.smartTouch.databinding.FragmentFaqsBinding
+import com.dellainfotech.smartTouch.mqtt.NetworkConnectionLiveData
 import com.dellainfotech.smartTouch.ui.fragments.ModelBaseFragment
 import com.dellainfotech.smartTouch.ui.viewmodel.HomeViewModel
 import java.util.*
@@ -63,12 +65,17 @@ class FaqsFragment : ModelBaseFragment<HomeViewModel, FragmentFaqsBinding, HomeR
 
         })
 
-        faqList.clear()
-
-        activity?.let {
-            DialogUtil.loadingAlert(it)
-        }
-        viewModel.getFAQ()
+        NetworkConnectionLiveData().observe(viewLifecycleOwner, { isConnected ->
+            if (isConnected){
+                faqList.clear()
+                activity?.let {
+                    DialogUtil.loadingAlert(it)
+                }
+                viewModel.getFAQ()
+            }else {
+                Log.e(logTag, " internet is not available")
+            }
+        })
 
         viewModel.faqResponse.observe(viewLifecycleOwner, { response ->
             when (response) {

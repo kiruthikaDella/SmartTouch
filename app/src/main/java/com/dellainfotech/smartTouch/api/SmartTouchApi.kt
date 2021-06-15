@@ -267,7 +267,7 @@ interface SmartTouchApi {
         @Header("access_key") access_key: String,
         @Part("iDeviceId") deviceId: RequestBody,
         @Part image: List<MultipartBody.Part>
-    ): CommonResponse
+    ): DeviceCustomizationResponse
 
     @DELETE(API_DELETE_IMAGE)
     suspend fun deleteImage(

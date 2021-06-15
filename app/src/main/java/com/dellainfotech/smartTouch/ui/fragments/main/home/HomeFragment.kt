@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import android.widget.Toast
 import androidx.core.view.GravityCompat
+import androidx.lifecycle.observe
 import androidx.navigation.fragment.findNavController
 import com.appizona.yehiahd.fastsave.FastSave
 import com.dellainfotech.smartTouch.BuildConfig
@@ -22,6 +23,7 @@ import com.dellainfotech.smartTouch.common.interfaces.AdapterItemClickListener
 import com.dellainfotech.smartTouch.common.utils.Constants
 import com.dellainfotech.smartTouch.common.utils.DialogUtil
 import com.dellainfotech.smartTouch.databinding.FragmentHomeBinding
+import com.dellainfotech.smartTouch.mqtt.NetworkConnectionLiveData
 import com.dellainfotech.smartTouch.ui.activities.AuthenticationActivity
 import com.dellainfotech.smartTouch.ui.fragments.ModelBaseFragment
 import com.dellainfotech.smartTouch.ui.viewmodel.HomeViewModel
@@ -64,11 +66,19 @@ class HomeFragment : ModelBaseFragment<HomeViewModel, FragmentHomeBinding, HomeR
     }
 
     private fun apiCall() {
-        roomList.toMutableList().clear()
-        viewModel.getRoom()
-        activity?.let {
-            DialogUtil.loadingAlert(it)
-        }
+
+        NetworkConnectionLiveData().observe(viewLifecycleOwner, { isConnected ->
+            if (isConnected){
+                Log.e(logTag, " internet is available")
+                roomList.toMutableList().clear()
+                viewModel.getRoom()
+                activity?.let {
+                    DialogUtil.loadingAlert(it)
+                }
+            }else {
+                Log.e(logTag, " internet is not available")
+            }
+        })
 
         viewModel.logoutResponse.observe(viewLifecycleOwner, { response ->
             when (response) {
