@@ -20,7 +20,7 @@ import com.dellainfotech.smartTouch.api.repository.HomeRepository
 import com.dellainfotech.smartTouch.common.utils.Constants
 import com.dellainfotech.smartTouch.common.utils.DialogUtil
 import com.dellainfotech.smartTouch.databinding.FragmentFaqsBinding
-import com.dellainfotech.smartTouch.mqtt.NetworkConnectionLiveData
+import com.dellainfotech.smartTouch.mqtt.NotifyManager
 import com.dellainfotech.smartTouch.ui.fragments.ModelBaseFragment
 import com.dellainfotech.smartTouch.ui.viewmodel.HomeViewModel
 import java.util.*
@@ -49,7 +49,7 @@ class FaqsFragment : ModelBaseFragment<HomeViewModel, FragmentFaqsBinding, HomeR
             animator.supportsChangeAnimations = false
         }
 
-        binding.edtSearch.addTextChangedListener(object : TextWatcher{
+        binding.edtSearch.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
 
             }
@@ -65,14 +65,14 @@ class FaqsFragment : ModelBaseFragment<HomeViewModel, FragmentFaqsBinding, HomeR
 
         })
 
-        NetworkConnectionLiveData().observe(viewLifecycleOwner, { isConnected ->
-            if (isConnected){
+        NotifyManager.internetInfo.observe(viewLifecycleOwner, { isConnected ->
+            if (isConnected) {
                 faqList.clear()
                 activity?.let {
                     DialogUtil.loadingAlert(it)
                 }
                 viewModel.getFAQ()
-            }else {
+            } else {
                 Log.e(logTag, " internet is not available")
             }
         })

@@ -8,6 +8,7 @@ import androidx.lifecycle.OnLifecycleEvent
 import androidx.lifecycle.ProcessLifecycleOwner
 import com.appizona.yehiahd.fastsave.FastSave
 import com.dellainfotech.smartTouch.mqtt.AwsMqttSingleton
+import com.dellainfotech.smartTouch.mqtt.NetworkConnectionLiveData
 
 /**
  * Created by Jignesh Dangar on 09-04-2021.

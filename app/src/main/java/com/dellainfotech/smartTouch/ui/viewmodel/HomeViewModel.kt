@@ -12,6 +12,7 @@ import com.dellainfotech.smartTouch.api.repository.HomeRepository
 import kotlinx.coroutines.launch
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
+import okhttp3.ResponseBody
 
 class HomeViewModel @ViewModelInject constructor(
     private val homeRepository: HomeRepository
@@ -184,8 +185,8 @@ class HomeViewModel @ViewModelInject constructor(
     val addSceneResponse: LiveData<Resource<CommonResponse>>
         get() = _addSceneResponse
 
-    private val _updateSceneResponse: MutableLiveData<Resource<CommonResponse>> = MutableLiveData()
-    val updateSceneResponse: LiveData<Resource<CommonResponse>>
+    private val _updateSceneResponse: MutableLiveData<Resource<ResponseBody>> = MutableLiveData()
+    val updateSceneResponse: LiveData<Resource<ResponseBody>>
         get() = _updateSceneResponse
 
     private val _deleteSceneResponse: MutableLiveData<Resource<CommonResponse>> = MutableLiveData()

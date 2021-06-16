@@ -207,8 +207,9 @@ class UpdateDeviceSceneAdapter(
                     object : DialogAskListener {
                         override fun onYesClicked() {
                             if (scenes[adapterPosition].id == ""){
-                                scenes.removeAt(adapterPosition)
-                                notifyDataSetChanged()
+                       /*         scenes.removeAt(adapterPosition)
+                                notifyDataSetChanged()*/
+                                deleteScene(adapterPosition)
                             }else {
                                 deleteClickListener?.onItemClick(scenes[adapterPosition],adapterPosition)
                             }
@@ -261,12 +262,7 @@ class UpdateDeviceSceneAdapter(
 
     fun isDuplicateSwitchFound(): Boolean{
 
-        val scenes = arrayListOf<BodyUpdateSceneData>()
-        for (scene in updateSceneList) {
-            if (scene.deviceSwitchId.isNotEmpty()) {
-                scenes.add(scene)
-            }
-        }
+        val scenes = getScenes()
 
         val switchList = arrayListOf<String>()
         for (switch in scenes){

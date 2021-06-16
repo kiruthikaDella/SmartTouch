@@ -20,6 +20,7 @@ import com.dellainfotech.smartTouch.api.model.GetDeviceData
 import com.dellainfotech.smartTouch.api.repository.HomeRepository
 import com.dellainfotech.smartTouch.common.interfaces.AdapterItemClickListener
 import com.dellainfotech.smartTouch.common.interfaces.DialogEditListener
+import com.dellainfotech.smartTouch.common.interfaces.DialogShowListener
 import com.dellainfotech.smartTouch.common.utils.Constants
 import com.dellainfotech.smartTouch.common.utils.DialogUtil
 import com.dellainfotech.smartTouch.common.utils.Utils.clearError
@@ -27,7 +28,7 @@ import com.dellainfotech.smartTouch.common.utils.Utils.toBoolean
 import com.dellainfotech.smartTouch.common.utils.Utils.toEditable
 import com.dellainfotech.smartTouch.common.utils.Utils.toInt
 import com.dellainfotech.smartTouch.databinding.FragmentDeviceBinding
-import com.dellainfotech.smartTouch.mqtt.NetworkConnectionLiveData
+import com.dellainfotech.smartTouch.mqtt.NotifyManager
 import com.dellainfotech.smartTouch.ui.fragments.ModelBaseFragment
 import com.dellainfotech.smartTouch.ui.viewmodel.HomeViewModel
 import com.sothree.slidinguppanel.SlidingUpPanelLayout
@@ -63,13 +64,25 @@ class DeviceFragment :
             viewModel.retainState(BodyRetainState(args.roomDetail.id, isChecked.toInt()))
         }
 
-        NetworkConnectionLiveData().observe(viewLifecycleOwner, { isConnected ->
-            if (isConnected){
+        NotifyManager.internetInfo.observe(viewLifecycleOwner, { isConnected ->
+            if (isConnected) {
                 deviceList.clear()
                 showLoading()
                 viewModel.getDevice(args.roomDetail.id)
-            }else {
-                Log.e(logTag, " internet is not available")
+            } else {
+                activity?.let {
+                    DialogUtil.deviceOfflineAlert(
+                        it,
+                        getString(R.string.text_no_internet_available),
+                        object : DialogShowListener {
+                            override fun onClick() {
+                                DialogUtil.hideDialog()
+                                findNavController().navigateUp()
+                            }
+
+                        }
+                    )
+                }
             }
         })
 
@@ -192,7 +205,7 @@ class DeviceFragment :
             override fun onItemClick(data: GetDeviceData) {
                 findNavController().navigate(
                     DeviceFragmentDirections.actionRoomPanelFragmentToDeviceCustomizationFragment(
-                        data,args.roomDetail
+                        data, args.roomDetail
                     )
                 )
             }

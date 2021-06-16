@@ -284,7 +284,7 @@ class ControlModeDeviceAdapter(
                     seekParams?.progress?.let {
                         publishDimmer(
                             device.deviceSerialNo,
-                            MQTTConstants.AWS_USB_PORT_C,
+                            MQTTConstants.AWS_DMR,
                             it
                         )
                     }
@@ -394,7 +394,7 @@ class ControlModeDeviceAdapter(
                     seekParams?.progress?.let {
                         publishDimmer(
                             device.deviceSerialNo,
-                            MQTTConstants.AWS_USB_PORT_C,
+                            MQTTConstants.AWS_DMR,
                             it
                         )
                     }

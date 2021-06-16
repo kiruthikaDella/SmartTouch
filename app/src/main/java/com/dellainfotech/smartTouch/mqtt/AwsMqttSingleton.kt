@@ -32,6 +32,8 @@ object AwsMqttSingleton {
     private var keystoreName: String? = null
     private var keystorePassword: String? = null
 
+    private var isInternetConnected = false
+
     private fun connectAWS() {
         Log.d("Aws connection", "clientId = $clientId")
 
@@ -52,12 +54,14 @@ object AwsMqttSingleton {
                         AWSIotMqttClientStatusCallback.AWSIotMqttClientStatus.Connected -> {
                             Log.e(logTag, "Connected.", throwable)
                             mqttStatus = MQTTConnectionStatus.CONNECTED
+                            updateObserver(true)
                             NotifyManager.getMQTTConnectionInfo().onNext(MQTTConnectionStatus.CONNECTED)
                         }
 
                         AWSIotMqttClientStatusCallback.AWSIotMqttClientStatus.Reconnecting -> {
                             Log.e(logTag, "Reconnecting error.", throwable)
                             mqttStatus = MQTTConnectionStatus.RECONNECTING
+                            updateObserver(false)
                             NotifyManager.getMQTTConnectionInfo().onNext(MQTTConnectionStatus.RECONNECTING)
                         }
 
@@ -83,6 +87,13 @@ object AwsMqttSingleton {
         }
 
 
+    }
+
+    private fun updateObserver(isConnected: Boolean){
+        if (isInternetConnected != isConnected){
+            isInternetConnected = isConnected
+            NotifyManager.internetInfo.postValue(isConnected)
+        }
     }
 
     fun initializeMQTT() {

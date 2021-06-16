@@ -168,6 +168,7 @@ class LoginFragment : ModelBaseFragment<AuthViewModel, FragmentLoginBinding, Aut
                                 .saveString(Constants.USER_PHONE_NUMBER, userData.bPhoneNumber)
                             FastSave.getInstance().saveString(Constants.SOCIAL_ID, userData.socialId)
                             FastSave.getInstance().saveBoolean(Constants.isControlModePinned, userData.iIsPinStatus!!.toBoolean())
+                            FastSave.getInstance().saveInt(Constants.LOGIN_TYPE, Constants.LOGIN_TYPE_MANUAL)
                             activity?.let {
                                 startActivity(Intent(it, MainActivity::class.java))
                                 it.finishAffinity()
@@ -213,6 +214,7 @@ class LoginFragment : ModelBaseFragment<AuthViewModel, FragmentLoginBinding, Aut
                             FastSave.getInstance().saveBoolean(Constants.isControlModePinned, userData.iIsPinStatus!!.toBoolean())
 
                             activity?.let {
+                                FastSave.getInstance().saveInt(Constants.LOGIN_TYPE, Constants.LOGIN_TYPE_GOOGLE)
                                 startActivity(Intent(it, MainActivity::class.java))
                                 it.finishAffinity()
                             }

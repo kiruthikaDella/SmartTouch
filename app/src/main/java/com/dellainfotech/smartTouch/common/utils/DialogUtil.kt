@@ -82,9 +82,9 @@ object DialogUtil {
         }
 
         btnOk.setOnClickListener {
-            if (onClick == null){
+            if (onClick == null) {
                 hideDialog()
-            }else{
+            } else {
                 onClick.onClick()
             }
         }
@@ -146,27 +146,30 @@ object DialogUtil {
         isCancelable: Boolean = false
     ) {
 
-        hideDialog()
-        dialog = Dialog(activity)
-        dialog?.setContentView(R.layout.dialog_loading)
-        dialog?.setCancelable(isCancelable)
+        activity.runOnUiThread {
+            hideDialog()
+            dialog = Dialog(activity)
+            dialog?.setContentView(R.layout.dialog_loading)
+            dialog?.setCancelable(isCancelable)
 
-        val tvTitle = dialog?.findViewById(R.id.tv_dialog_title) as TextView
+            val tvTitle = dialog?.findViewById(R.id.tv_dialog_title) as TextView
 
-        if (title == null) {
-            tvTitle.isVisible = false
-        } else {
-            tvTitle.text = title
+            if (title == null) {
+                tvTitle.isVisible = false
+            } else {
+                tvTitle.text = title
+            }
+
+            val displayMetrics = DisplayMetrics()
+            activity.windowManager?.defaultDisplay?.getMetrics(displayMetrics)
+            val width = (displayMetrics.widthPixels * Constants.COMMON_DIALOG_WIDTH)
+            val height = (displayMetrics.heightPixels * Constants.COMMON_DIALOG_HEIGHT)
+
+            dialog?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+            dialog?.window?.setLayout(width.toInt(), height.toInt())
+            dialog?.show()
         }
 
-        val displayMetrics = DisplayMetrics()
-        activity.windowManager?.defaultDisplay?.getMetrics(displayMetrics)
-        val width = (displayMetrics.widthPixels * Constants.COMMON_DIALOG_WIDTH)
-        val height = (displayMetrics.heightPixels * Constants.COMMON_DIALOG_HEIGHT)
-
-        dialog?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-        dialog?.window?.setLayout(width.toInt(), height.toInt())
-        dialog?.show()
     }
 
     fun hideDialog() {

@@ -22,11 +22,10 @@ import com.dellainfotech.smartTouch.common.interfaces.DialogAskListener
 import com.dellainfotech.smartTouch.common.interfaces.DialogShowListener
 import com.dellainfotech.smartTouch.common.utils.Constants
 import com.dellainfotech.smartTouch.common.utils.DialogUtil
-import com.dellainfotech.smartTouch.mqtt.MQTTConstants
 import com.dellainfotech.smartTouch.databinding.FragmentSceneBinding
 import com.dellainfotech.smartTouch.mqtt.AwsMqttSingleton
 import com.dellainfotech.smartTouch.mqtt.MQTTConnectionStatus
-import com.dellainfotech.smartTouch.mqtt.NetworkConnectionLiveData
+import com.dellainfotech.smartTouch.mqtt.MQTTConstants
 import com.dellainfotech.smartTouch.mqtt.NotifyManager
 import com.dellainfotech.smartTouch.ui.fragments.ModelBaseFragment
 import com.dellainfotech.smartTouch.ui.viewmodel.HomeViewModel
@@ -56,15 +55,17 @@ class SceneFragment : ModelBaseFragment<HomeViewModel, FragmentSceneBinding, Hom
             findNavController().navigateUp()
         }
 
-        mqttConnectionDisposable = NotifyManager.getMQTTConnectionInfo().observeOn(AndroidSchedulers.mainThread()).subscribe{
-            Log.e(logTag, " MQTTConnectionStatus = $it ")
-            when(it){
-                MQTTConnectionStatus.CONNECTED -> {
-                    Log.e(logTag, " MQTTConnectionStatus.CONNECTED ")
-                    subscribeToDevice(args.deviceDetail.deviceSerialNo)
+        mqttConnectionDisposable =
+            NotifyManager.getMQTTConnectionInfo().observeOn(AndroidSchedulers.mainThread())
+                .subscribe {
+                    Log.e(logTag, " MQTTConnectionStatus = $it ")
+                    when (it) {
+                        MQTTConnectionStatus.CONNECTED -> {
+                            Log.e(logTag, " MQTTConnectionStatus.CONNECTED ")
+                            subscribeToDevice(args.deviceDetail.deviceSerialNo)
+                        }
+                    }
                 }
-            }
-        }
 
         binding.ibCreate.setOnClickListener {
             findNavController().navigate(
@@ -117,15 +118,27 @@ class SceneFragment : ModelBaseFragment<HomeViewModel, FragmentSceneBinding, Hom
 
         })
 
-        NetworkConnectionLiveData().observe(viewLifecycleOwner, { isConnected ->
-            if (isConnected){
+        NotifyManager.internetInfo.observe(viewLifecycleOwner, { isConnected ->
+            if (isConnected) {
                 activity?.let {
                     DialogUtil.loadingAlert(it)
                 }
                 viewModel.getScene(BodyGetScene(args.roomDetail.id, args.deviceDetail.id))
                 viewModel.getControl()
-            }else {
-                Log.e(logTag, " internet is not available")
+            } else {
+                activity?.let {
+                    DialogUtil.deviceOfflineAlert(
+                        it,
+                        getString(R.string.text_no_internet_available),
+                        object : DialogShowListener {
+                            override fun onClick() {
+                                DialogUtil.hideDialog()
+                                findNavController().navigate(SceneFragmentDirections.actionGlobalHomeFragment())
+                            }
+
+                        }
+                    )
+                }
             }
         })
 
@@ -234,15 +247,21 @@ class SceneFragment : ModelBaseFragment<HomeViewModel, FragmentSceneBinding, Hom
 
                         if (jsonObject.has(MQTTConstants.AWS_STATUS)) {
                             val deviceStatus = jsonObject.getInt(MQTTConstants.AWS_STATUS)
-                            if (deviceStatus == 1){
+                            if (deviceStatus == 1) {
                                 DialogUtil.hideDialog()
-                            }else {
-                                DialogUtil.deviceOfflineAlert(it, onClick = object : DialogShowListener {
-                                    override fun onClick() {
-                                        findNavController().navigate(SceneFragmentDirections.actionSceneFragmentToRoomPanelFragment(args.roomDetail))
-                                    }
+                            } else {
+                                DialogUtil.deviceOfflineAlert(
+                                    it,
+                                    onClick = object : DialogShowListener {
+                                        override fun onClick() {
+                                            findNavController().navigate(
+                                                SceneFragmentDirections.actionSceneFragmentToRoomPanelFragment(
+                                                    args.roomDetail
+                                                )
+                                            )
+                                        }
 
-                                })
+                                    })
                             }
                         }
                     }

@@ -86,8 +86,7 @@ class DeviceCustomizationFragment :
         super.onViewCreated(view, savedInstanceState)
 
         val sizeList = arrayOf("Small", "Medium", "Large")
-        val fontNames =
-            arrayOf("Times New Roman", "Arial", "Roman")
+        val fontNames = arrayOf("Times New Roman", "Arial", "Roman")
 
         if (FastSave.getInstance().getBoolean(
                 Constants.isDeviceCustomizationLocked,
@@ -119,14 +118,26 @@ class DeviceCustomizationFragment :
 
         }
 
-        NetworkConnectionLiveData().observe(viewLifecycleOwner, { isConnected ->
+        NotifyManager.internetInfo.observe(viewLifecycleOwner, { isConnected ->
             if (isConnected) {
                 activity?.let {
                     DialogUtil.loadingAlert(it)
                 }
                 viewModel.getDeviceCustomization(args.deviceDetail.id)
             } else {
-                Log.e(logTag, " internet is not available")
+                activity?.let {
+                    DialogUtil.deviceOfflineAlert(
+                        it,
+                        getString(R.string.text_no_internet_available),
+                        object : DialogShowListener {
+                            override fun onClick() {
+                                DialogUtil.hideDialog()
+                                findNavController().navigate(DeviceCustomizationFragmentDirections.actionGlobalHomeFragment())
+                            }
+
+                        }
+                    )
+                }
             }
         })
 

@@ -32,14 +32,6 @@
         <item name="android:windowNoTitle">true</item>
     </style>
 
-<!--    <style name="BackArrowImageStyle" parent="Widget.AppCompat.ImageButton">
-        <item name="android:layout_width">@dimen/_18sdp</item>
-        <item name="android:layout_height">@dimen/_12sdp</item>
-        <item name="android:layout_marginTop">@dimen/_18sdp</item>
-        <item name="android:layout_marginStart">@dimen/screen_start_margin</item>
-        <item name="android:background">@drawable/ic_back_arrow</item>
-    </style>-->
-
     <style name="BackArrowImageStyle">
         <item name="android:layout_width">@dimen/_40sdp</item>
         <item name="android:layout_height">@dimen/_30sdp</item>
@@ -47,13 +39,6 @@
         <item name="android:src">@drawable/ic_back_arrow</item>
         <item name="android:padding">@dimen/_10sdp</item>
     </style>
-
-  <!--  <style name="BackImageStyle" parent="Widget.AppCompat.ImageButton">
-        <item name="android:layout_width">@dimen/_11sdp</item>
-        <item name="android:layout_height">@dimen/_18sdp</item>
-        <item name="android:layout_marginStart">@dimen/screen_start_margin</item>
-        <item name="android:background">@drawable/ic_back</item>
-    </style>-->
 
     <style name="BackImageStyle">
         <item name="android:layout_width">@dimen/_30sdp</item>

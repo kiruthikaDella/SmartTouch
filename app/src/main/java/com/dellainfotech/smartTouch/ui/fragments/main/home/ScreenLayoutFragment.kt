@@ -12,6 +12,7 @@ import android.view.Window
 import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.DialogFragment
+import androidx.lifecycle.observe
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.amazonaws.mobileconnectors.iot.AWSIotMqttQos
@@ -121,6 +122,24 @@ class ScreenLayoutFragment : DialogFragment() {
                 binding.ivBottomCenter.performClick()
             }
         }
+
+        NotifyManager.internetInfo.observe(viewLifecycleOwner, { isConnected ->
+            if (!isConnected) {
+                activity?.let {
+                    DialogUtil.deviceOfflineAlert(
+                        it,
+                        getString(R.string.text_no_internet_available),
+                        object : DialogShowListener {
+                            override fun onClick() {
+                                DialogUtil.hideDialog()
+                                findNavController().navigate(ScreenLayoutFragmentDirections.actionGlobalHomeFragment())
+                            }
+
+                        }
+                    )
+                }
+            }
+        })
 
 
         binding.ivBack.setOnClickListener {

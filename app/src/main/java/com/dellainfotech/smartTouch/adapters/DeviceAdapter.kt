@@ -406,7 +406,7 @@ class DeviceAdapter(
                     seekParams?.progress?.let {
                         publishDimmer(
                             device.deviceSerialNo,
-                            MQTTConstants.AWS_USB_PORT_C,
+                            MQTTConstants.AWS_DMR,
                             it
                         )
                     }
@@ -569,7 +569,7 @@ class DeviceAdapter(
                     seekParams?.progress?.let {
                         publishDimmer(
                             device.deviceSerialNo,
-                            MQTTConstants.AWS_USB_PORT_C,
+                            MQTTConstants.AWS_DMR,
                             it
                         )
                     }
@@ -736,6 +736,7 @@ class DeviceAdapter(
         val payload = JSONObject()
         payload.put(switchIndex, switchValue)
 
+        Log.e(logTag, " publishSwitch payload $payload  ")
         AwsMqttSingleton.publish(
             MQTTConstants.CONTROL_DEVICE_SWITCHES.replace(
                 MQTTConstants.AWS_DEVICE_ID,
@@ -747,6 +748,8 @@ class DeviceAdapter(
     private fun publishDimmer(deviceId: String, switchIndex: String, progress: Int) {
         val payload = JSONObject()
         payload.put(switchIndex, progress)
+
+        Log.e(logTag, " publishDimmer payload $payload  ")
 
         AwsMqttSingleton.publish(
             MQTTConstants.CONTROL_DEVICE_SWITCHES.replace(

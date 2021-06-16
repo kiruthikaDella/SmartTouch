@@ -2,7 +2,6 @@ package com.dellainfotech.smartTouch.ui.fragments.main.home
 
 import android.annotation.SuppressLint
 import android.app.Dialog
-import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
@@ -26,17 +25,14 @@ import com.dellainfotech.smartTouch.api.Resource
 import com.dellainfotech.smartTouch.api.body.BodyChangePassword
 import com.dellainfotech.smartTouch.api.body.BodyOwnership
 import com.dellainfotech.smartTouch.api.body.BodyUpdateUserProfile
-import com.dellainfotech.smartTouch.api.model.UserProfile
 import com.dellainfotech.smartTouch.api.repository.HomeRepository
 import com.dellainfotech.smartTouch.common.utils.Constants
 import com.dellainfotech.smartTouch.common.utils.DialogUtil
 import com.dellainfotech.smartTouch.common.utils.Utils.toEditable
 import com.dellainfotech.smartTouch.databinding.FragmentAccountSettingsBinding
-import com.dellainfotech.smartTouch.mqtt.NetworkConnectionLiveData
-import com.dellainfotech.smartTouch.ui.activities.MainActivity
+import com.dellainfotech.smartTouch.mqtt.NotifyManager
 import com.dellainfotech.smartTouch.ui.fragments.ModelBaseFragment
 import com.dellainfotech.smartTouch.ui.viewmodel.HomeViewModel
-import com.github.dhaval2404.colorpicker.util.setVisibility
 import com.google.android.material.button.MaterialButton
 
 /**
@@ -113,17 +109,17 @@ class AccountSettingsFragment :
                 binding.edtMasterName.error = getString(R.string.error_text_full_name_length)
             } else if (email.isEmpty()) {
                 binding.edtMasterEmail.error = getString(R.string.error_text_email)
-            }else if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+            } else if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
                 binding.edtMasterEmail.error = getString(R.string.error_text_valid_email)
-            }else {
+            } else {
                 activity?.let {
                     DialogUtil.loadingAlert(it)
                 }
-                viewModel.transferOwnership(BodyOwnership(email,name))
+                viewModel.transferOwnership(BodyOwnership(email, name))
             }
         }
 
-        if (FastSave.getInstance().getString(Constants.SOCIAL_ID, null) != "0"){
+        if (FastSave.getInstance().getString(Constants.SOCIAL_ID, null) != "0") {
             binding.ivPassword.visibility = View.INVISIBLE
             binding.tvTitlePassword.visibility = View.INVISIBLE
             binding.edtPassword.visibility = View.INVISIBLE
@@ -150,14 +146,14 @@ class AccountSettingsFragment :
 
     private fun apiCall() {
 
-        NetworkConnectionLiveData().observe(viewLifecycleOwner, { isConnected ->
-            if (isConnected){
+        NotifyManager.internetInfo.observe(viewLifecycleOwner, { isConnected ->
+            if (isConnected) {
                 activity?.let {
                     DialogUtil.loadingAlert(it)
                 }
                 viewModel.getUserProfile()
                 viewModel.getOwnership()
-            }else {
+            } else {
                 Log.e(logTag, " internet is not available")
             }
         })
@@ -284,11 +280,11 @@ class AccountSettingsFragment :
         })
 
         viewModel.transferOwnershipResponse.observe(viewLifecycleOwner, { response ->
-            when(response){
+            when (response) {
                 is Resource.Success -> {
                     DialogUtil.hideDialog()
                     context?.let {
-                        Toast.makeText(it,response.values.message,Toast.LENGTH_SHORT).show()
+                        Toast.makeText(it, response.values.message, Toast.LENGTH_SHORT).show()
                     }
                     if (response.values.status && response.values.code == Constants.API_SUCCESS_CODE) {
                         response.values.data?.let {
@@ -300,7 +296,10 @@ class AccountSettingsFragment :
                 }
                 is Resource.Failure -> {
                     DialogUtil.hideDialog()
-                    Log.e(logTag, " transferOwnershipResponse Failure ${response.errorBody?.string()} ")
+                    Log.e(
+                        logTag,
+                        " transferOwnershipResponse Failure ${response.errorBody?.string()} "
+                    )
                 }
                 else -> {
                     //We will do nothing here
@@ -328,23 +327,33 @@ class AccountSettingsFragment :
 
 
             edtCurrentPassword.setOnTouchListener { _, event ->
-                val DRAWABLE_END  = 2
+                val DRAWABLE_END = 2
 
-                if(event.action == MotionEvent.ACTION_UP) {
-                    if(event.rawX >= (edtCurrentPassword.right - edtCurrentPassword.compoundDrawables[DRAWABLE_END].bounds.width())) {
-                        if (isCurrentPasswordVisible){
+                if (event.action == MotionEvent.ACTION_UP) {
+                    if (event.rawX >= (edtCurrentPassword.right - edtCurrentPassword.compoundDrawables[DRAWABLE_END].bounds.width())) {
+                        if (isCurrentPasswordVisible) {
                             isCurrentPasswordVisible = false
                             context?.let {
-                                edtCurrentPassword.setCompoundDrawablesWithIntrinsicBounds(null,null,
-                                    ContextCompat.getDrawable(it,R.drawable.ic_password_visible),null)
-                                edtCurrentPassword.transformationMethod = HideReturnsTransformationMethod.getInstance()
+                                edtCurrentPassword.setCompoundDrawablesWithIntrinsicBounds(
+                                    null,
+                                    null,
+                                    ContextCompat.getDrawable(it, R.drawable.ic_password_visible),
+                                    null
+                                )
+                                edtCurrentPassword.transformationMethod =
+                                    HideReturnsTransformationMethod.getInstance()
                             }
-                        }else {
+                        } else {
                             isCurrentPasswordVisible = true
                             context?.let {
-                                edtCurrentPassword.setCompoundDrawablesWithIntrinsicBounds(null,null,
-                                    ContextCompat.getDrawable(it,R.drawable.ic_password_hidden),null)
-                                edtCurrentPassword.transformationMethod = PasswordTransformationMethod.getInstance()
+                                edtCurrentPassword.setCompoundDrawablesWithIntrinsicBounds(
+                                    null,
+                                    null,
+                                    ContextCompat.getDrawable(it, R.drawable.ic_password_hidden),
+                                    null
+                                )
+                                edtCurrentPassword.transformationMethod =
+                                    PasswordTransformationMethod.getInstance()
                             }
                         }
 
@@ -355,23 +364,33 @@ class AccountSettingsFragment :
             }
 
             edtPassword.setOnTouchListener { _, event ->
-                val DRAWABLE_END  = 2
+                val DRAWABLE_END = 2
 
-                if(event.action == MotionEvent.ACTION_UP) {
-                    if(event.rawX >= (edtPassword.right - edtPassword.compoundDrawables[DRAWABLE_END].bounds.width())) {
-                        if (isPasswordVisible){
+                if (event.action == MotionEvent.ACTION_UP) {
+                    if (event.rawX >= (edtPassword.right - edtPassword.compoundDrawables[DRAWABLE_END].bounds.width())) {
+                        if (isPasswordVisible) {
                             isPasswordVisible = false
                             context?.let {
-                                edtPassword.setCompoundDrawablesWithIntrinsicBounds(null,null,
-                                    ContextCompat.getDrawable(it,R.drawable.ic_password_visible),null)
-                                edtPassword.transformationMethod = HideReturnsTransformationMethod.getInstance()
+                                edtPassword.setCompoundDrawablesWithIntrinsicBounds(
+                                    null,
+                                    null,
+                                    ContextCompat.getDrawable(it, R.drawable.ic_password_visible),
+                                    null
+                                )
+                                edtPassword.transformationMethod =
+                                    HideReturnsTransformationMethod.getInstance()
                             }
-                        }else {
+                        } else {
                             isPasswordVisible = true
                             context?.let {
-                                edtPassword.setCompoundDrawablesWithIntrinsicBounds(null,null,
-                                    ContextCompat.getDrawable(it,R.drawable.ic_password_hidden),null)
-                                edtPassword.transformationMethod = PasswordTransformationMethod.getInstance()
+                                edtPassword.setCompoundDrawablesWithIntrinsicBounds(
+                                    null,
+                                    null,
+                                    ContextCompat.getDrawable(it, R.drawable.ic_password_hidden),
+                                    null
+                                )
+                                edtPassword.transformationMethod =
+                                    PasswordTransformationMethod.getInstance()
                             }
                         }
 
@@ -382,23 +401,33 @@ class AccountSettingsFragment :
             }
 
             edtConfirmPassword.setOnTouchListener { _, event ->
-                val DRAWABLE_END  = 2
+                val DRAWABLE_END = 2
 
-                if(event.action == MotionEvent.ACTION_UP) {
-                    if(event.rawX >= (edtConfirmPassword.right - edtConfirmPassword.compoundDrawables[DRAWABLE_END].bounds.width())) {
-                        if (isConfirmPasswordVisible){
+                if (event.action == MotionEvent.ACTION_UP) {
+                    if (event.rawX >= (edtConfirmPassword.right - edtConfirmPassword.compoundDrawables[DRAWABLE_END].bounds.width())) {
+                        if (isConfirmPasswordVisible) {
                             isConfirmPasswordVisible = false
                             context?.let {
-                                edtConfirmPassword.setCompoundDrawablesWithIntrinsicBounds(null,null,
-                                    ContextCompat.getDrawable(it,R.drawable.ic_password_visible),null)
-                                edtConfirmPassword.transformationMethod = HideReturnsTransformationMethod.getInstance()
+                                edtConfirmPassword.setCompoundDrawablesWithIntrinsicBounds(
+                                    null,
+                                    null,
+                                    ContextCompat.getDrawable(it, R.drawable.ic_password_visible),
+                                    null
+                                )
+                                edtConfirmPassword.transformationMethod =
+                                    HideReturnsTransformationMethod.getInstance()
                             }
-                        }else {
+                        } else {
                             isConfirmPasswordVisible = true
                             context?.let {
-                                edtConfirmPassword.setCompoundDrawablesWithIntrinsicBounds(null,null,
-                                    ContextCompat.getDrawable(it,R.drawable.ic_password_hidden),null)
-                                edtConfirmPassword.transformationMethod = PasswordTransformationMethod.getInstance()
+                                edtConfirmPassword.setCompoundDrawablesWithIntrinsicBounds(
+                                    null,
+                                    null,
+                                    ContextCompat.getDrawable(it, R.drawable.ic_password_hidden),
+                                    null
+                                )
+                                edtConfirmPassword.transformationMethod =
+                                    PasswordTransformationMethod.getInstance()
                             }
                         }
 

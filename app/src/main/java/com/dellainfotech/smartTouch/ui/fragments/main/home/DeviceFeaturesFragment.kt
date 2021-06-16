@@ -18,13 +18,12 @@ import com.dellainfotech.smartTouch.api.repository.HomeRepository
 import com.dellainfotech.smartTouch.common.interfaces.DialogShowListener
 import com.dellainfotech.smartTouch.common.utils.Constants
 import com.dellainfotech.smartTouch.common.utils.DialogUtil
-import com.dellainfotech.smartTouch.mqtt.MQTTConstants
 import com.dellainfotech.smartTouch.common.utils.Utils.toBoolean
 import com.dellainfotech.smartTouch.common.utils.Utils.toInt
 import com.dellainfotech.smartTouch.databinding.FragmentDeviceFeaturesBinding
 import com.dellainfotech.smartTouch.mqtt.AwsMqttSingleton
 import com.dellainfotech.smartTouch.mqtt.MQTTConnectionStatus
-import com.dellainfotech.smartTouch.mqtt.NetworkConnectionLiveData
+import com.dellainfotech.smartTouch.mqtt.MQTTConstants
 import com.dellainfotech.smartTouch.mqtt.NotifyManager
 import com.dellainfotech.smartTouch.ui.fragments.ModelBaseFragment
 import com.dellainfotech.smartTouch.ui.viewmodel.HomeViewModel
@@ -52,33 +51,56 @@ class DeviceFeaturesFragment :
         }
 
         binding.ivCreateSceneSettings.setOnClickListener {
-            findNavController().navigate(DeviceFeaturesFragmentDirections.actionDeviceFeaturesFragmentToSceneFragment(args.deviceDetail,args.roomDetail))
+            findNavController().navigate(
+                DeviceFeaturesFragmentDirections.actionDeviceFeaturesFragmentToSceneFragment(
+                    args.deviceDetail,
+                    args.roomDetail
+                )
+            )
         }
 
-        mqttConnectionDisposable = NotifyManager.getMQTTConnectionInfo().observeOn(AndroidSchedulers.mainThread()).subscribe{
-            Log.e(logTag, " MQTTConnectionStatus = $it ")
-            when(it){
-                MQTTConnectionStatus.CONNECTED -> {
-                    Log.e(logTag, " MQTTConnectionStatus.CONNECTED ")
-                    subscribeToDevice(args.deviceDetail.deviceSerialNo)
+        mqttConnectionDisposable =
+            NotifyManager.getMQTTConnectionInfo().observeOn(AndroidSchedulers.mainThread())
+                .subscribe {
+                    Log.e(logTag, " MQTTConnectionStatus = $it ")
+                    when (it) {
+                        MQTTConnectionStatus.CONNECTED -> {
+                            Log.e(logTag, " MQTTConnectionStatus.CONNECTED ")
+                            subscribeToDevice(args.deviceDetail.deviceSerialNo)
+                        }
+                    }
                 }
-            }
-        }
 
-        NetworkConnectionLiveData().observe(viewLifecycleOwner, { isConnected ->
-            if (isConnected){
+        NotifyManager.internetInfo.observe(viewLifecycleOwner, { isConnected ->
+            if (isConnected) {
                 activity?.let {
                     DialogUtil.loadingAlert(it)
                 }
                 viewModel.getDeviceFeatures(args.deviceDetail.id)
-            }else {
-                Log.e(logTag, " internet is not available")
+            } else {
+                activity?.let {
+                    DialogUtil.deviceOfflineAlert(
+                        it,
+                        getString(R.string.text_no_internet_available),
+                        object : DialogShowListener {
+                            override fun onClick() {
+                                DialogUtil.hideDialog()
+                                findNavController().navigate(DeviceCustomizationFragmentDirections.actionGlobalHomeFragment())
+                            }
+
+                        }
+                    )
+                }
             }
         })
 
         binding.rgDisplayBrightness.setOnCheckedChangeListener { group, checkedId ->
             binding.seekBarBrightness.isVisible =
-                binding.rgDisplayBrightness.indexOfChild(binding.rgDisplayBrightness.findViewById(checkedId)) != 0
+                binding.rgDisplayBrightness.indexOfChild(
+                    binding.rgDisplayBrightness.findViewById(
+                        checkedId
+                    )
+                ) != 0
         }
 
         viewModel.getDeviceFeatureSettingsResponse.observe(viewLifecycleOwner, { response ->
@@ -87,13 +109,19 @@ class DeviceFeaturesFragment :
                     DialogUtil.hideDialog()
                     if (response.values.status && response.values.code == Constants.API_SUCCESS_CODE) {
                         response.values.data?.let { deviceFeatureData ->
-                            binding.switchSleepMode.isChecked = deviceFeatureData.sleepMode.toBoolean()
-                            binding.switchNightMode.isChecked = deviceFeatureData.nightMode.toBoolean()
-                            binding.switchOutdoorMode.isChecked = deviceFeatureData.outdoorMode.toBoolean()
+                            binding.switchSleepMode.isChecked =
+                                deviceFeatureData.sleepMode.toBoolean()
+                            binding.switchNightMode.isChecked =
+                                deviceFeatureData.nightMode.toBoolean()
+                            binding.switchOutdoorMode.isChecked =
+                                deviceFeatureData.outdoorMode.toBoolean()
                             binding.switchTime.isChecked = deviceFeatureData.time.toBoolean()
-                            binding.switchWeatherReport.isChecked = deviceFeatureData.weatherReport.toBoolean()
-                            binding.switchRoomTemperature.isChecked = deviceFeatureData.roomTemperature.toBoolean()
-                            binding.seekBarBrightness.progress = deviceFeatureData.displayBrightnessValue.toInt()
+                            binding.switchWeatherReport.isChecked =
+                                deviceFeatureData.weatherReport.toBoolean()
+                            binding.switchRoomTemperature.isChecked =
+                                deviceFeatureData.roomTemperature.toBoolean()
+                            binding.seekBarBrightness.progress =
+                                deviceFeatureData.displayBrightnessValue.toInt()
 
                             binding.rgTimeFormat.check(binding.rgTimeFormat[deviceFeatureData.timeFormat].id)
                             binding.rgTemperatureUnit.check(binding.rgTemperatureUnit[deviceFeatureData.temperatureUnit].id)
@@ -107,7 +135,10 @@ class DeviceFeaturesFragment :
                 }
                 is Resource.Failure -> {
                     DialogUtil.hideDialog()
-                    Log.e(logTag, " getDeviceFeatureSettingsResponse Failure ${response.errorBody?.string()} ")
+                    Log.e(
+                        logTag,
+                        " getDeviceFeatureSettingsResponse Failure ${response.errorBody?.string()} "
+                    )
                 }
                 else -> {
                     // We will do nothing here
@@ -116,27 +147,57 @@ class DeviceFeaturesFragment :
         })
 
         binding.btnSynchronize.setOnClickListener {
-            if (AwsMqttSingleton.isConnected()){
+            if (AwsMqttSingleton.isConnected()) {
                 try {
                     val payload = JSONObject()
-                    payload.put(MQTTConstants.AWS_SLEEP_MODE,binding.switchSleepMode.isChecked.toInt())
-                    payload.put(MQTTConstants.AWS_NIGHT_MODE,binding.switchNightMode.isChecked.toInt())
-                    payload.put(MQTTConstants.AWS_OUTDOOR_MODE,binding.switchOutdoorMode.isChecked.toInt())
-                    payload.put(MQTTConstants.AWS_TIME_DISPLAY,binding.switchTime.isChecked.toInt())
-                    payload.put(MQTTConstants.AWS_TIME_FORMAT,binding.rgTimeFormat.indexOfChild(activity?.findViewById(binding.rgTimeFormat.checkedRadioButtonId)))
-                    payload.put(MQTTConstants.AWS_WEATHER_REPORT_DISPLAY,binding.switchWeatherReport.isChecked.toInt())
-                    payload.put(MQTTConstants.AWS_ROOM_TEMPERATURE_DISPLAY,binding.switchRoomTemperature.isChecked.toInt())
-                    payload.put(MQTTConstants.AWS_TEMPERATURE_UNIT,binding.rgTemperatureUnit.indexOfChild(activity?.findViewById(binding.rgTemperatureUnit.checkedRadioButtonId)))
-                    payload.put(MQTTConstants.AWS_BRIGHTNESS_MODE,binding.rgDisplayBrightness.indexOfChild(activity?.findViewById(binding.rgDisplayBrightness.checkedRadioButtonId)))
-                    payload.put(MQTTConstants.AWS_BRIGHTNESS_VALUE,binding.seekBarBrightness.progress)
+                    payload.put(
+                        MQTTConstants.AWS_SLEEP_MODE,
+                        binding.switchSleepMode.isChecked.toInt()
+                    )
+                    payload.put(
+                        MQTTConstants.AWS_NIGHT_MODE,
+                        binding.switchNightMode.isChecked.toInt()
+                    )
+                    payload.put(
+                        MQTTConstants.AWS_OUTDOOR_MODE,
+                        binding.switchOutdoorMode.isChecked.toInt()
+                    )
+                    payload.put(
+                        MQTTConstants.AWS_TIME_DISPLAY,
+                        binding.switchTime.isChecked.toInt()
+                    )
+                    payload.put(
+                        MQTTConstants.AWS_TIME_FORMAT,
+                        binding.rgTimeFormat.indexOfChild(activity?.findViewById(binding.rgTimeFormat.checkedRadioButtonId))
+                    )
+                    payload.put(
+                        MQTTConstants.AWS_WEATHER_REPORT_DISPLAY,
+                        binding.switchWeatherReport.isChecked.toInt()
+                    )
+                    payload.put(
+                        MQTTConstants.AWS_ROOM_TEMPERATURE_DISPLAY,
+                        binding.switchRoomTemperature.isChecked.toInt()
+                    )
+                    payload.put(
+                        MQTTConstants.AWS_TEMPERATURE_UNIT,
+                        binding.rgTemperatureUnit.indexOfChild(activity?.findViewById(binding.rgTemperatureUnit.checkedRadioButtonId))
+                    )
+                    payload.put(
+                        MQTTConstants.AWS_BRIGHTNESS_MODE,
+                        binding.rgDisplayBrightness.indexOfChild(activity?.findViewById(binding.rgDisplayBrightness.checkedRadioButtonId))
+                    )
+                    payload.put(
+                        MQTTConstants.AWS_BRIGHTNESS_VALUE,
+                        binding.seekBarBrightness.progress
+                    )
 
                     publish(payload.toString())
-                }catch (e: Exception){
+                } catch (e: Exception) {
                     e.printStackTrace()
                 }
-            }else{
+            } else {
                 context?.let {
-                    Toast.makeText(it,"Please try again later!",Toast.LENGTH_SHORT).show()
+                    Toast.makeText(it, "Please try again later!", Toast.LENGTH_SHORT).show()
                 }
             }
         }
@@ -179,15 +240,17 @@ class DeviceFeaturesFragment :
 
                         if (jsonObject.has(MQTTConstants.AWS_STATUS)) {
                             val deviceStatus = jsonObject.getInt(MQTTConstants.AWS_STATUS)
-                            if (deviceStatus == 1){
+                            if (deviceStatus == 1) {
                                 DialogUtil.hideDialog()
-                            }else {
-                                DialogUtil.deviceOfflineAlert(it, onClick = object : DialogShowListener {
-                                    override fun onClick() {
-                                        findNavController().navigateUp()
-                                    }
+                            } else {
+                                DialogUtil.deviceOfflineAlert(
+                                    it,
+                                    onClick = object : DialogShowListener {
+                                        override fun onClick() {
+                                            findNavController().navigateUp()
+                                        }
 
-                                })
+                                    })
                             }
                         }
                     }
@@ -225,38 +288,59 @@ class DeviceFeaturesFragment :
 
                             val jsonObject = JSONObject(message)
 
-                            if (jsonObject.has(MQTTConstants.AWS_SLEEP_MODE)){
-                                binding.switchSleepMode.isChecked = jsonObject.getInt(MQTTConstants.AWS_SLEEP_MODE).toBoolean()
+                            if (jsonObject.has(MQTTConstants.AWS_SLEEP_MODE)) {
+                                binding.switchSleepMode.isChecked =
+                                    jsonObject.getInt(MQTTConstants.AWS_SLEEP_MODE).toBoolean()
                             }
-                            if (jsonObject.has(MQTTConstants.AWS_NIGHT_MODE)){
-                                binding.switchNightMode.isChecked = jsonObject.getInt(MQTTConstants.AWS_NIGHT_MODE).toBoolean()
+                            if (jsonObject.has(MQTTConstants.AWS_NIGHT_MODE)) {
+                                binding.switchNightMode.isChecked =
+                                    jsonObject.getInt(MQTTConstants.AWS_NIGHT_MODE).toBoolean()
                             }
-                            if (jsonObject.has(MQTTConstants.AWS_OUTDOOR_MODE)){
-                                binding.switchOutdoorMode.isChecked = jsonObject.getInt(MQTTConstants.AWS_OUTDOOR_MODE).toBoolean()
+                            if (jsonObject.has(MQTTConstants.AWS_OUTDOOR_MODE)) {
+                                binding.switchOutdoorMode.isChecked =
+                                    jsonObject.getInt(MQTTConstants.AWS_OUTDOOR_MODE).toBoolean()
                             }
-                            if (jsonObject.has(MQTTConstants.AWS_TIME_DISPLAY)){
-                                binding.switchTime.isChecked = jsonObject.getInt(MQTTConstants.AWS_TIME_DISPLAY).toBoolean()
+                            if (jsonObject.has(MQTTConstants.AWS_TIME_DISPLAY)) {
+                                binding.switchTime.isChecked =
+                                    jsonObject.getInt(MQTTConstants.AWS_TIME_DISPLAY).toBoolean()
                             }
-                            if (jsonObject.has(MQTTConstants.AWS_TIME_FORMAT)){
-                                binding.rgTimeFormat.check(binding.rgTimeFormat[jsonObject.getInt(MQTTConstants.AWS_TIME_FORMAT)].id)
+                            if (jsonObject.has(MQTTConstants.AWS_TIME_FORMAT)) {
+                                binding.rgTimeFormat.check(
+                                    binding.rgTimeFormat[jsonObject.getInt(
+                                        MQTTConstants.AWS_TIME_FORMAT
+                                    )].id
+                                )
                             }
-                            if (jsonObject.has(MQTTConstants.AWS_WEATHER_REPORT_DISPLAY)){
-                                binding.switchWeatherReport.isChecked = jsonObject.getInt(MQTTConstants.AWS_WEATHER_REPORT_DISPLAY).toBoolean()
+                            if (jsonObject.has(MQTTConstants.AWS_WEATHER_REPORT_DISPLAY)) {
+                                binding.switchWeatherReport.isChecked =
+                                    jsonObject.getInt(MQTTConstants.AWS_WEATHER_REPORT_DISPLAY)
+                                        .toBoolean()
                             }
-                            if (jsonObject.has(MQTTConstants.AWS_ROOM_TEMPERATURE_DISPLAY)){
-                                binding.switchRoomTemperature.isChecked = jsonObject.getInt(MQTTConstants.AWS_ROOM_TEMPERATURE_DISPLAY).toBoolean()
+                            if (jsonObject.has(MQTTConstants.AWS_ROOM_TEMPERATURE_DISPLAY)) {
+                                binding.switchRoomTemperature.isChecked =
+                                    jsonObject.getInt(MQTTConstants.AWS_ROOM_TEMPERATURE_DISPLAY)
+                                        .toBoolean()
                             }
-                            if (jsonObject.has(MQTTConstants.AWS_TEMPERATURE_UNIT)){
-                                binding.rgTemperatureUnit.check(binding.rgTemperatureUnit[jsonObject.getInt(MQTTConstants.AWS_TEMPERATURE_UNIT)].id)
+                            if (jsonObject.has(MQTTConstants.AWS_TEMPERATURE_UNIT)) {
+                                binding.rgTemperatureUnit.check(
+                                    binding.rgTemperatureUnit[jsonObject.getInt(
+                                        MQTTConstants.AWS_TEMPERATURE_UNIT
+                                    )].id
+                                )
                             }
-                            if (jsonObject.has(MQTTConstants.AWS_BRIGHTNESS_MODE)){
-                                binding.rgDisplayBrightness.check(binding.rgDisplayBrightness[jsonObject.getInt(MQTTConstants.AWS_BRIGHTNESS_MODE)].id)
+                            if (jsonObject.has(MQTTConstants.AWS_BRIGHTNESS_MODE)) {
+                                binding.rgDisplayBrightness.check(
+                                    binding.rgDisplayBrightness[jsonObject.getInt(
+                                        MQTTConstants.AWS_BRIGHTNESS_MODE
+                                    )].id
+                                )
                             }
-                            if (jsonObject.has(MQTTConstants.AWS_BRIGHTNESS_VALUE)){
-                                binding.seekBarBrightness.progress = jsonObject.getInt(MQTTConstants.AWS_BRIGHTNESS_VALUE)
+                            if (jsonObject.has(MQTTConstants.AWS_BRIGHTNESS_VALUE)) {
+                                binding.seekBarBrightness.progress =
+                                    jsonObject.getInt(MQTTConstants.AWS_BRIGHTNESS_VALUE)
                             }
 
-                        }catch (e: Exception){
+                        } catch (e: Exception) {
                             e.printStackTrace()
                         }
 

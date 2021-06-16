@@ -29,11 +29,13 @@ import com.dellainfotech.smartTouch.common.utils.Utils.clearError
 import com.dellainfotech.smartTouch.common.utils.Utils.toEditable
 import com.dellainfotech.smartTouch.databinding.ActivityMainBinding
 import com.dellainfotech.smartTouch.mqtt.NetworkConnectionLiveData
+import com.dellainfotech.smartTouch.mqtt.NotifyManager
 import com.dellainfotech.smartTouch.ui.fragments.main.home.HomeFragmentDirections
 import com.dellainfotech.smartTouch.ui.viewmodel.HomeViewModel
 import com.dellainfotech.smartTouch.ui.viewmodel.ViewModelFactory
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.sothree.slidinguppanel.SlidingUpPanelLayout
+
 
 /**
  * Created by Jignesh Dangar on 09-04-2021.
@@ -138,15 +140,16 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
             }
         })
 
-        NetworkConnectionLiveData().observe(this, { isConnected ->
-            if (isConnected){
+        NotifyManager.internetInfo.observe(this, { isConnected ->
+            if (isConnected) {
                 roomTypeList.toMutableList().clear()
                 viewModel.roomType()
-            }else {
-                DialogUtil.deviceOfflineAlert(this,title = getString(R.string.text_no_internet_available))
             }
         })
 
+        NetworkConnectionLiveData().observe(this, { isConnected ->
+            NotifyManager.internetInfo.postValue(isConnected)
+        })
 
         bottomNavigationClickEvent()
         apiResponses()
