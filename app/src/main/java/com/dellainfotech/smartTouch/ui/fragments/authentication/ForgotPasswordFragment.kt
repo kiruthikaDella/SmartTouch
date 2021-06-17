@@ -39,7 +39,7 @@ class ForgotPasswordFragment :
 
         binding.btnSend.setOnClickListener {
             val email = binding.edtEmail.text.toString().trim()
-            if (email.isNullOrBlank()){
+            if (email.isBlank()){
                 binding.edtEmail.error = getString(R.string.error_text_email)
             }else{
                 activity?.let {
@@ -67,6 +67,8 @@ class ForgotPasswordFragment :
                 is Resource.Failure -> {
                     DialogUtil.hideDialog()
                     Log.e(logTag, " Failure ${response.errorBody}")
+                }else -> {
+                    //We will do nothing here
                 }
             }
         })

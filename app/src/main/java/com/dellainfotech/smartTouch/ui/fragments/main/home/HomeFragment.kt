@@ -9,7 +9,6 @@ import android.view.ViewGroup
 import android.widget.TextView
 import android.widget.Toast
 import androidx.core.view.GravityCompat
-import androidx.lifecycle.observe
 import androidx.navigation.fragment.findNavController
 import com.appizona.yehiahd.fastsave.FastSave
 import com.dellainfotech.smartTouch.BuildConfig
@@ -27,6 +26,7 @@ import com.dellainfotech.smartTouch.mqtt.NotifyManager
 import com.dellainfotech.smartTouch.ui.activities.AuthenticationActivity
 import com.dellainfotech.smartTouch.ui.fragments.ModelBaseFragment
 import com.dellainfotech.smartTouch.ui.viewmodel.HomeViewModel
+import com.facebook.login.LoginManager
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
@@ -60,7 +60,7 @@ class HomeFragment : ModelBaseFragment<HomeViewModel, FragmentHomeBinding, HomeR
         roomsAdapter = RoomsAdapter(roomList)
         binding.recyclerRooms.adapter = roomsAdapter
 
-        binding.tvAppVersion.text = "Version - ${BuildConfig.VERSION_NAME}"
+        binding.tvAppVersion.text = String.format("%s", "Version - ${BuildConfig.VERSION_NAME}")
 
         initGoogleSignInClient()
 
@@ -82,16 +82,12 @@ class HomeFragment : ModelBaseFragment<HomeViewModel, FragmentHomeBinding, HomeR
     private fun apiCall() {
 
         NotifyManager.internetInfo.observe(viewLifecycleOwner, { isConnected ->
-            Log.e(logTag, " isConnected $isConnected ")
             if (isConnected) {
-                Log.e(logTag, " internet is available")
                 roomList.toMutableList().clear()
                 viewModel.getRoom()
                 activity?.let {
                     DialogUtil.loadingAlert(it)
                 }
-            } else {
-                Log.e(logTag, " internet is not available")
             }
         })
 
@@ -200,11 +196,11 @@ class HomeFragment : ModelBaseFragment<HomeViewModel, FragmentHomeBinding, HomeR
                 }
                 R.id.nav_logout -> {
 
-                    val loginType = FastSave.getInstance().getInt(Constants.LOGIN_TYPE,1)
-                    if (loginType == Constants.LOGIN_TYPE_GOOGLE){
+                    val loginType = FastSave.getInstance().getInt(Constants.LOGIN_TYPE, 1)
+                    if (loginType == Constants.LOGIN_TYPE_GOOGLE) {
                         mGoogleSingInClient?.signOut()
-                    }else if (loginType == Constants.LOGIN_TYPE_FACEBOOK){
-
+                    } else if (loginType == Constants.LOGIN_TYPE_FACEBOOK) {
+                        LoginManager.getInstance().logOut()
                     }
 
                     activity?.let {

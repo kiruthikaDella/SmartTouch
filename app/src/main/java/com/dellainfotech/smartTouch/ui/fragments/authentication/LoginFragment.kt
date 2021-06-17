@@ -1,6 +1,7 @@
 package com.dellainfotech.smartTouch.ui.fragments.authentication
 
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.text.method.HideReturnsTransformationMethod
@@ -12,6 +13,7 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult
 import androidx.core.content.ContextCompat
 import androidx.navigation.fragment.findNavController
 import com.appizona.yehiahd.fastsave.FastSave
@@ -39,6 +41,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
 import java.util.*
 
+
 /**
  * Created by Jignesh Dangar on 09-04-2021.
  */
@@ -49,7 +52,6 @@ class LoginFragment : ModelBaseFragment<AuthViewModel, FragmentLoginBinding, Aut
     private var isPasswordVisible = false
 
     //Google SignIn
-    private val GOOGLE_SIGN_IN_REQUEST = 1
     private var mGoogleSingInClient: GoogleSignInClient? = null
 
     @SuppressLint("ClickableViewAccessibility")
@@ -87,23 +89,6 @@ class LoginFragment : ModelBaseFragment<AuthViewModel, FragmentLoginBinding, Aut
             validateUserInformation()
         }
 
-        binding.linearGoogle.setOnClickListener {
-            if (isNetworkConnectivityAvailable()) {
-                val intent = mGoogleSingInClient?.signInIntent
-                startActivityForResult(intent, GOOGLE_SIGN_IN_REQUEST)
-            } else {
-                context?.let {
-                    showAlertDialog(
-                        it,
-                        getString(R.string.text_no_internet_available),
-                        "",
-                        getString(R.string.text_ok),
-                        null
-                    )
-                }
-            }
-        }
-
         binding.linearFacebook.setOnClickListener {
             if (isNetworkConnectivityAvailable()) {
                 (activity as AuthenticationActivity).performFacebookLogin()
@@ -121,10 +106,10 @@ class LoginFragment : ModelBaseFragment<AuthViewModel, FragmentLoginBinding, Aut
         }
 
         binding.edtPassword.setOnTouchListener { _, event ->
-            val DRAWABLE_END  = 2
+            val drawableEnd  = 2
 
             if(event.action == MotionEvent.ACTION_UP) {
-                if(event.rawX >= (binding.edtPassword.right - binding.edtPassword.compoundDrawables[DRAWABLE_END].bounds.width())) {
+                if(event.rawX >= (binding.edtPassword.right - binding.edtPassword.compoundDrawables[drawableEnd].bounds.width())) {
                     if (isPasswordVisible){
                         isPasswordVisible = false
                         context?.let {
@@ -140,11 +125,79 @@ class LoginFragment : ModelBaseFragment<AuthViewModel, FragmentLoginBinding, Aut
                             binding.edtPassword.transformationMethod = PasswordTransformationMethod.getInstance()
                         }
                     }
-
-                    true
                 }
             }
             false
+        }
+
+        activityLauncher()
+    }
+
+    private fun activityLauncher(){
+
+        val googleSignInResultLauncher = registerForActivityResult(
+            StartActivityForResult()
+        ) { result ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                val task = GoogleSignIn.getSignedInAccountFromIntent(result.data)
+
+                try {
+                    if (task.isSuccessful) {
+                        val account: GoogleSignInAccount? = task.getResult(ApiException::class.java)
+
+                        account?.let {
+
+                            Log.d(logTag, "Success Login User Id ${it.id} email ${it.email}")
+
+//                            val name = it.displayName?.split(" ")
+//                            val firstName = name?.get(0)
+//                            val lastName = name?.get(1)
+                            val email = it.email ?: ""
+                            Log.d(logTag, "account ${it.displayName} ")
+
+                            val uuid: String = UUID.randomUUID().toString()
+                            FastSave.getInstance().saveString(Constants.MOBILE_UUID, uuid)
+
+                            activity?.let { act ->
+                                DialogUtil.loadingAlert(act)
+                            }
+
+                            viewModel.socialLogin(
+                                BodySocialLogin(
+                                    it.id.toString(),
+                                    uuid,
+                                    Constants.SOCIAL_LOGIN,
+                                    email
+                                )
+                            )
+                        }
+                    } else {
+                        Log.e(logTag, "Google sign in cancelled")
+                    }
+                } catch (e: Exception) {
+                    Log.e(logTag, "${e.printStackTrace()}")
+                }
+
+            }
+        }
+
+        binding.linearGoogle.setOnClickListener {
+            if (isNetworkConnectivityAvailable()) {
+
+                val intent = mGoogleSingInClient?.signInIntent
+                googleSignInResultLauncher.launch(intent)
+
+            } else {
+                context?.let {
+                    showAlertDialog(
+                        it,
+                        getString(R.string.text_no_internet_available),
+                        "",
+                        getString(R.string.text_ok),
+                        null
+                    )
+                }
+            }
         }
     }
 
@@ -268,51 +321,6 @@ class LoginFragment : ModelBaseFragment<AuthViewModel, FragmentLoginBinding, Aut
             .build()
 
         mGoogleSingInClient = GoogleSignIn.getClient(requireActivity(), gso)
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-
-        if (requestCode == GOOGLE_SIGN_IN_REQUEST) {
-            val task = GoogleSignIn.getSignedInAccountFromIntent(data)
-
-            try {
-                if (task.isSuccessful) {
-                    val account: GoogleSignInAccount? = task.getResult(ApiException::class.java)
-
-                    account?.let {
-
-                        Log.d(logTag, "Success Login User Id ${it.id} email ${it.email}")
-
-                        val name = it.displayName?.split(" ")
-                        val firstName = name?.get(0)
-                        val lastName = name?.get(1)
-                        val email = it.email ?: ""
-                        Log.d(logTag, "account ${it.displayName} ")
-
-                        val uuid: String = UUID.randomUUID().toString()
-                        FastSave.getInstance().saveString(Constants.MOBILE_UUID, uuid)
-
-                        activity?.let { act ->
-                            DialogUtil.loadingAlert(act)
-                        }
-
-                        viewModel.socialLogin(
-                            BodySocialLogin(
-                                it.id.toString(),
-                                uuid,
-                                Constants.SOCIAL_LOGIN,
-                                email
-                            )
-                        )
-                    }
-                } else {
-                    Log.e(logTag, "Google sign in cancelled")
-                }
-            } catch (e: Exception) {
-                Log.e(logTag, "${e.printStackTrace()}")
-            }
-        }
     }
 
     override fun getViewModel(): Class<AuthViewModel> = AuthViewModel::class.java

@@ -50,11 +50,11 @@ class CreateAccountFragment :
             validateUserInformation()
         }
 
-        binding.edtPassword.setOnTouchListener { v, event ->
-            val DRAWABLE_END = 2
+        binding.edtPassword.setOnTouchListener { _, event ->
+            val drawableEnd = 2
 
             if (event.action == MotionEvent.ACTION_UP) {
-                if (event.rawX >= (binding.edtPassword.right - binding.edtPassword.compoundDrawables[DRAWABLE_END].bounds.width())) {
+                if (event.rawX >= (binding.edtPassword.right - binding.edtPassword.compoundDrawables[drawableEnd].bounds.width())) {
                     if (isPasswordVisible) {
                         isPasswordVisible = false
                         context?.let {
@@ -80,18 +80,16 @@ class CreateAccountFragment :
                                 PasswordTransformationMethod.getInstance()
                         }
                     }
-
-                    true
                 }
             }
             false
         }
 
-        binding.edtConfirmPassword.setOnTouchListener { v, event ->
-            val DRAWABLE_END = 2
+        binding.edtConfirmPassword.setOnTouchListener { _, event ->
+            val drawableEnd = 2
 
             if (event.action == MotionEvent.ACTION_UP) {
-                if (event.rawX >= (binding.edtConfirmPassword.right - binding.edtConfirmPassword.compoundDrawables[DRAWABLE_END].bounds.width())) {
+                if (event.rawX >= (binding.edtConfirmPassword.right - binding.edtConfirmPassword.compoundDrawables[drawableEnd].bounds.width())) {
                     if (isConfirmPasswordVisible) {
                         isConfirmPasswordVisible = false
                         context?.let {
@@ -117,8 +115,6 @@ class CreateAccountFragment :
                                 PasswordTransformationMethod.getInstance()
                         }
                     }
-
-                    true
                 }
             }
             false
@@ -143,6 +139,8 @@ class CreateAccountFragment :
                 is Resource.Failure -> {
                     DialogUtil.hideDialog()
                     Log.e(logTag, "registration error ${response.errorBody}")
+                }else -> {
+                    //We will do nothing here
                 }
             }
         })

@@ -8,7 +8,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.lifecycle.observe
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.dellainfotech.smartTouch.R
@@ -293,18 +292,22 @@ class DeviceFragment :
             val deviceName = binding.layoutRoomPanel.edtPanelName.text.toString().trim()
             val serialNumber = binding.layoutRoomPanel.edtSerialNumber.text.toString().trim()
 
-            if (deviceName.isEmpty()) {
-                binding.layoutRoomPanel.edtPanelName.error =
-                    getString(R.string.error_text_panel_name)
-            } else if (serialNumber.isEmpty()) {
-                binding.layoutRoomPanel.edtSerialNumber.error =
-                    getString(R.string.error_text_serial_number)
-            } else {
-                hidePanel()
-                Handler(Looper.getMainLooper()).postDelayed({
-                    showLoading()
-                    viewModel.addDevice(BodyAddDevice(serialNumber, args.roomDetail.id, deviceName))
-                }, 600)
+            when {
+                deviceName.isEmpty() -> {
+                    binding.layoutRoomPanel.edtPanelName.error =
+                        getString(R.string.error_text_panel_name)
+                }
+                serialNumber.isEmpty() -> {
+                    binding.layoutRoomPanel.edtSerialNumber.error =
+                        getString(R.string.error_text_serial_number)
+                }
+                else -> {
+                    hidePanel()
+                    Handler(Looper.getMainLooper()).postDelayed({
+                        showLoading()
+                        viewModel.addDevice(BodyAddDevice(serialNumber, args.roomDetail.id, deviceName))
+                    }, 600)
+                }
             }
         }
 

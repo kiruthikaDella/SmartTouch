@@ -9,7 +9,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.PopupMenu
 import android.widget.Toast
-import androidx.lifecycle.observe
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.amazonaws.mobileconnectors.iot.AWSIotMqttQos
@@ -47,6 +46,7 @@ import java.util.*
  * Created by Jignesh Dangar on 23-04-2021.
  */
 
+@Suppress("DEPRECATION")
 class CreateSceneFragment :
     ModelBaseFragment<HomeViewModel, FragmentCreateSceneBinding, HomeRepository>() {
 
@@ -70,6 +70,8 @@ class CreateSceneFragment :
                         MQTTConnectionStatus.CONNECTED -> {
                             Log.e(logTag, " MQTTConnectionStatus.CONNECTED ")
                             subscribeToDevice(args.deviceDetail.deviceSerialNo)
+                        }else -> {
+                            //We will do nothing here
                         }
                     }
                 }

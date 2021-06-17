@@ -4,20 +4,17 @@ import android.annotation.SuppressLint
 import android.app.Dialog
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
+import android.os.Build
 import android.os.Bundle
 import android.text.method.HideReturnsTransformationMethod
 import android.text.method.PasswordTransformationMethod
 import android.util.DisplayMetrics
 import android.util.Log
 import android.util.Patterns
-import android.view.LayoutInflater
-import android.view.MotionEvent
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.EditText
 import android.widget.Toast
 import androidx.core.content.ContextCompat
-import androidx.lifecycle.observe
 import androidx.navigation.fragment.findNavController
 import com.appizona.yehiahd.fastsave.FastSave
 import com.dellainfotech.smartTouch.R
@@ -35,10 +32,12 @@ import com.dellainfotech.smartTouch.ui.fragments.ModelBaseFragment
 import com.dellainfotech.smartTouch.ui.viewmodel.HomeViewModel
 import com.google.android.material.button.MaterialButton
 
+
 /**
  * Created by Jignesh Dangar on 26-04-2021.
  */
 
+@Suppress("DEPRECATION")
 class AccountSettingsFragment :
     ModelBaseFragment<HomeViewModel, FragmentAccountSettingsBinding, HomeRepository>() {
 
@@ -70,21 +69,26 @@ class AccountSettingsFragment :
             val fullName = binding.edtName.text.toString()
             val phoneNumber = binding.edtPhoneNumber.text.toString()
 
-            if (fullName.isEmpty()) {
-                binding.edtName.error = getString(R.string.error_text_full_name)
-            } else if (fullName.length < 3) {
-                binding.edtName.error = getString(R.string.error_text_full_name_length)
-            } else if (phoneNumber.isEmpty()) {
-                binding.edtPhoneNumber.error = getString(R.string.error_text_phone_number)
-            } else {
-                activity?.let {
-                    DialogUtil.loadingAlert(it)
-                    viewModel.updateUserProfile(
-                        BodyUpdateUserProfile(
-                            fullName,
-                            phoneNumber
+            when {
+                fullName.isEmpty() -> {
+                    binding.edtName.error = getString(R.string.error_text_full_name)
+                }
+                fullName.length < 3 -> {
+                    binding.edtName.error = getString(R.string.error_text_full_name_length)
+                }
+                phoneNumber.isEmpty() -> {
+                    binding.edtPhoneNumber.error = getString(R.string.error_text_phone_number)
+                }
+                else -> {
+                    activity?.let {
+                        DialogUtil.loadingAlert(it)
+                        viewModel.updateUserProfile(
+                            BodyUpdateUserProfile(
+                                fullName,
+                                phoneNumber
+                            )
                         )
-                    )
+                    }
                 }
             }
         }
@@ -266,6 +270,9 @@ class AccountSettingsFragment :
                             binding.edtMasterName.text = it.name.toEditable()
                             binding.edtMasterEmail.text = it.email.toEditable()
                             binding.btnUpdate.isEnabled = false
+                            if (it.isEmailVerified == 0){
+                                binding.btnUpdate.text = "Pending"
+                            }
                         }
                     }
                 }
@@ -327,10 +334,10 @@ class AccountSettingsFragment :
 
 
             edtCurrentPassword.setOnTouchListener { _, event ->
-                val DRAWABLE_END = 2
+                val drawableEnd = 2
 
                 if (event.action == MotionEvent.ACTION_UP) {
-                    if (event.rawX >= (edtCurrentPassword.right - edtCurrentPassword.compoundDrawables[DRAWABLE_END].bounds.width())) {
+                    if (event.rawX >= (edtCurrentPassword.right - edtCurrentPassword.compoundDrawables[drawableEnd].bounds.width())) {
                         if (isCurrentPasswordVisible) {
                             isCurrentPasswordVisible = false
                             context?.let {
@@ -357,17 +364,16 @@ class AccountSettingsFragment :
                             }
                         }
 
-                        true
                     }
                 }
                 false
             }
 
             edtPassword.setOnTouchListener { _, event ->
-                val DRAWABLE_END = 2
+                val drawableEnd = 2
 
                 if (event.action == MotionEvent.ACTION_UP) {
-                    if (event.rawX >= (edtPassword.right - edtPassword.compoundDrawables[DRAWABLE_END].bounds.width())) {
+                    if (event.rawX >= (edtPassword.right - edtPassword.compoundDrawables[drawableEnd].bounds.width())) {
                         if (isPasswordVisible) {
                             isPasswordVisible = false
                             context?.let {
@@ -394,17 +400,16 @@ class AccountSettingsFragment :
                             }
                         }
 
-                        true
                     }
                 }
                 false
             }
 
             edtConfirmPassword.setOnTouchListener { _, event ->
-                val DRAWABLE_END = 2
+                val drawableEnd = 2
 
                 if (event.action == MotionEvent.ACTION_UP) {
-                    if (event.rawX >= (edtConfirmPassword.right - edtConfirmPassword.compoundDrawables[DRAWABLE_END].bounds.width())) {
+                    if (event.rawX >= (edtConfirmPassword.right - edtConfirmPassword.compoundDrawables[drawableEnd].bounds.width())) {
                         if (isConfirmPasswordVisible) {
                             isConfirmPasswordVisible = false
                             context?.let {
@@ -431,7 +436,6 @@ class AccountSettingsFragment :
                             }
                         }
 
-                        true
                     }
                 }
                 false
@@ -446,28 +450,46 @@ class AccountSettingsFragment :
                 val newPassword = edtPassword.text.toString().trim()
                 val confirmPassword = edtConfirmPassword.text.toString().trim()
 
-                if (currentPassword.isEmpty()) {
-                    edtCurrentPassword.error = getString(R.string.error_text_current_password)
-                } else if (newPassword.isEmpty()) {
-                    edtPassword.error = getString(R.string.error_text_password)
-                } else if (newPassword.length < Constants.PASSWORD_LENGTH) {
-                    edtPassword.error = getString(R.string.error_text_password_length)
-                } else if (newPassword != confirmPassword) {
-                    edtConfirmPassword.error = getString(R.string.error_text_confirm_password)
-                } else {
-                    dialog?.dismiss()
-                    DialogUtil.loadingAlert(myActivity)
-                    viewModel.changePassword(BodyChangePassword(currentPassword, newPassword))
+                when {
+                    currentPassword.isEmpty() -> {
+                        edtCurrentPassword.error = getString(R.string.error_text_current_password)
+                    }
+                    newPassword.isEmpty() -> {
+                        edtPassword.error = getString(R.string.error_text_password)
+                    }
+                    newPassword.length < Constants.PASSWORD_LENGTH -> {
+                        edtPassword.error = getString(R.string.error_text_password_length)
+                    }
+                    newPassword != confirmPassword -> {
+                        edtConfirmPassword.error = getString(R.string.error_text_confirm_password)
+                    }
+                    else -> {
+                        dialog?.dismiss()
+                        DialogUtil.loadingAlert(myActivity)
+                        viewModel.changePassword(BodyChangePassword(currentPassword, newPassword))
+                    }
                 }
             }
 
-            val displayMetrics = DisplayMetrics()
-            myActivity.windowManager?.defaultDisplay?.getMetrics(displayMetrics)
-            val width = (displayMetrics.widthPixels * 0.85.toFloat())
-            val height = (displayMetrics.heightPixels * Constants.COMMON_DIALOG_HEIGHT)
+            val dpHeight: Float
+            val dpWidth: Float
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                val display: Display? = myActivity.display
+                val displayMetrics = DisplayMetrics()
+                display?.getRealMetrics(displayMetrics)
+                dpHeight = displayMetrics.heightPixels * Constants.COMMON_DIALOG_HEIGHT
+                dpWidth = displayMetrics.widthPixels * 0.85.toFloat()
+            } else {
+                val display: Display = myActivity.windowManager.defaultDisplay
+                val outMetrics = DisplayMetrics()
+                display.getMetrics(outMetrics)
+                dpHeight = outMetrics.heightPixels * Constants.COMMON_DIALOG_HEIGHT
+                dpWidth = outMetrics.widthPixels * 0.85.toFloat()
+            }
 
             dialog?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-            dialog?.window?.setLayout(width.toInt(), height.toInt())
+            dialog?.window?.setLayout(dpWidth.toInt(), dpHeight.toInt())
             dialog?.show()
         }
     }

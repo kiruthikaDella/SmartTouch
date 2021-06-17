@@ -722,6 +722,7 @@
                     android:layout_height="@dimen/_24sdp"
                     android:layout_marginStart="@dimen/_10sdp"
                     android:scaleType="fitXY"
+                    android:elevation="@dimen/_5sdp"
                     android:src="@drawable/triangle_up"
                     app:tint="@color/theme_color" />
 

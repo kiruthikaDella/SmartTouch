@@ -20,7 +20,6 @@ import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.core.view.isVisible
-import androidx.lifecycle.observe
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.amazonaws.mobileconnectors.iot.AWSIotMqttQos
@@ -103,6 +102,8 @@ class DeviceCustomizationFragment :
                     when (it) {
                         MQTTConnectionStatus.CONNECTED -> {
                             subscribeToDevice(args.deviceDetail.deviceSerialNo)
+                        }else -> {
+                            //We will do nothing here
                         }
                     }
                 }
@@ -158,7 +159,7 @@ class DeviceCustomizationFragment :
 
         binding.ibLock.setOnClickListener {
             activity?.let {
-                var msg = ""
+                val msg: String
                 if (isDeviceCustomizationLocked) {
                     isDeviceCustomizationLocked = false
                     msg = getString(R.string.dialog_title_text_unlock)
@@ -245,7 +246,7 @@ class DeviceCustomizationFragment :
             binding.layoutTextColor.linearTextColor.isVisible = false
             binding.layoutTextStyle.linearTextStyle.isVisible = true
 
-            val pos = textStyleAdapter?.getPosition(deviceCustomization?.textStyle) ?: 0
+            val pos = textStyleAdapter.getPosition(deviceCustomization?.textStyle)
             binding.layoutTextStyle.spinnerFonts.setSelection(pos)
 
             showPanel()

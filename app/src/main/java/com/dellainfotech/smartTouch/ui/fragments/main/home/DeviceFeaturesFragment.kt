@@ -8,7 +8,6 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.view.get
 import androidx.core.view.isVisible
-import androidx.lifecycle.observe
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.amazonaws.mobileconnectors.iot.AWSIotMqttQos
@@ -68,6 +67,9 @@ class DeviceFeaturesFragment :
                             Log.e(logTag, " MQTTConnectionStatus.CONNECTED ")
                             subscribeToDevice(args.deviceDetail.deviceSerialNo)
                         }
+                        else -> {
+                            //We will do nothing here
+                        }
                     }
                 }
 
@@ -94,7 +96,7 @@ class DeviceFeaturesFragment :
             }
         })
 
-        binding.rgDisplayBrightness.setOnCheckedChangeListener { group, checkedId ->
+        binding.rgDisplayBrightness.setOnCheckedChangeListener { _, checkedId ->
             binding.seekBarBrightness.isVisible =
                 binding.rgDisplayBrightness.indexOfChild(
                     binding.rgDisplayBrightness.findViewById(
@@ -280,7 +282,7 @@ class DeviceFeaturesFragment :
                                 Toast.LENGTH_SHORT
                             ).show()
 
-                            val topic1 = topic.split("/")
+                            // val topic1 = topic.split("/")
                             // topic [0] = ''
                             // topic [1] = smarttouch
                             // topic [2] = deviceId

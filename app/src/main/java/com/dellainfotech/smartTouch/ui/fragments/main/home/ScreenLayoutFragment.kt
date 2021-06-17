@@ -12,7 +12,6 @@ import android.view.Window
 import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.DialogFragment
-import androidx.lifecycle.observe
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.amazonaws.mobileconnectors.iot.AWSIotMqttQos
@@ -82,6 +81,9 @@ class ScreenLayoutFragment : DialogFragment() {
                         MQTTConnectionStatus.CONNECTED -> {
                             Log.e(logTag, " MQTTConnectionStatus.CONNECTED ")
                             subscribeToDevice(args.deviceDetail.deviceSerialNo)
+                        }
+                        else -> {
+                            //We will do nothing here
                         }
                     }
                 }
