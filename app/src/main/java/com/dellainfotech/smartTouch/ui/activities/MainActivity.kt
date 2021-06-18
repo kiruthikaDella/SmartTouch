@@ -121,6 +121,8 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
             }
         }
 
+        binding.layoutSlidingUpPanel.setFadeOnClickListener { hidePanel() }
+
         binding.layoutSlidingUpPanel.addPanelSlideListener(object :
             SlidingUpPanelLayout.PanelSlideListener {
             override fun onPanelSlide(panel: View?, slideOffset: Float) {

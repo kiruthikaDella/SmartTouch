@@ -157,6 +157,8 @@ class DeviceCustomizationFragment :
             findNavController().navigateUp()
         }
 
+        binding.layoutSlidingUpPanel.setFadeOnClickListener { hidePanel() }
+
         binding.ibLock.setOnClickListener {
             activity?.let {
                 val msg: String

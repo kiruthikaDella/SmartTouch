@@ -8,7 +8,6 @@ import androidx.lifecycle.OnLifecycleEvent
 import androidx.lifecycle.ProcessLifecycleOwner
 import com.appizona.yehiahd.fastsave.FastSave
 import com.dellainfotech.smartTouch.mqtt.AwsMqttSingleton
-import com.dellainfotech.smartTouch.mqtt.NetworkConnectionLiveData
 
 /**
  * Created by Jignesh Dangar on 09-04-2021.
@@ -34,7 +33,6 @@ class AppDelegate: Application(), LifecycleObserver {
         ProcessLifecycleOwner.get().lifecycle.addObserver(this)
 
     }
-
 
     @OnLifecycleEvent(Lifecycle.Event.ON_STOP)
     private fun onAppBackgrounded() {

@@ -11,7 +11,6 @@ import com.dellainfotech.smartTouch.api.model.CommonResponse
 import com.dellainfotech.smartTouch.api.model.SubordinateUserResponse
 import com.dellainfotech.smartTouch.api.repository.UserManagementRepository
 import kotlinx.coroutines.launch
-import okhttp3.RequestBody
 
 class UserManagementViewModel @ViewModelInject constructor(
     private val userManagementRepository: UserManagementRepository

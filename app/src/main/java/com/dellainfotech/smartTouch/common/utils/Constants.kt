@@ -1,7 +1,5 @@
 package com.dellainfotech.smartTouch.common.utils
 
-import com.amazonaws.regions.Regions
-
 /**
  * Created by Jignesh Dangar on 19-04-2021.
  */

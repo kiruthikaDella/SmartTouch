@@ -6,10 +6,7 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.TextView
 import com.dellainfotech.smartTouch.R
-import com.dellainfotech.smartTouch.adapters.faqadapter.AnswerModel
-import com.dellainfotech.smartTouch.adapters.faqadapter.QuestionModel
 import com.dellainfotech.smartTouch.api.model.GetRoomData
-import com.dellainfotech.smartTouch.api.model.RoomTypeData
 
 class RoomAdapter(private val activity: Activity, private val items: List<GetRoomData>) :
     ArrayAdapter<GetRoomData?>(activity, R.layout.simple_spinner_dropdown, items) {

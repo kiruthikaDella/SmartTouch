@@ -2,7 +2,6 @@ package com.dellainfotech.smartTouch.api.repository
 
 import com.dellainfotech.smartTouch.api.SmartTouchApi
 import com.dellainfotech.smartTouch.api.body.BodyAddSubordinateUser
-import okhttp3.RequestBody
 import javax.inject.Inject
 import javax.inject.Singleton
 

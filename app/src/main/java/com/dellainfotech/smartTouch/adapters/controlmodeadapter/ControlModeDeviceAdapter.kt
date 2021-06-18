@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.app.Activity
 import android.util.Log
 import android.view.LayoutInflater
-import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.widget.RelativeLayout
@@ -15,7 +14,7 @@ import com.dellainfotech.smartTouch.R
 import com.dellainfotech.smartTouch.api.model.GetDeviceData
 import com.dellainfotech.smartTouch.common.utils.Constants
 import com.dellainfotech.smartTouch.common.utils.Utils.toBoolean
-import com.dellainfotech.smartTouch.common.utils.Utils.toReverseInt
+import com.dellainfotech.smartTouch.common.utils.Utils.toInt
 import com.dellainfotech.smartTouch.mqtt.AwsMqttSingleton
 import com.dellainfotech.smartTouch.mqtt.MQTTConstants
 import com.google.android.material.switchmaterial.SwitchMaterial
@@ -212,113 +211,84 @@ class ControlModeDeviceAdapter(
                 }
             }
 
-            switchOne.setOnTouchListener { _, event ->
-                if (event.action == MotionEvent.ACTION_DOWN) {
-                    publish(
-                        device.deviceSerialNo,
-                        MQTTConstants.AWS_SWITCH_1,
-                        switchOne.isChecked.toReverseInt().toString()
-                    )
-                }
-                false
+            switchOne.setOnClickListener {
+                publish(
+                    device.deviceSerialNo,
+                    MQTTConstants.AWS_SWITCH_1,
+                    switchOne.isChecked.toInt().toString()
+                )
             }
 
-            switchTwo.setOnTouchListener { _, event ->
-                if (event.action == MotionEvent.ACTION_DOWN) {
-                    publish(
-                        device.deviceSerialNo,
-                        MQTTConstants.AWS_SWITCH_2,
-                        switchTwo.isChecked.toReverseInt().toString()
-                    )
-                }
-                false
+            switchTwo.setOnClickListener {
+                publish(
+                    device.deviceSerialNo,
+                    MQTTConstants.AWS_SWITCH_2,
+                    switchTwo.isChecked.toInt().toString()
+                )
             }
 
-            switchThree.setOnTouchListener { _, event ->
-                if (event.action == MotionEvent.ACTION_DOWN) {
-                    publish(
-                        device.deviceSerialNo,
-                        MQTTConstants.AWS_SWITCH_3,
-                        switchThree.isChecked.toReverseInt().toString()
-                    )
-                }
-                false
+            switchThree.setOnClickListener {
+                publish(
+                    device.deviceSerialNo,
+                    MQTTConstants.AWS_SWITCH_3,
+                    switchThree.isChecked.toInt().toString()
+                )
             }
 
-            switchFour.setOnTouchListener { _, event ->
-                if (event.action == MotionEvent.ACTION_DOWN) {
-                    publish(
-                        device.deviceSerialNo,
-                        MQTTConstants.AWS_SWITCH_4,
-                        switchFour.isChecked.toReverseInt().toString()
-                    )
-                }
-                false
+            switchFour.setOnClickListener {
+                publish(
+                    device.deviceSerialNo,
+                    MQTTConstants.AWS_SWITCH_4,
+                    switchFour.isChecked.toInt().toString()
+                )
             }
 
-            switchFive.setOnTouchListener { _, event ->
-                if (event.action == MotionEvent.ACTION_DOWN) {
-                    publish(
-                        device.deviceSerialNo,
-                        MQTTConstants.AWS_SWITCH_5,
-                        switchFive.isChecked.toReverseInt().toString()
-                    )
-                }
-                false
+            switchFive.setOnClickListener {
+                publish(
+                    device.deviceSerialNo,
+                    MQTTConstants.AWS_SWITCH_5,
+                    switchFive.isChecked.toInt().toString()
+                )
             }
 
-            switchSix.setOnTouchListener { _, event ->
-                if (event.action == MotionEvent.ACTION_DOWN) {
-                    publish(
-                        device.deviceSerialNo,
-                        MQTTConstants.AWS_SWITCH_6,
-                        switchSix.isChecked.toReverseInt().toString()
-                    )
-                }
-                false
+            switchSix.setOnClickListener {
+                publish(
+                    device.deviceSerialNo,
+                    MQTTConstants.AWS_SWITCH_6,
+                    switchSix.isChecked.toInt().toString()
+                )
             }
 
-            switchSeven.setOnTouchListener { _, event ->
-                if (event.action == MotionEvent.ACTION_DOWN) {
-                    publish(
-                        device.deviceSerialNo,
-                        MQTTConstants.AWS_SWITCH_7,
-                        switchSeven.isChecked.toReverseInt().toString()
-                    )
-                }
-                false
+            switchSeven.setOnClickListener {
+                publish(
+                    device.deviceSerialNo,
+                    MQTTConstants.AWS_SWITCH_7,
+                    switchSeven.isChecked.toInt().toString()
+                )
             }
 
-            switchEight.setOnTouchListener { _, event ->
-                if (event.action == MotionEvent.ACTION_DOWN) {
-                    publish(
-                        device.deviceSerialNo,
-                        MQTTConstants.AWS_SWITCH_8,
-                        switchEight.isChecked.toReverseInt().toString()
-                    )
-                }
-                false
+            switchEight.setOnClickListener {
+                publish(
+                    device.deviceSerialNo,
+                    MQTTConstants.AWS_SWITCH_8,
+                    switchEight.isChecked.toInt().toString()
+                )
             }
 
-            switchPortA.setOnTouchListener { _, event ->
-                if (event.action == MotionEvent.ACTION_DOWN) {
-                    publish(
-                        device.deviceSerialNo,
-                        MQTTConstants.AWS_USB_PORT_A,
-                        switchPortA.isChecked.toReverseInt().toString()
-                    )
-                }
-                false
+            switchPortA.setOnClickListener {
+                publish(
+                    device.deviceSerialNo,
+                    MQTTConstants.AWS_USB_PORT_A,
+                    switchPortA.isChecked.toInt().toString()
+                )
             }
-            switchPortC.setOnTouchListener { _, event ->
-                if (event.action == MotionEvent.ACTION_DOWN) {
-                    publish(
-                        device.deviceSerialNo,
-                        MQTTConstants.AWS_USB_PORT_C,
-                        switchPortC.isChecked.toReverseInt().toString()
-                    )
-                }
-                false
+
+            switchPortC.setOnClickListener {
+                publish(
+                    device.deviceSerialNo,
+                    MQTTConstants.AWS_USB_PORT_C,
+                    switchPortC.isChecked.toInt().toString()
+                )
             }
 
             seekBar.onSeekChangeListener = object : OnSeekChangeListener {
@@ -396,58 +366,44 @@ class ControlModeDeviceAdapter(
                 }
             }
 
-            switchOne.setOnTouchListener { _, event ->
-                if (event.action == MotionEvent.ACTION_DOWN) {
-                    publish(
-                        device.deviceSerialNo,
-                        MQTTConstants.AWS_SWITCH_1,
-                        switchOne.isChecked.toReverseInt().toString()
-                    )
-                }
-                false
+            switchOne.setOnClickListener {
+                publish(
+                    device.deviceSerialNo,
+                    MQTTConstants.AWS_SWITCH_1,
+                    switchOne.isChecked.toInt().toString()
+                )
             }
 
-            switchTwo.setOnTouchListener { _, event ->
-                if (event.action == MotionEvent.ACTION_DOWN) {
-                    publish(
-                        device.deviceSerialNo,
-                        MQTTConstants.AWS_SWITCH_2,
-                        switchTwo.isChecked.toReverseInt().toString()
-                    )
-                }
-                false
+            switchTwo.setOnClickListener {
+                publish(
+                    device.deviceSerialNo,
+                    MQTTConstants.AWS_SWITCH_2,
+                    switchTwo.isChecked.toInt().toString()
+                )
             }
 
-            switchThree.setOnTouchListener { _, event ->
-                if (event.action == MotionEvent.ACTION_DOWN) {
-                    publish(
-                        device.deviceSerialNo,
-                        MQTTConstants.AWS_SWITCH_3,
-                        switchThree.isChecked.toReverseInt().toString()
-                    )
-                }
-                false
+            switchThree.setOnClickListener {
+                publish(
+                    device.deviceSerialNo,
+                    MQTTConstants.AWS_SWITCH_3,
+                    switchThree.isChecked.toInt().toString()
+                )
             }
 
-            switchFour.setOnTouchListener { _, event ->
-                if (event.action == MotionEvent.ACTION_DOWN) {
-                    publish(
-                        device.deviceSerialNo,
-                        MQTTConstants.AWS_SWITCH_4,
-                        switchFour.isChecked.toReverseInt().toString()
-                    )
-                }
-                false
+            switchFour.setOnClickListener {
+                publish(
+                    device.deviceSerialNo,
+                    MQTTConstants.AWS_SWITCH_4,
+                    switchFour.isChecked.toInt().toString()
+                )
             }
-            switchPortC.setOnTouchListener { _, event ->
-                if (event.action == MotionEvent.ACTION_DOWN) {
-                    publish(
-                        device.deviceSerialNo,
-                        MQTTConstants.AWS_USB_PORT_C,
-                        switchPortC.isChecked.toReverseInt().toString()
-                    )
-                }
-                false
+
+            switchPortC.setOnClickListener {
+                publish(
+                    device.deviceSerialNo,
+                    MQTTConstants.AWS_USB_PORT_C,
+                    switchPortC.isChecked.toInt().toString()
+                )
             }
             seekBar.onSeekChangeListener = object : OnSeekChangeListener {
                 override fun onSeeking(seekParams: SeekParams?) {

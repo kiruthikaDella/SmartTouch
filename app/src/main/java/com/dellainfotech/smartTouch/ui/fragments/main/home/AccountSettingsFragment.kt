@@ -272,6 +272,8 @@ class AccountSettingsFragment :
                             binding.btnUpdate.isEnabled = false
                             if (it.isEmailVerified == 0){
                                 binding.btnUpdate.text = "Pending"
+                                binding.ivMasterEditName.isEnabled = false
+                                binding.ivMasterEditEmail.isEnabled = false
                             }
                         }
                     }

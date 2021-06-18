@@ -1,12 +1,10 @@
 package com.dellainfotech.smartTouch.adapters
 
 import android.app.Activity
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
-import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.Spinner
 import androidx.recyclerview.widget.RecyclerView
@@ -14,18 +12,13 @@ import com.dellainfotech.smartTouch.R
 import com.dellainfotech.smartTouch.adapters.spinneradapter.DeviceAdapter
 import com.dellainfotech.smartTouch.adapters.spinneradapter.RoomAdapter
 import com.dellainfotech.smartTouch.adapters.spinneradapter.SwitchAdapter
-import com.dellainfotech.smartTouch.api.body.BodySceneData
-import com.dellainfotech.smartTouch.api.body.BodyUpdateScene
 import com.dellainfotech.smartTouch.api.body.BodyUpdateSceneData
 import com.dellainfotech.smartTouch.api.model.*
-import com.dellainfotech.smartTouch.common.interfaces.AdapterItemClickListener
 import com.dellainfotech.smartTouch.common.interfaces.DialogAskListener
 import com.dellainfotech.smartTouch.common.utils.DialogUtil
 import com.dellainfotech.smartTouch.common.utils.Utils.toBoolean
 import com.dellainfotech.smartTouch.common.utils.Utils.toInt
 import com.google.android.material.switchmaterial.SwitchMaterial
-import java.util.*
-import kotlin.collections.ArrayList
 
 /**
  * Created by Jignesh Dangar on 22-04-2021.
@@ -38,7 +31,6 @@ class UpdateDeviceSceneAdapter(
 ) : RecyclerView.Adapter<UpdateDeviceSceneAdapter.MyViewHolder>() {
 
     private val roomDataList = arrayListOf<ControlModeRoomData>()
-    private val logTag = this::class.java.simpleName
 
     private var deleteClickListener: DeleteSceneItemClickListener<Scene>? = null
 
@@ -46,8 +38,16 @@ class UpdateDeviceSceneAdapter(
     var updateSceneList = arrayListOf<BodyUpdateSceneData>()
 
     init {
-        for (scene in scenes){
-            updateSceneList.add(BodyUpdateSceneData("", "", scene.id, scene.deviceSwitchId!!.id,scene.deviceSwitchSettingValue))
+        for (scene in scenes) {
+            updateSceneList.add(
+                BodyUpdateSceneData(
+                    "",
+                    "",
+                    scene.id,
+                    scene.deviceSwitchId!!.id,
+                    scene.deviceSwitchSettingValue
+                )
+            )
         }
     }
 
@@ -58,7 +58,7 @@ class UpdateDeviceSceneAdapter(
     }
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
-        updateSceneList.add(BodyUpdateSceneData("", "", null, "",0))
+        updateSceneList.add(BodyUpdateSceneData("", "", null, "", 0))
         setSpinners(holder)
     }
 
@@ -82,7 +82,7 @@ class UpdateDeviceSceneAdapter(
             spinnerRoom.adapter = roomAdapter
             scenes[adapterPosition].roomId?.let { roomData ->
                 spinnerRoom.setSelection(roomAdapter.getPositionById(roomData.id))
-            }?: kotlin.run {
+            } ?: kotlin.run {
                 spinnerRoom.setSelection(roomAdapter.getPositionById(roomId))
             }
 
@@ -113,7 +113,7 @@ class UpdateDeviceSceneAdapter(
                                                 deviceData.id
                                             )
                                         )
-                                    }?: kotlin.run {
+                                    } ?: kotlin.run {
                                         spinnerDevice.setSelection(
                                             deviceAdapter.getPositionById(
                                                 deviceId
@@ -206,12 +206,15 @@ class UpdateDeviceSceneAdapter(
                     mActivity.getString(R.string.text_no),
                     object : DialogAskListener {
                         override fun onYesClicked() {
-                            if (scenes[adapterPosition].id == ""){
-                       /*         scenes.removeAt(adapterPosition)
-                                notifyDataSetChanged()*/
+                            if (scenes[adapterPosition].id == "") {
+                                /*         scenes.removeAt(adapterPosition)
+                                         notifyDataSetChanged()*/
                                 deleteScene(adapterPosition)
-                            }else {
-                                deleteClickListener?.onItemClick(scenes[adapterPosition],adapterPosition)
+                            } else {
+                                deleteClickListener?.onItemClick(
+                                    scenes[adapterPosition],
+                                    adapterPosition
+                                )
                             }
                         }
 
@@ -224,22 +227,22 @@ class UpdateDeviceSceneAdapter(
         }
     }
 
-    fun deleteScene(position: Int){
-       /* val id = scenes[position].id
-        for ((index,value) in updateSceneList.withIndex()){
-            if (value.sceneDetailId == id){
-                updateSceneList.removeAt(index)
-                scenes.removeAt(position)
-                notifyDataSetChanged()
-            }
-        }*/
+    fun deleteScene(position: Int) {
+        /* val id = scenes[position].id
+         for ((index,value) in updateSceneList.withIndex()){
+             if (value.sceneDetailId == id){
+                 updateSceneList.removeAt(index)
+                 scenes.removeAt(position)
+                 notifyDataSetChanged()
+             }
+         }*/
         updateSceneList.removeAt(position)
         scenes.removeAt(position)
         notifyDataSetChanged()
     }
 
-    fun addScene(){
-        scenes.add(Scene("","",null,null,null,0))
+    fun addScene() {
+        scenes.add(Scene("", "", null, null, null, 0))
         notifyDataSetChanged()
     }
 
@@ -260,15 +263,15 @@ class UpdateDeviceSceneAdapter(
         return scenes
     }
 
-    fun isDuplicateSwitchFound(): Boolean{
+    fun isDuplicateSwitchFound(): Boolean {
 
         val scenes = getScenes()
 
         val switchList = arrayListOf<String>()
-        for (switch in scenes){
+        for (switch in scenes) {
             switchList.add(switch.deviceSwitchId)
         }
-        switchList.removeAll(listOf(null,""))
+        switchList.removeAll(listOf(null, ""))
         return switchList.size != switchList.distinct().count()
     }
 

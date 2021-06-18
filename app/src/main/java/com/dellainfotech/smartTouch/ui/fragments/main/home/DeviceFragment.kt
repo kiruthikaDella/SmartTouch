@@ -32,7 +32,6 @@ import com.dellainfotech.smartTouch.ui.fragments.ModelBaseFragment
 import com.dellainfotech.smartTouch.ui.viewmodel.HomeViewModel
 import com.sothree.slidinguppanel.SlidingUpPanelLayout
 
-
 /**
  * Created by Jignesh Dangar on 09-04-2021.
  */
@@ -104,6 +103,8 @@ class DeviceFragment :
     override fun getFragmentRepository(): HomeRepository = HomeRepository(networkModel)
 
     private fun clickEvents() {
+
+        binding.layoutSlidingUpPanel.setFadeOnClickListener { hidePanel() }
 
         binding.layoutSlidingUpPanel.addPanelSlideListener(object :
             SlidingUpPanelLayout.PanelSlideListener {
@@ -277,7 +278,6 @@ class DeviceFragment :
                     )
                 )
             }
-
         })
 
         binding.layoutRoomPanel.ivHidePanel.setOnClickListener {

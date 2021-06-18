@@ -1,9 +1,7 @@
 package com.dellainfotech.smartTouch.api.repository
 
 import com.dellainfotech.smartTouch.api.SmartTouchApi
-import com.dellainfotech.smartTouch.api.body.BodyAddRoom
 import com.dellainfotech.smartTouch.api.body.BodyFeedback
-import com.dellainfotech.smartTouch.api.body.BodyLogout
 import javax.inject.Inject
 import javax.inject.Singleton
 

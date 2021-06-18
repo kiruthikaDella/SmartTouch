@@ -6,7 +6,6 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.TextView
 import com.dellainfotech.smartTouch.R
-import com.dellainfotech.smartTouch.api.model.GetDeviceData
 
 class SpinnerAdapter(private val activity: Activity, private val items: List<String>) :
     ArrayAdapter<String?>(activity, R.layout.simple_spinner_dropdown, items) {
