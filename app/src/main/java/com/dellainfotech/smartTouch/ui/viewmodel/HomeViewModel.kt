@@ -304,6 +304,10 @@ class HomeViewModel @ViewModelInject constructor(
     val transferOwnershipResponse: LiveData<Resource<OwnershipResponse>>
         get() = _transferOwnershipResponse
 
+    private val _cancelOwnershipResponse: MutableLiveData<Resource<CommonResponse>> = MutableLiveData()
+    val cancelOwnershipResponse: LiveData<Resource<CommonResponse>>
+        get() = _cancelOwnershipResponse
+
     fun getOwnership() = viewModelScope.launch {
         _getOwnershipResponse.value = Resource.Loading
         _getOwnershipResponse.value = homeRepository.getOwnership()
@@ -312,6 +316,11 @@ class HomeViewModel @ViewModelInject constructor(
     fun transferOwnership(bodyOwnership: BodyOwnership) = viewModelScope.launch {
         _transferOwnershipResponse.value = Resource.Loading
         _transferOwnershipResponse.value = homeRepository.transferOwnership(bodyOwnership)
+    }
+
+    fun cancelOwnership(ownershipId: String) = viewModelScope.launch {
+        _cancelOwnershipResponse.value = Resource.Loading
+        _cancelOwnershipResponse.value = homeRepository.cancelTransferOwnership(ownershipId)
     }
 
     //

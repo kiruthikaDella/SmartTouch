@@ -394,7 +394,7 @@
                 android:layout_marginTop="@dimen/_30sdp"
                 android:fontFamily="@font/roboto_medium"
                 android:letterSpacing="0"
-                android:text="@string/text_update"
+                android:text="@string/text_transfer_ownership"
                 android:textAllCaps="false"
                 android:textColor="@color/white"
                 android:textSize="@dimen/_12ssp"

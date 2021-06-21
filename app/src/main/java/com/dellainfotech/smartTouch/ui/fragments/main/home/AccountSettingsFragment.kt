@@ -23,6 +23,8 @@ import com.dellainfotech.smartTouch.api.body.BodyChangePassword
 import com.dellainfotech.smartTouch.api.body.BodyOwnership
 import com.dellainfotech.smartTouch.api.body.BodyUpdateUserProfile
 import com.dellainfotech.smartTouch.api.repository.HomeRepository
+import com.dellainfotech.smartTouch.common.interfaces.DialogAskListener
+import com.dellainfotech.smartTouch.common.interfaces.DialogEditListener
 import com.dellainfotech.smartTouch.common.utils.Constants
 import com.dellainfotech.smartTouch.common.utils.DialogUtil
 import com.dellainfotech.smartTouch.common.utils.Utils.toEditable
@@ -43,6 +45,8 @@ class AccountSettingsFragment :
 
     private val logTag = this::class.java.simpleName
     private var dialog: Dialog? = null
+    private var cancelOwnership: Boolean = false
+    private var ownershipId: String? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -52,13 +56,89 @@ class AccountSettingsFragment :
         }
 
         binding.ivEditName.setOnClickListener {
-            binding.edtName.isEnabled = true
-            binding.edtName.requestFocus()
+
+            activity?.let {
+                DialogUtil.editDialog(
+                    it,
+                    "Edit name",
+                    binding.edtName.text.toString().trim(),
+                    getString(R.string.text_save),
+                    getString(R.string.text_cancel),
+                    isLimitedText = false,
+                    onClick = object : DialogEditListener {
+                        override fun onYesClicked(string: String) {
+                            when {
+                                string.isEmpty() -> {
+                                    Toast.makeText(
+                                        it,
+                                        getString(R.string.error_text_full_name),
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                }
+                                string.length < 3 -> {
+                                    Toast.makeText(
+                                        it,
+                                        getString(R.string.error_text_full_name_length),
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                }
+                                else -> {
+                                    DialogUtil.hideDialog()
+                                    binding.edtName.text = string.toEditable()
+                                }
+                            }
+                        }
+
+                        override fun onNoClicked() {
+                            DialogUtil.hideDialog()
+                        }
+
+                    }
+                )
+            }
+
         }
 
         binding.ivEditPhoneNumber.setOnClickListener {
-            binding.edtPhoneNumber.isEnabled = true
-            binding.edtPhoneNumber.requestFocus()
+            activity?.let {
+                DialogUtil.editDialog(
+                    it,
+                    "Edit name",
+                    binding.edtPhoneNumber.text.toString().trim(),
+                    getString(R.string.text_save),
+                    getString(R.string.text_cancel),
+                    getString(R.string.dialog_input_type_phone),
+                    onClick = object : DialogEditListener {
+                        override fun onYesClicked(string: String) {
+                            when {
+                                string.isEmpty() -> {
+                                    Toast.makeText(
+                                        it,
+                                        getString(R.string.error_text_full_name),
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                }
+                                string.length < 3 -> {
+                                    Toast.makeText(
+                                        it,
+                                        getString(R.string.error_text_full_name_length),
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                }
+                                else -> {
+                                    DialogUtil.hideDialog()
+                                    binding.edtPhoneNumber.text = string.toEditable()
+                                }
+                            }
+                        }
+
+                        override fun onNoClicked() {
+                            DialogUtil.hideDialog()
+                        }
+
+                    }
+                )
+            }
         }
 
         binding.ivEditPassword.setOnClickListener {
@@ -94,13 +174,84 @@ class AccountSettingsFragment :
         }
 
         binding.ivMasterEditName.setOnClickListener {
-            binding.edtMasterName.isEnabled = true
-            binding.edtMasterName.requestFocus()
+            activity?.let {
+                DialogUtil.editDialog(
+                    it,
+                    "Edit name",
+                    binding.edtMasterName.text.toString().trim(),
+                    getString(R.string.text_save),
+                    getString(R.string.text_cancel),
+                    isLimitedText = false,
+                    onClick = object : DialogEditListener {
+                        override fun onYesClicked(string: String) {
+                            when {
+                                string.isEmpty() -> {
+                                    Toast.makeText(
+                                        it,
+                                        getString(R.string.error_text_name),
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                }
+                                string.length < 3 -> {
+                                    Toast.makeText(
+                                        it,
+                                        getString(R.string.error_text_name_length),
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                }
+                                else -> {
+                                    DialogUtil.hideDialog()
+                                    binding.edtMasterName.text = string.toEditable()
+                                }
+                            }
+                        }
+
+                        override fun onNoClicked() {
+                            DialogUtil.hideDialog()
+                        }
+
+                    }
+                )
+            }
         }
 
         binding.ivMasterEditEmail.setOnClickListener {
-            binding.edtMasterEmail.isEnabled = true
-            binding.edtMasterEmail.requestFocus()
+            activity?.let {
+                DialogUtil.editDialog(
+                    it,
+                    "Edit email",
+                    binding.edtMasterEmail.text.toString().trim(),
+                    getString(R.string.text_save),
+                    getString(R.string.text_cancel),
+                    isLimitedText = false,
+                    onClick = object : DialogEditListener {
+                        override fun onYesClicked(string: String) {
+                            if (string.isEmpty()) {
+                                Toast.makeText(
+                                    it,
+                                    getString(R.string.error_text_email),
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            } else if (!Patterns.EMAIL_ADDRESS.matcher(string).matches()) {
+                                Toast.makeText(
+                                    it,
+                                    getString(R.string.error_text_valid_email),
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            } else {
+                                DialogUtil.hideDialog()
+                                binding.edtMasterEmail.text = string.toEditable()
+                            }
+
+                        }
+
+                        override fun onNoClicked() {
+                            DialogUtil.hideDialog()
+                        }
+
+                    }
+                )
+            }
         }
 
         binding.btnUpdate.setOnClickListener {
@@ -116,10 +267,39 @@ class AccountSettingsFragment :
             } else if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
                 binding.edtMasterEmail.error = getString(R.string.error_text_valid_email)
             } else {
-                activity?.let {
-                    DialogUtil.loadingAlert(it)
+                if (cancelOwnership) {
+
+                    activity?.let {
+                        DialogUtil.askAlert(it,getString(R.string.dialog_title_cancel_ownership),getString(R.string.text_ok),getString(R.string.text_cancel), object : DialogAskListener{
+                            override fun onYesClicked() {
+                                DialogUtil.hideDialog()
+                                DialogUtil.loadingAlert(it)
+                                ownershipId?.let {
+                                    viewModel.cancelOwnership(it)
+                                }
+                            }
+
+                            override fun onNoClicked() {
+                                DialogUtil.hideDialog()
+                            }
+                        })
+                    }
+                } else {
+                    activity?.let {
+                        DialogUtil.askAlert(it,getString(R.string.dialog_title_transfer_ownership),getString(R.string.text_ok),getString(R.string.text_cancel), object : DialogAskListener{
+                            override fun onYesClicked() {
+                                DialogUtil.hideDialog()
+                                DialogUtil.loadingAlert(it)
+                                viewModel.transferOwnership(BodyOwnership(email, name))
+                            }
+
+                            override fun onNoClicked() {
+                                DialogUtil.hideDialog()
+                            }
+                        })
+                    }
+
                 }
-                viewModel.transferOwnership(BodyOwnership(email, name))
             }
         }
 
@@ -269,13 +449,25 @@ class AccountSettingsFragment :
                         response.values.data?.let {
                             binding.edtMasterName.text = it.name.toEditable()
                             binding.edtMasterEmail.text = it.email.toEditable()
-                            binding.btnUpdate.isEnabled = false
-                            if (it.isEmailVerified == 0){
-                                binding.btnUpdate.text = "Pending"
+//                            binding.btnUpdate.isEnabled = false
+                            if (it.isEmailVerified == 0) {
+                                cancelOwnership = true
+                                ownershipId = it.id
+                                binding.btnUpdate.text = getString(R.string.text_cancel)
+                                binding.edtMasterName.clearFocus()
+                                binding.edtMasterEmail.clearFocus()
                                 binding.ivMasterEditName.isEnabled = false
                                 binding.ivMasterEditEmail.isEnabled = false
                             }
                         }
+                    } else {
+                        binding.edtMasterName.text = "".toEditable()
+                        binding.edtMasterEmail.text = "".toEditable()
+                        cancelOwnership = false
+                        ownershipId = null
+                        binding.btnUpdate.text = getString(R.string.text_transfer_ownership)
+                        binding.ivMasterEditName.isEnabled = true
+                        binding.ivMasterEditEmail.isEnabled = true
                     }
                 }
                 is Resource.Failure -> {
@@ -296,11 +488,7 @@ class AccountSettingsFragment :
                         Toast.makeText(it, response.values.message, Toast.LENGTH_SHORT).show()
                     }
                     if (response.values.status && response.values.code == Constants.API_SUCCESS_CODE) {
-                        response.values.data?.let {
-                            binding.edtMasterName.text = it.name.toEditable()
-                            binding.edtMasterEmail.text = it.email.toEditable()
-                            binding.btnUpdate.isEnabled = false
-                        }
+                        getOwnership()
                     }
                 }
                 is Resource.Failure -> {
@@ -315,6 +503,37 @@ class AccountSettingsFragment :
                 }
             }
         })
+
+        viewModel.cancelOwnershipResponse.observe(viewLifecycleOwner, { response ->
+            when (response) {
+                is Resource.Success -> {
+                    DialogUtil.hideDialog()
+                    context?.let {
+                        Toast.makeText(it, response.values.message, Toast.LENGTH_SHORT).show()
+                    }
+                    if (response.values.status && response.values.code == Constants.API_SUCCESS_CODE) {
+                        getOwnership()
+                    }
+                }
+                is Resource.Failure -> {
+                    DialogUtil.hideDialog()
+                    Log.e(
+                        logTag,
+                        " cancelOwnershipResponse Failure ${response.errorBody?.string()} "
+                    )
+                }
+                else -> {
+                    //We will do nothing here
+                }
+            }
+        })
+    }
+
+    private fun getOwnership() {
+        activity?.let {
+            DialogUtil.loadingAlert(it)
+        }
+        viewModel.getOwnership()
     }
 
     @SuppressLint("ClickableViewAccessibility")

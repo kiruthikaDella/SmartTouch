@@ -59,6 +59,7 @@
     <string name="error_text_name_length">Name must be more than 3 character</string>
     <string name="error_text_scene_name_empty">Scene name must not be empty</string>
     <string name="error_text_scene_name_length">Scene name must be more than 3 character</string>
+    <string name="error_text_only_master_user_can_edit">Only master user can edit this settings</string>
 
     <!--    Forgot Password-->
     <string name="title_text_forgot_password">Forgot your password?</string>
@@ -81,6 +82,10 @@
     <string name="dialog_title_remove_device_image">Do you really want to remove this device image?</string>
     <string name="dialog_title_delete_scene">Do you really want to delete this scene?</string>
     <string name="dialog_title_device_offline">Device is offline</string>
+    <string name="dialog_input_type_text">text</string>
+    <string name="dialog_input_type_phone">phone</string>
+    <string name="dialog_title_transfer_ownership">Are you sure you want to transfer ownership?</string>
+    <string name="dialog_title_cancel_ownership">Are you sure you want to cancel ownership?</string>
 
     <!--    Home Screen-->
     <string name="title_text_home_screen">Smartouch</string>
@@ -220,6 +225,7 @@
     <string name="text_ownership_transfer">Ownership Transfer</string>
     <string name="text_for_master_users">for master users only</string>
     <string name="text_update">Update</string>
+    <string name="text_transfer_ownership">Transfer Ownership</string>
     <string name="text_update_password">Update Password</string>
     <string name="hint_text_current_password">Current Password</string>
     <string name="hint_text_new_password">New Password</string>

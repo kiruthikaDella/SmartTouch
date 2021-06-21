@@ -32,8 +32,26 @@
         android:gravity="start|top"
         android:padding="@dimen/_10sdp"
         android:singleLine="true"
-        android:text="Switch 1"
         android:maxLength="20"
+        android:inputType="text"
+        android:textColor="@color/daintree"
+        android:textColorHint="@color/ghost_2"
+        android:textSize="@dimen/_12ssp" />
+
+    <EditText
+        android:id="@+id/edt_edit_no_limit"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/_15sdp"
+        android:layout_marginTop="@dimen/_8sdp"
+        android:layout_marginEnd="@dimen/_15sdp"
+        android:background="@drawable/white_background_with_catskill_white_dark_border"
+        android:fontFamily="@font/roboto_regular"
+        android:gravity="start|top"
+        android:padding="@dimen/_10sdp"
+        android:singleLine="true"
+        android:visibility="gone"
+        android:inputType="text"
         android:textColor="@color/daintree"
         android:textColorHint="@color/ghost_2"
         android:textSize="@dimen/_12ssp" />

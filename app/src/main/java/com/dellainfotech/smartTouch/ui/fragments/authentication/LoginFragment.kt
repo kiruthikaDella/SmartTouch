@@ -219,6 +219,13 @@ class LoginFragment : ModelBaseFragment<AuthViewModel, FragmentLoginBinding, Aut
                             FastSave.getInstance().saveString(Constants.USER_EMAIL, userData.vEmail)
                             FastSave.getInstance()
                                 .saveString(Constants.USER_PHONE_NUMBER, userData.bPhoneNumber)
+
+                            if (userData.userRole == Constants.MASTER_USER){
+                                FastSave.getInstance().saveBoolean(Constants.IS_MASTER_USER,true)
+                            }else{
+                                FastSave.getInstance().saveBoolean(Constants.IS_MASTER_USER,false)
+                            }
+                            
                             FastSave.getInstance().saveString(Constants.SOCIAL_ID, userData.socialId)
                             FastSave.getInstance().saveBoolean(Constants.isControlModePinned, userData.iIsPinStatus!!.toBoolean())
                             FastSave.getInstance().saveInt(Constants.LOGIN_TYPE, Constants.LOGIN_TYPE_MANUAL)
@@ -265,6 +272,12 @@ class LoginFragment : ModelBaseFragment<AuthViewModel, FragmentLoginBinding, Aut
                                 .saveString(Constants.USER_PHONE_NUMBER, userData.bPhoneNumber)
                             FastSave.getInstance().saveString(Constants.SOCIAL_ID, userData.socialId)
                             FastSave.getInstance().saveBoolean(Constants.isControlModePinned, userData.iIsPinStatus!!.toBoolean())
+
+                            if (userData.userRole == Constants.MASTER_USER){
+                                FastSave.getInstance().saveBoolean(Constants.IS_MASTER_USER,true)
+                            }else{
+                                FastSave.getInstance().saveBoolean(Constants.IS_MASTER_USER,false)
+                            }
 
                             activity?.let {
                                 FastSave.getInstance().saveInt(Constants.LOGIN_TYPE, Constants.LOGIN_TYPE_GOOGLE)

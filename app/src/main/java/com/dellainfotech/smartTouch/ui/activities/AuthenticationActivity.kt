@@ -69,6 +69,12 @@ class AuthenticationActivity : AppCompatActivity() {
                             FastSave.getInstance().saveString(Constants.SOCIAL_ID, userData.socialId)
                             FastSave.getInstance().saveBoolean(Constants.isControlModePinned, userData.iIsPinStatus!!.toBoolean())
 
+                            if (userData.userRole == Constants.MASTER_USER){
+                                FastSave.getInstance().saveBoolean(Constants.IS_MASTER_USER,true)
+                            }else{
+                                FastSave.getInstance().saveBoolean(Constants.IS_MASTER_USER,false)
+                            }
+
                             FastSave.getInstance().saveInt(Constants.LOGIN_TYPE, Constants.LOGIN_TYPE_FACEBOOK)
                             startActivity(Intent(this, MainActivity::class.java))
                             finishAffinity()
@@ -123,8 +129,8 @@ class AuthenticationActivity : AppCompatActivity() {
 
                         profileTracker = object : ProfileTracker() {
                             override fun onCurrentProfileChanged(
-                                profile: Profile?,
-                                profile1: Profile?
+                                oldProfile: Profile?,
+                                currentProfile: Profile?
                             ) {
                             }
                         }
@@ -136,9 +142,9 @@ class AuthenticationActivity : AppCompatActivity() {
                             GraphRequest.newMeRequest(result.accessToken) { _, response ->
 
                                 response?.let {
-                                    val json: JSONObject = it.jsonObject
+                                    val json: JSONObject? = it.jsonObject
                                     email = try {
-                                        json.getString("email") ?: ""
+                                        json?.getString("email") ?: ""
                                     } catch (e: java.lang.Exception) {
                                         ""
                                     }

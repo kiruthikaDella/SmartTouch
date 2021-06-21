@@ -176,11 +176,14 @@ class CreateSceneFragment :
         binding.ivEditCreateScene.setOnClickListener {
             activity?.let {
                 DialogUtil.editDialog(
-                    it, "Edit Scene name", binding.edtSceneName.text.toString().trim(), getString(
-                        R.string.text_save
-                    ), getString(
+                    it,
+                    "Edit Scene name",
+                    binding.edtSceneName.text.toString().trim(),
+                    getString(R.string.text_save),
+                    getString(
                         R.string.text_cancel
-                    ), object : DialogEditListener {
+                    ),
+                    onClick = object : DialogEditListener {
                         override fun onYesClicked(string: String) {
                             if (string.isEmpty()) {
                                 Toast.makeText(

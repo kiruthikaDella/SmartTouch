@@ -118,6 +118,9 @@ class HomeRepository @Inject constructor(
     suspend fun transferOwnership(bodyOwnership: BodyOwnership) =
         safeApiCall { smartTouchApi.transferOwnership(getAccessKey(), bodyOwnership) }
 
+    suspend fun cancelTransferOwnership(ownershipId: String) =
+        safeApiCall { smartTouchApi.deleteOwnershipTransfer(getAccessKey(), ownershipId) }
+
     //
     //endregion
     //

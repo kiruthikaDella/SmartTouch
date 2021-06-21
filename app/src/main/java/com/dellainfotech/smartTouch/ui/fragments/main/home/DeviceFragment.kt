@@ -1,15 +1,18 @@
 package com.dellainfotech.smartTouch.ui.fragments.main.home
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
+import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import com.appizona.yehiahd.fastsave.FastSave
 import com.dellainfotech.smartTouch.R
 import com.dellainfotech.smartTouch.adapters.DeviceAdapter
 import com.dellainfotech.smartTouch.api.Resource
@@ -36,6 +39,7 @@ import com.sothree.slidinguppanel.SlidingUpPanelLayout
  * Created by Jignesh Dangar on 09-04-2021.
  */
 
+@SuppressLint("ClickableViewAccessibility")
 class DeviceFragment :
     ModelBaseFragment<HomeViewModel, FragmentDeviceBinding, HomeRepository>() {
 
@@ -50,6 +54,26 @@ class DeviceFragment :
         super.onViewCreated(view, savedInstanceState)
 
         deviceList.clear()
+
+        binding.switchRetainState.isClickable =
+            FastSave.getInstance().getBoolean(Constants.IS_MASTER_USER, false)
+        binding.switchRetainState.isFocusable =
+            FastSave.getInstance().getBoolean(Constants.IS_MASTER_USER, false)
+
+        binding.switchRetainState.setOnTouchListener { v, event ->
+            if (event.action == KeyEvent.ACTION_DOWN) {
+                if (!FastSave.getInstance().getBoolean(Constants.IS_MASTER_USER, false)) {
+                    context?.let {
+                        Toast.makeText(
+                            it,
+                            getString(R.string.error_text_only_master_user_can_edit),
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                }
+            }
+            false
+        }
 
         binding.ivBack.setOnClickListener {
             findNavController().navigateUp()
@@ -134,7 +158,7 @@ class DeviceFragment :
                     binding.tvTitle.text.toString().trim(),
                     getString(R.string.text_save),
                     getString(R.string.text_cancel),
-                    object : DialogEditListener {
+                    onClick = object : DialogEditListener {
                         override fun onYesClicked(string: String) {
                             if (string.isEmpty()) {
                                 Toast.makeText(
@@ -168,7 +192,7 @@ class DeviceFragment :
                         data.deviceName ?: "",
                         getString(R.string.text_save),
                         getString(R.string.text_cancel),
-                        object : DialogEditListener {
+                        onClick = object : DialogEditListener {
                             override fun onYesClicked(string: String) {
                                 if (string.isEmpty()) {
                                     Toast.makeText(
@@ -235,7 +259,7 @@ class DeviceFragment :
                         switchData.name,
                         getString(R.string.text_save),
                         getString(R.string.text_cancel),
-                        object : DialogEditListener {
+                        onClick = object : DialogEditListener {
                             override fun onYesClicked(string: String) {
                                 if (string.isEmpty()) {
                                     Toast.makeText(
@@ -305,7 +329,13 @@ class DeviceFragment :
                     hidePanel()
                     Handler(Looper.getMainLooper()).postDelayed({
                         showLoading()
-                        viewModel.addDevice(BodyAddDevice(serialNumber, args.roomDetail.id, deviceName))
+                        viewModel.addDevice(
+                            BodyAddDevice(
+                                serialNumber,
+                                args.roomDetail.id,
+                                deviceName
+                            )
+                        )
                     }, 600)
                 }
             }
