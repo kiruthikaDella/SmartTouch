@@ -20,7 +20,6 @@ import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.core.view.isVisible
-import androidx.lifecycle.observe
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.amazonaws.mobileconnectors.iot.AWSIotMqttQos
@@ -86,8 +85,7 @@ class DeviceCustomizationFragment :
         super.onViewCreated(view, savedInstanceState)
 
         val sizeList = arrayOf("Small", "Medium", "Large")
-        val fontNames =
-            arrayOf("Times New Roman", "Arial", "Roman")
+        val fontNames = arrayOf("Times New Roman", "Arial", "Roman")
 
         if (FastSave.getInstance().getBoolean(
                 Constants.isDeviceCustomizationLocked,
@@ -104,6 +102,8 @@ class DeviceCustomizationFragment :
                     when (it) {
                         MQTTConnectionStatus.CONNECTED -> {
                             subscribeToDevice(args.deviceDetail.deviceSerialNo)
+                        }else -> {
+                            //We will do nothing here
                         }
                     }
                 }
@@ -119,14 +119,26 @@ class DeviceCustomizationFragment :
 
         }
 
-        NetworkConnectionLiveData().observe(viewLifecycleOwner, { isConnected ->
+        NotifyManager.internetInfo.observe(viewLifecycleOwner, { isConnected ->
             if (isConnected) {
                 activity?.let {
                     DialogUtil.loadingAlert(it)
                 }
                 viewModel.getDeviceCustomization(args.deviceDetail.id)
             } else {
-                Log.e(logTag, " internet is not available")
+                activity?.let {
+                    DialogUtil.deviceOfflineAlert(
+                        it,
+                        getString(R.string.text_no_internet_available),
+                        object : DialogShowListener {
+                            override fun onClick() {
+                                DialogUtil.hideDialog()
+                                findNavController().navigate(DeviceCustomizationFragmentDirections.actionGlobalHomeFragment())
+                            }
+
+                        }
+                    )
+                }
             }
         })
 
@@ -145,9 +157,11 @@ class DeviceCustomizationFragment :
             findNavController().navigateUp()
         }
 
+        binding.layoutSlidingUpPanel.setFadeOnClickListener { hidePanel() }
+
         binding.ibLock.setOnClickListener {
             activity?.let {
-                var msg = ""
+                val msg: String
                 if (isDeviceCustomizationLocked) {
                     isDeviceCustomizationLocked = false
                     msg = getString(R.string.dialog_title_text_unlock)
@@ -234,7 +248,7 @@ class DeviceCustomizationFragment :
             binding.layoutTextColor.linearTextColor.isVisible = false
             binding.layoutTextStyle.linearTextStyle.isVisible = true
 
-            val pos = textStyleAdapter?.getPosition(deviceCustomization?.textStyle) ?: 0
+            val pos = textStyleAdapter.getPosition(deviceCustomization?.textStyle)
             binding.layoutTextStyle.spinnerFonts.setSelection(pos)
 
             showPanel()

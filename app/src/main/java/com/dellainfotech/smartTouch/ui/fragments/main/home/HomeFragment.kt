@@ -9,7 +9,6 @@ import android.view.ViewGroup
 import android.widget.TextView
 import android.widget.Toast
 import androidx.core.view.GravityCompat
-import androidx.lifecycle.observe
 import androidx.navigation.fragment.findNavController
 import com.appizona.yehiahd.fastsave.FastSave
 import com.dellainfotech.smartTouch.BuildConfig
@@ -23,11 +22,14 @@ import com.dellainfotech.smartTouch.common.interfaces.AdapterItemClickListener
 import com.dellainfotech.smartTouch.common.utils.Constants
 import com.dellainfotech.smartTouch.common.utils.DialogUtil
 import com.dellainfotech.smartTouch.databinding.FragmentHomeBinding
-import com.dellainfotech.smartTouch.mqtt.NetworkConnectionLiveData
+import com.dellainfotech.smartTouch.mqtt.NotifyManager
 import com.dellainfotech.smartTouch.ui.activities.AuthenticationActivity
 import com.dellainfotech.smartTouch.ui.fragments.ModelBaseFragment
 import com.dellainfotech.smartTouch.ui.viewmodel.HomeViewModel
-
+import com.facebook.login.LoginManager
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInClient
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 
 /**
  * Created by Jignesh Dangar on 09-04-2021.
@@ -39,6 +41,7 @@ class HomeFragment : ModelBaseFragment<HomeViewModel, FragmentHomeBinding, HomeR
     private val logTag = this::class.java.simpleName
     private lateinit var roomsAdapter: RoomsAdapter
     private var roomList = arrayListOf<GetRoomData>()
+    private var mGoogleSingInClient: GoogleSignInClient? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -57,7 +60,9 @@ class HomeFragment : ModelBaseFragment<HomeViewModel, FragmentHomeBinding, HomeR
         roomsAdapter = RoomsAdapter(roomList)
         binding.recyclerRooms.adapter = roomsAdapter
 
-        binding.tvAppVersion.text = "Version - ${BuildConfig.VERSION_NAME}"
+        binding.tvAppVersion.text = String.format("%s", "Version - ${BuildConfig.VERSION_NAME}")
+
+        initGoogleSignInClient()
 
         // initializing navigation menu
         setUpNavigationView()
@@ -65,18 +70,24 @@ class HomeFragment : ModelBaseFragment<HomeViewModel, FragmentHomeBinding, HomeR
         apiCall()
     }
 
+    //Initialization object of GoogleSignInClient
+    private fun initGoogleSignInClient() {
+        val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+            .requestEmail()
+            .build()
+
+        mGoogleSingInClient = GoogleSignIn.getClient(requireActivity(), gso)
+    }
+
     private fun apiCall() {
 
-        NetworkConnectionLiveData().observe(viewLifecycleOwner, { isConnected ->
-            if (isConnected){
-                Log.e(logTag, " internet is available")
+        NotifyManager.internetInfo.observe(viewLifecycleOwner, { isConnected ->
+            if (isConnected) {
                 roomList.toMutableList().clear()
                 viewModel.getRoom()
                 activity?.let {
                     DialogUtil.loadingAlert(it)
                 }
-            }else {
-                Log.e(logTag, " internet is not available")
             }
         })
 
@@ -129,7 +140,8 @@ class HomeFragment : ModelBaseFragment<HomeViewModel, FragmentHomeBinding, HomeR
                     context?.let {
                         Log.e(logTag, "getRoomResponse Failure ${response.errorBody?.string()} ")
                     }
-                }else -> {
+                }
+                else -> {
                     // We will do nothing here
                 }
             }
@@ -183,6 +195,14 @@ class HomeFragment : ModelBaseFragment<HomeViewModel, FragmentHomeBinding, HomeR
                     Log.e(logTag, "nav_shop")
                 }
                 R.id.nav_logout -> {
+
+                    val loginType = FastSave.getInstance().getInt(Constants.LOGIN_TYPE, 1)
+                    if (loginType == Constants.LOGIN_TYPE_GOOGLE) {
+                        mGoogleSingInClient?.signOut()
+                    } else if (loginType == Constants.LOGIN_TYPE_FACEBOOK) {
+                        LoginManager.getInstance().logOut()
+                    }
+
                     activity?.let {
                         DialogUtil.loadingAlert(it)
                     }

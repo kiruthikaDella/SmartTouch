@@ -8,7 +8,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.view.isVisible
-import androidx.lifecycle.observe
 import com.appizona.yehiahd.fastsave.FastSave
 import com.dellainfotech.smartTouch.R
 import com.dellainfotech.smartTouch.adapters.controlmodeadapter.ControlModeAdapter
@@ -22,7 +21,7 @@ import com.dellainfotech.smartTouch.common.utils.DialogUtil
 import com.dellainfotech.smartTouch.common.utils.Utils.toBoolean
 import com.dellainfotech.smartTouch.common.utils.Utils.toInt
 import com.dellainfotech.smartTouch.databinding.FragmentControlModeBinding
-import com.dellainfotech.smartTouch.mqtt.NetworkConnectionLiveData
+import com.dellainfotech.smartTouch.mqtt.NotifyManager
 import com.dellainfotech.smartTouch.ui.activities.AuthenticationActivity
 import com.dellainfotech.smartTouch.ui.fragments.ModelBaseFragment
 import com.dellainfotech.smartTouch.ui.viewmodel.HomeViewModel
@@ -48,7 +47,7 @@ class ControlModeFragment :
             binding.ibPin.rotation = -45f
         }
 
-        NetworkConnectionLiveData().observe(viewLifecycleOwner, { isConnected ->
+        NotifyManager.internetInfo.observe(viewLifecycleOwner, { isConnected ->
             if (isConnected) {
                 activity?.let {
                     DialogUtil.loadingAlert(it)
@@ -109,7 +108,7 @@ class ControlModeFragment :
                             roomList.addAll(roomDataList)
                             activity?.let { mActivity ->
                                 Log.e(logTag, "  roomList ${roomList.size}")
-                                controlModeAdapter = ControlModeAdapter(mActivity,roomList)
+                                controlModeAdapter = ControlModeAdapter(mActivity, roomList)
                                 binding.recyclerControlModes.adapter = controlModeAdapter
                             }
 

@@ -11,8 +11,6 @@ import com.dellainfotech.smartTouch.databinding.FragmentScreenLayoutBinding
  */
 class ScreenLayoutModel(context: Context, mBinding: FragmentScreenLayoutBinding) {
 
-    private val logTag = this::class.java.simpleName
-
     private var mContext = context
     private var binding = mBinding
     private var viewType = VIEW_TYPE.EIGHT_ICONS_VIEW

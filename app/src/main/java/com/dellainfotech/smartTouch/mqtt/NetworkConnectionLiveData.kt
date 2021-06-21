@@ -11,14 +11,17 @@ import android.net.Network
 import android.net.NetworkInfo
 import android.net.NetworkRequest
 import android.os.Build
-import androidx.lifecycle.LiveData
+import android.util.Log
+import androidx.lifecycle.MutableLiveData
 import com.dellainfotech.smartTouch.AppDelegate
 
-class NetworkConnectionLiveData() : LiveData<Boolean>() {
+class NetworkConnectionLiveData : MutableLiveData<Boolean>() {
 
     private val context = AppDelegate.instance
+    private val logTag = this::class.java.simpleName
 
-    private var connectivityManager: ConnectivityManager = context.getSystemService(CONNECTIVITY_SERVICE) as ConnectivityManager
+    private var connectivityManager: ConnectivityManager =
+        context.getSystemService(CONNECTIVITY_SERVICE) as ConnectivityManager
 
     private lateinit var connectivityManagerCallback: ConnectivityManager.NetworkCallback
 
@@ -26,11 +29,16 @@ class NetworkConnectionLiveData() : LiveData<Boolean>() {
         super.onActive()
         updateConnection()
         when {
-            Build.VERSION.SDK_INT >= Build.VERSION_CODES.N -> connectivityManager.registerDefaultNetworkCallback(getConnectivityManagerCallback())
+            Build.VERSION.SDK_INT >= Build.VERSION_CODES.N -> connectivityManager.registerDefaultNetworkCallback(
+                getConnectivityManagerCallback()
+            )
             Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP -> lollipopNetworkAvailableRequest()
             else -> {
                 if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
-                    context.registerReceiver(networkReceiver, IntentFilter("android.net.conn.CONNECTIVITY_CHANGE"))
+                    context.registerReceiver(
+                        networkReceiver,
+                        IntentFilter("android.net.conn.CONNECTIVITY_CHANGE")
+                    )
                 }
             }
         }
@@ -50,7 +58,10 @@ class NetworkConnectionLiveData() : LiveData<Boolean>() {
         val builder = NetworkRequest.Builder()
             .addTransportType(android.net.NetworkCapabilities.TRANSPORT_CELLULAR)
             .addTransportType(android.net.NetworkCapabilities.TRANSPORT_WIFI)
-        connectivityManager.registerNetworkCallback(builder.build(), getConnectivityManagerCallback())
+        connectivityManager.registerNetworkCallback(
+            builder.build(),
+            getConnectivityManagerCallback()
+        )
     }
 
     private fun getConnectivityManagerCallback(): ConnectivityManager.NetworkCallback {
@@ -61,20 +72,14 @@ class NetworkConnectionLiveData() : LiveData<Boolean>() {
                 override fun onAvailable(network: Network) {    //when Wifi is on
                     super.onAvailable(network)
                     postValue(true)
+//                    NotifyManager.internetInfo.postValue(true)
                 }
 
                 override fun onLost(network: Network) {    //when Wifi 【turns off】
                     super.onLost(network)
                     postValue(false)
+//                    NotifyManager.internetInfo.postValue(false)
                 }
-
-                /*override fun onAvailable(network: Network?) {
-                    postValue(true)
-                }
-
-                override fun onLost(network: Network?) {
-                    postValue(false)
-                }*/
             }
             return connectivityManagerCallback
         } else {
@@ -84,6 +89,7 @@ class NetworkConnectionLiveData() : LiveData<Boolean>() {
 
     private val networkReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
+            Log.e(logTag, " networkReceiver ")
             updateConnection()
         }
     }
@@ -91,6 +97,6 @@ class NetworkConnectionLiveData() : LiveData<Boolean>() {
     private fun updateConnection() {
         val activeNetwork: NetworkInfo? = connectivityManager.activeNetworkInfo
         postValue(activeNetwork?.isConnected == true)
+//        NotifyManager.internetInfo.postValue(activeNetwork?.isConnected == true)
     }
-
 }

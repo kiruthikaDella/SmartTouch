@@ -1,6 +1,5 @@
 package com.dellainfotech.smartTouch.api
 
-import android.util.Log
 import com.dellainfotech.smartTouch.common.utils.Utils
 import dagger.Module
 import dagger.Provides
@@ -13,7 +12,6 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
-
 
 @Module
 @InstallIn(ApplicationComponent::class)

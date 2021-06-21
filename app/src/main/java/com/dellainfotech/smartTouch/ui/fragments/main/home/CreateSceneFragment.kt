@@ -26,11 +26,11 @@ import com.dellainfotech.smartTouch.common.interfaces.DialogEditListener
 import com.dellainfotech.smartTouch.common.interfaces.DialogShowListener
 import com.dellainfotech.smartTouch.common.utils.Constants
 import com.dellainfotech.smartTouch.common.utils.DialogUtil
-import com.dellainfotech.smartTouch.mqtt.MQTTConstants
 import com.dellainfotech.smartTouch.common.utils.Utils.toEditable
 import com.dellainfotech.smartTouch.databinding.FragmentCreateSceneBinding
 import com.dellainfotech.smartTouch.mqtt.AwsMqttSingleton
 import com.dellainfotech.smartTouch.mqtt.MQTTConnectionStatus
+import com.dellainfotech.smartTouch.mqtt.MQTTConstants
 import com.dellainfotech.smartTouch.mqtt.NotifyManager
 import com.dellainfotech.smartTouch.ui.fragments.ModelBaseFragment
 import com.dellainfotech.smartTouch.ui.viewmodel.HomeViewModel
@@ -46,7 +46,9 @@ import java.util.*
  * Created by Jignesh Dangar on 23-04-2021.
  */
 
-class CreateSceneFragment : ModelBaseFragment<HomeViewModel, FragmentCreateSceneBinding, HomeRepository>() {
+@Suppress("DEPRECATION")
+class CreateSceneFragment :
+    ModelBaseFragment<HomeViewModel, FragmentCreateSceneBinding, HomeRepository>() {
 
     private val logTag = this::class.java.simpleName
     private val args: CreateSceneFragmentArgs by navArgs()
@@ -60,15 +62,19 @@ class CreateSceneFragment : ModelBaseFragment<HomeViewModel, FragmentCreateScene
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        mqttConnectionDisposable = NotifyManager.getMQTTConnectionInfo().observeOn(AndroidSchedulers.mainThread()).subscribe{
-            Log.e(logTag, " MQTTConnectionStatus = $it ")
-            when(it){
-                MQTTConnectionStatus.CONNECTED -> {
-                    Log.e(logTag, " MQTTConnectionStatus.CONNECTED ")
-                    subscribeToDevice(args.deviceDetail.deviceSerialNo)
+        mqttConnectionDisposable =
+            NotifyManager.getMQTTConnectionInfo().observeOn(AndroidSchedulers.mainThread())
+                .subscribe {
+                    Log.e(logTag, " MQTTConnectionStatus = $it ")
+                    when (it) {
+                        MQTTConnectionStatus.CONNECTED -> {
+                            Log.e(logTag, " MQTTConnectionStatus.CONNECTED ")
+                            subscribeToDevice(args.deviceDetail.deviceSerialNo)
+                        }else -> {
+                            //We will do nothing here
+                        }
+                    }
                 }
-            }
-        }
 
         setTime()
         clickEvents()
@@ -76,9 +82,14 @@ class CreateSceneFragment : ModelBaseFragment<HomeViewModel, FragmentCreateScene
         args.sceneDetail?.let {
             isUpdatingScene = true
             setSceneData(it)
-        }?: kotlin.run {
+        } ?: kotlin.run {
             activity?.let {
-                deviceSceneAdapter = DeviceSceneAdapter(it, createScenesList,args.deviceDetail.id,args.roomDetail.id)
+                deviceSceneAdapter = DeviceSceneAdapter(
+                    it,
+                    createScenesList,
+                    args.deviceDetail.id,
+                    args.roomDetail.id
+                )
                 deviceSceneAdapter.updateRoomList(args.controlModeList.toList())
                 binding.recyclerScenes.adapter = deviceSceneAdapter
             }
@@ -121,6 +132,24 @@ class CreateSceneFragment : ModelBaseFragment<HomeViewModel, FragmentCreateScene
             findNavController().navigateUp()
         }
 
+        NotifyManager.internetInfo.observe(viewLifecycleOwner, { isConnected ->
+            if (!isConnected) {
+                activity?.let {
+                    DialogUtil.deviceOfflineAlert(
+                        it,
+                        getString(R.string.text_no_internet_available),
+                        object : DialogShowListener {
+                            override fun onClick() {
+                                DialogUtil.hideDialog()
+                                findNavController().navigate(CreateSceneFragmentDirections.actionGlobalHomeFragment())
+                            }
+
+                        }
+                    )
+                }
+            }
+        })
+
         binding.tvDaily.setOnClickListener {
 
             context?.let { ctx ->
@@ -136,10 +165,10 @@ class CreateSceneFragment : ModelBaseFragment<HomeViewModel, FragmentCreateScene
         }
 
         binding.tvAdd.setOnClickListener {
-            if (isUpdatingScene){
+            if (isUpdatingScene) {
                 updateDeviceSceneAdapter.addScene()
-            }else{
-                createScenesList.add(BodySceneData("","","",0))
+            } else {
+                createScenesList.add(BodySceneData("", "", "", 0))
                 deviceSceneAdapter.notifyItemInserted(createScenesList.size)
             }
         }
@@ -151,7 +180,7 @@ class CreateSceneFragment : ModelBaseFragment<HomeViewModel, FragmentCreateScene
                         R.string.text_save
                     ), getString(
                         R.string.text_cancel
-                    ), object : DialogEditListener{
+                    ), object : DialogEditListener {
                         override fun onYesClicked(string: String) {
                             if (string.isEmpty()) {
                                 Toast.makeText(
@@ -219,39 +248,91 @@ class CreateSceneFragment : ModelBaseFragment<HomeViewModel, FragmentCreateScene
             when {
                 sceneName.isEmpty() -> {
                     context?.let {
-                        Toast.makeText(it,getString(R.string.error_text_scene_name_empty),Toast.LENGTH_LONG).show()
+                        Toast.makeText(
+                            it,
+                            getString(R.string.error_text_scene_name_empty),
+                            Toast.LENGTH_LONG
+                        ).show()
                     }
                 }
                 sceneName.length < 3 -> {
                     context?.let {
-                        Toast.makeText(it,getString(R.string.error_text_scene_name_length),Toast.LENGTH_LONG).show()
+                        Toast.makeText(
+                            it,
+                            getString(R.string.error_text_scene_name_length),
+                            Toast.LENGTH_LONG
+                        ).show()
                     }
                 }
                 else -> {
-                    if (isUpdatingScene){
-                        if (updateDeviceSceneAdapter.isDuplicateSwitchFound()){
+                    if (isUpdatingScene) {
+                        if (updateDeviceSceneAdapter.isDuplicateSwitchFound()) {
                             context?.let { mContext ->
-                                Toast.makeText(mContext,getString(R.string.error_text_duplicate_scene),Toast.LENGTH_SHORT).show()
+                                Toast.makeText(
+                                    mContext,
+                                    getString(R.string.error_text_duplicate_scene),
+                                    Toast.LENGTH_SHORT
+                                ).show()
                             }
-                        }else{
+                        } else {
                             activity?.let {
                                 DialogUtil.loadingAlert(it)
                             }
-                            Log.e(logTag, " BodyScene ${BodyUpdateScene(args.sceneDetail!!.id,sceneName,sceneTime,sceneFrequency,updateDeviceSceneAdapter.getScenes())}")
-                            viewModel.updateScene(BodyUpdateScene(args.sceneDetail!!.id,sceneName,sceneTime,sceneFrequency,updateDeviceSceneAdapter.getScenes()))
+                            Log.e(
+                                logTag,
+                                " BodyScene ${
+                                    BodyUpdateScene(
+                                        args.sceneDetail!!.id,
+                                        sceneName,
+                                        sceneTime,
+                                        sceneFrequency,
+                                        updateDeviceSceneAdapter.getScenes()
+                                    )
+                                }"
+                            )
+                            viewModel.updateScene(
+                                BodyUpdateScene(
+                                    args.sceneDetail!!.id,
+                                    sceneName,
+                                    sceneTime,
+                                    sceneFrequency,
+                                    updateDeviceSceneAdapter.getScenes()
+                                )
+                            )
                         }
-                   }else {
-                       if (deviceSceneAdapter.isDuplicateSwitchFound()){
-                           context?.let { mContext ->
-                               Toast.makeText(mContext,getString(R.string.error_text_duplicate_scene),Toast.LENGTH_SHORT).show()
-                           }
-                       }else{
-                           activity?.let {
-                               DialogUtil.loadingAlert(it)
-                           }
-                           Log.e(logTag, " BodyScene ${BodyAddScene(sceneName,sceneTime,sceneFrequency,deviceSceneAdapter.getScenes())}")
-                           viewModel.addScene(BodyAddScene(sceneName,sceneTime,sceneFrequency,deviceSceneAdapter.getScenes()))
-                       }
+                    } else {
+                        if (deviceSceneAdapter.isDuplicateSwitchFound()) {
+                            context?.let { mContext ->
+                                Toast.makeText(
+                                    mContext,
+                                    getString(R.string.error_text_duplicate_scene),
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            }
+                        } else {
+                            activity?.let {
+                                DialogUtil.loadingAlert(it)
+                            }
+                            Log.e(
+                                logTag,
+                                " BodyScene ${
+                                    BodyAddScene(
+                                        sceneName,
+                                        sceneTime,
+                                        sceneFrequency,
+                                        deviceSceneAdapter.getScenes()
+                                    )
+                                }"
+                            )
+                            viewModel.addScene(
+                                BodyAddScene(
+                                    sceneName,
+                                    sceneTime,
+                                    sceneFrequency,
+                                    deviceSceneAdapter.getScenes()
+                                )
+                            )
+                        }
 
                     }
                 }
@@ -259,15 +340,15 @@ class CreateSceneFragment : ModelBaseFragment<HomeViewModel, FragmentCreateScene
         }
     }
 
-    private fun apiResponse(){
+    private fun apiResponse() {
         viewModel.addSceneResponse.observe(viewLifecycleOwner, { response ->
-            when(response){
+            when (response) {
                 is Resource.Success -> {
                     DialogUtil.hideDialog()
                     context?.let {
-                        Toast.makeText(it,response.values.message,Toast.LENGTH_SHORT).show()
+                        Toast.makeText(it, response.values.message, Toast.LENGTH_SHORT).show()
                     }
-                    if (response.values.status && response.values.code == Constants.API_SUCCESS_CODE){
+                    if (response.values.status && response.values.code == Constants.API_SUCCESS_CODE) {
                         findNavController().navigateUp()
                     }
                 }
@@ -282,15 +363,45 @@ class CreateSceneFragment : ModelBaseFragment<HomeViewModel, FragmentCreateScene
         })
 
         viewModel.updateSceneResponse.observe(viewLifecycleOwner, { response ->
-            when(response){
+            when (response) {
                 is Resource.Success -> {
                     DialogUtil.hideDialog()
-                    context?.let {
-                        Toast.makeText(it,response.values.message,Toast.LENGTH_SHORT).show()
+
+                    activity?.runOnUiThread {
+                        try {
+                            val jsonObject = JSONObject(response.values.string())
+
+                            println(" $logTag jsonObject $jsonObject")
+                            if (jsonObject.getBoolean("status") && jsonObject.getInt("code") == Constants.API_SUCCESS_CODE) {
+                                context?.let {
+                                    Toast.makeText(
+                                        it,
+                                        jsonObject.getString("message"),
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                }
+                                findNavController().navigateUp()
+                                println(" $logTag success")
+                            } else if (!jsonObject.getBoolean("status") && jsonObject.getInt("code") == 400) {
+                                println(" $logTag fail")
+                                val msgArray = jsonObject.getJSONArray("message")
+                                if (msgArray.length() > 0) {
+                                    println(" $logTag length() > 0")
+                                    context?.let {
+                                        Toast.makeText(
+                                            it,
+                                            msgArray.getJSONObject(0).getString("message"),
+                                            Toast.LENGTH_SHORT
+                                        ).show()
+                                    }
+                                }
+
+                            }
+                        } catch (e: Exception) {
+                            e.printStackTrace()
+                        }
                     }
-                    if (response.values.status && response.values.code == Constants.API_SUCCESS_CODE){
-                        findNavController().navigateUp()
-                    }
+
                 }
                 is Resource.Failure -> {
                     DialogUtil.hideDialog()
@@ -303,13 +414,13 @@ class CreateSceneFragment : ModelBaseFragment<HomeViewModel, FragmentCreateScene
         })
 
         viewModel.deleteSceneDetailResponse.observe(viewLifecycleOwner, { response ->
-            when(response){
+            when (response) {
                 is Resource.Success -> {
                     DialogUtil.hideDialog()
                     context?.let {
-                        Toast.makeText(it,response.values.message,Toast.LENGTH_SHORT).show()
+                        Toast.makeText(it, response.values.message, Toast.LENGTH_SHORT).show()
                     }
-                    if (response.values.status && response.values.code == Constants.API_SUCCESS_CODE){
+                    if (response.values.status && response.values.code == Constants.API_SUCCESS_CODE) {
                         itemPosition?.let {
                             updateDeviceSceneAdapter.deleteScene(it)
                         }
@@ -317,7 +428,10 @@ class CreateSceneFragment : ModelBaseFragment<HomeViewModel, FragmentCreateScene
                 }
                 is Resource.Failure -> {
                     DialogUtil.hideDialog()
-                    Log.e(logTag, " deleteSceneDetailResponse Failure ${response.errorBody?.string()} ")
+                    Log.e(
+                        logTag,
+                        " deleteSceneDetailResponse Failure ${response.errorBody?.string()} "
+                    )
                 }
                 else -> {
                     //We will do nothing here
@@ -326,7 +440,7 @@ class CreateSceneFragment : ModelBaseFragment<HomeViewModel, FragmentCreateScene
         })
     }
 
-    private fun setSceneData(sceneData: GetSceneData){
+    private fun setSceneData(sceneData: GetSceneData) {
         binding.edtSceneName.text = sceneData.sceneName.toEditable()
 
         val time = "<font color='#1A8EFF'>${
@@ -340,16 +454,22 @@ class CreateSceneFragment : ModelBaseFragment<HomeViewModel, FragmentCreateScene
             binding.tvTime.text = Html.fromHtml(time)
         }
 
-        binding.tvDaily.text= sceneData.sceneInterval
+        binding.tvDaily.text = sceneData.sceneInterval
 
-        activity?.let {mActivity ->
+        activity?.let { mActivity ->
             sceneData.scene?.let {
-                updateDeviceSceneAdapter = UpdateDeviceSceneAdapter(mActivity,it,args.roomDetail.id,args.deviceDetail.id)
+                updateDeviceSceneAdapter = UpdateDeviceSceneAdapter(
+                    mActivity,
+                    it,
+                    args.roomDetail.id,
+                    args.deviceDetail.id
+                )
                 binding.recyclerScenes.adapter = updateDeviceSceneAdapter
                 updateDeviceSceneAdapter.updateRoomList(args.controlModeList.toList())
                 updateDeviceSceneAdapter.notifyDataSetChanged()
 
-                updateDeviceSceneAdapter.setOnDeleteClickListener(object : UpdateDeviceSceneAdapter.DeleteSceneItemClickListener<Scene> {
+                updateDeviceSceneAdapter.setOnDeleteClickListener(object :
+                    UpdateDeviceSceneAdapter.DeleteSceneItemClickListener<Scene> {
                     override fun onItemClick(data: Scene, scenePosition: Int) {
                         DialogUtil.loadingAlert(mActivity)
                         viewModel.deleteSceneDetail(data.id)
@@ -384,15 +504,21 @@ class CreateSceneFragment : ModelBaseFragment<HomeViewModel, FragmentCreateScene
 
                         if (jsonObject.has(MQTTConstants.AWS_STATUS)) {
                             val deviceStatus = jsonObject.getInt(MQTTConstants.AWS_STATUS)
-                            if (deviceStatus == 1){
+                            if (deviceStatus == 1) {
                                 DialogUtil.hideDialog()
-                            }else {
-                                DialogUtil.deviceOfflineAlert(it, onClick =  object : DialogShowListener {
-                                    override fun onClick() {
-                                        findNavController().navigate(CreateSceneFragmentDirections.actionCreateSceneFragmentToRoomPanelFragment(args.roomDetail))
-                                    }
+                            } else {
+                                DialogUtil.deviceOfflineAlert(
+                                    it,
+                                    onClick = object : DialogShowListener {
+                                        override fun onClick() {
+                                            findNavController().navigate(
+                                                CreateSceneFragmentDirections.actionCreateSceneFragmentToRoomPanelFragment(
+                                                    args.roomDetail
+                                                )
+                                            )
+                                        }
 
-                                })
+                                    })
                             }
                         }
                     }

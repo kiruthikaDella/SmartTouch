@@ -6,7 +6,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.lifecycle.observe
 import androidx.navigation.fragment.findNavController
 import com.dellainfotech.smartTouch.R
 import com.dellainfotech.smartTouch.adapters.UserManagementAdapter
@@ -18,7 +17,7 @@ import com.dellainfotech.smartTouch.common.interfaces.DialogAskListener
 import com.dellainfotech.smartTouch.common.utils.Constants
 import com.dellainfotech.smartTouch.common.utils.DialogUtil
 import com.dellainfotech.smartTouch.databinding.FragmentUserManagementBinding
-import com.dellainfotech.smartTouch.mqtt.NetworkConnectionLiveData
+import com.dellainfotech.smartTouch.mqtt.NotifyManager
 import com.dellainfotech.smartTouch.ui.fragments.ModelBaseFragment
 import com.dellainfotech.smartTouch.ui.viewmodel.UserManagementViewModel
 
@@ -47,11 +46,11 @@ class UserManagementFragment :
 
     private fun apiCall() {
 
-        NetworkConnectionLiveData().observe(viewLifecycleOwner, { isConnected ->
-            if (isConnected){
+        NotifyManager.internetInfo.observe(viewLifecycleOwner, { isConnected ->
+            if (isConnected) {
                 showProgressDialog()
                 viewModel.getSubordinateUser()
-            }else {
+            } else {
                 Log.e(logTag, " internet is not available")
             }
         })

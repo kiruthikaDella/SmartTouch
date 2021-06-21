@@ -1,5 +1,6 @@
 package com.dellainfotech.smartTouch.adapters.controlmodeadapter
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.util.Log
 import android.view.LayoutInflater
@@ -26,6 +27,7 @@ import java.nio.charset.StandardCharsets
 /**
  * Created by Jignesh Dangar on 16-04-2021.
  */
+@SuppressLint("ClickableViewAccessibility")
 class ControlModeDeviceAdapter(
     private val mActivity: Activity,
     private val deviceList: ArrayList<GetDeviceData>
@@ -157,7 +159,7 @@ class ControlModeDeviceAdapter(
 
             if (device.isDeviceAvailable == "0") {
                 relativeLayout.visibility = View.VISIBLE
-            }else{
+            } else {
                 relativeLayout.visibility = View.GONE
             }
 
@@ -209,82 +211,92 @@ class ControlModeDeviceAdapter(
                 }
             }
 
-            switchOne.setOnCheckedChangeListener { _, isChecked ->
+            switchOne.setOnClickListener {
                 publish(
                     device.deviceSerialNo,
                     MQTTConstants.AWS_SWITCH_1,
-                    isChecked.toInt().toString()
+                    switchOne.isChecked.toInt().toString()
                 )
             }
-            switchTwo.setOnCheckedChangeListener { _, isChecked ->
+
+            switchTwo.setOnClickListener {
                 publish(
                     device.deviceSerialNo,
                     MQTTConstants.AWS_SWITCH_2,
-                    isChecked.toInt().toString()
+                    switchTwo.isChecked.toInt().toString()
                 )
             }
-            switchThree.setOnCheckedChangeListener { _, isChecked ->
+
+            switchThree.setOnClickListener {
                 publish(
                     device.deviceSerialNo,
                     MQTTConstants.AWS_SWITCH_3,
-                    isChecked.toInt().toString()
+                    switchThree.isChecked.toInt().toString()
                 )
             }
-            switchFour.setOnCheckedChangeListener { _, isChecked ->
+
+            switchFour.setOnClickListener {
                 publish(
                     device.deviceSerialNo,
                     MQTTConstants.AWS_SWITCH_4,
-                    isChecked.toInt().toString()
+                    switchFour.isChecked.toInt().toString()
                 )
             }
-            switchFive.setOnCheckedChangeListener { _, isChecked ->
+
+            switchFive.setOnClickListener {
                 publish(
                     device.deviceSerialNo,
                     MQTTConstants.AWS_SWITCH_5,
-                    isChecked.toInt().toString()
+                    switchFive.isChecked.toInt().toString()
                 )
             }
-            switchSix.setOnCheckedChangeListener { _, isChecked ->
+
+            switchSix.setOnClickListener {
                 publish(
                     device.deviceSerialNo,
                     MQTTConstants.AWS_SWITCH_6,
-                    isChecked.toInt().toString()
+                    switchSix.isChecked.toInt().toString()
                 )
             }
-            switchSeven.setOnCheckedChangeListener { _, isChecked ->
+
+            switchSeven.setOnClickListener {
                 publish(
                     device.deviceSerialNo,
                     MQTTConstants.AWS_SWITCH_7,
-                    isChecked.toInt().toString()
+                    switchSeven.isChecked.toInt().toString()
                 )
             }
-            switchEight.setOnCheckedChangeListener { _, isChecked ->
+
+            switchEight.setOnClickListener {
                 publish(
                     device.deviceSerialNo,
                     MQTTConstants.AWS_SWITCH_8,
-                    isChecked.toInt().toString()
+                    switchEight.isChecked.toInt().toString()
                 )
             }
-            switchPortA.setOnCheckedChangeListener { _, isChecked ->
+
+            switchPortA.setOnClickListener {
                 publish(
                     device.deviceSerialNo,
                     MQTTConstants.AWS_USB_PORT_A,
-                    isChecked.toInt().toString()
+                    switchPortA.isChecked.toInt().toString()
                 )
             }
-            switchPortC.setOnCheckedChangeListener { _, isChecked ->
+
+            switchPortC.setOnClickListener {
                 publish(
                     device.deviceSerialNo,
                     MQTTConstants.AWS_USB_PORT_C,
-                    isChecked.toInt().toString()
+                    switchPortC.isChecked.toInt().toString()
                 )
             }
+
             seekBar.onSeekChangeListener = object : OnSeekChangeListener {
                 override fun onSeeking(seekParams: SeekParams?) {
                     seekParams?.progress?.let {
                         publishDimmer(
                             device.deviceSerialNo,
-                            MQTTConstants.AWS_USB_PORT_C,
+                            MQTTConstants.AWS_DMR,
                             it
                         )
                     }
@@ -321,7 +333,7 @@ class ControlModeDeviceAdapter(
 
             if (device.isDeviceAvailable == "0") {
                 relativeLayout.visibility = View.VISIBLE
-            }else{
+            } else {
                 relativeLayout.visibility = View.GONE
             }
 
@@ -354,39 +366,43 @@ class ControlModeDeviceAdapter(
                 }
             }
 
-            switchOne.setOnCheckedChangeListener { _, isChecked ->
+            switchOne.setOnClickListener {
                 publish(
                     device.deviceSerialNo,
                     MQTTConstants.AWS_SWITCH_1,
-                    isChecked.toInt().toString()
+                    switchOne.isChecked.toInt().toString()
                 )
             }
-            switchTwo.setOnCheckedChangeListener { _, isChecked ->
+
+            switchTwo.setOnClickListener {
                 publish(
                     device.deviceSerialNo,
                     MQTTConstants.AWS_SWITCH_2,
-                    isChecked.toInt().toString()
+                    switchTwo.isChecked.toInt().toString()
                 )
             }
-            switchThree.setOnCheckedChangeListener { _, isChecked ->
+
+            switchThree.setOnClickListener {
                 publish(
                     device.deviceSerialNo,
                     MQTTConstants.AWS_SWITCH_3,
-                    isChecked.toInt().toString()
+                    switchThree.isChecked.toInt().toString()
                 )
             }
-            switchFour.setOnCheckedChangeListener { _, isChecked ->
+
+            switchFour.setOnClickListener {
                 publish(
                     device.deviceSerialNo,
                     MQTTConstants.AWS_SWITCH_4,
-                    isChecked.toInt().toString()
+                    switchFour.isChecked.toInt().toString()
                 )
             }
-            switchPortC.setOnCheckedChangeListener { _, isChecked ->
+
+            switchPortC.setOnClickListener {
                 publish(
                     device.deviceSerialNo,
                     MQTTConstants.AWS_USB_PORT_C,
-                    isChecked.toInt().toString()
+                    switchPortC.isChecked.toInt().toString()
                 )
             }
             seekBar.onSeekChangeListener = object : OnSeekChangeListener {
@@ -394,7 +410,7 @@ class ControlModeDeviceAdapter(
                     seekParams?.progress?.let {
                         publishDimmer(
                             device.deviceSerialNo,
-                            MQTTConstants.AWS_USB_PORT_C,
+                            MQTTConstants.AWS_DMR,
                             it
                         )
                     }
@@ -490,7 +506,7 @@ class ControlModeDeviceAdapter(
                                         ) //Dimmer
                                     deviceData?.switchData?.get(5)?.switchStatus =
                                         jsonObject.getInt(
-                                            MQTTConstants.AWS_USB_A
+                                            MQTTConstants.AWS_USB_C
                                         ) //USB C
                                 }
                             }
@@ -557,6 +573,8 @@ class ControlModeDeviceAdapter(
     private fun publish(deviceId: String, switchIndex: String, switchValue: String) {
         val payload = JSONObject()
         payload.put(switchIndex, switchValue)
+
+        Log.e(logTag, " publish payload $payload")
 
         AwsMqttSingleton.publish(
             MQTTConstants.CONTROL_DEVICE_SWITCHES.replace(

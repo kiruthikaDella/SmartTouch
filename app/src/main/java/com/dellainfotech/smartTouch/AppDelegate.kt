@@ -34,7 +34,6 @@ class AppDelegate: Application(), LifecycleObserver {
 
     }
 
-
     @OnLifecycleEvent(Lifecycle.Event.ON_STOP)
     private fun onAppBackgrounded() {
         Log.v(logTag, "Lifecycle.Event.ON_STOP")

@@ -5,24 +5,20 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.view.isVisible
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.amazonaws.mobileconnectors.iot.AWSIotMqttQos
-import com.appizona.yehiahd.fastsave.FastSave
 import com.dellainfotech.smartTouch.R
 import com.dellainfotech.smartTouch.adapters.SwitchIconsAdapter
 import com.dellainfotech.smartTouch.api.model.DeviceSwitchData
 import com.dellainfotech.smartTouch.api.repository.HomeRepository
 import com.dellainfotech.smartTouch.common.interfaces.AdapterItemClickListener
-import com.dellainfotech.smartTouch.common.interfaces.DialogAskListener
 import com.dellainfotech.smartTouch.common.interfaces.DialogShowListener
-import com.dellainfotech.smartTouch.common.utils.Constants
 import com.dellainfotech.smartTouch.common.utils.DialogUtil
-import com.dellainfotech.smartTouch.mqtt.MQTTConstants
 import com.dellainfotech.smartTouch.databinding.FragmentSwitchIconsBinding
 import com.dellainfotech.smartTouch.mqtt.AwsMqttSingleton
 import com.dellainfotech.smartTouch.mqtt.MQTTConnectionStatus
+import com.dellainfotech.smartTouch.mqtt.MQTTConstants
 import com.dellainfotech.smartTouch.mqtt.NotifyManager
 import com.dellainfotech.smartTouch.ui.fragments.ModelBaseFragment
 import com.dellainfotech.smartTouch.ui.viewmodel.HomeViewModel
@@ -49,17 +45,40 @@ class SwitchIconsFragment :
             findNavController().navigateUp()
         }
 
-        mqttConnectionDisposable = NotifyManager.getMQTTConnectionInfo().observeOn(AndroidSchedulers.mainThread()).subscribe{
-            Log.e(logTag, " MQTTConnectionStatus = $it ")
-            when(it){
-                MQTTConnectionStatus.CONNECTED -> {
-                    Log.e(logTag, " MQTTConnectionStatus.CONNECTED ")
-                    subscribeToDevice(args.deviceDetail.deviceSerialNo)
+        mqttConnectionDisposable =
+            NotifyManager.getMQTTConnectionInfo().observeOn(AndroidSchedulers.mainThread())
+                .subscribe {
+                    Log.e(logTag, " MQTTConnectionStatus = $it ")
+                    when (it) {
+                        MQTTConnectionStatus.CONNECTED -> {
+                            Log.e(logTag, " MQTTConnectionStatus.CONNECTED ")
+                            subscribeToDevice(args.deviceDetail.deviceSerialNo)
+                        }
+                        else -> {
+                            //We will do nothing here
+                        }
+                    }
                 }
-            }
-        }
 
         switchList.clear()
+
+        NotifyManager.internetInfo.observe(viewLifecycleOwner, { isConnected ->
+            if (!isConnected) {
+                activity?.let {
+                    DialogUtil.deviceOfflineAlert(
+                        it,
+                        getString(R.string.text_no_internet_available),
+                        object : DialogShowListener {
+                            override fun onClick() {
+                                DialogUtil.hideDialog()
+                                findNavController().navigate(SwitchIconsFragmentDirections.actionGlobalHomeFragment())
+                            }
+
+                        }
+                    )
+                }
+            }
+        })
 
         args.deviceDetail.switchData?.let {
 
@@ -75,7 +94,7 @@ class SwitchIconsFragment :
                 override fun onItemClick(data: DeviceSwitchData) {
                     findNavController().navigate(
                         SwitchIconsFragmentDirections.actionSwitchIconsFragmentToSwitchIconsDetailFragment(
-                            data,args.roomDetail,args.deviceDetail
+                            data, args.roomDetail, args.deviceDetail
                         )
                     )
                 }
@@ -121,15 +140,21 @@ class SwitchIconsFragment :
 
                         if (jsonObject.has(MQTTConstants.AWS_STATUS)) {
                             val deviceStatus = jsonObject.getInt(MQTTConstants.AWS_STATUS)
-                            if (deviceStatus == 1){
+                            if (deviceStatus == 1) {
                                 DialogUtil.hideDialog()
-                            }else {
-                                DialogUtil.deviceOfflineAlert(it, onClick = object : DialogShowListener {
-                                    override fun onClick() {
-                                        findNavController().navigate(SwitchIconsFragmentDirections.actionSwitchIconsFragmentToRoomPanelFragment(args.roomDetail))
-                                    }
+                            } else {
+                                DialogUtil.deviceOfflineAlert(
+                                    it,
+                                    onClick = object : DialogShowListener {
+                                        override fun onClick() {
+                                            findNavController().navigate(
+                                                SwitchIconsFragmentDirections.actionSwitchIconsFragmentToRoomPanelFragment(
+                                                    args.roomDetail
+                                                )
+                                            )
+                                        }
 
-                                })
+                                    })
                             }
                         }
                     }

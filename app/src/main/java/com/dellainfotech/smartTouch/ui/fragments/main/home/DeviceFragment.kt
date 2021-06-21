@@ -8,7 +8,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.lifecycle.observe
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.dellainfotech.smartTouch.R
@@ -20,6 +19,7 @@ import com.dellainfotech.smartTouch.api.model.GetDeviceData
 import com.dellainfotech.smartTouch.api.repository.HomeRepository
 import com.dellainfotech.smartTouch.common.interfaces.AdapterItemClickListener
 import com.dellainfotech.smartTouch.common.interfaces.DialogEditListener
+import com.dellainfotech.smartTouch.common.interfaces.DialogShowListener
 import com.dellainfotech.smartTouch.common.utils.Constants
 import com.dellainfotech.smartTouch.common.utils.DialogUtil
 import com.dellainfotech.smartTouch.common.utils.Utils.clearError
@@ -27,11 +27,10 @@ import com.dellainfotech.smartTouch.common.utils.Utils.toBoolean
 import com.dellainfotech.smartTouch.common.utils.Utils.toEditable
 import com.dellainfotech.smartTouch.common.utils.Utils.toInt
 import com.dellainfotech.smartTouch.databinding.FragmentDeviceBinding
-import com.dellainfotech.smartTouch.mqtt.NetworkConnectionLiveData
+import com.dellainfotech.smartTouch.mqtt.NotifyManager
 import com.dellainfotech.smartTouch.ui.fragments.ModelBaseFragment
 import com.dellainfotech.smartTouch.ui.viewmodel.HomeViewModel
 import com.sothree.slidinguppanel.SlidingUpPanelLayout
-
 
 /**
  * Created by Jignesh Dangar on 09-04-2021.
@@ -63,13 +62,25 @@ class DeviceFragment :
             viewModel.retainState(BodyRetainState(args.roomDetail.id, isChecked.toInt()))
         }
 
-        NetworkConnectionLiveData().observe(viewLifecycleOwner, { isConnected ->
-            if (isConnected){
+        NotifyManager.internetInfo.observe(viewLifecycleOwner, { isConnected ->
+            if (isConnected) {
                 deviceList.clear()
                 showLoading()
                 viewModel.getDevice(args.roomDetail.id)
-            }else {
-                Log.e(logTag, " internet is not available")
+            } else {
+                activity?.let {
+                    DialogUtil.deviceOfflineAlert(
+                        it,
+                        getString(R.string.text_no_internet_available),
+                        object : DialogShowListener {
+                            override fun onClick() {
+                                DialogUtil.hideDialog()
+                                findNavController().navigateUp()
+                            }
+
+                        }
+                    )
+                }
             }
         })
 
@@ -92,6 +103,8 @@ class DeviceFragment :
     override fun getFragmentRepository(): HomeRepository = HomeRepository(networkModel)
 
     private fun clickEvents() {
+
+        binding.layoutSlidingUpPanel.setFadeOnClickListener { hidePanel() }
 
         binding.layoutSlidingUpPanel.addPanelSlideListener(object :
             SlidingUpPanelLayout.PanelSlideListener {
@@ -192,7 +205,7 @@ class DeviceFragment :
             override fun onItemClick(data: GetDeviceData) {
                 findNavController().navigate(
                     DeviceFragmentDirections.actionRoomPanelFragmentToDeviceCustomizationFragment(
-                        data,args.roomDetail
+                        data, args.roomDetail
                     )
                 )
             }
@@ -265,7 +278,6 @@ class DeviceFragment :
                     )
                 )
             }
-
         })
 
         binding.layoutRoomPanel.ivHidePanel.setOnClickListener {
@@ -280,18 +292,22 @@ class DeviceFragment :
             val deviceName = binding.layoutRoomPanel.edtPanelName.text.toString().trim()
             val serialNumber = binding.layoutRoomPanel.edtSerialNumber.text.toString().trim()
 
-            if (deviceName.isEmpty()) {
-                binding.layoutRoomPanel.edtPanelName.error =
-                    getString(R.string.error_text_panel_name)
-            } else if (serialNumber.isEmpty()) {
-                binding.layoutRoomPanel.edtSerialNumber.error =
-                    getString(R.string.error_text_serial_number)
-            } else {
-                hidePanel()
-                Handler(Looper.getMainLooper()).postDelayed({
-                    showLoading()
-                    viewModel.addDevice(BodyAddDevice(serialNumber, args.roomDetail.id, deviceName))
-                }, 600)
+            when {
+                deviceName.isEmpty() -> {
+                    binding.layoutRoomPanel.edtPanelName.error =
+                        getString(R.string.error_text_panel_name)
+                }
+                serialNumber.isEmpty() -> {
+                    binding.layoutRoomPanel.edtSerialNumber.error =
+                        getString(R.string.error_text_serial_number)
+                }
+                else -> {
+                    hidePanel()
+                    Handler(Looper.getMainLooper()).postDelayed({
+                        showLoading()
+                        viewModel.addDevice(BodyAddDevice(serialNumber, args.roomDetail.id, deviceName))
+                    }, 600)
+                }
             }
         }
 

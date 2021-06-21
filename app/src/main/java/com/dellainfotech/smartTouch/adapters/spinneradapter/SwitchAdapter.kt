@@ -7,9 +7,6 @@ import android.widget.ArrayAdapter
 import android.widget.TextView
 import com.dellainfotech.smartTouch.R
 import com.dellainfotech.smartTouch.api.model.DeviceSwitchData
-import com.dellainfotech.smartTouch.api.model.GetDeviceData
-import com.dellainfotech.smartTouch.api.model.GetRoomData
-import com.dellainfotech.smartTouch.api.model.RoomTypeData
 
 class SwitchAdapter(private val activity: Activity, private val items: List<DeviceSwitchData>) :
     ArrayAdapter<DeviceSwitchData?>(activity, R.layout.simple_spinner_dropdown, items) {

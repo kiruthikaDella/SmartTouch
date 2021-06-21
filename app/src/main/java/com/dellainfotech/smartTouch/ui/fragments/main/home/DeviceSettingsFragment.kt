@@ -11,9 +11,11 @@ import com.dellainfotech.smartTouch.R
 import com.dellainfotech.smartTouch.api.Resource
 import com.dellainfotech.smartTouch.api.repository.HomeRepository
 import com.dellainfotech.smartTouch.common.interfaces.DialogAskListener
+import com.dellainfotech.smartTouch.common.interfaces.DialogShowListener
 import com.dellainfotech.smartTouch.common.utils.Constants
 import com.dellainfotech.smartTouch.common.utils.DialogUtil
 import com.dellainfotech.smartTouch.databinding.FragmentDeviceSettingsBinding
+import com.dellainfotech.smartTouch.mqtt.NotifyManager
 import com.dellainfotech.smartTouch.ui.fragments.ModelBaseFragment
 import com.dellainfotech.smartTouch.ui.viewmodel.HomeViewModel
 
@@ -23,7 +25,6 @@ import com.dellainfotech.smartTouch.ui.viewmodel.HomeViewModel
 class DeviceSettingsFragment :
     ModelBaseFragment<HomeViewModel, FragmentDeviceSettingsBinding, HomeRepository>() {
 
-    private val logTag = this::class.java.simpleName
     private val args: DeviceSettingsFragmentArgs by navArgs()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -86,6 +87,24 @@ class DeviceSettingsFragment :
                 )
             }
         }*/
+
+        NotifyManager.internetInfo.observe(viewLifecycleOwner, { isConnected ->
+            if (!isConnected) {
+                activity?.let {
+                    DialogUtil.deviceOfflineAlert(
+                        it,
+                        getString(R.string.text_no_internet_available),
+                        object : DialogShowListener {
+                            override fun onClick() {
+                                DialogUtil.hideDialog()
+                                findNavController().navigate(DeviceSettingsFragmentDirections.actionGlobalHomeFragment())
+                            }
+
+                        }
+                    )
+                }
+            }
+        })
 
         viewModel.deleteDeviceResponse.observe(viewLifecycleOwner, { response ->
             when (response) {

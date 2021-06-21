@@ -69,6 +69,7 @@ class AuthenticationActivity : AppCompatActivity() {
                             FastSave.getInstance().saveString(Constants.SOCIAL_ID, userData.socialId)
                             FastSave.getInstance().saveBoolean(Constants.isControlModePinned, userData.iIsPinStatus!!.toBoolean())
 
+                            FastSave.getInstance().saveInt(Constants.LOGIN_TYPE, Constants.LOGIN_TYPE_FACEBOOK)
                             startActivity(Intent(this, MainActivity::class.java))
                             finishAffinity()
                         }

@@ -1,7 +1,5 @@
 package com.dellainfotech.smartTouch.common.utils
 
-import com.amazonaws.regions.Regions
-
 /**
  * Created by Jignesh Dangar on 19-04-2021.
  */
@@ -34,6 +32,10 @@ object Constants {
 
     const val PASSWORD_LENGTH = 6
     const val SOCIAL_LOGIN = "2"
+    const val LOGIN_TYPE = "login_type" // 1 - Manual login, 2 - Google, 3 - Facebook
+    const val LOGIN_TYPE_MANUAL = 1
+    const val LOGIN_TYPE_GOOGLE = 2
+    const val LOGIN_TYPE_FACEBOOK = 3
 
     //Swagger
     const val SECRET_KEY = "PXGuKjNtjzLiyLRE0GzykvGcaZO5uWE0"

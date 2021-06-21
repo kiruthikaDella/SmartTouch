@@ -4,6 +4,7 @@ import com.dellainfotech.smartTouch.api.body.*
 import com.dellainfotech.smartTouch.api.model.*
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
+import okhttp3.ResponseBody
 import retrofit2.http.*
 
 /**
@@ -291,7 +292,7 @@ interface SmartTouchApi {
     suspend fun updateScene(
         @Header("access_key") access_key: String,
         @Body bodyUpdateScene: BodyUpdateScene
-    ): CommonResponse
+    ): ResponseBody
 
     @DELETE(API_DELETE_SCENE)
     suspend fun deleteScene(

@@ -52,14 +52,18 @@ class AddUserFragment : ModelBaseFragment<UserManagementViewModel, FragmentAddUs
             val userName = binding.edtFullName.text.toString().trim()
             val email = binding.edtEmailAddress.text.toString().trim()
 
-            if (userName.isEmpty()) {
-                binding.edtFullName.error = "Please enter name."
-            } else if (email.isEmpty()) {
-                binding.edtEmailAddress.error = "Please enter email."
-            } else {
-                activity?.let {
-                    DialogUtil.loadingAlert(it)
-                    viewModel.addSubordinateUser(BodyAddSubordinateUser(userName, email))
+            when {
+                userName.isEmpty() -> {
+                    binding.edtFullName.error = "Please enter name."
+                }
+                email.isEmpty() -> {
+                    binding.edtEmailAddress.error = "Please enter email."
+                }
+                else -> {
+                    activity?.let {
+                        DialogUtil.loadingAlert(it)
+                        viewModel.addSubordinateUser(BodyAddSubordinateUser(userName, email))
+                    }
                 }
             }
         }

@@ -6,11 +6,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.lifecycle.observe
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.GridLayoutManager
 import com.amazonaws.mobileconnectors.iot.AWSIotMqttQos
+import com.dellainfotech.smartTouch.R
 import com.dellainfotech.smartTouch.adapters.SwitchIconsDetailAdapter
 import com.dellainfotech.smartTouch.api.Resource
 import com.dellainfotech.smartTouch.api.body.BodyUpdateSwitchIcon
@@ -20,11 +20,10 @@ import com.dellainfotech.smartTouch.common.interfaces.AdapterItemClickListener
 import com.dellainfotech.smartTouch.common.interfaces.DialogShowListener
 import com.dellainfotech.smartTouch.common.utils.Constants
 import com.dellainfotech.smartTouch.common.utils.DialogUtil
-import com.dellainfotech.smartTouch.mqtt.MQTTConstants
 import com.dellainfotech.smartTouch.databinding.FragmentSwitchIconsDetailBinding
 import com.dellainfotech.smartTouch.mqtt.AwsMqttSingleton
 import com.dellainfotech.smartTouch.mqtt.MQTTConnectionStatus
-import com.dellainfotech.smartTouch.mqtt.NetworkConnectionLiveData
+import com.dellainfotech.smartTouch.mqtt.MQTTConstants
 import com.dellainfotech.smartTouch.mqtt.NotifyManager
 import com.dellainfotech.smartTouch.ui.fragments.ModelBaseFragment
 import com.dellainfotech.smartTouch.ui.viewmodel.HomeViewModel
@@ -54,24 +53,41 @@ class SwitchIconsDetailFragment :
 
         binding.tvTitle.text = args.switchDetail.name
 
-        mqttConnectionDisposable = NotifyManager.getMQTTConnectionInfo().observeOn(AndroidSchedulers.mainThread()).subscribe{
-            Log.e(logTag, " MQTTConnectionStatus = $it ")
-            when(it){
-                MQTTConnectionStatus.CONNECTED -> {
-                    Log.e(logTag, " MQTTConnectionStatus.CONNECTED ")
-                    subscribeToDevice(args.deviceDetail.deviceSerialNo)
+        mqttConnectionDisposable =
+            NotifyManager.getMQTTConnectionInfo().observeOn(AndroidSchedulers.mainThread())
+                .subscribe {
+                    Log.e(logTag, " MQTTConnectionStatus = $it ")
+                    when (it) {
+                        MQTTConnectionStatus.CONNECTED -> {
+                            Log.e(logTag, " MQTTConnectionStatus.CONNECTED ")
+                            subscribeToDevice(args.deviceDetail.deviceSerialNo)
+                        }
+                        else -> {
+                            //We will do nothing here
+                        }
+                    }
                 }
-            }
-        }
 
-        NetworkConnectionLiveData().observe(viewLifecycleOwner, { isConnected ->
-            if (isConnected){
+        NotifyManager.internetInfo.observe(viewLifecycleOwner, { isConnected ->
+            if (isConnected) {
                 activity?.let {
                     DialogUtil.loadingAlert(it)
                 }
                 viewModel.iconList()
-            }else {
-                Log.e(logTag, " internet is not available")
+            } else {
+                activity?.let {
+                    DialogUtil.deviceOfflineAlert(
+                        it,
+                        getString(R.string.text_no_internet_available),
+                        object : DialogShowListener {
+                            override fun onClick() {
+                                DialogUtil.hideDialog()
+                                findNavController().navigate(SwitchIconsDetailFragmentDirections.actionGlobalHomeFragment())
+                            }
+
+                        }
+                    )
+                }
             }
         })
 
@@ -193,15 +209,21 @@ class SwitchIconsDetailFragment :
 
                         if (jsonObject.has(MQTTConstants.AWS_STATUS)) {
                             val deviceStatus = jsonObject.getInt(MQTTConstants.AWS_STATUS)
-                            if (deviceStatus == 1){
+                            if (deviceStatus == 1) {
                                 DialogUtil.hideDialog()
-                            }else {
-                                DialogUtil.deviceOfflineAlert(it, onClick = object : DialogShowListener {
-                                    override fun onClick() {
-                                        findNavController().navigate(SwitchIconsDetailFragmentDirections.actionSwitchIconsDetailFragmentToRoomPanelFragment(args.roomDetail))
-                                    }
+                            } else {
+                                DialogUtil.deviceOfflineAlert(
+                                    it,
+                                    onClick = object : DialogShowListener {
+                                        override fun onClick() {
+                                            findNavController().navigate(
+                                                SwitchIconsDetailFragmentDirections.actionSwitchIconsDetailFragmentToRoomPanelFragment(
+                                                    args.roomDetail
+                                                )
+                                            )
+                                        }
 
-                                })
+                                    })
                             }
                         }
                     }
