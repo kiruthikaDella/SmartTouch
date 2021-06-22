@@ -19,6 +19,7 @@ import com.dellainfotech.smartTouch.api.Resource
 import com.dellainfotech.smartTouch.api.body.*
 import com.dellainfotech.smartTouch.api.model.DeviceSwitchData
 import com.dellainfotech.smartTouch.api.model.GetDeviceData
+import com.dellainfotech.smartTouch.api.model.GetDeviceResponse
 import com.dellainfotech.smartTouch.api.repository.HomeRepository
 import com.dellainfotech.smartTouch.common.interfaces.AdapterItemClickListener
 import com.dellainfotech.smartTouch.common.interfaces.DialogEditListener
@@ -35,6 +36,7 @@ import com.dellainfotech.smartTouch.ui.fragments.ModelBaseFragment
 import com.dellainfotech.smartTouch.ui.viewmodel.HomeViewModel
 import com.sothree.slidinguppanel.SlidingUpPanelLayout
 
+
 /**
  * Created by Jignesh Dangar on 09-04-2021.
  */
@@ -49,11 +51,21 @@ class DeviceFragment :
     private lateinit var panelAdapter: DeviceAdapter
     private var devicePosition: Int? = null
     private var switchPosition: Int? = null
+    private var deviceResponse: GetDeviceResponse? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        deviceList.clear()
+        deviceResponse = FastSave.getInstance().getObject(Constants.DEVICE_DATA, GetDeviceResponse::class.java)
+        Log.e(logTag, " deviceData $deviceResponse")
+
+        deviceResponse?.data?.let {
+            deviceList.addAll(it)
+        }
+
+        if (deviceList.isEmpty()) {
+            showLoading()
+        }
 
         binding.switchRetainState.isClickable =
             FastSave.getInstance().getBoolean(Constants.IS_MASTER_USER, false)
@@ -88,8 +100,6 @@ class DeviceFragment :
 
         NotifyManager.internetInfo.observe(viewLifecycleOwner, { isConnected ->
             if (isConnected) {
-                deviceList.clear()
-                showLoading()
                 viewModel.getDevice(args.roomDetail.id)
             } else {
                 activity?.let {
@@ -125,6 +135,11 @@ class DeviceFragment :
     ): FragmentDeviceBinding = FragmentDeviceBinding.inflate(inflater, container, false)
 
     override fun getFragmentRepository(): HomeRepository = HomeRepository(networkModel)
+
+    override fun onDestroy() {
+        super.onDestroy()
+        FastSave.getInstance().deleteValue(Constants.DEVICE_DATA)
+    }
 
     private fun clickEvents() {
 
@@ -387,7 +402,6 @@ class DeviceFragment :
                     context?.let {
                         Toast.makeText(it, response.values.message, Toast.LENGTH_SHORT).show()
                     }
-
                     if (response.values.status && response.values.code == Constants.API_SUCCESS_CODE) {
                         response.values.data?.let {
                             deviceList.add(it)
@@ -406,9 +420,12 @@ class DeviceFragment :
         })
 
         viewModel.getDeviceResponse.observe(viewLifecycleOwner, { response ->
+            deviceList.clear()
             when (response) {
                 is Resource.Success -> {
                     DialogUtil.hideDialog()
+                    deviceResponse = response.values
+                    FastSave.getInstance().saveObject(Constants.DEVICE_DATA, deviceResponse)
                     if (response.values.status && response.values.code == Constants.API_SUCCESS_CODE) {
                         response.values.data?.let { deviceData ->
                             deviceList.addAll(deviceData)

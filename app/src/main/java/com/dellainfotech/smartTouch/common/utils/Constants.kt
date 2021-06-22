@@ -53,5 +53,6 @@ object Constants {
     const val IS_REMEMBER = "is_remember"
     const val IS_LOGGED_IN = "is_logged_in"
 
+    const val DEVICE_DATA = "deviceList"
 
 }
