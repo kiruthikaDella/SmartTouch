@@ -16,14 +16,13 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/daintree"
-        android:visibility="gone"
-        android:alpha="0.4" />
+        android:alpha="0.5" />
 
     <TextView
         android:id="@+id/tv_room_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_toStartOf="@+id/iv_room_settings"
+        android:layout_toStartOf="@+id/iv_delete_room"
         android:layout_alignParentStart="true"
         android:gravity="start"
         android:textSize="@dimen/_12ssp"
@@ -33,13 +32,14 @@
         android:textColor="@color/white" />
 
     <ImageView
-        android:id="@+id/iv_room_settings"
+        android:id="@+id/iv_delete_room"
         android:layout_width="@dimen/_30sdp"
         android:layout_height="@dimen/_30sdp"
         android:padding="@dimen/_8sdp"
         android:layout_marginTop="@dimen/_5sdp"
-        android:src="@drawable/ic_home_room_settings"
+        android:src="@drawable/ic_delete"
         android:layout_alignParentEnd="true"
-        android:layout_marginEnd="@dimen/_5sdp" />
+        android:layout_marginEnd="@dimen/_5sdp"
+        app:tint="@color/white" />
 
 </com.jcminarro.roundkornerlayout.RoundKornerRelativeLayout>

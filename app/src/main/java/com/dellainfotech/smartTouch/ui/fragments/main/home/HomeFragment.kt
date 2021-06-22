@@ -19,6 +19,7 @@ import com.dellainfotech.smartTouch.api.body.BodyLogout
 import com.dellainfotech.smartTouch.api.model.GetRoomData
 import com.dellainfotech.smartTouch.api.repository.HomeRepository
 import com.dellainfotech.smartTouch.common.interfaces.AdapterItemClickListener
+import com.dellainfotech.smartTouch.common.interfaces.DialogAskListener
 import com.dellainfotech.smartTouch.common.utils.Constants
 import com.dellainfotech.smartTouch.common.utils.DialogUtil
 import com.dellainfotech.smartTouch.databinding.FragmentHomeBinding
@@ -35,8 +36,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions
  * Created by Jignesh Dangar on 09-04-2021.
  */
 
-class HomeFragment : ModelBaseFragment<HomeViewModel, FragmentHomeBinding, HomeRepository>(),
-    AdapterItemClickListener<GetRoomData> {
+class HomeFragment : ModelBaseFragment<HomeViewModel, FragmentHomeBinding, HomeRepository>() {
 
     private val logTag = this::class.java.simpleName
     private lateinit var roomsAdapter: RoomsAdapter
@@ -59,6 +59,39 @@ class HomeFragment : ModelBaseFragment<HomeViewModel, FragmentHomeBinding, HomeR
 
         roomsAdapter = RoomsAdapter(roomList)
         binding.recyclerRooms.adapter = roomsAdapter
+        roomsAdapter.setCallback(object : AdapterItemClickListener<GetRoomData> {
+            override fun onItemClick(data: GetRoomData) {
+                findNavController().navigate(
+                    HomeFragmentDirections.actionHomeFragmentToRoomPanelFragment(
+                        data
+                    )
+                )
+            }
+        })
+
+        roomsAdapter.setDeleteCallback(object : AdapterItemClickListener<GetRoomData>{
+            override fun onItemClick(data: GetRoomData) {
+                activity?.let {
+                    DialogUtil.askAlert(
+                        it,
+                        getString(R.string.dialog_title_delete_room),
+                        getString(R.string.text_ok),
+                        getString(R.string.text_cancel),
+                        object : DialogAskListener{
+                            override fun onYesClicked() {
+                                Log.e(logTag, "Yes Clicked")
+                            }
+
+                            override fun onNoClicked() {
+                                Log.e(logTag, "No Clicked")
+                            }
+
+                        }
+                    )
+                }
+            }
+
+        })
 
         binding.tvAppVersion.text = String.format("%s", "Version - ${BuildConfig.VERSION_NAME}")
 
@@ -126,7 +159,6 @@ class HomeFragment : ModelBaseFragment<HomeViewModel, FragmentHomeBinding, HomeR
                         response.values.data?.let { roomData ->
                             roomList.addAll(roomData)
                             roomsAdapter.notifyDataSetChanged()
-                            roomsAdapter.setCallback(this)
                         }
                     } else {
                         roomsAdapter.notifyDataSetChanged()
@@ -146,14 +178,6 @@ class HomeFragment : ModelBaseFragment<HomeViewModel, FragmentHomeBinding, HomeR
                 }
             }
         })
-    }
-
-    override fun onItemClick(data: GetRoomData) {
-        findNavController().navigate(
-            HomeFragmentDirections.actionHomeFragmentToRoomPanelFragment(
-                data
-            )
-        )
     }
 
     private fun openOrCloseDrawer() {
