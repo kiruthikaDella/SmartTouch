@@ -150,7 +150,7 @@ class ScreenLayoutFragment : DialogFragment() {
 
         binding.btnSave.setOnClickListener {
             args.deviceCustomizationDetail.screenLayoutType =
-                screenLayoutModel?.screenLayoutType ?: ""
+                screenLayoutModel?.storedViewType ?: ""
             args.deviceCustomizationDetail.screenLayout = screenLayoutModel?.screenLayout ?: ""
             context?.let {
                 Toast.makeText(it, "Settings Saved!", Toast.LENGTH_SHORT).show()
