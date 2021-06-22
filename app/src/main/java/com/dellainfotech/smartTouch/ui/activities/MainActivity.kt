@@ -86,8 +86,7 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
                 .getBoolean(Constants.isControlModePinned, Constants.DEFAULT_CONTROL_MODE_STATUS)
         ) {
             navController.navigate(R.id.controlModeFragment)
-            binding.linearBottomNavigationView.visibility = View.GONE
-            binding.ivAddRoom.visibility = View.GONE
+            hideBottomNavigation()
         }
 
         binding.ivAddRoom.setOnClickListener {
@@ -158,6 +157,16 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         return item.onNavDestinationSelected(navController) || super.onOptionsItemSelected(item)
+    }
+
+    fun showBottomNavigation() {
+        binding.linearBottomNavigationView.visibility = View.VISIBLE
+        binding.ivAddRoom.visibility = View.VISIBLE
+    }
+
+    fun hideBottomNavigation() {
+        binding.linearBottomNavigationView.visibility = View.GONE
+        binding.ivAddRoom.visibility = View.GONE
     }
 
     private fun hidePanel() {

@@ -35,7 +35,7 @@
 
         <ImageView
             android:id="@+id/ib_pin"
-            android:layout_width="@dimen/_30sdp"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"

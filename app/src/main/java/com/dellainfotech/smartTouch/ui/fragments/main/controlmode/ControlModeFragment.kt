@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import com.appizona.yehiahd.fastsave.FastSave
 import com.dellainfotech.smartTouch.R
@@ -23,6 +24,7 @@ import com.dellainfotech.smartTouch.common.utils.Utils.toInt
 import com.dellainfotech.smartTouch.databinding.FragmentControlModeBinding
 import com.dellainfotech.smartTouch.mqtt.NotifyManager
 import com.dellainfotech.smartTouch.ui.activities.AuthenticationActivity
+import com.dellainfotech.smartTouch.ui.activities.MainActivity
 import com.dellainfotech.smartTouch.ui.fragments.ModelBaseFragment
 import com.dellainfotech.smartTouch.ui.viewmodel.HomeViewModel
 
@@ -44,7 +46,9 @@ class ControlModeFragment :
                 .getBoolean(Constants.isControlModePinned, Constants.DEFAULT_CONTROL_MODE_STATUS)
         ) {
             binding.ibLogout.isVisible = true
-            binding.ibPin.rotation = -45f
+            context?.let { mContext ->
+                binding.ibPin.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_pin_straight))
+            }
         }
 
         NotifyManager.internetInfo.observe(viewLifecycleOwner, { isConnected ->
@@ -142,6 +146,21 @@ class ControlModeFragment :
                                 Constants.isControlModePinned,
                                 it.isPinStatus.toBoolean()
                             )
+
+                            if (it.isPinStatus.toBoolean()) {
+                                (activity as MainActivity).hideBottomNavigation()
+                                binding.ibLogout.isVisible = true
+                                context?.let { mContext ->
+                                    binding.ibPin.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_pin_straight))
+                                }
+
+                            } else {
+                                (activity as MainActivity).showBottomNavigation()
+                                binding.ibLogout.isVisible = false
+                                context?.let { mContext ->
+                                    binding.ibPin.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_pin))
+                                }
+                            }
                         }
                     }
                 }
