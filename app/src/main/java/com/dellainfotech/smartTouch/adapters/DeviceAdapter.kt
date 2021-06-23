@@ -768,12 +768,13 @@ class DeviceAdapter(
         val payload = JSONObject()
         payload.put(switchIndex, switchValue)
 
-        Log.e(logTag, " publishSwitch payload $payload  ")
+        val topic = MQTTConstants.CONTROL_DEVICE_SWITCHES.replace(
+            MQTTConstants.AWS_DEVICE_ID,
+            deviceId
+        )
+        Log.e(logTag, " publishSwitch topic $topic payload $payload  ")
         AwsMqttSingleton.publish(
-            MQTTConstants.CONTROL_DEVICE_SWITCHES.replace(
-                MQTTConstants.AWS_DEVICE_ID,
-                deviceId
-            ), payload.toString()
+            topic, payload.toString()
         )
     }
 

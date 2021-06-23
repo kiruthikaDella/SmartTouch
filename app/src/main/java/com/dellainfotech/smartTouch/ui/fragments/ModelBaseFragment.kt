@@ -25,7 +25,7 @@ abstract class ModelBaseFragment<VM : ViewModel, B : ViewBinding, R : BaseReposi
     ): View? {
         binding = getFragmentBinding(inflater, container)
         val factory = ViewModelFactory(getFragmentRepository())
-        viewModel = ViewModelProvider(this, factory).get(getViewModel())
+        viewModel = ViewModelProvider(requireActivity(), factory).get(getViewModel())
 
         return binding.root
     }

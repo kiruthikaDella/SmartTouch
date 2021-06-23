@@ -19,7 +19,6 @@ import com.dellainfotech.smartTouch.api.Resource
 import com.dellainfotech.smartTouch.api.body.*
 import com.dellainfotech.smartTouch.api.model.DeviceSwitchData
 import com.dellainfotech.smartTouch.api.model.GetDeviceData
-import com.dellainfotech.smartTouch.api.model.GetDeviceResponse
 import com.dellainfotech.smartTouch.api.repository.HomeRepository
 import com.dellainfotech.smartTouch.common.interfaces.AdapterItemClickListener
 import com.dellainfotech.smartTouch.common.interfaces.DialogEditListener
@@ -51,20 +50,30 @@ class DeviceFragment :
     private lateinit var panelAdapter: DeviceAdapter
     private var devicePosition: Int? = null
     private var switchPosition: Int? = null
-    private var deviceResponse: GetDeviceResponse? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        deviceResponse = FastSave.getInstance().getObject(Constants.DEVICE_DATA, GetDeviceResponse::class.java)
-        Log.e(logTag, " deviceData $deviceResponse")
+        deviceList.clear()
 
-        deviceResponse?.data?.let {
-            deviceList.addAll(it)
-        }
-
-        if (deviceList.isEmpty()) {
+        if (viewModel.getDeviceResponse.value == null) {
             showLoading()
+        } else {
+            viewModel.getDeviceResponse.value?.let {
+                when (it) {
+                    is Resource.Success -> {
+                        if (it.values.status && it.values.code == Constants.API_SUCCESS_CODE) {
+                            it.values.data?.let { deviceData ->
+                                deviceList.addAll(deviceData)
+                            }
+                        }
+                        Log.e(logTag, "" + it.values.data)
+                    }
+                    else -> {
+
+                    }
+                }
+            }
         }
 
         binding.switchRetainState.isClickable =
@@ -138,7 +147,7 @@ class DeviceFragment :
 
     override fun onDestroy() {
         super.onDestroy()
-        FastSave.getInstance().deleteValue(Constants.DEVICE_DATA)
+        viewModel.getDeviceResponse.postValue(null)
     }
 
     private fun clickEvents() {
@@ -424,8 +433,6 @@ class DeviceFragment :
             when (response) {
                 is Resource.Success -> {
                     DialogUtil.hideDialog()
-                    deviceResponse = response.values
-                    FastSave.getInstance().saveObject(Constants.DEVICE_DATA, deviceResponse)
                     if (response.values.status && response.values.code == Constants.API_SUCCESS_CODE) {
                         response.values.data?.let { deviceData ->
                             deviceList.addAll(deviceData)

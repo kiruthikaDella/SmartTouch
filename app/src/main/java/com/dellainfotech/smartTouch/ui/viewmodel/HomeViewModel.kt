@@ -130,8 +130,13 @@ class HomeViewModel @ViewModelInject constructor(
         get() = _addDeviceResponse
 
     private val _getDeviceResponse: MutableLiveData<Resource<GetDeviceResponse>> = MutableLiveData()
-    val getDeviceResponse: LiveData<Resource<GetDeviceResponse>>
+    val getDeviceResponse: MutableLiveData<Resource<GetDeviceResponse>>
         get() = _getDeviceResponse
+
+
+    fun getDeviceList() {
+        (getDeviceResponse.value as Resource<GetDeviceResponse>)
+    }
 
     private val _getDeviceCustomizationSettingsResponse: MutableLiveData<Resource<DeviceCustomizationResponse>> = MutableLiveData()
     val getDeviceCustomizationSettingsResponse: LiveData<Resource<DeviceCustomizationResponse>>
@@ -322,6 +327,8 @@ class HomeViewModel @ViewModelInject constructor(
         _cancelOwnershipResponse.value = Resource.Loading
         _cancelOwnershipResponse.value = homeRepository.cancelTransferOwnership(ownershipId)
     }
+
+
 
     //
     //endregion
