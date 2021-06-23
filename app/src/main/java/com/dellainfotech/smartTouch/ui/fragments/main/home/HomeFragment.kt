@@ -1,5 +1,6 @@
 package com.dellainfotech.smartTouch.ui.fragments.main.home
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -53,6 +54,11 @@ class HomeFragment : ModelBaseFragment<HomeViewModel, FragmentHomeBinding, HomeR
         val headerView: View = binding.sideNavigationView.getHeaderView(0)
         val navUsername = headerView.findViewById(R.id.tv_user_name) as TextView
         val navUserEmail = headerView.findViewById(R.id.tv_user_email) as TextView
+
+        val sharedPreference =  activity?.getSharedPreferences(Constants.SHARED_PREF, Context.MODE_PRIVATE)
+        val isRemember = sharedPreference?.getBoolean(Constants.IS_REMEMBER,Constants.DEFAULT_REMEMBER_STATUS)
+
+        Log.e(logTag, " isRemember $isRemember ")
 
         navUsername.text = FastSave.getInstance().getString(Constants.USER_FULL_NAME, null)
         navUserEmail.text = FastSave.getInstance().getString(Constants.USER_EMAIL, null)
@@ -130,6 +136,23 @@ class HomeFragment : ModelBaseFragment<HomeViewModel, FragmentHomeBinding, HomeR
                     DialogUtil.hideDialog()
                     if (response.values.status && response.values.code == Constants.API_SUCCESS_CODE) {
                         activity?.let {
+
+                            val sharedPreference =  it.getSharedPreferences(Constants.SHARED_PREF, Context.MODE_PRIVATE)
+                            val isRemember = sharedPreference.getBoolean(Constants.IS_REMEMBER,Constants.DEFAULT_REMEMBER_STATUS)
+                            val loginType = sharedPreference.getInt(Constants.LOGGED_IN_TYPE, 0)
+
+                            if (loginType == Constants.LOGIN_TYPE_MANUAL){
+                                if (!isRemember){
+                                    val editor = sharedPreference.edit()
+                                    editor.clear()
+                                    editor.apply()
+                                }
+                            }else {
+                                val editor = sharedPreference.edit()
+                                editor.clear()
+                                editor.apply()
+                            }
+
                             FastSave.getInstance().clearSession()
                             startActivity(Intent(it, AuthenticationActivity::class.java))
                             it.finishAffinity()
@@ -220,7 +243,7 @@ class HomeFragment : ModelBaseFragment<HomeViewModel, FragmentHomeBinding, HomeR
                 }
                 R.id.nav_logout -> {
 
-                    val loginType = FastSave.getInstance().getInt(Constants.LOGIN_TYPE, 1)
+                    val loginType = FastSave.getInstance().getInt(Constants.LOGIN_TYPE, 0)
                     if (loginType == Constants.LOGIN_TYPE_GOOGLE) {
                         mGoogleSingInClient?.signOut()
                     } else if (loginType == Constants.LOGIN_TYPE_FACEBOOK) {

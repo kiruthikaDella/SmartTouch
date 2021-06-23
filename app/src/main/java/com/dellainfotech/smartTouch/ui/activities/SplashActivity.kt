@@ -20,9 +20,7 @@ class SplashActivity : AppCompatActivity() {
         super.onResume()
         Handler(Looper.getMainLooper()).postDelayed({
 
-            if (FastSave.getInstance()
-                    .getBoolean(Constants.IS_REMEMBER, false) && FastSave.getInstance()
-                    .getBoolean(Constants.IS_LOGGED_IN, false)
+            if (FastSave.getInstance().getBoolean(Constants.IS_LOGGED_IN, false)
             ) {
                 startActivity(Intent(this@SplashActivity, MainActivity::class.java))
             } else {

@@ -1,5 +1,6 @@
 package com.dellainfotech.smartTouch.ui.activities
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -74,6 +75,11 @@ class AuthenticationActivity : AppCompatActivity() {
                             }else{
                                 FastSave.getInstance().saveBoolean(Constants.IS_MASTER_USER,false)
                             }
+
+                            val sharedPreference =  getSharedPreferences(Constants.SHARED_PREF, Context.MODE_PRIVATE)
+                            val editor = sharedPreference?.edit()
+                            editor?.putInt(Constants.LOGGED_IN_TYPE,Constants.LOGIN_TYPE_GOOGLE)
+                            editor?.apply()
 
                             FastSave.getInstance().saveInt(Constants.LOGIN_TYPE, Constants.LOGIN_TYPE_FACEBOOK)
                             startActivity(Intent(this, MainActivity::class.java))

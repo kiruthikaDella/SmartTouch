@@ -5,6 +5,12 @@ package com.dellainfotech.smartTouch.common.utils
  */
 object Constants {
 
+    const val SHARED_PREF = "smarttouch_preference"
+    const val LOGGED_IN_EMAIL = "logged_in_email"
+    const val LOGGED_IN_PASSWORD = "logged_in_password"
+    const val LOGGED_IN_TYPE = "logged_in_type"
+    const val IS_REMEMBER = "is_remember"
+
     var COMMON_DIALOG_WIDTH = 0.8.toFloat()
     var COMMON_DIALOG_HEIGHT = 0.9.toFloat()
 
@@ -50,7 +56,6 @@ object Constants {
 
     const val MOBILE_UUID = "mobile_uuid"
     const val DEFAULT_REMEMBER_STATUS = false
-    const val IS_REMEMBER = "is_remember"
     const val IS_LOGGED_IN = "is_logged_in"
 
 }
