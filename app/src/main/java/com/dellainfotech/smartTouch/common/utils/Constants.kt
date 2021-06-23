@@ -35,9 +35,9 @@ object Constants {
     const val PASSWORD_LENGTH = 6
     const val SOCIAL_LOGIN = "2"
     const val LOGIN_TYPE = "login_type" // 1 - Manual login, 2 - Google, 3 - Facebook
-    const val LOGIN_TYPE_MANUAL = 1
-    const val LOGIN_TYPE_GOOGLE = 2
-    const val LOGIN_TYPE_FACEBOOK = 3
+    const val LOGIN_TYPE_MANUAL = "Manual"
+    const val LOGIN_TYPE_GOOGLE = "Google"
+    const val LOGIN_TYPE_FACEBOOK = "Facebook"
     const val IS_MASTER_USER = "is_master_user"
     const val MASTER_USER = "Master User"
     const val SUBORDINATE_USER = "subordinate"

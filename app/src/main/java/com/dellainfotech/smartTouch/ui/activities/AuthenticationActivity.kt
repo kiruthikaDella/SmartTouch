@@ -78,10 +78,10 @@ class AuthenticationActivity : AppCompatActivity() {
 
                             val sharedPreference =  getSharedPreferences(Constants.SHARED_PREF, Context.MODE_PRIVATE)
                             val editor = sharedPreference?.edit()
-                            editor?.putInt(Constants.LOGGED_IN_TYPE,Constants.LOGIN_TYPE_GOOGLE)
+                            editor?.putString(Constants.LOGGED_IN_TYPE,Constants.LOGIN_TYPE_FACEBOOK)
                             editor?.apply()
 
-                            FastSave.getInstance().saveInt(Constants.LOGIN_TYPE, Constants.LOGIN_TYPE_FACEBOOK)
+                            FastSave.getInstance().saveString(Constants.LOGIN_TYPE, Constants.LOGIN_TYPE_FACEBOOK)
                             startActivity(Intent(this, MainActivity::class.java))
                             finishAffinity()
                         }

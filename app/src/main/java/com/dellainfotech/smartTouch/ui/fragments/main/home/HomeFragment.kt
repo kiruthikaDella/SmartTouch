@@ -139,7 +139,7 @@ class HomeFragment : ModelBaseFragment<HomeViewModel, FragmentHomeBinding, HomeR
 
                             val sharedPreference =  it.getSharedPreferences(Constants.SHARED_PREF, Context.MODE_PRIVATE)
                             val isRemember = sharedPreference.getBoolean(Constants.IS_REMEMBER,Constants.DEFAULT_REMEMBER_STATUS)
-                            val loginType = sharedPreference.getInt(Constants.LOGGED_IN_TYPE, 0)
+                            val loginType = sharedPreference.getString(Constants.LOGGED_IN_TYPE, "")
 
                             if (loginType == Constants.LOGIN_TYPE_MANUAL){
                                 if (!isRemember){
@@ -243,7 +243,7 @@ class HomeFragment : ModelBaseFragment<HomeViewModel, FragmentHomeBinding, HomeR
                 }
                 R.id.nav_logout -> {
 
-                    val loginType = FastSave.getInstance().getInt(Constants.LOGIN_TYPE, 0)
+                    val loginType = FastSave.getInstance().getString(Constants.LOGIN_TYPE, "")
                     if (loginType == Constants.LOGIN_TYPE_GOOGLE) {
                         mGoogleSingInClient?.signOut()
                     } else if (loginType == Constants.LOGIN_TYPE_FACEBOOK) {
