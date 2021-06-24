@@ -141,7 +141,7 @@ class HomeFragment : ModelBaseFragment<HomeViewModel, FragmentHomeBinding, HomeR
                             val isRemember = sharedPreference.getBoolean(Constants.IS_REMEMBER,Constants.DEFAULT_REMEMBER_STATUS)
                             val loginType = sharedPreference.getString(Constants.LOGGED_IN_TYPE, "")
 
-                            if (loginType == Constants.LOGIN_TYPE_MANUAL){
+                            if (loginType == Constants.LOGIN_TYPE_NORMAL){
                                 if (!isRemember){
                                     val editor = sharedPreference.edit()
                                     editor.clear()

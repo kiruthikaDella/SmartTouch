@@ -25,11 +25,11 @@
         android:id="@+id/nav_shop"
         android:icon="@drawable/ic_side_nav_shop"
         android:title="@string/side_nav_text_shop" />
-<!--
+
     <item
         android:id="@+id/nav_contact_us"
         android:icon="@drawable/ic_side_nav_contact_us"
-        android:title="@string/side_nav_text_contact_us" />-->
+        android:title="@string/side_nav_text_contact_us" />
 
     <item
         android:id="@+id/nav_logout"

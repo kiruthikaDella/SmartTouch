@@ -150,6 +150,7 @@ class CreateAccountFragment :
                     email,
                     password,
                     confirmPassword,
+                    Constants.LOGIN_TYPE_NORMAL,
                     phoneNumber
                 )
             )

@@ -181,6 +181,7 @@ class AuthenticationActivity : AppCompatActivity() {
                                     accessToken.userId,
                                     uuid,
                                     Constants.SOCIAL_LOGIN,
+                                    Constants.LOGIN_TYPE_FACEBOOK,
                                     email
                                 )
                             )

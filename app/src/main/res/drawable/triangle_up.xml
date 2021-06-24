@@ -8,7 +8,7 @@
             android:toDegrees="45" >
             <shape android:shape="rectangle" >
                 <stroke
-                    android:width="10dp"
+                    android:width="@dimen/_10sdp"
                     android:color="#00000000" />
 
                 <solid android:color="@color/theme_color" />

@@ -10,7 +10,6 @@ import android.text.method.PasswordTransformationMethod
 import android.util.Log
 import android.util.Patterns
 import android.view.LayoutInflater
-import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
@@ -74,7 +73,7 @@ class LoginFragment : ModelBaseFragment<AuthViewModel, FragmentLoginBinding, Aut
 
             Log.e(logTag," loginType $loginType isRememberMeChecked $isRememberMeChecked  ")
 
-            if (isRememberMeChecked && loginType == Constants.LOGIN_TYPE_MANUAL){
+            if (isRememberMeChecked && loginType == Constants.LOGIN_TYPE_NORMAL){
                 val email = sharedPreference.getString(Constants.LOGGED_IN_EMAIL, null)
                 val password = sharedPreference.getString(Constants.LOGGED_IN_PASSWORD,null)
 
@@ -179,6 +178,7 @@ class LoginFragment : ModelBaseFragment<AuthViewModel, FragmentLoginBinding, Aut
                                     it.id.toString(),
                                     uuid,
                                     Constants.SOCIAL_LOGIN,
+                                    Constants.LOGIN_TYPE_GOOGLE,
                                     email
                                 )
                             )
@@ -240,14 +240,14 @@ class LoginFragment : ModelBaseFragment<AuthViewModel, FragmentLoginBinding, Aut
                             
                             FastSave.getInstance().saveString(Constants.SOCIAL_ID, userData.socialId)
                             FastSave.getInstance().saveBoolean(Constants.isControlModePinned, userData.iIsPinStatus!!.toBoolean())
-                            FastSave.getInstance().saveString(Constants.LOGIN_TYPE, Constants.LOGIN_TYPE_MANUAL)
+                            FastSave.getInstance().saveString(Constants.LOGIN_TYPE, Constants.LOGIN_TYPE_NORMAL)
 
                             if (binding.checkboxRemember.isChecked){
                                 val sharedPreference =  activity?.getSharedPreferences(Constants.SHARED_PREF, Context.MODE_PRIVATE)
                                 val editor = sharedPreference?.edit()
                                 editor?.putString(Constants.LOGGED_IN_EMAIL,binding.edtEmail.text.toString())
                                 editor?.putString(Constants.LOGGED_IN_PASSWORD,binding.edtPassword.text.toString())
-                                editor?.putString(Constants.LOGGED_IN_TYPE,Constants.LOGIN_TYPE_MANUAL)
+                                editor?.putString(Constants.LOGGED_IN_TYPE,Constants.LOGIN_TYPE_NORMAL)
                                 editor?.apply()
                             }
                             activity?.let {

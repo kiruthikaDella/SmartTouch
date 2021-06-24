@@ -3,16 +3,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginStart="@dimen/screen_start_margin"
-    android:layout_marginTop="@dimen/_10sdp"
-    android:layout_marginEnd="@dimen/screen_end_margin"
     app:cardCornerRadius="@dimen/corner_radius_2dp"
     app:cardElevation="@dimen/_5sdp">
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/catskill_white">
+        android:layout_height="wrap_content">
 
         <RelativeLayout
             android:id="@+id/relative_main"
@@ -24,6 +20,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
+                android:visibility="gone"
                 app:cardBackgroundColor="@color/white"
                 app:cardElevation="@dimen/_1sdp">
 
@@ -31,51 +28,28 @@
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/_40sdp">
 
-                    <ImageView
-                        android:id="@+id/img_panel_menu"
-                        android:layout_width="@dimen/_30sdp"
-                        android:layout_height="match_parent"
-                        android:layout_centerVertical="true"
-                        android:paddingStart="@dimen/_10sdp"
-                        android:paddingEnd="@dimen/_10sdp"
-                        android:src="@drawable/ic_panel_menu"
-                        app:tint="@color/theme_color" />
-
                     <TextView
                         android:id="@+id/tv_panel_name"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
-                        android:layout_toStartOf="@+id/img_panel_edit"
-                        android:layout_toEndOf="@+id/img_panel_menu"
+                        android:layout_marginStart="@dimen/_10sdp"
                         android:fontFamily="@font/roboto_bold"
                         android:text="SMT2028189"
                         android:textColor="@color/daintree"
                         android:textSize="@dimen/_12ssp" />
-
-                    <ImageView
-                        android:id="@+id/img_panel_edit"
-                        android:layout_width="@dimen/_30sdp"
-                        android:layout_height="match_parent"
-                        android:padding="@dimen/_8sdp"
-                        android:layout_alignParentEnd="true"
-                        android:layout_centerVertical="true"
-                        android:src="@drawable/ic_panel_edit"
-                        app:tint="@color/theme_color" />
 
                 </RelativeLayout>
 
             </androidx.cardview.widget.CardView>
 
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/constraint_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/card_title"
-                android:background="@color/catskill_white"
-                android:paddingStart="@dimen/_10sdp"
-                android:paddingTop="@dimen/_15sdp"
-                android:paddingEnd="@dimen/_10sdp">
+                android:layout_marginStart="@dimen/_10sdp"
+                android:background="@color/white"
+                android:paddingTop="@dimen/_15sdp">
 
                 <androidx.constraintlayout.widget.Guideline
                     android:id="@+id/guideline1"
@@ -134,22 +108,6 @@
                     app:layout_constraintStart_toStartOf="@+id/guideline1"
                     app:layout_constraintTop_toTopOf="@+id/tv_switch_one_name" />
 
-                <TextView
-                    android:id="@+id/tv_switch_one_edit"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/_5sdp"
-                    android:fontFamily="@font/roboto_medium"
-                    android:maxLength="8"
-                    android:singleLine="true"
-                    android:text="@string/text_edit"
-                    android:textColor="@color/theme_color"
-                    android:textSize="@dimen/_11ssp"
-                    app:layout_constraintBottom_toBottomOf="@+id/tv_switch_one_name"
-                    app:layout_constraintEnd_toStartOf="@+id/switch_one"
-                    app:layout_constraintStart_toStartOf="@+id/guideline2"
-                    app:layout_constraintTop_toTopOf="@+id/tv_switch_one_name" />
-
                 <com.google.android.material.switchmaterial.SwitchMaterial
                     android:id="@+id/switch_one"
                     style="@style/PanelSwitchColorStyle"
@@ -200,22 +158,6 @@
                     app:layout_constraintBottom_toBottomOf="@+id/tv_switch_two_name"
                     app:layout_constraintEnd_toEndOf="@+id/guideline2"
                     app:layout_constraintStart_toStartOf="@+id/guideline1"
-                    app:layout_constraintTop_toTopOf="@+id/tv_switch_two_name" />
-
-                <TextView
-                    android:id="@+id/tv_switch_two_edit"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/_5sdp"
-                    android:fontFamily="@font/roboto_medium"
-                    android:maxLength="8"
-                    android:singleLine="true"
-                    android:text="@string/text_edit"
-                    android:textColor="@color/theme_color"
-                    android:textSize="@dimen/_11ssp"
-                    app:layout_constraintBottom_toBottomOf="@+id/tv_switch_two_name"
-                    app:layout_constraintEnd_toStartOf="@+id/switch_two"
-                    app:layout_constraintStart_toStartOf="@+id/guideline2"
                     app:layout_constraintTop_toTopOf="@+id/tv_switch_two_name" />
 
                 <com.google.android.material.switchmaterial.SwitchMaterial
@@ -272,22 +214,6 @@
                     app:layout_constraintStart_toStartOf="@+id/guideline1"
                     app:layout_constraintTop_toTopOf="@+id/tv_switch_three_name" />
 
-                <TextView
-                    android:id="@+id/tv_switch_three_edit"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/_5sdp"
-                    android:fontFamily="@font/roboto_medium"
-                    android:maxLength="8"
-                    android:singleLine="true"
-                    android:text="@string/text_edit"
-                    android:textColor="@color/theme_color"
-                    android:textSize="@dimen/_11ssp"
-                    app:layout_constraintBottom_toBottomOf="@+id/tv_switch_three_name"
-                    app:layout_constraintEnd_toStartOf="@+id/switch_three"
-                    app:layout_constraintStart_toStartOf="@+id/guideline2"
-                    app:layout_constraintTop_toTopOf="@+id/tv_switch_three_name" />
-
                 <com.google.android.material.switchmaterial.SwitchMaterial
                     android:id="@+id/switch_three"
                     style="@style/PanelSwitchColorStyle"
@@ -342,23 +268,6 @@
                     app:layout_constraintStart_toStartOf="@+id/guideline1"
                     app:layout_constraintTop_toTopOf="@+id/tv_switch_four_name" />
 
-                <TextView
-                    android:id="@+id/tv_switch_four_edit"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/_5sdp"
-                    android:fontFamily="@font/roboto_medium"
-                    android:maxLength="8"
-                    android:singleLine="true"
-                    android:text="@string/text_edit"
-                    android:textColor="@color/theme_color"
-                    android:textSize="@dimen/_11ssp"
-                    app:layout_constraintBottom_toBottomOf="@+id/tv_switch_four_name"
-                    app:layout_constraintEnd_toStartOf="@+id/switch_four"
-                    app:layout_constraintHorizontal_bias="1.0"
-                    app:layout_constraintStart_toStartOf="@+id/guideline2"
-                    app:layout_constraintTop_toTopOf="@+id/tv_switch_four_name" />
-
                 <com.google.android.material.switchmaterial.SwitchMaterial
                     android:id="@+id/switch_four"
                     style="@style/PanelSwitchColorStyle"
@@ -380,9 +289,9 @@
                     app:isb_show_tick_marks_type="none"
                     app:isb_show_tick_texts="true"
                     app:isb_thumb_drawable="@drawable/ic_panel_seekbar_thumb"
-                    app:isb_thumb_size="@dimen/_20sdp"
+                    app:isb_thumb_size="@dimen/_50sdp"
                     app:isb_tick_texts_color="@color/theme_color"
-                    app:isb_tick_texts_size="@dimen/_12ssp"
+                    app:isb_tick_texts_size="15sp"
                     app:isb_ticks_count="6"
                     app:isb_track_background_color="@color/gull_gray"
                     app:isb_track_background_size="@dimen/_1sdp"
@@ -416,140 +325,6 @@
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <LinearLayout
-                android:id="@+id/linear_panel_menu"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/card_title"
-                android:layout_marginTop="@dimen/_minus10sdp"
-                android:orientation="vertical"
-                android:visibility="gone">
-
-                <ImageView
-                    android:layout_width="@dimen/_24sdp"
-                    android:layout_height="@dimen/_24sdp"
-                    android:scaleType="fitXY"
-                    android:elevation="@dimen/_5sdp"
-                    android:src="@drawable/triangle_up"
-                    app:tint="@color/theme_color" />
-
-                <androidx.cardview.widget.CardView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="-1dp"
-                    android:orientation="vertical"
-                    app:cardBackgroundColor="@color/theme_color"
-                    app:cardCornerRadius="@dimen/_6sdp"
-                    app:cardElevation="@dimen/_5sdp">
-
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/_20sdp"
-                        android:layout_marginBottom="@dimen/_20sdp"
-                        android:orientation="vertical">
-
-                        <LinearLayout
-                            android:id="@+id/linear_customization"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="@dimen/_25sdp"
-                            android:layout_marginEnd="@dimen/_25sdp"
-                            android:orientation="horizontal">
-
-                            <ImageView
-                                android:layout_width="@dimen/_16sdp"
-                                android:layout_height="@dimen/_16sdp"
-                                android:layout_gravity="center_vertical"
-                                android:src="@drawable/ic_panel_menu_customization"
-                                app:tint="@color/white" />
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center_vertical"
-                                android:layout_marginStart="@dimen/_20sdp"
-                                android:fontFamily="@font/roboto_medium"
-                                android:text="@string/text_customization"
-                                android:textColor="@color/white"
-                                android:textSize="@dimen/_12ssp" />
-
-                        </LinearLayout>
-
-                        <View
-                            android:layout_width="match_parent"
-                            android:layout_height="0.3dp"
-                            android:layout_marginStart="@dimen/_15sdp"
-                            android:layout_marginTop="@dimen/_10sdp"
-                            android:layout_marginEnd="@dimen/_15sdp"
-                            android:background="@color/white" />
-
-                        <LinearLayout
-                            android:id="@+id/linear_features"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="@dimen/_25sdp"
-                            android:layout_marginTop="@dimen/_10sdp"
-                            android:layout_marginEnd="@dimen/_25sdp"
-                            android:orientation="horizontal">
-
-                            <ImageView
-                                android:layout_width="@dimen/_16sdp"
-                                android:layout_height="@dimen/_14sdp"
-                                android:src="@drawable/ic_panel_menu_features"
-                                app:tint="@color/white" />
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginStart="@dimen/_20sdp"
-                                android:fontFamily="@font/roboto_medium"
-                                android:text="@string/text_features"
-                                android:textColor="@color/white"
-                                android:textSize="@dimen/_12ssp" />
-
-                        </LinearLayout>
-
-                        <View
-                            android:layout_width="match_parent"
-                            android:layout_height="0.3dp"
-                            android:layout_marginStart="@dimen/_15sdp"
-                            android:layout_marginTop="@dimen/_10sdp"
-                            android:layout_marginEnd="@dimen/_15sdp"
-                            android:background="@color/white" />
-
-                        <LinearLayout
-                            android:id="@+id/linear_device_settings"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="@dimen/_25sdp"
-                            android:layout_marginTop="@dimen/_10sdp"
-                            android:layout_marginEnd="@dimen/_25sdp"
-                            android:orientation="horizontal">
-
-                            <ImageView
-                                android:layout_width="@dimen/_14sdp"
-                                android:layout_height="@dimen/_16sdp"
-                                android:src="@drawable/ic_panel_menu_settings"
-                                app:tint="@color/white" />
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginStart="@dimen/_20sdp"
-                                android:fontFamily="@font/roboto_medium"
-                                android:text="@string/text_settings"
-                                android:textColor="@color/white"
-                                android:textSize="@dimen/_12ssp" />
-
-                        </LinearLayout>
-
-                    </LinearLayout>
-
-                </androidx.cardview.widget.CardView>
-
-            </LinearLayout>
-
         </RelativeLayout>
 
         <RelativeLayout
@@ -560,7 +335,7 @@
             android:background="@color/black"
             android:clickable="true"
             android:focusable="true"
-            android:visibility="gone" />
+            android:visibility="gone"/>
 
     </RelativeLayout>
 

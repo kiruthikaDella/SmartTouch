@@ -10,18 +10,19 @@
         android:id="@+id/tv_user_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="@dimen/_14ssp"
-        android:text="Hermione Granger"
         android:fontFamily="@font/roboto_medium"
-        android:textColor="@color/theme_color" />
+        android:text="Hermione Granger"
+        android:textColor="@color/theme_color"
+        android:textSize="@dimen/_14ssp" />
 
     <TextView
         android:id="@+id/tv_user_email"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="@dimen/_12ssp"
-        android:text="hermione.granger@gmail.com"
+        android:layout_marginTop="@dimen/_minus5sdp"
         android:fontFamily="@font/roboto_medium"
-        android:textColor="@color/daintree"/>
+        android:text="hermione.granger@gmail.com"
+        android:textColor="@color/daintree"
+        android:textSize="@dimen/_12ssp" />
 
 </LinearLayout>

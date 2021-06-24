@@ -63,6 +63,7 @@
         app:itemIconTint="@color/nepal"
         app:itemTextAppearance="@style/SideNavigationTextStyle"
         app:itemTextColor="@color/daintree"
+        android:theme="@style/NavigationTheme"
         app:menu="@menu/side_navigation_menu"
         app:itemHorizontalPadding="@dimen/navigation_start_margin">
 

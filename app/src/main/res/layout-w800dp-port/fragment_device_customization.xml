@@ -1,0 +1,489 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.sothree.slidinguppanel.SlidingUpPanelLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/layout_sliding_up_panel"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/app_background_color"
+    android:gravity="bottom"
+    app:umanoDragView="@id/drag_upload_image"
+    app:umanoOverlay="true"
+    app:umanoPanelHeight="0dp"
+    tools:context="com.dellainfotech.smartTouch.ui.fragments.main.home.DeviceCustomizationFragment">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:id="@+id/relative_header"
+            android:layout_width="match_parent"
+            android:layout_height="?actionBarSize"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/iv_back"
+                style="@style/BackImageStyle"
+                android:layout_centerVertical="true" />
+
+            <TextView
+                android:id="@+id/tv_title"
+                style="@style/ScreenTitleHomeStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:layout_gravity="center_horizontal"
+                android:text="@string/title_text_device_customization" />
+
+            <ImageView
+                android:id="@+id/ib_lock"
+                android:layout_width="@dimen/_30sdp"
+                android:layout_height="match_parent"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="@dimen/screen_end_margin"
+                android:padding="@dimen/_5sdp"
+                android:src="@drawable/ic_lock" />
+
+        </RelativeLayout>
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/relative_header">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/card_components"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/screen_start_margin"
+                    android:layout_marginTop="@dimen/_15sdp"
+                    android:layout_marginEnd="@dimen/screen_end_margin"
+                    android:layout_marginBottom="@dimen/_15sdp"
+                    app:cardBackgroundColor="@color/white"
+                    app:cardCornerRadius="@dimen/corner_radius_6dp"
+                    app:cardElevation="@dimen/_5sdp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/_10sdp"
+                        android:layout_marginTop="@dimen/_15sdp"
+                        android:layout_marginEnd="@dimen/_10sdp"
+                        android:layout_marginBottom="@dimen/_15sdp">
+
+                        <androidx.constraintlayout.widget.Guideline
+                            android:id="@+id/guideline"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="vertical"
+                            app:layout_constraintGuide_percent="0.45" />
+
+                        <TextView
+                            android:id="@+id/tv_screen_layout"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="@dimen/_2sdp"
+                            android:fontFamily="@font/roboto_medium"
+                            android:singleLine="true"
+                            android:text="@string/text_screen_layout"
+                            android:textColor="@color/daintree"
+                            android:textSize="@dimen/_12ssp"
+                            app:layout_constraintBottom_toBottomOf="@+id/iv_screen_layout_settings"
+                            app:layout_constraintEnd_toEndOf="@+id/guideline"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="@+id/iv_screen_layout_settings" />
+
+                        <ImageView
+                            android:id="@+id/iv_screen_layout_info"
+                            android:layout_width="@dimen/_14sdp"
+                            android:layout_height="@dimen/_14sdp"
+                            android:src="@drawable/img_info"
+                            app:layout_constraintBottom_toBottomOf="@+id/iv_screen_layout_settings"
+                            app:layout_constraintStart_toStartOf="@+id/guideline"
+                            app:layout_constraintTop_toTopOf="@+id/iv_screen_layout_settings" />
+
+                        <ImageView
+                            android:id="@+id/iv_screen_layout_settings"
+                            android:layout_width="@dimen/_22sdp"
+                            android:layout_height="@dimen/_22sdp"
+                            android:src="@drawable/ic_customize"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <TextView
+                            android:id="@+id/tv_upload_image"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="@dimen/_2sdp"
+                            android:fontFamily="@font/roboto_medium"
+                            android:singleLine="true"
+                            android:text="@string/text_upload_image"
+                            android:textColor="@color/daintree"
+                            android:textSize="@dimen/_12ssp"
+                            app:layout_constraintBottom_toBottomOf="@+id/iv_upload_image_settings"
+                            app:layout_constraintEnd_toEndOf="@+id/guideline"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="@+id/iv_upload_image_settings" />
+
+                        <ImageView
+                            android:id="@+id/iv_upload_image_info"
+                            android:layout_width="@dimen/_14sdp"
+                            android:layout_height="@dimen/_14sdp"
+                            android:src="@drawable/img_info"
+                            app:layout_constraintBottom_toBottomOf="@+id/iv_upload_image_settings"
+                            app:layout_constraintStart_toStartOf="@+id/iv_screen_layout_info"
+                            app:layout_constraintTop_toTopOf="@+id/iv_upload_image_settings" />
+
+                        <ImageView
+                            android:id="@+id/iv_upload_image_settings"
+                            android:layout_width="@dimen/_22sdp"
+                            android:layout_height="@dimen/_22sdp"
+                            android:layout_marginTop="@dimen/_15sdp"
+                            android:src="@drawable/ic_customize"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/iv_screen_layout_settings" />
+
+                        <TextView
+                            android:id="@+id/tv_switch_icons"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="@dimen/_2sdp"
+                            android:fontFamily="@font/roboto_medium"
+                            android:singleLine="true"
+                            android:text="@string/text_switch_icons"
+                            android:textColor="@color/daintree"
+                            android:textSize="@dimen/_12ssp"
+                            app:layout_constraintBottom_toBottomOf="@+id/iv_switch_icons_info"
+                            app:layout_constraintEnd_toEndOf="@+id/guideline"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="@+id/iv_switch_icons_info" />
+
+                        <ImageView
+                            android:id="@+id/iv_switch_icons_info"
+                            android:layout_width="@dimen/_14sdp"
+                            android:layout_height="@dimen/_14sdp"
+                            android:src="@drawable/img_info"
+                            app:layout_constraintBottom_toBottomOf="@+id/iv_switch_icons_settings"
+                            app:layout_constraintStart_toStartOf="@+id/iv_screen_layout_info"
+                            app:layout_constraintTop_toTopOf="@+id/iv_switch_icons_settings" />
+
+                        <ImageView
+                            android:id="@+id/iv_switch_icons_settings"
+                            android:layout_width="@dimen/_22sdp"
+                            android:layout_height="@dimen/_22sdp"
+                            android:layout_marginTop="@dimen/_15sdp"
+                            android:src="@drawable/ic_customize"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/iv_upload_image_settings" />
+
+                        <TextView
+                            android:id="@+id/tv_switch_icon_size"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="@dimen/_2sdp"
+                            android:fontFamily="@font/roboto_medium"
+                            android:singleLine="true"
+                            android:text="@string/text_switch_icon_size"
+                            android:textColor="@color/daintree"
+                            android:textSize="@dimen/_12ssp"
+                            app:layout_constraintBottom_toBottomOf="@+id/iv_switch_icon_size_info"
+                            app:layout_constraintEnd_toEndOf="@+id/guideline"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="@+id/iv_switch_icon_size_info" />
+
+                        <ImageView
+                            android:id="@+id/iv_switch_icon_size_info"
+                            android:layout_width="@dimen/_14sdp"
+                            android:layout_height="@dimen/_14sdp"
+                            android:src="@drawable/img_info"
+                            app:layout_constraintBottom_toBottomOf="@+id/rl_switch_icon_size"
+                            app:layout_constraintStart_toStartOf="@+id/iv_screen_layout_info"
+                            app:layout_constraintTop_toTopOf="@+id/rl_switch_icon_size" />
+
+                        <RelativeLayout
+                            android:id="@+id/rl_switch_icon_size"
+                            android:layout_width="@dimen/_80sdp"
+                            android:layout_height="@dimen/_30sdp"
+                            android:layout_marginTop="@dimen/_15sdp"
+                            android:background="@drawable/transparent_background_with_catskill_white_dark_border"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/iv_switch_icons_settings">
+
+                            <Spinner
+                                android:id="@+id/spinner_icon_size"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_marginEnd="@dimen/_2sdp"
+                                android:layout_toStartOf="@+id/iv_icon_size_down"
+                                android:background="@android:color/transparent"
+                                android:gravity="center"
+                                android:spinnerMode="dropdown" />
+
+                            <ImageButton
+                                android:id="@+id/iv_icon_size_down"
+                                android:layout_width="@dimen/_10sdp"
+                                android:layout_height="@dimen/_6sdp"
+                                android:layout_alignParentEnd="true"
+                                android:layout_centerVertical="true"
+                                android:layout_marginEnd="@dimen/_5sdp"
+                                android:background="@drawable/ic_arrow_down"
+                                android:backgroundTint="@color/daintree" />
+
+                        </RelativeLayout>
+
+                        <TextView
+                            android:id="@+id/tv_switch_name"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="@dimen/_2sdp"
+                            android:fontFamily="@font/roboto_medium"
+                            android:singleLine="true"
+                            android:text="@string/text_switch_name"
+                            android:textColor="@color/daintree"
+                            android:textSize="@dimen/_12ssp"
+                            app:layout_constraintBottom_toBottomOf="@+id/iv_switch_name_info"
+                            app:layout_constraintEnd_toEndOf="@+id/guideline"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="@+id/iv_switch_name_info" />
+
+                        <ImageView
+                            android:id="@+id/iv_switch_name_info"
+                            android:layout_width="@dimen/_14sdp"
+                            android:layout_height="@dimen/_14sdp"
+                            android:src="@drawable/img_info"
+                            app:layout_constraintBottom_toBottomOf="@+id/cb_switch_name_settings"
+                            app:layout_constraintStart_toStartOf="@+id/iv_screen_layout_info"
+                            app:layout_constraintTop_toTopOf="@+id/cb_switch_name_settings" />
+
+                        <CheckBox
+                            android:id="@+id/cb_switch_name_settings"
+                            android:layout_width="@dimen/_22sdp"
+                            android:layout_height="@dimen/_22sdp"
+                            android:layout_marginTop="@dimen/_15sdp"
+                            android:scaleX="1.6"
+                            android:scaleY="1.6"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/rl_switch_icon_size" />
+
+                        <TextView
+                            android:id="@+id/tv_text_style"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="@dimen/_2sdp"
+                            android:fontFamily="@font/roboto_medium"
+                            android:singleLine="true"
+                            android:text="@string/text_style"
+                            android:textColor="@color/daintree"
+                            android:textSize="@dimen/_12ssp"
+                            app:layout_constraintBottom_toBottomOf="@+id/iv_text_style_info"
+                            app:layout_constraintEnd_toEndOf="@+id/guideline"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="@+id/iv_text_style_info" />
+
+                        <ImageView
+                            android:id="@+id/iv_text_style_info"
+                            android:layout_width="@dimen/_14sdp"
+                            android:layout_height="@dimen/_14sdp"
+                            android:src="@drawable/img_info"
+                            app:layout_constraintBottom_toBottomOf="@+id/iv_text_style_settings"
+                            app:layout_constraintStart_toStartOf="@+id/iv_screen_layout_info"
+                            app:layout_constraintTop_toTopOf="@+id/iv_text_style_settings" />
+
+                        <ImageView
+                            android:id="@+id/iv_text_style_settings"
+                            android:layout_width="@dimen/_22sdp"
+                            android:layout_height="@dimen/_22sdp"
+                            android:layout_marginTop="@dimen/_15sdp"
+                            android:src="@drawable/ic_customize"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/cb_switch_name_settings" />
+
+                        <TextView
+                            android:id="@+id/tv_text_color"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="@dimen/_2sdp"
+                            android:fontFamily="@font/roboto_medium"
+                            android:singleLine="true"
+                            android:text="@string/text_color"
+                            android:textColor="@color/daintree"
+                            android:textSize="@dimen/_12ssp"
+                            app:layout_constraintBottom_toBottomOf="@+id/iv_text_color_info"
+                            app:layout_constraintEnd_toEndOf="@+id/guideline"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="@+id/iv_text_color_info" />
+
+                        <ImageView
+                            android:id="@+id/iv_text_color_info"
+                            android:layout_width="@dimen/_14sdp"
+                            android:layout_height="@dimen/_14sdp"
+                            android:src="@drawable/img_info"
+                            app:layout_constraintBottom_toBottomOf="@+id/iv_text_color_settings"
+                            app:layout_constraintStart_toStartOf="@+id/iv_screen_layout_info"
+                            app:layout_constraintTop_toTopOf="@+id/iv_text_color_settings" />
+
+                        <ImageView
+                            android:id="@+id/iv_text_color_settings"
+                            android:layout_width="@dimen/_22sdp"
+                            android:layout_height="@dimen/_22sdp"
+                            android:layout_marginTop="@dimen/_15sdp"
+                            android:src="@drawable/ic_customize"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/iv_text_style_settings" />
+
+                        <TextView
+                            android:id="@+id/tv_text_size"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="@dimen/_2sdp"
+                            android:fontFamily="@font/roboto_medium"
+                            android:singleLine="true"
+                            android:text="@string/text_size"
+                            android:textColor="@color/daintree"
+                            android:textSize="@dimen/_12ssp"
+                            app:layout_constraintBottom_toBottomOf="@+id/tv_text_size_info"
+                            app:layout_constraintEnd_toEndOf="@+id/guideline"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="@+id/tv_text_size_info" />
+
+                        <ImageView
+                            android:id="@+id/tv_text_size_info"
+                            android:layout_width="@dimen/_14sdp"
+                            android:layout_height="@dimen/_14sdp"
+                            android:src="@drawable/img_info"
+                            app:layout_constraintBottom_toBottomOf="@+id/rl_text_size_info"
+                            app:layout_constraintStart_toStartOf="@+id/iv_screen_layout_info"
+                            app:layout_constraintTop_toTopOf="@+id/rl_text_size_info" />
+
+                        <RelativeLayout
+                            android:id="@+id/rl_text_size_info"
+                            android:layout_width="@dimen/_80sdp"
+                            android:layout_height="@dimen/_30sdp"
+                            android:layout_marginTop="@dimen/_15sdp"
+                            android:background="@drawable/transparent_background_with_catskill_white_dark_border"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/iv_text_color_settings">
+
+                            <Spinner
+                                android:id="@+id/spinner_text_size"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_marginEnd="@dimen/_2sdp"
+                                android:layout_toStartOf="@+id/iv_text_size_down"
+                                android:background="@android:color/transparent"
+                                android:gravity="center"
+                                android:spinnerMode="dropdown" />
+
+                            <ImageButton
+                                android:id="@+id/iv_text_size_down"
+                                android:layout_width="@dimen/_10sdp"
+                                android:layout_height="@dimen/_6sdp"
+                                android:layout_alignParentEnd="true"
+                                android:layout_centerVertical="true"
+                                android:layout_marginEnd="@dimen/_5sdp"
+                                android:background="@drawable/ic_arrow_down"
+                                android:backgroundTint="@color/daintree" />
+
+                        </RelativeLayout>
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                </androidx.cardview.widget.CardView>
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/card_view_synchronize"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/login_component_height"
+                    android:layout_marginStart="@dimen/screen_start_margin"
+                    android:layout_marginTop="@dimen/_10sdp"
+                    android:layout_marginEnd="@dimen/screen_end_margin"
+                    android:layout_marginBottom="@dimen/_15sdp"
+                    app:cardBackgroundColor="@color/theme_color"
+                    app:cardCornerRadius="@dimen/corner_radius_6dp"
+                    app:cardElevation="@dimen/_7sdp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/card_components">
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btn_synchronize"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@android:color/transparent"
+                        android:fontFamily="@font/roboto_medium"
+                        android:text="@string/button_text_synchronize"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/_12ssp"
+                        app:backgroundTint="@null" />
+
+                </androidx.cardview.widget.CardView>
+
+            </LinearLayout>
+        </ScrollView>
+
+        <RelativeLayout
+            android:id="@+id/relative_lock"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/relative_header"
+            android:clickable="true"
+            android:focusable="true"
+            android:visibility="gone" />
+
+    </RelativeLayout>
+
+    <com.jcminarro.roundkornerlayout.RoundKornerLinearLayout
+        android:id="@+id/drag_upload_image"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:background="@color/white"
+        android:clickable="true"
+        android:focusable="true"
+        android:orientation="vertical"
+        app:top_left_corner_radius="@dimen/_20sdp"
+        app:top_right_corner_radius="@dimen/_20sdp">
+
+        <ImageButton
+            android:id="@+id/iv_hide_upload_image_panel"
+            android:layout_width="@dimen/_14sdp"
+            android:layout_height="@dimen/_9sdp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="@dimen/_15sdp"
+            android:background="@drawable/ic_arrow_down" />
+
+        <TextView
+            android:id="@+id/tv_bottom_view_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="@dimen/_20sdp"
+            android:fontFamily="@font/roboto_bold"
+            android:text="@string/text_upload_image"
+            android:textColor="@color/theme_color"
+            android:textSize="@dimen/_18ssp" />
+
+        <include
+            android:id="@+id/layout_upload_image"
+            layout="@layout/layout_upload_image" />
+
+        <include
+            android:id="@+id/layout_text_style"
+            layout="@layout/layout_device_customization_text_style" />
+
+        <include
+            android:id="@+id/layout_text_color"
+            layout="@layout/layout_device_customization_text_color" />
+
+    </com.jcminarro.roundkornerlayout.RoundKornerLinearLayout>
+
+</com.sothree.slidinguppanel.SlidingUpPanelLayout>

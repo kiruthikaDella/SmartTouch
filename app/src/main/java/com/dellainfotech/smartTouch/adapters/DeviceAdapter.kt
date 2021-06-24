@@ -52,7 +52,6 @@ class DeviceAdapter(
 
     private val eightPanelView = 1
     private val fourPanelView = 2
-    private var visibilityPosition = -1
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return when (viewType) {

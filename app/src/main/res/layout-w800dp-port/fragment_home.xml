@@ -25,7 +25,7 @@
                 android:id="@+id/iv_side_navigation"
                 android:layout_width="@dimen/_40sdp"
                 android:layout_height="match_parent"
-                android:padding="@dimen/_9sdp"
+                android:padding="@dimen/_6sdp"
                 android:layout_centerVertical="true"
                 android:layout_marginStart="@dimen/_6sdp"
                 android:src="@drawable/ic_side_navigation" />
@@ -61,9 +61,11 @@
         android:fitsSystemWindows="true"
         app:headerLayout="@layout/navigation_header_layout"
         app:itemIconTint="@color/nepal"
+        app:itemIconSize="@dimen/_15sdp"
         app:itemTextAppearance="@style/SideNavigationTextStyle"
         app:itemTextColor="@color/daintree"
         app:menu="@menu/side_navigation_menu"
+        android:theme="@style/NavigationTheme"
         app:itemHorizontalPadding="@dimen/navigation_start_margin">
 
         <LinearLayout

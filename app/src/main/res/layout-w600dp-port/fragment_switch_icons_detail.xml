@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:background="@color/app_background_color"
+    tools:context="com.dellainfotech.smartTouch.ui.fragments.main.home.SwitchIconsDetailFragment">
+
+    <RelativeLayout
+        android:id="@+id/relative_header"
+        android:layout_width="match_parent"
+        android:layout_height="?actionBarSize"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/iv_back"
+            style="@style/BackImageStyle"
+            android:layout_centerVertical="true" />
+
+        <TextView
+            android:id="@+id/tv_title"
+            style="@style/ScreenTitleHomeStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_gravity="center_horizontal"
+            android:text="@string/switch_one" />
+
+        <ImageView
+            android:id="@+id/ib_switch"
+            android:layout_width="@dimen/_30sdp"
+            android:layout_height="@dimen/_30sdp"
+            android:padding="@dimen/_8sdp"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:src="@drawable/ic_switch"
+            app:tint="@color/daintree" />
+
+    </RelativeLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycler_switch_icons"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/relative_header"
+        android:layout_above="@+id/btn_submit"
+        android:overScrollMode="never"
+        android:layout_marginStart="@dimen/screen_start_margin"
+        android:layout_marginEnd="@dimen/screen_end_margin"/>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btn_submit"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/login_component_height"
+        android:layout_alignParentBottom="true"
+        android:background="@color/theme_color"
+        android:fontFamily="@font/roboto_medium"
+        android:text="@string/button_text_submit"
+        android:textAllCaps="true"
+        android:textColor="@color/white"
+        android:textSize="@dimen/_12ssp"
+        app:backgroundTint="@null" />
+
+</RelativeLayout>

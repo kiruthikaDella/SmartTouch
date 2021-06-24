@@ -8,5 +8,6 @@ class BodySignUp(
     @SerializedName("vEmail") var userEmail: String,
     @SerializedName("vPassword") var userPassword: String,
     @SerializedName("vConfirmPassword") var userConfirmPassword: String,
+    @SerializedName("tiLoginType") var loginType: String,
     @SerializedName("bPhoneNumber") var userPhoneNumber: String
 )
