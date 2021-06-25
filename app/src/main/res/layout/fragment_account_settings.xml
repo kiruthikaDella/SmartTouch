@@ -34,7 +34,8 @@
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:overScrollMode="never">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -89,8 +90,8 @@
                 android:id="@+id/iv_edit_name"
                 android:layout_width="@dimen/_20sdp"
                 android:layout_height="@dimen/_20sdp"
-                android:padding="@dimen/_4sdp"
                 android:layout_marginEnd="@dimen/screen_end_margin"
+                android:padding="@dimen/_4sdp"
                 android:src="@drawable/ic_as_edit"
                 app:layout_constraintBottom_toBottomOf="@+id/edt_name"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -176,10 +177,10 @@
                 android:backgroundTint="@null"
                 android:enabled="false"
                 android:fontFamily="@font/roboto_regular"
+                android:inputType="phone"
                 android:singleLine="true"
                 android:textColor="@color/waikawa_gray"
                 android:textSize="@dimen/_12ssp"
-                android:inputType="phone"
                 app:layout_constraintEnd_toStartOf="@+id/iv_edit_phone_number"
                 app:layout_constraintStart_toStartOf="@+id/tv_title_phone_number"
                 app:layout_constraintTop_toBottomOf="@+id/tv_title_phone_number" />

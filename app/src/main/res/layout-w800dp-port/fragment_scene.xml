@@ -29,7 +29,7 @@
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
             android:src="@drawable/ic_add"
-            android:padding="@dimen/_8sdp"
+            android:padding="@dimen/_6sdp"
             app:tint="@color/daintree" />
 
     </RelativeLayout>

@@ -1,5 +1,6 @@
 package com.dellainfotech.smartTouch.ui.fragments.main.controlmode
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -13,6 +14,7 @@ import com.appizona.yehiahd.fastsave.FastSave
 import com.dellainfotech.smartTouch.R
 import com.dellainfotech.smartTouch.adapters.controlmodeadapter.ControlModeAdapter
 import com.dellainfotech.smartTouch.api.Resource
+import com.dellainfotech.smartTouch.api.body.BodyLogout
 import com.dellainfotech.smartTouch.api.body.BodyPinStatus
 import com.dellainfotech.smartTouch.api.model.ControlModeRoomData
 import com.dellainfotech.smartTouch.api.repository.HomeRepository
@@ -27,6 +29,10 @@ import com.dellainfotech.smartTouch.ui.activities.AuthenticationActivity
 import com.dellainfotech.smartTouch.ui.activities.MainActivity
 import com.dellainfotech.smartTouch.ui.fragments.ModelBaseFragment
 import com.dellainfotech.smartTouch.ui.viewmodel.HomeViewModel
+import com.facebook.login.LoginManager
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInClient
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 
 /**
  * Created by Jignesh Dangar on 19-04-2021.
@@ -38,6 +44,7 @@ class ControlModeFragment :
     private val logTag = this::class.java.simpleName
     private lateinit var controlModeAdapter: ControlModeAdapter
     private var roomList = arrayListOf<ControlModeRoomData>()
+    private var mGoogleSingInClient: GoogleSignInClient? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -50,6 +57,8 @@ class ControlModeFragment :
                 binding.ibPin.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_pin_straight))
             }
         }
+
+        initGoogleSignInClient()
 
         NotifyManager.internetInfo.observe(viewLifecycleOwner, { isConnected ->
             if (isConnected) {
@@ -95,11 +104,107 @@ class ControlModeFragment :
         }
 
         binding.ibLogout.setOnClickListener {
-            activity?.let {
-                startActivity(Intent(it, AuthenticationActivity::class.java))
-                it.finishAffinity()
+
+            activity?.let { mActivity ->
+                DialogUtil.askAlert(mActivity, getString(R.string.dialog_title_logout), getString(R.string.text_yes),getString(R.string.text_no), object : DialogAskListener {
+                    override fun onYesClicked() {
+                        DialogUtil.hideDialog()
+                        val loginType = FastSave.getInstance().getString(Constants.LOGIN_TYPE, "")
+                        if (loginType == Constants.LOGIN_TYPE_GOOGLE) {
+                            mGoogleSingInClient?.signOut()
+                        } else if (loginType == Constants.LOGIN_TYPE_FACEBOOK) {
+                            LoginManager.getInstance().logOut()
+                        }
+
+                        DialogUtil.loadingAlert(mActivity)
+
+                        viewModel.logout(
+                            BodyLogout(
+                                FastSave.getInstance().getString(Constants.MOBILE_UUID, null)
+                            )
+                        )
+                    }
+
+                    override fun onNoClicked() {
+                        DialogUtil.hideDialog()
+                    }
+
+                })
             }
         }
+
+
+      apiCall()
+    }
+
+    //Initialization object of GoogleSignInClient
+    private fun initGoogleSignInClient() {
+        val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+            .requestEmail()
+            .build()
+
+        mGoogleSingInClient = GoogleSignIn.getClient(requireActivity(), gso)
+    }
+
+    override fun onStop() {
+        super.onStop()
+        DialogUtil.hideDialog()
+        viewModel.updatePinStatusResponse.postValue(null)
+    }
+
+    override fun getViewModel(): Class<HomeViewModel> = HomeViewModel::class.java
+
+    override fun getFragmentBinding(
+        inflater: LayoutInflater,
+        container: ViewGroup?
+    ): FragmentControlModeBinding = FragmentControlModeBinding.inflate(inflater, container, false)
+
+    override fun getFragmentRepository(): HomeRepository = HomeRepository(networkModel)
+
+    private fun apiCall(){
+
+        viewModel.logoutResponse.observe(viewLifecycleOwner, { response ->
+            when (response) {
+                is Resource.Success -> {
+                    DialogUtil.hideDialog()
+                    if (response.values.status && response.values.code == Constants.API_SUCCESS_CODE) {
+                        activity?.let {
+
+                            val sharedPreference =  it.getSharedPreferences(Constants.SHARED_PREF, Context.MODE_PRIVATE)
+                            val isRemember = sharedPreference.getBoolean(Constants.IS_REMEMBER,Constants.DEFAULT_REMEMBER_STATUS)
+                            val loginType = sharedPreference.getString(Constants.LOGGED_IN_TYPE, "")
+
+                            if (loginType == Constants.LOGIN_TYPE_NORMAL){
+                                if (!isRemember){
+                                    val editor = sharedPreference.edit()
+                                    editor.clear()
+                                    editor.apply()
+                                }
+                            }else {
+                                val editor = sharedPreference.edit()
+                                editor.clear()
+                                editor.apply()
+                            }
+
+                            FastSave.getInstance().clearSession()
+                            startActivity(Intent(it, AuthenticationActivity::class.java))
+                            it.finishAffinity()
+                        }
+                    } else {
+                        context?.let {
+                            Toast.makeText(it, response.values.message, Toast.LENGTH_SHORT).show()
+                        }
+                    }
+                }
+                is Resource.Failure -> {
+                    DialogUtil.hideDialog()
+                    Log.e(logTag, "logout error ${response.errorBody?.string()}")
+                }
+                else -> {
+                    // We will do nothing here
+                }
+            }
+        })
 
         viewModel.getControlResponse.observe(viewLifecycleOwner, { response ->
             roomList.clear()
@@ -173,19 +278,6 @@ class ControlModeFragment :
                 }
             }
         })
+
     }
-
-    override fun onStop() {
-        super.onStop()
-        DialogUtil.hideDialog()
-    }
-
-    override fun getViewModel(): Class<HomeViewModel> = HomeViewModel::class.java
-
-    override fun getFragmentBinding(
-        inflater: LayoutInflater,
-        container: ViewGroup?
-    ): FragmentControlModeBinding = FragmentControlModeBinding.inflate(inflater, container, false)
-
-    override fun getFragmentRepository(): HomeRepository = HomeRepository(networkModel)
 }

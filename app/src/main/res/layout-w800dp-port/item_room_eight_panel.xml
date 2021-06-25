@@ -144,7 +144,7 @@
                     android:textColor="@color/theme_color"
                     android:textSize="@dimen/_11ssp"
                     app:layout_constraintBottom_toBottomOf="@+id/tv_switch_one_name"
-                    app:layout_constraintEnd_toEndOf="@+id/switch_one"
+                    app:layout_constraintEnd_toStartOf="@+id/switch_one"
                     app:layout_constraintHorizontal_bias="0.0"
                     app:layout_constraintStart_toStartOf="@+id/guideline2"
                     app:layout_constraintTop_toTopOf="@+id/tv_switch_one_name" />
@@ -216,7 +216,7 @@
                     android:textColor="@color/theme_color"
                     android:textSize="@dimen/_11ssp"
                     app:layout_constraintBottom_toBottomOf="@+id/tv_switch_two_name"
-                    app:layout_constraintEnd_toEndOf="@+id/switch_two"
+                    app:layout_constraintEnd_toStartOf="@+id/switch_two"
                     app:layout_constraintStart_toStartOf="@+id/guideline2"
                     app:layout_constraintTop_toTopOf="@+id/tv_switch_two_name" />
 
@@ -288,7 +288,7 @@
                     android:textColor="@color/theme_color"
                     android:textSize="@dimen/_11ssp"
                     app:layout_constraintBottom_toBottomOf="@+id/tv_switch_three_name"
-                    app:layout_constraintEnd_toEndOf="@+id/switch_three"
+                    app:layout_constraintEnd_toStartOf="@+id/switch_three"
                     app:layout_constraintStart_toStartOf="@+id/guideline2"
                     app:layout_constraintTop_toTopOf="@+id/tv_switch_three_name" />
 
@@ -360,7 +360,8 @@
                     android:textColor="@color/theme_color"
                     android:textSize="@dimen/_11ssp"
                     app:layout_constraintBottom_toBottomOf="@+id/tv_switch_four_name"
-                    app:layout_constraintEnd_toEndOf="@+id/switch_four"
+                    app:layout_constraintEnd_toStartOf="@+id/switch_four"
+                    app:layout_constraintHorizontal_bias="0.0"
                     app:layout_constraintStart_toStartOf="@+id/guideline2"
                     app:layout_constraintTop_toTopOf="@+id/tv_switch_four_name" />
 
@@ -431,7 +432,8 @@
                     android:textColor="@color/theme_color"
                     android:textSize="@dimen/_11ssp"
                     app:layout_constraintBottom_toBottomOf="@+id/tv_switch_five_name"
-                    app:layout_constraintEnd_toEndOf="@+id/switch_five"
+                    app:layout_constraintEnd_toStartOf="@+id/switch_five"
+                    app:layout_constraintHorizontal_bias="0.0"
                     app:layout_constraintStart_toStartOf="@+id/guideline2"
                     app:layout_constraintTop_toTopOf="@+id/tv_switch_five_name" />
 
@@ -503,7 +505,7 @@
                     android:textColor="@color/theme_color"
                     android:textSize="@dimen/_11ssp"
                     app:layout_constraintBottom_toBottomOf="@+id/tv_switch_six_name"
-                    app:layout_constraintEnd_toEndOf="@+id/switch_six"
+                    app:layout_constraintEnd_toStartOf="@+id/switch_six"
                     app:layout_constraintStart_toStartOf="@+id/guideline2"
                     app:layout_constraintTop_toTopOf="@+id/tv_switch_six_name" />
 
@@ -576,7 +578,7 @@
                     android:textColor="@color/theme_color"
                     android:textSize="@dimen/_11ssp"
                     app:layout_constraintBottom_toBottomOf="@+id/tv_switch_seven_name"
-                    app:layout_constraintEnd_toEndOf="@+id/switch_seven"
+                    app:layout_constraintEnd_toStartOf="@+id/switch_seven"
                     app:layout_constraintStart_toStartOf="@+id/guideline2"
                     app:layout_constraintTop_toTopOf="@+id/tv_switch_seven_name" />
 
@@ -648,7 +650,7 @@
                     android:textColor="@color/theme_color"
                     android:textSize="@dimen/_11ssp"
                     app:layout_constraintBottom_toBottomOf="@+id/tv_switch_eight_name"
-                    app:layout_constraintEnd_toEndOf="@+id/switch_eight"
+                    app:layout_constraintEnd_toStartOf="@+id/switch_eight"
                     app:layout_constraintStart_toStartOf="@+id/guideline2"
                     app:layout_constraintTop_toTopOf="@+id/tv_switch_eight_name" />
 

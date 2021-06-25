@@ -60,7 +60,7 @@ class HomeViewModel @ViewModelInject constructor(
         get() = _changePasswordResponse
 
     private val _updatePinStatusResponse: MutableLiveData<Resource<PinResponse>> = MutableLiveData()
-    val updatePinStatusResponse: LiveData<Resource<PinResponse>>
+    val updatePinStatusResponse: MutableLiveData<Resource<PinResponse>>
         get() = _updatePinStatusResponse
 
     fun logout(
@@ -195,7 +195,7 @@ class HomeViewModel @ViewModelInject constructor(
         get() = _updateSceneResponse
 
     private val _deleteSceneResponse: MutableLiveData<Resource<CommonResponse>> = MutableLiveData()
-    val deleteSceneResponse: LiveData<Resource<CommonResponse>>
+    val deleteSceneResponse: MutableLiveData<Resource<CommonResponse>>
         get() = _deleteSceneResponse
 
     private val _deleteSceneDetailResponse: MutableLiveData<Resource<CommonResponse>> = MutableLiveData()

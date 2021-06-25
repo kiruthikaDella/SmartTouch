@@ -68,7 +68,7 @@
                 android:layout_marginBottom="@dimen/_10sdp"
                 android:layout_marginStart="@dimen/screen_start_margin"
                 android:layout_weight="0.5"
-                android:background="@drawable/dodger_blue_background"
+                android:background="@drawable/dodger_blue_background_6dp_corner"
                 android:text="@string/text_add_panel"
                 android:textColor="@color/white"
                 android:textSize="@dimen/_11ssp"

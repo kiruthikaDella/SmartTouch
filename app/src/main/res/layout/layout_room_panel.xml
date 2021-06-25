@@ -90,7 +90,7 @@
         android:layout_marginTop="@dimen/_10sdp"
         android:layout_marginEnd="@dimen/screen_end_margin"
         android:layout_marginBottom="@dimen/_10sdp"
-        android:background="@drawable/dodger_blue_background"
+        android:background="@drawable/dodger_blue_background_6dp_corner"
         android:text="@string/button_text_add_room"
         android:textAllCaps="false"
         android:textColor="@color/white"

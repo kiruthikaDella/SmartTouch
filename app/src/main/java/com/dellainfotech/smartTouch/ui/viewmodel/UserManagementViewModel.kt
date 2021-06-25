@@ -16,25 +16,21 @@ class UserManagementViewModel @ViewModelInject constructor(
     private val userManagementRepository: UserManagementRepository
 ) : ViewModel() {
 
-    private val _addSubordinateUserResponse: MutableLiveData<Resource<CommonResponse>> =
-        MutableLiveData()
-    val addSubordinateUserResponse: LiveData<Resource<CommonResponse>>
+    private val _addSubordinateUserResponse: MutableLiveData<Resource<CommonResponse>> = MutableLiveData()
+    val addSubordinateUserResponse: MutableLiveData<Resource<CommonResponse>>
         get() = _addSubordinateUserResponse
 
-    private val _getSubordinateUserResponse: MutableLiveData<Resource<SubordinateUserResponse>> =
-        MutableLiveData()
+    private val _getSubordinateUserResponse: MutableLiveData<Resource<SubordinateUserResponse>> = MutableLiveData()
     val getSubordinateUserResponse: LiveData<Resource<SubordinateUserResponse>>
         get() = _getSubordinateUserResponse
 
-    private val _deleteSubordinateUserResponse: MutableLiveData<Resource<CommonResponse>> =
-        MutableLiveData()
-    val deleteSubordinateUserResponse: LiveData<Resource<CommonResponse>>
+    private val _deleteSubordinateUserResponse: MutableLiveData<Resource<CommonResponse>> = MutableLiveData()
+    val deleteSubordinateUserResponse: MutableLiveData<Resource<CommonResponse>>
         get() = _deleteSubordinateUserResponse
 
     fun addSubordinateUser(bodyAddSubordinateUser: BodyAddSubordinateUser) = viewModelScope.launch {
         _addSubordinateUserResponse.value = Resource.Loading
-        _addSubordinateUserResponse.value =
-            userManagementRepository.addSubordinateUser(bodyAddSubordinateUser)
+        _addSubordinateUserResponse.value = userManagementRepository.addSubordinateUser(bodyAddSubordinateUser)
     }
 
     fun getSubordinateUser() = viewModelScope.launch {
@@ -45,8 +41,7 @@ class UserManagementViewModel @ViewModelInject constructor(
     fun deleteSubordinateUser(subordinateUserId: String) =
         viewModelScope.launch {
             _deleteSubordinateUserResponse.value = Resource.Loading
-            _deleteSubordinateUserResponse.value =
-                userManagementRepository.deleteSubordinateUser(subordinateUserId)
+            _deleteSubordinateUserResponse.value = userManagementRepository.deleteSubordinateUser(subordinateUserId)
         }
 
 }

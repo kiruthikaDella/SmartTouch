@@ -54,6 +54,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/screen_start_margin"
         android:layout_marginEnd="@dimen/screen_end_margin"
+        android:overScrollMode="never"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
 </LinearLayout>

@@ -92,8 +92,6 @@ class DeviceSceneAdapter(
             } else {
                 spinnerRoom.setSelection(roomAdapter.getPositionById(bodyScenes[adapterPosition].roomId))
             }
-            spinnerRoom.isEnabled = false
-            spinnerDevice.isEnabled = false
 
             spinnerRoom.onItemSelectedListener =
                 object : AdapterView.OnItemSelectedListener {
@@ -109,9 +107,20 @@ class DeviceSceneAdapter(
                             if (roomData.id == room.id) {
                                 roomData.deviceData?.let { devices ->
                                     deviceList.clear()
-                                    deviceList.addAll(devices)
+                                    switchList.clear()
+                                    if (devices.size <= 0){
+                                        val device = GetDeviceData("","",0,"","",mActivity.getString(R.string.text_no_device),0,null)
+                                        deviceList.add(device)
+                                        spinnerDevice.isEnabled = false
+                                    }else{
+                                        spinnerDevice.isEnabled = true
+                                        deviceList.addAll(devices)
+                                    }
                                     val deviceAdapter = DeviceAdapter(mActivity, deviceList)
                                     spinnerDevice.adapter = deviceAdapter
+
+                                    val switchAdapter = SwitchAdapter(mActivity, switchList)
+                                    spinnerSwitch.adapter = switchAdapter
 
                                     if (bodyScenes[adapterPosition].deviceId == "") {
                                         spinnerDevice.setSelection(
@@ -159,9 +168,9 @@ class DeviceSceneAdapter(
                                             switchList.add(switch)
                                         }
                                     }
-                                    val switchAdapter =
-                                        SwitchAdapter(mActivity, switchList)
+                                    val switchAdapter = SwitchAdapter(mActivity, switchList)
                                     spinnerSwitch.adapter = switchAdapter
+                                    spinnerSwitch.isEnabled = true
 
                                     if (bodyScenes[adapterPosition].deviceSwitchId != "") {
                                         spinnerSwitch.setSelection(
@@ -170,6 +179,13 @@ class DeviceSceneAdapter(
                                             )
                                         )
                                     }
+                                } ?: kotlin.run {
+                                    switchList.clear()
+                                    val switch = DeviceSwitchData("","",0,"",mActivity.getString(R.string.text_no_switch),"",0)
+                                    switchList.add(switch)
+                                    val switchAdapter = SwitchAdapter(mActivity, switchList)
+                                    spinnerSwitch.adapter = switchAdapter
+                                    spinnerSwitch.isEnabled = false
                                 }
                                 break
                             }

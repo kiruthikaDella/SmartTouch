@@ -37,7 +37,7 @@
                 android:id="@+id/ib_save"
                 android:layout_width="@dimen/_30sdp"
                 android:layout_height="match_parent"
-                android:padding="@dimen/_8sdp"
+                android:padding="@dimen/_6sdp"
                 android:src="@drawable/ic_check"
                 android:layout_alignParentEnd="true"
                 android:layout_centerVertical="true"

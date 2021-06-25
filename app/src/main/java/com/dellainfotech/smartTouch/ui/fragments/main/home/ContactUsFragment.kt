@@ -1,4 +1,4 @@
-package com.dellainfotech.smartTouch.ui.fragments.main.contact
+package com.dellainfotech.smartTouch.ui.fragments.main.home
 
 import android.os.Bundle
 import android.util.Log
@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.navigation.fragment.findNavController
 import com.dellainfotech.smartTouch.api.Resource
 import com.dellainfotech.smartTouch.api.body.BodyFeedback
 import com.dellainfotech.smartTouch.api.repository.ContactUsRepository
@@ -25,6 +26,10 @@ class ContactUsFragment :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        binding.ivBack.setOnClickListener {
+            findNavController().navigateUp()
+        }
 
         binding.btnSend.setOnClickListener {
             val feedback = binding.edtFeedback.text.toString().trim()

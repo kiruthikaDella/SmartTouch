@@ -105,6 +105,9 @@
                     style="@style/PanelSwitchColorStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:padding="@dimen/_10sdp"
+                    android:scaleX="1.5"
+                    android:scaleY="1.5"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
@@ -157,6 +160,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/_5sdp"
+                    android:padding="@dimen/_10sdp"
+                    android:scaleX="1.5"
+                    android:scaleY="1.5"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/switch_one" />
 
@@ -209,6 +215,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/_5sdp"
+                    android:padding="@dimen/_10sdp"
+                    android:scaleX="1.5"
+                    android:scaleY="1.5"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/switch_two" />
 
@@ -261,6 +270,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/_5sdp"
+                    android:padding="@dimen/_10sdp"
+                    android:scaleX="1.5"
+                    android:scaleY="1.5"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/switch_three" />
 
@@ -313,6 +325,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/_5sdp"
+                    android:padding="@dimen/_10sdp"
+                    android:scaleX="1.5"
+                    android:scaleY="1.5"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/switch_four" />
 
@@ -365,6 +380,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/_5sdp"
+                    android:padding="@dimen/_10sdp"
+                    android:scaleX="1.5"
+                    android:scaleY="1.5"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/switch_five" />
 
@@ -418,6 +436,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/_5sdp"
+                    android:padding="@dimen/_10sdp"
+                    android:scaleX="1.5"
+                    android:scaleY="1.5"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/switch_six" />
 
@@ -470,6 +491,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/_5sdp"
+                    android:padding="@dimen/_10sdp"
+                    android:scaleX="1.5"
+                    android:scaleY="1.5"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/switch_seven" />
 
@@ -487,7 +511,7 @@
                     app:isb_thumb_drawable="@drawable/ic_panel_seekbar_thumb"
                     app:isb_thumb_size="@dimen/_50sdp"
                     app:isb_tick_texts_color="@color/theme_color"
-                    app:isb_tick_texts_size="15sp"
+                    app:isb_tick_texts_size="@dimen/_12ssp"
                     app:isb_ticks_count="6"
                     app:isb_track_background_color="@color/gull_gray"
                     app:isb_track_background_size="@dimen/_1sdp"
@@ -514,6 +538,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/_5sdp"
+                    android:padding="@dimen/_10sdp"
+                    android:scaleX="1.5"
+                    android:scaleY="1.5"
                     app:layout_constraintBottom_toBottomOf="@+id/switch_usb_port_c"
                     app:layout_constraintStart_toEndOf="@+id/tv_usb_port_a"
                     app:layout_constraintTop_toTopOf="@+id/switch_usb_port_c" />
@@ -538,6 +565,9 @@
                     style="@style/PanelSwitchColorStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:padding="@dimen/_10sdp"
+                    android:scaleX="1.5"
+                    android:scaleY="1.5"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/seek_bar" />
 

@@ -241,23 +241,39 @@ class HomeFragment : ModelBaseFragment<HomeViewModel, FragmentHomeBinding, HomeR
                 R.id.nav_shop -> {
                     Log.e(logTag, "nav_shop")
                 }
+                R.id.nav_contact_us -> {
+                    openOrCloseDrawer()
+                    findNavController().navigate(HomeFragmentDirections.actionHomeFragmentToContactUsFragment())
+                }
                 R.id.nav_logout -> {
 
-                    val loginType = FastSave.getInstance().getString(Constants.LOGIN_TYPE, "")
-                    if (loginType == Constants.LOGIN_TYPE_GOOGLE) {
-                        mGoogleSingInClient?.signOut()
-                    } else if (loginType == Constants.LOGIN_TYPE_FACEBOOK) {
-                        LoginManager.getInstance().logOut()
+                    activity?.let { mActivity ->
+                        DialogUtil.askAlert(mActivity, getString(R.string.dialog_title_logout), getString(R.string.text_yes),getString(R.string.text_no), object : DialogAskListener {
+                            override fun onYesClicked() {
+                                DialogUtil.hideDialog()
+                                val loginType = FastSave.getInstance().getString(Constants.LOGIN_TYPE, "")
+                                if (loginType == Constants.LOGIN_TYPE_GOOGLE) {
+                                    mGoogleSingInClient?.signOut()
+                                } else if (loginType == Constants.LOGIN_TYPE_FACEBOOK) {
+                                    LoginManager.getInstance().logOut()
+                                }
+
+                                DialogUtil.loadingAlert(mActivity)
+
+                                viewModel.logout(
+                                    BodyLogout(
+                                        FastSave.getInstance().getString(Constants.MOBILE_UUID, null)
+                                    )
+                                )
+                            }
+
+                            override fun onNoClicked() {
+                                DialogUtil.hideDialog()
+                            }
+
+                        })
                     }
 
-                    activity?.let {
-                        DialogUtil.loadingAlert(it)
-                    }
-                    viewModel.logout(
-                        BodyLogout(
-                            FastSave.getInstance().getString(Constants.MOBILE_UUID, null)
-                        )
-                    )
                 }
             }
 

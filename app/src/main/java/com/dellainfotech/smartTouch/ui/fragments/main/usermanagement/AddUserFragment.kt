@@ -69,14 +69,17 @@ class AddUserFragment : ModelBaseFragment<UserManagementViewModel, FragmentAddUs
         }
     }
 
-    override fun getViewModel(): Class<UserManagementViewModel> =
-        UserManagementViewModel::class.java
+    override fun getViewModel(): Class<UserManagementViewModel> = UserManagementViewModel::class.java
 
     override fun getFragmentBinding(
         inflater: LayoutInflater,
         container: ViewGroup?
     ): FragmentAddUserBinding = FragmentAddUserBinding.inflate(inflater, container, false)
 
-    override fun getFragmentRepository(): UserManagementRepository =
-        UserManagementRepository(networkModel)
+    override fun getFragmentRepository(): UserManagementRepository = UserManagementRepository(networkModel)
+
+    override fun onStop() {
+        super.onStop()
+        viewModel.addSubordinateUserResponse.postValue(null)
+    }
 }

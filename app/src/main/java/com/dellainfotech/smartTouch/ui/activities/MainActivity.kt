@@ -71,7 +71,7 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
 
         navHostFragment.navController.addOnDestinationChangedListener { _, destination, _ ->
             when (destination.id) {
-                R.id.homeFragment, R.id.controlModeFragment, R.id.userManagementFragment, R.id.contactUsFragment -> {
+                R.id.homeFragment, R.id.controlModeFragment, R.id.userManagementFragment, R.id.sceneFragment -> {
                     binding.linearBottomNavigationView.visibility = View.VISIBLE
                     binding.ivAddRoom.visibility = View.VISIBLE
                 }
@@ -82,10 +82,12 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
             }
         }
 
+        bottomNavigationClickEvent()
+
         if (FastSave.getInstance()
                 .getBoolean(Constants.isControlModePinned, Constants.DEFAULT_CONTROL_MODE_STATUS)
         ) {
-            navController.navigate(R.id.controlModeFragment)
+            binding.ivControlMode.performClick()
             hideBottomNavigation()
         }
 
@@ -151,7 +153,6 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
             NotifyManager.internetInfo.postValue(isConnected)
         })
 
-        bottomNavigationClickEvent()
         apiResponses()
     }
 
@@ -193,7 +194,7 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
                 ContextCompat.getColor(this, R.color.daintree),
                 android.graphics.PorterDuff.Mode.SRC_IN
             )
-            binding.ivContactUs.setColorFilter(
+            binding.ivScene.setColorFilter(
                 ContextCompat.getColor(this, R.color.daintree),
                 android.graphics.PorterDuff.Mode.SRC_IN
             )
@@ -213,7 +214,7 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
                 ContextCompat.getColor(this, R.color.daintree),
                 android.graphics.PorterDuff.Mode.SRC_IN
             )
-            binding.ivContactUs.setColorFilter(
+            binding.ivScene.setColorFilter(
                 ContextCompat.getColor(this, R.color.daintree),
                 android.graphics.PorterDuff.Mode.SRC_IN
             )
@@ -233,15 +234,15 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
                 ContextCompat.getColor(this, R.color.daintree),
                 android.graphics.PorterDuff.Mode.SRC_IN
             )
-            binding.ivContactUs.setColorFilter(
+            binding.ivScene.setColorFilter(
                 ContextCompat.getColor(this, R.color.daintree),
                 android.graphics.PorterDuff.Mode.SRC_IN
             )
             navController.navigate(R.id.controlModeFragment)
         }
 
-        binding.ivContactUs.setOnClickListener {
-            binding.ivContactUs.setColorFilter(
+        binding.ivScene.setOnClickListener {
+            binding.ivScene.setColorFilter(
                 ContextCompat.getColor(this, R.color.theme_color),
                 android.graphics.PorterDuff.Mode.SRC_IN
             )
@@ -257,12 +258,12 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
                 ContextCompat.getColor(this, R.color.daintree),
                 android.graphics.PorterDuff.Mode.SRC_IN
             )
-            navController.navigate(R.id.contactUsFragment)
+            navController.navigate(R.id.sceneFragment)
         }
     }
 
     override fun onBackPressed() {
-        if (navController.currentDestination?.id == R.id.userManagementFragment || navController.currentDestination?.id == R.id.controlModeFragment || navController.currentDestination?.id == R.id.contactUsFragment) {
+        if (navController.currentDestination?.id == R.id.userManagementFragment || navController.currentDestination?.id == R.id.controlModeFragment || navController.currentDestination?.id == R.id.sceneFragment) {
             binding.ivHome.performClick()
         } else if (navController.currentDestination?.id == R.id.homeFragment) {
             finishAffinity()
