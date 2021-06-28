@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    tools:ignore="contentDescription,Autofill,LabelFor"
     tools:context="com.dellainfotech.smartTouch.ui.fragments.authentication.CreateAccountFragment">
 
     <ImageView
@@ -53,21 +54,71 @@
                 android:hint="@string/hint_text_email"
                 android:inputType="textEmailAddress" />
 
-            <EditText
-                android:id="@+id/edt_password"
-                style="@style/CreateAccountEditText"
-                android:drawableEnd="@drawable/ic_password_hidden"
-                android:drawableTint="@color/gray"
-                android:hint="@string/hint_text_password"
-                android:inputType="textPassword" />
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/login_component_height"
+                android:layout_marginStart="@dimen/login_component_start_margin"
+                android:layout_marginTop="@dimen/_20sdp"
+                android:layout_marginEnd="@dimen/login_component_end_margin">
 
-            <EditText
-                android:id="@+id/edt_confirm_password"
-                style="@style/CreateAccountEditText"
-                android:drawableEnd="@drawable/ic_password_hidden"
-                android:drawableTint="@color/gray"
-                android:hint="@string/hint_confirm_password"
-                android:inputType="textPassword" />
+                <EditText
+                    android:id="@+id/edt_password"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/catskill_white_background_without_border"
+                    android:fontFamily="@font/roboto_regular"
+                    android:hint="@string/hint_text_password"
+                    android:inputType="textPassword"
+                    android:paddingStart="@dimen/_10sdp"
+                    android:paddingEnd="@dimen/_40sdp"
+                    android:textColor="@color/daintree"
+                    android:textColorHint="@color/silver"
+                    android:textSize="@dimen/_12ssp" />
+
+                <ImageView
+                    android:id="@+id/iv_hide_password"
+                    android:layout_width="@dimen/_40sdp"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:padding="@dimen/_10sdp"
+                    android:src="@drawable/ic_password_hidden"
+                    app:tint="@color/gray" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/login_component_height"
+                android:layout_marginStart="@dimen/login_component_start_margin"
+                android:layout_marginTop="@dimen/_20sdp"
+                android:layout_marginEnd="@dimen/login_component_end_margin">
+
+                <EditText
+                    android:id="@+id/edt_confirm_password"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/catskill_white_background_without_border"
+                    android:fontFamily="@font/roboto_regular"
+                    android:hint="@string/hint_confirm_password"
+                    android:inputType="textPassword"
+                    android:paddingStart="@dimen/_10sdp"
+                    android:paddingEnd="@dimen/_40sdp"
+                    android:textColor="@color/daintree"
+                    android:textColorHint="@color/silver"
+                    android:textSize="@dimen/_12ssp" />
+
+                <ImageView
+                    android:id="@+id/iv_hide_confirm_password"
+                    android:layout_width="@dimen/_40sdp"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:padding="@dimen/_10sdp"
+                    android:src="@drawable/ic_password_hidden"
+                    app:tint="@color/gray" />
+
+            </RelativeLayout>
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btn_sign_up"

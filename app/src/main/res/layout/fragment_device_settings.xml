@@ -6,7 +6,8 @@
     android:layout_height="match_parent"
     android:background="@color/app_background_color"
     android:orientation="vertical"
-    tools:context="com.dellainfotech.smartTouch.ui.fragments.main.home.DeviceSettingsFragment">
+    tools:context="com.dellainfotech.smartTouch.ui.fragments.main.home.DeviceSettingsFragment"
+    tools:ignore="contentDescription,Autofill,LabelFor">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -71,9 +72,9 @@
                 android:layout_width="@dimen/_6sdp"
                 android:layout_height="@dimen/_12sdp"
                 android:src="@drawable/ic_arrow_right"
-                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintBottom_toBottomOf="@+id/iv_restart"
-                app:layout_constraintTop_toTopOf="@+id/iv_restart"/>
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/iv_restart" />
 
 
             <ImageView
@@ -102,9 +103,9 @@
                 android:layout_width="@dimen/_6sdp"
                 android:layout_height="@dimen/_12sdp"
                 android:src="@drawable/ic_arrow_right"
-                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintBottom_toBottomOf="@+id/iv_factory_reset"
-                app:layout_constraintTop_toTopOf="@+id/iv_factory_reset"/>
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/iv_factory_reset" />
 
 
             <ImageView
@@ -133,9 +134,9 @@
                 android:layout_width="@dimen/_6sdp"
                 android:layout_height="@dimen/_12sdp"
                 android:src="@drawable/ic_arrow_right"
-                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintBottom_toBottomOf="@+id/iv_remove"
-                app:layout_constraintTop_toTopOf="@+id/iv_remove"/>
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/iv_remove" />
 
             <ImageView
                 android:id="@+id/iv_update"
@@ -163,9 +164,9 @@
                 android:layout_width="@dimen/_6sdp"
                 android:layout_height="@dimen/_12sdp"
                 android:src="@drawable/ic_arrow_right"
-                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintBottom_toBottomOf="@+id/iv_update"
-                app:layout_constraintTop_toTopOf="@+id/iv_update"/>
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/iv_update" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

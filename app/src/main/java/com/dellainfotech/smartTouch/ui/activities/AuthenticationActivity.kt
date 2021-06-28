@@ -1,5 +1,6 @@
 package com.dellainfotech.smartTouch.ui.activities
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -69,7 +70,18 @@ class AuthenticationActivity : AppCompatActivity() {
                             FastSave.getInstance().saveString(Constants.SOCIAL_ID, userData.socialId)
                             FastSave.getInstance().saveBoolean(Constants.isControlModePinned, userData.iIsPinStatus!!.toBoolean())
 
-                            FastSave.getInstance().saveInt(Constants.LOGIN_TYPE, Constants.LOGIN_TYPE_FACEBOOK)
+                            if (userData.userRole == Constants.MASTER_USER){
+                                FastSave.getInstance().saveBoolean(Constants.IS_MASTER_USER,true)
+                            }else{
+                                FastSave.getInstance().saveBoolean(Constants.IS_MASTER_USER,false)
+                            }
+
+                            val sharedPreference =  getSharedPreferences(Constants.SHARED_PREF, Context.MODE_PRIVATE)
+                            val editor = sharedPreference?.edit()
+                            editor?.putString(Constants.LOGGED_IN_TYPE,Constants.LOGIN_TYPE_FACEBOOK)
+                            editor?.apply()
+
+                            FastSave.getInstance().saveString(Constants.LOGIN_TYPE, Constants.LOGIN_TYPE_FACEBOOK)
                             startActivity(Intent(this, MainActivity::class.java))
                             finishAffinity()
                         }
@@ -123,8 +135,8 @@ class AuthenticationActivity : AppCompatActivity() {
 
                         profileTracker = object : ProfileTracker() {
                             override fun onCurrentProfileChanged(
-                                profile: Profile?,
-                                profile1: Profile?
+                                oldProfile: Profile?,
+                                currentProfile: Profile?
                             ) {
                             }
                         }
@@ -136,9 +148,9 @@ class AuthenticationActivity : AppCompatActivity() {
                             GraphRequest.newMeRequest(result.accessToken) { _, response ->
 
                                 response?.let {
-                                    val json: JSONObject = it.jsonObject
+                                    val json: JSONObject? = it.jsonObject
                                     email = try {
-                                        json.getString("email") ?: ""
+                                        json?.getString("email") ?: ""
                                     } catch (e: java.lang.Exception) {
                                         ""
                                     }
@@ -169,6 +181,7 @@ class AuthenticationActivity : AppCompatActivity() {
                                     accessToken.userId,
                                     uuid,
                                     Constants.SOCIAL_LOGIN,
+                                    Constants.LOGIN_TYPE_FACEBOOK,
                                     email
                                 )
                             )

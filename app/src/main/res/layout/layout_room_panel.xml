@@ -1,13 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/linear_panel"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@color/white"
     android:clickable="true"
     android:focusable="true"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    tools:ignore="contentDescription">
 
     <ImageButton
         android:id="@+id/iv_hide_panel"
@@ -90,7 +92,7 @@
         android:layout_marginTop="@dimen/_10sdp"
         android:layout_marginEnd="@dimen/screen_end_margin"
         android:layout_marginBottom="@dimen/_10sdp"
-        android:background="@drawable/dodger_blue_background"
+        android:background="@drawable/dodger_blue_background_6dp_corner"
         android:text="@string/button_text_add_room"
         android:textAllCaps="false"
         android:textColor="@color/white"

@@ -49,15 +49,6 @@ class DeviceFeaturesFragment :
             findNavController().navigateUp()
         }
 
-        binding.ivCreateSceneSettings.setOnClickListener {
-            findNavController().navigate(
-                DeviceFeaturesFragmentDirections.actionDeviceFeaturesFragmentToSceneFragment(
-                    args.deviceDetail,
-                    args.roomDetail
-                )
-            )
-        }
-
         mqttConnectionDisposable =
             NotifyManager.getMQTTConnectionInfo().observeOn(AndroidSchedulers.mainThread())
                 .subscribe {

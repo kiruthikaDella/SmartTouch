@@ -15,12 +15,14 @@ data class UserProfile(
     var socialId: String? = null,
     @SerializedName("bPhoneNumber")
     var bPhoneNumber: String? = null,
+    @SerializedName("user_role")
+    var userRole: String? = null,
     @SerializedName("iIsPinStatus")
     var iIsPinStatus: Int? = null
 ){
 
     override fun toString(): String {
-        return "UserProfile(iUserId=$iUserId, vFullName=$vFullName, vUserName=$vUserName, vEmail=$vEmail, socialId=$socialId, bPhoneNumber=$bPhoneNumber, iIsPinStatus=$iIsPinStatus)"
+        return "UserProfile(iUserId=$iUserId, vFullName=$vFullName, vUserName=$vUserName, vEmail=$vEmail, socialId=$socialId, bPhoneNumber=$bPhoneNumber, userRole=$userRole, iIsPinStatus=$iIsPinStatus)"
     }
 
     override fun equals(other: Any?): Boolean {
@@ -35,6 +37,7 @@ data class UserProfile(
         if (vEmail != other.vEmail) return false
         if (socialId != other.socialId) return false
         if (bPhoneNumber != other.bPhoneNumber) return false
+        if (userRole != other.userRole) return false
         if (iIsPinStatus != other.iIsPinStatus) return false
 
         return true
@@ -47,6 +50,7 @@ data class UserProfile(
         result = 31 * result + (vEmail?.hashCode() ?: 0)
         result = 31 * result + (socialId?.hashCode() ?: 0)
         result = 31 * result + (bPhoneNumber?.hashCode() ?: 0)
+        result = 31 * result + (userRole?.hashCode() ?: 0)
         result = 31 * result + (iIsPinStatus ?: 0)
         return result
     }

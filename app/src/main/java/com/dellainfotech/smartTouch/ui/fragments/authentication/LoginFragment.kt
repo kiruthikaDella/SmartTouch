@@ -2,6 +2,7 @@ package com.dellainfotech.smartTouch.ui.fragments.authentication
 
 import android.annotation.SuppressLint
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.text.method.HideReturnsTransformationMethod
@@ -9,7 +10,6 @@ import android.text.method.PasswordTransformationMethod
 import android.util.Log
 import android.util.Patterns
 import android.view.LayoutInflater
-import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
@@ -29,6 +29,7 @@ import com.dellainfotech.smartTouch.common.utils.Utils
 import com.dellainfotech.smartTouch.common.utils.Utils.isNetworkConnectivityAvailable
 import com.dellainfotech.smartTouch.common.utils.Utils.showAlertDialog
 import com.dellainfotech.smartTouch.common.utils.Utils.toBoolean
+import com.dellainfotech.smartTouch.common.utils.Utils.toEditable
 import com.dellainfotech.smartTouch.databinding.FragmentLoginBinding
 import com.dellainfotech.smartTouch.ui.activities.AuthenticationActivity
 import com.dellainfotech.smartTouch.ui.activities.MainActivity
@@ -62,10 +63,32 @@ class LoginFragment : ModelBaseFragment<AuthViewModel, FragmentLoginBinding, Aut
 
         context?.let {
             Utils.generateSSHKey(it)
-        }
 
-        binding.checkboxRemember.isChecked = FastSave.getInstance()
-            .getBoolean(Constants.IS_REMEMBER, Constants.DEFAULT_REMEMBER_STATUS)
+            val sharedPreference =  it.getSharedPreferences(Constants.SHARED_PREF, Context.MODE_PRIVATE)
+
+            val isRememberMeChecked = sharedPreference.getBoolean(Constants.IS_REMEMBER, Constants.DEFAULT_REMEMBER_STATUS)
+            binding.checkboxRemember.isChecked = isRememberMeChecked
+
+            val loginType = sharedPreference.getString(Constants.LOGGED_IN_TYPE, "")
+
+            Log.e(logTag," loginType $loginType isRememberMeChecked $isRememberMeChecked  ")
+
+            if (isRememberMeChecked && loginType == Constants.LOGIN_TYPE_NORMAL){
+                val email = sharedPreference.getString(Constants.LOGGED_IN_EMAIL, null)
+                val password = sharedPreference.getString(Constants.LOGGED_IN_PASSWORD,null)
+
+                email?.let {
+                    binding.edtEmail.text = email.toEditable()
+                    binding.edtPassword.text = password?.toEditable()
+                }
+            }
+
+            binding.checkboxRemember.setOnCheckedChangeListener { _, isChecked ->
+                val editor = sharedPreference?.edit()
+                editor?.putBoolean(Constants.IS_REMEMBER,isChecked)
+                editor?.apply()
+            }
+        }
 
         clickEvents()
         apiCall()
@@ -82,9 +105,6 @@ class LoginFragment : ModelBaseFragment<AuthViewModel, FragmentLoginBinding, Aut
             findNavController().navigate(LoginFragmentDirections.actionLoginFragmentToForgotPasswordFragment())
         }
 
-        binding.checkboxRemember.setOnCheckedChangeListener { _, isChecked ->
-            FastSave.getInstance().saveBoolean(Constants.IS_REMEMBER, isChecked)
-        }
         binding.btnLogin.setOnClickListener {
             validateUserInformation()
         }
@@ -105,29 +125,20 @@ class LoginFragment : ModelBaseFragment<AuthViewModel, FragmentLoginBinding, Aut
             }
         }
 
-        binding.edtPassword.setOnTouchListener { _, event ->
-            val drawableEnd  = 2
-
-            if(event.action == MotionEvent.ACTION_UP) {
-                if(event.rawX >= (binding.edtPassword.right - binding.edtPassword.compoundDrawables[drawableEnd].bounds.width())) {
-                    if (isPasswordVisible){
-                        isPasswordVisible = false
-                        context?.let {
-                            binding.edtPassword.setCompoundDrawablesWithIntrinsicBounds(null,null,
-                                ContextCompat.getDrawable(it,R.drawable.ic_password_visible),null)
-                            binding.edtPassword.transformationMethod = HideReturnsTransformationMethod.getInstance()
-                        }
-                    }else {
-                        isPasswordVisible = true
-                        context?.let {
-                            binding.edtPassword.setCompoundDrawablesWithIntrinsicBounds(null,null,
-                                ContextCompat.getDrawable(it,R.drawable.ic_password_hidden),null)
-                            binding.edtPassword.transformationMethod = PasswordTransformationMethod.getInstance()
-                        }
-                    }
+        binding.ivHidePassword.setOnClickListener {
+            if (isPasswordVisible){
+                isPasswordVisible = false
+                context?.let {
+                    binding.ivHidePassword.setImageDrawable(ContextCompat.getDrawable(it,R.drawable.ic_password_hidden))
+                    binding.edtPassword.transformationMethod = PasswordTransformationMethod.getInstance()
+                }
+            }else {
+                isPasswordVisible = true
+                context?.let {
+                    binding.ivHidePassword.setImageDrawable(ContextCompat.getDrawable(it,R.drawable.ic_password_visible))
+                    binding.edtPassword.transformationMethod = HideReturnsTransformationMethod.getInstance()
                 }
             }
-            false
         }
 
         activityLauncher()
@@ -167,6 +178,7 @@ class LoginFragment : ModelBaseFragment<AuthViewModel, FragmentLoginBinding, Aut
                                     it.id.toString(),
                                     uuid,
                                     Constants.SOCIAL_LOGIN,
+                                    Constants.LOGIN_TYPE_GOOGLE,
                                     email
                                 )
                             )
@@ -219,9 +231,25 @@ class LoginFragment : ModelBaseFragment<AuthViewModel, FragmentLoginBinding, Aut
                             FastSave.getInstance().saveString(Constants.USER_EMAIL, userData.vEmail)
                             FastSave.getInstance()
                                 .saveString(Constants.USER_PHONE_NUMBER, userData.bPhoneNumber)
+
+                            if (userData.userRole == Constants.MASTER_USER){
+                                FastSave.getInstance().saveBoolean(Constants.IS_MASTER_USER,true)
+                            }else{
+                                FastSave.getInstance().saveBoolean(Constants.IS_MASTER_USER,false)
+                            }
+                            
                             FastSave.getInstance().saveString(Constants.SOCIAL_ID, userData.socialId)
                             FastSave.getInstance().saveBoolean(Constants.isControlModePinned, userData.iIsPinStatus!!.toBoolean())
-                            FastSave.getInstance().saveInt(Constants.LOGIN_TYPE, Constants.LOGIN_TYPE_MANUAL)
+                            FastSave.getInstance().saveString(Constants.LOGIN_TYPE, Constants.LOGIN_TYPE_NORMAL)
+
+                            if (binding.checkboxRemember.isChecked){
+                                val sharedPreference =  activity?.getSharedPreferences(Constants.SHARED_PREF, Context.MODE_PRIVATE)
+                                val editor = sharedPreference?.edit()
+                                editor?.putString(Constants.LOGGED_IN_EMAIL,binding.edtEmail.text.toString())
+                                editor?.putString(Constants.LOGGED_IN_PASSWORD,binding.edtPassword.text.toString())
+                                editor?.putString(Constants.LOGGED_IN_TYPE,Constants.LOGIN_TYPE_NORMAL)
+                                editor?.apply()
+                            }
                             activity?.let {
                                 startActivity(Intent(it, MainActivity::class.java))
                                 it.finishAffinity()
@@ -266,8 +294,19 @@ class LoginFragment : ModelBaseFragment<AuthViewModel, FragmentLoginBinding, Aut
                             FastSave.getInstance().saveString(Constants.SOCIAL_ID, userData.socialId)
                             FastSave.getInstance().saveBoolean(Constants.isControlModePinned, userData.iIsPinStatus!!.toBoolean())
 
+                            if (userData.userRole == Constants.MASTER_USER){
+                                FastSave.getInstance().saveBoolean(Constants.IS_MASTER_USER,true)
+                            }else{
+                                FastSave.getInstance().saveBoolean(Constants.IS_MASTER_USER,false)
+                            }
+
+                            val sharedPreference =  activity?.getSharedPreferences(Constants.SHARED_PREF, Context.MODE_PRIVATE)
+                            val editor = sharedPreference?.edit()
+                            editor?.putString(Constants.LOGGED_IN_TYPE,Constants.LOGIN_TYPE_GOOGLE)
+                            editor?.apply()
+
                             activity?.let {
-                                FastSave.getInstance().saveInt(Constants.LOGIN_TYPE, Constants.LOGIN_TYPE_GOOGLE)
+                                FastSave.getInstance().saveString(Constants.LOGIN_TYPE, Constants.LOGIN_TYPE_GOOGLE)
                                 startActivity(Intent(it, MainActivity::class.java))
                                 it.finishAffinity()
                             }

@@ -4,10 +4,10 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_gravity="center"
-    android:background="@color/app_background_color"
+    android:background="@color/dialog_background_color"
     android:gravity="center"
     android:orientation="vertical"
-    app:corner_radius="@dimen/corner_radius_20dp"
+    app:corner_radius="@dimen/dialog_corner_radius"
     android:paddingTop="@dimen/_20sdp"
     android:paddingBottom="@dimen/_20sdp">
 
@@ -30,7 +30,7 @@
         android:gravity="center"
         android:text="@string/text_verify_update"
         android:textColor="@color/daintree"
-        android:textSize="@dimen/_14ssp" />
+        android:textSize="@dimen/dialog_title_size" />
 
 
 </com.jcminarro.roundkornerlayout.RoundKornerLinearLayout>

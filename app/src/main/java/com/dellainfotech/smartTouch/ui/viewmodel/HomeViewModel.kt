@@ -60,7 +60,7 @@ class HomeViewModel @ViewModelInject constructor(
         get() = _changePasswordResponse
 
     private val _updatePinStatusResponse: MutableLiveData<Resource<PinResponse>> = MutableLiveData()
-    val updatePinStatusResponse: LiveData<Resource<PinResponse>>
+    val updatePinStatusResponse: MutableLiveData<Resource<PinResponse>>
         get() = _updatePinStatusResponse
 
     fun logout(
@@ -130,8 +130,13 @@ class HomeViewModel @ViewModelInject constructor(
         get() = _addDeviceResponse
 
     private val _getDeviceResponse: MutableLiveData<Resource<GetDeviceResponse>> = MutableLiveData()
-    val getDeviceResponse: LiveData<Resource<GetDeviceResponse>>
+    val getDeviceResponse: MutableLiveData<Resource<GetDeviceResponse>>
         get() = _getDeviceResponse
+
+
+    fun getDeviceList() {
+        (getDeviceResponse.value as Resource<GetDeviceResponse>)
+    }
 
     private val _getDeviceCustomizationSettingsResponse: MutableLiveData<Resource<DeviceCustomizationResponse>> = MutableLiveData()
     val getDeviceCustomizationSettingsResponse: LiveData<Resource<DeviceCustomizationResponse>>
@@ -190,7 +195,7 @@ class HomeViewModel @ViewModelInject constructor(
         get() = _updateSceneResponse
 
     private val _deleteSceneResponse: MutableLiveData<Resource<CommonResponse>> = MutableLiveData()
-    val deleteSceneResponse: LiveData<Resource<CommonResponse>>
+    val deleteSceneResponse: MutableLiveData<Resource<CommonResponse>>
         get() = _deleteSceneResponse
 
     private val _deleteSceneDetailResponse: MutableLiveData<Resource<CommonResponse>> = MutableLiveData()
@@ -304,6 +309,10 @@ class HomeViewModel @ViewModelInject constructor(
     val transferOwnershipResponse: LiveData<Resource<OwnershipResponse>>
         get() = _transferOwnershipResponse
 
+    private val _cancelOwnershipResponse: MutableLiveData<Resource<CommonResponse>> = MutableLiveData()
+    val cancelOwnershipResponse: LiveData<Resource<CommonResponse>>
+        get() = _cancelOwnershipResponse
+
     fun getOwnership() = viewModelScope.launch {
         _getOwnershipResponse.value = Resource.Loading
         _getOwnershipResponse.value = homeRepository.getOwnership()
@@ -313,6 +322,13 @@ class HomeViewModel @ViewModelInject constructor(
         _transferOwnershipResponse.value = Resource.Loading
         _transferOwnershipResponse.value = homeRepository.transferOwnership(bodyOwnership)
     }
+
+    fun cancelOwnership(ownershipId: String) = viewModelScope.launch {
+        _cancelOwnershipResponse.value = Resource.Loading
+        _cancelOwnershipResponse.value = homeRepository.cancelTransferOwnership(ownershipId)
+    }
+
+
 
     //
     //endregion

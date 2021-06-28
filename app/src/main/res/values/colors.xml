@@ -24,5 +24,8 @@
     <color name="app_background_color">@color/catskill_white</color>
     <color name="red">#FF0000</color>
     <color name="gray">#707070</color>
+    <color name="transparent">#00000000</color>
+
+    <color name="dialog_background_color">@color/app_background_color</color>
 
 </resources>

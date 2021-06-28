@@ -3,10 +3,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_marginStart="@dimen/screen_start_margin"
     android:layout_marginTop="@dimen/_5sdp"
     android:layout_marginBottom="@dimen/_5sdp"
     android:layout_marginEnd="@dimen/screen_end_margin"
+    tools:ignore="contentDescription"
     app:cardElevation="@dimen/_3sdp"
     app:cardCornerRadius="@dimen/corner_radius_4dp">
 

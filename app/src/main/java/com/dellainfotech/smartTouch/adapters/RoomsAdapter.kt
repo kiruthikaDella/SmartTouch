@@ -22,6 +22,7 @@ class RoomsAdapter(
 ) : RecyclerView.Adapter<RoomsAdapter.MyViewHolder>() {
 
     private var roomClickListener: AdapterItemClickListener<GetRoomData>? = null
+    private var roomDeleteClickListener: AdapterItemClickListener<GetRoomData>? = null
     private var mContext: Context? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
@@ -65,8 +66,12 @@ class RoomsAdapter(
                     .into(ivRoomImage)
             }
 
-            tvRoomSettings.setOnClickListener {
+            itemView.setOnClickListener {
                 roomClickListener?.onItemClick(data)
+            }
+
+            tvDeleteRoom.setOnClickListener {
+                roomDeleteClickListener?.onItemClick(data)
             }
         }
     }
@@ -78,10 +83,14 @@ class RoomsAdapter(
     inner class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val tvRoomTitle: TextView = itemView.findViewById(R.id.tv_room_title)
         val ivRoomImage: ImageView = itemView.findViewById(R.id.iv_room_image)
-        val tvRoomSettings: ImageView = itemView.findViewById(R.id.iv_room_settings)
+        val tvDeleteRoom: ImageView = itemView.findViewById(R.id.iv_delete_room)
     }
 
     fun setCallback(listener: AdapterItemClickListener<GetRoomData>) {
         this.roomClickListener = listener
+    }
+
+    fun setDeleteCallback(listener: AdapterItemClickListener<GetRoomData>) {
+        this.roomDeleteClickListener = listener
     }
 }

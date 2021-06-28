@@ -140,6 +140,11 @@ class UserManagementFragment :
         })
     }
 
+    override fun onStop() {
+        super.onStop()
+        viewModel.deleteSubordinateUserResponse.postValue(null)
+    }
+
     private fun showProgressDialog() {
         activity?.let {
             DialogUtil.loadingAlert(it)

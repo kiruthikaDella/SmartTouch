@@ -1,15 +1,18 @@
 package com.dellainfotech.smartTouch.ui.fragments.main.home
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
+import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import com.appizona.yehiahd.fastsave.FastSave
 import com.dellainfotech.smartTouch.R
 import com.dellainfotech.smartTouch.adapters.DeviceAdapter
 import com.dellainfotech.smartTouch.api.Resource
@@ -32,10 +35,12 @@ import com.dellainfotech.smartTouch.ui.fragments.ModelBaseFragment
 import com.dellainfotech.smartTouch.ui.viewmodel.HomeViewModel
 import com.sothree.slidinguppanel.SlidingUpPanelLayout
 
+
 /**
  * Created by Jignesh Dangar on 09-04-2021.
  */
 
+@SuppressLint("ClickableViewAccessibility")
 class DeviceFragment :
     ModelBaseFragment<HomeViewModel, FragmentDeviceBinding, HomeRepository>() {
 
@@ -51,6 +56,46 @@ class DeviceFragment :
 
         deviceList.clear()
 
+        if (viewModel.getDeviceResponse.value == null) {
+            showLoading()
+        } else {
+            viewModel.getDeviceResponse.value?.let {
+                when (it) {
+                    is Resource.Success -> {
+                        if (it.values.status && it.values.code == Constants.API_SUCCESS_CODE) {
+                            it.values.data?.let { deviceData ->
+                                deviceList.addAll(deviceData)
+                            }
+                        }
+                        Log.e(logTag, "" + it.values.data)
+                    }
+                    else -> {
+
+                    }
+                }
+            }
+        }
+
+        binding.switchRetainState.isClickable =
+            FastSave.getInstance().getBoolean(Constants.IS_MASTER_USER, false)
+        binding.switchRetainState.isFocusable =
+            FastSave.getInstance().getBoolean(Constants.IS_MASTER_USER, false)
+
+        binding.switchRetainState.setOnTouchListener { v, event ->
+            if (event.action == KeyEvent.ACTION_DOWN) {
+                if (!FastSave.getInstance().getBoolean(Constants.IS_MASTER_USER, false)) {
+                    context?.let {
+                        Toast.makeText(
+                            it,
+                            getString(R.string.error_text_only_master_user_can_edit),
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                }
+            }
+            false
+        }
+
         binding.ivBack.setOnClickListener {
             findNavController().navigateUp()
         }
@@ -64,8 +109,6 @@ class DeviceFragment :
 
         NotifyManager.internetInfo.observe(viewLifecycleOwner, { isConnected ->
             if (isConnected) {
-                deviceList.clear()
-                showLoading()
                 viewModel.getDevice(args.roomDetail.id)
             } else {
                 activity?.let {
@@ -102,6 +145,11 @@ class DeviceFragment :
 
     override fun getFragmentRepository(): HomeRepository = HomeRepository(networkModel)
 
+    override fun onDestroy() {
+        super.onDestroy()
+        viewModel.getDeviceResponse.postValue(null)
+    }
+
     private fun clickEvents() {
 
         binding.layoutSlidingUpPanel.setFadeOnClickListener { hidePanel() }
@@ -134,7 +182,7 @@ class DeviceFragment :
                     binding.tvTitle.text.toString().trim(),
                     getString(R.string.text_save),
                     getString(R.string.text_cancel),
-                    object : DialogEditListener {
+                    onClick = object : DialogEditListener {
                         override fun onYesClicked(string: String) {
                             if (string.isEmpty()) {
                                 Toast.makeText(
@@ -168,7 +216,7 @@ class DeviceFragment :
                         data.deviceName ?: "",
                         getString(R.string.text_save),
                         getString(R.string.text_cancel),
-                        object : DialogEditListener {
+                        onClick = object : DialogEditListener {
                             override fun onYesClicked(string: String) {
                                 if (string.isEmpty()) {
                                     Toast.makeText(
@@ -235,7 +283,7 @@ class DeviceFragment :
                         switchData.name,
                         getString(R.string.text_save),
                         getString(R.string.text_cancel),
-                        object : DialogEditListener {
+                        onClick = object : DialogEditListener {
                             override fun onYesClicked(string: String) {
                                 if (string.isEmpty()) {
                                     Toast.makeText(
@@ -305,7 +353,13 @@ class DeviceFragment :
                     hidePanel()
                     Handler(Looper.getMainLooper()).postDelayed({
                         showLoading()
-                        viewModel.addDevice(BodyAddDevice(serialNumber, args.roomDetail.id, deviceName))
+                        viewModel.addDevice(
+                            BodyAddDevice(
+                                serialNumber,
+                                args.roomDetail.id,
+                                deviceName
+                            )
+                        )
                     }, 600)
                 }
             }
@@ -357,7 +411,6 @@ class DeviceFragment :
                     context?.let {
                         Toast.makeText(it, response.values.message, Toast.LENGTH_SHORT).show()
                     }
-
                     if (response.values.status && response.values.code == Constants.API_SUCCESS_CODE) {
                         response.values.data?.let {
                             deviceList.add(it)
@@ -376,6 +429,7 @@ class DeviceFragment :
         })
 
         viewModel.getDeviceResponse.observe(viewLifecycleOwner, { response ->
+            deviceList.clear()
             when (response) {
                 is Resource.Success -> {
                     DialogUtil.hideDialog()

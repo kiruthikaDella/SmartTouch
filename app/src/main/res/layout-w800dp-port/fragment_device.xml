@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.sothree.slidinguppanel.SlidingUpPanelLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/layout_sliding_up_panel"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/app_background_color"
+    android:gravity="bottom"
+    android:orientation="vertical"
+    app:umanoDragView="@id/drag_add_panel"
+    app:umanoOverlay="true"
+    app:umanoPanelHeight="0dp"
+    tools:context="com.dellainfotech.smartTouch.ui.fragments.main.home.DeviceFragment"
+    tools:ignore="contentDescription,Autofill,LabelFor">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="?actionBarSize"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/iv_back"
+                style="@style/BackImageStyle"
+                android:layout_centerVertical="true" />
+
+            <TextView
+                android:id="@+id/tv_title"
+                style="@style/ScreenTitleHomeStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginStart="@dimen/_5sdp"
+                android:layout_marginEnd="@dimen/_5sdp"
+                android:layout_toStartOf="@+id/i_btn_edit_room_name"
+                android:layout_toEndOf="@+id/iv_back"
+                android:gravity="center"
+                android:text="@string/title_text_home_screen" />
+
+            <ImageView
+                android:id="@+id/i_btn_edit_room_name"
+                android:layout_width="@dimen/_30sdp"
+                android:layout_height="match_parent"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:padding="@dimen/_6sdp"
+                android:src="@drawable/ic_edit" />
+
+        </RelativeLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_10sdp"
+            android:orientation="horizontal">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_add_panel"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/_38sdp"
+                android:layout_marginStart="@dimen/screen_start_margin"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:layout_marginEnd="@dimen/_10sdp"
+                android:layout_marginBottom="@dimen/_10sdp"
+                android:layout_weight="0.5"
+                android:background="@drawable/dodger_blue_background_6dp_corner"
+                android:text="@string/text_add_panel"
+                android:textColor="@color/white"
+                android:textSize="@dimen/_11ssp"
+                app:backgroundTint="@null" />
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="0dp"
+                android:layout_height="@dimen/_38sdp"
+                android:layout_marginStart="@dimen/_10sdp"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:layout_marginEnd="@dimen/screen_end_margin"
+                android:layout_marginBottom="@dimen/_10sdp"
+                android:layout_weight="0.5"
+                app:cardBackgroundColor="@color/white"
+                app:cardCornerRadius="@dimen/_6sdp"
+                app:cardElevation="@dimen/_5sdp">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/tv_switch_one_name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginStart="@dimen/_8sdp"
+                        android:fontFamily="@font/roboto_medium"
+                        android:singleLine="true"
+                        android:text="@string/text_retain_state"
+                        android:textColor="@color/daintree"
+                        android:textSize="@dimen/_12ssp" />
+
+                    <com.google.android.material.switchmaterial.SwitchMaterial
+                        android:id="@+id/switch_retain_state"
+                        style="@style/PanelSwitchColorStyle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginEnd="@dimen/_5sdp" />
+                </RelativeLayout>
+
+            </androidx.cardview.widget.CardView>
+
+        </LinearLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycler_room_panels"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clipToPadding="false"
+            android:overScrollMode="never"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+
+    </LinearLayout>
+
+    <com.jcminarro.roundkornerlayout.RoundKornerLinearLayout
+        android:id="@+id/drag_add_panel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:background="@color/white"
+        android:orientation="vertical"
+        app:top_left_corner_radius="@dimen/_20sdp"
+        app:top_right_corner_radius="@dimen/_20sdp">
+
+        <include
+            android:id="@+id/layout_room_panel"
+            layout="@layout/layout_room_panel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+    </com.jcminarro.roundkornerlayout.RoundKornerLinearLayout>
+
+</com.sothree.slidinguppanel.SlidingUpPanelLayout>

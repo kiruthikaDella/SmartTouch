@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.jcminarro.roundkornerlayout.RoundKornerLinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:background="@color/dialog_background_color"
+    android:gravity="center"
+    android:layout_gravity="center"
+    app:corner_radius="@dimen/dialog_corner_radius">
+
+    <TextView
+        android:id="@+id/tv_dialog_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/dialog_title_pin_control_mode"
+        android:gravity="center"
+        android:textColor="@color/daintree"
+        android:fontFamily="@font/roboto_medium"
+        android:textSize="@dimen/dialog_title_size"
+        android:layout_margin="@dimen/_15sdp"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_1sdp"
+        android:background="@color/silver"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_35sdp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/tv_cancel"
+            android:layout_width="0dp"
+            android:layout_weight="0.5"
+            android:gravity="center"
+            android:layout_height="match_parent"
+            android:text="@string/text_cancel"
+            android:textSize="@dimen/dialog_button_size"
+            android:textColor="@color/theme_color"
+            android:fontFamily="@font/roboto_medium"/>
+
+        <View
+            android:layout_width="@dimen/_1sdp"
+            android:layout_height="match_parent"
+            android:background="@color/silver"/>
+
+        <TextView
+            android:id="@+id/tv_ok"
+            android:layout_width="0dp"
+            android:layout_weight="0.5"
+            android:gravity="center"
+            android:layout_height="match_parent"
+            android:text="@string/text_ok"
+            android:textSize="@dimen/dialog_button_size"
+            android:textColor="@color/theme_color"
+            android:fontFamily="@font/roboto_medium"/>
+
+    </LinearLayout>
+
+</com.jcminarro.roundkornerlayout.RoundKornerLinearLayout>

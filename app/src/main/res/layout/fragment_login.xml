@@ -5,7 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
-    tools:context="com.dellainfotech.smartTouch.ui.fragments.authentication.LoginFragment">
+    tools:context="com.dellainfotech.smartTouch.ui.fragments.authentication.LoginFragment"
+    tools:ignore="contentDescription,Autofill,LabelFor">
 
     <TextView
         android:id="@+id/tv_welcome_to"
@@ -37,31 +38,48 @@
         android:paddingEnd="@dimen/_10sdp"
         android:textColor="@color/daintree"
         android:textColorHint="@color/silver"
+        android:textCursorDrawable="@drawable/edittext_cursor"
         android:textSize="@dimen/_12ssp"
-        app:layout_constraintBottom_toTopOf="@+id/edt_password"
+        app:layout_constraintBottom_toTopOf="@+id/relative_password"
         app:layout_constraintTop_toBottomOf="@+id/tv_welcome_to" />
 
-    <EditText
-        android:id="@+id/edt_password"
+    <RelativeLayout
+        android:id="@+id/relative_password"
         android:layout_width="match_parent"
         android:layout_height="@dimen/login_component_height"
-        android:layout_gravity="center_vertical"
         android:layout_marginVertical="@dimen/_20sdp"
         android:layout_marginStart="@dimen/login_component_start_margin"
         android:layout_marginEnd="@dimen/login_component_end_margin"
-        android:background="@drawable/catskill_white_background_without_border"
-        android:drawableEnd="@drawable/ic_password_hidden"
-        android:drawableTint="@color/gray"
-        android:fontFamily="@font/roboto_regular"
-        android:hint="@string/hint_text_password"
-        android:inputType="textPassword"
-        android:paddingStart="@dimen/_10sdp"
-        android:paddingEnd="@dimen/_10sdp"
-        android:textColor="@color/daintree"
-        android:textColorHint="@color/silver"
-        android:textSize="@dimen/_12ssp"
         app:layout_constraintBottom_toTopOf="@+id/btn_login"
-        app:layout_constraintTop_toBottomOf="@+id/edt_email" />
+        app:layout_constraintTop_toBottomOf="@+id/edt_email">
+
+        <EditText
+            android:id="@+id/edt_password"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_vertical"
+            android:background="@drawable/catskill_white_background_without_border"
+            android:fontFamily="@font/roboto_regular"
+            android:hint="@string/hint_text_password"
+            android:inputType="textPassword"
+            android:paddingStart="@dimen/_10sdp"
+            android:paddingEnd="@dimen/_40sdp"
+            android:textColor="@color/daintree"
+            android:textColorHint="@color/silver"
+            android:textCursorDrawable="@drawable/edittext_cursor"
+            android:textSize="@dimen/_12ssp" />
+
+        <ImageView
+            android:id="@+id/iv_hide_password"
+            android:layout_width="@dimen/_40sdp"
+            android:layout_height="match_parent"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:padding="@dimen/_10sdp"
+            android:src="@drawable/ic_password_hidden"
+            app:tint="@color/gray" />
+
+    </RelativeLayout>
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btn_login"
@@ -101,6 +119,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
             android:layout_centerVertical="true"
+            android:buttonTint="@color/theme_color"
             android:fontFamily="@font/roboto_medium"
             android:text="@string/text_remember"
             android:textColor="@color/daintree"

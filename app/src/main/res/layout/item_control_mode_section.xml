@@ -27,7 +27,7 @@
                 android:layout_centerVertical="true"
                 android:layout_marginStart="@dimen/_10sdp"
                 android:fontFamily="@font/roboto_bold"
-                android:text="Living Room"
+                android:text="@string/text_living_room"
                 android:textColor="@color/daintree"
                 android:textSize="@dimen/_12ssp" />
 

@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/app_background_color"
     android:orientation="vertical"
-    tools:context="com.dellainfotech.smartTouch.ui.fragments.main.usermanagement.AddUserFragment">
+    tools:context="com.dellainfotech.smartTouch.ui.fragments.main.usermanagement.AddUserFragment"
+    tools:ignore="contentDescription,Autofill,LabelFor">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -76,8 +77,8 @@
         android:layout_marginTop="@dimen/_5sdp"
         android:layout_marginEnd="@dimen/screen_end_margin"
         android:background="@drawable/white_background_with_catskill_white_dark_border"
-        android:inputType="textEmailAddress"
         android:hint="@string/hint_text_email"
+        android:inputType="textEmailAddress"
         android:paddingStart="@dimen/_10sdp"
         android:paddingEnd="@dimen/_10sdp"
         android:singleLine="true"
@@ -89,13 +90,13 @@
         android:id="@+id/btn_add_user"
         android:layout_width="match_parent"
         android:layout_height="@dimen/login_component_height"
-        android:orientation="horizontal"
-        android:background="@color/dodger_blue"
         android:layout_marginStart="@dimen/screen_start_margin"
+        android:layout_marginTop="@dimen/_25sdp"
         android:layout_marginEnd="@dimen/screen_end_margin"
         android:layout_marginBottom="@dimen/_15sdp"
-        android:layout_marginTop="@dimen/_25sdp"
+        android:background="@color/dodger_blue"
         android:gravity="center"
+        android:orientation="horizontal"
         app:corner_radius="@dimen/corner_radius_6dp">
 
         <ImageView
@@ -106,11 +107,11 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_5sdp"
+            android:fontFamily="@font/roboto_medium"
             android:text="@string/text_add_new_user"
             android:textColor="@color/white"
-            android:fontFamily="@font/roboto_medium"
-            android:textSize="@dimen/_13ssp"
-            android:layout_marginStart="@dimen/_5sdp" />
+            android:textSize="@dimen/_13ssp" />
     </com.jcminarro.roundkornerlayout.RoundKornerLinearLayout>
 
 </LinearLayout>

@@ -1,0 +1,257 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    tools:context="com.dellainfotech.smartTouch.ui.fragments.authentication.LoginFragment"
+    tools:ignore="contentDescription,Autofill,LabelFor">
+
+    <TextView
+        android:id="@+id/tv_welcome_to"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_30sdp"
+        android:fontFamily="@font/roboto_bold"
+        android:text="@string/welcome"
+        android:textColor="@color/theme_color"
+        android:textSize="@dimen/_24ssp"
+        app:layout_constraintBottom_toTopOf="@+id/edt_email"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/edt_email"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/login_component_height"
+        android:layout_gravity="center_vertical"
+        android:layout_marginStart="@dimen/login_component_start_margin"
+        android:layout_marginTop="@dimen/_20sdp"
+        android:layout_marginEnd="@dimen/login_component_end_margin"
+        android:background="@drawable/catskill_white_background_without_border"
+        android:fontFamily="@font/roboto_regular"
+        android:hint="@string/hint_text_email"
+        android:inputType="textEmailAddress"
+        android:paddingStart="@dimen/_10sdp"
+        android:paddingEnd="@dimen/_10sdp"
+        android:textColor="@color/daintree"
+        android:textColorHint="@color/silver"
+        android:textSize="@dimen/_12ssp"
+        app:layout_constraintBottom_toTopOf="@+id/relative_password"
+        app:layout_constraintTop_toBottomOf="@+id/tv_welcome_to" />
+
+    <RelativeLayout
+        android:id="@+id/relative_password"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/login_component_height"
+        android:layout_marginVertical="@dimen/_20sdp"
+        android:layout_marginStart="@dimen/login_component_start_margin"
+        android:layout_marginEnd="@dimen/login_component_end_margin"
+        app:layout_constraintBottom_toTopOf="@+id/btn_login"
+        app:layout_constraintTop_toBottomOf="@+id/edt_email">
+
+        <EditText
+            android:id="@+id/edt_password"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_vertical"
+            android:background="@drawable/catskill_white_background_without_border"
+            android:fontFamily="@font/roboto_regular"
+            android:hint="@string/hint_text_password"
+            android:inputType="textPassword"
+            android:paddingStart="@dimen/_10sdp"
+            android:paddingEnd="@dimen/_40sdp"
+            android:textColor="@color/daintree"
+            android:textColorHint="@color/silver"
+            android:textSize="@dimen/_12ssp" />
+
+        <ImageView
+            android:id="@+id/iv_hide_password"
+            android:layout_width="@dimen/_40sdp"
+            android:layout_height="match_parent"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:padding="@dimen/_10sdp"
+            android:src="@drawable/ic_password_hidden"
+            app:tint="@color/gray" />
+
+    </RelativeLayout>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btn_login"
+        style="@style/DodgerBlueButtonStyle"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/login_component_height"
+        android:layout_gravity="center_vertical"
+        android:layout_marginStart="@dimen/login_component_start_margin"
+        android:layout_marginEnd="@dimen/login_component_end_margin"
+        android:fontFamily="@font/roboto_medium"
+        android:letterSpacing="0"
+        android:text="@string/text_login"
+        android:textAllCaps="false"
+        android:textColor="@color/white"
+        android:textSize="@dimen/_12ssp"
+        app:layout_constraintBottom_toBottomOf="@+id/guideline" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.55" />
+
+    <RelativeLayout
+        android:id="@+id/relative_remember"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/login_component_height"
+        android:layout_marginStart="@dimen/login_component_start_margin"
+        android:layout_marginTop="@dimen/_15sdp"
+        android:layout_marginEnd="@dimen/login_component_end_margin"
+        app:layout_constraintTop_toBottomOf="@+id/guideline">
+
+        <CheckBox
+            android:id="@+id/checkbox_remember"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="@dimen/_10sdp"
+            android:gravity="center"
+            android:scaleX="1.6"
+            android:scaleY="1.6" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="@dimen/_minus7sdp"
+            android:layout_toEndOf="@+id/checkbox_remember"
+            android:fontFamily="@font/roboto_medium"
+            android:text="@string/text_remember"
+            android:textColor="@color/daintree"
+            android:textSize="@dimen/_12ssp" />
+
+        <TextView
+            android:id="@+id/tv_forgot_password"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:fontFamily="@font/roboto_medium"
+            android:text="@string/text_forgot_password"
+            android:textColor="@color/theme_color"
+            android:textSize="@dimen/_12ssp" />
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/linear_social_login"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/login_component_height"
+        android:layout_marginStart="@dimen/login_component_start_margin"
+        android:layout_marginTop="@dimen/_30sdp"
+        android:layout_marginEnd="@dimen/login_component_end_margin"
+        android:background="@color/white"
+        android:orientation="horizontal"
+        app:layout_constraintTop_toBottomOf="@+id/relative_remember">
+
+        <LinearLayout
+            android:id="@+id/linear_facebook"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/_40sdp"
+            android:layout_marginEnd="@dimen/_8sdp"
+            android:layout_weight="0.5"
+            android:background="@drawable/transparent_background_with_silver_border"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="@dimen/_20sdp"
+                android:layout_height="@dimen/_20sdp"
+                android:src="@drawable/ic_facebook" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_10sdp"
+                android:fontFamily="@font/roboto_medium"
+                android:text="@string/text_facebook"
+                android:textColor="@color/daintree"
+                android:textSize="@dimen/_12ssp" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/linear_google"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/_40sdp"
+            android:layout_marginStart="@dimen/_8sdp"
+            android:layout_weight="0.5"
+            android:background="@drawable/transparent_background_with_silver_border"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="@dimen/_20sdp"
+                android:layout_height="@dimen/_20sdp"
+                android:src="@drawable/ic_google" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_10sdp"
+                android:fontFamily="@font/roboto_medium"
+                android:text="@string/text_google"
+                android:textColor="@color/daintree"
+                android:textSize="@dimen/_12ssp" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_20sdp"
+        android:gravity="center"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toTopOf="@+id/tv_org_name"
+        app:layout_constraintTop_toBottomOf="@+id/linear_social_login"
+        app:layout_constraintVertical_bias="0.1">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/roboto_medium"
+            android:text="@string/text_do_not_have_account"
+            android:textColor="@color/daintree"
+            android:textSize="@dimen/_12ssp" />
+
+        <TextView
+            android:id="@+id/tv_sign_up"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_5sdp"
+            android:fontFamily="@font/roboto_medium"
+            android:text="@string/text_sign_up"
+            android:textColor="@color/theme_color"
+            android:textSize="@dimen/_12ssp" />
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tv_org_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/_10sdp"
+        android:fontFamily="@font/roboto_medium"
+        android:text="@string/org_name"
+        android:textColor="@color/daintree"
+        android:textSize="@dimen/_10ssp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

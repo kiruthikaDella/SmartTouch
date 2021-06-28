@@ -7,6 +7,7 @@
     android:layout_height="match_parent"
     android:background="@color/app_background_color"
     android:orientation="vertical"
+    tools:ignore="contentDescription"
     tools:context="com.dellainfotech.smartTouch.ui.fragments.main.home.HomeFragment">
 
     <LinearLayout
@@ -25,9 +26,9 @@
                 android:id="@+id/iv_side_navigation"
                 android:layout_width="@dimen/_40sdp"
                 android:layout_height="match_parent"
-                android:padding="@dimen/_9sdp"
                 android:layout_centerVertical="true"
                 android:layout_marginStart="@dimen/_6sdp"
+                android:padding="@dimen/_9sdp"
                 android:src="@drawable/ic_side_navigation" />
 
             <TextView
@@ -59,7 +60,9 @@
         android:layout_height="match_parent"
         android:layout_gravity="start"
         android:fitsSystemWindows="true"
+        android:overScrollMode="never"
         app:headerLayout="@layout/navigation_header_layout"
+        app:itemHorizontalPadding="@dimen/navigation_start_margin"
         app:itemIconTint="@color/nepal"
         app:itemTextAppearance="@style/SideNavigationTextStyle"
         app:itemTextColor="@color/daintree"
@@ -75,9 +78,9 @@
                 android:id="@+id/tv_app_version"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@color/gray"
                 android:layout_marginStart="@dimen/_20sdp"
                 android:layout_marginBottom="@dimen/_15sdp"
+                android:textColor="@color/gray"
                 android:textSize="@dimen/_12ssp" />
         </LinearLayout>
 

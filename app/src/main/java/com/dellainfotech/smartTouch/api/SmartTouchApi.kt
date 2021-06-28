@@ -12,6 +12,10 @@ import retrofit2.http.*
  */
 interface SmartTouchApi {
 
+    //
+    //region Urls
+    //
+
     companion object {
         const val BASE_URL = "https://dev.teksun.com/smarttouch/api/v1/"
 
@@ -66,7 +70,12 @@ interface SmartTouchApi {
         //Ownership transfer
         const val API_GET_OWNER_TRANSFER = "owner/owner-transfer"
         const val API_POST_OWNER_TRANSFER = "owner/owner-transfer"
+        const val API_CANCEL_OWNER_TRANSFER = "owner/owner-transfer-cancel/{id}"
     }
+
+    //
+    //endregion
+    //
 
     //
     //region Authentication APIs
@@ -325,6 +334,12 @@ interface SmartTouchApi {
         @Header("access_key") access_key: String,
         @Body bodyOwnership: BodyOwnership
     ): OwnershipResponse
+
+    @DELETE(API_CANCEL_OWNER_TRANSFER)
+    suspend fun deleteOwnershipTransfer(
+        @Header("access_key") access_key: String,
+        @Path("id") ownershipTransferId: String
+    ): CommonResponse
 
     //
     //endregion

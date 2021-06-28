@@ -1,13 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginStart="@dimen/screen_start_margin"
     android:layout_marginTop="@dimen/_10sdp"
     android:layout_marginEnd="@dimen/screen_end_margin"
     app:cardCornerRadius="@dimen/corner_radius_2dp"
-    app:cardElevation="@dimen/_5sdp">
+    app:cardElevation="@dimen/_5sdp"
+    tools:ignore="contentDescription">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -48,7 +50,6 @@
                         android:layout_toStartOf="@+id/img_panel_edit"
                         android:layout_toEndOf="@+id/img_panel_menu"
                         android:fontFamily="@font/roboto_bold"
-                        android:text="SMT2028189"
                         android:textColor="@color/daintree"
                         android:textSize="@dimen/_12ssp" />
 
@@ -56,9 +57,9 @@
                         android:id="@+id/img_panel_edit"
                         android:layout_width="@dimen/_30sdp"
                         android:layout_height="match_parent"
-                        android:padding="@dimen/_8sdp"
                         android:layout_alignParentEnd="true"
                         android:layout_centerVertical="true"
+                        android:padding="@dimen/_8sdp"
                         android:src="@drawable/ic_panel_edit"
                         app:tint="@color/theme_color" />
 
@@ -144,7 +145,7 @@
                     android:textColor="@color/theme_color"
                     android:textSize="@dimen/_11ssp"
                     app:layout_constraintBottom_toBottomOf="@+id/tv_switch_one_name"
-                    app:layout_constraintEnd_toEndOf="@+id/switch_one"
+                    app:layout_constraintEnd_toStartOf="@+id/switch_one"
                     app:layout_constraintStart_toStartOf="@+id/guideline2"
                     app:layout_constraintTop_toTopOf="@+id/tv_switch_one_name" />
 
@@ -212,7 +213,7 @@
                     android:textColor="@color/theme_color"
                     android:textSize="@dimen/_11ssp"
                     app:layout_constraintBottom_toBottomOf="@+id/tv_switch_two_name"
-                    app:layout_constraintEnd_toEndOf="@+id/switch_two"
+                    app:layout_constraintEnd_toStartOf="@+id/switch_two"
                     app:layout_constraintStart_toStartOf="@+id/guideline2"
                     app:layout_constraintTop_toTopOf="@+id/tv_switch_two_name" />
 
@@ -281,7 +282,7 @@
                     android:textColor="@color/theme_color"
                     android:textSize="@dimen/_11ssp"
                     app:layout_constraintBottom_toBottomOf="@+id/tv_switch_three_name"
-                    app:layout_constraintEnd_toEndOf="@+id/switch_three"
+                    app:layout_constraintEnd_toStartOf="@+id/switch_three"
                     app:layout_constraintStart_toStartOf="@+id/guideline2"
                     app:layout_constraintTop_toTopOf="@+id/tv_switch_three_name" />
 
@@ -350,7 +351,7 @@
                     android:textColor="@color/theme_color"
                     android:textSize="@dimen/_11ssp"
                     app:layout_constraintBottom_toBottomOf="@+id/tv_switch_four_name"
-                    app:layout_constraintEnd_toEndOf="@+id/switch_four"
+                    app:layout_constraintEnd_toStartOf="@+id/switch_four"
                     app:layout_constraintStart_toStartOf="@+id/guideline2"
                     app:layout_constraintTop_toTopOf="@+id/tv_switch_four_name" />
 
@@ -418,7 +419,8 @@
                     android:textColor="@color/theme_color"
                     android:textSize="@dimen/_11ssp"
                     app:layout_constraintBottom_toBottomOf="@+id/tv_switch_five_name"
-                    app:layout_constraintEnd_toEndOf="@+id/switch_five"
+                    app:layout_constraintEnd_toStartOf="@+id/switch_five"
+                    app:layout_constraintHorizontal_bias="1.0"
                     app:layout_constraintStart_toStartOf="@+id/guideline2"
                     app:layout_constraintTop_toTopOf="@+id/tv_switch_five_name" />
 
@@ -487,7 +489,7 @@
                     android:textColor="@color/theme_color"
                     android:textSize="@dimen/_11ssp"
                     app:layout_constraintBottom_toBottomOf="@+id/tv_switch_six_name"
-                    app:layout_constraintEnd_toEndOf="@+id/switch_six"
+                    app:layout_constraintEnd_toStartOf="@+id/switch_six"
                     app:layout_constraintStart_toStartOf="@+id/guideline2"
                     app:layout_constraintTop_toTopOf="@+id/tv_switch_six_name" />
 
@@ -557,7 +559,7 @@
                     android:textColor="@color/theme_color"
                     android:textSize="@dimen/_11ssp"
                     app:layout_constraintBottom_toBottomOf="@+id/tv_switch_seven_name"
-                    app:layout_constraintEnd_toEndOf="@+id/switch_seven"
+                    app:layout_constraintEnd_toStartOf="@+id/switch_seven"
                     app:layout_constraintStart_toStartOf="@+id/guideline2"
                     app:layout_constraintTop_toTopOf="@+id/tv_switch_seven_name" />
 
@@ -626,7 +628,7 @@
                     android:textColor="@color/theme_color"
                     android:textSize="@dimen/_11ssp"
                     app:layout_constraintBottom_toBottomOf="@+id/tv_switch_eight_name"
-                    app:layout_constraintEnd_toEndOf="@+id/switch_eight"
+                    app:layout_constraintEnd_toStartOf="@+id/switch_eight"
                     app:layout_constraintStart_toStartOf="@+id/guideline2"
                     app:layout_constraintTop_toTopOf="@+id/tv_switch_eight_name" />
 
@@ -651,9 +653,9 @@
                     app:isb_show_tick_marks_type="none"
                     app:isb_show_tick_texts="true"
                     app:isb_thumb_drawable="@drawable/ic_panel_seekbar_thumb"
-                    app:isb_thumb_size="@dimen/_50sdp"
+                    app:isb_thumb_size="@dimen/_20sdp"
                     app:isb_tick_texts_color="@color/theme_color"
-                    app:isb_tick_texts_size="15sp"
+                    app:isb_tick_texts_size="@dimen/_12ssp"
                     app:isb_ticks_count="6"
                     app:isb_track_background_color="@color/gull_gray"
                     app:isb_track_background_size="@dimen/_1sdp"
@@ -721,8 +723,8 @@
                 <ImageView
                     android:layout_width="@dimen/_24sdp"
                     android:layout_height="@dimen/_24sdp"
-                    android:scaleType="fitXY"
                     android:elevation="@dimen/_5sdp"
+                    android:scaleType="fitXY"
                     android:src="@drawable/triangle_up"
                     app:tint="@color/theme_color" />
 
@@ -853,7 +855,7 @@
             android:background="@color/black"
             android:clickable="true"
             android:focusable="true"
-            android:visibility="gone"/>
+            android:visibility="gone" />
 
     </RelativeLayout>
 

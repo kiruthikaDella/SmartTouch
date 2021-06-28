@@ -5,6 +5,12 @@ package com.dellainfotech.smartTouch.common.utils
  */
 object Constants {
 
+    const val SHARED_PREF = "smarttouch_preference"
+    const val LOGGED_IN_EMAIL = "logged_in_email"
+    const val LOGGED_IN_PASSWORD = "logged_in_password"
+    const val LOGGED_IN_TYPE = "logged_in_type"
+    const val IS_REMEMBER = "is_remember"
+
     var COMMON_DIALOG_WIDTH = 0.8.toFloat()
     var COMMON_DIALOG_HEIGHT = 0.9.toFloat()
 
@@ -25,17 +31,16 @@ object Constants {
     const val isControlModePinned = "isControlModePinned"
     const val DEFAULT_DEVICE_CUSTOMIZATION_LOCK_STATUS = false
     const val isDeviceCustomizationLocked = "isDeviceCustomizationLocked"
-    const val DEFAULT_SCREEN_LAYOUT_LOCK_STATUS = false
-    const val isScreenLayoutLocked = "isScreenLayoutLocked"
-    const val DEFAULT_SWITCH_ICONS_LOCK_STATUS = false
-    const val isSwitchIconsLocked = "isSwitchIconsLocked"
 
     const val PASSWORD_LENGTH = 6
     const val SOCIAL_LOGIN = "2"
-    const val LOGIN_TYPE = "login_type" // 1 - Manual login, 2 - Google, 3 - Facebook
-    const val LOGIN_TYPE_MANUAL = 1
-    const val LOGIN_TYPE_GOOGLE = 2
-    const val LOGIN_TYPE_FACEBOOK = 3
+    const val LOGIN_TYPE = "login_type"
+    const val LOGIN_TYPE_NORMAL = "Normal"
+    const val LOGIN_TYPE_GOOGLE = "Google"
+    const val LOGIN_TYPE_FACEBOOK = "Facebook"
+    const val IS_MASTER_USER = "is_master_user"
+    const val MASTER_USER = "Master User"
+    const val SUBORDINATE_USER = "subordinate"
 
     //Swagger
     const val SECRET_KEY = "PXGuKjNtjzLiyLRE0GzykvGcaZO5uWE0"
@@ -51,8 +56,6 @@ object Constants {
 
     const val MOBILE_UUID = "mobile_uuid"
     const val DEFAULT_REMEMBER_STATUS = false
-    const val IS_REMEMBER = "is_remember"
     const val IS_LOGGED_IN = "is_logged_in"
-
 
 }

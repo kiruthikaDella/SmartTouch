@@ -6,11 +6,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:clipChildren="false"
-    tools:context="com.dellainfotech.smartTouch.ui.activities.MainActivity"
     android:gravity="bottom"
     app:umanoDragView="@id/drag_add_room"
     app:umanoOverlay="true"
-    app:umanoPanelHeight="0dp">
+    app:umanoPanelHeight="0dp"
+    tools:context="com.dellainfotech.smartTouch.ui.activities.MainActivity"
+    tools:ignore="contentDescription">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -22,56 +23,56 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             app:defaultNavHost="true"
-            app:navGraph="@navigation/nav_main"
+            app:layout_constraintBottom_toTopOf="@+id/linear_bottom_navigation_view"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toTopOf="@+id/linear_bottom_navigation_view"/>
+            app:navGraph="@navigation/nav_main" />
 
         <LinearLayout
             android:id="@+id/linear_bottom_navigation_view"
             android:layout_width="match_parent"
             android:layout_height="@dimen/_50sdp"
             android:orientation="horizontal"
-            app:layout_constraintStart_toStartOf="parent"
+            android:weightSum="5"
             app:layout_constraintBottom_toBottomOf="parent"
-            android:weightSum="5">
+            app:layout_constraintStart_toStartOf="parent">
 
             <ImageView
                 android:id="@+id/iv_home"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:src="@drawable/ic_bottom_navigation_home"
                 android:layout_weight="1"
-                android:padding="@dimen/_18sdp"/>
+                android:padding="@dimen/_18sdp"
+                android:src="@drawable/ic_bottom_navigation_home" />
 
             <ImageView
                 android:id="@+id/iv_user"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:src="@drawable/ic_bottom_navigation_profile"
                 android:layout_weight="1"
-                android:padding="@dimen/_18sdp"/>
+                android:padding="@dimen/_18sdp"
+                android:src="@drawable/ic_bottom_navigation_profile" />
 
             <ImageView
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="1"/>
+                android:layout_weight="1" />
 
             <ImageView
                 android:id="@+id/iv_control_mode"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:src="@drawable/ic_bottom_navigation_settings"
                 android:layout_weight="1"
-                android:padding="@dimen/_18sdp"/>
+                android:padding="@dimen/_18sdp"
+                android:src="@drawable/ic_bottom_navigation_settings" />
 
             <ImageView
-                android:id="@+id/iv_contact_us"
+                android:id="@+id/iv_scene"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:src="@drawable/ic_bottom_navigation_call"
                 android:layout_weight="1"
-                android:padding="@dimen/_18sdp"/>
+                android:padding="@dimen/_18sdp"
+                android:src="@drawable/ic_bottom_navigation_scene" />
 
         </LinearLayout>
 
@@ -79,12 +80,12 @@
             android:id="@+id/iv_add_room"
             android:layout_width="@dimen/_60sdp"
             android:layout_height="@dimen/_60sdp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toTopOf="@+id/linear_bottom_navigation_view"
-            app:layout_constraintTop_toTopOf="@+id/linear_bottom_navigation_view"
             android:layout_centerHorizontal="true"
-            android:background="@drawable/ic_bottom_navigation_add_room" />
+            android:background="@drawable/ic_bottom_navigation_add_room"
+            app:layout_constraintBottom_toTopOf="@+id/linear_bottom_navigation_view"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/linear_bottom_navigation_view" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -92,17 +93,17 @@
         android:id="@+id/drag_add_room"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
         android:layout_gravity="bottom"
         android:background="@color/white"
+        android:orientation="vertical"
         app:top_left_corner_radius="@dimen/corner_radius_20dp"
         app:top_right_corner_radius="@dimen/corner_radius_20dp">
 
-       <include
-           android:id="@+id/layout_add_room"
-           layout="@layout/layout_add_room"
-           android:layout_width="match_parent"
-           android:layout_height="wrap_content"/>
+        <include
+            android:id="@+id/layout_add_room"
+            layout="@layout/layout_add_room"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
 
     </com.jcminarro.roundkornerlayout.RoundKornerLinearLayout>
 

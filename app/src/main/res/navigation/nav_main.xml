@@ -18,15 +18,18 @@
             app:destination="@id/faqsFragment" />
         <action
             android:id="@+id/action_homeFragment_to_roomPanelFragment"
-            app:destination="@id/roomPanelFragment" />
+            app:destination="@id/deviceFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_contactUsFragment"
+            app:destination="@id/contactUsFragment" />
     </fragment>
     <action
         android:id="@+id/action_global_homeFragment"
         app:destination="@id/homeFragment" />
     <fragment
-        android:id="@+id/roomPanelFragment"
+        android:id="@+id/deviceFragment"
         android:name="com.dellainfotech.smartTouch.ui.fragments.main.home.DeviceFragment"
-        android:label="fragment_room_panel"
+        android:label="fragment_device"
         tools:layout="@layout/fragment_device">
         <argument
             android:name="roomDetail"
@@ -80,8 +83,8 @@
             app:argType="com.dellainfotech.smartTouch.api.model.GetRoomData" />
         <action
             android:id="@+id/action_screenLayoutFragment_to_roomPanelFragment"
-            app:destination="@id/roomPanelFragment"
-            app:popUpTo="@id/roomPanelFragment"
+            app:destination="@id/deviceFragment"
+            app:popUpTo="@id/deviceFragment"
             app:popUpToInclusive="true" />
     </dialog>
     <fragment
@@ -92,24 +95,15 @@
         <argument
             android:name="deviceDetail"
             app:argType="com.dellainfotech.smartTouch.api.model.GetDeviceData" />
-        <action
-            android:id="@+id/action_deviceFeaturesFragment_to_sceneFragment"
-            app:destination="@id/sceneFragment" />
         <argument
             android:name="roomDetail"
             app:argType="com.dellainfotech.smartTouch.api.model.GetRoomData" />
     </fragment>
     <fragment
         android:id="@+id/createSceneFragment"
-        android:name="com.dellainfotech.smartTouch.ui.fragments.main.home.CreateSceneFragment"
+        android:name="com.dellainfotech.smartTouch.ui.fragments.main.scenes.CreateSceneFragment"
         android:label="fragment_create_scene"
         tools:layout="@layout/fragment_create_scene" >
-        <argument
-            android:name="deviceDetail"
-            app:argType="com.dellainfotech.smartTouch.api.model.GetDeviceData" />
-        <argument
-            android:name="roomDetail"
-            app:argType="com.dellainfotech.smartTouch.api.model.GetRoomData" />
         <argument
             android:name="sceneDetail"
             app:argType="com.dellainfotech.smartTouch.api.model.GetSceneData"
@@ -117,11 +111,6 @@
         <argument
             android:name="controlModeList"
             app:argType="com.dellainfotech.smartTouch.api.model.ControlModeRoomData[]" />
-        <action
-            android:id="@+id/action_createSceneFragment_to_roomPanelFragment"
-            app:destination="@id/roomPanelFragment"
-            app:popUpTo="@id/roomPanelFragment"
-            app:popUpToInclusive="true" />
     </fragment>
     <fragment
         android:id="@+id/accountSettingsFragment"
@@ -135,7 +124,7 @@
         tools:layout="@layout/fragment_faqs" />
     <fragment
         android:id="@+id/contactUsFragment"
-        android:name="com.dellainfotech.smartTouch.ui.fragments.main.contact.ContactUsFragment"
+        android:name="com.dellainfotech.smartTouch.ui.fragments.main.home.ContactUsFragment"
         android:label="fragment_contact_us"
         tools:layout="@layout/fragment_contact_us" />
     <fragment
@@ -154,8 +143,8 @@
             app:argType="com.dellainfotech.smartTouch.api.model.GetRoomData" />
         <action
             android:id="@+id/action_switchIconsFragment_to_roomPanelFragment"
-            app:destination="@id/roomPanelFragment"
-            app:popUpTo="@id/roomPanelFragment"
+            app:destination="@id/deviceFragment"
+            app:popUpTo="@id/deviceFragment"
             app:popUpToInclusive="true" />
     </fragment>
     <fragment
@@ -171,8 +160,8 @@
             app:argType="com.dellainfotech.smartTouch.api.model.GetRoomData" />
         <action
             android:id="@+id/action_switchIconsDetailFragment_to_roomPanelFragment"
-            app:destination="@id/roomPanelFragment"
-            app:popUpTo="@id/roomPanelFragment"
+            app:destination="@id/deviceFragment"
+            app:popUpTo="@id/deviceFragment"
             app:popUpToInclusive="true" />
         <argument android:name="deviceDetail"
             app:argType="com.dellainfotech.smartTouch.api.model.GetDeviceData" />
@@ -199,25 +188,16 @@
         <argument
             android:name="deviceDetail"
             app:argType="com.dellainfotech.smartTouch.api.model.GetDeviceData" />
-    </fragment><action android:id="@+id/action_global_userManagementFragment" app:destination="@id/userManagementFragment"/><action android:id="@+id/action_global_contactUsFragment" app:destination="@id/contactUsFragment"/><action android:id="@+id/action_global_controlModeFragment" app:destination="@id/controlModeFragment"/>
+    </fragment><action android:id="@+id/action_global_userManagementFragment" app:destination="@id/userManagementFragment"/>
+    <action android:id="@+id/action_global_controlModeFragment" app:destination="@id/controlModeFragment"/>
     <fragment
         android:id="@+id/sceneFragment"
-        android:name="com.dellainfotech.smartTouch.ui.fragments.main.home.SceneFragment"
+        android:name="com.dellainfotech.smartTouch.ui.fragments.main.scenes.SceneFragment"
         android:label="fragment_scene"
         tools:layout="@layout/fragment_scene" >
         <action
             android:id="@+id/action_sceneFragment_to_createSceneFragment"
             app:destination="@id/createSceneFragment" />
-        <argument
-            android:name="deviceDetail"
-            app:argType="com.dellainfotech.smartTouch.api.model.GetDeviceData" />
-        <argument
-            android:name="roomDetail"
-            app:argType="com.dellainfotech.smartTouch.api.model.GetRoomData" />
-        <action
-            android:id="@+id/action_sceneFragment_to_roomPanelFragment"
-            app:destination="@id/roomPanelFragment"
-            app:popUpTo="@id/roomPanelFragment"
-            app:popUpToInclusive="true" />
     </fragment>
+    <action android:id="@+id/action_global_sceneFragment" app:destination="@id/sceneFragment" />
 </navigation>

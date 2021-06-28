@@ -4,14 +4,13 @@
     android:layout_height="wrap_content"
     android:background="@color/catskill_white"
     android:orientation="vertical"
-    android:padding="@dimen/_25sdp">
+    android:padding="@dimen/navigation_start_margin">
 
     <TextView
         android:id="@+id/tv_user_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="@dimen/_14ssp"
-        android:text="Hermione Granger"
         android:fontFamily="@font/roboto_medium"
         android:textColor="@color/theme_color" />
 
@@ -20,7 +19,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="@dimen/_12ssp"
-        android:text="hermione.granger@gmail.com"
         android:fontFamily="@font/roboto_medium"
         android:textColor="@color/daintree"/>
 

@@ -1,5 +1,6 @@
 package com.dellainfotech.smartTouch.ui.fragments.main.home
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -19,6 +20,7 @@ import com.dellainfotech.smartTouch.api.body.BodyLogout
 import com.dellainfotech.smartTouch.api.model.GetRoomData
 import com.dellainfotech.smartTouch.api.repository.HomeRepository
 import com.dellainfotech.smartTouch.common.interfaces.AdapterItemClickListener
+import com.dellainfotech.smartTouch.common.interfaces.DialogAskListener
 import com.dellainfotech.smartTouch.common.utils.Constants
 import com.dellainfotech.smartTouch.common.utils.DialogUtil
 import com.dellainfotech.smartTouch.databinding.FragmentHomeBinding
@@ -35,8 +37,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions
  * Created by Jignesh Dangar on 09-04-2021.
  */
 
-class HomeFragment : ModelBaseFragment<HomeViewModel, FragmentHomeBinding, HomeRepository>(),
-    AdapterItemClickListener<GetRoomData> {
+class HomeFragment : ModelBaseFragment<HomeViewModel, FragmentHomeBinding, HomeRepository>() {
 
     private val logTag = this::class.java.simpleName
     private lateinit var roomsAdapter: RoomsAdapter
@@ -54,11 +55,49 @@ class HomeFragment : ModelBaseFragment<HomeViewModel, FragmentHomeBinding, HomeR
         val navUsername = headerView.findViewById(R.id.tv_user_name) as TextView
         val navUserEmail = headerView.findViewById(R.id.tv_user_email) as TextView
 
+        val sharedPreference =  activity?.getSharedPreferences(Constants.SHARED_PREF, Context.MODE_PRIVATE)
+        val isRemember = sharedPreference?.getBoolean(Constants.IS_REMEMBER,Constants.DEFAULT_REMEMBER_STATUS)
+
+        Log.e(logTag, " isRemember $isRemember ")
+
         navUsername.text = FastSave.getInstance().getString(Constants.USER_FULL_NAME, null)
         navUserEmail.text = FastSave.getInstance().getString(Constants.USER_EMAIL, null)
 
         roomsAdapter = RoomsAdapter(roomList)
         binding.recyclerRooms.adapter = roomsAdapter
+        roomsAdapter.setCallback(object : AdapterItemClickListener<GetRoomData> {
+            override fun onItemClick(data: GetRoomData) {
+                findNavController().navigate(
+                    HomeFragmentDirections.actionHomeFragmentToRoomPanelFragment(
+                        data
+                    )
+                )
+            }
+        })
+
+        roomsAdapter.setDeleteCallback(object : AdapterItemClickListener<GetRoomData>{
+            override fun onItemClick(data: GetRoomData) {
+                activity?.let {
+                    DialogUtil.askAlert(
+                        it,
+                        getString(R.string.dialog_title_delete_room),
+                        getString(R.string.text_ok),
+                        getString(R.string.text_cancel),
+                        object : DialogAskListener{
+                            override fun onYesClicked() {
+                                Log.e(logTag, "Yes Clicked")
+                            }
+
+                            override fun onNoClicked() {
+                                Log.e(logTag, "No Clicked")
+                            }
+
+                        }
+                    )
+                }
+            }
+
+        })
 
         binding.tvAppVersion.text = String.format("%s", "Version - ${BuildConfig.VERSION_NAME}")
 
@@ -97,6 +136,23 @@ class HomeFragment : ModelBaseFragment<HomeViewModel, FragmentHomeBinding, HomeR
                     DialogUtil.hideDialog()
                     if (response.values.status && response.values.code == Constants.API_SUCCESS_CODE) {
                         activity?.let {
+
+                            val sharedPreference =  it.getSharedPreferences(Constants.SHARED_PREF, Context.MODE_PRIVATE)
+                            val isRemember = sharedPreference.getBoolean(Constants.IS_REMEMBER,Constants.DEFAULT_REMEMBER_STATUS)
+                            val loginType = sharedPreference.getString(Constants.LOGGED_IN_TYPE, "")
+
+                            if (loginType == Constants.LOGIN_TYPE_NORMAL){
+                                if (!isRemember){
+                                    val editor = sharedPreference.edit()
+                                    editor.clear()
+                                    editor.apply()
+                                }
+                            }else {
+                                val editor = sharedPreference.edit()
+                                editor.clear()
+                                editor.apply()
+                            }
+
                             FastSave.getInstance().clearSession()
                             startActivity(Intent(it, AuthenticationActivity::class.java))
                             it.finishAffinity()
@@ -126,7 +182,6 @@ class HomeFragment : ModelBaseFragment<HomeViewModel, FragmentHomeBinding, HomeR
                         response.values.data?.let { roomData ->
                             roomList.addAll(roomData)
                             roomsAdapter.notifyDataSetChanged()
-                            roomsAdapter.setCallback(this)
                         }
                     } else {
                         roomsAdapter.notifyDataSetChanged()
@@ -146,14 +201,6 @@ class HomeFragment : ModelBaseFragment<HomeViewModel, FragmentHomeBinding, HomeR
                 }
             }
         })
-    }
-
-    override fun onItemClick(data: GetRoomData) {
-        findNavController().navigate(
-            HomeFragmentDirections.actionHomeFragmentToRoomPanelFragment(
-                data
-            )
-        )
     }
 
     private fun openOrCloseDrawer() {
@@ -194,23 +241,39 @@ class HomeFragment : ModelBaseFragment<HomeViewModel, FragmentHomeBinding, HomeR
                 R.id.nav_shop -> {
                     Log.e(logTag, "nav_shop")
                 }
+                R.id.nav_contact_us -> {
+                    openOrCloseDrawer()
+                    findNavController().navigate(HomeFragmentDirections.actionHomeFragmentToContactUsFragment())
+                }
                 R.id.nav_logout -> {
 
-                    val loginType = FastSave.getInstance().getInt(Constants.LOGIN_TYPE, 1)
-                    if (loginType == Constants.LOGIN_TYPE_GOOGLE) {
-                        mGoogleSingInClient?.signOut()
-                    } else if (loginType == Constants.LOGIN_TYPE_FACEBOOK) {
-                        LoginManager.getInstance().logOut()
+                    activity?.let { mActivity ->
+                        DialogUtil.askAlert(mActivity, getString(R.string.dialog_title_logout), getString(R.string.text_yes),getString(R.string.text_no), object : DialogAskListener {
+                            override fun onYesClicked() {
+                                DialogUtil.hideDialog()
+                                val loginType = FastSave.getInstance().getString(Constants.LOGIN_TYPE, "")
+                                if (loginType == Constants.LOGIN_TYPE_GOOGLE) {
+                                    mGoogleSingInClient?.signOut()
+                                } else if (loginType == Constants.LOGIN_TYPE_FACEBOOK) {
+                                    LoginManager.getInstance().logOut()
+                                }
+
+                                DialogUtil.loadingAlert(mActivity)
+
+                                viewModel.logout(
+                                    BodyLogout(
+                                        FastSave.getInstance().getString(Constants.MOBILE_UUID, null)
+                                    )
+                                )
+                            }
+
+                            override fun onNoClicked() {
+                                DialogUtil.hideDialog()
+                            }
+
+                        })
                     }
 
-                    activity?.let {
-                        DialogUtil.loadingAlert(it)
-                    }
-                    viewModel.logout(
-                        BodyLogout(
-                            FastSave.getInstance().getString(Constants.MOBILE_UUID, null)
-                        )
-                    )
                 }
             }
 

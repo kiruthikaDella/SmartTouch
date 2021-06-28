@@ -50,74 +50,38 @@ class CreateAccountFragment :
             validateUserInformation()
         }
 
-        binding.edtPassword.setOnTouchListener { _, event ->
-            val drawableEnd = 2
-
-            if (event.action == MotionEvent.ACTION_UP) {
-                if (event.rawX >= (binding.edtPassword.right - binding.edtPassword.compoundDrawables[drawableEnd].bounds.width())) {
-                    if (isPasswordVisible) {
-                        isPasswordVisible = false
-                        context?.let {
-                            binding.edtPassword.setCompoundDrawablesWithIntrinsicBounds(
-                                null,
-                                null,
-                                ContextCompat.getDrawable(it, R.drawable.ic_password_visible),
-                                null
-                            )
-                            binding.edtPassword.transformationMethod =
-                                HideReturnsTransformationMethod.getInstance()
-                        }
-                    } else {
-                        isPasswordVisible = true
-                        context?.let {
-                            binding.edtPassword.setCompoundDrawablesWithIntrinsicBounds(
-                                null,
-                                null,
-                                ContextCompat.getDrawable(it, R.drawable.ic_password_hidden),
-                                null
-                            )
-                            binding.edtPassword.transformationMethod =
-                                PasswordTransformationMethod.getInstance()
-                        }
-                    }
+        binding.ivHidePassword.setOnClickListener {
+            if (isPasswordVisible) {
+                isPasswordVisible = false
+                context?.let {
+                    binding.ivHidePassword.setImageDrawable(ContextCompat.getDrawable(it,R.drawable.ic_password_hidden))
+                    binding.edtPassword.transformationMethod = PasswordTransformationMethod.getInstance()
+                }
+            } else {
+                isPasswordVisible = true
+                context?.let {
+                    binding.ivHidePassword.setImageDrawable(ContextCompat.getDrawable(it,R.drawable.ic_password_visible))
+                    binding.edtPassword.transformationMethod = HideReturnsTransformationMethod.getInstance()
                 }
             }
-            false
         }
 
-        binding.edtConfirmPassword.setOnTouchListener { _, event ->
-            val drawableEnd = 2
+        binding.ivHideConfirmPassword.setOnClickListener {
 
-            if (event.action == MotionEvent.ACTION_UP) {
-                if (event.rawX >= (binding.edtConfirmPassword.right - binding.edtConfirmPassword.compoundDrawables[drawableEnd].bounds.width())) {
-                    if (isConfirmPasswordVisible) {
-                        isConfirmPasswordVisible = false
-                        context?.let {
-                            binding.edtConfirmPassword.setCompoundDrawablesWithIntrinsicBounds(
-                                null,
-                                null,
-                                ContextCompat.getDrawable(it, R.drawable.ic_password_visible),
-                                null
-                            )
-                            binding.edtConfirmPassword.transformationMethod =
-                                HideReturnsTransformationMethod.getInstance()
-                        }
-                    } else {
-                        isConfirmPasswordVisible = true
-                        context?.let {
-                            binding.edtConfirmPassword.setCompoundDrawablesWithIntrinsicBounds(
-                                null,
-                                null,
-                                ContextCompat.getDrawable(it, R.drawable.ic_password_hidden),
-                                null
-                            )
-                            binding.edtConfirmPassword.transformationMethod =
-                                PasswordTransformationMethod.getInstance()
-                        }
-                    }
+            if (isConfirmPasswordVisible) {
+                isConfirmPasswordVisible = false
+                context?.let {
+                    binding.ivHideConfirmPassword.setImageDrawable(ContextCompat.getDrawable(it, R.drawable.ic_password_hidden))
+                    binding.edtConfirmPassword.transformationMethod = PasswordTransformationMethod.getInstance()
+                }
+            } else {
+                isConfirmPasswordVisible = true
+                context?.let {
+                    binding.ivHideConfirmPassword.setImageDrawable(ContextCompat.getDrawable(it, R.drawable.ic_password_visible))
+                    binding.edtConfirmPassword.transformationMethod = HideReturnsTransformationMethod.getInstance()
                 }
             }
-            false
+
         }
 
         viewModel.signUpResponse.observe(viewLifecycleOwner, { response ->
@@ -186,6 +150,7 @@ class CreateAccountFragment :
                     email,
                     password,
                     confirmPassword,
+                    Constants.LOGIN_TYPE_NORMAL,
                     phoneNumber
                 )
             )
