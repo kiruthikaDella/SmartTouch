@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    tools:ignore="contentDescription,Autofill,LabelFor"
     tools:context="com.dellainfotech.smartTouch.ui.fragments.authentication.CreateAccountFragment">
 
     <ImageView

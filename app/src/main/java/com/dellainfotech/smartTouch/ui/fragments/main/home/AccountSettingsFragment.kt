@@ -1,6 +1,5 @@
 package com.dellainfotech.smartTouch.ui.fragments.main.home
 
-import android.annotation.SuppressLint
 import android.app.Dialog
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
@@ -11,8 +10,12 @@ import android.text.method.PasswordTransformationMethod
 import android.util.DisplayMetrics
 import android.util.Log
 import android.util.Patterns
-import android.view.*
+import android.view.Display
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import android.widget.EditText
+import android.widget.ImageView
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.navigation.fragment.findNavController
@@ -27,13 +30,11 @@ import com.dellainfotech.smartTouch.common.interfaces.DialogAskListener
 import com.dellainfotech.smartTouch.common.interfaces.DialogEditListener
 import com.dellainfotech.smartTouch.common.utils.Constants
 import com.dellainfotech.smartTouch.common.utils.DialogUtil
-import com.dellainfotech.smartTouch.common.utils.Utils.toEditable
 import com.dellainfotech.smartTouch.databinding.FragmentAccountSettingsBinding
 import com.dellainfotech.smartTouch.mqtt.NotifyManager
 import com.dellainfotech.smartTouch.ui.fragments.ModelBaseFragment
 import com.dellainfotech.smartTouch.ui.viewmodel.HomeViewModel
 import com.google.android.material.button.MaterialButton
-
 
 /**
  * Created by Jignesh Dangar on 26-04-2021.
@@ -61,7 +62,7 @@ class AccountSettingsFragment :
                 DialogUtil.editDialog(
                     it,
                     "Edit name",
-                    binding.edtName.text.toString().trim(),
+                    binding.tvName.text.toString().trim(),
                     getString(R.string.text_save),
                     getString(R.string.text_cancel),
                     isLimitedText = false,
@@ -84,7 +85,7 @@ class AccountSettingsFragment :
                                 }
                                 else -> {
                                     DialogUtil.hideDialog()
-                                    binding.edtName.text = string.toEditable()
+                                    binding.tvName.text = string
                                 }
                             }
                         }
@@ -104,7 +105,7 @@ class AccountSettingsFragment :
                 DialogUtil.editDialog(
                     it,
                     "Edit name",
-                    binding.edtPhoneNumber.text.toString().trim(),
+                    binding.tvPhoneNumber.text.toString().trim(),
                     getString(R.string.text_save),
                     getString(R.string.text_cancel),
                     getString(R.string.dialog_input_type_phone),
@@ -127,7 +128,7 @@ class AccountSettingsFragment :
                                 }
                                 else -> {
                                     DialogUtil.hideDialog()
-                                    binding.edtPhoneNumber.text = string.toEditable()
+                                    binding.tvPhoneNumber.text = string
                                 }
                             }
                         }
@@ -146,18 +147,18 @@ class AccountSettingsFragment :
         }
 
         binding.btnUpdateProfile.setOnClickListener {
-            val fullName = binding.edtName.text.toString()
-            val phoneNumber = binding.edtPhoneNumber.text.toString()
+            val fullName = binding.tvName.text.toString()
+            val phoneNumber = binding.tvPhoneNumber.text.toString()
 
             when {
                 fullName.isEmpty() -> {
-                    binding.edtName.error = getString(R.string.error_text_full_name)
+                    binding.tvName.error = getString(R.string.error_text_full_name)
                 }
                 fullName.length < 3 -> {
-                    binding.edtName.error = getString(R.string.error_text_full_name_length)
+                    binding.tvName.error = getString(R.string.error_text_full_name_length)
                 }
                 phoneNumber.isEmpty() -> {
-                    binding.edtPhoneNumber.error = getString(R.string.error_text_phone_number)
+                    binding.tvPhoneNumber.error = getString(R.string.error_text_phone_number)
                 }
                 else -> {
                     activity?.let {
@@ -178,7 +179,7 @@ class AccountSettingsFragment :
                 DialogUtil.editDialog(
                     it,
                     "Edit name",
-                    binding.edtMasterName.text.toString().trim(),
+                    binding.tvMasterName.text.toString().trim(),
                     getString(R.string.text_save),
                     getString(R.string.text_cancel),
                     isLimitedText = false,
@@ -201,7 +202,7 @@ class AccountSettingsFragment :
                                 }
                                 else -> {
                                     DialogUtil.hideDialog()
-                                    binding.edtMasterName.text = string.toEditable()
+                                    binding.tvMasterName.text = string
                                 }
                             }
                         }
@@ -220,7 +221,7 @@ class AccountSettingsFragment :
                 DialogUtil.editDialog(
                     it,
                     "Edit email",
-                    binding.edtMasterEmail.text.toString().trim(),
+                    binding.tvMasterEmail.text.toString().trim(),
                     getString(R.string.text_save),
                     getString(R.string.text_cancel),
                     isLimitedText = false,
@@ -240,7 +241,7 @@ class AccountSettingsFragment :
                                 ).show()
                             } else {
                                 DialogUtil.hideDialog()
-                                binding.edtMasterEmail.text = string.toEditable()
+                                binding.tvMasterEmail.text = string
                             }
 
                         }
@@ -254,59 +255,84 @@ class AccountSettingsFragment :
             }
         }
 
-        binding.btnUpdate.setOnClickListener {
-            val name = binding.edtMasterName.text.toString().trim()
-            val email = binding.edtMasterEmail.text.toString().trim()
+        binding.btnTransferOwnership.setOnClickListener {
+            val name = binding.tvMasterName.text.toString().trim()
+            val email = binding.tvMasterEmail.text.toString().trim()
 
-            if (name.isEmpty()) {
-                binding.edtMasterName.error = getString(R.string.error_text_name)
-            } else if (name.length < 3) {
-                binding.edtMasterName.error = getString(R.string.error_text_full_name_length)
-            } else if (email.isEmpty()) {
-                binding.edtMasterEmail.error = getString(R.string.error_text_email)
-            } else if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-                binding.edtMasterEmail.error = getString(R.string.error_text_valid_email)
-            } else {
-                if (cancelOwnership) {
+            activity?.let { mActivity ->
 
-                    activity?.let {
-                        DialogUtil.askAlert(it,getString(R.string.dialog_title_cancel_ownership),getString(R.string.text_ok),getString(R.string.text_cancel), object : DialogAskListener{
-                            override fun onYesClicked() {
-                                DialogUtil.hideDialog()
-                                DialogUtil.loadingAlert(it)
-                                ownershipId?.let {
-                                    viewModel.cancelOwnership(it)
-                                }
-                            }
-
-                            override fun onNoClicked() {
-                                DialogUtil.hideDialog()
-                            }
-                        })
-                    }
+                if (name.isEmpty()) {
+                    Toast.makeText(
+                        mActivity,
+                        getString(R.string.error_text_name),
+                        Toast.LENGTH_SHORT
+                    ).show()
+                } else if (name.length < 3) {
+                    Toast.makeText(
+                        mActivity,
+                        getString(R.string.error_text_full_name_length),
+                        Toast.LENGTH_SHORT
+                    ).show()
+                } else if (email.isEmpty()) {
+                    Toast.makeText(
+                        mActivity,
+                        getString(R.string.error_text_email),
+                        Toast.LENGTH_SHORT
+                    ).show()
+                } else if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+                    Toast.makeText(
+                        mActivity,
+                        getString(R.string.error_text_valid_email),
+                        Toast.LENGTH_SHORT
+                    ).show()
                 } else {
-                    activity?.let {
-                        DialogUtil.askAlert(it,getString(R.string.dialog_title_transfer_ownership),getString(R.string.text_ok),getString(R.string.text_cancel), object : DialogAskListener{
-                            override fun onYesClicked() {
-                                DialogUtil.hideDialog()
-                                DialogUtil.loadingAlert(it)
-                                viewModel.transferOwnership(BodyOwnership(email, name))
-                            }
+                    if (cancelOwnership) {
+                        DialogUtil.askAlert(
+                            mActivity,
+                            getString(R.string.dialog_title_cancel_ownership),
+                            getString(R.string.text_ok),
+                            getString(R.string.text_cancel),
+                            object : DialogAskListener {
+                                override fun onYesClicked() {
+                                    DialogUtil.hideDialog()
+                                    DialogUtil.loadingAlert(mActivity)
+                                    ownershipId?.let {
+                                        viewModel.cancelOwnership(it)
+                                    }
+                                }
 
-                            override fun onNoClicked() {
-                                DialogUtil.hideDialog()
-                            }
-                        })
+                                override fun onNoClicked() {
+                                    DialogUtil.hideDialog()
+                                }
+                            })
+                    } else {
+                        DialogUtil.askAlert(
+                            mActivity,
+                            getString(R.string.dialog_title_transfer_ownership),
+                            getString(R.string.text_ok),
+                            getString(R.string.text_cancel),
+                            object : DialogAskListener {
+                                override fun onYesClicked() {
+                                    DialogUtil.hideDialog()
+                                    DialogUtil.loadingAlert(mActivity)
+                                    viewModel.transferOwnership(BodyOwnership(email, name))
+                                }
+
+                                override fun onNoClicked() {
+                                    DialogUtil.hideDialog()
+                                }
+                            })
+
                     }
-
                 }
+
             }
         }
 
         if (FastSave.getInstance().getString(Constants.SOCIAL_ID, null) != "0") {
             binding.ivPassword.visibility = View.INVISIBLE
             binding.tvTitlePassword.visibility = View.INVISIBLE
-            binding.edtPassword.visibility = View.INVISIBLE
+            binding.tvPassword.visibility = View.INVISIBLE
             binding.ivEditPassword.visibility = View.INVISIBLE
         }
 
@@ -350,13 +376,13 @@ class AccountSettingsFragment :
 
                         response.values.data?.let { userData ->
                             userData.vEmail?.let {
-                                binding.edtEmail.text = it.toEditable()
+                                binding.tvEmail.text = it
                             }
                             userData.vFullName?.let {
-                                binding.edtName.text = it.toEditable()
+                                binding.tvName.text = it
                             }
                             userData.bPhoneNumber?.let {
-                                binding.edtPhoneNumber.text = it.toEditable()
+                                binding.tvPhoneNumber.text = it
                             }
                         }
 
@@ -388,13 +414,13 @@ class AccountSettingsFragment :
 
                         response.values.data?.let { userData ->
                             userData.vEmail?.let {
-                                binding.edtEmail.text = it.toEditable()
+                                binding.tvEmail.text = it
                             }
                             userData.vFullName?.let {
-                                binding.edtName.text = it.toEditable()
+                                binding.tvName.text = it
                             }
                             userData.bPhoneNumber?.let {
-                                binding.edtPhoneNumber.text = it.toEditable()
+                                binding.tvPhoneNumber.text = it
                             }
 
                             FastSave.getInstance().saveString(Constants.USER_ID, userData.iUserId)
@@ -447,25 +473,26 @@ class AccountSettingsFragment :
                     DialogUtil.hideDialog()
                     if (response.values.status && response.values.code == Constants.API_SUCCESS_CODE) {
                         response.values.data?.let {
-                            binding.edtMasterName.text = it.name.toEditable()
-                            binding.edtMasterEmail.text = it.email.toEditable()
+                            binding.tvMasterName.text = it.name
+                            binding.tvMasterEmail.text = it.email
 //                            binding.btnUpdate.isEnabled = false
                             if (it.isEmailVerified == 0) {
                                 cancelOwnership = true
                                 ownershipId = it.id
-                                binding.btnUpdate.text = getString(R.string.text_cancel)
-                                binding.edtMasterName.clearFocus()
-                                binding.edtMasterEmail.clearFocus()
+                                binding.btnTransferOwnership.text = getString(R.string.text_cancel)
+                                binding.tvMasterName.clearFocus()
+                                binding.tvMasterEmail.clearFocus()
                                 binding.ivMasterEditName.isEnabled = false
                                 binding.ivMasterEditEmail.isEnabled = false
                             }
                         }
                     } else {
-                        binding.edtMasterName.text = "".toEditable()
-                        binding.edtMasterEmail.text = "".toEditable()
+                        binding.tvMasterName.text = ""
+                        binding.tvMasterEmail.text = ""
                         cancelOwnership = false
                         ownershipId = null
-                        binding.btnUpdate.text = getString(R.string.text_transfer_ownership)
+                        binding.btnTransferOwnership.text =
+                            getString(R.string.text_transfer_ownership)
                         binding.ivMasterEditName.isEnabled = true
                         binding.ivMasterEditEmail.isEnabled = true
                     }
@@ -536,7 +563,6 @@ class AccountSettingsFragment :
         viewModel.getOwnership()
     }
 
-    @SuppressLint("ClickableViewAccessibility")
     private fun dialogUpdatePassword() {
         activity?.let { myActivity ->
             dialog = Dialog(myActivity)
@@ -544,122 +570,92 @@ class AccountSettingsFragment :
             dialog?.setCancelable(true)
 
             var isCurrentPasswordVisible = false
-            var isPasswordVisible = false
+            var isNewPasswordVisible = false
             var isConfirmPasswordVisible = false
 
             val edtCurrentPassword = dialog?.findViewById(R.id.edt_current_password) as EditText
-            val edtPassword = dialog?.findViewById(R.id.edt_password) as EditText
+            val edtNewPassword = dialog?.findViewById(R.id.edt_new_password) as EditText
             val edtConfirmPassword = dialog?.findViewById(R.id.edt_confirm_password) as EditText
+            val ivHideCurrentPassword =
+                dialog?.findViewById(R.id.iv_hide_current_password) as ImageView
+            val ivHideNewPassword = dialog?.findViewById(R.id.iv_hide_new_password) as ImageView
+            val ivHideConfirmPassword =
+                dialog?.findViewById(R.id.iv_hide_confirm_password) as ImageView
             val btnSave = dialog?.findViewById(R.id.btn_save) as MaterialButton
             val btnCancel = dialog?.findViewById(R.id.btn_cancel) as MaterialButton
 
+            ivHideCurrentPassword.setOnClickListener {
+                if (isCurrentPasswordVisible) {
+                    isCurrentPasswordVisible = false
+                    ivHideCurrentPassword.setImageDrawable(
+                        ContextCompat.getDrawable(
+                            myActivity,
+                            R.drawable.ic_password_hidden
+                        )
+                    )
+                    edtCurrentPassword.transformationMethod =
+                        PasswordTransformationMethod.getInstance()
 
-            edtCurrentPassword.setOnTouchListener { _, event ->
-                val drawableEnd = 2
-
-                if (event.action == MotionEvent.ACTION_UP) {
-                    if (event.rawX >= (edtCurrentPassword.right - edtCurrentPassword.compoundDrawables[drawableEnd].bounds.width())) {
-                        if (isCurrentPasswordVisible) {
-                            isCurrentPasswordVisible = false
-                            context?.let {
-                                edtCurrentPassword.setCompoundDrawablesWithIntrinsicBounds(
-                                    null,
-                                    null,
-                                    ContextCompat.getDrawable(it, R.drawable.ic_password_visible),
-                                    null
-                                )
-                                edtCurrentPassword.transformationMethod =
-                                    HideReturnsTransformationMethod.getInstance()
-                            }
-                        } else {
-                            isCurrentPasswordVisible = true
-                            context?.let {
-                                edtCurrentPassword.setCompoundDrawablesWithIntrinsicBounds(
-                                    null,
-                                    null,
-                                    ContextCompat.getDrawable(it, R.drawable.ic_password_hidden),
-                                    null
-                                )
-                                edtCurrentPassword.transformationMethod =
-                                    PasswordTransformationMethod.getInstance()
-                            }
-                        }
-
-                    }
+                } else {
+                    isCurrentPasswordVisible = true
+                    ivHideCurrentPassword.setImageDrawable(
+                        ContextCompat.getDrawable(
+                            myActivity,
+                            R.drawable.ic_password_visible
+                        )
+                    )
+                    edtCurrentPassword.transformationMethod =
+                        HideReturnsTransformationMethod.getInstance()
                 }
-                false
             }
 
-            edtPassword.setOnTouchListener { _, event ->
-                val drawableEnd = 2
+            ivHideNewPassword.setOnClickListener {
+                if (isNewPasswordVisible) {
+                    isNewPasswordVisible = false
+                    ivHideNewPassword.setImageDrawable(
+                        ContextCompat.getDrawable(
+                            myActivity,
+                            R.drawable.ic_password_hidden
+                        )
+                    )
+                    edtNewPassword.transformationMethod = PasswordTransformationMethod.getInstance()
 
-                if (event.action == MotionEvent.ACTION_UP) {
-                    if (event.rawX >= (edtPassword.right - edtPassword.compoundDrawables[drawableEnd].bounds.width())) {
-                        if (isPasswordVisible) {
-                            isPasswordVisible = false
-                            context?.let {
-                                edtPassword.setCompoundDrawablesWithIntrinsicBounds(
-                                    null,
-                                    null,
-                                    ContextCompat.getDrawable(it, R.drawable.ic_password_visible),
-                                    null
-                                )
-                                edtPassword.transformationMethod =
-                                    HideReturnsTransformationMethod.getInstance()
-                            }
-                        } else {
-                            isPasswordVisible = true
-                            context?.let {
-                                edtPassword.setCompoundDrawablesWithIntrinsicBounds(
-                                    null,
-                                    null,
-                                    ContextCompat.getDrawable(it, R.drawable.ic_password_hidden),
-                                    null
-                                )
-                                edtPassword.transformationMethod =
-                                    PasswordTransformationMethod.getInstance()
-                            }
-                        }
-
-                    }
+                } else {
+                    isNewPasswordVisible = true
+                    ivHideNewPassword.setImageDrawable(
+                        ContextCompat.getDrawable(
+                            myActivity,
+                            R.drawable.ic_password_visible
+                        )
+                    )
+                    edtNewPassword.transformationMethod =
+                        HideReturnsTransformationMethod.getInstance()
                 }
-                false
             }
 
-            edtConfirmPassword.setOnTouchListener { _, event ->
-                val drawableEnd = 2
+            ivHideConfirmPassword.setOnClickListener {
+                if (isConfirmPasswordVisible) {
+                    isConfirmPasswordVisible = false
+                    ivHideConfirmPassword.setImageDrawable(
+                        ContextCompat.getDrawable(
+                            myActivity,
+                            R.drawable.ic_password_hidden
+                        )
+                    )
+                    edtConfirmPassword.transformationMethod =
+                        PasswordTransformationMethod.getInstance()
 
-                if (event.action == MotionEvent.ACTION_UP) {
-                    if (event.rawX >= (edtConfirmPassword.right - edtConfirmPassword.compoundDrawables[drawableEnd].bounds.width())) {
-                        if (isConfirmPasswordVisible) {
-                            isConfirmPasswordVisible = false
-                            context?.let {
-                                edtConfirmPassword.setCompoundDrawablesWithIntrinsicBounds(
-                                    null,
-                                    null,
-                                    ContextCompat.getDrawable(it, R.drawable.ic_password_visible),
-                                    null
-                                )
-                                edtConfirmPassword.transformationMethod =
-                                    HideReturnsTransformationMethod.getInstance()
-                            }
-                        } else {
-                            isConfirmPasswordVisible = true
-                            context?.let {
-                                edtConfirmPassword.setCompoundDrawablesWithIntrinsicBounds(
-                                    null,
-                                    null,
-                                    ContextCompat.getDrawable(it, R.drawable.ic_password_hidden),
-                                    null
-                                )
-                                edtConfirmPassword.transformationMethod =
-                                    PasswordTransformationMethod.getInstance()
-                            }
-                        }
-
-                    }
+                } else {
+                    isConfirmPasswordVisible = true
+                    ivHideConfirmPassword.setImageDrawable(
+                        ContextCompat.getDrawable(
+                            myActivity,
+                            R.drawable.ic_password_visible
+                        )
+                    )
+                    edtConfirmPassword.transformationMethod =
+                        HideReturnsTransformationMethod.getInstance()
                 }
-                false
             }
 
             btnCancel.setOnClickListener {
@@ -668,7 +664,7 @@ class AccountSettingsFragment :
 
             btnSave.setOnClickListener {
                 val currentPassword = edtCurrentPassword.text.toString().trim()
-                val newPassword = edtPassword.text.toString().trim()
+                val newPassword = edtNewPassword.text.toString().trim()
                 val confirmPassword = edtConfirmPassword.text.toString().trim()
 
                 when {
@@ -676,10 +672,10 @@ class AccountSettingsFragment :
                         edtCurrentPassword.error = getString(R.string.error_text_current_password)
                     }
                     newPassword.isEmpty() -> {
-                        edtPassword.error = getString(R.string.error_text_password)
+                        edtNewPassword.error = getString(R.string.error_text_password)
                     }
                     newPassword.length < Constants.PASSWORD_LENGTH -> {
-                        edtPassword.error = getString(R.string.error_text_password_length)
+                        edtNewPassword.error = getString(R.string.error_text_password_length)
                     }
                     newPassword != confirmPassword -> {
                         edtConfirmPassword.error = getString(R.string.error_text_confirm_password)

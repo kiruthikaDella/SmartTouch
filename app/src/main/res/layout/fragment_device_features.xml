@@ -6,7 +6,8 @@
     android:layout_height="match_parent"
     android:background="@color/app_background_color"
     android:orientation="vertical"
-    tools:context="com.dellainfotech.smartTouch.ui.fragments.main.home.DeviceFeaturesFragment">
+    tools:context="com.dellainfotech.smartTouch.ui.fragments.main.home.DeviceFeaturesFragment"
+    tools:ignore="contentDescription,Autofill,LabelFor">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -467,9 +468,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:background="@android:color/transparent"
-                    android:fontFamily="@font/roboto_medium"
                     android:clickable="false"
                     android:focusable="false"
+                    android:fontFamily="@font/roboto_medium"
                     android:text="@string/button_text_synchronize"
                     android:textColor="@color/white"
                     android:textSize="@dimen/_12ssp"

@@ -5,7 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
-    tools:context="com.dellainfotech.smartTouch.ui.fragments.authentication.LoginFragment">
+    tools:context="com.dellainfotech.smartTouch.ui.fragments.authentication.LoginFragment"
+    tools:ignore="contentDescription,Autofill,LabelFor">
 
     <TextView
         android:id="@+id/tv_welcome_to"
@@ -31,13 +32,13 @@
         android:layout_marginEnd="@dimen/login_component_end_margin"
         android:background="@drawable/catskill_white_background_without_border"
         android:fontFamily="@font/roboto_regular"
-        android:textCursorDrawable="@drawable/edittext_cursor"
         android:hint="@string/hint_text_email"
         android:inputType="textEmailAddress"
         android:paddingStart="@dimen/_10sdp"
         android:paddingEnd="@dimen/_10sdp"
         android:textColor="@color/daintree"
         android:textColorHint="@color/silver"
+        android:textCursorDrawable="@drawable/edittext_cursor"
         android:textSize="@dimen/_12ssp"
         app:layout_constraintBottom_toTopOf="@+id/relative_password"
         app:layout_constraintTop_toBottomOf="@+id/tv_welcome_to" />
@@ -61,21 +62,21 @@
             android:fontFamily="@font/roboto_regular"
             android:hint="@string/hint_text_password"
             android:inputType="textPassword"
-            android:textCursorDrawable="@drawable/edittext_cursor"
             android:paddingStart="@dimen/_10sdp"
             android:paddingEnd="@dimen/_40sdp"
             android:textColor="@color/daintree"
             android:textColorHint="@color/silver"
+            android:textCursorDrawable="@drawable/edittext_cursor"
             android:textSize="@dimen/_12ssp" />
 
         <ImageView
             android:id="@+id/iv_hide_password"
             android:layout_width="@dimen/_40sdp"
             android:layout_height="match_parent"
-            android:src="@drawable/ic_password_hidden"
-            android:layout_centerVertical="true"
             android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
             android:padding="@dimen/_10sdp"
+            android:src="@drawable/ic_password_hidden"
             app:tint="@color/gray" />
 
     </RelativeLayout>
@@ -118,9 +119,9 @@
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
             android:layout_centerVertical="true"
+            android:buttonTint="@color/theme_color"
             android:fontFamily="@font/roboto_medium"
             android:text="@string/text_remember"
-            android:buttonTint="@color/theme_color"
             android:textColor="@color/daintree"
             android:textSize="@dimen/_12ssp" />
 

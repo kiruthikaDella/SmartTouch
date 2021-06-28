@@ -1,16 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="@dimen/_43sdp"
     android:layout_marginStart="@dimen/screen_start_margin"
     android:layout_marginTop="@dimen/_8sdp"
-    android:layout_marginBottom="@dimen/_8sdp"
     android:layout_marginEnd="@dimen/screen_end_margin"
+    android:layout_marginBottom="@dimen/_8sdp"
     android:background="@drawable/white_background_with_catskill_white_dark_border"
     app:cardBackgroundColor="@color/white"
     app:cardCornerRadius="@dimen/corner_radius_6dp"
-    app:cardElevation="@dimen/_2sdp">
+    app:cardElevation="@dimen/_2sdp"
+    tools:ignore="contentDescription">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -20,10 +22,10 @@
             android:id="@+id/tv_scene_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="@dimen/_8sdp"
             android:layout_marginEnd="@dimen/_10sdp"
             android:layout_toStartOf="@+id/ib_delete"
-            android:layout_marginStart="@dimen/_8sdp"
-            android:layout_centerVertical="true"
             android:fontFamily="@font/roboto_medium"
             android:text="@string/text_switch"
             android:textColor="@color/daintree"

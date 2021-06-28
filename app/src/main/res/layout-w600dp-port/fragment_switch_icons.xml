@@ -5,7 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/app_background_color"
-    tools:context="com.dellainfotech.smartTouch.ui.fragments.main.home.SwitchIconsFragment">
+    tools:context="com.dellainfotech.smartTouch.ui.fragments.main.home.SwitchIconsFragment"
+    tools:ignore="contentDescription">
 
     <RelativeLayout
         android:id="@+id/relative_header"
@@ -32,10 +33,10 @@
             android:layout_width="@dimen/_16sdp"
             android:layout_height="@dimen/_20sdp"
             android:layout_alignParentEnd="true"
-            android:visibility="gone"
             android:layout_centerVertical="true"
             android:layout_marginEnd="@dimen/screen_end_margin"
-            android:background="@drawable/ic_lock" />
+            android:background="@drawable/ic_lock"
+            android:visibility="gone" />
 
     </RelativeLayout>
 

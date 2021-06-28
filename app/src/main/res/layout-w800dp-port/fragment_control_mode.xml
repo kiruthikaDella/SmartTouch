@@ -6,7 +6,8 @@
     android:layout_height="match_parent"
     android:background="@color/app_background_color"
     android:orientation="vertical"
-    tools:context="com.dellainfotech.smartTouch.ui.fragments.main.controlmode.ControlModeFragment">
+    tools:context="com.dellainfotech.smartTouch.ui.fragments.main.controlmode.ControlModeFragment"
+    tools:ignore="contentDescription,Autofill,LabelFor">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -22,7 +23,7 @@
             android:layout_marginStart="@dimen/screen_start_margin"
             android:background="@drawable/ic_power_settings"
             android:backgroundTint="@color/theme_color"
-            android:visibility="gone"/>
+            android:visibility="gone" />
 
         <TextView
             android:id="@+id/tv_title"
@@ -40,7 +41,7 @@
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
             android:padding="@dimen/_6sdp"
-            android:src="@drawable/ic_pin"/>
+            android:src="@drawable/ic_pin" />
 
     </RelativeLayout>
 

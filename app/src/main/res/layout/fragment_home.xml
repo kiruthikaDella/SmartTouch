@@ -7,6 +7,7 @@
     android:layout_height="match_parent"
     android:background="@color/app_background_color"
     android:orientation="vertical"
+    tools:ignore="contentDescription"
     tools:context="com.dellainfotech.smartTouch.ui.fragments.main.home.HomeFragment">
 
     <LinearLayout

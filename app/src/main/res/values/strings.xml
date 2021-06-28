@@ -235,6 +235,7 @@
     <string name="hint_text_current_password">Current Password</string>
     <string name="hint_text_new_password">New Password</string>
     <string name="hint_text_confirm_new_password">Confirm New Password</string>
+    <string name="text_hidden_password">******************</string>
 
     <!--    Faqs Screen-->
     <string name="title_text_faqs">FAQ\'s</string>
@@ -252,6 +253,9 @@
     <string name="office_address">Akshya Nagar 1st Block 1st Cross, Rammurthy nagar, Bangalore-560016</string>
     <string name="hint_text_comments">Your comments…</string>
     <string name="button_text_send">Send</string>
+    <string name="text_contact_us_email">hermione.granger@gmail.com</string>
+    <string name="text_contact_us_mobile1">+91 9812345678</string>
+    <string name="text_contact_us_mobile2">+91 8098765432</string>
 
     <!--    Switch Icons   -->
     <string name="title_text_switch_icons">Switch Icons</string>

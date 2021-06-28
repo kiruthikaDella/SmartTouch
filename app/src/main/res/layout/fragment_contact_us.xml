@@ -6,7 +6,8 @@
     android:layout_height="match_parent"
     android:background="@color/catskill_white"
     android:orientation="vertical"
-    tools:context="com.dellainfotech.smartTouch.ui.fragments.main.home.ContactUsFragment">
+    tools:context="com.dellainfotech.smartTouch.ui.fragments.main.home.ContactUsFragment"
+    tools:ignore="contentDescription,Autofill,LabelFor">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -80,7 +81,7 @@
                 android:layout_marginEnd="@dimen/_5sdp"
                 android:fontFamily="@font/roboto_regular"
                 android:singleLine="true"
-                android:text="hermione.granger@gmail.com"
+                android:text="@string/text_contact_us_email"
                 android:textColor="@color/waikawa_gray"
                 android:textSize="@dimen/_12ssp"
                 app:layout_constraintStart_toStartOf="@+id/tv_title_email"
@@ -114,7 +115,7 @@
                 android:layout_marginEnd="@dimen/_5sdp"
                 android:fontFamily="@font/roboto_regular"
                 android:singleLine="true"
-                android:text="+91 9812345678"
+                android:text="@string/text_contact_us_mobile1"
                 android:textColor="@color/waikawa_gray"
                 android:textSize="@dimen/_12ssp"
                 app:layout_constraintStart_toStartOf="@+id/tv_title_phone_number"
@@ -127,7 +128,7 @@
                 android:layout_marginEnd="@dimen/_5sdp"
                 android:fontFamily="@font/roboto_regular"
                 android:singleLine="true"
-                android:text="+91 8098765432"
+                android:text="@string/text_contact_us_mobile2"
                 android:textColor="@color/waikawa_gray"
                 android:textSize="@dimen/_12ssp"
                 app:layout_constraintStart_toStartOf="@+id/tv_phone_number1"

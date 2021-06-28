@@ -1,13 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginStart="@dimen/screen_start_margin"
     android:layout_marginTop="@dimen/_10sdp"
     android:layout_marginEnd="@dimen/screen_end_margin"
     app:cardCornerRadius="@dimen/corner_radius_2dp"
-    app:cardElevation="@dimen/_5sdp">
+    app:cardElevation="@dimen/_5sdp"
+    tools:ignore="contentDescription">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -49,7 +51,6 @@
                         android:layout_toStartOf="@+id/img_panel_edit"
                         android:layout_toEndOf="@+id/img_panel_menu"
                         android:fontFamily="@font/roboto_bold"
-                        android:text="SMT2028189"
                         android:textColor="@color/daintree"
                         android:textSize="@dimen/_12ssp" />
 

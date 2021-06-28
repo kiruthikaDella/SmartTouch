@@ -1,18 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context="com.dellainfotech.smartTouch.ui.fragments.main.scenes.CreateSceneFragment"
+    android:background="@color/app_background_color"
     android:orientation="vertical"
-    android:background="@color/app_background_color">
+    tools:context="com.dellainfotech.smartTouch.ui.fragments.main.scenes.CreateSceneFragment"
+    tools:ignore="contentDescription,Autofill,LabelFor">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:layout_above="@+id/linear_bottom">
+        android:layout_above="@+id/linear_bottom"
+        android:orientation="vertical">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -29,49 +30,49 @@
                 style="@style/ScreenTitleHomeStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
                 android:layout_gravity="center_horizontal"
-                android:text="@string/title_text_create_scene"
-                android:layout_centerInParent="true" />
+                android:text="@string/title_text_create_scene" />
 
             <ImageView
                 android:id="@+id/ib_save"
                 android:layout_width="@dimen/_30sdp"
                 android:layout_height="match_parent"
-                android:padding="@dimen/_8sdp"
-                android:src="@drawable/ic_check"
                 android:layout_alignParentEnd="true"
                 android:layout_centerVertical="true"
-                android:layout_marginEnd="@dimen/screen_end_margin" />
+                android:layout_marginEnd="@dimen/screen_end_margin"
+                android:padding="@dimen/_8sdp"
+                android:src="@drawable/ic_check" />
 
         </RelativeLayout>
 
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:cardBackgroundColor="@color/white"
-            android:layout_marginTop="@dimen/_15sdp"
             android:layout_marginStart="@dimen/screen_start_margin"
+            android:layout_marginTop="@dimen/_15sdp"
             android:layout_marginEnd="@dimen/screen_end_margin"
             android:layout_marginBottom="@dimen/_15sdp"
-            app:cardElevation="@dimen/_5sdp"
-            app:cardCornerRadius="@dimen/corner_radius_6dp">
+            app:cardBackgroundColor="@color/white"
+            app:cardCornerRadius="@dimen/corner_radius_6dp"
+            app:cardElevation="@dimen/_5sdp">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_margin="@dimen/_15sdp">
+                android:layout_margin="@dimen/_15sdp"
+                android:orientation="vertical">
 
                 <TextView
                     android:id="@+id/tv_scene_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
+                    android:fontFamily="@font/roboto_regular"
                     android:text="@string/text_scene_name"
-                    android:textSize="@dimen/_12ssp"
                     android:textColor="@color/nepal"
-                    android:fontFamily="@font/roboto_regular" />
+                    android:textSize="@dimen/_12ssp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <ImageView
                     android:id="@+id/iv_edit_create_scene"
@@ -86,23 +87,23 @@
                     android:id="@+id/edt_scene_name"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/login_component_height"
+                    android:background="@android:color/transparent"
+                    android:fontFamily="@font/roboto_bold"
                     android:gravity="center_vertical"
+                    android:maxLength="20"
+                    android:singleLine="true"
                     android:textColor="@color/daintree"
                     android:textSize="@dimen/_14ssp"
-                    android:fontFamily="@font/roboto_bold"
-                    android:background="@android:color/transparent"
-                    android:singleLine="true"
-                    android:maxLength="20"
+                    app:layout_constraintEnd_toStartOf="@+id/iv_edit_create_scene"
                     app:layout_constraintStart_toStartOf="@+id/tv_scene_name"
-                    app:layout_constraintTop_toBottomOf="@+id/tv_scene_name"
-                    app:layout_constraintEnd_toStartOf="@+id/iv_edit_create_scene" />
+                    app:layout_constraintTop_toBottomOf="@+id/tv_scene_name" />
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="0.3dp"
                     android:background="@color/nepal"
-                    app:layout_constraintStart_toStartOf="@+id/edt_scene_name"
                     app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="@+id/edt_scene_name"
                     app:layout_constraintTop_toBottomOf="@+id/edt_scene_name" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
@@ -124,10 +125,10 @@
         android:id="@+id/linear_bottom"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
         android:layout_alignParentBottom="true"
-        android:weightSum="3"
-        android:background="@color/white">
+        android:background="@color/white"
+        android:orientation="horizontal"
+        android:weightSum="3">
 
         <LinearLayout
             android:layout_width="0dp"
@@ -140,26 +141,26 @@
                 android:id="@+id/iv_clock"
                 android:layout_width="@dimen/_14sdp"
                 android:layout_height="@dimen/_14sdp"
-                android:src="@drawable/ic_clock"
-                android:layout_gravity="center_vertical" />
+                android:layout_gravity="center_vertical"
+                android:src="@drawable/ic_clock" />
 
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_gravity="center_vertical"
-                android:gravity="center_vertical"
                 android:layout_marginStart="@dimen/_5sdp"
+                android:gravity="center_vertical"
                 android:orientation="vertical">
 
                 <TextView
                     android:id="@+id/tv_text_time"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/text_time"
+                    android:fontFamily="@font/roboto_medium"
                     android:gravity="center_vertical"
+                    android:text="@string/text_time"
                     android:textColor="@color/nepal"
                     android:textSize="@dimen/_10ssp"
-                    android:fontFamily="@font/roboto_medium"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
@@ -167,10 +168,10 @@
                     android:id="@+id/tv_time"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:fontFamily="@font/roboto_regular"
                     android:text="@string/text_scene_time"
                     android:textColor="@color/theme_color"
                     android:textSize="@dimen/_12ssp"
-                    android:fontFamily="@font/roboto_regular"
                     app:layout_constraintStart_toStartOf="@+id/tv_text_time"
                     app:layout_constraintTop_toBottomOf="@+id/tv_text_time" />
 
@@ -189,26 +190,26 @@
                 android:id="@+id/iv_calender"
                 android:layout_width="@dimen/_14sdp"
                 android:layout_height="@dimen/_14sdp"
-                android:src="@drawable/ic_calender"
-                android:layout_gravity="center_vertical" />
+                android:layout_gravity="center_vertical"
+                android:src="@drawable/ic_calender" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_gravity="center_vertical"
-                android:gravity="center_vertical"
                 android:layout_marginStart="@dimen/_5sdp"
+                android:gravity="center_vertical"
                 android:orientation="vertical">
 
                 <TextView
                     android:id="@+id/tv_frequency"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/text_frequency"
+                    android:fontFamily="@font/roboto_medium"
                     android:gravity="center_vertical"
+                    android:text="@string/text_frequency"
                     android:textColor="@color/nepal"
                     android:textSize="@dimen/_10ssp"
-                    android:fontFamily="@font/roboto_medium"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
@@ -216,15 +217,15 @@
                     android:id="@+id/tv_daily"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:drawablePadding="@dimen/_5sdp"
+                    android:fontFamily="@font/roboto_regular"
                     android:text="@string/text_daily"
                     android:textColor="@color/theme_color"
                     android:textSize="@dimen/_12ssp"
-                    android:fontFamily="@font/roboto_regular"
-                    app:layout_constraintStart_toStartOf="@+id/tv_frequency"
-                    app:layout_constraintTop_toBottomOf="@+id/tv_frequency"
                     app:drawableEndCompat="@drawable/ic_arrow_down"
                     app:drawableTint="@color/daintree"
-                    android:drawablePadding="@dimen/_5sdp" />
+                    app:layout_constraintStart_toStartOf="@+id/tv_frequency"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_frequency" />
 
 
             </LinearLayout>
@@ -235,22 +236,22 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:paddingTop="@dimen/_15sdp"
-            android:paddingBottom="@dimen/_15sdp"
-            android:orientation="horizontal"
             android:background="@color/theme_color"
-            android:gravity="center">
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:paddingTop="@dimen/_15sdp"
+            android:paddingBottom="@dimen/_15sdp">
 
             <TextView
                 android:id="@+id/tv_add"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:drawablePadding="@dimen/_5sdp"
+                android:fontFamily="@font/roboto_medium"
                 android:text="@string/text_add"
                 android:textColor="@color/white"
                 android:textSize="@dimen/_12ssp"
-                android:fontFamily="@font/roboto_medium"
-                app:drawableEndCompat="@drawable/ic_add"
-                android:drawablePadding="@dimen/_5sdp" />
+                app:drawableEndCompat="@drawable/ic_add" />
 
         </LinearLayout>
 

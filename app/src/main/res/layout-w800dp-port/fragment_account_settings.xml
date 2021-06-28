@@ -6,7 +6,8 @@
     android:layout_height="match_parent"
     android:background="@color/app_background_color"
     android:orientation="vertical"
-    tools:context="com.dellainfotech.smartTouch.ui.fragments.main.home.AccountSettingsFragment">
+    tools:context="com.dellainfotech.smartTouch.ui.fragments.main.home.AccountSettingsFragment"
+    tools:ignore="contentDescription">
 
     <RelativeLayout
         android:id="@+id/relative_header"
@@ -50,8 +51,8 @@
 
             <ImageView
                 android:id="@+id/iv_name"
-                android:layout_width="@dimen/_13sdp"
-                android:layout_height="@dimen/_18sdp"
+                android:layout_width="@dimen/_15sdp"
+                android:layout_height="@dimen/_15sdp"
                 android:layout_marginStart="@dimen/screen_start_margin"
                 android:layout_marginTop="@dimen/_20sdp"
                 android:src="@drawable/ic_as_name"
@@ -70,8 +71,8 @@
                 app:layout_constraintStart_toEndOf="@+id/guideline"
                 app:layout_constraintTop_toTopOf="@+id/iv_name" />
 
-            <EditText
-                android:id="@+id/edt_name"
+            <TextView
+                android:id="@+id/tv_name"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="@dimen/_5sdp"
@@ -93,19 +94,19 @@
                 android:layout_marginEnd="@dimen/screen_end_margin"
                 android:padding="@dimen/_4sdp"
                 android:src="@drawable/ic_as_edit"
-                app:layout_constraintBottom_toBottomOf="@+id/edt_name"
+                app:layout_constraintBottom_toBottomOf="@+id/tv_name"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/edt_name" />
+                app:layout_constraintTop_toTopOf="@+id/tv_name" />
 
 
             <ImageView
                 android:id="@+id/iv_email"
-                android:layout_width="@dimen/_18sdp"
-                android:layout_height="@dimen/_13sdp"
+                android:layout_width="@dimen/_15sdp"
+                android:layout_height="@dimen/_15sdp"
                 android:layout_marginTop="@dimen/_20sdp"
                 android:src="@drawable/ic_as_email"
                 app:layout_constraintStart_toStartOf="@+id/iv_name"
-                app:layout_constraintTop_toBottomOf="@+id/edt_name" />
+                app:layout_constraintTop_toBottomOf="@+id/tv_name" />
 
             <TextView
                 android:id="@+id/tv_title_email"
@@ -119,8 +120,8 @@
                 app:layout_constraintStart_toEndOf="@+id/guideline"
                 app:layout_constraintTop_toTopOf="@+id/iv_email" />
 
-            <EditText
-                android:id="@+id/edt_email"
+            <TextView
+                android:id="@+id/tv_email"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="@dimen/_5sdp"
@@ -142,19 +143,19 @@
                 android:padding="@dimen/_4sdp"
                 android:src="@drawable/ic_as_edit"
                 android:visibility="invisible"
-                app:layout_constraintBottom_toBottomOf="@+id/edt_email"
+                app:layout_constraintBottom_toBottomOf="@+id/tv_email"
                 app:layout_constraintStart_toStartOf="@+id/iv_edit_name"
-                app:layout_constraintTop_toTopOf="@+id/edt_email" />
+                app:layout_constraintTop_toTopOf="@+id/tv_email" />
 
 
             <ImageView
                 android:id="@+id/iv_phone_number"
-                android:layout_width="@dimen/_18sdp"
-                android:layout_height="@dimen/_18sdp"
+                android:layout_width="@dimen/_15sdp"
+                android:layout_height="@dimen/_15sdp"
                 android:layout_marginTop="@dimen/_20sdp"
                 android:src="@drawable/ic_as_phone_number"
                 app:layout_constraintStart_toStartOf="@+id/iv_email"
-                app:layout_constraintTop_toBottomOf="@+id/edt_email" />
+                app:layout_constraintTop_toBottomOf="@+id/tv_email" />
 
             <TextView
                 android:id="@+id/tv_title_phone_number"
@@ -168,8 +169,8 @@
                 app:layout_constraintStart_toEndOf="@+id/guideline"
                 app:layout_constraintTop_toTopOf="@+id/iv_phone_number" />
 
-            <EditText
-                android:id="@+id/edt_phone_number"
+            <TextView
+                android:id="@+id/tv_phone_number"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="@dimen/_5sdp"
@@ -177,7 +178,6 @@
                 android:backgroundTint="@null"
                 android:enabled="false"
                 android:fontFamily="@font/roboto_regular"
-                android:inputType="phone"
                 android:singleLine="true"
                 android:textColor="@color/waikawa_gray"
                 android:textSize="@dimen/_12ssp"
@@ -191,19 +191,19 @@
                 android:layout_height="@dimen/_20sdp"
                 android:padding="@dimen/_4sdp"
                 android:src="@drawable/ic_as_edit"
-                app:layout_constraintBottom_toBottomOf="@+id/edt_phone_number"
+                app:layout_constraintBottom_toBottomOf="@+id/tv_phone_number"
                 app:layout_constraintStart_toStartOf="@+id/iv_edit_email"
-                app:layout_constraintTop_toTopOf="@+id/edt_phone_number" />
+                app:layout_constraintTop_toTopOf="@+id/tv_phone_number" />
 
 
             <ImageView
                 android:id="@+id/iv_password"
                 android:layout_width="@dimen/_15sdp"
-                android:layout_height="@dimen/_18sdp"
+                android:layout_height="@dimen/_15sdp"
                 android:layout_marginTop="@dimen/_20sdp"
                 android:src="@drawable/ic_as_password"
                 app:layout_constraintStart_toStartOf="@+id/iv_phone_number"
-                app:layout_constraintTop_toBottomOf="@+id/edt_phone_number" />
+                app:layout_constraintTop_toBottomOf="@+id/tv_phone_number" />
 
             <TextView
                 android:id="@+id/tv_title_password"
@@ -218,14 +218,14 @@
                 app:layout_constraintTop_toTopOf="@+id/iv_password" />
 
             <TextView
-                android:id="@+id/edt_password"
+                android:id="@+id/tv_password"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="@dimen/_5sdp"
                 android:enabled="false"
                 android:fontFamily="@font/roboto_regular"
                 android:singleLine="true"
-                android:text="******************"
+                android:text="@string/text_hidden_password"
                 android:textColor="@color/waikawa_gray"
                 android:textSize="@dimen/_12ssp"
                 app:layout_constraintEnd_toStartOf="@+id/iv_edit_password"
@@ -238,9 +238,9 @@
                 android:layout_height="@dimen/_20sdp"
                 android:padding="@dimen/_4sdp"
                 android:src="@drawable/ic_as_edit"
-                app:layout_constraintBottom_toBottomOf="@+id/edt_password"
+                app:layout_constraintBottom_toBottomOf="@+id/tv_password"
                 app:layout_constraintStart_toStartOf="@+id/iv_edit_phone_number"
-                app:layout_constraintTop_toTopOf="@+id/edt_password" />
+                app:layout_constraintTop_toTopOf="@+id/tv_password" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btn_update_profile"
@@ -257,7 +257,7 @@
                 android:textSize="@dimen/_12ssp"
                 app:layout_constraintEnd_toEndOf="@+id/iv_edit_password"
                 app:layout_constraintStart_toStartOf="@+id/iv_password"
-                app:layout_constraintTop_toBottomOf="@+id/edt_password" />
+                app:layout_constraintTop_toBottomOf="@+id/tv_password" />
 
             <TextView
                 android:id="@+id/tv_ownership_transfer"
@@ -295,8 +295,8 @@
 
             <ImageView
                 android:id="@+id/iv_master_name"
-                android:layout_width="@dimen/_13sdp"
-                android:layout_height="@dimen/_18sdp"
+                android:layout_width="@dimen/_15sdp"
+                android:layout_height="@dimen/_15sdp"
                 android:layout_marginTop="@dimen/_20sdp"
                 android:src="@drawable/ic_as_name"
                 app:layout_constraintStart_toStartOf="@+id/iv_password"
@@ -314,8 +314,8 @@
                 app:layout_constraintStart_toEndOf="@+id/guideline"
                 app:layout_constraintTop_toTopOf="@+id/iv_master_name" />
 
-            <EditText
-                android:id="@+id/edt_master_name"
+            <TextView
+                android:id="@+id/tv_master_name"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="@dimen/_5sdp"
@@ -336,18 +336,18 @@
                 android:layout_height="@dimen/_20sdp"
                 android:padding="@dimen/_4sdp"
                 android:src="@drawable/ic_as_edit"
-                app:layout_constraintBottom_toBottomOf="@+id/edt_master_name"
+                app:layout_constraintBottom_toBottomOf="@+id/tv_master_name"
                 app:layout_constraintStart_toStartOf="@+id/iv_edit_password"
-                app:layout_constraintTop_toTopOf="@+id/edt_master_name" />
+                app:layout_constraintTop_toTopOf="@+id/tv_master_name" />
 
             <ImageView
                 android:id="@+id/iv_master_email"
-                android:layout_width="@dimen/_18sdp"
-                android:layout_height="@dimen/_13sdp"
+                android:layout_width="@dimen/_15sdp"
+                android:layout_height="@dimen/_15sdp"
                 android:layout_marginTop="@dimen/_20sdp"
                 android:src="@drawable/ic_as_email"
                 app:layout_constraintStart_toStartOf="@+id/iv_master_name"
-                app:layout_constraintTop_toBottomOf="@+id/edt_master_name" />
+                app:layout_constraintTop_toBottomOf="@+id/tv_master_name" />
 
             <TextView
                 android:id="@+id/tv_master_title_email"
@@ -361,8 +361,8 @@
                 app:layout_constraintStart_toEndOf="@+id/guideline"
                 app:layout_constraintTop_toTopOf="@+id/iv_master_email" />
 
-            <EditText
-                android:id="@+id/edt_master_email"
+            <TextView
+                android:id="@+id/tv_master_email"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="@dimen/_5sdp"
@@ -383,12 +383,12 @@
                 android:layout_height="@dimen/_20sdp"
                 android:padding="@dimen/_4sdp"
                 android:src="@drawable/ic_as_edit"
-                app:layout_constraintBottom_toBottomOf="@+id/edt_master_email"
+                app:layout_constraintBottom_toBottomOf="@+id/tv_master_email"
                 app:layout_constraintStart_toStartOf="@+id/iv_master_edit_name"
-                app:layout_constraintTop_toTopOf="@+id/edt_master_email" />
+                app:layout_constraintTop_toTopOf="@+id/tv_master_email" />
 
             <com.google.android.material.button.MaterialButton
-                android:id="@+id/btn_update"
+                android:id="@+id/btn_transfer_ownership"
                 style="@style/DodgerBlueButtonStyle"
                 android:layout_width="0dp"
                 android:layout_height="@dimen/login_component_height"
@@ -402,7 +402,7 @@
                 android:textSize="@dimen/_12ssp"
                 app:layout_constraintEnd_toEndOf="@+id/iv_master_edit_email"
                 app:layout_constraintStart_toStartOf="@+id/iv_master_email"
-                app:layout_constraintTop_toBottomOf="@+id/edt_master_email" />
+                app:layout_constraintTop_toBottomOf="@+id/tv_master_email" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

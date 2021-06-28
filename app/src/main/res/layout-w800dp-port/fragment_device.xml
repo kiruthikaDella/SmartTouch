@@ -5,13 +5,14 @@
     android:id="@+id/layout_sliding_up_panel"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/app_background_color"
     android:gravity="bottom"
     android:orientation="vertical"
     app:umanoDragView="@id/drag_add_panel"
     app:umanoOverlay="true"
     app:umanoPanelHeight="0dp"
-    android:background="@color/app_background_color"
-    tools:context="com.dellainfotech.smartTouch.ui.fragments.main.home.DeviceFragment">
+    tools:context="com.dellainfotech.smartTouch.ui.fragments.main.home.DeviceFragment"
+    tools:ignore="contentDescription,Autofill,LabelFor">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -33,22 +34,22 @@
                 style="@style/ScreenTitleHomeStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:gravity="center"
+                android:layout_centerInParent="true"
+                android:layout_gravity="center_horizontal"
                 android:layout_marginStart="@dimen/_5sdp"
                 android:layout_marginEnd="@dimen/_5sdp"
-                android:layout_centerInParent="true"
-                android:layout_toEndOf="@+id/iv_back"
                 android:layout_toStartOf="@+id/i_btn_edit_room_name"
-                android:layout_gravity="center_horizontal"
+                android:layout_toEndOf="@+id/iv_back"
+                android:gravity="center"
                 android:text="@string/title_text_home_screen" />
 
             <ImageView
                 android:id="@+id/i_btn_edit_room_name"
                 android:layout_width="@dimen/_30sdp"
                 android:layout_height="match_parent"
-                android:padding="@dimen/_6sdp"
                 android:layout_alignParentEnd="true"
                 android:layout_centerVertical="true"
+                android:padding="@dimen/_6sdp"
                 android:src="@drawable/ic_edit" />
 
         </RelativeLayout>
@@ -63,10 +64,10 @@
                 android:id="@+id/btn_add_panel"
                 android:layout_width="0dp"
                 android:layout_height="@dimen/_38sdp"
-                android:layout_marginEnd="@dimen/_10sdp"
-                android:layout_marginTop="@dimen/_10sdp"
-                android:layout_marginBottom="@dimen/_10sdp"
                 android:layout_marginStart="@dimen/screen_start_margin"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:layout_marginEnd="@dimen/_10sdp"
+                android:layout_marginBottom="@dimen/_10sdp"
                 android:layout_weight="0.5"
                 android:background="@drawable/dodger_blue_background_6dp_corner"
                 android:text="@string/text_add_panel"
@@ -77,9 +78,9 @@
             <androidx.cardview.widget.CardView
                 android:layout_width="0dp"
                 android:layout_height="@dimen/_38sdp"
-                android:layout_marginEnd="@dimen/screen_end_margin"
                 android:layout_marginStart="@dimen/_10sdp"
                 android:layout_marginTop="@dimen/_10sdp"
+                android:layout_marginEnd="@dimen/screen_end_margin"
                 android:layout_marginBottom="@dimen/_10sdp"
                 android:layout_weight="0.5"
                 app:cardBackgroundColor="@color/white"
@@ -140,8 +141,8 @@
         <include
             android:id="@+id/layout_room_panel"
             layout="@layout/layout_room_panel"
-            android:layout_height="wrap_content"
-            android:layout_width="match_parent"/>
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
 
     </com.jcminarro.roundkornerlayout.RoundKornerLinearLayout>
 

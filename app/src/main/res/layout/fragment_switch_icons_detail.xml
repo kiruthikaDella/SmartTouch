@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
     android:background="@color/app_background_color"
-    tools:context="com.dellainfotech.smartTouch.ui.fragments.main.home.SwitchIconsDetailFragment">
+    android:orientation="vertical"
+    tools:context="com.dellainfotech.smartTouch.ui.fragments.main.home.SwitchIconsDetailFragment"
+    tools:ignore="contentDescription">
 
     <RelativeLayout
         android:id="@+id/relative_header"
@@ -32,9 +33,9 @@
             android:id="@+id/ib_switch"
             android:layout_width="@dimen/_30sdp"
             android:layout_height="@dimen/_30sdp"
-            android:padding="@dimen/_8sdp"
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
+            android:padding="@dimen/_8sdp"
             android:src="@drawable/ic_switch"
             app:tint="@color/daintree" />
 
@@ -44,11 +45,11 @@
         android:id="@+id/recycler_switch_icons"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/relative_header"
         android:layout_above="@+id/btn_submit"
-        android:overScrollMode="never"
+        android:layout_below="@+id/relative_header"
         android:layout_marginStart="@dimen/screen_start_margin"
-        android:layout_marginEnd="@dimen/screen_end_margin"/>
+        android:layout_marginEnd="@dimen/screen_end_margin"
+        android:overScrollMode="never" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btn_submit"

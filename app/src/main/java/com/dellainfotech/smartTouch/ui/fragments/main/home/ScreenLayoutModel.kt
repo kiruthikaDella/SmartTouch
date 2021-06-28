@@ -1,7 +1,6 @@
 package com.dellainfotech.smartTouch.ui.fragments.main.home
 
 import android.content.Context
-import android.view.View
 import androidx.core.content.ContextCompat
 import com.dellainfotech.smartTouch.R
 import com.dellainfotech.smartTouch.databinding.FragmentScreenLayoutBinding
@@ -35,19 +34,19 @@ class ScreenLayoutModel(context: Context, mBinding: FragmentScreenLayoutBinding)
 
     fun init() {
         changeViewType(viewType)
-        binding.linearEightIconsView.setOnClickListener {
+        binding.tvEightIconsView.setOnClickListener {
             screenLayoutType = screenLayoutEight
             viewType = VIEW_TYPE.EIGHT_ICONS_VIEW
             changeViewType(viewType)
         }
 
-        binding.linearSixIconsView.setOnClickListener {
+        binding.tvSixIconsView.setOnClickListener {
             screenLayoutType = screenLayoutSix
             viewType = VIEW_TYPE.SIX_ICONS_VIEW
             changeViewType(viewType)
         }
 
-        binding.linearFourIconsView.setOnClickListener {
+        binding.tvFourIconsView.setOnClickListener {
             screenLayoutType = screenLayoutFour
             viewType = VIEW_TYPE.FOUR_ICONS_VIEW
             changeViewType(viewType)
@@ -60,110 +59,43 @@ class ScreenLayoutModel(context: Context, mBinding: FragmentScreenLayoutBinding)
         changeImagesWithViewType(viewType)
         when (viewType) {
             VIEW_TYPE.EIGHT_ICONS_VIEW -> {
-                mContext.let {
-                    binding.ivEightIconsView.setImageDrawable(
-                        ContextCompat.getDrawable(
-                            it,
-                            R.drawable.ic_screen_layout_tab_selected
-                        )
-                    )
-                    binding.viewEightIcons.visibility = View.VISIBLE
-                    binding.tvEightIconsView.setTextColor(
-                        ContextCompat.getColor(
-                            it,
-                            R.color.daintree
-                        )
-                    )
+                binding.tvEightIconsView.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_screen_layout_tab_selected, 0, 0, 0)
+                binding.tvEightIconsView.background = ContextCompat.getDrawable(mContext, R.drawable.bottom_line)
+                binding.tvEightIconsView.setTextColor(ContextCompat.getColor(mContext, R.color.daintree))
 
-                    binding.ivSixIconsView.setImageDrawable(
-                        ContextCompat.getDrawable(
-                            it,
-                            R.drawable.ic_screen_layout_tab
-                        )
-                    )
-                    binding.viewSixIcons.visibility = View.INVISIBLE
-                    binding.tvSixIconsView.setTextColor(ContextCompat.getColor(it, R.color.nepal))
+                binding.tvSixIconsView.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_screen_layout_tab, 0, 0, 0)
+                binding.tvSixIconsView.background = ContextCompat.getDrawable(mContext, R.color.transparent)
+                binding.tvSixIconsView.setTextColor(ContextCompat.getColor(mContext, R.color.nepal))
 
-                    binding.ivFourIconsView.setImageDrawable(
-                        ContextCompat.getDrawable(
-                            it,
-                            R.drawable.ic_screen_layout_tab
-                        )
-                    )
-                    binding.viewFourIcons.visibility = View.INVISIBLE
-                    binding.tvFourIconsView.setTextColor(ContextCompat.getColor(it, R.color.nepal))
-                }
+                binding.tvFourIconsView.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_screen_layout_tab, 0, 0, 0)
+                binding.tvFourIconsView.background = ContextCompat.getDrawable(mContext, R.color.transparent)
+                binding.tvFourIconsView.setTextColor(ContextCompat.getColor(mContext, R.color.nepal))
             }
             VIEW_TYPE.SIX_ICONS_VIEW -> {
-                mContext.let {
-                    binding.ivSixIconsView.setImageDrawable(
-                        ContextCompat.getDrawable(
-                            it,
-                            R.drawable.ic_screen_layout_tab_selected
-                        )
-                    )
-                    binding.viewSixIcons.visibility = View.VISIBLE
-                    binding.tvSixIconsView.setTextColor(
-                        ContextCompat.getColor(
-                            it,
-                            R.color.daintree
-                        )
-                    )
+                binding.tvSixIconsView.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_screen_layout_tab_selected, 0, 0, 0)
+                binding.tvSixIconsView.background = ContextCompat.getDrawable(mContext, R.drawable.bottom_line)
+                binding.tvSixIconsView.setTextColor(ContextCompat.getColor(mContext, R.color.daintree))
 
-                    binding.ivEightIconsView.setImageDrawable(
-                        ContextCompat.getDrawable(
-                            it,
-                            R.drawable.ic_screen_layout_tab
-                        )
-                    )
-                    binding.viewEightIcons.visibility = View.INVISIBLE
-                    binding.tvEightIconsView.setTextColor(ContextCompat.getColor(it, R.color.nepal))
+                binding.tvEightIconsView.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_screen_layout_tab, 0, 0, 0)
+                binding.tvEightIconsView.background = ContextCompat.getDrawable(mContext, R.color.transparent)
+                binding.tvEightIconsView.setTextColor(ContextCompat.getColor(mContext, R.color.nepal))
 
-                    binding.ivFourIconsView.setImageDrawable(
-                        ContextCompat.getDrawable(
-                            it,
-                            R.drawable.ic_screen_layout_tab
-                        )
-                    )
-                    binding.viewFourIcons.visibility = View.INVISIBLE
-                    binding.tvFourIconsView.setTextColor(ContextCompat.getColor(it, R.color.nepal))
-                }
+                binding.tvFourIconsView.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_screen_layout_tab, 0, 0, 0)
+                binding.tvFourIconsView.background = ContextCompat.getDrawable(mContext, R.color.transparent)
+                binding.tvFourIconsView.setTextColor(ContextCompat.getColor(mContext, R.color.nepal))
             }
             VIEW_TYPE.FOUR_ICONS_VIEW -> {
-                mContext.let {
+                binding.tvFourIconsView.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_screen_layout_tab_selected, 0, 0, 0)
+                binding.tvFourIconsView.background = ContextCompat.getDrawable(mContext, R.drawable.bottom_line)
+                binding.tvFourIconsView.setTextColor(ContextCompat.getColor(mContext, R.color.daintree))
 
-                    binding.ivFourIconsView.setImageDrawable(
-                        ContextCompat.getDrawable(
-                            it,
-                            R.drawable.ic_screen_layout_tab_selected
-                        )
-                    )
-                    binding.viewFourIcons.visibility = View.VISIBLE
-                    binding.tvFourIconsView.setTextColor(
-                        ContextCompat.getColor(
-                            it,
-                            R.color.daintree
-                        )
-                    )
+                binding.tvSixIconsView.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_screen_layout_tab, 0, 0, 0)
+                binding.tvSixIconsView.background = ContextCompat.getDrawable(mContext, R.color.transparent)
+                binding.tvSixIconsView.setTextColor(ContextCompat.getColor(mContext, R.color.nepal))
 
-                    binding.ivEightIconsView.setImageDrawable(
-                        ContextCompat.getDrawable(
-                            it,
-                            R.drawable.ic_screen_layout_tab
-                        )
-                    )
-                    binding.viewEightIcons.visibility = View.INVISIBLE
-                    binding.tvEightIconsView.setTextColor(ContextCompat.getColor(it, R.color.nepal))
-
-                    binding.ivSixIconsView.setImageDrawable(
-                        ContextCompat.getDrawable(
-                            it,
-                            R.drawable.ic_screen_layout_tab
-                        )
-                    )
-                    binding.viewSixIcons.visibility = View.INVISIBLE
-                    binding.tvSixIconsView.setTextColor(ContextCompat.getColor(it, R.color.nepal))
-                }
+                binding.tvEightIconsView.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_screen_layout_tab, 0, 0, 0)
+                binding.tvEightIconsView.background = ContextCompat.getDrawable(mContext, R.color.transparent)
+                binding.tvEightIconsView.setTextColor(ContextCompat.getColor(mContext, R.color.nepal))
             }
         }
     }
@@ -171,127 +103,30 @@ class ScreenLayoutModel(context: Context, mBinding: FragmentScreenLayoutBinding)
     private fun changeImagesWithViewType(viewType: VIEW_TYPE) {
         when (viewType) {
             VIEW_TYPE.EIGHT_ICONS_VIEW -> {
-                mContext.let {
-                    binding.ivLeftMost.setImageDrawable(
-                        ContextCompat.getDrawable(
-                            it,
-                            R.drawable.ic_eight_left_most
-                        )
-                    )
-                    binding.ivLeftRight.setImageDrawable(
-                        ContextCompat.getDrawable(
-                            it,
-                            R.drawable.ic_eight_left_right
-                        )
-                    )
-                    binding.ivTopCenter.setImageDrawable(
-                        ContextCompat.getDrawable(
-                            it,
-                            R.drawable.ic_eight_top_center
-                        )
-                    )
-                    binding.ivRightMost.setImageDrawable(
-                        ContextCompat.getDrawable(
-                            it,
-                            R.drawable.ic_eight_right_most
-                        )
-                    )
-                    binding.ivMiddleCenter.setImageDrawable(
-                        ContextCompat.getDrawable(
-                            it,
-                            R.drawable.ic_eight_middle_center
-                        )
-                    )
-                    binding.ivBottomCenter.setImageDrawable(
-                        ContextCompat.getDrawable(
-                            it,
-                            R.drawable.ic_eight_bottom_center
-                        )
-                    )
-                }
+                binding.ivLeftMost.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_eight_left_most))
+                binding.ivLeftRight.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_eight_left_right))
+                binding.ivTopCenter.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_eight_top_center))
+                binding.ivRightMost.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_eight_right_most))
+                binding.ivMiddleCenter.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_eight_middle_center))
+                binding.ivBottomCenter.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_eight_bottom_center))
             }
             VIEW_TYPE.SIX_ICONS_VIEW -> {
-                mContext.let {
-                    binding.ivLeftMost.setImageDrawable(
-                        ContextCompat.getDrawable(
-                            it,
-                            R.drawable.ic_six_left_most
-                        )
-                    )
-                    binding.ivLeftRight.setImageDrawable(
-                        ContextCompat.getDrawable(
-                            it,
-                            R.drawable.ic_six_left_right
-                        )
-                    )
-                    binding.ivTopCenter.setImageDrawable(
-                        ContextCompat.getDrawable(
-                            it,
-                            R.drawable.ic_six_top_center
-                        )
-                    )
-                    binding.ivRightMost.setImageDrawable(
-                        ContextCompat.getDrawable(
-                            it,
-                            R.drawable.ic_six_right_most
-                        )
-                    )
-                    binding.ivMiddleCenter.setImageDrawable(
-                        ContextCompat.getDrawable(
-                            it,
-                            R.drawable.ic_six_middle_center
-                        )
-                    )
-                    binding.ivBottomCenter.setImageDrawable(
-                        ContextCompat.getDrawable(
-                            it,
-                            R.drawable.ic_six_bottom_center
-                        )
-                    )
-                }
+                binding.ivLeftMost.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_six_left_most))
+                binding.ivLeftRight.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_six_left_right))
+                binding.ivTopCenter.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_six_top_center))
+                binding.ivRightMost.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_six_right_most))
+                binding.ivMiddleCenter.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_six_middle_center))
+                binding.ivBottomCenter.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_six_bottom_center))
             }
             VIEW_TYPE.FOUR_ICONS_VIEW -> {
-                mContext.let {
-                    binding.ivLeftMost.setImageDrawable(
-                        ContextCompat.getDrawable(
-                            it,
-                            R.drawable.ic_four_left_most
-                        )
-                    )
-                    binding.ivLeftRight.setImageDrawable(
-                        ContextCompat.getDrawable(
-                            it,
-                            R.drawable.ic_four_left_right
-                        )
-                    )
-                    binding.ivTopCenter.setImageDrawable(
-                        ContextCompat.getDrawable(
-                            it,
-                            R.drawable.ic_four_top_center
-                        )
-                    )
-                    binding.ivRightMost.setImageDrawable(
-                        ContextCompat.getDrawable(
-                            it,
-                            R.drawable.ic_four_right_most
-                        )
-                    )
-                    binding.ivMiddleCenter.setImageDrawable(
-                        ContextCompat.getDrawable(
-                            it,
-                            R.drawable.ic_four_middle_center
-                        )
-                    )
-                    binding.ivBottomCenter.setImageDrawable(
-                        ContextCompat.getDrawable(
-                            it,
-                            R.drawable.ic_four_bottom_center
-                        )
-                    )
-                }
+                binding.ivLeftMost.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_four_left_most))
+                binding.ivLeftRight.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_four_left_right))
+                binding.ivTopCenter.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_four_top_center))
+                binding.ivRightMost.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_four_right_most))
+                binding.ivMiddleCenter.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_four_middle_center))
+                binding.ivBottomCenter.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_four_bottom_center))
             }
         }
-//        selectDefaultLayout()
         selectLayout(viewType)
     }
 
@@ -344,120 +179,30 @@ class ScreenLayoutModel(context: Context, mBinding: FragmentScreenLayoutBinding)
             when (viewType) {
                 VIEW_TYPE.EIGHT_ICONS_VIEW -> {
                     storedViewType = screenLayoutEight
-                    binding.ivLeftMost.setImageDrawable(
-                        ContextCompat.getDrawable(
-                            mContext,
-                            R.drawable.ic_eight_left_most_selected
-                        )
-                    )
-                    binding.ivLeftRight.setImageDrawable(
-                        ContextCompat.getDrawable(
-                            mContext,
-                            R.drawable.ic_eight_left_right
-                        )
-                    )
-                    binding.ivTopCenter.setImageDrawable(
-                        ContextCompat.getDrawable(
-                            mContext,
-                            R.drawable.ic_eight_top_center
-                        )
-                    )
-                    binding.ivRightMost.setImageDrawable(
-                        ContextCompat.getDrawable(
-                            mContext,
-                            R.drawable.ic_eight_right_most
-                        )
-                    )
-                    binding.ivMiddleCenter.setImageDrawable(
-                        ContextCompat.getDrawable(
-                            mContext,
-                            R.drawable.ic_eight_middle_center
-                        )
-                    )
-                    binding.ivBottomCenter.setImageDrawable(
-                        ContextCompat.getDrawable(
-                            mContext,
-                            R.drawable.ic_eight_bottom_center
-                        )
-                    )
+                    binding.ivLeftMost.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_eight_left_most_selected))
+                    binding.ivLeftRight.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_eight_left_right))
+                    binding.ivTopCenter.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_eight_top_center))
+                    binding.ivRightMost.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_eight_right_most))
+                    binding.ivMiddleCenter.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_eight_middle_center))
+                    binding.ivBottomCenter.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_eight_bottom_center))
                 }
                 VIEW_TYPE.SIX_ICONS_VIEW -> {
                     storedViewType = screenLayoutSix
-                    binding.ivLeftMost.setImageDrawable(
-                        ContextCompat.getDrawable(
-                            mContext,
-                            R.drawable.ic_six_left_most_selected
-                        )
-                    )
-                    binding.ivLeftRight.setImageDrawable(
-                        ContextCompat.getDrawable(
-                            mContext,
-                            R.drawable.ic_six_left_right
-                        )
-                    )
-                    binding.ivTopCenter.setImageDrawable(
-                        ContextCompat.getDrawable(
-                            mContext,
-                            R.drawable.ic_six_top_center
-                        )
-                    )
-                    binding.ivRightMost.setImageDrawable(
-                        ContextCompat.getDrawable(
-                            mContext,
-                            R.drawable.ic_six_right_most
-                        )
-                    )
-                    binding.ivMiddleCenter.setImageDrawable(
-                        ContextCompat.getDrawable(
-                            mContext,
-                            R.drawable.ic_six_middle_center
-                        )
-                    )
-                    binding.ivBottomCenter.setImageDrawable(
-                        ContextCompat.getDrawable(
-                            mContext,
-                            R.drawable.ic_six_bottom_center
-                        )
-                    )
+                    binding.ivLeftMost.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_six_left_most_selected))
+                    binding.ivLeftRight.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_six_left_right))
+                    binding.ivTopCenter.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_six_top_center))
+                    binding.ivRightMost.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_six_right_most))
+                    binding.ivMiddleCenter.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_six_middle_center))
+                    binding.ivBottomCenter.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_six_bottom_center))
                 }
                 VIEW_TYPE.FOUR_ICONS_VIEW -> {
                     storedViewType = screenLayoutFour
-                    binding.ivLeftMost.setImageDrawable(
-                        ContextCompat.getDrawable(
-                            mContext,
-                            R.drawable.ic_four_left_most_selected
-                        )
-                    )
-                    binding.ivLeftRight.setImageDrawable(
-                        ContextCompat.getDrawable(
-                            mContext,
-                            R.drawable.ic_four_left_right
-                        )
-                    )
-                    binding.ivTopCenter.setImageDrawable(
-                        ContextCompat.getDrawable(
-                            mContext,
-                            R.drawable.ic_four_top_center
-                        )
-                    )
-                    binding.ivRightMost.setImageDrawable(
-                        ContextCompat.getDrawable(
-                            mContext,
-                            R.drawable.ic_four_right_most
-                        )
-                    )
-                    binding.ivMiddleCenter.setImageDrawable(
-                        ContextCompat.getDrawable(
-                            mContext,
-                            R.drawable.ic_four_middle_center
-                        )
-                    )
-                    binding.ivBottomCenter.setImageDrawable(
-                        ContextCompat.getDrawable(
-                            mContext,
-                            R.drawable.ic_four_bottom_center
-                        )
-                    )
+                    binding.ivLeftMost.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_four_left_most_selected))
+                    binding.ivLeftRight.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_four_left_right))
+                    binding.ivTopCenter.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_four_top_center))
+                    binding.ivRightMost.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_four_right_most))
+                    binding.ivMiddleCenter.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_four_middle_center))
+                    binding.ivBottomCenter.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_four_bottom_center))
                 }
             }
         }
@@ -467,120 +212,30 @@ class ScreenLayoutModel(context: Context, mBinding: FragmentScreenLayoutBinding)
             when (viewType) {
                 VIEW_TYPE.EIGHT_ICONS_VIEW -> {
                     storedViewType = screenLayoutEight
-                    binding.ivLeftMost.setImageDrawable(
-                        ContextCompat.getDrawable(
-                            mContext,
-                            R.drawable.ic_eight_left_most
-                        )
-                    )
-                    binding.ivLeftRight.setImageDrawable(
-                        ContextCompat.getDrawable(
-                            mContext,
-                            R.drawable.ic_eight_left_right_selected
-                        )
-                    )
-                    binding.ivTopCenter.setImageDrawable(
-                        ContextCompat.getDrawable(
-                            mContext,
-                            R.drawable.ic_eight_top_center
-                        )
-                    )
-                    binding.ivRightMost.setImageDrawable(
-                        ContextCompat.getDrawable(
-                            mContext,
-                            R.drawable.ic_eight_right_most
-                        )
-                    )
-                    binding.ivMiddleCenter.setImageDrawable(
-                        ContextCompat.getDrawable(
-                            mContext,
-                            R.drawable.ic_eight_middle_center
-                        )
-                    )
-                    binding.ivBottomCenter.setImageDrawable(
-                        ContextCompat.getDrawable(
-                            mContext,
-                            R.drawable.ic_eight_bottom_center
-                        )
-                    )
+                    binding.ivLeftMost.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_eight_left_most))
+                    binding.ivLeftRight.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_eight_left_right_selected))
+                    binding.ivTopCenter.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_eight_top_center))
+                    binding.ivRightMost.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_eight_right_most))
+                    binding.ivMiddleCenter.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_eight_middle_center))
+                    binding.ivBottomCenter.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_eight_bottom_center))
                 }
                 VIEW_TYPE.SIX_ICONS_VIEW -> {
                     storedViewType = screenLayoutSix
-                    binding.ivLeftMost.setImageDrawable(
-                        ContextCompat.getDrawable(
-                            mContext,
-                            R.drawable.ic_six_left_most
-                        )
-                    )
-                    binding.ivLeftRight.setImageDrawable(
-                        ContextCompat.getDrawable(
-                            mContext,
-                            R.drawable.ic_six_left_right_selected
-                        )
-                    )
-                    binding.ivTopCenter.setImageDrawable(
-                        ContextCompat.getDrawable(
-                            mContext,
-                            R.drawable.ic_six_top_center
-                        )
-                    )
-                    binding.ivRightMost.setImageDrawable(
-                        ContextCompat.getDrawable(
-                            mContext,
-                            R.drawable.ic_six_right_most
-                        )
-                    )
-                    binding.ivMiddleCenter.setImageDrawable(
-                        ContextCompat.getDrawable(
-                            mContext,
-                            R.drawable.ic_six_middle_center
-                        )
-                    )
-                    binding.ivBottomCenter.setImageDrawable(
-                        ContextCompat.getDrawable(
-                            mContext,
-                            R.drawable.ic_six_bottom_center
-                        )
-                    )
+                    binding.ivLeftMost.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_six_left_most))
+                    binding.ivLeftRight.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_six_left_right_selected))
+                    binding.ivTopCenter.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_six_top_center))
+                    binding.ivRightMost.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_six_right_most))
+                    binding.ivMiddleCenter.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_six_middle_center))
+                    binding.ivBottomCenter.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_six_bottom_center))
                 }
                 VIEW_TYPE.FOUR_ICONS_VIEW -> {
                     storedViewType = screenLayoutFour
-                    binding.ivLeftMost.setImageDrawable(
-                        ContextCompat.getDrawable(
-                            mContext,
-                            R.drawable.ic_four_left_most
-                        )
-                    )
-                    binding.ivLeftRight.setImageDrawable(
-                        ContextCompat.getDrawable(
-                            mContext,
-                            R.drawable.ic_four_left_right_selected
-                        )
-                    )
-                    binding.ivTopCenter.setImageDrawable(
-                        ContextCompat.getDrawable(
-                            mContext,
-                            R.drawable.ic_four_top_center
-                        )
-                    )
-                    binding.ivRightMost.setImageDrawable(
-                        ContextCompat.getDrawable(
-                            mContext,
-                            R.drawable.ic_four_right_most
-                        )
-                    )
-                    binding.ivMiddleCenter.setImageDrawable(
-                        ContextCompat.getDrawable(
-                            mContext,
-                            R.drawable.ic_four_middle_center
-                        )
-                    )
-                    binding.ivBottomCenter.setImageDrawable(
-                        ContextCompat.getDrawable(
-                            mContext,
-                            R.drawable.ic_four_bottom_center
-                        )
-                    )
+                    binding.ivLeftMost.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_four_left_most))
+                    binding.ivLeftRight.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_four_left_right_selected))
+                    binding.ivTopCenter.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_four_top_center))
+                    binding.ivRightMost.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_four_right_most))
+                    binding.ivMiddleCenter.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_four_middle_center))
+                    binding.ivBottomCenter.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_four_bottom_center))
                 }
             }
         }
@@ -590,120 +245,30 @@ class ScreenLayoutModel(context: Context, mBinding: FragmentScreenLayoutBinding)
             when (viewType) {
                 VIEW_TYPE.EIGHT_ICONS_VIEW -> {
                     storedViewType = screenLayoutEight
-                    binding.ivLeftMost.setImageDrawable(
-                        ContextCompat.getDrawable(
-                            mContext,
-                            R.drawable.ic_eight_left_most
-                        )
-                    )
-                    binding.ivLeftRight.setImageDrawable(
-                        ContextCompat.getDrawable(
-                            mContext,
-                            R.drawable.ic_eight_left_right
-                        )
-                    )
-                    binding.ivTopCenter.setImageDrawable(
-                        ContextCompat.getDrawable(
-                            mContext,
-                            R.drawable.ic_eight_top_center_selected
-                        )
-                    )
-                    binding.ivRightMost.setImageDrawable(
-                        ContextCompat.getDrawable(
-                            mContext,
-                            R.drawable.ic_eight_right_most
-                        )
-                    )
-                    binding.ivMiddleCenter.setImageDrawable(
-                        ContextCompat.getDrawable(
-                            mContext,
-                            R.drawable.ic_eight_middle_center
-                        )
-                    )
-                    binding.ivBottomCenter.setImageDrawable(
-                        ContextCompat.getDrawable(
-                            mContext,
-                            R.drawable.ic_eight_bottom_center
-                        )
-                    )
+                    binding.ivLeftMost.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_eight_left_most))
+                    binding.ivLeftRight.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_eight_left_right))
+                    binding.ivTopCenter.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_eight_top_center_selected))
+                    binding.ivRightMost.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_eight_right_most))
+                    binding.ivMiddleCenter.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_eight_middle_center))
+                    binding.ivBottomCenter.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_eight_bottom_center))
                 }
                 VIEW_TYPE.SIX_ICONS_VIEW -> {
                     storedViewType = screenLayoutSix
-                    binding.ivLeftMost.setImageDrawable(
-                        ContextCompat.getDrawable(
-                            mContext,
-                            R.drawable.ic_six_left_most
-                        )
-                    )
-                    binding.ivLeftRight.setImageDrawable(
-                        ContextCompat.getDrawable(
-                            mContext,
-                            R.drawable.ic_six_left_right
-                        )
-                    )
-                    binding.ivTopCenter.setImageDrawable(
-                        ContextCompat.getDrawable(
-                            mContext,
-                            R.drawable.ic_six_top_center_selected
-                        )
-                    )
-                    binding.ivRightMost.setImageDrawable(
-                        ContextCompat.getDrawable(
-                            mContext,
-                            R.drawable.ic_six_right_most
-                        )
-                    )
-                    binding.ivMiddleCenter.setImageDrawable(
-                        ContextCompat.getDrawable(
-                            mContext,
-                            R.drawable.ic_six_middle_center
-                        )
-                    )
-                    binding.ivBottomCenter.setImageDrawable(
-                        ContextCompat.getDrawable(
-                            mContext,
-                            R.drawable.ic_six_bottom_center
-                        )
-                    )
+                    binding.ivLeftMost.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_six_left_most))
+                    binding.ivLeftRight.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_six_left_right))
+                    binding.ivTopCenter.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_six_top_center_selected))
+                    binding.ivRightMost.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_six_right_most))
+                    binding.ivMiddleCenter.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_six_middle_center))
+                    binding.ivBottomCenter.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_six_bottom_center))
                 }
                 VIEW_TYPE.FOUR_ICONS_VIEW -> {
                     storedViewType = screenLayoutFour
-                    binding.ivLeftMost.setImageDrawable(
-                        ContextCompat.getDrawable(
-                            mContext,
-                            R.drawable.ic_four_left_most
-                        )
-                    )
-                    binding.ivLeftRight.setImageDrawable(
-                        ContextCompat.getDrawable(
-                            mContext,
-                            R.drawable.ic_four_left_right
-                        )
-                    )
-                    binding.ivTopCenter.setImageDrawable(
-                        ContextCompat.getDrawable(
-                            mContext,
-                            R.drawable.ic_four_top_center_selected
-                        )
-                    )
-                    binding.ivRightMost.setImageDrawable(
-                        ContextCompat.getDrawable(
-                            mContext,
-                            R.drawable.ic_four_right_most
-                        )
-                    )
-                    binding.ivMiddleCenter.setImageDrawable(
-                        ContextCompat.getDrawable(
-                            mContext,
-                            R.drawable.ic_four_middle_center
-                        )
-                    )
-                    binding.ivBottomCenter.setImageDrawable(
-                        ContextCompat.getDrawable(
-                            mContext,
-                            R.drawable.ic_four_bottom_center
-                        )
-                    )
+                    binding.ivLeftMost.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_four_left_most))
+                    binding.ivLeftRight.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_four_left_right))
+                    binding.ivTopCenter.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_four_top_center_selected))
+                    binding.ivRightMost.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_four_right_most))
+                    binding.ivMiddleCenter.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_four_middle_center))
+                    binding.ivBottomCenter.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_four_bottom_center))
                 }
             }
         }
@@ -713,120 +278,30 @@ class ScreenLayoutModel(context: Context, mBinding: FragmentScreenLayoutBinding)
             when (viewType) {
                 VIEW_TYPE.EIGHT_ICONS_VIEW -> {
                     storedViewType = screenLayoutEight
-                    binding.ivLeftMost.setImageDrawable(
-                        ContextCompat.getDrawable(
-                            mContext,
-                            R.drawable.ic_eight_left_most
-                        )
-                    )
-                    binding.ivLeftRight.setImageDrawable(
-                        ContextCompat.getDrawable(
-                            mContext,
-                            R.drawable.ic_eight_left_right
-                        )
-                    )
-                    binding.ivTopCenter.setImageDrawable(
-                        ContextCompat.getDrawable(
-                            mContext,
-                            R.drawable.ic_eight_top_center
-                        )
-                    )
-                    binding.ivRightMost.setImageDrawable(
-                        ContextCompat.getDrawable(
-                            mContext,
-                            R.drawable.ic_eight_right_most_selected
-                        )
-                    )
-                    binding.ivMiddleCenter.setImageDrawable(
-                        ContextCompat.getDrawable(
-                            mContext,
-                            R.drawable.ic_eight_middle_center
-                        )
-                    )
-                    binding.ivBottomCenter.setImageDrawable(
-                        ContextCompat.getDrawable(
-                            mContext,
-                            R.drawable.ic_eight_bottom_center
-                        )
-                    )
+                    binding.ivLeftMost.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_eight_left_most))
+                    binding.ivLeftRight.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_eight_left_right))
+                    binding.ivTopCenter.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_eight_top_center))
+                    binding.ivRightMost.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_eight_right_most_selected))
+                    binding.ivMiddleCenter.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_eight_middle_center))
+                    binding.ivBottomCenter.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_eight_bottom_center))
                 }
                 VIEW_TYPE.SIX_ICONS_VIEW -> {
                     storedViewType = screenLayoutSix
-                    binding.ivLeftMost.setImageDrawable(
-                        ContextCompat.getDrawable(
-                            mContext,
-                            R.drawable.ic_six_left_most
-                        )
-                    )
-                    binding.ivLeftRight.setImageDrawable(
-                        ContextCompat.getDrawable(
-                            mContext,
-                            R.drawable.ic_six_left_right
-                        )
-                    )
-                    binding.ivTopCenter.setImageDrawable(
-                        ContextCompat.getDrawable(
-                            mContext,
-                            R.drawable.ic_six_top_center
-                        )
-                    )
-                    binding.ivRightMost.setImageDrawable(
-                        ContextCompat.getDrawable(
-                            mContext,
-                            R.drawable.ic_six_right_most_selected
-                        )
-                    )
-                    binding.ivMiddleCenter.setImageDrawable(
-                        ContextCompat.getDrawable(
-                            mContext,
-                            R.drawable.ic_six_middle_center
-                        )
-                    )
-                    binding.ivBottomCenter.setImageDrawable(
-                        ContextCompat.getDrawable(
-                            mContext,
-                            R.drawable.ic_six_bottom_center
-                        )
-                    )
+                    binding.ivLeftMost.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_six_left_most))
+                    binding.ivLeftRight.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_six_left_right))
+                    binding.ivTopCenter.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_six_top_center))
+                    binding.ivRightMost.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_six_right_most_selected))
+                    binding.ivMiddleCenter.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_six_middle_center))
+                    binding.ivBottomCenter.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_six_bottom_center))
                 }
                 VIEW_TYPE.FOUR_ICONS_VIEW -> {
                     storedViewType = screenLayoutFour
-                    binding.ivLeftMost.setImageDrawable(
-                        ContextCompat.getDrawable(
-                            mContext,
-                            R.drawable.ic_four_left_most
-                        )
-                    )
-                    binding.ivLeftRight.setImageDrawable(
-                        ContextCompat.getDrawable(
-                            mContext,
-                            R.drawable.ic_four_left_right
-                        )
-                    )
-                    binding.ivTopCenter.setImageDrawable(
-                        ContextCompat.getDrawable(
-                            mContext,
-                            R.drawable.ic_four_top_center
-                        )
-                    )
-                    binding.ivRightMost.setImageDrawable(
-                        ContextCompat.getDrawable(
-                            mContext,
-                            R.drawable.ic_four_right_most_selected
-                        )
-                    )
-                    binding.ivMiddleCenter.setImageDrawable(
-                        ContextCompat.getDrawable(
-                            mContext,
-                            R.drawable.ic_four_middle_center
-                        )
-                    )
-                    binding.ivBottomCenter.setImageDrawable(
-                        ContextCompat.getDrawable(
-                            mContext,
-                            R.drawable.ic_four_bottom_center
-                        )
-                    )
+                    binding.ivLeftMost.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_four_left_most))
+                    binding.ivLeftRight.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_four_left_right))
+                    binding.ivTopCenter.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_four_top_center))
+                    binding.ivRightMost.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_four_right_most_selected))
+                    binding.ivMiddleCenter.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_four_middle_center))
+                    binding.ivBottomCenter.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_four_bottom_center))
                 }
             }
         }
@@ -836,120 +311,30 @@ class ScreenLayoutModel(context: Context, mBinding: FragmentScreenLayoutBinding)
             when (viewType) {
                 VIEW_TYPE.EIGHT_ICONS_VIEW -> {
                     storedViewType = screenLayoutEight
-                    binding.ivLeftMost.setImageDrawable(
-                        ContextCompat.getDrawable(
-                            mContext,
-                            R.drawable.ic_eight_left_most
-                        )
-                    )
-                    binding.ivLeftRight.setImageDrawable(
-                        ContextCompat.getDrawable(
-                            mContext,
-                            R.drawable.ic_eight_left_right
-                        )
-                    )
-                    binding.ivTopCenter.setImageDrawable(
-                        ContextCompat.getDrawable(
-                            mContext,
-                            R.drawable.ic_eight_top_center
-                        )
-                    )
-                    binding.ivRightMost.setImageDrawable(
-                        ContextCompat.getDrawable(
-                            mContext,
-                            R.drawable.ic_eight_right_most
-                        )
-                    )
-                    binding.ivMiddleCenter.setImageDrawable(
-                        ContextCompat.getDrawable(
-                            mContext,
-                            R.drawable.ic_eight_middle_center_selected
-                        )
-                    )
-                    binding.ivBottomCenter.setImageDrawable(
-                        ContextCompat.getDrawable(
-                            mContext,
-                            R.drawable.ic_eight_bottom_center
-                        )
-                    )
+                    binding.ivLeftMost.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_eight_left_most))
+                    binding.ivLeftRight.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_eight_left_right))
+                    binding.ivTopCenter.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_eight_top_center))
+                    binding.ivRightMost.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_eight_right_most))
+                    binding.ivMiddleCenter.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_eight_middle_center_selected))
+                    binding.ivBottomCenter.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_eight_bottom_center))
                 }
                 VIEW_TYPE.SIX_ICONS_VIEW -> {
                     storedViewType = screenLayoutSix
-                    binding.ivLeftMost.setImageDrawable(
-                        ContextCompat.getDrawable(
-                            mContext,
-                            R.drawable.ic_six_left_most
-                        )
-                    )
-                    binding.ivLeftRight.setImageDrawable(
-                        ContextCompat.getDrawable(
-                            mContext,
-                            R.drawable.ic_six_left_right
-                        )
-                    )
-                    binding.ivTopCenter.setImageDrawable(
-                        ContextCompat.getDrawable(
-                            mContext,
-                            R.drawable.ic_six_top_center
-                        )
-                    )
-                    binding.ivRightMost.setImageDrawable(
-                        ContextCompat.getDrawable(
-                            mContext,
-                            R.drawable.ic_six_right_most
-                        )
-                    )
-                    binding.ivMiddleCenter.setImageDrawable(
-                        ContextCompat.getDrawable(
-                            mContext,
-                            R.drawable.ic_six_middle_center_selected
-                        )
-                    )
-                    binding.ivBottomCenter.setImageDrawable(
-                        ContextCompat.getDrawable(
-                            mContext,
-                            R.drawable.ic_six_bottom_center
-                        )
-                    )
+                    binding.ivLeftMost.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_six_left_most))
+                    binding.ivLeftRight.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_six_left_right))
+                    binding.ivTopCenter.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_six_top_center))
+                    binding.ivRightMost.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_six_right_most))
+                    binding.ivMiddleCenter.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_six_middle_center_selected))
+                    binding.ivBottomCenter.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_six_bottom_center))
                 }
                 VIEW_TYPE.FOUR_ICONS_VIEW -> {
                     storedViewType = screenLayoutFour
-                    binding.ivLeftMost.setImageDrawable(
-                        ContextCompat.getDrawable(
-                            mContext,
-                            R.drawable.ic_four_left_most
-                        )
-                    )
-                    binding.ivLeftRight.setImageDrawable(
-                        ContextCompat.getDrawable(
-                            mContext,
-                            R.drawable.ic_four_left_right
-                        )
-                    )
-                    binding.ivTopCenter.setImageDrawable(
-                        ContextCompat.getDrawable(
-                            mContext,
-                            R.drawable.ic_four_top_center
-                        )
-                    )
-                    binding.ivRightMost.setImageDrawable(
-                        ContextCompat.getDrawable(
-                            mContext,
-                            R.drawable.ic_four_right_most
-                        )
-                    )
-                    binding.ivMiddleCenter.setImageDrawable(
-                        ContextCompat.getDrawable(
-                            mContext,
-                            R.drawable.ic_four_middle_center_selected
-                        )
-                    )
-                    binding.ivBottomCenter.setImageDrawable(
-                        ContextCompat.getDrawable(
-                            mContext,
-                            R.drawable.ic_four_bottom_center
-                        )
-                    )
+                    binding.ivLeftMost.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_four_left_most))
+                    binding.ivLeftRight.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_four_left_right))
+                    binding.ivTopCenter.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_four_top_center))
+                    binding.ivRightMost.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_four_right_most))
+                    binding.ivMiddleCenter.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_four_middle_center_selected))
+                    binding.ivBottomCenter.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_four_bottom_center))
                 }
             }
         }
@@ -959,120 +344,30 @@ class ScreenLayoutModel(context: Context, mBinding: FragmentScreenLayoutBinding)
             when (viewType) {
                 VIEW_TYPE.EIGHT_ICONS_VIEW -> {
                     storedViewType = screenLayoutEight
-                    binding.ivLeftMost.setImageDrawable(
-                        ContextCompat.getDrawable(
-                            mContext,
-                            R.drawable.ic_eight_left_most
-                        )
-                    )
-                    binding.ivLeftRight.setImageDrawable(
-                        ContextCompat.getDrawable(
-                            mContext,
-                            R.drawable.ic_eight_left_right
-                        )
-                    )
-                    binding.ivTopCenter.setImageDrawable(
-                        ContextCompat.getDrawable(
-                            mContext,
-                            R.drawable.ic_eight_top_center
-                        )
-                    )
-                    binding.ivRightMost.setImageDrawable(
-                        ContextCompat.getDrawable(
-                            mContext,
-                            R.drawable.ic_eight_right_most
-                        )
-                    )
-                    binding.ivMiddleCenter.setImageDrawable(
-                        ContextCompat.getDrawable(
-                            mContext,
-                            R.drawable.ic_eight_middle_center
-                        )
-                    )
-                    binding.ivBottomCenter.setImageDrawable(
-                        ContextCompat.getDrawable(
-                            mContext,
-                            R.drawable.ic_eight_bottom_center_selected
-                        )
-                    )
+                    binding.ivLeftMost.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_eight_left_most))
+                    binding.ivLeftRight.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_eight_left_right))
+                    binding.ivTopCenter.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_eight_top_center))
+                    binding.ivRightMost.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_eight_right_most))
+                    binding.ivMiddleCenter.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_eight_middle_center))
+                    binding.ivBottomCenter.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_eight_bottom_center_selected))
                 }
                 VIEW_TYPE.SIX_ICONS_VIEW -> {
                     storedViewType = screenLayoutSix
-                    binding.ivLeftMost.setImageDrawable(
-                        ContextCompat.getDrawable(
-                            mContext,
-                            R.drawable.ic_six_left_most
-                        )
-                    )
-                    binding.ivLeftRight.setImageDrawable(
-                        ContextCompat.getDrawable(
-                            mContext,
-                            R.drawable.ic_six_left_right
-                        )
-                    )
-                    binding.ivTopCenter.setImageDrawable(
-                        ContextCompat.getDrawable(
-                            mContext,
-                            R.drawable.ic_six_top_center
-                        )
-                    )
-                    binding.ivRightMost.setImageDrawable(
-                        ContextCompat.getDrawable(
-                            mContext,
-                            R.drawable.ic_six_right_most
-                        )
-                    )
-                    binding.ivMiddleCenter.setImageDrawable(
-                        ContextCompat.getDrawable(
-                            mContext,
-                            R.drawable.ic_six_middle_center
-                        )
-                    )
-                    binding.ivBottomCenter.setImageDrawable(
-                        ContextCompat.getDrawable(
-                            mContext,
-                            R.drawable.ic_six_bottom_center_selected
-                        )
-                    )
+                    binding.ivLeftMost.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_six_left_most))
+                    binding.ivLeftRight.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_six_left_right))
+                    binding.ivTopCenter.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_six_top_center))
+                    binding.ivRightMost.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_six_right_most))
+                    binding.ivMiddleCenter.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_six_middle_center))
+                    binding.ivBottomCenter.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_six_bottom_center_selected))
                 }
                 VIEW_TYPE.FOUR_ICONS_VIEW -> {
                     storedViewType = screenLayoutFour
-                    binding.ivLeftMost.setImageDrawable(
-                        ContextCompat.getDrawable(
-                            mContext,
-                            R.drawable.ic_four_left_most
-                        )
-                    )
-                    binding.ivLeftRight.setImageDrawable(
-                        ContextCompat.getDrawable(
-                            mContext,
-                            R.drawable.ic_four_left_right
-                        )
-                    )
-                    binding.ivTopCenter.setImageDrawable(
-                        ContextCompat.getDrawable(
-                            mContext,
-                            R.drawable.ic_four_top_center
-                        )
-                    )
-                    binding.ivRightMost.setImageDrawable(
-                        ContextCompat.getDrawable(
-                            mContext,
-                            R.drawable.ic_four_right_most
-                        )
-                    )
-                    binding.ivMiddleCenter.setImageDrawable(
-                        ContextCompat.getDrawable(
-                            mContext,
-                            R.drawable.ic_four_middle_center
-                        )
-                    )
-                    binding.ivBottomCenter.setImageDrawable(
-                        ContextCompat.getDrawable(
-                            mContext,
-                            R.drawable.ic_four_bottom_center_selected
-                        )
-                    )
+                    binding.ivLeftMost.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_four_left_most))
+                    binding.ivLeftRight.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_four_left_right))
+                    binding.ivTopCenter.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_four_top_center))
+                    binding.ivRightMost.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_four_right_most))
+                    binding.ivMiddleCenter.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_four_middle_center))
+                    binding.ivBottomCenter.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_four_bottom_center_selected))
                 }
             }
         }

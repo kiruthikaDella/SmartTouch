@@ -90,17 +90,17 @@ class ScreenLayoutFragment : DialogFragment() {
 
         when (args.deviceCustomizationDetail.screenLayoutType) {
             screenLayoutModel?.screenLayoutEight -> {
-                binding.linearFourIconsView.isVisible = false
-                binding.linearEightIconsView.performClick()
+                binding.tvFourIconsView.isVisible = false
+                binding.tvEightIconsView.performClick()
             }
             screenLayoutModel?.screenLayoutSix -> {
-                binding.linearFourIconsView.isVisible = false
-                binding.linearSixIconsView.performClick()
+                binding.tvFourIconsView.isVisible = false
+                binding.tvSixIconsView.performClick()
             }
             screenLayoutModel?.screenLayoutFour -> {
-                binding.linearEightIconsView.isVisible = false
-                binding.linearSixIconsView.isVisible = false
-                binding.linearFourIconsView.performClick()
+                binding.tvEightIconsView.isVisible = false
+                binding.tvSixIconsView.isVisible = false
+                binding.tvFourIconsView.performClick()
             }
         }
 

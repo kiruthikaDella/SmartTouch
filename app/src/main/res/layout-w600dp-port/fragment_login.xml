@@ -5,7 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
-    tools:context="com.dellainfotech.smartTouch.ui.fragments.authentication.LoginFragment">
+    tools:context="com.dellainfotech.smartTouch.ui.fragments.authentication.LoginFragment"
+    tools:ignore="contentDescription,Autofill,LabelFor">
 
     <TextView
         android:id="@+id/tv_welcome_to"
