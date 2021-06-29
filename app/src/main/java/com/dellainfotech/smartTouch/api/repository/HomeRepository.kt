@@ -27,6 +27,9 @@ class HomeRepository @Inject constructor(
     suspend fun updateRoom(bodyUpdateRoom: BodyUpdateRoom) =
         safeApiCall { smartTouchApi.updateRoom(getAccessKey(), bodyUpdateRoom) }
 
+    suspend fun deleteRoom(roomId: String) =
+        safeApiCall { smartTouchApi.deleteRoom(getAccessKey(), roomId) }
+
     suspend fun retainState(bodyRetainState: BodyRetainState) =
         safeApiCall { smartTouchApi.retainState(getAccessKey(), bodyRetainState) }
 
@@ -62,8 +65,8 @@ class HomeRepository @Inject constructor(
     suspend fun getDeviceFeaturesSettings(deviceId: String) =
         safeApiCall { smartTouchApi.getDeviceFeatureSettings(getAccessKey(), deviceId) }
 
-    suspend fun deleteDevice(deviceId: String) =
-        safeApiCall { smartTouchApi.deleteDevice(getAccessKey(), deviceId) }
+    suspend fun deleteDevice(roomId: String, deviceId: String) =
+        safeApiCall { smartTouchApi.deleteDevice(getAccessKey(), roomId, deviceId) }
 
     suspend fun updateDeviceName(bodyUpdateDeviceName: BodyUpdateDeviceName) =
         safeApiCall { smartTouchApi.updateDeviceName(getAccessKey(), bodyUpdateDeviceName) }
@@ -103,6 +106,12 @@ class HomeRepository @Inject constructor(
 
     suspend fun deleteSceneDetail(sceneDetailId: String) =
         safeApiCall { smartTouchApi.deleteSceneDetail(getAccessKey(), sceneDetailId) }
+
+    suspend fun factoryReset(bodyFactoryReset: BodyFactoryReset) =
+        safeApiCall { smartTouchApi.factoryReset(getAccessKey(), bodyFactoryReset) }
+
+    suspend fun profileReset() =
+        safeApiCall { smartTouchApi.profileReset(getAccessKey()) }
 
     //
     //endregion

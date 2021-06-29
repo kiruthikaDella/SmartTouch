@@ -1,6 +1,7 @@
 package com.dellainfotech.smartTouch.ui.fragments.main.home
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,11 +10,16 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.dellainfotech.smartTouch.R
 import com.dellainfotech.smartTouch.api.Resource
+import com.dellainfotech.smartTouch.api.body.BodyFactoryReset
+import com.dellainfotech.smartTouch.api.body.BodyRetainState
 import com.dellainfotech.smartTouch.api.repository.HomeRepository
 import com.dellainfotech.smartTouch.common.interfaces.DialogAskListener
 import com.dellainfotech.smartTouch.common.interfaces.DialogShowListener
 import com.dellainfotech.smartTouch.common.utils.Constants
 import com.dellainfotech.smartTouch.common.utils.DialogUtil
+import com.dellainfotech.smartTouch.common.utils.Utils.toBoolean
+import com.dellainfotech.smartTouch.common.utils.Utils.toInt
+import com.dellainfotech.smartTouch.common.utils.Utils.toReverseInt
 import com.dellainfotech.smartTouch.databinding.FragmentDeviceSettingsBinding
 import com.dellainfotech.smartTouch.mqtt.NotifyManager
 import com.dellainfotech.smartTouch.ui.fragments.ModelBaseFragment
@@ -26,6 +32,7 @@ class DeviceSettingsFragment :
     ModelBaseFragment<HomeViewModel, FragmentDeviceSettingsBinding, HomeRepository>() {
 
     private val args: DeviceSettingsFragmentArgs by navArgs()
+    private val logTag = this::class.java.simpleName
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -50,7 +57,17 @@ class DeviceSettingsFragment :
                     it,
                     getString(R.string.dialog_title_factory_reset),
                     getString(R.string.text_ok),
-                    getString(R.string.text_cancel)
+                    getString(R.string.text_cancel),
+                    object : DialogAskListener {
+                        override fun onYesClicked() {
+                            DialogUtil.loadingAlert(it)
+                            viewModel.factoryReset(BodyFactoryReset(args.deviceDetail.id,args.deviceDetail.deviceType.toString()))
+                        }
+
+                        override fun onNoClicked() {
+                        }
+
+                    }
                 )
             }
         }
@@ -67,7 +84,7 @@ class DeviceSettingsFragment :
                             activity?.let { myActivity ->
                                 DialogUtil.loadingAlert(myActivity)
                             }
-                            viewModel.deleteDevice(args.deviceDetail.id)
+                            viewModel.deleteDevice(args.roomDetail.id, args.deviceDetail.id)
                         }
 
                         override fun onNoClicked() {
@@ -78,15 +95,29 @@ class DeviceSettingsFragment :
             }
         }
 
-      /*  binding.tvUpdate.setOnClickListener {
+        binding.switchRetainState.isChecked = args.deviceDetail.retainState.toBoolean()
+
+        binding.switchRetainState.setOnClickListener {
             activity?.let {
-                DialogUtil.loadingAlert(
-                    it,
-                    getString(R.string.text_verify_update),
-                    true
+                DialogUtil.loadingAlert(it)
+                viewModel.retainState(
+                    BodyRetainState(
+                        args.deviceDetail.id,
+                        binding.switchRetainState.isChecked.toInt()
+                    )
                 )
             }
-        }*/
+        }
+
+        /*  binding.tvUpdate.setOnClickListener {
+              activity?.let {
+                  DialogUtil.loadingAlert(
+                      it,
+                      getString(R.string.text_verify_update),
+                      true
+                  )
+              }
+          }*/
 
         NotifyManager.internetInfo.observe(viewLifecycleOwner, { isConnected ->
             if (!isConnected) {
@@ -106,6 +137,27 @@ class DeviceSettingsFragment :
             }
         })
 
+        apiCall()
+    }
+
+    override fun getViewModel(): Class<HomeViewModel> = HomeViewModel::class.java
+
+    override fun getFragmentBinding(
+        inflater: LayoutInflater,
+        container: ViewGroup?
+    ): FragmentDeviceSettingsBinding =
+        FragmentDeviceSettingsBinding.inflate(inflater, container, false)
+
+    override fun getFragmentRepository(): HomeRepository = HomeRepository(networkModel)
+
+    override fun onDestroy() {
+        super.onDestroy()
+        viewModel.deleteDeviceResponse.postValue(null)
+        viewModel.retainStateResponse.postValue(null)
+        viewModel.factoryResetResponse.postValue(null)
+    }
+
+    private fun apiCall() {
         viewModel.deleteDeviceResponse.observe(viewLifecycleOwner, { response ->
             when (response) {
                 is Resource.Success -> {
@@ -125,16 +177,57 @@ class DeviceSettingsFragment :
                 }
             }
         })
+
+        viewModel.retainStateResponse.observe(viewLifecycleOwner, { response ->
+            when (response) {
+                is Resource.Success -> {
+                    DialogUtil.hideDialog()
+                    context?.let {
+                        Toast.makeText(it, response.values.message, Toast.LENGTH_SHORT).show()
+                    }
+                    if (!response.values.status || response.values.code != Constants.API_SUCCESS_CODE){
+                        binding.switchRetainState.isChecked = !binding.switchRetainState.isChecked
+
+                    }
+                }
+                is Resource.Failure -> {
+                    DialogUtil.hideDialog()
+                    Log.e(logTag, " retainStateResponse Failure ${response.errorBody?.string()} ")
+                }
+                else -> {
+                    //We will do nothing here
+                }
+            }
+        })
+
+        viewModel.factoryResetResponse.observe(viewLifecycleOwner, { response ->
+            when(response){
+                is Resource.Success -> {
+                    DialogUtil.hideDialog()
+                    if (response.values.status && response.values.code == Constants.API_SUCCESS_CODE){
+                        activity?.let {
+                            DialogUtil.deviceOfflineAlert(it, response.values.message, object : DialogShowListener {
+                                override fun onClick() {
+                                    DialogUtil.hideDialog()
+                                    findNavController().navigateUp()
+                                }
+                            })
+                        }
+                    }else {
+                        context?.let {
+                            Toast.makeText(it,response.values.message,Toast.LENGTH_SHORT).show()
+                        }
+                    }
+                }
+                is Resource.Failure -> {
+                    DialogUtil.hideDialog()
+                    Log.e(logTag, " factoryResetResponse Failure ${response.errorBody?.string()}")
+                }
+                else -> {
+                    //We will do nothing here
+                }
+            }
+        })
     }
-
-    override fun getViewModel(): Class<HomeViewModel> = HomeViewModel::class.java
-
-    override fun getFragmentBinding(
-        inflater: LayoutInflater,
-        container: ViewGroup?
-    ): FragmentDeviceSettingsBinding =
-        FragmentDeviceSettingsBinding.inflate(inflater, container, false)
-
-    override fun getFragmentRepository(): HomeRepository = HomeRepository(networkModel)
 
 }

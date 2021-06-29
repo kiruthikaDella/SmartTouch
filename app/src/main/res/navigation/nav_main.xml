@@ -188,6 +188,9 @@
         <argument
             android:name="deviceDetail"
             app:argType="com.dellainfotech.smartTouch.api.model.GetDeviceData" />
+        <argument
+            android:name="roomDetail"
+            app:argType="com.dellainfotech.smartTouch.api.model.GetRoomData" />
     </fragment><action android:id="@+id/action_global_userManagementFragment" app:destination="@id/userManagementFragment"/>
     <action android:id="@+id/action_global_controlModeFragment" app:destination="@id/controlModeFragment"/>
     <fragment

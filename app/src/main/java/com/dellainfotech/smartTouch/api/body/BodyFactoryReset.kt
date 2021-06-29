@@ -2,7 +2,7 @@ package com.dellainfotech.smartTouch.api.body
 
 import com.google.gson.annotations.SerializedName
 
-class BodyRetainState(
+class BodyFactoryReset(
     @SerializedName("iDeviceId") var deviceId: String,
-    @SerializedName("tiRetainState") var retainState: Int
+    @SerializedName("tiDeviceType") var deviceType: String
 )

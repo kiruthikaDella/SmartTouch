@@ -371,4 +371,10 @@ class LoginFragment : ModelBaseFragment<AuthViewModel, FragmentLoginBinding, Aut
 
     override fun getFragmentRepository(): AuthRepository = AuthRepository(networkModel)
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        viewModel.loginResponse.postValue(null)
+        viewModel.socialLoginResponse.postValue(null)
+    }
+
 }

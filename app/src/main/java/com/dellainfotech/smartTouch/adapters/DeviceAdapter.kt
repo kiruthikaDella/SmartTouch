@@ -111,10 +111,9 @@ class DeviceAdapter(
         val constraintLayout = itemView.findViewById(R.id.relative_main) as RelativeLayout
         val relativeLayout = itemView.findViewById(R.id.relative_layout) as RelativeLayout
 
-        val linearCustomization = itemView.findViewById(R.id.linear_customization) as LinearLayout
-        val linearFeature = itemView.findViewById(R.id.linear_features) as LinearLayout
-        val linearDeviceSettings =
-            itemView.findViewById(R.id.linear_device_settings) as LinearLayout
+        val tvCustomization = itemView.findViewById(R.id.tv_customization) as TextView
+        val tvFeature = itemView.findViewById(R.id.tv_features) as TextView
+        val tvDeviceSettings = itemView.findViewById(R.id.tv_device_settings) as TextView
 
         val tvSwitchNameOne = itemView.findViewById(R.id.tv_switch_one_name) as TextView
         val tvSwitchNameTwo = itemView.findViewById(R.id.tv_switch_two_name) as TextView
@@ -161,10 +160,9 @@ class DeviceAdapter(
         val constraintLayout = itemView.findViewById(R.id.relative_main) as RelativeLayout
         val relativeLayout = itemView.findViewById(R.id.relative_layout) as RelativeLayout
 
-        val linearCustomization = itemView.findViewById(R.id.linear_customization) as LinearLayout
-        val linearFeature = itemView.findViewById(R.id.linear_features) as LinearLayout
-        val linearDeviceSettings =
-            itemView.findViewById(R.id.linear_device_settings) as LinearLayout
+        val tvCustomization = itemView.findViewById(R.id.tv_customization) as TextView
+        val tvFeature = itemView.findViewById(R.id.tv_features) as TextView
+        val tvDeviceSettings = itemView.findViewById(R.id.tv_device_settings) as TextView
 
         val tvSwitchNameOne = itemView.findViewById(R.id.tv_switch_one_name) as TextView
         val tvSwitchNameTwo = itemView.findViewById(R.id.tv_switch_two_name) as TextView
@@ -205,7 +203,7 @@ class DeviceAdapter(
             }
 
             tvPanelName.text = device.deviceName
-            if (device.isDeviceAvailable == "0") {
+            if (device.isDeviceAvailable == 0) {
                 relativeLayout.visibility = View.VISIBLE
             } else {
                 relativeLayout.visibility = View.GONE
@@ -283,15 +281,15 @@ class DeviceAdapter(
                 updateDeviceNameClickListener?.onItemClick(device, adapterPosition)
             }
 
-            linearCustomization.setOnClickListener {
+            tvCustomization.setOnClickListener {
                 customizationClickListener?.onItemClick(device)
             }
 
-            linearFeature.setOnClickListener {
+            tvFeature.setOnClickListener {
                 featuresClickListener?.onItemClick(device)
             }
 
-            linearDeviceSettings.setOnClickListener {
+            tvDeviceSettings.setOnClickListener {
                 settingsClickListener?.onItemClick(device)
             }
 
@@ -456,7 +454,7 @@ class DeviceAdapter(
             }
 
             tvPanelName.text = device.deviceName
-            if (device.isDeviceAvailable == "0") {
+            if (device.isDeviceAvailable == 0) {
                 relativeLayout.visibility = View.VISIBLE
             } else {
                 relativeLayout.visibility = View.GONE
@@ -509,15 +507,15 @@ class DeviceAdapter(
                 updateDeviceNameClickListener?.onItemClick(device, adapterPosition)
             }
 
-            linearCustomization.setOnClickListener {
+            tvCustomization.setOnClickListener {
                 customizationClickListener?.onItemClick(device)
             }
 
-            linearFeature.setOnClickListener {
+            tvFeature.setOnClickListener {
                 featuresClickListener?.onItemClick(device)
             }
 
-            linearDeviceSettings.setOnClickListener {
+            tvDeviceSettings.setOnClickListener {
                 settingsClickListener?.onItemClick(device)
             }
 
@@ -544,16 +542,16 @@ class DeviceAdapter(
                 }
             }
 
-           /* switchOne.setOnTouchListener { _, event ->
-                if (event.action == MotionEvent.ACTION_DOWN) {
-                    publish(
-                        device.deviceSerialNo,
-                        MQTTConstants.AWS_SWITCH_1,
-                        switchOne.isChecked.toReverseInt().toString()
-                    )
-                }
-                false
-            }*/
+            /* switchOne.setOnTouchListener { _, event ->
+                 if (event.action == MotionEvent.ACTION_DOWN) {
+                     publish(
+                         device.deviceSerialNo,
+                         MQTTConstants.AWS_SWITCH_1,
+                         switchOne.isChecked.toReverseInt().toString()
+                     )
+                 }
+                 false
+             }*/
 
             switchOne.setOnClickListener {
                 publish(
@@ -741,8 +739,7 @@ class DeviceAdapter(
                         val jsonObject = JSONObject(message)
 
                         if (jsonObject.has(MQTTConstants.AWS_STATUS)) {
-                            deviceData?.isDeviceAvailable =
-                                jsonObject.getInt(MQTTConstants.AWS_STATUS).toString()
+                            deviceData?.isDeviceAvailable = jsonObject.getInt(MQTTConstants.AWS_STATUS)
                             for ((index, value) in deviceList.withIndex()) {
                                 if (value.deviceSerialNo == deviceData?.deviceSerialNo) {
                                     deviceList[index] = deviceData

@@ -103,7 +103,7 @@ class UpdateDeviceSceneAdapter(
                                     deviceList.clear()
                                     switchList.clear()
                                     if (devices.size <= 0){
-                                        val device = GetDeviceData("","",0,"","",mActivity.getString(R.string.text_no_device),0,null)
+                                        val device = GetDeviceData("","","","",mActivity.getString(R.string.text_no_device),0,0,1,0,null)
                                         deviceList.add(device)
                                         spinnerDevice.isEnabled = false
                                     }else{
@@ -172,7 +172,7 @@ class UpdateDeviceSceneAdapter(
                                     }
                                 }?: kotlin.run {
                                     switchList.clear()
-                                    val switch = DeviceSwitchData("","",0,"",mActivity.getString(R.string.text_no_switch),"",0)
+                                    val switch = DeviceSwitchData("",0,"",mActivity.getString(R.string.text_no_switch),"",0,null)
                                     switchList.add(switch)
                                     val switchAdapter = SwitchAdapter(mActivity, switchList)
                                     spinnerSwitch.adapter = switchAdapter

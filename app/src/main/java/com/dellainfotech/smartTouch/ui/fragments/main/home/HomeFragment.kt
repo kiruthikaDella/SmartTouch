@@ -43,6 +43,7 @@ class HomeFragment : ModelBaseFragment<HomeViewModel, FragmentHomeBinding, HomeR
     private lateinit var roomsAdapter: RoomsAdapter
     private var roomList = arrayListOf<GetRoomData>()
     private var mGoogleSingInClient: GoogleSignInClient? = null
+    private var roomData: GetRoomData?= null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -55,11 +56,6 @@ class HomeFragment : ModelBaseFragment<HomeViewModel, FragmentHomeBinding, HomeR
         val navUsername = headerView.findViewById(R.id.tv_user_name) as TextView
         val navUserEmail = headerView.findViewById(R.id.tv_user_email) as TextView
 
-        val sharedPreference =  activity?.getSharedPreferences(Constants.SHARED_PREF, Context.MODE_PRIVATE)
-        val isRemember = sharedPreference?.getBoolean(Constants.IS_REMEMBER,Constants.DEFAULT_REMEMBER_STATUS)
-
-        Log.e(logTag, " isRemember $isRemember ")
-
         navUsername.text = FastSave.getInstance().getString(Constants.USER_FULL_NAME, null)
         navUserEmail.text = FastSave.getInstance().getString(Constants.USER_EMAIL, null)
 
@@ -67,11 +63,7 @@ class HomeFragment : ModelBaseFragment<HomeViewModel, FragmentHomeBinding, HomeR
         binding.recyclerRooms.adapter = roomsAdapter
         roomsAdapter.setCallback(object : AdapterItemClickListener<GetRoomData> {
             override fun onItemClick(data: GetRoomData) {
-                findNavController().navigate(
-                    HomeFragmentDirections.actionHomeFragmentToRoomPanelFragment(
-                        data
-                    )
-                )
+                findNavController().navigate(HomeFragmentDirections.actionHomeFragmentToRoomPanelFragment(data))
             }
         })
 
@@ -85,11 +77,13 @@ class HomeFragment : ModelBaseFragment<HomeViewModel, FragmentHomeBinding, HomeR
                         getString(R.string.text_cancel),
                         object : DialogAskListener{
                             override fun onYesClicked() {
-                                Log.e(logTag, "Yes Clicked")
+                                DialogUtil.loadingAlert(it)
+                                roomData = data
+                                viewModel.deleteRoom(data.id)
                             }
 
                             override fun onNoClicked() {
-                                Log.e(logTag, "No Clicked")
+
                             }
 
                         }
@@ -109,6 +103,21 @@ class HomeFragment : ModelBaseFragment<HomeViewModel, FragmentHomeBinding, HomeR
         apiCall()
     }
 
+    override fun getViewModel(): Class<HomeViewModel> = HomeViewModel::class.java
+
+    override fun getFragmentBinding(
+        inflater: LayoutInflater,
+        container: ViewGroup?
+    ): FragmentHomeBinding = FragmentHomeBinding.inflate(inflater, container, false)
+
+    override fun getFragmentRepository(): HomeRepository = HomeRepository(networkModel)
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        viewModel.profileResetResponse.postValue(null)
+        viewModel.deleteRoomResponse.postValue(null)
+    }
+
     //Initialization object of GoogleSignInClient
     private fun initGoogleSignInClient() {
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -123,10 +132,10 @@ class HomeFragment : ModelBaseFragment<HomeViewModel, FragmentHomeBinding, HomeR
         NotifyManager.internetInfo.observe(viewLifecycleOwner, { isConnected ->
             if (isConnected) {
                 roomList.toMutableList().clear()
-                viewModel.getRoom()
                 activity?.let {
                     DialogUtil.loadingAlert(it)
                 }
+                viewModel.getRoom()
             }
         })
 
@@ -201,6 +210,50 @@ class HomeFragment : ModelBaseFragment<HomeViewModel, FragmentHomeBinding, HomeR
                 }
             }
         })
+
+        viewModel.profileResetResponse.observe(viewLifecycleOwner, { response ->
+            when(response){
+                is Resource.Success -> {
+                    DialogUtil.hideDialog()
+                    context?.let {
+                        Toast.makeText(it,response.values.message,Toast.LENGTH_SHORT).show()
+                    }
+                }
+                is Resource.Failure -> {
+                    DialogUtil.hideDialog()
+                    Log.e(logTag, " profileResetResponse Failure ${response.errorBody?.string()}")
+                }
+                else -> {
+                    //We will do nothing here
+                }
+            }
+        })
+
+        viewModel.deleteRoomResponse.observe(viewLifecycleOwner, { response ->
+            when(response){
+                is Resource.Success -> {
+                    DialogUtil.hideDialog()
+                    context?.let {
+                        Toast.makeText(it,response.values.message,Toast.LENGTH_SHORT).show()
+                    }
+
+                    if (response.values.status && response.values.code == Constants.API_SUCCESS_CODE){
+                        roomData?.let {
+                            roomList.remove(it)
+                            roomsAdapter.notifyDataSetChanged()
+                            roomData = null
+                        }
+                    }
+                }
+                is Resource.Failure -> {
+                    DialogUtil.hideDialog()
+                    Log.e(logTag, " deleteRoomResponse Failure ${response.errorBody?.string()} ")
+                }
+                else -> {
+                    //We will do nothing here
+                }
+            }
+        })
     }
 
     private fun openOrCloseDrawer() {
@@ -230,7 +283,19 @@ class HomeFragment : ModelBaseFragment<HomeViewModel, FragmentHomeBinding, HomeR
                             it,
                             getString(R.string.dialog_title_profile_reset),
                             getString(R.string.text_ok),
-                            getString(R.string.text_cancel)
+                            getString(R.string.text_cancel),
+                            object : DialogAskListener {
+                                override fun onYesClicked() {
+                                    openOrCloseDrawer()
+                                    DialogUtil.loadingAlert(it)
+                                    viewModel.profileReset()
+                                }
+
+                                override fun onNoClicked() {
+
+                                }
+
+                            }
                         )
                     }
                 }
@@ -280,14 +345,5 @@ class HomeFragment : ModelBaseFragment<HomeViewModel, FragmentHomeBinding, HomeR
             true
         }
     }
-
-    override fun getViewModel(): Class<HomeViewModel> = HomeViewModel::class.java
-
-    override fun getFragmentBinding(
-        inflater: LayoutInflater,
-        container: ViewGroup?
-    ): FragmentHomeBinding = FragmentHomeBinding.inflate(inflater, container, false)
-
-    override fun getFragmentRepository(): HomeRepository = HomeRepository(networkModel)
 
 }

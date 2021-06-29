@@ -52,23 +52,29 @@ data class AddDeviceResponse(
 data class GetDeviceData(
     @SerializedName("_id")
     var id: String,
-    @SerializedName("tiIsDeviceAvilable")
-    var isDeviceAvailable: String,
-    @SerializedName("iActiveSwitchCount")
-    var activeSwitchCount: Int,
     @SerializedName("iUserId")
     var userId: String,
+    @SerializedName("vProductGroup")
+    var productGroup: String,
     @SerializedName("vDeviceSerialNo")
     var deviceSerialNo: String,
     @SerializedName("vDeviceName")
     var deviceName: String,
     @SerializedName("tiDeviceType")
     var deviceType: Int,
+    @SerializedName("tiRetainState")
+    var retainState: Int,
+    @SerializedName("tiIsDeviceAvailable")
+    var isDeviceAvailable: Int,
+    @SerializedName("iActiveSwitchCount")
+    var activeSwitchCount: Int,
     @SerializedName("switchData")
     var switchData: ArrayList<DeviceSwitchData>? = null
 ) : Parcelable, Serializable {
+
+
     override fun toString(): String {
-        return "GetDeviceData(id='$id', isDeviceAvailable='$isDeviceAvailable', activeSwitchCount=$activeSwitchCount, userId='$userId', deviceSerialNo='$deviceSerialNo', deviceName='$deviceName', deviceType=$deviceType, switchData=$switchData)"
+        return "GetDeviceData(id='$id', userId='$userId', productGroup='$productGroup', deviceSerialNo='$deviceSerialNo', deviceName='$deviceName', deviceType=$deviceType, retainState=$retainState, isDeviceAvailable=$isDeviceAvailable, activeSwitchCount=$activeSwitchCount, switchData=$switchData)"
     }
 
     override fun equals(other: Any?): Boolean {
@@ -78,12 +84,14 @@ data class GetDeviceData(
         other as GetDeviceData
 
         if (id != other.id) return false
-        if (isDeviceAvailable != other.isDeviceAvailable) return false
-        if (activeSwitchCount != other.activeSwitchCount) return false
         if (userId != other.userId) return false
+        if (productGroup != other.productGroup) return false
         if (deviceSerialNo != other.deviceSerialNo) return false
         if (deviceName != other.deviceName) return false
         if (deviceType != other.deviceType) return false
+        if (retainState != other.retainState) return false
+        if (isDeviceAvailable != other.isDeviceAvailable) return false
+        if (activeSwitchCount != other.activeSwitchCount) return false
         if (switchData != other.switchData) return false
 
         return true
@@ -91,12 +99,14 @@ data class GetDeviceData(
 
     override fun hashCode(): Int {
         var result = id.hashCode()
-        result = 31 * result + isDeviceAvailable.hashCode()
-        result = 31 * result + activeSwitchCount
         result = 31 * result + userId.hashCode()
+        result = 31 * result + productGroup.hashCode()
         result = 31 * result + deviceSerialNo.hashCode()
         result = 31 * result + deviceName.hashCode()
         result = 31 * result + deviceType
+        result = 31 * result + retainState
+        result = 31 * result + isDeviceAvailable
+        result = 31 * result + activeSwitchCount
         result = 31 * result + (switchData?.hashCode() ?: 0)
         return result
     }
@@ -108,21 +118,22 @@ data class GetDeviceData(
 data class DeviceSwitchData(
     @SerializedName("_id")
     var id: String,
-    @SerializedName("vIcon")
-    var icon: String,
     @SerializedName("vTypeOfSwitch")
     var typeOfSwitch: Int,
     @SerializedName("vIndex")
     var index: String,
     @SerializedName("vName")
     var name: String,
-    @SerializedName("vDesc")
-    var desc: String? = null,
+    @SerializedName("vIcon")
+    var icon: String,
     @SerializedName("tiSwitchStatus")
-    var switchStatus: Int
+    var switchStatus: Int,
+    @SerializedName("vDesc")
+    var desc: String? = null
 ) : Parcelable, Serializable {
+
     override fun toString(): String {
-        return "DeviceSwitchData(id='$id', icon='$icon', typeOfSwitch=$typeOfSwitch, index='$index', name='$name', desc=$desc, switchStatus=$switchStatus)"
+        return "DeviceSwitchData(id='$id', typeOfSwitch=$typeOfSwitch, index='$index', name='$name', icon='$icon', switchStatus=$switchStatus, desc=$desc)"
     }
 
     override fun equals(other: Any?): Boolean {
@@ -132,24 +143,24 @@ data class DeviceSwitchData(
         other as DeviceSwitchData
 
         if (id != other.id) return false
-        if (icon != other.icon) return false
         if (typeOfSwitch != other.typeOfSwitch) return false
         if (index != other.index) return false
         if (name != other.name) return false
-        if (desc != other.desc) return false
+        if (icon != other.icon) return false
         if (switchStatus != other.switchStatus) return false
+        if (desc != other.desc) return false
 
         return true
     }
 
     override fun hashCode(): Int {
         var result = id.hashCode()
-        result = 31 * result + icon.hashCode()
         result = 31 * result + typeOfSwitch
         result = 31 * result + index.hashCode()
         result = 31 * result + name.hashCode()
-        result = 31 * result + (desc?.hashCode() ?: 0)
+        result = 31 * result + icon.hashCode()
         result = 31 * result + switchStatus
+        result = 31 * result + (desc?.hashCode() ?: 0)
         return result
     }
 
