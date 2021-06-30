@@ -56,11 +56,11 @@ class HomeViewModel @ViewModelInject constructor(
         get() = _getUserProfileResponse
 
     private val _updateUserProfileResponse: MutableLiveData<Resource<GetProfileResponse>> = MutableLiveData()
-    val updateUserProfileResponse: LiveData<Resource<GetProfileResponse>>
+    val updateUserProfileResponse: MutableLiveData<Resource<GetProfileResponse>>
         get() = _updateUserProfileResponse
 
     private val _changePasswordResponse: MutableLiveData<Resource<CommonResponse>> = MutableLiveData()
-    val changePasswordResponse: LiveData<Resource<CommonResponse>>
+    val changePasswordResponse: MutableLiveData<Resource<CommonResponse>>
         get() = _changePasswordResponse
 
     private val _updatePinStatusResponse: MutableLiveData<Resource<PinResponse>> = MutableLiveData()
@@ -176,15 +176,15 @@ class HomeViewModel @ViewModelInject constructor(
         get() = _iconListResponse
 
     private val _updateSwitchIconResponse: MutableLiveData<Resource<UpdateSwitchIconResponse>> = MutableLiveData()
-    val updateSwitchIconResponse: LiveData<Resource<UpdateSwitchIconResponse>>
+    val updateSwitchIconResponse: MutableLiveData<Resource<UpdateSwitchIconResponse>>
         get() = _updateSwitchIconResponse
 
     private val _getControlResponse: MutableLiveData<Resource<ControlModeResponse>> = MutableLiveData()
     val getControlResponse: LiveData<Resource<ControlModeResponse>>
         get() = _getControlResponse
 
-    private val _imageUploadResponse: MutableLiveData<Resource<DeviceCustomizationResponse>> = MutableLiveData()
-    val imageUploadResponse: LiveData<Resource<DeviceCustomizationResponse>>
+    private val _imageUploadResponse: MutableLiveData<Resource<ImageUploadResponse>> = MutableLiveData()
+    val imageUploadResponse: LiveData<Resource<ImageUploadResponse>>
         get() = _imageUploadResponse
 
     private val _deleteImageResponse: MutableLiveData<Resource<CommonResponse>> = MutableLiveData()
@@ -333,11 +333,11 @@ class HomeViewModel @ViewModelInject constructor(
         get() = _getOwnershipResponse
 
     private val _transferOwnershipResponse: MutableLiveData<Resource<OwnershipResponse>> = MutableLiveData()
-    val transferOwnershipResponse: LiveData<Resource<OwnershipResponse>>
+    val transferOwnershipResponse: MutableLiveData<Resource<OwnershipResponse>>
         get() = _transferOwnershipResponse
 
     private val _cancelOwnershipResponse: MutableLiveData<Resource<CommonResponse>> = MutableLiveData()
-    val cancelOwnershipResponse: LiveData<Resource<CommonResponse>>
+    val cancelOwnershipResponse: MutableLiveData<Resource<CommonResponse>>
         get() = _cancelOwnershipResponse
 
     fun getOwnership() = viewModelScope.launch {

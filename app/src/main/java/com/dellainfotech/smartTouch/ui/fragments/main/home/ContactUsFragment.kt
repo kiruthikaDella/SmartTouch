@@ -46,6 +46,25 @@ class ContactUsFragment :
             }
         }
 
+        apiCall()
+    }
+
+    override fun getViewModel(): Class<ContactUsViewModel> = ContactUsViewModel::class.java
+
+    override fun getFragmentBinding(
+        inflater: LayoutInflater,
+        container: ViewGroup?
+    ): FragmentContactUsBinding = FragmentContactUsBinding.inflate(inflater, container, false)
+
+    override fun getFragmentRepository(): ContactUsRepository = ContactUsRepository(networkModel)
+
+    override fun onDestroy() {
+        super.onDestroy()
+        viewModel.addFeedbackResponse.postValue(null)
+    }
+
+    private fun apiCall(){
+
         viewModel.addFeedbackResponse.observe(viewLifecycleOwner, { response ->
             when (response) {
                 is Resource.Success -> {
@@ -66,14 +85,5 @@ class ContactUsFragment :
         })
 
     }
-
-    override fun getViewModel(): Class<ContactUsViewModel> = ContactUsViewModel::class.java
-
-    override fun getFragmentBinding(
-        inflater: LayoutInflater,
-        container: ViewGroup?
-    ): FragmentContactUsBinding = FragmentContactUsBinding.inflate(inflater, container, false)
-
-    override fun getFragmentRepository(): ContactUsRepository = ContactUsRepository(networkModel)
 
 }

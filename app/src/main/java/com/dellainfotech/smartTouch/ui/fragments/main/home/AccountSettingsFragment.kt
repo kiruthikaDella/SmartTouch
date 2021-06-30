@@ -354,6 +354,14 @@ class AccountSettingsFragment :
         dialog?.dismiss()
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        viewModel.updateUserProfileResponse.postValue(null)
+        viewModel.changePasswordResponse.postValue(null)
+        viewModel.transferOwnershipResponse.postValue(null)
+        viewModel.cancelOwnershipResponse.postValue(null)
+    }
+
     private fun apiCall() {
 
         NotifyManager.internetInfo.observe(viewLifecycleOwner, { isConnected ->

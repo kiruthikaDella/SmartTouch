@@ -103,6 +103,7 @@ class SwitchIconsDetailFragment :
                     DialogUtil.loadingAlert(mActivity)
                     viewModel.updateSwitchIcon(
                         BodyUpdateSwitchIcon(
+                            args.deviceDetail.id,
                             args.switchDetail.id,
                             it.iconFile
                         )
@@ -152,7 +153,7 @@ class SwitchIconsDetailFragment :
                         Toast.makeText(it, response.values.message, Toast.LENGTH_SHORT).show()
                     }
                     if (response.values.status && response.values.code == Constants.API_SUCCESS_CODE) {
-                        response.values.data?.let {
+                        iconData?.let {
                             args.switchDetail.icon = it.icon
                             findNavController().navigateUp()
                         }
@@ -185,6 +186,11 @@ class SwitchIconsDetailFragment :
     override fun onDestroyView() {
         super.onDestroyView()
         mqttConnectionDisposable?.dispose()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        viewModel.updateSwitchIconResponse.postValue(null)
     }
 
     //

@@ -294,11 +294,10 @@ class DeviceCustomizationFragment : ModelBaseFragment<HomeViewModel, FragmentDev
                     DialogUtil.loadingAlert(it)
                 }
 
-                Log.e(logTag, " mProfileFile $mProfileFile ")
-                Log.e(logTag, " imagePath $imagePath ")
-                Log.e(logTag, " imageName $imageName ")
-
                 val fileExtension = mProfileFile!!.extension
+
+                Log.e(logTag, " mProfileFile $mProfileFile ")
+                Log.e(logTag, " imageName $imageName ")
 
                 imageParts.add(
                     MultipartBody.Part.createFormData(
@@ -308,6 +307,8 @@ class DeviceCustomizationFragment : ModelBaseFragment<HomeViewModel, FragmentDev
                 )
 
                 hidePanel()
+
+                Log.e(logTag," deviceDetail ${args.deviceDetail.id} ")
                 viewModel.imageUpload(
                     args.deviceDetail.id.toRequestBody("text/plain".toMediaTypeOrNull()),
                     imageParts
@@ -520,6 +521,7 @@ class DeviceCustomizationFragment : ModelBaseFragment<HomeViewModel, FragmentDev
                 }
                 is Resource.Failure -> {
                     DialogUtil.hideDialog()
+                    Log.e(logTag,"imageUploadResponse Failure ${response.errorBody?.string()}")
                 }
                 else -> {
                     //We will do nothing here

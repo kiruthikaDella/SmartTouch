@@ -16,7 +16,7 @@ class ContactUsViewModel @ViewModelInject constructor(
 ) : ViewModel() {
 
     private val _addFeedbackResponse: MutableLiveData<Resource<CommonResponse>> = MutableLiveData()
-    val addFeedbackResponse: LiveData<Resource<CommonResponse>>
+    val addFeedbackResponse: MutableLiveData<Resource<CommonResponse>>
         get() = _addFeedbackResponse
 
     fun addFeedback(bodyFeedback: BodyFeedback) = viewModelScope.launch {
