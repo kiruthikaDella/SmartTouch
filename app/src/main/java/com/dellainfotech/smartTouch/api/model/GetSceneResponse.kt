@@ -106,17 +106,16 @@ data class Scene(
     @SerializedName("_id")
     var id: String,
     @SerializedName("iRoomId")
-    var roomId: GetRoomData? = null,
+    var roomData: GetRoomData? = null,
     @SerializedName("iDeviceId")
-    var deviceId: GetDeviceData? = null,
+    var deviceData: GetDeviceData? = null,
     @SerializedName("iDeviceSwitchId")
-    var deviceSwitchId: DeviceSwitchData? = null,
+    var switchData: DeviceSwitchData? = null,
     @SerializedName("tiDeviceSwitchSettingValue")
     var deviceSwitchSettingValue: Int
 ) : Parcelable, Serializable {
-
     override fun toString(): String {
-        return "Scene(id='$id', roomId=$roomId, deviceId=$deviceId, deviceSwitchId=$deviceSwitchId, deviceSwitchSettingValue=$deviceSwitchSettingValue)"
+        return "Scene(id='$id', roomData=$roomData, deviceData=$deviceData, switchData=$switchData, deviceSwitchSettingValue=$deviceSwitchSettingValue)"
     }
 
     override fun equals(other: Any?): Boolean {
@@ -126,9 +125,9 @@ data class Scene(
         other as Scene
 
         if (id != other.id) return false
-        if (roomId != other.roomId) return false
-        if (deviceId != other.deviceId) return false
-        if (deviceSwitchId != other.deviceSwitchId) return false
+        if (roomData != other.roomData) return false
+        if (deviceData != other.deviceData) return false
+        if (switchData != other.switchData) return false
         if (deviceSwitchSettingValue != other.deviceSwitchSettingValue) return false
 
         return true
@@ -136,14 +135,15 @@ data class Scene(
 
     override fun hashCode(): Int {
         var result = id.hashCode()
-        result = 31 * result + (roomId?.hashCode() ?: 0)
-        result = 31 * result + (deviceId?.hashCode() ?: 0)
-        result = 31 * result + (deviceSwitchId?.hashCode() ?: 0)
+        result = 31 * result + (roomData?.hashCode() ?: 0)
+        result = 31 * result + (deviceData?.hashCode() ?: 0)
+        result = 31 * result + (switchData?.hashCode() ?: 0)
         result = 31 * result + deviceSwitchSettingValue
         return result
     }
 
 
 }
+
 
 

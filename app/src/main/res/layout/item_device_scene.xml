@@ -95,15 +95,15 @@
             android:gravity="center"
             android:spinnerMode="dropdown" />
 
-        <ImageButton
+        <ImageView
             android:id="@+id/iv_room_name_down"
-            android:layout_width="@dimen/_10sdp"
-            android:layout_height="@dimen/_6sdp"
+            android:layout_width="@dimen/_20sdp"
+            android:layout_height="match_parent"
             android:layout_alignParentEnd="true"
+            android:padding="@dimen/_5sdp"
             android:layout_centerVertical="true"
-            android:layout_marginEnd="@dimen/_5sdp"
-            android:background="@drawable/ic_arrow_down"
-            android:backgroundTint="@color/daintree" />
+            android:src="@drawable/ic_arrow_down"
+            app:tint="@color/daintree" />
 
     </RelativeLayout>
 
@@ -126,15 +126,15 @@
             android:gravity="center"
             android:spinnerMode="dropdown" />
 
-        <ImageButton
+        <ImageView
             android:id="@+id/iv_device_name_down"
-            android:layout_width="@dimen/_10sdp"
-            android:layout_height="@dimen/_6sdp"
+            android:layout_width="@dimen/_20sdp"
+            android:layout_height="match_parent"
             android:layout_alignParentEnd="true"
+            android:padding="@dimen/_5sdp"
             android:layout_centerVertical="true"
-            android:layout_marginEnd="@dimen/_5sdp"
-            android:background="@drawable/ic_arrow_down"
-            android:backgroundTint="@color/daintree" />
+            android:src="@drawable/ic_arrow_down"
+            app:tint="@color/daintree" />
 
     </RelativeLayout>
 
@@ -157,15 +157,15 @@
             android:gravity="center"
             android:spinnerMode="dropdown" />
 
-        <ImageButton
+        <ImageView
             android:id="@+id/iv_switch_name_down"
-            android:layout_width="@dimen/_10sdp"
-            android:layout_height="@dimen/_6sdp"
+            android:layout_width="@dimen/_20sdp"
+            android:layout_height="match_parent"
             android:layout_alignParentEnd="true"
+            android:padding="@dimen/_5sdp"
             android:layout_centerVertical="true"
-            android:layout_marginEnd="@dimen/_5sdp"
-            android:background="@drawable/ic_arrow_down"
-            android:backgroundTint="@color/daintree" />
+            android:src="@drawable/ic_arrow_down"
+            app:tint="@color/daintree" />
 
     </RelativeLayout>
 

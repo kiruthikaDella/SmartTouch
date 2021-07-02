@@ -203,6 +203,7 @@
     <string name="text_weekly">Weekly</string>
     <string name="text_monthly">Monthly</string>
     <string name="error_text_duplicate_scene">Duplicate switch is not allowed</string>
+    <string name="error_text_empty_switch">Please select switch to create a scene</string>
 
     <!--    Create Scene   -->
     <string name="title_text_scene">Scene</string>
@@ -217,7 +218,11 @@
     <string name="text_no_room">No Room</string>
     <string name="text_no_device">No Device</string>
     <string name="text_no_switch">No Switch</string>
+    <string name="text_select_room">Select Room</string>
+    <string name="text_select_device">Select Device</string>
+    <string name="text_select_switch">Select Switch</string>
     <string name="text_scene_time"><font fgcolor='#1A8EFF'>9:05</font><font fgcolor='#011B25'> am</font></string>
+    <string name="text_days">Days</string>
 
 
     <!--    Account Settings   -->

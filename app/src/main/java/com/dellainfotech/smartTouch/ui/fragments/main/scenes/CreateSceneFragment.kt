@@ -125,9 +125,10 @@ class CreateSceneFragment :
         binding.linearAdd.setOnClickListener {
             if (isUpdatingScene) {
                 updateDeviceSceneAdapter.addScene()
+                binding.recyclerScenes.smoothScrollToPosition(updateDeviceSceneAdapter.itemCount)
             } else {
-                createScenesList.add(BodySceneData("", "", "", 0))
-                deviceSceneAdapter.notifyItemInserted(createScenesList.size)
+                deviceSceneAdapter.addScene()
+                binding.recyclerScenes.smoothScrollToPosition(createScenesList.size - 1)
             }
         }
 
@@ -227,21 +228,43 @@ class CreateSceneFragment :
                 }
                 else -> {
                     if (isUpdatingScene) {
-                        if (updateDeviceSceneAdapter.isDuplicateSwitchFound()) {
-                            context?.let { mContext ->
-                                Toast.makeText(
-                                    mContext,
-                                    getString(R.string.error_text_duplicate_scene),
-                                    Toast.LENGTH_SHORT
-                                ).show()
+
+                        when {
+                            updateDeviceSceneAdapter.isEmptySwitchInList() -> {
+                                context?.let { mContext ->
+                                    Toast.makeText(
+                                        mContext,
+                                        getString(R.string.error_text_empty_switch),
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                }
                             }
-                        } else {
-                            activity?.let {
-                                DialogUtil.loadingAlert(it)
+                            updateDeviceSceneAdapter.isDuplicateSwitchFound() -> {
+                                context?.let { mContext ->
+                                    Toast.makeText(
+                                        mContext,
+                                        getString(R.string.error_text_duplicate_scene),
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                }
                             }
-                            Log.e(
-                                logTag,
-                                " BodyScene ${
+                            else -> {
+                                activity?.let {
+                                    DialogUtil.loadingAlert(it)
+                                }
+                                Log.e(
+                                    logTag,
+                                    " BodyScene ${
+                                        BodyUpdateScene(
+                                            args.sceneDetail!!.id,
+                                            sceneName,
+                                            sceneTime,
+                                            sceneFrequency,
+                                            updateDeviceSceneAdapter.getScenes()
+                                        )
+                                    }"
+                                )
+                                viewModel.updateScene(
                                     BodyUpdateScene(
                                         args.sceneDetail!!.id,
                                         sceneName,
@@ -249,50 +272,53 @@ class CreateSceneFragment :
                                         sceneFrequency,
                                         updateDeviceSceneAdapter.getScenes()
                                     )
-                                }"
-                            )
-                            viewModel.updateScene(
-                                BodyUpdateScene(
-                                    args.sceneDetail!!.id,
-                                    sceneName,
-                                    sceneTime,
-                                    sceneFrequency,
-                                    updateDeviceSceneAdapter.getScenes()
                                 )
-                            )
+                            }
                         }
                     } else {
-                        if (deviceSceneAdapter.isDuplicateSwitchFound()) {
-                            context?.let { mContext ->
-                                Toast.makeText(
-                                    mContext,
-                                    getString(R.string.error_text_duplicate_scene),
-                                    Toast.LENGTH_SHORT
-                                ).show()
+                        when {
+                            deviceSceneAdapter.isDuplicateSwitchFound() -> {
+                                context?.let { mContext ->
+                                    Toast.makeText(
+                                        mContext,
+                                        getString(R.string.error_text_duplicate_scene),
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                }
                             }
-                        } else {
-                            activity?.let {
-                                DialogUtil.loadingAlert(it)
+                            deviceSceneAdapter.isEmptySwitchInList() -> {
+                                context?.let { mContext ->
+                                    Toast.makeText(
+                                        mContext,
+                                        getString(R.string.error_text_empty_switch),
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                }
                             }
-                            Log.e(
-                                logTag,
-                                " BodyScene ${
+                            else -> {
+                                activity?.let {
+                                    DialogUtil.loadingAlert(it)
+                                }
+                                Log.e(
+                                    logTag,
+                                    " BodyScene ${
+                                        BodyAddScene(
+                                            sceneName,
+                                            sceneTime,
+                                            sceneFrequency,
+                                            deviceSceneAdapter.getScenes()
+                                        )
+                                    }"
+                                )
+                                viewModel.addScene(
                                     BodyAddScene(
                                         sceneName,
                                         sceneTime,
                                         sceneFrequency,
                                         deviceSceneAdapter.getScenes()
                                     )
-                                }"
-                            )
-                            viewModel.addScene(
-                                BodyAddScene(
-                                    sceneName,
-                                    sceneTime,
-                                    sceneFrequency,
-                                    deviceSceneAdapter.getScenes()
                                 )
-                            )
+                            }
                         }
 
                     }
@@ -420,9 +446,7 @@ class CreateSceneFragment :
             sceneData.scene?.let {
                 updateDeviceSceneAdapter = UpdateDeviceSceneAdapter(
                     mActivity,
-                    it,
-                    "",
-                    ""
+                    it
                 )
                 binding.recyclerScenes.adapter = updateDeviceSceneAdapter
                 updateDeviceSceneAdapter.updateRoomList(args.controlModeList.toList())
