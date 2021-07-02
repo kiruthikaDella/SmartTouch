@@ -114,7 +114,7 @@ class HomeFragment : ModelBaseFragment<HomeViewModel, FragmentHomeBinding, HomeR
 
     override fun onDestroyView() {
         super.onDestroyView()
-        viewModel.profileResetResponse.postValue(null)
+        viewModel.factoryResetAllDeviceResponse.postValue(null)
         viewModel.deleteRoomResponse.postValue(null)
     }
 
@@ -211,7 +211,7 @@ class HomeFragment : ModelBaseFragment<HomeViewModel, FragmentHomeBinding, HomeR
             }
         })
 
-        viewModel.profileResetResponse.observe(viewLifecycleOwner, { response ->
+        viewModel.factoryResetAllDeviceResponse.observe(viewLifecycleOwner, { response ->
             when(response){
                 is Resource.Success -> {
                     DialogUtil.hideDialog()
@@ -273,7 +273,19 @@ class HomeFragment : ModelBaseFragment<HomeViewModel, FragmentHomeBinding, HomeR
                             it,
                             getString(R.string.dialog_title_restore_device),
                             getString(R.string.text_ok),
-                            getString(R.string.text_cancel)
+                            getString(R.string.text_cancel),
+                            object : DialogAskListener {
+                                override fun onYesClicked() {
+                                    openOrCloseDrawer()
+                                    DialogUtil.loadingAlert(it)
+                                    viewModel.factoryResetAllDevice()
+                                }
+
+                                override fun onNoClicked() {
+
+                                }
+
+                            }
                         )
                     }
                 }
@@ -283,19 +295,7 @@ class HomeFragment : ModelBaseFragment<HomeViewModel, FragmentHomeBinding, HomeR
                             it,
                             getString(R.string.dialog_title_profile_reset),
                             getString(R.string.text_ok),
-                            getString(R.string.text_cancel),
-                            object : DialogAskListener {
-                                override fun onYesClicked() {
-                                    openOrCloseDrawer()
-                                    DialogUtil.loadingAlert(it)
-                                    viewModel.profileReset()
-                                }
-
-                                override fun onNoClicked() {
-
-                                }
-
-                            }
+                            getString(R.string.text_cancel)
                         )
                     }
                 }

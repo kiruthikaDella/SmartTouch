@@ -52,7 +52,6 @@ class CreateSceneFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-
         setTime()
         clickEvents()
         apiResponse()
@@ -63,9 +62,7 @@ class CreateSceneFragment :
             activity?.let {
                 deviceSceneAdapter = DeviceSceneAdapter(
                     it,
-                    createScenesList,
-                    "",
-                    ""
+                    createScenesList
                 )
                 deviceSceneAdapter.updateRoomList(args.controlModeList.toList())
                 binding.recyclerScenes.adapter = deviceSceneAdapter
@@ -98,6 +95,13 @@ class CreateSceneFragment :
 
     override fun getFragmentRepository(): HomeRepository = HomeRepository(networkModel)
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        viewModel.addSceneResponse.postValue(null)
+        viewModel.updateSceneResponse.postValue(null)
+        viewModel.deleteSceneDetailResponse.postValue(null)
+    }
+
     private fun clickEvents() {
 
         binding.ivBack.setOnClickListener {
@@ -118,7 +122,7 @@ class CreateSceneFragment :
 
         }
 
-        binding.tvAdd.setOnClickListener {
+        binding.linearAdd.setOnClickListener {
             if (isUpdatingScene) {
                 updateDeviceSceneAdapter.addScene()
             } else {
@@ -198,7 +202,6 @@ class CreateSceneFragment :
 
         }
 
-        binding.ibSave.isEnabled = false
         binding.ibSave.setOnClickListener {
             val sceneName = binding.edtSceneName.text.toString().trim()
             val sceneTime = binding.tvTime.text.toString()
@@ -401,11 +404,10 @@ class CreateSceneFragment :
     private fun setSceneData(sceneData: GetSceneData) {
         binding.edtSceneName.text = sceneData.sceneName.toEditable()
 
-        val time = "<font color='#1A8EFF'>${
-            sceneData.sceneTime.dropLast(3)
-        }</font><font color='#011B25'> ${
-            sceneData.sceneTime.takeLast(2).toLowerCase(Locale.getDefault())
-        }</font>"
+        val time =
+            "<font color='#1A8EFF'>${sceneData.sceneTime.dropLast(3)}</font><font color='#011B25'> ${
+                sceneData.sceneTime.takeLast(2).toLowerCase(Locale.getDefault())
+            }</font>"
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
             binding.tvTime.text = Html.fromHtml(time, Html.FROM_HTML_MODE_LEGACY)
         } else {
@@ -430,7 +432,7 @@ class CreateSceneFragment :
                     UpdateDeviceSceneAdapter.DeleteSceneItemClickListener<Scene> {
                     override fun onItemClick(data: Scene, scenePosition: Int) {
                         DialogUtil.loadingAlert(mActivity)
-                        viewModel.deleteSceneDetail(data.id)
+                        viewModel.deleteSceneDetail(args.sceneDetail!!.id, data.id)
                         itemPosition = scenePosition
                     }
 

@@ -1,6 +1,7 @@
 package com.dellainfotech.smartTouch.adapters
 
 import android.app.Activity
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -29,6 +30,8 @@ class UpdateDeviceSceneAdapter(
     private val roomId: String,
     private val deviceId: String,
 ) : RecyclerView.Adapter<UpdateDeviceSceneAdapter.MyViewHolder>() {
+
+    private val logTag = this::class.java.simpleName
 
     private val roomDataList = arrayListOf<ControlModeRoomData>()
 
@@ -115,7 +118,22 @@ class UpdateDeviceSceneAdapter(
                                     spinnerDevice.adapter = deviceAdapter
                                     val switchAdapter = SwitchAdapter(mActivity, switchList)
                                     spinnerSwitch.adapter = switchAdapter
-                                    scenes[adapterPosition].deviceId?.let { deviceData ->
+
+                                    if (scenes[adapterPosition].deviceId != null){
+                                        spinnerDevice.setSelection(
+                                            deviceAdapter.getPositionById(
+                                                scenes[adapterPosition].deviceId!!.id
+                                            )
+                                        )
+                                    }else {
+                                        spinnerDevice.setSelection(
+                                            deviceAdapter.getPositionById(
+                                                deviceId
+                                            )
+                                        )
+                                    }
+
+                                    /*scenes[adapterPosition].deviceId?.let { deviceData ->
                                         spinnerDevice.setSelection(
                                             deviceAdapter.getPositionById(
                                                 deviceData.id
@@ -127,7 +145,7 @@ class UpdateDeviceSceneAdapter(
                                                 deviceId
                                             )
                                         )
-                                    }
+                                    }*/
 
                                 }
                                 break
@@ -154,9 +172,12 @@ class UpdateDeviceSceneAdapter(
 
                         for (deviceData in deviceList) {
                             if (deviceData.id == device.id) {
-                                deviceData.switchData?.let { switches ->
+                                Log.e(logTag, " deviceData.id ${deviceData.id} device.id ${device.id} ")
+
+                                if (deviceData.switchData != null){
                                     switchList.clear()
-                                    for (switch in switches) {
+                                    Log.e(logTag, " deviceData.switchData?.let ")
+                                    for (switch in deviceData.switchData!!) {
                                         if (switch.typeOfSwitch == 0) {
                                             switchList.add(switch)
                                         }
@@ -170,7 +191,8 @@ class UpdateDeviceSceneAdapter(
                                             )
                                         )
                                     }
-                                }?: kotlin.run {
+                                }else {
+                                    Log.e(logTag, " deviceData.id ${deviceData.id} kotlin.run else ${deviceData.switchData}")
                                     switchList.clear()
                                     val switch = DeviceSwitchData("",0,"",mActivity.getString(R.string.text_no_switch),"",0,null)
                                     switchList.add(switch)
@@ -178,6 +200,7 @@ class UpdateDeviceSceneAdapter(
                                     spinnerSwitch.adapter = switchAdapter
                                     spinnerSwitch.isEnabled = false
                                 }
+
                                 break
                             }
                         }
@@ -257,7 +280,7 @@ class UpdateDeviceSceneAdapter(
     }
 
     fun addScene() {
-        scenes.add(Scene("", "", null, null, null, 0))
+        scenes.add(Scene("",  null, null, null, 0))
         notifyDataSetChanged()
     }
 

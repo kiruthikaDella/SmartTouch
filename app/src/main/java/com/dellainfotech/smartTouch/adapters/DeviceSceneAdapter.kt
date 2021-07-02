@@ -28,9 +28,7 @@ import com.google.android.material.switchmaterial.SwitchMaterial
  */
 class DeviceSceneAdapter(
     private val mActivity: Activity,
-    private var bodyScenes: ArrayList<BodySceneData>,
-    private val deviceId: String,
-    private val roomId: String
+    private var bodyScenes: ArrayList<BodySceneData>
 ) : RecyclerView.Adapter<DeviceSceneAdapter.MyViewHolder>() {
 
     private val roomDataList = arrayListOf<ControlModeRoomData>()
@@ -87,11 +85,15 @@ class DeviceSceneAdapter(
             val switchList = arrayListOf<DeviceSwitchData>()
             val roomAdapter = RoomAdapter(mActivity, roomList)
             spinnerRoom.adapter = roomAdapter
-            if (bodyScenes[adapterPosition].deviceSwitchId == "") {
-                spinnerRoom.setSelection(roomAdapter.getPositionById(roomId))
-            } else {
+            Log.e(logTag, " bodyScenes ${bodyScenes[adapterPosition]} ")
+            if (bodyScenes[adapterPosition].deviceSwitchId.isNotEmpty()) {
+                Log.e(logTag, " deviceSwitchId.isNotEmpty() ")
                 spinnerRoom.setSelection(roomAdapter.getPositionById(bodyScenes[adapterPosition].roomId))
+            }else {
+                Log.e(logTag, " deviceSwitchId.isEmpty() ")
+                spinnerRoom.setSelection(0)
             }
+            Log.e(logTag, " spinnerRoom ${spinnerRoom.selectedItemPosition} ")
 
             spinnerRoom.onItemSelectedListener =
                 object : AdapterView.OnItemSelectedListener {
@@ -101,9 +103,12 @@ class DeviceSceneAdapter(
                         position: Int,
                         id: Long
                     ) {
+                        Log.e(logTag, " room selected position $position \n ")
                         val room = parent?.selectedItem as GetRoomData
+//                        Log.e(logTag, " room ${room.id} ")
                         bodyScenes[adapterPosition].roomId = room.id
                         for (roomData in roomDataList) {
+//                            Log.e(logTag, " roomData.id ${roomData.id} room.id ${room.id} ")
                             if (roomData.id == room.id) {
                                 roomData.deviceData?.let { devices ->
                                     deviceList.clear()
@@ -122,20 +127,13 @@ class DeviceSceneAdapter(
                                     val switchAdapter = SwitchAdapter(mActivity, switchList)
                                     spinnerSwitch.adapter = switchAdapter
 
-                                    if (bodyScenes[adapterPosition].deviceId == "") {
-                                        spinnerDevice.setSelection(
-                                            deviceAdapter.getPositionById(
-                                                deviceId
-                                            )
-                                        )
-                                    } else {
+                                    if (bodyScenes[adapterPosition].deviceId != "") {
                                         spinnerRoom.setSelection(
                                             roomAdapter.getPositionById(
                                                 bodyScenes[adapterPosition].deviceId
                                             )
                                         )
                                     }
-
 
                                 }
                                 break

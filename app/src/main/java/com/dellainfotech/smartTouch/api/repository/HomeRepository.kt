@@ -104,14 +104,14 @@ class HomeRepository @Inject constructor(
     suspend fun deleteScene(sceneId: String) =
         safeApiCall { smartTouchApi.deleteScene(getAccessKey(), sceneId) }
 
-    suspend fun deleteSceneDetail(sceneDetailId: String) =
-        safeApiCall { smartTouchApi.deleteSceneDetail(getAccessKey(), sceneDetailId) }
+    suspend fun deleteSceneDetail(sceneId: String,sceneDetailId: String) =
+        safeApiCall { smartTouchApi.deleteSceneDetail(getAccessKey(), sceneId, sceneDetailId) }
 
     suspend fun factoryReset(bodyFactoryReset: BodyFactoryReset) =
         safeApiCall { smartTouchApi.factoryReset(getAccessKey(), bodyFactoryReset) }
 
-    suspend fun profileReset() =
-        safeApiCall { smartTouchApi.profileReset(getAccessKey()) }
+    suspend fun factoryResetAllDevice() =
+        safeApiCall { smartTouchApi.factoryResetAllDevice(getAccessKey()) }
 
     //
     //endregion

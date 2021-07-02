@@ -115,6 +115,7 @@ class SceneFragment : ModelBaseFragment<HomeViewModel, FragmentSceneBinding, Hom
 
     private fun apiResponse() {
         viewModel.getControlResponse.observe(viewLifecycleOwner, { response ->
+            controlModeRoomData.clear()
             when (response) {
                 is Resource.Success -> {
                     DialogUtil.hideDialog()

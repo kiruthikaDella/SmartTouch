@@ -196,11 +196,11 @@ class HomeViewModel @ViewModelInject constructor(
         get() = _getSceneResponse
 
     private val _addSceneResponse: MutableLiveData<Resource<CommonResponse>> = MutableLiveData()
-    val addSceneResponse: LiveData<Resource<CommonResponse>>
+    val addSceneResponse: MutableLiveData<Resource<CommonResponse>>
         get() = _addSceneResponse
 
     private val _updateSceneResponse: MutableLiveData<Resource<ResponseBody>> = MutableLiveData()
-    val updateSceneResponse: LiveData<Resource<ResponseBody>>
+    val updateSceneResponse: MutableLiveData<Resource<ResponseBody>>
         get() = _updateSceneResponse
 
     private val _deleteSceneResponse: MutableLiveData<Resource<CommonResponse>> = MutableLiveData()
@@ -208,16 +208,16 @@ class HomeViewModel @ViewModelInject constructor(
         get() = _deleteSceneResponse
 
     private val _deleteSceneDetailResponse: MutableLiveData<Resource<CommonResponse>> = MutableLiveData()
-    val deleteSceneDetailResponse: LiveData<Resource<CommonResponse>>
+    val deleteSceneDetailResponse: MutableLiveData<Resource<CommonResponse>>
         get() = _deleteSceneDetailResponse
 
     private val _factoryResetResponse: MutableLiveData<Resource<CommonResponse>> = MutableLiveData()
     val factoryResetResponse: MutableLiveData<Resource<CommonResponse>>
         get() = _factoryResetResponse
 
-    private val _profileResetResponse: MutableLiveData<Resource<CommonResponse>> = MutableLiveData()
-    val profileResetResponse: MutableLiveData<Resource<CommonResponse>>
-        get() = _profileResetResponse
+    private val _factoryResetAllDeviceResponse: MutableLiveData<Resource<CommonResponse>> = MutableLiveData()
+    val factoryResetAllDeviceResponse: MutableLiveData<Resource<CommonResponse>>
+        get() = _factoryResetAllDeviceResponse
 
     fun addDevice(bodyAddDevice: BodyAddDevice) = viewModelScope.launch {
         _addDeviceResponse.value = Resource.Loading
@@ -304,9 +304,9 @@ class HomeViewModel @ViewModelInject constructor(
         _deleteSceneResponse.value = homeRepository.deleteScene(sceneId)
     }
 
-    fun deleteSceneDetail(sceneDetailId: String) = viewModelScope.launch {
+    fun deleteSceneDetail(sceneId: String,sceneDetailId: String) = viewModelScope.launch {
         _deleteSceneDetailResponse.value = Resource.Loading
-        _deleteSceneDetailResponse.value = homeRepository.deleteSceneDetail(sceneDetailId)
+        _deleteSceneDetailResponse.value = homeRepository.deleteSceneDetail(sceneId,sceneDetailId)
     }
 
     fun factoryReset(bodyFactoryReset: BodyFactoryReset) = viewModelScope.launch {
@@ -314,9 +314,9 @@ class HomeViewModel @ViewModelInject constructor(
         _factoryResetResponse.value = homeRepository.factoryReset(bodyFactoryReset)
     }
 
-    fun profileReset() = viewModelScope.launch {
-        _profileResetResponse.value = Resource.Loading
-        _profileResetResponse.value = homeRepository.profileReset()
+    fun factoryResetAllDevice() = viewModelScope.launch {
+        _factoryResetAllDeviceResponse.value = Resource.Loading
+        _factoryResetAllDeviceResponse.value = homeRepository.factoryResetAllDevice()
     }
 
     //

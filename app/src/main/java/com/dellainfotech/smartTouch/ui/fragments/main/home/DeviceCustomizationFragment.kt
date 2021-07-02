@@ -296,8 +296,8 @@ class DeviceCustomizationFragment : ModelBaseFragment<HomeViewModel, FragmentDev
 
                 val fileExtension = mProfileFile!!.extension
 
-                Log.e(logTag, " mProfileFile $mProfileFile ")
-                Log.e(logTag, " imageName $imageName ")
+                Log.e(logTag, " linearUploadImage mProfileFile $mProfileFile ")
+                Log.e(logTag, " linearUploadImage imageName $imageName ")
 
                 imageParts.add(
                     MultipartBody.Part.createFormData(
@@ -307,8 +307,11 @@ class DeviceCustomizationFragment : ModelBaseFragment<HomeViewModel, FragmentDev
                 )
 
                 hidePanel()
-
-                Log.e(logTag," deviceDetail ${args.deviceDetail.id} ")
+                mProfileFile?.let {file ->
+                    Log.e(logTag, " linearUploadImage image length ${file.length()} ")
+                    Log.e(logTag, " linearUploadImage image size ${((file.length() / 1024) / 1024)} ")
+                }
+                Log.e(logTag," linearUploadImage deviceDetail ${args.deviceDetail.id} ")
                 viewModel.imageUpload(
                     args.deviceDetail.id.toRequestBody("text/plain".toMediaTypeOrNull()),
                     imageParts
@@ -431,7 +434,10 @@ class DeviceCustomizationFragment : ModelBaseFragment<HomeViewModel, FragmentDev
                             Log.e(logTag, " mProfileFile $mProfileFile ")
                             Log.e(logTag, " imagePath $imagePath ")
                             Log.e(logTag, " imageName $imageName ")
-
+                            mProfileFile?.let {file ->
+                                Log.e(logTag, " image length ${file.length()} ")
+                                Log.e(logTag, " image size ${((file.length() / 1024) / 1024)} ")
+                            }
                         }
                     }
 

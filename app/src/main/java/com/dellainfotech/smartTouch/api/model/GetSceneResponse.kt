@@ -58,11 +58,16 @@ data class GetSceneData(
     var sceneTime: String,
     @SerializedName("vSceneInterval")
     var sceneInterval: String,
+    @SerializedName("vSceneIntervalValue")
+    var sceneIntervalValue: ArrayList<String>? = null,
+    @SerializedName("iUserId")
+    var userId: String,
     @SerializedName("scene")
     var scene: ArrayList<Scene>? = null
 ) : Parcelable, Serializable {
+
     override fun toString(): String {
-        return "GetSceneData(id='$id', sceneName='$sceneName', sceneTime='$sceneTime', sceneInterval='$sceneInterval', scene=$scene)"
+        return "GetSceneData(id='$id', sceneName='$sceneName', sceneTime='$sceneTime', sceneInterval='$sceneInterval', sceneIntervalValue=$sceneIntervalValue, userId='$userId', scene=$scene)"
     }
 
     override fun equals(other: Any?): Boolean {
@@ -75,6 +80,8 @@ data class GetSceneData(
         if (sceneName != other.sceneName) return false
         if (sceneTime != other.sceneTime) return false
         if (sceneInterval != other.sceneInterval) return false
+        if (sceneIntervalValue != other.sceneIntervalValue) return false
+        if (userId != other.userId) return false
         if (scene != other.scene) return false
 
         return true
@@ -85,9 +92,12 @@ data class GetSceneData(
         result = 31 * result + sceneName.hashCode()
         result = 31 * result + sceneTime.hashCode()
         result = 31 * result + sceneInterval.hashCode()
+        result = 31 * result + (sceneIntervalValue?.hashCode() ?: 0)
+        result = 31 * result + userId.hashCode()
         result = 31 * result + (scene?.hashCode() ?: 0)
         return result
     }
+
 
 }
 
@@ -95,8 +105,6 @@ data class GetSceneData(
 data class Scene(
     @SerializedName("_id")
     var id: String,
-    @SerializedName("iSceneId")
-    var sceneId: String,
     @SerializedName("iRoomId")
     var roomId: GetRoomData? = null,
     @SerializedName("iDeviceId")
@@ -106,8 +114,9 @@ data class Scene(
     @SerializedName("tiDeviceSwitchSettingValue")
     var deviceSwitchSettingValue: Int
 ) : Parcelable, Serializable {
+
     override fun toString(): String {
-        return "Scene(id='$id', sceneId='$sceneId', roomId=$roomId, deviceId=$deviceId, deviceSwitchId=$deviceSwitchId, deviceSwitchSettingValue=$deviceSwitchSettingValue)"
+        return "Scene(id='$id', roomId=$roomId, deviceId=$deviceId, deviceSwitchId=$deviceSwitchId, deviceSwitchSettingValue=$deviceSwitchSettingValue)"
     }
 
     override fun equals(other: Any?): Boolean {
@@ -117,7 +126,6 @@ data class Scene(
         other as Scene
 
         if (id != other.id) return false
-        if (sceneId != other.sceneId) return false
         if (roomId != other.roomId) return false
         if (deviceId != other.deviceId) return false
         if (deviceSwitchId != other.deviceSwitchId) return false
@@ -128,13 +136,13 @@ data class Scene(
 
     override fun hashCode(): Int {
         var result = id.hashCode()
-        result = 31 * result + sceneId.hashCode()
         result = 31 * result + (roomId?.hashCode() ?: 0)
         result = 31 * result + (deviceId?.hashCode() ?: 0)
         result = 31 * result + (deviceSwitchId?.hashCode() ?: 0)
         result = 31 * result + deviceSwitchSettingValue
         return result
     }
+
 
 }
 

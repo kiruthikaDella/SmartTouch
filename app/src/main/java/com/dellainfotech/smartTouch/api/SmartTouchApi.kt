@@ -56,7 +56,7 @@ interface SmartTouchApi {
         const val API_ADD_SCENE = "device/scene"
         const val API_UPDATE_SCENE = "device/scene"
         const val API_DELETE_SCENE = "device/scene/{scene_id}"
-        const val API_DELETE_SCENE_DETAIL = "device/scene-details/{scene_detail_id}"
+        const val API_DELETE_SCENE_DETAIL = "device/scene-details/{scene_id}/{scene_detail_id}"
         const val API_RETAIN_STATE = "Device/retain-state"
         const val API_FACTORY_RESET = "device/factory-reset"
         const val API_FACTORY_RESET_ALL_DEVICE = "device/factory-reset-all-devices"
@@ -323,6 +323,7 @@ interface SmartTouchApi {
     @DELETE(API_DELETE_SCENE_DETAIL)
     suspend fun deleteSceneDetail(
         @Header("access_key") access_key: String,
+        @Path("scene_id") sceneId: String,
         @Path("scene_detail_id") sceneDetailId: String
     ): CommonResponse
 
@@ -333,7 +334,7 @@ interface SmartTouchApi {
     ): CommonResponse
 
     @POST(API_FACTORY_RESET_ALL_DEVICE)
-    suspend fun profileReset(
+    suspend fun factoryResetAllDevice(
         @Header("access_key") access_key: String
     ): CommonResponse
 
