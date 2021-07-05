@@ -22,9 +22,12 @@ import com.dellainfotech.smartTouch.api.Resource
 import com.dellainfotech.smartTouch.api.body.BodyAddRoom
 import com.dellainfotech.smartTouch.api.model.RoomTypeData
 import com.dellainfotech.smartTouch.api.repository.HomeRepository
+import com.dellainfotech.smartTouch.common.interfaces.DialogShowListener
 import com.dellainfotech.smartTouch.common.utils.Constants
 import com.dellainfotech.smartTouch.common.utils.DialogUtil
+import com.dellainfotech.smartTouch.common.utils.Utils
 import com.dellainfotech.smartTouch.common.utils.Utils.clearError
+import com.dellainfotech.smartTouch.common.utils.Utils.isControlModePin
 import com.dellainfotech.smartTouch.common.utils.Utils.toEditable
 import com.dellainfotech.smartTouch.databinding.ActivityMainBinding
 import com.dellainfotech.smartTouch.mqtt.NetworkConnectionLiveData
@@ -84,9 +87,7 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
 
         bottomNavigationClickEvent()
 
-        if (FastSave.getInstance()
-                .getBoolean(Constants.isControlModePinned, Constants.DEFAULT_CONTROL_MODE_STATUS)
-        ) {
+        if (isControlModePin()) {
             binding.ivControlMode.performClick()
             hideBottomNavigation()
         }
@@ -202,23 +203,35 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
         }
 
         binding.ivUser.setOnClickListener {
-            binding.ivUser.setColorFilter(
-                ContextCompat.getColor(this, R.color.theme_color),
-                android.graphics.PorterDuff.Mode.SRC_IN
-            )
-            binding.ivHome.setColorFilter(
-                ContextCompat.getColor(this, R.color.daintree),
-                android.graphics.PorterDuff.Mode.SRC_IN
-            )
-            binding.ivControlMode.setColorFilter(
-                ContextCompat.getColor(this, R.color.daintree),
-                android.graphics.PorterDuff.Mode.SRC_IN
-            )
-            binding.ivScene.setColorFilter(
-                ContextCompat.getColor(this, R.color.daintree),
-                android.graphics.PorterDuff.Mode.SRC_IN
-            )
-            navController.navigate(R.id.userManagementFragment)
+
+            if (Utils.isMasterUser()) {
+                binding.ivUser.setColorFilter(
+                    ContextCompat.getColor(this, R.color.theme_color),
+                    android.graphics.PorterDuff.Mode.SRC_IN
+                )
+                binding.ivHome.setColorFilter(
+                    ContextCompat.getColor(this, R.color.daintree),
+                    android.graphics.PorterDuff.Mode.SRC_IN
+                )
+                binding.ivControlMode.setColorFilter(
+                    ContextCompat.getColor(this, R.color.daintree),
+                    android.graphics.PorterDuff.Mode.SRC_IN
+                )
+                binding.ivScene.setColorFilter(
+                    ContextCompat.getColor(this, R.color.daintree),
+                    android.graphics.PorterDuff.Mode.SRC_IN
+                )
+                navController.navigate(R.id.userManagementFragment)
+            } else {
+                DialogUtil.deviceOfflineAlert(
+                    this,
+                    getString(R.string.error_text_unauthorized),
+                    object : DialogShowListener {
+                        override fun onClick() {
+                            DialogUtil.hideDialog()
+                        }
+                    })
+            }
         }
 
         binding.ivControlMode.setOnClickListener {

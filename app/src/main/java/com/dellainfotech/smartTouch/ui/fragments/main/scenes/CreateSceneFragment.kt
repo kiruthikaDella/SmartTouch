@@ -2,6 +2,8 @@ package com.dellainfotech.smartTouch.ui.fragments.main.scenes
 
 import android.app.TimePickerDialog
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.text.Html
 import android.util.Log
 import android.view.LayoutInflater
@@ -14,12 +16,14 @@ import androidx.navigation.fragment.navArgs
 import com.dellainfotech.smartTouch.R
 import com.dellainfotech.smartTouch.adapters.DeviceSceneAdapter
 import com.dellainfotech.smartTouch.adapters.UpdateDeviceSceneAdapter
+import com.dellainfotech.smartTouch.adapters.WeeklyDaysAdapter
 import com.dellainfotech.smartTouch.api.Resource
 import com.dellainfotech.smartTouch.api.body.BodyAddScene
 import com.dellainfotech.smartTouch.api.body.BodySceneData
 import com.dellainfotech.smartTouch.api.body.BodyUpdateScene
 import com.dellainfotech.smartTouch.api.model.GetSceneData
 import com.dellainfotech.smartTouch.api.model.Scene
+import com.dellainfotech.smartTouch.api.model.WeeklyDaysModel
 import com.dellainfotech.smartTouch.api.repository.HomeRepository
 import com.dellainfotech.smartTouch.common.interfaces.DialogEditListener
 import com.dellainfotech.smartTouch.common.utils.Constants
@@ -28,6 +32,7 @@ import com.dellainfotech.smartTouch.common.utils.Utils.toEditable
 import com.dellainfotech.smartTouch.databinding.FragmentCreateSceneBinding
 import com.dellainfotech.smartTouch.ui.fragments.ModelBaseFragment
 import com.dellainfotech.smartTouch.ui.viewmodel.HomeViewModel
+import com.sothree.slidinguppanel.SlidingUpPanelLayout
 import org.json.JSONObject
 import java.text.Format
 import java.text.SimpleDateFormat
@@ -45,12 +50,25 @@ class CreateSceneFragment :
     private val args: CreateSceneFragmentArgs by navArgs()
     private lateinit var deviceSceneAdapter: DeviceSceneAdapter
     private lateinit var updateDeviceSceneAdapter: UpdateDeviceSceneAdapter
+    private lateinit var weeklyDaysAdapter: WeeklyDaysAdapter
     private val createScenesList = arrayListOf<BodySceneData>()
+    private val daysList = arrayListOf<WeeklyDaysModel>()
     private var isUpdatingScene: Boolean = false
     private var itemPosition: Int? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        daysList.add(WeeklyDaysModel(getString(R.string.text_sunday),false))
+        daysList.add(WeeklyDaysModel(getString(R.string.text_monday),false))
+        daysList.add(WeeklyDaysModel(getString(R.string.text_tuesday),false))
+        daysList.add(WeeklyDaysModel(getString(R.string.text_wednesday),false))
+        daysList.add(WeeklyDaysModel(getString(R.string.text_thursday),false))
+        daysList.add(WeeklyDaysModel(getString(R.string.text_friday),false))
+        daysList.add(WeeklyDaysModel(getString(R.string.text_saturday),false))
+
+        weeklyDaysAdapter = WeeklyDaysAdapter(daysList)
+        binding.layoutFrequencyWeekly.rvDays.adapter = weeklyDaysAdapter
 
         setTime()
         clickEvents()
@@ -108,6 +126,12 @@ class CreateSceneFragment :
             findNavController().navigateUp()
         }
 
+        binding.layoutSlidingUpPanel.setFadeOnClickListener { hidePanel() }
+
+        binding.layoutFrequencyWeekly.ivHidePanel.setOnClickListener {
+            hidePanel()
+        }
+
         binding.tvDaily.setOnClickListener {
 
             context?.let { ctx ->
@@ -115,6 +139,11 @@ class CreateSceneFragment :
                 popup.menuInflater.inflate(R.menu.scene_frequency_menu, popup.menu)
                 popup.setOnMenuItemClickListener { item ->
                     binding.tvDaily.text = item.title
+
+                    if (item.itemId == R.id.action_weekly){
+                        showPanel()
+                    }
+
                     true
                 }
                 popup.show()
@@ -325,6 +354,21 @@ class CreateSceneFragment :
                 }
             }
         }
+
+        binding.layoutFrequencyWeekly.btnSave.setOnClickListener {
+            Log.e(logTag," selected days ${weeklyDaysAdapter.getDayList()}")
+            hidePanel()
+        }
+    }
+
+    private fun showPanel() {
+        Handler(Looper.getMainLooper()).postDelayed({
+            binding.layoutSlidingUpPanel.panelState = SlidingUpPanelLayout.PanelState.EXPANDED
+        }, 600)
+    }
+
+    private fun hidePanel() {
+        binding.layoutSlidingUpPanel.panelState = SlidingUpPanelLayout.PanelState.HIDDEN
     }
 
     private fun apiResponse() {

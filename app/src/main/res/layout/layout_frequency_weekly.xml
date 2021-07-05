@@ -27,78 +27,17 @@
         android:textColor="@color/theme_color"
         android:textSize="@dimen/_18ssp" />
 
-    <TextView
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_days"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="start"
-        android:layout_marginStart="@dimen/screen_start_margin"
-        android:layout_marginTop="@dimen/_20sdp"
-        android:fontFamily="@font/roboto_medium"
-        android:text="@string/title_text_add_room"
-        android:textColor="@color/daintree"
-        android:textSize="@dimen/_12ssp" />
-
-    <EditText
-        android:id="@+id/edt_room_name"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/login_component_height"
-        android:layout_marginStart="@dimen/screen_start_margin"
         android:layout_marginTop="@dimen/_5sdp"
-        android:layout_marginEnd="@dimen/screen_end_margin"
-        android:background="@drawable/catskill_white_background"
-        android:hint="@string/hint_text_room_name"
-        android:maxLength="20"
-        android:paddingStart="@dimen/_10sdp"
-        android:paddingEnd="@dimen/_10sdp"
-        android:textColor="@color/daintree"
-        android:textColorHint="@color/ghost"
-        android:textSize="@dimen/_12ssp" />
-
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="start"
-        android:layout_marginStart="@dimen/screen_start_margin"
-        android:layout_marginTop="@dimen/_20sdp"
-        android:fontFamily="@font/roboto_medium"
-        android:text="@string/title_text_room_type"
-        android:textColor="@color/daintree"
-        android:textSize="@dimen/_12ssp" />
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/login_component_height"
-        android:layout_marginStart="@dimen/screen_start_margin"
-        android:layout_marginTop="@dimen/_5sdp"
-        android:layout_marginEnd="@dimen/screen_end_margin"
-        android:background="@drawable/catskill_white_background">
-
-        <Spinner
-            android:id="@+id/spinner_room"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginStart="@dimen/_5sdp"
-            android:layout_marginEnd="@dimen/_5sdp"
-            android:layout_toStartOf="@+id/iv_down"
-            android:background="@android:color/transparent"
-            android:gravity="center"
-            android:spinnerMode="dropdown" />
-
-        <ImageButton
-            android:id="@+id/iv_down"
-            android:layout_width="@dimen/_12sdp"
-            android:layout_height="@dimen/_7sdp"
-            android:layout_alignParentEnd="true"
-            android:layout_centerVertical="true"
-            android:layout_marginEnd="@dimen/_12sdp"
-            android:background="@drawable/ic_arrow_down"
-            android:backgroundTint="@color/daintree" />
-
-    </RelativeLayout>
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        tools:listitem="@layout/item_weekly_days"
+        tools:itemCount="7"/>
 
     <com.jcminarro.roundkornerlayout.RoundKornerLinearLayout
-        android:id="@+id/btn_add_room"
+        android:id="@+id/btn_save"
         android:layout_width="match_parent"
         android:layout_height="@dimen/login_component_height"
         android:layout_marginStart="@dimen/screen_start_margin"
@@ -111,18 +50,18 @@
         app:corner_radius="@dimen/corner_radius_6dp">
 
         <ImageView
-            android:layout_width="@dimen/_12sdp"
-            android:layout_height="@dimen/_12sdp"
-            android:src="@drawable/ic_add" />
+            android:layout_width="@dimen/_14sdp"
+            android:layout_height="@dimen/_14sdp"
+            android:src="@drawable/ic_save" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/_5sdp"
             android:fontFamily="@font/roboto_medium"
-            android:text="@string/text_add"
+            android:text="@string/text_save"
             android:textColor="@color/white"
-            android:textSize="@dimen/_13ssp" />
+            android:textSize="@dimen/_12ssp" />
     </com.jcminarro.roundkornerlayout.RoundKornerLinearLayout>
 
 </LinearLayout>

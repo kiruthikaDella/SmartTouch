@@ -10,6 +10,7 @@ import android.util.Base64
 import android.util.Log
 import android.widget.EditText
 import androidx.appcompat.app.AlertDialog
+import com.appizona.yehiahd.fastsave.FastSave
 import com.dellainfotech.smartTouch.AppDelegate
 import com.dellainfotech.smartTouch.common.interfaces.DialogShowListener
 import com.facebook.appevents.internal.AppEventUtility.bytesToHex
@@ -69,24 +70,6 @@ object Utils {
         return isConnected
     }
 
-    fun showAlertDialog(
-        context: Context,
-        title: String,
-        message: String,
-        buttonText: String,
-        dialogShowListener: DialogShowListener?
-    ) {
-        val builder = AlertDialog.Builder(context)
-        builder.setTitle(title)
-        builder.setCancelable(false)
-        builder.setMessage(message)
-        builder.setPositiveButton(buttonText) { dialog, _ ->
-            dialog.dismiss()
-            dialogShowListener?.onClick()
-        }
-        builder.show()
-    }
-
     fun generateSSHKey(context: Context) {
         try {
             val info = context.packageManager.getPackageInfo(
@@ -133,12 +116,12 @@ object Utils {
         return salt.toString()
     }
 
-    fun convertToHtml(htmlString: String?): String? {
-        val stringBuilder = java.lang.StringBuilder()
-        stringBuilder.append("<![CDATA[")
-        stringBuilder.append(htmlString)
-        stringBuilder.append("]]>")
-        return stringBuilder.toString()
+    fun isMasterUser(): Boolean {
+        return FastSave.getInstance().getBoolean(Constants.IS_MASTER_USER, false)
+    }
+
+    fun isControlModePin(): Boolean {
+        return FastSave.getInstance().getBoolean(Constants.isControlModePinned, Constants.DEFAULT_CONTROL_MODE_STATUS)
     }
 
     fun String.toEditable(): Editable = Editable.Factory.getInstance().newEditable(this)

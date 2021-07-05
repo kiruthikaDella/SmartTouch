@@ -21,6 +21,7 @@ import com.dellainfotech.smartTouch.api.repository.HomeRepository
 import com.dellainfotech.smartTouch.common.interfaces.DialogAskListener
 import com.dellainfotech.smartTouch.common.utils.Constants
 import com.dellainfotech.smartTouch.common.utils.DialogUtil
+import com.dellainfotech.smartTouch.common.utils.Utils.isControlModePin
 import com.dellainfotech.smartTouch.common.utils.Utils.toBoolean
 import com.dellainfotech.smartTouch.common.utils.Utils.toInt
 import com.dellainfotech.smartTouch.databinding.FragmentControlModeBinding
@@ -49,9 +50,7 @@ class ControlModeFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        if (FastSave.getInstance()
-                .getBoolean(Constants.isControlModePinned, Constants.DEFAULT_CONTROL_MODE_STATUS)
-        ) {
+        if (isControlModePin()) {
             binding.ibLogout.isVisible = true
             context?.let { mContext ->
                 binding.ibPin.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_pin_straight))
@@ -73,10 +72,7 @@ class ControlModeFragment :
 
         binding.ibPin.setOnClickListener {
             activity?.let {
-                var isPinned = FastSave.getInstance().getBoolean(
-                    Constants.isControlModePinned,
-                    Constants.DEFAULT_CONTROL_MODE_STATUS
-                )
+                var isPinned = isControlModePin()
                 val msg: String = if (isPinned) {
                     isPinned = false
                     getString(R.string.dialog_title_unpin_control_mode)
