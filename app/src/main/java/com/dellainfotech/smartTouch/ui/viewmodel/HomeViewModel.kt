@@ -195,12 +195,12 @@ class HomeViewModel @ViewModelInject constructor(
     val getSceneResponse: LiveData<Resource<GetSceneResponse>>
         get() = _getSceneResponse
 
-    private val _addSceneResponse: MutableLiveData<Resource<CommonResponse>> = MutableLiveData()
-    val addSceneResponse: MutableLiveData<Resource<CommonResponse>>
+    private val _addSceneResponse: MutableLiveData<Resource<AddSceneResponse>> = MutableLiveData()
+    val addSceneResponse: MutableLiveData<Resource<AddSceneResponse>>
         get() = _addSceneResponse
 
-    private val _updateSceneResponse: MutableLiveData<Resource<ResponseBody>> = MutableLiveData()
-    val updateSceneResponse: MutableLiveData<Resource<ResponseBody>>
+    private val _updateSceneResponse: MutableLiveData<Resource<AddSceneResponse>> = MutableLiveData()
+    val updateSceneResponse: MutableLiveData<Resource<AddSceneResponse>>
         get() = _updateSceneResponse
 
     private val _deleteSceneResponse: MutableLiveData<Resource<CommonResponse>> = MutableLiveData()

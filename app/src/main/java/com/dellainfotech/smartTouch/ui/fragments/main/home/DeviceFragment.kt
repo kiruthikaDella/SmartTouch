@@ -57,8 +57,9 @@ class DeviceFragment : ModelBaseFragment<HomeViewModel, FragmentDeviceBinding, H
             binding.recyclerRoomPanels.adapter = panelAdapter
         }
 
-    /*    if (viewModel.getDeviceResponse.value == null) {
+        if (viewModel.getDeviceResponse.value == null) {
             showLoading()
+            viewModel.getDevice(args.roomDetail.id)
         } else {
             viewModel.getDeviceResponse.value?.let {
                 when (it) {
@@ -72,11 +73,11 @@ class DeviceFragment : ModelBaseFragment<HomeViewModel, FragmentDeviceBinding, H
                         Log.e(logTag, "" + it.values.data)
                     }
                     else -> {
-
+                        panelAdapter.notifyDataSetChanged()
                     }
                 }
             }
-        }*/
+        }
 
         binding.ivBack.setOnClickListener {
             findNavController().navigateUp()
@@ -86,7 +87,7 @@ class DeviceFragment : ModelBaseFragment<HomeViewModel, FragmentDeviceBinding, H
 
         NotifyManager.internetInfo.observe(viewLifecycleOwner, { isConnected ->
             if (isConnected) {
-                showLoading()
+//                showLoading()
                 viewModel.getDevice(args.roomDetail.id)
             } else {
                 activity?.let {

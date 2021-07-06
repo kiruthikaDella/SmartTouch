@@ -15,7 +15,7 @@ object Constants {
     var COMMON_DIALOG_HEIGHT = 0.9.toFloat()
 
     const val API_SUCCESS_CODE = 200
-    const val API_FAILURE_CODE = 401
+    const val API_FAILURE_CODE = 400
 
     const val REQUEST_CAMERA_PERMISSION = 101
     const val REQUEST_IMAGE_CAPTURE = 102

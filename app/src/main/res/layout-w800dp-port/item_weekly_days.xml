@@ -38,10 +38,11 @@
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
-            android:layout_marginEnd="@dimen/_minus5sdp"
+            android:layout_marginEnd="@dimen/_5sdp"
             android:buttonTint="@color/theme_color"
             android:clickable="false"
             android:focusable="false"
+            android:layoutDirection="rtl"
             android:scaleX="1.5"
             android:scaleY="1.5" />
     </RelativeLayout>

@@ -32,17 +32,16 @@
             android:textColor="@color/daintree"
             android:textSize="@dimen/_12ssp" />
 
-
         <CheckBox
             android:id="@+id/cb_day"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
-            android:layout_marginEnd="@dimen/_minus5sdp"
             android:buttonTint="@color/theme_color"
             android:clickable="false"
-            android:focusable="false" />
+            android:focusable="false"
+            android:layoutDirection="rtl" />
     </RelativeLayout>
 
 </com.google.android.material.card.MaterialCardView>

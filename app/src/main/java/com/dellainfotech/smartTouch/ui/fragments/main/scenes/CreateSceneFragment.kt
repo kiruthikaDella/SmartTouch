@@ -59,13 +59,13 @@ class CreateSceneFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        daysList.add(WeeklyDaysModel(getString(R.string.text_sunday),false))
-        daysList.add(WeeklyDaysModel(getString(R.string.text_monday),false))
-        daysList.add(WeeklyDaysModel(getString(R.string.text_tuesday),false))
-        daysList.add(WeeklyDaysModel(getString(R.string.text_wednesday),false))
-        daysList.add(WeeklyDaysModel(getString(R.string.text_thursday),false))
-        daysList.add(WeeklyDaysModel(getString(R.string.text_friday),false))
-        daysList.add(WeeklyDaysModel(getString(R.string.text_saturday),false))
+        daysList.add(WeeklyDaysModel(getString(R.string.text_sunday), false))
+        daysList.add(WeeklyDaysModel(getString(R.string.text_monday), false))
+        daysList.add(WeeklyDaysModel(getString(R.string.text_tuesday), false))
+        daysList.add(WeeklyDaysModel(getString(R.string.text_wednesday), false))
+        daysList.add(WeeklyDaysModel(getString(R.string.text_thursday), false))
+        daysList.add(WeeklyDaysModel(getString(R.string.text_friday), false))
+        daysList.add(WeeklyDaysModel(getString(R.string.text_saturday), false))
 
         weeklyDaysAdapter = WeeklyDaysAdapter(daysList)
         binding.layoutFrequencyWeekly.rvDays.adapter = weeklyDaysAdapter
@@ -95,7 +95,7 @@ class CreateSceneFragment :
         }</font><font color='#011B25'> ${
             formatter.format(
                 Calendar.getInstance().time
-            ).takeLast(2).toLowerCase(Locale.getDefault())
+            ).takeLast(2).lowercase(Locale.getDefault())
         }</font>"
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
             binding.tvTime.text = Html.fromHtml(time, Html.FROM_HTML_MODE_LEGACY)
@@ -132,15 +132,15 @@ class CreateSceneFragment :
             hidePanel()
         }
 
-        binding.tvDaily.setOnClickListener {
+        binding.tvInterval.setOnClickListener {
 
             context?.let { ctx ->
-                val popup = PopupMenu(ctx, binding.tvDaily)
+                val popup = PopupMenu(ctx, binding.tvInterval)
                 popup.menuInflater.inflate(R.menu.scene_frequency_menu, popup.menu)
                 popup.setOnMenuItemClickListener { item ->
-                    binding.tvDaily.text = item.title
+                    binding.tvInterval.text = item.title
 
-                    if (item.itemId == R.id.action_weekly){
+                    if (item.itemId == R.id.action_weekly) {
                         showPanel()
                     }
 
@@ -214,7 +214,7 @@ class CreateSceneFragment :
                         }</font><font color='#011B25'> ${
                             formatter.format(
                                 cal.time
-                            ).takeLast(2).toLowerCase(Locale.getDefault())
+                            ).takeLast(2).lowercase(Locale.getDefault())
                         }</font>"
                         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
                             binding.tvTime.text = Html.fromHtml(time, Html.FROM_HTML_MODE_LEGACY)
@@ -235,7 +235,7 @@ class CreateSceneFragment :
         binding.ibSave.setOnClickListener {
             val sceneName = binding.edtSceneName.text.toString().trim()
             val sceneTime = binding.tvTime.text.toString()
-            val sceneFrequency = binding.tvDaily.text.toString()
+            val sceneFrequency = binding.tvInterval.text.toString().lowercase(Locale.getDefault())
             when {
                 sceneName.isEmpty() -> {
                     context?.let {
@@ -356,7 +356,7 @@ class CreateSceneFragment :
         }
 
         binding.layoutFrequencyWeekly.btnSave.setOnClickListener {
-            Log.e(logTag," selected days ${weeklyDaysAdapter.getDayList()}")
+            Log.e(logTag, " selected days ${weeklyDaysAdapter.getDayList()}")
             hidePanel()
         }
     }
@@ -381,6 +381,10 @@ class CreateSceneFragment :
                     }
                     if (response.values.status && response.values.code == Constants.API_SUCCESS_CODE) {
                         findNavController().navigateUp()
+                    }else if (!response.values.status && response.values.code == Constants.API_FAILURE_CODE){
+                        response.values.errorData?.let { errorData ->
+                            deviceSceneAdapter.setError(errorData)
+                        }
                     }
                 }
                 is Resource.Failure -> {
@@ -397,39 +401,18 @@ class CreateSceneFragment :
             when (response) {
                 is Resource.Success -> {
                     DialogUtil.hideDialog()
-
-                    activity?.runOnUiThread {
-                        try {
-                            val jsonObject = JSONObject(response.values.string())
-
-                            println(" $logTag jsonObject $jsonObject")
-                            if (jsonObject.getBoolean("status") && jsonObject.getInt("code") == Constants.API_SUCCESS_CODE) {
-                                context?.let {
-                                    Toast.makeText(
-                                        it,
-                                        jsonObject.getString("message"),
-                                        Toast.LENGTH_SHORT
-                                    ).show()
-                                }
-                                findNavController().navigateUp()
-                                println(" $logTag success")
-                            } else if (!jsonObject.getBoolean("status") && jsonObject.getInt("code") == 400) {
-                                println(" $logTag fail")
-                                val msgArray = jsonObject.getJSONArray("message")
-                                if (msgArray.length() > 0) {
-                                    println(" $logTag length() > 0")
-                                    context?.let {
-                                        Toast.makeText(
-                                            it,
-                                            msgArray.getJSONObject(0).getString("message"),
-                                            Toast.LENGTH_SHORT
-                                        ).show()
-                                    }
-                                }
-
-                            }
-                        } catch (e: Exception) {
-                            e.printStackTrace()
+                    context?.let {
+                        Toast.makeText(
+                            it,
+                            response.values.message,
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                    if (response.values.status && response.values.code == Constants.API_SUCCESS_CODE){
+                        findNavController().navigateUp()
+                    }else if (!response.values.status && response.values.code == Constants.API_FAILURE_CODE){
+                        response.values.errorData?.let {errorData ->
+                            updateDeviceSceneAdapter.setError(errorData)
                         }
                     }
 
@@ -476,7 +459,7 @@ class CreateSceneFragment :
 
         val time =
             "<font color='#1A8EFF'>${sceneData.sceneTime.dropLast(3)}</font><font color='#011B25'> ${
-                sceneData.sceneTime.takeLast(2).toLowerCase(Locale.getDefault())
+                sceneData.sceneTime.takeLast(2).lowercase(Locale.getDefault())
             }</font>"
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
             binding.tvTime.text = Html.fromHtml(time, Html.FROM_HTML_MODE_LEGACY)
@@ -484,7 +467,11 @@ class CreateSceneFragment :
             binding.tvTime.text = Html.fromHtml(time)
         }
 
-        binding.tvDaily.text = sceneData.sceneInterval
+        binding.tvInterval.text = sceneData.sceneInterval.replaceFirstChar {
+            if (it.isLowerCase()) it.titlecase(
+                Locale.getDefault()
+            ) else it.toString()
+        }
 
         activity?.let { mActivity ->
             sceneData.scene?.let {

@@ -1,13 +1,12 @@
 package com.dellainfotech.smartTouch.adapters
 
 import android.app.Activity
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView
-import android.widget.ImageView
-import android.widget.Spinner
-import android.widget.Toast
+import android.widget.*
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.dellainfotech.smartTouch.R
 import com.dellainfotech.smartTouch.adapters.spinneradapter.DeviceAdapter
@@ -33,6 +32,7 @@ class UpdateDeviceSceneAdapter(
 
     private val roomDataList = arrayListOf<ControlModeRoomData>()
     private var roomList = arrayListOf<GetRoomData>()
+    private var errorList : MutableMap<Int,String> = mutableMapOf()
 
     private var deleteClickListener: DeleteSceneItemClickListener<Scene>? = null
 
@@ -84,6 +84,17 @@ class UpdateDeviceSceneAdapter(
                 if (spinnerSwitch.isEnabled)
                     spinnerSwitch.performClick()
             }
+
+            if (errorList.isNotEmpty()){
+                if (errorList.containsKey(position)){
+                    tvError.text = errorList[position]
+                    tvError.isVisible = true
+                }else {
+                    tvError.isVisible = false
+                }
+            }else {
+                tvError.isVisible = false
+            }
         }
 
         setSpinners(holder)
@@ -103,6 +114,8 @@ class UpdateDeviceSceneAdapter(
         val ivRoomName = itemView.findViewById(R.id.iv_room_name_down) as ImageView
         val ivDeviceName = itemView.findViewById(R.id.iv_device_name_down) as ImageView
         val ivSwitchName = itemView.findViewById(R.id.iv_switch_name_down) as ImageView
+
+        val tvError = itemView.findViewById(R.id.tv_text_error) as TextView
     }
 
     private fun setSpinners(holder: MyViewHolder) {
@@ -421,5 +434,19 @@ class UpdateDeviceSceneAdapter(
 
     fun setOnDeleteClickListener(listener: DeleteSceneItemClickListener<Scene>) {
         this.deleteClickListener = listener
+    }
+
+    fun setError(errorData: List<ErrorSceneData>){
+        errorList.clear()
+        for (error in errorData){
+            for ((index, scene) in getScenes().withIndex()){
+                if (scene.deviceSwitchId == error.deviceSwitchId){
+                    errorList[index] = error.message
+                }
+            }
+        }
+
+        Log.e(logTag, " errorList $errorList ")
+        notifyDataSetChanged()
     }
 }

@@ -306,13 +306,13 @@ interface SmartTouchApi {
     suspend fun addScene(
         @Header("access_key") access_key: String,
         @Body bodyAddScene: BodyAddScene
-    ): CommonResponse
+    ): AddSceneResponse
 
     @PUT(API_UPDATE_SCENE)
     suspend fun updateScene(
         @Header("access_key") access_key: String,
         @Body bodyUpdateScene: BodyUpdateScene
-    ): ResponseBody
+    ): AddSceneResponse
 
     @DELETE(API_DELETE_SCENE)
     suspend fun deleteScene(

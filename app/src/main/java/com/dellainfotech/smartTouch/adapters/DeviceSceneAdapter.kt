@@ -1,23 +1,19 @@
 package com.dellainfotech.smartTouch.adapters
 
 import android.app.Activity
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView
-import android.widget.ImageView
-import android.widget.Spinner
-import android.widget.Toast
+import android.widget.*
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.dellainfotech.smartTouch.R
 import com.dellainfotech.smartTouch.adapters.spinneradapter.DeviceAdapter
 import com.dellainfotech.smartTouch.adapters.spinneradapter.RoomAdapter
 import com.dellainfotech.smartTouch.adapters.spinneradapter.SwitchAdapter
 import com.dellainfotech.smartTouch.api.body.BodySceneData
-import com.dellainfotech.smartTouch.api.model.ControlModeRoomData
-import com.dellainfotech.smartTouch.api.model.DeviceSwitchData
-import com.dellainfotech.smartTouch.api.model.GetDeviceData
-import com.dellainfotech.smartTouch.api.model.GetRoomData
+import com.dellainfotech.smartTouch.api.model.*
 import com.dellainfotech.smartTouch.common.interfaces.DialogAskListener
 import com.dellainfotech.smartTouch.common.utils.DialogUtil
 import com.dellainfotech.smartTouch.common.utils.Utils.toInt
@@ -35,6 +31,7 @@ class DeviceSceneAdapter(
     private val logTag = this::class.java.simpleName
 
     private var roomList = arrayListOf<GetRoomData>()
+    private var errorList : MutableMap<Int,String> = mutableMapOf()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
         val v = LayoutInflater.from(parent.context)
@@ -77,6 +74,17 @@ class DeviceSceneAdapter(
                 if (spinnerSwitch.isEnabled)
                     spinnerSwitch.performClick()
             }
+
+            if (errorList.isNotEmpty()){
+                if (errorList.containsKey(position)){
+                    tvError.text = errorList[position]
+                    tvError.isVisible = true
+                }else {
+                    tvError.isVisible = false
+                }
+            }else {
+                tvError.isVisible = false
+            }
         }
 
         setSpinners(holder)
@@ -97,6 +105,8 @@ class DeviceSceneAdapter(
         val ivRoomName = itemView.findViewById(R.id.iv_room_name_down) as ImageView
         val ivDeviceName = itemView.findViewById(R.id.iv_device_name_down) as ImageView
         val ivSwitchName = itemView.findViewById(R.id.iv_switch_name_down) as ImageView
+
+        val tvError = itemView.findViewById(R.id.tv_text_error) as TextView
 
     }
 
@@ -386,5 +396,19 @@ class DeviceSceneAdapter(
     }
 
     fun getScenes(): ArrayList<BodySceneData> = bodyScenes
+
+    fun setError(errorData: List<ErrorSceneData>){
+        errorList.clear()
+        for (error in errorData){
+            for ((index, scene) in getScenes().withIndex()){
+                if (scene.deviceSwitchId == error.deviceSwitchId){
+                    errorList[index] = error.message
+                }
+            }
+        }
+
+        Log.e(logTag, " errorList $errorList ")
+        notifyDataSetChanged()
+    }
 
 }

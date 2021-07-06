@@ -55,6 +55,10 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
     private var roomTypeList: List<RoomTypeData> = ArrayList()
     private var roomTypeId: String? = null
 
+    //
+    //region override methods
+    //
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -160,6 +164,24 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         return item.onNavDestinationSelected(navController) || super.onOptionsItemSelected(item)
     }
+
+    override fun onBackPressed() {
+        if (navController.currentDestination?.id == R.id.userManagementFragment || navController.currentDestination?.id == R.id.controlModeFragment || navController.currentDestination?.id == R.id.sceneFragment) {
+            binding.ivHome.performClick()
+        } else if (navController.currentDestination?.id == R.id.homeFragment) {
+            finishAffinity()
+        } else {
+            super.onBackPressed()
+        }
+    }
+
+    //
+    //endregion
+    //
+
+    //
+    //region private methods
+    //
 
     fun showBottomNavigation() {
         binding.linearBottomNavigationView.visibility = View.VISIBLE
@@ -275,16 +297,6 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
         }
     }
 
-    override fun onBackPressed() {
-        if (navController.currentDestination?.id == R.id.userManagementFragment || navController.currentDestination?.id == R.id.controlModeFragment || navController.currentDestination?.id == R.id.sceneFragment) {
-            binding.ivHome.performClick()
-        } else if (navController.currentDestination?.id == R.id.homeFragment) {
-            finishAffinity()
-        } else {
-            super.onBackPressed()
-        }
-    }
-
     private fun apiResponses() {
         viewModel.roomTypeResponse.observe(this, { response ->
             roomTypeList.toMutableList().clear()
@@ -354,5 +366,9 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
             }
         })
     }
+
+    //
+    //endregion
+    //
 
 }

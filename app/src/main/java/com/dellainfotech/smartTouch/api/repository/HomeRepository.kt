@@ -12,6 +12,10 @@ class HomeRepository @Inject constructor(
     private val smartTouchApi: SmartTouchApi
 ) : BaseRepository() {
 
+    //
+    //region Home
+    //
+
     suspend fun logout(bodyLogout: BodyLogout) =
         safeApiCall { smartTouchApi.logout(getAccessKey(), bodyLogout) }
 
@@ -30,9 +34,6 @@ class HomeRepository @Inject constructor(
     suspend fun deleteRoom(roomId: String) =
         safeApiCall { smartTouchApi.deleteRoom(getAccessKey(), roomId) }
 
-    suspend fun retainState(bodyRetainState: BodyRetainState) =
-        safeApiCall { smartTouchApi.retainState(getAccessKey(), bodyRetainState) }
-
     suspend fun getFAQ() =
         safeApiCall { smartTouchApi.faq(getAccessKey()) }
 
@@ -48,6 +49,9 @@ class HomeRepository @Inject constructor(
     suspend fun updatePinStatus(bodyPinStatus: BodyPinStatus) =
         safeApiCall { smartTouchApi.updatePinStatus(getAccessKey(), bodyPinStatus) }
 
+    //
+    //endregion
+    //
 
     //
     //region Device
@@ -58,6 +62,9 @@ class HomeRepository @Inject constructor(
 
     suspend fun getDeviceData(roomId: String) =
         safeApiCall { smartTouchApi.getDeviceData(getAccessKey(), roomId) }
+
+    suspend fun retainState(bodyRetainState: BodyRetainState) =
+        safeApiCall { smartTouchApi.retainState(getAccessKey(), bodyRetainState) }
 
     suspend fun getDeviceCustomizationSettings(deviceId: String) =
         safeApiCall { smartTouchApi.getDeviceCustomizationSettings(getAccessKey(), deviceId) }

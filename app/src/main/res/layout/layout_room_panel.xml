@@ -50,6 +50,7 @@
         android:background="@drawable/catskill_white_background"
         android:fontFamily="@font/roboto_regular"
         android:hint="@string/hint_text_enter_panel_name"
+        android:inputType="text"
         android:maxLength="20"
         android:paddingStart="@dimen/_10sdp"
         android:paddingEnd="@dimen/_10sdp"
