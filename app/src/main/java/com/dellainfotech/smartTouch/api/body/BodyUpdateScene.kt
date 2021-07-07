@@ -7,6 +7,7 @@ class BodyUpdateScene(
     @SerializedName("vSceneName") var sceneName: String,
     @SerializedName("vSceneTime") var sceneTime: String,
     @SerializedName("vSceneInterval") var sceneInterval: String,
+    @SerializedName("vSceneIntervalValue") var sceneIntervalValue: ArrayList<String>,
     @SerializedName("scene") var scenes: ArrayList<BodyUpdateSceneData>
 ){
     override fun toString(): String {

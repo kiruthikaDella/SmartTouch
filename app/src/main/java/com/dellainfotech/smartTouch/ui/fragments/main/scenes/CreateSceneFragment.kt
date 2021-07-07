@@ -33,7 +33,6 @@ import com.dellainfotech.smartTouch.databinding.FragmentCreateSceneBinding
 import com.dellainfotech.smartTouch.ui.fragments.ModelBaseFragment
 import com.dellainfotech.smartTouch.ui.viewmodel.HomeViewModel
 import com.sothree.slidinguppanel.SlidingUpPanelLayout
-import org.json.JSONObject
 import java.text.Format
 import java.text.SimpleDateFormat
 import java.util.*
@@ -281,24 +280,17 @@ class CreateSceneFragment :
                                 activity?.let {
                                     DialogUtil.loadingAlert(it)
                                 }
-                                Log.e(
-                                    logTag,
-                                    " BodyScene ${
-                                        BodyUpdateScene(
-                                            args.sceneDetail!!.id,
-                                            sceneName,
-                                            sceneTime,
-                                            sceneFrequency,
-                                            updateDeviceSceneAdapter.getScenes()
-                                        )
-                                    }"
-                                )
+                                val weeklyDayList = weeklyDaysAdapter.getDayList()
+                                if (sceneFrequency != getString(R.string.text_weekly).lowercase()) {
+                                    weeklyDayList.clear()
+                                }
                                 viewModel.updateScene(
                                     BodyUpdateScene(
                                         args.sceneDetail!!.id,
                                         sceneName,
                                         sceneTime,
                                         sceneFrequency,
+                                        weeklyDayList,
                                         updateDeviceSceneAdapter.getScenes()
                                     )
                                 )
@@ -328,22 +320,17 @@ class CreateSceneFragment :
                                 activity?.let {
                                     DialogUtil.loadingAlert(it)
                                 }
-                                Log.e(
-                                    logTag,
-                                    " BodyScene ${
-                                        BodyAddScene(
-                                            sceneName,
-                                            sceneTime,
-                                            sceneFrequency,
-                                            deviceSceneAdapter.getScenes()
-                                        )
-                                    }"
-                                )
+
+                                val weeklyDayList = weeklyDaysAdapter.getDayList()
+                                if (sceneFrequency != getString(R.string.text_weekly).lowercase()) {
+                                    weeklyDayList.clear()
+                                }
                                 viewModel.addScene(
                                     BodyAddScene(
                                         sceneName,
                                         sceneTime,
                                         sceneFrequency,
+                                        weeklyDayList,
                                         deviceSceneAdapter.getScenes()
                                     )
                                 )
@@ -357,6 +344,9 @@ class CreateSceneFragment :
 
         binding.layoutFrequencyWeekly.btnSave.setOnClickListener {
             Log.e(logTag, " selected days ${weeklyDaysAdapter.getDayList()}")
+            if (weeklyDaysAdapter.getDayList().size >= 7) {
+                binding.tvInterval.text = getString(R.string.text_daily)
+            }
             hidePanel()
         }
     }
@@ -381,7 +371,7 @@ class CreateSceneFragment :
                     }
                     if (response.values.status && response.values.code == Constants.API_SUCCESS_CODE) {
                         findNavController().navigateUp()
-                    }else if (!response.values.status && response.values.code == Constants.API_FAILURE_CODE){
+                    } else if (!response.values.status && response.values.code == Constants.API_FAILURE_CODE) {
                         response.values.errorData?.let { errorData ->
                             deviceSceneAdapter.setError(errorData)
                         }
@@ -408,10 +398,10 @@ class CreateSceneFragment :
                             Toast.LENGTH_SHORT
                         ).show()
                     }
-                    if (response.values.status && response.values.code == Constants.API_SUCCESS_CODE){
+                    if (response.values.status && response.values.code == Constants.API_SUCCESS_CODE) {
                         findNavController().navigateUp()
-                    }else if (!response.values.status && response.values.code == Constants.API_FAILURE_CODE){
-                        response.values.errorData?.let {errorData ->
+                    } else if (!response.values.status && response.values.code == Constants.API_FAILURE_CODE) {
+                        response.values.errorData?.let { errorData ->
                             updateDeviceSceneAdapter.setError(errorData)
                         }
                     }
@@ -494,6 +484,57 @@ class CreateSceneFragment :
                 })
 
             }
+
+            daysList.clear()
+            daysList.add(
+                WeeklyDaysModel(
+                    getString(R.string.text_sunday),
+                    sceneData.sceneIntervalValue?.contains(getString(R.string.text_sunday).take(3))
+                        ?: false
+                )
+            )
+            daysList.add(
+                WeeklyDaysModel(
+                    getString(R.string.text_monday),
+                    sceneData.sceneIntervalValue?.contains(getString(R.string.text_monday).take(3))
+                        ?: false
+                )
+            )
+            daysList.add(
+                WeeklyDaysModel(
+                    getString(R.string.text_tuesday),
+                    sceneData.sceneIntervalValue?.contains(getString(R.string.text_tuesday).take(3))
+                        ?: false
+                )
+            )
+            daysList.add(
+                WeeklyDaysModel(
+                    getString(R.string.text_wednesday),
+                    sceneData.sceneIntervalValue?.contains(getString(R.string.text_wednesday).take(3))
+                        ?: false
+                )
+            )
+            daysList.add(
+                WeeklyDaysModel(
+                    getString(R.string.text_thursday),
+                    sceneData.sceneIntervalValue?.contains(getString(R.string.text_thursday).take(3))
+                        ?: false
+                )
+            )
+            daysList.add(
+                WeeklyDaysModel(
+                    getString(R.string.text_friday),
+                    sceneData.sceneIntervalValue?.contains(getString(R.string.text_friday).take(3))
+                        ?: false
+                )
+            )
+            daysList.add(
+                WeeklyDaysModel(
+                    getString(R.string.text_saturday),
+                    sceneData.sceneIntervalValue?.contains(getString(R.string.text_saturday).take(3))
+                        ?: false
+                )
+            )
         }
     }
 

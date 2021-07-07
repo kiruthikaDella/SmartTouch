@@ -48,7 +48,7 @@ class WeeklyDaysAdapter(
         val arrayDays: ArrayList<String> = ArrayList()
         for (day in daysList) {
             if (day.isChecked)
-                arrayDays.add(day.day)
+                arrayDays.add(day.day.take(3))
         }
 
         return arrayDays
