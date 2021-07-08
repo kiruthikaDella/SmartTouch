@@ -6,6 +6,7 @@ class BodyUpdateScene(
     @SerializedName("iSceneId") var sceneId: String,
     @SerializedName("vSceneName") var sceneName: String,
     @SerializedName("vSceneTime") var sceneTime: String,
+    @SerializedName("vSceneTimeZone") var sceneTimeZone: String,
     @SerializedName("vSceneInterval") var sceneInterval: String,
     @SerializedName("vSceneIntervalValue") var sceneIntervalValue: ArrayList<String>,
     @SerializedName("scene") var scenes: ArrayList<BodyUpdateSceneData>

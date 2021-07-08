@@ -42,8 +42,7 @@ import java.util.*
  */
 
 @Suppress("DEPRECATION")
-class CreateSceneFragment :
-    ModelBaseFragment<HomeViewModel, FragmentCreateSceneBinding, HomeRepository>() {
+class CreateSceneFragment : ModelBaseFragment<HomeViewModel, FragmentCreateSceneBinding, HomeRepository>() {
 
     private val logTag = this::class.java.simpleName
     private val args: CreateSceneFragmentArgs by navArgs()
@@ -289,6 +288,7 @@ class CreateSceneFragment :
                                         args.sceneDetail!!.id,
                                         sceneName,
                                         sceneTime,
+                                        TimeZone.getDefault().id,
                                         sceneFrequency,
                                         weeklyDayList,
                                         updateDeviceSceneAdapter.getScenes()
@@ -329,6 +329,7 @@ class CreateSceneFragment :
                                     BodyAddScene(
                                         sceneName,
                                         sceneTime,
+                                        TimeZone.getDefault().id,
                                         sceneFrequency,
                                         weeklyDayList,
                                         deviceSceneAdapter.getScenes()
