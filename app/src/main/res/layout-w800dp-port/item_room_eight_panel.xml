@@ -777,100 +777,61 @@
                         android:layout_marginBottom="@dimen/_20sdp"
                         android:orientation="vertical">
 
-                        <LinearLayout
-                            android:id="@+id/linear_customization"
+                        <TextView
+                            android:id="@+id/tv_customization"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginStart="@dimen/_25sdp"
-                            android:layout_marginEnd="@dimen/_25sdp"
-                            android:orientation="horizontal">
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginStart="@dimen/_15sdp"
+                            android:layout_marginEnd="@dimen/_15sdp"
+                            android:background="@drawable/device_menu_bottom_line"
+                            android:drawablePadding="@dimen/_20sdp"
+                            android:fontFamily="@font/roboto_medium"
+                            android:paddingStart="@dimen/_10sdp"
+                            android:paddingEnd="@dimen/_10sdp"
+                            android:paddingBottom="@dimen/_10sdp"
+                            android:text="@string/text_customization"
+                            android:textColor="@color/white"
+                            android:textSize="@dimen/_12ssp"
+                            app:drawableStartCompat="@drawable/ic_panel_menu_customization" />
 
-                            <ImageView
-                                android:layout_width="@dimen/_16sdp"
-                                android:layout_height="@dimen/_16sdp"
-                                android:layout_gravity="center_vertical"
-                                android:src="@drawable/ic_panel_menu_customization"
-                                app:tint="@color/white" />
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center_vertical"
-                                android:layout_marginStart="@dimen/_20sdp"
-                                android:fontFamily="@font/roboto_medium"
-                                android:text="@string/text_customization"
-                                android:textColor="@color/white"
-                                android:textSize="@dimen/_12ssp" />
-
-                        </LinearLayout>
-
-                        <View
-                            android:layout_width="match_parent"
-                            android:layout_height="0.3dp"
+                        <TextView
+                            android:id="@+id/tv_features"
+                            android:layout_width="fill_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
                             android:layout_marginStart="@dimen/_15sdp"
                             android:layout_marginTop="@dimen/_10sdp"
                             android:layout_marginEnd="@dimen/_15sdp"
-                            android:background="@color/white" />
+                            android:background="@drawable/device_menu_bottom_line"
+                            android:drawablePadding="@dimen/_20sdp"
+                            android:fontFamily="@font/roboto_medium"
+                            android:paddingStart="@dimen/_10sdp"
+                            android:paddingEnd="@dimen/_10sdp"
+                            android:paddingBottom="@dimen/_10sdp"
+                            android:text="@string/text_features"
+                            android:textColor="@color/white"
+                            android:textSize="@dimen/_12ssp"
+                            app:drawableStartCompat="@drawable/ic_panel_menu_features" />
 
-                        <LinearLayout
-                            android:id="@+id/linear_features"
+
+                        <TextView
+                            android:id="@+id/tv_device_settings"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginStart="@dimen/_25sdp"
-                            android:layout_marginTop="@dimen/_10sdp"
-                            android:layout_marginEnd="@dimen/_25sdp"
-                            android:orientation="horizontal">
-
-                            <ImageView
-                                android:layout_width="@dimen/_16sdp"
-                                android:layout_height="@dimen/_14sdp"
-                                android:src="@drawable/ic_panel_menu_features"
-                                app:tint="@color/white" />
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginStart="@dimen/_20sdp"
-                                android:fontFamily="@font/roboto_medium"
-                                android:text="@string/text_features"
-                                android:textColor="@color/white"
-                                android:textSize="@dimen/_12ssp" />
-
-                        </LinearLayout>
-
-                        <View
-                            android:layout_width="match_parent"
-                            android:layout_height="0.3dp"
+                            android:layout_gravity="center_vertical"
                             android:layout_marginStart="@dimen/_15sdp"
                             android:layout_marginTop="@dimen/_10sdp"
                             android:layout_marginEnd="@dimen/_15sdp"
-                            android:background="@color/white" />
-
-                        <LinearLayout
-                            android:id="@+id/linear_device_settings"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="@dimen/_25sdp"
-                            android:layout_marginTop="@dimen/_10sdp"
-                            android:layout_marginEnd="@dimen/_25sdp"
-                            android:orientation="horizontal">
-
-                            <ImageView
-                                android:layout_width="@dimen/_14sdp"
-                                android:layout_height="@dimen/_16sdp"
-                                android:src="@drawable/ic_panel_menu_settings"
-                                app:tint="@color/white" />
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginStart="@dimen/_20sdp"
-                                android:fontFamily="@font/roboto_medium"
-                                android:text="@string/text_settings"
-                                android:textColor="@color/white"
-                                android:textSize="@dimen/_12ssp" />
-
-                        </LinearLayout>
+                            android:drawablePadding="@dimen/_20sdp"
+                            android:fontFamily="@font/roboto_medium"
+                            android:paddingStart="@dimen/_10sdp"
+                            android:paddingEnd="@dimen/_10sdp"
+                            android:paddingBottom="@dimen/_10sdp"
+                            android:text="@string/text_settings"
+                            android:textColor="@color/white"
+                            android:textSize="@dimen/_12ssp"
+                            app:drawableStartCompat="@drawable/ic_panel_menu_settings" />
 
                     </LinearLayout>
 

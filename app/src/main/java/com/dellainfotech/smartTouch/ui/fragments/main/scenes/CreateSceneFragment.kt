@@ -2,6 +2,8 @@ package com.dellainfotech.smartTouch.ui.fragments.main.scenes
 
 import android.app.TimePickerDialog
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.text.Html
 import android.util.Log
 import android.view.LayoutInflater
@@ -14,12 +16,14 @@ import androidx.navigation.fragment.navArgs
 import com.dellainfotech.smartTouch.R
 import com.dellainfotech.smartTouch.adapters.DeviceSceneAdapter
 import com.dellainfotech.smartTouch.adapters.UpdateDeviceSceneAdapter
+import com.dellainfotech.smartTouch.adapters.WeeklyDaysAdapter
 import com.dellainfotech.smartTouch.api.Resource
 import com.dellainfotech.smartTouch.api.body.BodyAddScene
 import com.dellainfotech.smartTouch.api.body.BodySceneData
 import com.dellainfotech.smartTouch.api.body.BodyUpdateScene
 import com.dellainfotech.smartTouch.api.model.GetSceneData
 import com.dellainfotech.smartTouch.api.model.Scene
+import com.dellainfotech.smartTouch.api.model.WeeklyDaysModel
 import com.dellainfotech.smartTouch.api.repository.HomeRepository
 import com.dellainfotech.smartTouch.common.interfaces.DialogEditListener
 import com.dellainfotech.smartTouch.common.utils.Constants
@@ -28,7 +32,7 @@ import com.dellainfotech.smartTouch.common.utils.Utils.toEditable
 import com.dellainfotech.smartTouch.databinding.FragmentCreateSceneBinding
 import com.dellainfotech.smartTouch.ui.fragments.ModelBaseFragment
 import com.dellainfotech.smartTouch.ui.viewmodel.HomeViewModel
-import org.json.JSONObject
+import com.sothree.slidinguppanel.SlidingUpPanelLayout
 import java.text.Format
 import java.text.SimpleDateFormat
 import java.util.*
@@ -45,13 +49,25 @@ class CreateSceneFragment :
     private val args: CreateSceneFragmentArgs by navArgs()
     private lateinit var deviceSceneAdapter: DeviceSceneAdapter
     private lateinit var updateDeviceSceneAdapter: UpdateDeviceSceneAdapter
+    private lateinit var weeklyDaysAdapter: WeeklyDaysAdapter
     private val createScenesList = arrayListOf<BodySceneData>()
+    private val daysList = arrayListOf<WeeklyDaysModel>()
     private var isUpdatingScene: Boolean = false
     private var itemPosition: Int? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        daysList.add(WeeklyDaysModel(getString(R.string.text_sunday), false))
+        daysList.add(WeeklyDaysModel(getString(R.string.text_monday), false))
+        daysList.add(WeeklyDaysModel(getString(R.string.text_tuesday), false))
+        daysList.add(WeeklyDaysModel(getString(R.string.text_wednesday), false))
+        daysList.add(WeeklyDaysModel(getString(R.string.text_thursday), false))
+        daysList.add(WeeklyDaysModel(getString(R.string.text_friday), false))
+        daysList.add(WeeklyDaysModel(getString(R.string.text_saturday), false))
+
+        weeklyDaysAdapter = WeeklyDaysAdapter(daysList)
+        binding.layoutFrequencyWeekly.rvDays.adapter = weeklyDaysAdapter
 
         setTime()
         clickEvents()
@@ -63,9 +79,7 @@ class CreateSceneFragment :
             activity?.let {
                 deviceSceneAdapter = DeviceSceneAdapter(
                     it,
-                    createScenesList,
-                    "",
-                    ""
+                    createScenesList
                 )
                 deviceSceneAdapter.updateRoomList(args.controlModeList.toList())
                 binding.recyclerScenes.adapter = deviceSceneAdapter
@@ -80,7 +94,7 @@ class CreateSceneFragment :
         }</font><font color='#011B25'> ${
             formatter.format(
                 Calendar.getInstance().time
-            ).takeLast(2).toLowerCase(Locale.getDefault())
+            ).takeLast(2).lowercase(Locale.getDefault())
         }</font>"
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
             binding.tvTime.text = Html.fromHtml(time, Html.FROM_HTML_MODE_LEGACY)
@@ -98,19 +112,44 @@ class CreateSceneFragment :
 
     override fun getFragmentRepository(): HomeRepository = HomeRepository(networkModel)
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        viewModel.addSceneResponse.postValue(null)
+        viewModel.updateSceneResponse.postValue(null)
+        viewModel.deleteSceneDetailResponse.postValue(null)
+    }
+
     private fun clickEvents() {
 
         binding.ivBack.setOnClickListener {
             findNavController().navigateUp()
         }
 
-        binding.tvDaily.setOnClickListener {
+        binding.layoutSlidingUpPanel.setFadeOnClickListener { hidePanel() }
+
+        binding.layoutFrequencyWeekly.ivHidePanel.setOnClickListener {
+            hidePanel()
+        }
+
+        binding.tvInterval.setOnClickListener {
 
             context?.let { ctx ->
-                val popup = PopupMenu(ctx, binding.tvDaily)
+                val popup = PopupMenu(ctx, binding.tvInterval)
                 popup.menuInflater.inflate(R.menu.scene_frequency_menu, popup.menu)
                 popup.setOnMenuItemClickListener { item ->
-                    binding.tvDaily.text = item.title
+
+                    when (item.itemId) {
+                        R.id.action_daily -> {
+                            binding.tvInterval.text = item.title
+                        }
+                        R.id.action_weekly -> {
+                            showPanel()
+                        }
+                        R.id.action_monthly -> {
+                            binding.tvInterval.text = item.title
+                        }
+                    }
+
                     true
                 }
                 popup.show()
@@ -118,12 +157,13 @@ class CreateSceneFragment :
 
         }
 
-        binding.tvAdd.setOnClickListener {
+        binding.linearAdd.setOnClickListener {
             if (isUpdatingScene) {
                 updateDeviceSceneAdapter.addScene()
+                binding.recyclerScenes.smoothScrollToPosition(updateDeviceSceneAdapter.itemCount)
             } else {
-                createScenesList.add(BodySceneData("", "", "", 0))
-                deviceSceneAdapter.notifyItemInserted(createScenesList.size)
+                deviceSceneAdapter.addScene()
+                binding.recyclerScenes.smoothScrollToPosition(createScenesList.size - 1)
             }
         }
 
@@ -180,7 +220,7 @@ class CreateSceneFragment :
                         }</font><font color='#011B25'> ${
                             formatter.format(
                                 cal.time
-                            ).takeLast(2).toLowerCase(Locale.getDefault())
+                            ).takeLast(2).lowercase(Locale.getDefault())
                         }</font>"
                         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
                             binding.tvTime.text = Html.fromHtml(time, Html.FROM_HTML_MODE_LEGACY)
@@ -198,11 +238,10 @@ class CreateSceneFragment :
 
         }
 
-        binding.ibSave.isEnabled = false
         binding.ibSave.setOnClickListener {
             val sceneName = binding.edtSceneName.text.toString().trim()
             val sceneTime = binding.tvTime.text.toString()
-            val sceneFrequency = binding.tvDaily.text.toString()
+            val sceneFrequency = binding.tvInterval.text.toString().lowercase(Locale.getDefault())
             when {
                 sceneName.isEmpty() -> {
                     context?.let {
@@ -224,78 +263,121 @@ class CreateSceneFragment :
                 }
                 else -> {
                     if (isUpdatingScene) {
-                        if (updateDeviceSceneAdapter.isDuplicateSwitchFound()) {
-                            context?.let { mContext ->
-                                Toast.makeText(
-                                    mContext,
-                                    getString(R.string.error_text_duplicate_scene),
-                                    Toast.LENGTH_SHORT
-                                ).show()
+
+                        when {
+                            updateDeviceSceneAdapter.isEmptySwitchInList() -> {
+                                context?.let { mContext ->
+                                    Toast.makeText(
+                                        mContext,
+                                        getString(R.string.error_text_empty_switch),
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                }
                             }
-                        } else {
-                            activity?.let {
-                                DialogUtil.loadingAlert(it)
+                            updateDeviceSceneAdapter.isDuplicateSwitchFound() -> {
+                                context?.let { mContext ->
+                                    Toast.makeText(
+                                        mContext,
+                                        getString(R.string.error_text_duplicate_scene),
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                }
                             }
-                            Log.e(
-                                logTag,
-                                " BodyScene ${
+                            else -> {
+                                activity?.let {
+                                    DialogUtil.loadingAlert(it)
+                                }
+                                val weeklyDayList = weeklyDaysAdapter.getDayList()
+                                if (sceneFrequency != getString(R.string.text_weekly).lowercase()) {
+                                    weeklyDayList.clear()
+                                }
+                                viewModel.updateScene(
                                     BodyUpdateScene(
                                         args.sceneDetail!!.id,
                                         sceneName,
                                         sceneTime,
+                                        TimeZone.getDefault().id,
                                         sceneFrequency,
+                                        weeklyDayList,
                                         updateDeviceSceneAdapter.getScenes()
                                     )
-                                }"
-                            )
-                            viewModel.updateScene(
-                                BodyUpdateScene(
-                                    args.sceneDetail!!.id,
-                                    sceneName,
-                                    sceneTime,
-                                    sceneFrequency,
-                                    updateDeviceSceneAdapter.getScenes()
                                 )
-                            )
+                            }
                         }
                     } else {
-                        if (deviceSceneAdapter.isDuplicateSwitchFound()) {
-                            context?.let { mContext ->
-                                Toast.makeText(
-                                    mContext,
-                                    getString(R.string.error_text_duplicate_scene),
-                                    Toast.LENGTH_SHORT
-                                ).show()
+                        when {
+                            deviceSceneAdapter.isDuplicateSwitchFound() -> {
+                                context?.let { mContext ->
+                                    Toast.makeText(
+                                        mContext,
+                                        getString(R.string.error_text_duplicate_scene),
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                }
                             }
-                        } else {
-                            activity?.let {
-                                DialogUtil.loadingAlert(it)
+                            deviceSceneAdapter.isEmptySwitchInList() -> {
+                                context?.let { mContext ->
+                                    Toast.makeText(
+                                        mContext,
+                                        getString(R.string.error_text_empty_switch),
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                }
                             }
-                            Log.e(
-                                logTag,
-                                " BodyScene ${
+                            else -> {
+                                activity?.let {
+                                    DialogUtil.loadingAlert(it)
+                                }
+
+                                val weeklyDayList = weeklyDaysAdapter.getDayList()
+                                if (sceneFrequency != getString(R.string.text_weekly).lowercase()) {
+                                    weeklyDayList.clear()
+                                }
+                                viewModel.addScene(
                                     BodyAddScene(
                                         sceneName,
                                         sceneTime,
+                                        TimeZone.getDefault().id,
                                         sceneFrequency,
+                                        weeklyDayList,
                                         deviceSceneAdapter.getScenes()
                                     )
-                                }"
-                            )
-                            viewModel.addScene(
-                                BodyAddScene(
-                                    sceneName,
-                                    sceneTime,
-                                    sceneFrequency,
-                                    deviceSceneAdapter.getScenes()
                                 )
-                            )
+                            }
                         }
 
                     }
                 }
             }
         }
+
+        binding.layoutFrequencyWeekly.btnSave.setOnClickListener {
+            Log.e(logTag, " selected days ${weeklyDaysAdapter.getDayList()}")
+
+            if (weeklyDaysAdapter.getDayList().size <= 0) {
+                context?.let { mContext ->
+                    Toast.makeText(mContext, getString(R.string.error_text_empty_weekly_days), Toast.LENGTH_SHORT)
+                        .show()
+                }
+            } else {
+                if (weeklyDaysAdapter.getDayList().size >= 7) {
+                    binding.tvInterval.text = getString(R.string.text_daily)
+                } else {
+                    binding.tvInterval.text = getString(R.string.text_weekly)
+                }
+                hidePanel()
+            }
+        }
+    }
+
+    private fun showPanel() {
+        Handler(Looper.getMainLooper()).postDelayed({
+            binding.layoutSlidingUpPanel.panelState = SlidingUpPanelLayout.PanelState.EXPANDED
+        }, 600)
+    }
+
+    private fun hidePanel() {
+        binding.layoutSlidingUpPanel.panelState = SlidingUpPanelLayout.PanelState.HIDDEN
     }
 
     private fun apiResponse() {
@@ -308,6 +390,10 @@ class CreateSceneFragment :
                     }
                     if (response.values.status && response.values.code == Constants.API_SUCCESS_CODE) {
                         findNavController().navigateUp()
+                    } else if (!response.values.status && response.values.code == Constants.API_FAILURE_CODE) {
+                        response.values.errorData?.let { errorData ->
+                            deviceSceneAdapter.setError(errorData)
+                        }
                     }
                 }
                 is Resource.Failure -> {
@@ -324,39 +410,18 @@ class CreateSceneFragment :
             when (response) {
                 is Resource.Success -> {
                     DialogUtil.hideDialog()
-
-                    activity?.runOnUiThread {
-                        try {
-                            val jsonObject = JSONObject(response.values.string())
-
-                            println(" $logTag jsonObject $jsonObject")
-                            if (jsonObject.getBoolean("status") && jsonObject.getInt("code") == Constants.API_SUCCESS_CODE) {
-                                context?.let {
-                                    Toast.makeText(
-                                        it,
-                                        jsonObject.getString("message"),
-                                        Toast.LENGTH_SHORT
-                                    ).show()
-                                }
-                                findNavController().navigateUp()
-                                println(" $logTag success")
-                            } else if (!jsonObject.getBoolean("status") && jsonObject.getInt("code") == 400) {
-                                println(" $logTag fail")
-                                val msgArray = jsonObject.getJSONArray("message")
-                                if (msgArray.length() > 0) {
-                                    println(" $logTag length() > 0")
-                                    context?.let {
-                                        Toast.makeText(
-                                            it,
-                                            msgArray.getJSONObject(0).getString("message"),
-                                            Toast.LENGTH_SHORT
-                                        ).show()
-                                    }
-                                }
-
-                            }
-                        } catch (e: Exception) {
-                            e.printStackTrace()
+                    context?.let {
+                        Toast.makeText(
+                            it,
+                            response.values.message,
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                    if (response.values.status && response.values.code == Constants.API_SUCCESS_CODE) {
+                        findNavController().navigateUp()
+                    } else if (!response.values.status && response.values.code == Constants.API_FAILURE_CODE) {
+                        response.values.errorData?.let { errorData ->
+                            updateDeviceSceneAdapter.setError(errorData)
                         }
                     }
 
@@ -401,26 +466,27 @@ class CreateSceneFragment :
     private fun setSceneData(sceneData: GetSceneData) {
         binding.edtSceneName.text = sceneData.sceneName.toEditable()
 
-        val time = "<font color='#1A8EFF'>${
-            sceneData.sceneTime.dropLast(3)
-        }</font><font color='#011B25'> ${
-            sceneData.sceneTime.takeLast(2).toLowerCase(Locale.getDefault())
-        }</font>"
+        val time =
+            "<font color='#1A8EFF'>${sceneData.sceneTime.dropLast(3)}</font><font color='#011B25'> ${
+                sceneData.sceneTime.takeLast(2).lowercase(Locale.getDefault())
+            }</font>"
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
             binding.tvTime.text = Html.fromHtml(time, Html.FROM_HTML_MODE_LEGACY)
         } else {
             binding.tvTime.text = Html.fromHtml(time)
         }
 
-        binding.tvDaily.text = sceneData.sceneInterval
+        binding.tvInterval.text = sceneData.sceneInterval.replaceFirstChar {
+            if (it.isLowerCase()) it.titlecase(
+                Locale.getDefault()
+            ) else it.toString()
+        }
 
         activity?.let { mActivity ->
             sceneData.scene?.let {
                 updateDeviceSceneAdapter = UpdateDeviceSceneAdapter(
                     mActivity,
-                    it,
-                    "",
-                    ""
+                    it
                 )
                 binding.recyclerScenes.adapter = updateDeviceSceneAdapter
                 updateDeviceSceneAdapter.updateRoomList(args.controlModeList.toList())
@@ -430,13 +496,64 @@ class CreateSceneFragment :
                     UpdateDeviceSceneAdapter.DeleteSceneItemClickListener<Scene> {
                     override fun onItemClick(data: Scene, scenePosition: Int) {
                         DialogUtil.loadingAlert(mActivity)
-                        viewModel.deleteSceneDetail(data.id)
+                        viewModel.deleteSceneDetail(args.sceneDetail!!.id, data.id)
                         itemPosition = scenePosition
                     }
 
                 })
 
             }
+
+            daysList.clear()
+            daysList.add(
+                WeeklyDaysModel(
+                    getString(R.string.text_sunday),
+                    sceneData.sceneIntervalValue?.contains(getString(R.string.text_sunday).take(3))
+                        ?: false
+                )
+            )
+            daysList.add(
+                WeeklyDaysModel(
+                    getString(R.string.text_monday),
+                    sceneData.sceneIntervalValue?.contains(getString(R.string.text_monday).take(3))
+                        ?: false
+                )
+            )
+            daysList.add(
+                WeeklyDaysModel(
+                    getString(R.string.text_tuesday),
+                    sceneData.sceneIntervalValue?.contains(getString(R.string.text_tuesday).take(3))
+                        ?: false
+                )
+            )
+            daysList.add(
+                WeeklyDaysModel(
+                    getString(R.string.text_wednesday),
+                    sceneData.sceneIntervalValue?.contains(getString(R.string.text_wednesday).take(3))
+                        ?: false
+                )
+            )
+            daysList.add(
+                WeeklyDaysModel(
+                    getString(R.string.text_thursday),
+                    sceneData.sceneIntervalValue?.contains(getString(R.string.text_thursday).take(3))
+                        ?: false
+                )
+            )
+            daysList.add(
+                WeeklyDaysModel(
+                    getString(R.string.text_friday),
+                    sceneData.sceneIntervalValue?.contains(getString(R.string.text_friday).take(3))
+                        ?: false
+                )
+            )
+            daysList.add(
+                WeeklyDaysModel(
+                    getString(R.string.text_saturday),
+                    sceneData.sceneIntervalValue?.contains(getString(R.string.text_saturday).take(3))
+                        ?: false
+                )
+            )
         }
     }
 

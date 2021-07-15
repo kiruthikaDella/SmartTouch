@@ -1,6 +1,7 @@
 package com.dellainfotech.smartTouch.adapters.spinneradapter
 
 import android.app.Activity
+import android.graphics.Typeface
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
@@ -13,6 +14,11 @@ class DeviceAdapter(private val activity: Activity, private val items: List<GetD
     override fun getDropDownView(position: Int, convertView: View?, parent: ViewGroup): View {
         val textView = super.getView(position, convertView, parent) as TextView
         textView.text = items[position].deviceName
+
+        if (position == 0){
+            textView.setTypeface(null, Typeface.ITALIC)
+        }
+
         return textView
     }
 

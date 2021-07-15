@@ -22,9 +22,12 @@ import com.dellainfotech.smartTouch.api.Resource
 import com.dellainfotech.smartTouch.api.body.BodyAddRoom
 import com.dellainfotech.smartTouch.api.model.RoomTypeData
 import com.dellainfotech.smartTouch.api.repository.HomeRepository
+import com.dellainfotech.smartTouch.common.interfaces.DialogShowListener
 import com.dellainfotech.smartTouch.common.utils.Constants
 import com.dellainfotech.smartTouch.common.utils.DialogUtil
+import com.dellainfotech.smartTouch.common.utils.Utils
 import com.dellainfotech.smartTouch.common.utils.Utils.clearError
+import com.dellainfotech.smartTouch.common.utils.Utils.isControlModePin
 import com.dellainfotech.smartTouch.common.utils.Utils.toEditable
 import com.dellainfotech.smartTouch.databinding.ActivityMainBinding
 import com.dellainfotech.smartTouch.mqtt.NetworkConnectionLiveData
@@ -34,6 +37,9 @@ import com.dellainfotech.smartTouch.ui.viewmodel.HomeViewModel
 import com.dellainfotech.smartTouch.ui.viewmodel.ViewModelFactory
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.sothree.slidinguppanel.SlidingUpPanelLayout
+import java.time.ZoneId
+import java.util.*
+import kotlin.collections.ArrayList
 
 
 /**
@@ -51,6 +57,10 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
 
     private var roomTypeList: List<RoomTypeData> = ArrayList()
     private var roomTypeId: String? = null
+
+    //
+    //region override methods
+    //
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -84,9 +94,7 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
 
         bottomNavigationClickEvent()
 
-        if (FastSave.getInstance()
-                .getBoolean(Constants.isControlModePinned, Constants.DEFAULT_CONTROL_MODE_STATUS)
-        ) {
+        if (isControlModePin()) {
             binding.ivControlMode.performClick()
             hideBottomNavigation()
         }
@@ -160,6 +168,24 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
         return item.onNavDestinationSelected(navController) || super.onOptionsItemSelected(item)
     }
 
+    override fun onBackPressed() {
+        if (navController.currentDestination?.id == R.id.userManagementFragment || navController.currentDestination?.id == R.id.controlModeFragment || navController.currentDestination?.id == R.id.sceneFragment) {
+            binding.ivHome.performClick()
+        } else if (navController.currentDestination?.id == R.id.homeFragment) {
+            finishAffinity()
+        } else {
+            super.onBackPressed()
+        }
+    }
+
+    //
+    //endregion
+    //
+
+    //
+    //region private methods
+    //
+
     fun showBottomNavigation() {
         binding.linearBottomNavigationView.visibility = View.VISIBLE
         binding.ivAddRoom.visibility = View.VISIBLE
@@ -202,23 +228,35 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
         }
 
         binding.ivUser.setOnClickListener {
-            binding.ivUser.setColorFilter(
-                ContextCompat.getColor(this, R.color.theme_color),
-                android.graphics.PorterDuff.Mode.SRC_IN
-            )
-            binding.ivHome.setColorFilter(
-                ContextCompat.getColor(this, R.color.daintree),
-                android.graphics.PorterDuff.Mode.SRC_IN
-            )
-            binding.ivControlMode.setColorFilter(
-                ContextCompat.getColor(this, R.color.daintree),
-                android.graphics.PorterDuff.Mode.SRC_IN
-            )
-            binding.ivScene.setColorFilter(
-                ContextCompat.getColor(this, R.color.daintree),
-                android.graphics.PorterDuff.Mode.SRC_IN
-            )
-            navController.navigate(R.id.userManagementFragment)
+
+            if (Utils.isMasterUser()) {
+                binding.ivUser.setColorFilter(
+                    ContextCompat.getColor(this, R.color.theme_color),
+                    android.graphics.PorterDuff.Mode.SRC_IN
+                )
+                binding.ivHome.setColorFilter(
+                    ContextCompat.getColor(this, R.color.daintree),
+                    android.graphics.PorterDuff.Mode.SRC_IN
+                )
+                binding.ivControlMode.setColorFilter(
+                    ContextCompat.getColor(this, R.color.daintree),
+                    android.graphics.PorterDuff.Mode.SRC_IN
+                )
+                binding.ivScene.setColorFilter(
+                    ContextCompat.getColor(this, R.color.daintree),
+                    android.graphics.PorterDuff.Mode.SRC_IN
+                )
+                navController.navigate(R.id.userManagementFragment)
+            } else {
+                DialogUtil.deviceOfflineAlert(
+                    this,
+                    getString(R.string.error_text_unauthorized),
+                    object : DialogShowListener {
+                        override fun onClick() {
+                            DialogUtil.hideDialog()
+                        }
+                    })
+            }
         }
 
         binding.ivControlMode.setOnClickListener {
@@ -259,16 +297,6 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
                 android.graphics.PorterDuff.Mode.SRC_IN
             )
             navController.navigate(R.id.sceneFragment)
-        }
-    }
-
-    override fun onBackPressed() {
-        if (navController.currentDestination?.id == R.id.userManagementFragment || navController.currentDestination?.id == R.id.controlModeFragment || navController.currentDestination?.id == R.id.sceneFragment) {
-            binding.ivHome.performClick()
-        } else if (navController.currentDestination?.id == R.id.homeFragment) {
-            finishAffinity()
-        } else {
-            super.onBackPressed()
         }
     }
 
@@ -341,5 +369,9 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
             }
         })
     }
+
+    //
+    //endregion
+    //
 
 }

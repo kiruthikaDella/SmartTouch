@@ -30,6 +30,7 @@ class UserManagementFragment :
     private val logTag = this::class.java.simpleName
     private lateinit var userManagementAdapter: UserManagementAdapter
     private var userList = arrayListOf<SubordinateUserData>()
+    private var userData: SubordinateUserData? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -40,6 +41,32 @@ class UserManagementFragment :
 
         userManagementAdapter = UserManagementAdapter(userList)
         binding.recyclerRegisteredUser.adapter = userManagementAdapter
+        userManagementAdapter.setOnRemoveClickListener(object :
+            AdapterItemClickListener<SubordinateUserData> {
+            override fun onItemClick(data: SubordinateUserData) {
+                activity?.let {
+                    DialogUtil.askAlert(
+                        it,
+                        getString(R.string.dialog_title_remove_subordinate_user),
+                        getString(R.string.text_yes),
+                        getString(R.string.text_no),
+                        object : DialogAskListener {
+                            override fun onYesClicked() {
+                                showProgressDialog()
+                                userData = data
+                                viewModel.deleteSubordinateUser(data.id)
+                            }
+
+                            override fun onNoClicked() {
+                            }
+
+                        }
+                    )
+                }
+
+            }
+
+        })
 
         apiCall()
     }
@@ -64,35 +91,6 @@ class UserManagementFragment :
                         response.values.data?.let { userData ->
                             userList.addAll(userData)
                             userManagementAdapter.notifyDataSetChanged()
-                            userManagementAdapter.setOnRemoveClickListener(object :
-                                AdapterItemClickListener<SubordinateUserData> {
-                                override fun onItemClick(data: SubordinateUserData) {
-                                    activity?.let {
-                                        DialogUtil.askAlert(
-                                            it,
-                                            getString(R.string.dialog_title_remove_subordinate_user),
-                                            getString(R.string.text_yes),
-                                            getString(R.string.text_no),
-                                            object : DialogAskListener {
-                                                override fun onYesClicked() {
-                                                    showProgressDialog()
-                                                    Log.e(
-                                                        logTag,
-                                                        " deleteSubordinateUser id ${data.id}"
-                                                    )
-                                                    viewModel.deleteSubordinateUser(data.id)
-                                                }
-
-                                                override fun onNoClicked() {
-                                                }
-
-                                            }
-                                        )
-                                    }
-
-                                }
-
-                            })
                         }
                     } else {
                         userManagementAdapter.notifyDataSetChanged()
@@ -122,8 +120,12 @@ class UserManagementFragment :
                         Toast.makeText(it, response.values.message, Toast.LENGTH_SHORT).show()
                     }
                     if (response.values.status && response.values.code == Constants.API_SUCCESS_CODE) {
-                        showProgressDialog()
-                        viewModel.getSubordinateUser()
+//                        showProgressDialog()
+//                        viewModel.getSubordinateUser()
+                        userData?.let {
+                            userList.remove(it)
+                            userManagementAdapter.notifyDataSetChanged()
+                        }
                     }
                 }
                 is Resource.Failure -> {

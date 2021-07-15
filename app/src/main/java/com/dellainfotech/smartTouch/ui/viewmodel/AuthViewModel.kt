@@ -20,7 +20,7 @@ class AuthViewModel @ViewModelInject constructor(
 ) : ViewModel() {
 
     private val _loginResponse: MutableLiveData<Resource<LoginResponse>> = MutableLiveData()
-    val loginResponse: LiveData<Resource<LoginResponse>>
+    val loginResponse: MutableLiveData<Resource<LoginResponse>>
         get() = _loginResponse
 
     private val _signUpResponse: MutableLiveData<Resource<CommonResponse>> = MutableLiveData()
@@ -33,7 +33,7 @@ class AuthViewModel @ViewModelInject constructor(
         get() = _forgotPasswordResponse
 
     private val _socialLoginResponse: MutableLiveData<Resource<LoginResponse>> = MutableLiveData()
-    val socialLoginResponse: LiveData<Resource<LoginResponse>>
+    val socialLoginResponse: MutableLiveData<Resource<LoginResponse>>
         get() = _socialLoginResponse
 
     fun login(

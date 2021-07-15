@@ -4,7 +4,6 @@ import com.dellainfotech.smartTouch.api.body.*
 import com.dellainfotech.smartTouch.api.model.*
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
-import okhttp3.ResponseBody
 import retrofit2.http.*
 
 /**
@@ -17,7 +16,9 @@ interface SmartTouchApi {
     //
 
     companion object {
-        const val BASE_URL = "https://dev.teksun.com/smarttouch/api/v1/"
+        //        const val BASE_URL = "https://dev.teksun.com/smarttouch/api/v1/"
+//        const val BASE_URL = "http://192.168.4.113:6001/api/v1/"
+        const val BASE_URL = "https://dev.teksun.com/smarttouch_new/api/v1/"
 
         // Authentication APIs
         const val API_LOGIN = "auth/login"
@@ -31,7 +32,7 @@ interface SmartTouchApi {
         const val API_GET_ROOM = "room/room"
         const val API_ADD_ROOM = "room/room"
         const val API_UPDATE_ROOM = "room/room"
-        const val API_RETAIN_STATE = "room/retain-state"
+        const val API_DELETE_ROOM = "room/room/{roomId}"
         const val API_FAQ = "faq/view"
         const val API_GET_USER_PROFILE = "user/profile"
         const val API_UPDATE_USER_PROFILE = "user/profile"
@@ -42,7 +43,7 @@ interface SmartTouchApi {
         const val API_GET_DEVICE_DATA = "device/device-data/{id}"
         const val API_GET_DEVICE_CUSTOMIZATION_SETTINGS = "device/device-customization-setting/{id}"
         const val API_GET_DEVICE_FEATURES_SETTINGS = "device/device-feature-setting/{id}"
-        const val API_DELETE_DEVICE = "device/device/{id}"
+        const val API_DELETE_DEVICE = "device/device/{room_id}/{device_id}"
         const val API_UPDATE_DEVICE_NAME = "device/device-name"
         const val API_UPDATE_CUSTOMIZATION_LOCK = "device/customization-lock"
         const val API_UPDATE_SWITCH_NAME = "device/switch"
@@ -55,7 +56,10 @@ interface SmartTouchApi {
         const val API_ADD_SCENE = "device/scene"
         const val API_UPDATE_SCENE = "device/scene"
         const val API_DELETE_SCENE = "device/scene/{scene_id}"
-        const val API_DELETE_SCENE_DETAIL = "device/scene-details/{scene_detail_id}"
+        const val API_DELETE_SCENE_DETAIL = "device/scene-details/{scene_id}/{scene_detail_id}"
+        const val API_RETAIN_STATE = "Device/retain-state"
+        const val API_FACTORY_RESET = "device/factory-reset"
+        const val API_FACTORY_RESET_ALL_DEVICE = "device/factory-reset-all-devices"
 
         // Contact Us APIs
         const val API_FEEDBACK = "feedback/add"
@@ -125,11 +129,17 @@ interface SmartTouchApi {
         @Body bodyUpdateRoom: BodyUpdateRoom
     ): UpdateRoomResponse
 
+    @DELETE(API_DELETE_ROOM)
+    suspend fun deleteRoom(
+        @Header("access_key") access_key: String,
+        @Path("roomId") roomId: String
+    ): CommonResponse
+
     @PUT(API_RETAIN_STATE)
     suspend fun retainState(
         @Header("access_key") access_key: String,
         @Body bodyRetainState: BodyRetainState
-    ): AddRoomResponse
+    ): CommonResponse
 
     @GET(API_FAQ)
     suspend fun faq(@Header("access_key") access_key: String): FAQResponse
@@ -234,7 +244,8 @@ interface SmartTouchApi {
     @DELETE(API_DELETE_DEVICE)
     suspend fun deleteDevice(
         @Header("access_key") access_key: String,
-        @Path("id") deviceId: String
+        @Path("room_id") roomId: String,
+        @Path("device_id") deviceId: String
     ): CommonResponse
 
     @PUT(API_UPDATE_DEVICE_NAME)
@@ -258,7 +269,7 @@ interface SmartTouchApi {
     suspend fun customizationLock(
         @Header("access_key") access_key: String,
         @Body bodyCustomizationLock: BodyCustomizationLock
-    ): DeviceCustomizationResponse
+    ): CommonResponse
 
     @PUT(API_UPDATE_SWITCH_ICON)
     suspend fun updateSwitchIcon(
@@ -277,7 +288,7 @@ interface SmartTouchApi {
         @Header("access_key") access_key: String,
         @Part("iDeviceId") deviceId: RequestBody,
         @Part image: List<MultipartBody.Part>
-    ): DeviceCustomizationResponse
+    ): ImageUploadResponse
 
     @DELETE(API_DELETE_IMAGE)
     suspend fun deleteImage(
@@ -295,13 +306,13 @@ interface SmartTouchApi {
     suspend fun addScene(
         @Header("access_key") access_key: String,
         @Body bodyAddScene: BodyAddScene
-    ): CommonResponse
+    ): AddSceneResponse
 
     @PUT(API_UPDATE_SCENE)
     suspend fun updateScene(
         @Header("access_key") access_key: String,
         @Body bodyUpdateScene: BodyUpdateScene
-    ): ResponseBody
+    ): AddSceneResponse
 
     @DELETE(API_DELETE_SCENE)
     suspend fun deleteScene(
@@ -312,7 +323,19 @@ interface SmartTouchApi {
     @DELETE(API_DELETE_SCENE_DETAIL)
     suspend fun deleteSceneDetail(
         @Header("access_key") access_key: String,
+        @Path("scene_id") sceneId: String,
         @Path("scene_detail_id") sceneDetailId: String
+    ): CommonResponse
+
+    @POST(API_FACTORY_RESET)
+    suspend fun factoryReset(
+        @Header("access_key") access_key: String,
+        @Body bodyFactoryReset: BodyFactoryReset
+    ): CommonResponse
+
+    @POST(API_FACTORY_RESET_ALL_DEVICE)
+    suspend fun factoryResetAllDevice(
+        @Header("access_key") access_key: String
     ): CommonResponse
 
     //

@@ -27,7 +27,6 @@ import com.dellainfotech.smartTouch.common.utils.Constants
 import com.dellainfotech.smartTouch.common.utils.DialogUtil
 import com.dellainfotech.smartTouch.common.utils.Utils
 import com.dellainfotech.smartTouch.common.utils.Utils.isNetworkConnectivityAvailable
-import com.dellainfotech.smartTouch.common.utils.Utils.showAlertDialog
 import com.dellainfotech.smartTouch.common.utils.Utils.toBoolean
 import com.dellainfotech.smartTouch.common.utils.Utils.toEditable
 import com.dellainfotech.smartTouch.databinding.FragmentLoginBinding
@@ -47,6 +46,7 @@ import java.util.*
  * Created by Jignesh Dangar on 09-04-2021.
  */
 
+@SuppressLint("ClickableViewAccessibility")
 class LoginFragment : ModelBaseFragment<AuthViewModel, FragmentLoginBinding, AuthRepository>() {
 
     private val logTag = this::class.java.simpleName
@@ -55,7 +55,6 @@ class LoginFragment : ModelBaseFragment<AuthViewModel, FragmentLoginBinding, Aut
     //Google SignIn
     private var mGoogleSingInClient: GoogleSignInClient? = null
 
-    @SuppressLint("ClickableViewAccessibility")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -70,8 +69,6 @@ class LoginFragment : ModelBaseFragment<AuthViewModel, FragmentLoginBinding, Aut
             binding.checkboxRemember.isChecked = isRememberMeChecked
 
             val loginType = sharedPreference.getString(Constants.LOGGED_IN_TYPE, "")
-
-            Log.e(logTag," loginType $loginType isRememberMeChecked $isRememberMeChecked  ")
 
             if (isRememberMeChecked && loginType == Constants.LOGIN_TYPE_NORMAL){
                 val email = sharedPreference.getString(Constants.LOGGED_IN_EMAIL, null)
@@ -94,7 +91,6 @@ class LoginFragment : ModelBaseFragment<AuthViewModel, FragmentLoginBinding, Aut
         apiCall()
     }
 
-    @SuppressLint("ClickableViewAccessibility")
     private fun clickEvents(){
 
         binding.tvSignUp.setOnClickListener {
@@ -113,15 +109,11 @@ class LoginFragment : ModelBaseFragment<AuthViewModel, FragmentLoginBinding, Aut
             if (isNetworkConnectivityAvailable()) {
                 (activity as AuthenticationActivity).performFacebookLogin()
             } else {
-                context?.let {
-                    showAlertDialog(
-                        it,
-                        getString(R.string.text_no_internet_available),
-                        "",
-                        getString(R.string.text_ok),
-                        null
-                    )
+
+                activity?.let {
+                    DialogUtil.deviceOfflineAlert(it,getString(R.string.text_no_internet_available))
                 }
+
             }
         }
 
@@ -200,14 +192,8 @@ class LoginFragment : ModelBaseFragment<AuthViewModel, FragmentLoginBinding, Aut
                 googleSignInResultLauncher.launch(intent)
 
             } else {
-                context?.let {
-                    showAlertDialog(
-                        it,
-                        getString(R.string.text_no_internet_available),
-                        "",
-                        getString(R.string.text_ok),
-                        null
-                    )
+                activity?.let {
+                    DialogUtil.deviceOfflineAlert(it,getString(R.string.text_no_internet_available))
                 }
             }
         }
@@ -278,7 +264,7 @@ class LoginFragment : ModelBaseFragment<AuthViewModel, FragmentLoginBinding, Aut
             when (response) {
                 is Resource.Success -> {
                     DialogUtil.hideDialog()
-                    Log.e(logTag, "code ${response.values.code}")
+
                     if (response.values.status && response.values.code == Constants.API_SUCCESS_CODE) {
 
                         val userProfile: UserProfile? = response.values.data?.user_data
@@ -370,5 +356,11 @@ class LoginFragment : ModelBaseFragment<AuthViewModel, FragmentLoginBinding, Aut
     ): FragmentLoginBinding = FragmentLoginBinding.inflate(inflater, container, false)
 
     override fun getFragmentRepository(): AuthRepository = AuthRepository(networkModel)
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        viewModel.loginResponse.postValue(null)
+        viewModel.socialLoginResponse.postValue(null)
+    }
 
 }

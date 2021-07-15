@@ -38,6 +38,7 @@ import com.dellainfotech.smartTouch.common.utils.DialogUtil
 import com.dellainfotech.smartTouch.common.utils.FileHelper.getRealPathFromUri
 import com.dellainfotech.smartTouch.common.utils.Utils.toBoolean
 import com.dellainfotech.smartTouch.common.utils.Utils.toInt
+import com.dellainfotech.smartTouch.common.utils.Utils.toReverseInt
 import com.dellainfotech.smartTouch.databinding.FragmentDeviceCustomizationBinding
 import com.dellainfotech.smartTouch.mqtt.*
 import com.dellainfotech.smartTouch.ui.fragments.ModelBaseFragment
@@ -64,8 +65,7 @@ import java.util.*
  * Created by Jignesh Dangar on 22-04-2021.
  */
 
-class DeviceCustomizationFragment :
-    ModelBaseFragment<HomeViewModel, FragmentDeviceCustomizationBinding, HomeRepository>() {
+class DeviceCustomizationFragment : ModelBaseFragment<HomeViewModel, FragmentDeviceCustomizationBinding, HomeRepository>() {
 
     private val logTag = this::class.java.simpleName
     private val args: DeviceCustomizationFragmentArgs by navArgs()
@@ -149,6 +149,8 @@ class DeviceCustomizationFragment :
 
     override fun onDestroyView() {
         super.onDestroyView()
+        viewModel.customizationLockResponse.postValue(null)
+        viewModel.imageUploadResponse.postValue(null)
         mqttConnectionDisposable?.dispose()
     }
 
@@ -161,13 +163,10 @@ class DeviceCustomizationFragment :
 
         binding.ibLock.setOnClickListener {
             activity?.let {
-                val msg: String
-                if (isDeviceCustomizationLocked) {
-                    isDeviceCustomizationLocked = false
-                    msg = getString(R.string.dialog_title_text_unlock)
+                val msg = if (isDeviceCustomizationLocked) {
+                    getString(R.string.dialog_title_text_unlock)
                 } else {
-                    isDeviceCustomizationLocked = true
-                    msg = getString(R.string.dialog_title_text_lock)
+                    getString(R.string.dialog_title_text_lock)
                 }
 
                 DialogUtil.askAlert(
@@ -181,7 +180,7 @@ class DeviceCustomizationFragment :
                             viewModel.customizationLock(
                                 BodyCustomizationLock(
                                     args.deviceDetail.id,
-                                    isDeviceCustomizationLocked.toInt()
+                                    isDeviceCustomizationLocked.toReverseInt()
                                 )
                             )
                         }
@@ -296,11 +295,9 @@ class DeviceCustomizationFragment :
                     DialogUtil.loadingAlert(it)
                 }
 
-                Log.e(logTag, " mProfileFile $mProfileFile ")
-                Log.e(logTag, " imagePath $imagePath ")
-                Log.e(logTag, " imageName $imageName ")
-
                 val fileExtension = mProfileFile!!.extension
+
+                Log.e(logTag, " linearUploadImage mProfileFile $mProfileFile ")
 
                 imageParts.add(
                     MultipartBody.Part.createFormData(
@@ -432,7 +429,10 @@ class DeviceCustomizationFragment :
                             Log.e(logTag, " mProfileFile $mProfileFile ")
                             Log.e(logTag, " imagePath $imagePath ")
                             Log.e(logTag, " imageName $imageName ")
-
+                            mProfileFile?.let {file ->
+                                Log.e(logTag, " image length ${file.length()} ")
+                                Log.e(logTag, " image size ${((file.length() / 1024) / 1024)} ")
+                            }
                         }
                     }
 
@@ -483,14 +483,14 @@ class DeviceCustomizationFragment :
                         Toast.makeText(it, response.values.message, Toast.LENGTH_SHORT).show()
                     }
                     if (response.values.status && response.values.code == Constants.API_SUCCESS_CODE) {
-                        response.values.data?.let {
-                            isDeviceCustomizationLocked = it.isLock.toBoolean()
-                            if (isDeviceCustomizationLocked) {
-                                lockScreen()
-                            } else {
-                                unLockScreen()
-                            }
+
+                        isDeviceCustomizationLocked = !isDeviceCustomizationLocked
+                        if (isDeviceCustomizationLocked) {
+                            lockScreen()
+                        } else {
+                            unLockScreen()
                         }
+
                     }
                 }
                 is Resource.Failure -> {
@@ -522,6 +522,7 @@ class DeviceCustomizationFragment :
                 }
                 is Resource.Failure -> {
                     DialogUtil.hideDialog()
+                    Log.e(logTag,"imageUploadResponse Failure ${response.errorBody?.string()}")
                 }
                 else -> {
                     //We will do nothing here

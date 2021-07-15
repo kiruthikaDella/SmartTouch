@@ -5,20 +5,19 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
-import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import com.appizona.yehiahd.fastsave.FastSave
 import com.dellainfotech.smartTouch.R
 import com.dellainfotech.smartTouch.adapters.DeviceAdapter
 import com.dellainfotech.smartTouch.api.Resource
 import com.dellainfotech.smartTouch.api.body.*
 import com.dellainfotech.smartTouch.api.model.DeviceSwitchData
 import com.dellainfotech.smartTouch.api.model.GetDeviceData
+import com.dellainfotech.smartTouch.api.model.GetRoomData
 import com.dellainfotech.smartTouch.api.repository.HomeRepository
 import com.dellainfotech.smartTouch.common.interfaces.AdapterItemClickListener
 import com.dellainfotech.smartTouch.common.interfaces.DialogEditListener
@@ -26,23 +25,19 @@ import com.dellainfotech.smartTouch.common.interfaces.DialogShowListener
 import com.dellainfotech.smartTouch.common.utils.Constants
 import com.dellainfotech.smartTouch.common.utils.DialogUtil
 import com.dellainfotech.smartTouch.common.utils.Utils.clearError
-import com.dellainfotech.smartTouch.common.utils.Utils.toBoolean
 import com.dellainfotech.smartTouch.common.utils.Utils.toEditable
-import com.dellainfotech.smartTouch.common.utils.Utils.toInt
 import com.dellainfotech.smartTouch.databinding.FragmentDeviceBinding
 import com.dellainfotech.smartTouch.mqtt.NotifyManager
 import com.dellainfotech.smartTouch.ui.fragments.ModelBaseFragment
 import com.dellainfotech.smartTouch.ui.viewmodel.HomeViewModel
 import com.sothree.slidinguppanel.SlidingUpPanelLayout
 
-
 /**
  * Created by Jignesh Dangar on 09-04-2021.
  */
 
 @SuppressLint("ClickableViewAccessibility")
-class DeviceFragment :
-    ModelBaseFragment<HomeViewModel, FragmentDeviceBinding, HomeRepository>() {
+class DeviceFragment : ModelBaseFragment<HomeViewModel, FragmentDeviceBinding, HomeRepository>() {
 
     private val logTag = this::class.java.simpleName
     private val args: DeviceFragmentArgs by navArgs()
@@ -50,14 +45,21 @@ class DeviceFragment :
     private lateinit var panelAdapter: DeviceAdapter
     private var devicePosition: Int? = null
     private var switchPosition: Int? = null
+    private var deviceData: GetDeviceData? = null
+    private var roomData: GetRoomData? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         deviceList.clear()
+        activity?.let {
+            panelAdapter = DeviceAdapter(it, deviceList)
+            binding.recyclerRoomPanels.adapter = panelAdapter
+        }
 
         if (viewModel.getDeviceResponse.value == null) {
             showLoading()
+            viewModel.getDevice(args.roomDetail.id)
         } else {
             viewModel.getDeviceResponse.value?.let {
                 when (it) {
@@ -65,35 +67,16 @@ class DeviceFragment :
                         if (it.values.status && it.values.code == Constants.API_SUCCESS_CODE) {
                             it.values.data?.let { deviceData ->
                                 deviceList.addAll(deviceData)
+                                panelAdapter.notifyDataSetChanged()
                             }
                         }
                         Log.e(logTag, "" + it.values.data)
                     }
                     else -> {
-
+                        panelAdapter.notifyDataSetChanged()
                     }
                 }
             }
-        }
-
-        binding.switchRetainState.isClickable =
-            FastSave.getInstance().getBoolean(Constants.IS_MASTER_USER, false)
-        binding.switchRetainState.isFocusable =
-            FastSave.getInstance().getBoolean(Constants.IS_MASTER_USER, false)
-
-        binding.switchRetainState.setOnTouchListener { v, event ->
-            if (event.action == KeyEvent.ACTION_DOWN) {
-                if (!FastSave.getInstance().getBoolean(Constants.IS_MASTER_USER, false)) {
-                    context?.let {
-                        Toast.makeText(
-                            it,
-                            getString(R.string.error_text_only_master_user_can_edit),
-                            Toast.LENGTH_SHORT
-                        ).show()
-                    }
-                }
-            }
-            false
         }
 
         binding.ivBack.setOnClickListener {
@@ -101,14 +84,10 @@ class DeviceFragment :
         }
 
         binding.tvTitle.text = args.roomDetail.roomName
-        binding.switchRetainState.isChecked = args.roomDetail.retainState.toBoolean()
-
-        binding.switchRetainState.setOnCheckedChangeListener { _, isChecked ->
-            viewModel.retainState(BodyRetainState(args.roomDetail.id, isChecked.toInt()))
-        }
 
         NotifyManager.internetInfo.observe(viewLifecycleOwner, { isConnected ->
             if (isConnected) {
+//                showLoading()
                 viewModel.getDevice(args.roomDetail.id)
             } else {
                 activity?.let {
@@ -127,11 +106,6 @@ class DeviceFragment :
             }
         })
 
-        activity?.let {
-            panelAdapter = DeviceAdapter(it, deviceList)
-            binding.recyclerRoomPanels.adapter = panelAdapter
-        }
-
         clickEvents()
         apiCall()
     }
@@ -144,6 +118,14 @@ class DeviceFragment :
     ): FragmentDeviceBinding = FragmentDeviceBinding.inflate(inflater, container, false)
 
     override fun getFragmentRepository(): HomeRepository = HomeRepository(networkModel)
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        viewModel.updateRoomResponse.postValue(null)
+        viewModel.addDeviceResponse.postValue(null)
+        viewModel.updateDeviceNameResponse.postValue(null)
+        viewModel.updateSwitchNameResponse.postValue(null)
+    }
 
     override fun onDestroy() {
         super.onDestroy()
@@ -191,6 +173,8 @@ class DeviceFragment :
                                     Toast.LENGTH_SHORT
                                 ).show()
                             } else {
+                                roomData = args.roomDetail
+                                roomData?.roomName = string
                                 DialogUtil.hideDialog()
                                 DialogUtil.loadingAlert(it)
                                 viewModel.updateRoom(BodyUpdateRoom(args.roomDetail.id, string))
@@ -225,6 +209,8 @@ class DeviceFragment :
                                         Toast.LENGTH_SHORT
                                     ).show()
                                 } else {
+                                    deviceData = data
+                                    deviceData?.deviceName = string
                                     DialogUtil.hideDialog()
                                     this@DeviceFragment.devicePosition = devicePosition
                                     DialogUtil.loadingAlert(it)
@@ -292,12 +278,15 @@ class DeviceFragment :
                                         Toast.LENGTH_SHORT
                                     ).show()
                                 } else {
+                                    deviceData = data
                                     DialogUtil.hideDialog()
                                     this@DeviceFragment.devicePosition = devicePosition
                                     switchPosition = switchData.index.toInt() - 1
+                                    deviceData?.switchData?.get(switchPosition!!)?.name = string
                                     DialogUtil.loadingAlert(it)
                                     viewModel.updateSwitchName(
                                         BodyUpdateSwitchName(
+                                            data.id,
                                             switchData.id,
                                             string
                                         )
@@ -315,14 +304,14 @@ class DeviceFragment :
                 }
             }
 
-
         })
 
         panelAdapter.setOnSettingsClickListener(object : AdapterItemClickListener<GetDeviceData> {
             override fun onItemClick(data: GetDeviceData) {
                 findNavController().navigate(
                     DeviceFragmentDirections.actionRoomPanelFragmentToDeviceSettingsFragment(
-                        data
+                        data,
+                        args.roomDetail
                     )
                 )
             }
@@ -388,9 +377,10 @@ class DeviceFragment :
                     }
 
                     if (response.values.status && response.values.code == Constants.API_SUCCESS_CODE) {
-                        response.values.data?.let {
+                        roomData?.let {
                             args.roomDetail.roomName = it.roomName
                             binding.tvTitle.text = it.roomName
+                            roomData = null
                         }
                     }
                 }
@@ -438,9 +428,14 @@ class DeviceFragment :
                             deviceList.addAll(deviceData)
                             panelAdapter.notifyDataSetChanged()
                         }
+                    } else {
+                        context?.let {
+                            Toast.makeText(it, response.values.message, Toast.LENGTH_SHORT).show()
+                        }
                     }
                 }
                 is Resource.Failure -> {
+                    DialogUtil.hideDialog()
                     Log.e(logTag, "getDeviceResponse Failure ${response.errorBody?.string()}")
                 }
                 else -> {
@@ -459,13 +454,15 @@ class DeviceFragment :
                     }
                     if (response.values.status && response.values.code == Constants.API_SUCCESS_CODE) {
 
-                        response.values.data?.let { deviceData ->
+                        deviceData?.let { data ->
                             devicePosition?.let { pos ->
-                                deviceList[pos] = deviceData
+                                deviceList[pos] = data
                                 panelAdapter.notifyDataSetChanged()
                                 devicePosition = null
+                                deviceData = null
                             }
                         }
+
                     }
                 }
                 is Resource.Failure -> {
@@ -492,17 +489,17 @@ class DeviceFragment :
                     }
                     if (response.values.status && response.values.code == Constants.API_SUCCESS_CODE) {
 
-                        response.values.data?.let { dData ->
-                            devicePosition?.let { dPosition ->
-                                switchPosition?.let { sPosition ->
+                        devicePosition?.let { dPosition ->
+                            switchPosition?.let { sPosition ->
+                                deviceData?.switchData?.get(sPosition)?.let { sData ->
                                     deviceList[dPosition].switchData?.let {
-                                        it[sPosition] = dData
+                                        it[sPosition] = sData
                                         panelAdapter.notifyDataSetChanged()
                                         devicePosition = null
                                         switchPosition = null
                                     }
-
                                 }
+
                             }
                         }
 

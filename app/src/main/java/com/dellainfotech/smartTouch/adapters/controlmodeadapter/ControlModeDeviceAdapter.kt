@@ -35,12 +35,12 @@ class ControlModeDeviceAdapter(
 
     private val logTag = this::class.java.simpleName
 
-    private val EIGHT_PANEL_VIEW = 1
-    private val FOUR_PANEL_VIEW = 2
+    private val eightPanelView = 1
+    private val fourPanelView = 2
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return when (viewType) {
-            EIGHT_PANEL_VIEW -> {
+            eightPanelView -> {
                 val v = LayoutInflater.from(parent.context)
                     .inflate(R.layout.item_control_mode_eight_panel, parent, false)
                 EightPanelViewHolder(v)
@@ -61,11 +61,11 @@ class ControlModeDeviceAdapter(
         }
 
         when (holder.itemViewType) {
-            EIGHT_PANEL_VIEW -> {
+            eightPanelView -> {
                 val eightPanelViewHolder: EightPanelViewHolder = holder as EightPanelViewHolder
                 setEightSwitchViewHolder(eightPanelViewHolder, data)
             }
-            FOUR_PANEL_VIEW -> {
+            fourPanelView -> {
                 val fourPanelViewHolder: FourPanelViewHolder = holder as FourPanelViewHolder
                 setFourSwitchViewHolder(fourPanelViewHolder, data)
             }
@@ -79,15 +79,13 @@ class ControlModeDeviceAdapter(
 
     override fun getItemViewType(position: Int): Int {
         return if (deviceList[position].deviceType == Constants.DEVICE_TYPE_EIGHT) {
-            EIGHT_PANEL_VIEW
+            eightPanelView
         } else {
-            FOUR_PANEL_VIEW
+            fourPanelView
         }
     }
 
     inner class EightPanelViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-
-        val tvPanelName = itemView.findViewById(R.id.tv_panel_name) as TextView
 
         val relativeMain = itemView.findViewById(R.id.relative_main) as RelativeLayout
         val relativeLayout = itemView.findViewById(R.id.relative_layout) as RelativeLayout
@@ -122,8 +120,6 @@ class ControlModeDeviceAdapter(
         val relativeMain = itemView.findViewById(R.id.relative_main) as RelativeLayout
         val relativeLayout = itemView.findViewById(R.id.relative_layout) as RelativeLayout
 
-        val tvPanelName = itemView.findViewById(R.id.tv_panel_name) as TextView
-
         val tvSwitchNameOne = itemView.findViewById(R.id.tv_switch_one_name) as TextView
         val tvSwitchNameTwo = itemView.findViewById(R.id.tv_switch_two_name) as TextView
         val tvSwitchNameThree = itemView.findViewById(R.id.tv_switch_three_name) as TextView
@@ -141,7 +137,6 @@ class ControlModeDeviceAdapter(
 
     private fun setEightSwitchViewHolder(holder: EightPanelViewHolder, device: GetDeviceData) {
         holder.apply {
-            tvPanelName.text = device.deviceName
 
             try {
                 val wrapSpec = View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED)
@@ -157,7 +152,7 @@ class ControlModeDeviceAdapter(
                 e.printStackTrace()
             }
 
-            if (device.isDeviceAvailable == "0") {
+            if (device.isDeviceAvailable == 0) {
                 relativeLayout.visibility = View.VISIBLE
             } else {
                 relativeLayout.visibility = View.GONE
@@ -296,7 +291,6 @@ class ControlModeDeviceAdapter(
                     seekParams?.progress?.let {
                         publishDimmer(
                             device.deviceSerialNo,
-                            MQTTConstants.AWS_DMR,
                             it
                         )
                     }
@@ -315,7 +309,6 @@ class ControlModeDeviceAdapter(
 
     private fun setFourSwitchViewHolder(holder: FourPanelViewHolder, device: GetDeviceData) {
         holder.apply {
-            tvPanelName.text = device.deviceName
 
             try {
                 val wrapSpec = View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED)
@@ -331,7 +324,7 @@ class ControlModeDeviceAdapter(
                 e.printStackTrace()
             }
 
-            if (device.isDeviceAvailable == "0") {
+            if (device.isDeviceAvailable == 0) {
                 relativeLayout.visibility = View.VISIBLE
             } else {
                 relativeLayout.visibility = View.GONE
@@ -410,7 +403,6 @@ class ControlModeDeviceAdapter(
                     seekParams?.progress?.let {
                         publishDimmer(
                             device.deviceSerialNo,
-                            MQTTConstants.AWS_DMR,
                             it
                         )
                     }
@@ -549,7 +541,7 @@ class ControlModeDeviceAdapter(
 
                         if (jsonObject.has(MQTTConstants.AWS_STATUS)) {
                             deviceData?.isDeviceAvailable =
-                                jsonObject.getInt(MQTTConstants.AWS_STATUS).toString()
+                                jsonObject.getInt(MQTTConstants.AWS_STATUS)
                             for ((index, value) in deviceList.withIndex()) {
                                 if (value.deviceSerialNo == deviceData?.deviceSerialNo) {
                                     deviceList[index] = deviceData
@@ -584,9 +576,9 @@ class ControlModeDeviceAdapter(
         )
     }
 
-    private fun publishDimmer(deviceId: String, switchIndex: String, progress: Int) {
+    private fun publishDimmer(deviceId: String, progress: Int) {
         val payload = JSONObject()
-        payload.put(switchIndex, progress)
+        payload.put(MQTTConstants.AWS_DMR, progress)
 
         AwsMqttSingleton.publish(
             MQTTConstants.CONTROL_DEVICE_SWITCHES.replace(
