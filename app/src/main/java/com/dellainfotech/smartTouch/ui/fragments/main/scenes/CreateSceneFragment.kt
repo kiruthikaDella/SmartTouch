@@ -42,7 +42,8 @@ import java.util.*
  */
 
 @Suppress("DEPRECATION")
-class CreateSceneFragment : ModelBaseFragment<HomeViewModel, FragmentCreateSceneBinding, HomeRepository>() {
+class CreateSceneFragment :
+    ModelBaseFragment<HomeViewModel, FragmentCreateSceneBinding, HomeRepository>() {
 
     private val logTag = this::class.java.simpleName
     private val args: CreateSceneFragmentArgs by navArgs()
@@ -136,10 +137,17 @@ class CreateSceneFragment : ModelBaseFragment<HomeViewModel, FragmentCreateScene
                 val popup = PopupMenu(ctx, binding.tvInterval)
                 popup.menuInflater.inflate(R.menu.scene_frequency_menu, popup.menu)
                 popup.setOnMenuItemClickListener { item ->
-                    binding.tvInterval.text = item.title
 
-                    if (item.itemId == R.id.action_weekly) {
-                        showPanel()
+                    when (item.itemId) {
+                        R.id.action_daily -> {
+                            binding.tvInterval.text = item.title
+                        }
+                        R.id.action_weekly -> {
+                            showPanel()
+                        }
+                        R.id.action_monthly -> {
+                            binding.tvInterval.text = item.title
+                        }
                     }
 
                     true
@@ -345,10 +353,20 @@ class CreateSceneFragment : ModelBaseFragment<HomeViewModel, FragmentCreateScene
 
         binding.layoutFrequencyWeekly.btnSave.setOnClickListener {
             Log.e(logTag, " selected days ${weeklyDaysAdapter.getDayList()}")
-            if (weeklyDaysAdapter.getDayList().size >= 7) {
-                binding.tvInterval.text = getString(R.string.text_daily)
+
+            if (weeklyDaysAdapter.getDayList().size <= 0) {
+                context?.let { mContext ->
+                    Toast.makeText(mContext, getString(R.string.error_text_empty_weekly_days), Toast.LENGTH_SHORT)
+                        .show()
+                }
+            } else {
+                if (weeklyDaysAdapter.getDayList().size >= 7) {
+                    binding.tvInterval.text = getString(R.string.text_daily)
+                } else {
+                    binding.tvInterval.text = getString(R.string.text_weekly)
+                }
+                hidePanel()
             }
-            hidePanel()
         }
     }
 

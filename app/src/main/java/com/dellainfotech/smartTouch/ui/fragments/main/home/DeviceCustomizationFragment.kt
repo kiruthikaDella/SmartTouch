@@ -150,6 +150,7 @@ class DeviceCustomizationFragment : ModelBaseFragment<HomeViewModel, FragmentDev
     override fun onDestroyView() {
         super.onDestroyView()
         viewModel.customizationLockResponse.postValue(null)
+        viewModel.imageUploadResponse.postValue(null)
         mqttConnectionDisposable?.dispose()
     }
 
@@ -297,7 +298,6 @@ class DeviceCustomizationFragment : ModelBaseFragment<HomeViewModel, FragmentDev
                 val fileExtension = mProfileFile!!.extension
 
                 Log.e(logTag, " linearUploadImage mProfileFile $mProfileFile ")
-                Log.e(logTag, " linearUploadImage imageName $imageName ")
 
                 imageParts.add(
                     MultipartBody.Part.createFormData(
@@ -307,11 +307,6 @@ class DeviceCustomizationFragment : ModelBaseFragment<HomeViewModel, FragmentDev
                 )
 
                 hidePanel()
-                mProfileFile?.let {file ->
-                    Log.e(logTag, " linearUploadImage image length ${file.length()} ")
-                    Log.e(logTag, " linearUploadImage image size ${((file.length() / 1024) / 1024)} ")
-                }
-                Log.e(logTag," linearUploadImage deviceDetail ${args.deviceDetail.id} ")
                 viewModel.imageUpload(
                     args.deviceDetail.id.toRequestBody("text/plain".toMediaTypeOrNull()),
                     imageParts

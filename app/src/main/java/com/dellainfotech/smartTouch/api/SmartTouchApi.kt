@@ -4,7 +4,6 @@ import com.dellainfotech.smartTouch.api.body.*
 import com.dellainfotech.smartTouch.api.model.*
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
-import okhttp3.ResponseBody
 import retrofit2.http.*
 
 /**
@@ -17,8 +16,9 @@ interface SmartTouchApi {
     //
 
     companion object {
-//        const val BASE_URL = "https://dev.teksun.com/smarttouch/api/v1/"
-        const val BASE_URL = "http://192.168.4.113:6001/api/v1/"
+        //        const val BASE_URL = "https://dev.teksun.com/smarttouch/api/v1/"
+//        const val BASE_URL = "http://192.168.4.113:6001/api/v1/"
+        const val BASE_URL = "https://dev.teksun.com/smarttouch_new/api/v1/"
 
         // Authentication APIs
         const val API_LOGIN = "auth/login"

@@ -184,7 +184,7 @@ class HomeViewModel @ViewModelInject constructor(
         get() = _getControlResponse
 
     private val _imageUploadResponse: MutableLiveData<Resource<ImageUploadResponse>> = MutableLiveData()
-    val imageUploadResponse: LiveData<Resource<ImageUploadResponse>>
+    val imageUploadResponse: MutableLiveData<Resource<ImageUploadResponse>>
         get() = _imageUploadResponse
 
     private val _deleteImageResponse: MutableLiveData<Resource<CommonResponse>> = MutableLiveData()

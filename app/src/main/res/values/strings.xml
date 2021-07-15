@@ -205,6 +205,7 @@
     <string name="text_monthly">Monthly</string>
     <string name="error_text_duplicate_scene">Duplicate switch is not allowed</string>
     <string name="error_text_empty_switch">Please select switch to create a scene</string>
+    <string name="error_text_empty_weekly_days">Please select at least one day</string>
 
     <!--    Create Scene   -->
     <string name="title_text_scene">Scene</string>
