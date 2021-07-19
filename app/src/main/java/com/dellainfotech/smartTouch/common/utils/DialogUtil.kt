@@ -195,6 +195,43 @@ object DialogUtil {
 
     }
 
+    fun featureDetailAlert(
+        activity: Activity,
+        title: String,
+        detail: String,
+        onClick: DialogShowListener? = null
+    ) {
+
+        hideDialog()
+        dialog = Dialog(activity)
+        dialog?.setContentView(R.layout.dialog_feature_detail)
+        dialog?.setCancelable(false)
+
+        val tvTitle = dialog?.findViewById(R.id.tv_title) as TextView
+        val tvDetail = dialog?.findViewById(R.id.tv_detail) as TextView
+        val tvClose = dialog?.findViewById(R.id.tv_close) as TextView
+
+        tvTitle.text = title
+        tvDetail.text = detail
+
+        tvClose.setOnClickListener {
+            if (onClick == null) {
+                hideDialog()
+            } else {
+                onClick.onClick()
+            }
+        }
+
+        val displayMetrics = DisplayMetrics()
+        activity.windowManager?.defaultDisplay?.getMetrics(displayMetrics)
+        val width = (displayMetrics.widthPixels * Constants.COMMON_DIALOG_WIDTH)
+        val height = (displayMetrics.heightPixels * Constants.COMMON_DIALOG_HEIGHT)
+
+        dialog?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        dialog?.window?.setLayout(width.toInt(), height.toInt())
+        dialog?.show()
+    }
+
     fun hideDialog() {
         dialog?.let {
             if (it.isShowing) {

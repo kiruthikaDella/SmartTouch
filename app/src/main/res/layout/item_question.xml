@@ -26,7 +26,6 @@
         android:layout_height="wrap_content"
         android:layout_toStartOf="@+id/iv_arrow"
         android:fontFamily="@font/roboto_medium"
-        android:text="@string/que1"
         android:textColor="@color/theme_color"
         android:textSize="@dimen/_13ssp" />
 

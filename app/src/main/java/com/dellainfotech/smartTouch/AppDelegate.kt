@@ -15,8 +15,6 @@ import com.dellainfotech.smartTouch.mqtt.AwsMqttSingleton
 
 class AppDelegate: Application(), LifecycleObserver {
 
-    private val logTag = AppDelegate::class.java.simpleName
-
     companion object {
         lateinit var instance: AppDelegate
     }
@@ -32,36 +30,5 @@ class AppDelegate: Application(), LifecycleObserver {
 
         ProcessLifecycleOwner.get().lifecycle.addObserver(this)
 
-    }
-
-    @OnLifecycleEvent(Lifecycle.Event.ON_STOP)
-    private fun onAppBackgrounded() {
-        Log.v(logTag, "Lifecycle.Event.ON_STOP")
-    }
-
-
-    @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
-    fun createSomething() {
-        Log.v(logTag, "Lifecycle.Event.ON_CREATE")
-    }
-
-    @OnLifecycleEvent(Lifecycle.Event.ON_START)
-    fun startSomething() {
-        Log.v(logTag, "Lifecycle.Event.ON_START")
-    }
-
-    @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
-    private fun onResume() {
-        Log.v(logTag, "Lifecycle.Event.ON_RESUME")
-    }
-
-    @OnLifecycleEvent(Lifecycle.Event.ON_PAUSE)
-    private fun onPause() {
-        Log.v(logTag, "Lifecycle.Event.ON_PAUSE")
-    }
-
-    @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
-    private fun onAppDestroy() {
-        Log.v(logTag, "Lifecycle.Event.ON_DESTROY")
     }
 }

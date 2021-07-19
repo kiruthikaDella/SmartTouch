@@ -15,5 +15,6 @@
 
     <dimen name="dialog_button_size">@dimen/_10ssp</dimen>
     <dimen name="dialog_title_size">@dimen/_14ssp</dimen>
+    <dimen name="dialog_description_size">@dimen/_12ssp</dimen>
     <dimen name="dialog_corner_radius">@dimen/_20sdp</dimen>
 </resources>

@@ -212,7 +212,6 @@ class ControlModeFragment :
                         response.values.data?.let { roomDataList ->
                             roomList.addAll(roomDataList)
                             activity?.let { mActivity ->
-                                Log.e(logTag, "  roomList ${roomList.size}")
                                 controlModeAdapter = ControlModeAdapter(mActivity, roomList)
                                 binding.recyclerControlModes.adapter = controlModeAdapter
                             }

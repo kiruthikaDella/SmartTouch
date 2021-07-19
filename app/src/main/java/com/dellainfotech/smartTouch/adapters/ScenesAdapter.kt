@@ -4,6 +4,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.RelativeLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.dellainfotech.smartTouch.R
@@ -24,11 +25,12 @@ class ScenesAdapter(
     inner class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val tvSceneName = itemView.findViewById(R.id.tv_scene_name) as TextView
         val ibDeleteScene = itemView.findViewById(R.id.ib_delete) as ImageView
+        val relativeLayout = itemView.findViewById(R.id.main_view) as RelativeLayout
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
         val v = LayoutInflater.from(parent.context)
-            .inflate(R.layout.item_scene, parent, false)
+            .inflate(R.layout.item_scene2, parent, false)
         return MyViewHolder(v)
     }
 
@@ -42,7 +44,7 @@ class ScenesAdapter(
         holder.apply {
             tvSceneName.text = data.sceneName
 
-            itemView.setOnClickListener {
+            relativeLayout.setOnClickListener {
                 sceneClickListener?.onItemClick(data)
             }
 

@@ -188,7 +188,7 @@ class HomeViewModel @ViewModelInject constructor(
         get() = _imageUploadResponse
 
     private val _deleteImageResponse: MutableLiveData<Resource<CommonResponse>> = MutableLiveData()
-    val deleteImageResponse: LiveData<Resource<CommonResponse>>
+    val deleteImageResponse: MutableLiveData<Resource<CommonResponse>>
         get() = _deleteImageResponse
 
     private val _getSceneResponse: MutableLiveData<Resource<GetSceneResponse>> = MutableLiveData()

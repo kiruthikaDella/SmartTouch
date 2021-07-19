@@ -145,9 +145,6 @@ class CreateSceneFragment :
                         R.id.action_weekly -> {
                             showPanel()
                         }
-                        R.id.action_monthly -> {
-                            binding.tvInterval.text = item.title
-                        }
                     }
 
                     true
