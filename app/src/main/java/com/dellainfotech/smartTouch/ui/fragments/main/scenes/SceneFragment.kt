@@ -11,6 +11,7 @@ import com.dellainfotech.smartTouch.R
 import com.dellainfotech.smartTouch.adapters.ScenesAdapter
 import com.dellainfotech.smartTouch.api.Resource
 import com.dellainfotech.smartTouch.api.body.BodyGetScene
+import com.dellainfotech.smartTouch.api.body.BodyUpdateSceneStatus
 import com.dellainfotech.smartTouch.api.model.ControlModeRoomData
 import com.dellainfotech.smartTouch.api.model.GetSceneData
 import com.dellainfotech.smartTouch.api.repository.HomeRepository
@@ -32,7 +33,9 @@ class SceneFragment : ModelBaseFragment<HomeViewModel, FragmentSceneBinding, Hom
     private val logTag = this::class.java.simpleName
     private var controlModeRoomData = arrayListOf<ControlModeRoomData>()
     private lateinit var sceneAdapter: ScenesAdapter
-    private val sceneList = arrayListOf<GetSceneData>()
+    private val sceneList: MutableList<GetSceneData> = ArrayList()
+    private var sceneData: GetSceneData? = null
+    private var sceneStatus: Int = 0
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -85,12 +88,24 @@ class SceneFragment : ModelBaseFragment<HomeViewModel, FragmentSceneBinding, Hom
 
         })
 
+        sceneAdapter.setOnSwitchClickListener(object :
+            ScenesAdapter.SwitchItemClickListener<GetSceneData> {
+            override fun onItemClick(data: GetSceneData, sceneStatusValue: Int) {
+                activity?.let {
+                    DialogUtil.loadingAlert(it)
+                }
+                sceneStatus = sceneStatusValue
+                sceneData = data
+                viewModel.updateSceneStatus(data.id, BodyUpdateSceneStatus(sceneStatus))
+            }
+
+        })
+
         NotifyManager.internetInfo.observe(viewLifecycleOwner, { isConnected ->
             if (isConnected) {
                 activity?.let {
                     DialogUtil.loadingAlert(it)
                 }
-//                viewModel.getScene(BodyGetScene(args.roomDetail.id, args.deviceDetail.id))
                 viewModel.getScene(BodyGetScene("", ""))
                 viewModel.getControl()
             }
@@ -164,7 +179,6 @@ class SceneFragment : ModelBaseFragment<HomeViewModel, FragmentSceneBinding, Hom
                         Toast.makeText(it, response.values.message, Toast.LENGTH_SHORT).show()
                     }
                     if (response.values.status && response.values.code == Constants.API_SUCCESS_CODE) {
-//                        viewModel.getScene(BodyGetScene(args.roomDetail.id, args.deviceDetail.id))
                         viewModel.getScene(BodyGetScene("", ""))
                     } else {
                         DialogUtil.hideDialog()
@@ -173,6 +187,40 @@ class SceneFragment : ModelBaseFragment<HomeViewModel, FragmentSceneBinding, Hom
                 is Resource.Failure -> {
                     DialogUtil.hideDialog()
                     Log.e(logTag, " deleteSceneResponse Failure ${response.errorBody?.string()} ")
+                }
+                else -> {
+                    //We will do nothing here
+                }
+            }
+        })
+
+        viewModel.updateSceneStatusResponse.observe(viewLifecycleOwner, { response ->
+            when (response) {
+                is Resource.Success -> {
+                    DialogUtil.hideDialog()
+                    context?.let { mContext ->
+                        Toast.makeText(mContext, response.values.message, Toast.LENGTH_SHORT)
+                    }
+
+                    if (response.values.status && response.values.code == Constants.API_SUCCESS_CODE) {
+                        sceneData?.let { scene ->
+                            val tempScene = sceneList.find { it == scene }
+                            tempScene?.let { tempData ->
+                                tempData.isDeviceDisable = sceneStatus
+                                sceneList.set(sceneList.indexOf(tempData),tempData)
+                            }
+                        }
+                    }
+
+                    sceneStatus = 0
+                    sceneData = null
+                }
+                is Resource.Failure -> {
+                    DialogUtil.hideDialog()
+                    Log.e(
+                        logTag,
+                        " updateSceneStatusResponse Failure ${response.errorBody?.string()} "
+                    )
                 }
                 else -> {
                     //We will do nothing here

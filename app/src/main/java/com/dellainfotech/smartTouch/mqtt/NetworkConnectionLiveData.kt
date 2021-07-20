@@ -72,13 +72,11 @@ class NetworkConnectionLiveData : MutableLiveData<Boolean>() {
                 override fun onAvailable(network: Network) {    //when Wifi is on
                     super.onAvailable(network)
                     postValue(true)
-//                    NotifyManager.internetInfo.postValue(true)
                 }
 
                 override fun onLost(network: Network) {    //when Wifi 【turns off】
                     super.onLost(network)
                     postValue(false)
-//                    NotifyManager.internetInfo.postValue(false)
                 }
             }
             return connectivityManagerCallback
@@ -97,6 +95,5 @@ class NetworkConnectionLiveData : MutableLiveData<Boolean>() {
     private fun updateConnection() {
         val activeNetwork: NetworkInfo? = connectivityManager.activeNetworkInfo
         postValue(activeNetwork?.isConnected == true)
-//        NotifyManager.internetInfo.postValue(activeNetwork?.isConnected == true)
     }
 }

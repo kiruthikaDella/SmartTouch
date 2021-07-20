@@ -1,6 +1,7 @@
 package com.dellainfotech.smartTouch.ui.fragments.main.home
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.app.Activity.RESULT_OK
 import android.app.AlertDialog
 import android.content.Intent
@@ -391,49 +392,81 @@ class DeviceCustomizationFragment :
 
         binding.ivScreenLayoutInfo.setOnClickListener {
             activity?.let { mActivity ->
-                DialogUtil.featureDetailAlert(mActivity,getString(R.string.text_screen_layout),getString(R.string.description_screen_layout))
+                DialogUtil.featureDetailAlert(
+                    mActivity,
+                    getString(R.string.text_screen_layout),
+                    getString(R.string.description_screen_layout)
+                )
             }
         }
 
         binding.ivUploadImageInfo.setOnClickListener {
             activity?.let { mActivity ->
-                DialogUtil.featureDetailAlert(mActivity,getString(R.string.text_upload_image),getString(R.string.description_upload_image))
+                DialogUtil.featureDetailAlert(
+                    mActivity,
+                    getString(R.string.text_upload_image),
+                    getString(R.string.description_upload_image)
+                )
             }
         }
 
         binding.ivSwitchIconsInfo.setOnClickListener {
             activity?.let { mActivity ->
-                DialogUtil.featureDetailAlert(mActivity,getString(R.string.text_switch_icons),getString(R.string.description_switch_icons))
+                DialogUtil.featureDetailAlert(
+                    mActivity,
+                    getString(R.string.text_switch_icons),
+                    getString(R.string.description_switch_icons)
+                )
             }
         }
 
         binding.ivSwitchIconSizeInfo.setOnClickListener {
             activity?.let { mActivity ->
-                DialogUtil.featureDetailAlert(mActivity,getString(R.string.text_switch_icon_size),getString(R.string.description_switch_icons_size))
+                DialogUtil.featureDetailAlert(
+                    mActivity,
+                    getString(R.string.text_switch_icon_size),
+                    getString(R.string.description_switch_icons_size)
+                )
             }
         }
 
         binding.ivSwitchNameInfo.setOnClickListener {
             activity?.let { mActivity ->
-                DialogUtil.featureDetailAlert(mActivity,getString(R.string.text_switch_name),getString(R.string.description_switch_name))
+                DialogUtil.featureDetailAlert(
+                    mActivity,
+                    getString(R.string.text_switch_name),
+                    getString(R.string.description_switch_name)
+                )
             }
         }
 
         binding.ivTextStyleInfo.setOnClickListener {
             activity?.let { mActivity ->
-                DialogUtil.featureDetailAlert(mActivity,getString(R.string.text_style),getString(R.string.description_text_style))
+                DialogUtil.featureDetailAlert(
+                    mActivity,
+                    getString(R.string.text_style),
+                    getString(R.string.description_text_style)
+                )
             }
         }
 
         binding.ivTextColorInfo.setOnClickListener {
             activity?.let { mActivity ->
-                DialogUtil.featureDetailAlert(mActivity,getString(R.string.text_color),getString(R.string.description_text_color))
+                DialogUtil.featureDetailAlert(
+                    mActivity,
+                    getString(R.string.text_color),
+                    getString(R.string.description_text_color)
+                )
             }
         }
 
         binding.ivTextSizeInfo.setOnClickListener {
             activity?.let { mActivity ->
-                DialogUtil.featureDetailAlert(mActivity,getString(R.string.text_size),getString(R.string.description_text_size))
+                DialogUtil.featureDetailAlert(
+                    mActivity,
+                    getString(R.string.text_size),
+                    getString(R.string.description_text_size)
+                )
             }
         }
     }
@@ -461,39 +494,19 @@ class DeviceCustomizationFragment :
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
-        if (resultCode == RESULT_OK) {
-            if (requestCode == Constants.REQUEST_IMAGE_CAPTURE) {
-                try {
-//                    mPhotoFile = mCompressor.compressToFile(mPhotoFile)
-                    Log.e(logTag, " camera mProfileFile $mProfileFile ")
-                    Log.e(logTag, " camera imagePath $imagePath ")
-                    Log.e(logTag, " camera imageName $imageName ")
-                } catch (e: Exception) {
-                    e.printStackTrace()
-                }
-
-            } else if (requestCode == Constants.REQUEST_GALLERY_IMAGE) {
-                val selectedImage: Uri? = data?.data
-                try {
-                    selectedImage?.let { uri ->
-                        getRealPathFromUri(uri)?.let {
-                            mProfileFile = File(it)
-                            imagePath = mProfileFile!!.absolutePath
-                            imageName = imagePath.substring(imagePath.lastIndexOf("/") + 1)
-
-                            Log.e(logTag, " mProfileFile $mProfileFile ")
-                            Log.e(logTag, " imagePath $imagePath ")
-                            Log.e(logTag, " imageName $imageName ")
-                            mProfileFile?.let { file ->
-                                Log.e(logTag, " image length ${file.length()} ")
-                                Log.e(logTag, " image size ${((file.length() / 1024) / 1024)} ")
-                            }
-                        }
+        if (requestCode == Constants.REQUEST_GALLERY_IMAGE && resultCode == RESULT_OK) {
+            val selectedImage: Uri? = data?.data
+            try {
+                selectedImage?.let { uri ->
+                    getRealPathFromUri(uri)?.let {
+                        mProfileFile = File(it)
+                        imagePath = mProfileFile!!.absolutePath
+                        imageName = imagePath.substring(imagePath.lastIndexOf("/") + 1)
                     }
-
-                } catch (e: Exception) {
-                    e.printStackTrace()
                 }
+
+            } catch (e: Exception) {
+                e.printStackTrace()
             }
         }
 
@@ -687,10 +700,11 @@ class DeviceCustomizationFragment :
         return File.createTempFile(mFileName, ".jpg", storageDir)
     }
 
+    @SuppressLint("QueryPermissionsNeeded")
     private fun dispatchTakePictureIntent() {
         val takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-        context?.let {
-            if (takePictureIntent.resolveActivity(it.packageManager) != null) {
+        context?.let {mContext ->
+            if (takePictureIntent.resolveActivity(mContext.packageManager) != null) {
                 // Create the File where the photo should go
                 var photoFile: File? = null
                 try {
@@ -701,7 +715,7 @@ class DeviceCustomizationFragment :
                 }
                 if (photoFile != null) {
                     val photoURI = FileProvider.getUriForFile(
-                        it, BuildConfig.APPLICATION_ID + ".provider",
+                        mContext, BuildConfig.APPLICATION_ID + ".provider",
                         photoFile
                     )
                     mProfileFile = photoFile

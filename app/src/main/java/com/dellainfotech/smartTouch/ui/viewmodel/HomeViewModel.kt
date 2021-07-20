@@ -219,6 +219,10 @@ class HomeViewModel @ViewModelInject constructor(
     val factoryResetAllDeviceResponse: MutableLiveData<Resource<CommonResponse>>
         get() = _factoryResetAllDeviceResponse
 
+    private val _updateSceneStatusResponse: MutableLiveData<Resource<CommonResponse>> = MutableLiveData()
+    val updateSceneStatusResponse: MutableLiveData<Resource<CommonResponse>>
+        get() = _updateSceneStatusResponse
+
     fun addDevice(bodyAddDevice: BodyAddDevice) = viewModelScope.launch {
         _addDeviceResponse.value = Resource.Loading
         _addDeviceResponse.value = homeRepository.addDevice(bodyAddDevice)
@@ -317,6 +321,11 @@ class HomeViewModel @ViewModelInject constructor(
     fun factoryResetAllDevice() = viewModelScope.launch {
         _factoryResetAllDeviceResponse.value = Resource.Loading
         _factoryResetAllDeviceResponse.value = homeRepository.factoryResetAllDevice()
+    }
+
+    fun updateSceneStatus(sceneId: String,bodyUpdateSceneStatus: BodyUpdateSceneStatus) = viewModelScope.launch {
+        _updateSceneStatusResponse.value = Resource.Loading
+        _updateSceneStatusResponse.value = homeRepository.updateSceneStatus(sceneId,bodyUpdateSceneStatus)
     }
 
     //

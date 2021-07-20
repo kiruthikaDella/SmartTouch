@@ -120,6 +120,9 @@ class HomeRepository @Inject constructor(
     suspend fun factoryResetAllDevice() =
         safeApiCall { smartTouchApi.factoryResetAllDevice(getAccessKey()) }
 
+    suspend fun updateSceneStatus(sceneId: String,bodyUpdateSceneStatus: BodyUpdateSceneStatus) =
+        safeApiCall { smartTouchApi.updateSceneStatus(getAccessKey(), sceneId, bodyUpdateSceneStatus) }
+
     //
     //endregion
     //

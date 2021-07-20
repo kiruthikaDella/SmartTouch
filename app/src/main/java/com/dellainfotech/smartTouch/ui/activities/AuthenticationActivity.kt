@@ -94,7 +94,7 @@ class AuthenticationActivity : AppCompatActivity() {
                 }
                 is Resource.Failure -> {
                     DialogUtil.hideDialog()
-                    Log.e(logTag, "login error ${response.errorBody}")
+                    Log.e(logTag, "login error ${response.errorBody?.string()}")
                 }
                 else -> {
                     // We will do nothing here

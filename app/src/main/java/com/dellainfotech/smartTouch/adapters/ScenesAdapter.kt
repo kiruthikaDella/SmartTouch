@@ -10,22 +10,27 @@ import androidx.recyclerview.widget.RecyclerView
 import com.dellainfotech.smartTouch.R
 import com.dellainfotech.smartTouch.api.model.GetSceneData
 import com.dellainfotech.smartTouch.common.interfaces.AdapterItemClickListener
+import com.dellainfotech.smartTouch.common.utils.Utils.toBoolean
+import com.dellainfotech.smartTouch.common.utils.Utils.toInt
+import com.google.android.material.switchmaterial.SwitchMaterial
 
 /**
  * Created by Jignesh Dangar on 03-06-2021.
  */
 
 class ScenesAdapter(
-    private val sceneList: ArrayList<GetSceneData>
+    private val sceneList: MutableList<GetSceneData>
 ) : RecyclerView.Adapter<ScenesAdapter.MyViewHolder>() {
 
     private var sceneClickListener: AdapterItemClickListener<GetSceneData>? = null
     private var deleteClickListener: AdapterItemClickListener<GetSceneData>? = null
+    private var switchClickListener: SwitchItemClickListener<GetSceneData>? = null
 
     inner class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val tvSceneName = itemView.findViewById(R.id.tv_scene_name) as TextView
         val ibDeleteScene = itemView.findViewById(R.id.ib_delete) as ImageView
         val relativeLayout = itemView.findViewById(R.id.main_view) as RelativeLayout
+        val switchSceneStatus = itemView.findViewById(R.id.switch_status) as SwitchMaterial
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
@@ -43,15 +48,26 @@ class ScenesAdapter(
 
         holder.apply {
             tvSceneName.text = data.sceneName
+            switchSceneStatus.isChecked = data.isDeviceDisable.toBoolean()
 
             relativeLayout.setOnClickListener {
-                sceneClickListener?.onItemClick(data)
+                if (data.isDeviceDisable != 0) {
+                    sceneClickListener?.onItemClick(data)
+                }
             }
 
             ibDeleteScene.setOnClickListener {
                 deleteClickListener?.onItemClick(data)
             }
+
+            switchSceneStatus.setOnCheckedChangeListener { _, isChecked ->
+                switchClickListener?.onItemClick(data, isChecked.toInt())
+            }
         }
+    }
+
+    interface SwitchItemClickListener<GetSceneData> {
+        fun onItemClick(data: GetSceneData, sceneStatus: Int)
     }
 
     fun setOnClickListener(listener: AdapterItemClickListener<GetSceneData>) {
@@ -60,5 +76,9 @@ class ScenesAdapter(
 
     fun setOnDeleteClickListener(listener: AdapterItemClickListener<GetSceneData>) {
         this.deleteClickListener = listener
+    }
+
+    fun setOnSwitchClickListener(listener: SwitchItemClickListener<GetSceneData>) {
+        this.switchClickListener = listener
     }
 }

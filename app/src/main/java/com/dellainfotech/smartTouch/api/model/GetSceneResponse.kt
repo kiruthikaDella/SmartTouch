@@ -58,6 +58,8 @@ data class GetSceneData(
     var sceneTime: String,
     @SerializedName("vSceneInterval")
     var sceneInterval: String,
+    @SerializedName("isDeviceDisable")
+    var isDeviceDisable: Int,
     @SerializedName("vSceneIntervalValue")
     var sceneIntervalValue: ArrayList<String>? = null,
     @SerializedName("iUserId")
@@ -67,7 +69,7 @@ data class GetSceneData(
 ) : Parcelable, Serializable {
 
     override fun toString(): String {
-        return "GetSceneData(id='$id', sceneName='$sceneName', sceneTime='$sceneTime', sceneInterval='$sceneInterval', sceneIntervalValue=$sceneIntervalValue, userId='$userId', scene=$scene)"
+        return "GetSceneData(id='$id', sceneName='$sceneName', sceneTime='$sceneTime', sceneInterval='$sceneInterval', isDeviceDisable=$isDeviceDisable, sceneIntervalValue=$sceneIntervalValue, userId='$userId', scene=$scene)"
     }
 
     override fun equals(other: Any?): Boolean {
@@ -80,6 +82,7 @@ data class GetSceneData(
         if (sceneName != other.sceneName) return false
         if (sceneTime != other.sceneTime) return false
         if (sceneInterval != other.sceneInterval) return false
+        if (isDeviceDisable != other.isDeviceDisable) return false
         if (sceneIntervalValue != other.sceneIntervalValue) return false
         if (userId != other.userId) return false
         if (scene != other.scene) return false
@@ -92,12 +95,12 @@ data class GetSceneData(
         result = 31 * result + sceneName.hashCode()
         result = 31 * result + sceneTime.hashCode()
         result = 31 * result + sceneInterval.hashCode()
+        result = 31 * result + isDeviceDisable
         result = 31 * result + (sceneIntervalValue?.hashCode() ?: 0)
         result = 31 * result + userId.hashCode()
         result = 31 * result + (scene?.hashCode() ?: 0)
         return result
     }
-
 
 }
 
