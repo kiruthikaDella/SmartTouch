@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/linear_select_device"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:clickable="true"
+    android:focusable="true"
+    android:orientation="vertical"
+    android:visibility="gone"
+    tools:ignore="contentDescription">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="start"
+        android:layout_marginStart="@dimen/screen_start_margin"
+        android:layout_marginTop="@dimen/_20sdp"
+        android:fontFamily="@font/roboto_medium"
+        android:text="@string/text_device_type"
+        android:textColor="@color/daintree"
+        android:textSize="@dimen/_12ssp" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/login_component_height"
+        android:layout_marginStart="@dimen/screen_start_margin"
+        android:layout_marginTop="@dimen/_5sdp"
+        android:layout_marginEnd="@dimen/screen_end_margin"
+        android:background="@drawable/catskill_white_background">
+
+        <Spinner
+            android:id="@+id/spinner_device_type"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginStart="@dimen/_5sdp"
+            android:layout_marginEnd="@dimen/_5sdp"
+            android:layout_toStartOf="@+id/iv_down"
+            android:background="@android:color/transparent"
+            android:gravity="center"
+            android:spinnerMode="dropdown" />
+
+        <ImageView
+            android:id="@+id/iv_down"
+            android:layout_width="@dimen/_25sdp"
+            android:layout_height="match_parent"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:padding="@dimen/_6sdp"
+            android:src="@drawable/ic_arrow_down"
+            app:tint="@color/daintree" />
+
+    </RelativeLayout>
+
+    <com.jcminarro.roundkornerlayout.RoundKornerLinearLayout
+        android:id="@+id/btn_save"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/login_component_height"
+        android:layout_marginStart="@dimen/screen_start_margin"
+        android:layout_marginTop="@dimen/_25sdp"
+        android:layout_marginEnd="@dimen/screen_end_margin"
+        android:layout_marginBottom="@dimen/_15sdp"
+        android:background="@color/dodger_blue"
+        android:gravity="center"
+        android:orientation="horizontal"
+        app:corner_radius="@dimen/corner_radius_6dp">
+
+        <ImageView
+            android:layout_width="@dimen/_14sdp"
+            android:layout_height="@dimen/_14sdp"
+            android:src="@drawable/ic_save" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_5sdp"
+            android:fontFamily="@font/roboto_medium"
+            android:text="@string/text_save"
+            android:textColor="@color/white"
+            android:textSize="@dimen/_12ssp" />
+    </com.jcminarro.roundkornerlayout.RoundKornerLinearLayout>
+
+</LinearLayout>

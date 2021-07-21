@@ -90,9 +90,34 @@
         app:top_left_corner_radius="@dimen/_20sdp"
         app:top_right_corner_radius="@dimen/_20sdp">
 
+        <ImageButton
+            android:id="@+id/iv_hide_panel"
+            android:layout_width="@dimen/_14sdp"
+            android:layout_height="@dimen/_9sdp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="@dimen/_15sdp"
+            android:background="@drawable/ic_arrow_down" />
+
+        <TextView
+            android:id="@+id/tv_bottom_view_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="@dimen/_20sdp"
+            android:fontFamily="@font/roboto_bold"
+            android:text="@string/text_add_panel"
+            android:textColor="@color/theme_color"
+            android:textSize="@dimen/_18ssp" />
+
         <include
             android:id="@+id/layout_room_panel"
             layout="@layout/layout_room_panel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <include
+            android:id="@+id/layout_select_device"
+            layout="@layout/layout_select_device"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 

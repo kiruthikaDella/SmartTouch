@@ -9,10 +9,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.view.isVisible
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.dellainfotech.smartTouch.R
 import com.dellainfotech.smartTouch.adapters.DeviceAdapter
+import com.dellainfotech.smartTouch.adapters.spinneradapter.SpinnerAdapter
 import com.dellainfotech.smartTouch.api.Resource
 import com.dellainfotech.smartTouch.api.body.*
 import com.dellainfotech.smartTouch.api.model.DeviceSwitchData
@@ -47,9 +49,12 @@ class DeviceFragment : ModelBaseFragment<HomeViewModel, FragmentDeviceBinding, H
     private var switchPosition: Int? = null
     private var deviceData: GetDeviceData? = null
     private var roomData: GetRoomData? = null
+    private lateinit var deviceTypeAdapter: SpinnerAdapter
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        val deviceTypeList = arrayOf(getString(R.string.text_smart_touch), getString(R.string.text_smart_tack))
 
         deviceList.clear()
         activity?.let {
@@ -79,10 +84,6 @@ class DeviceFragment : ModelBaseFragment<HomeViewModel, FragmentDeviceBinding, H
             }
         }
 
-        binding.ivBack.setOnClickListener {
-            findNavController().navigateUp()
-        }
-
         binding.tvTitle.text = args.roomDetail.roomName
 
         NotifyManager.internetInfo.observe(viewLifecycleOwner, { isConnected ->
@@ -105,6 +106,11 @@ class DeviceFragment : ModelBaseFragment<HomeViewModel, FragmentDeviceBinding, H
                 }
             }
         })
+
+        activity?.let { mActivity ->
+            deviceTypeAdapter = SpinnerAdapter(mActivity, deviceTypeList.toMutableList())
+            binding.layoutSelectDevice.spinnerDeviceType.adapter = deviceTypeAdapter
+        }
 
         clickEvents()
         apiCall()
@@ -133,6 +139,10 @@ class DeviceFragment : ModelBaseFragment<HomeViewModel, FragmentDeviceBinding, H
     }
 
     private fun clickEvents() {
+
+        binding.ivBack.setOnClickListener {
+            findNavController().navigateUp()
+        }
 
         binding.layoutSlidingUpPanel.setFadeOnClickListener { hidePanel() }
 
@@ -317,12 +327,15 @@ class DeviceFragment : ModelBaseFragment<HomeViewModel, FragmentDeviceBinding, H
             }
         })
 
-        binding.layoutRoomPanel.ivHidePanel.setOnClickListener {
+        binding.ivHidePanel.setOnClickListener {
             hidePanel()
         }
 
         binding.btnAddPanel.setOnClickListener {
-            binding.layoutSlidingUpPanel.panelState = SlidingUpPanelLayout.PanelState.EXPANDED
+            binding.layoutSelectDevice.linearSelectDevice.isVisible = true
+            binding.layoutRoomPanel.linearPanel.isVisible = false
+            binding.tvBottomViewTitle.text = getString(R.string.text_select_device)
+            showPanel()
         }
 
         binding.layoutRoomPanel.btnAddPanel.setOnClickListener {
@@ -354,6 +367,32 @@ class DeviceFragment : ModelBaseFragment<HomeViewModel, FragmentDeviceBinding, H
             }
         }
 
+        binding.layoutSelectDevice.ivDown.setOnClickListener {
+            binding.layoutSelectDevice.spinnerDeviceType.performClick()
+        }
+
+        binding.layoutSelectDevice.btnSave.setOnClickListener {
+            if (binding.layoutSelectDevice.spinnerDeviceType.selectedItem == getString(R.string.text_smart_touch)){
+                hidePanel()
+                binding.layoutSelectDevice.linearSelectDevice.isVisible = false
+                binding.layoutRoomPanel.linearPanel.isVisible = true
+                binding.tvBottomViewTitle.text = getString(R.string.text_add_panel)
+                showPanel()
+            }else if (binding.layoutSelectDevice.spinnerDeviceType.selectedItem == getString(R.string.text_smart_tack)){
+                hidePanel()
+                Handler(Looper.getMainLooper()).postDelayed({
+                    findNavController().navigate(DeviceFragmentDirections.actionDeviceFragmentToConfigWifiFragment())
+                }, 600)
+
+            }
+        }
+
+    }
+
+    private fun showPanel(){
+        Handler(Looper.getMainLooper()).postDelayed({
+            binding.layoutSlidingUpPanel.panelState = SlidingUpPanelLayout.PanelState.EXPANDED
+        }, 600)
     }
 
     private fun hidePanel() {

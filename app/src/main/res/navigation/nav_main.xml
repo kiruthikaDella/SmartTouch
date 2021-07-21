@@ -43,6 +43,9 @@
         <action
             android:id="@+id/action_roomPanelFragment_to_deviceSettingsFragment"
             app:destination="@id/deviceSettingsFragment" />
+        <action
+            android:id="@+id/action_deviceFragment_to_configWifiFragment"
+            app:destination="@id/configWifiFragment" />
     </fragment>
     <fragment
         android:id="@+id/controlModeFragment"
@@ -203,4 +206,9 @@
             app:destination="@id/createSceneFragment" />
     </fragment>
     <action android:id="@+id/action_global_sceneFragment" app:destination="@id/sceneFragment" />
+    <fragment
+        android:id="@+id/configWifiFragment"
+        android:name="com.dellainfotech.smartTouch.ui.fragments.main.home.ConfigWifiFragment"
+        android:label="fragment_config_wifi"
+        tools:layout="@layout/fragment_config_wifi" />
 </navigation>
