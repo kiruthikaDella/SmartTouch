@@ -70,7 +70,6 @@ class DeviceFragment : ModelBaseFragment<HomeViewModel, FragmentDeviceBinding, H
                                 panelAdapter.notifyDataSetChanged()
                             }
                         }
-                        Log.e(logTag, "" + it.values.data)
                     }
                     else -> {
                         panelAdapter.notifyDataSetChanged()
