@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.navigation.fragment.findNavController
 import com.dellainfotech.smartTouch.api.repository.HomeRepository
 import com.dellainfotech.smartTouch.databinding.FragmentConfigWifiBinding
@@ -23,6 +24,13 @@ class ConfigWifiFragment :
         binding.ivBack.setOnClickListener {
             findNavController().navigateUp()
         }
+
+        showConfigView()
+
+        binding.layoutConfigWifiPanel.btnSubmit.setOnClickListener {
+            showConfigProcessView()
+        }
+
     }
 
     override fun getViewModel(): Class<HomeViewModel> = HomeViewModel::class.java
@@ -34,5 +42,15 @@ class ConfigWifiFragment :
 
     override fun getFragmentRepository(): HomeRepository = HomeRepository(networkModel)
 
+    private fun showConfigView() {
+        binding.layoutConfigWifiPanel.linearConfigWifiPanel.isVisible = true
+        binding.layoutConfigWifiProcess.linearConfigWifiProcess.isVisible = false
+        binding.layoutConfigWifiProcess.pulsator.stopRippleAnimation()
+    }
 
+    private fun showConfigProcessView() {
+        binding.layoutConfigWifiPanel.linearConfigWifiPanel.isVisible = false
+        binding.layoutConfigWifiProcess.linearConfigWifiProcess.isVisible = true
+        binding.layoutConfigWifiProcess.pulsator.startRippleAnimation()
+    }
 }
