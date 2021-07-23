@@ -1,6 +1,7 @@
 package com.dellainfotech.smartTouch.ui.fragments.main.home
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.app.Activity.RESULT_OK
 import android.app.AlertDialog
 import android.content.Intent
@@ -40,7 +41,10 @@ import com.dellainfotech.smartTouch.common.utils.Utils.toBoolean
 import com.dellainfotech.smartTouch.common.utils.Utils.toInt
 import com.dellainfotech.smartTouch.common.utils.Utils.toReverseInt
 import com.dellainfotech.smartTouch.databinding.FragmentDeviceCustomizationBinding
-import com.dellainfotech.smartTouch.mqtt.*
+import com.dellainfotech.smartTouch.mqtt.AwsMqttSingleton
+import com.dellainfotech.smartTouch.mqtt.MQTTConnectionStatus
+import com.dellainfotech.smartTouch.mqtt.MQTTConstants
+import com.dellainfotech.smartTouch.mqtt.NotifyManager
 import com.dellainfotech.smartTouch.ui.fragments.ModelBaseFragment
 import com.dellainfotech.smartTouch.ui.viewmodel.HomeViewModel
 import com.karumi.dexter.Dexter
@@ -65,7 +69,9 @@ import java.util.*
  * Created by Jignesh Dangar on 22-04-2021.
  */
 
-class DeviceCustomizationFragment : ModelBaseFragment<HomeViewModel, FragmentDeviceCustomizationBinding, HomeRepository>() {
+@Suppress("DEPRECATION")
+class DeviceCustomizationFragment :
+    ModelBaseFragment<HomeViewModel, FragmentDeviceCustomizationBinding, HomeRepository>() {
 
     private val logTag = this::class.java.simpleName
     private val args: DeviceCustomizationFragmentArgs by navArgs()
@@ -102,7 +108,8 @@ class DeviceCustomizationFragment : ModelBaseFragment<HomeViewModel, FragmentDev
                     when (it) {
                         MQTTConnectionStatus.CONNECTED -> {
                             subscribeToDevice(args.deviceDetail.deviceSerialNo)
-                        }else -> {
+                        }
+                        else -> {
                             //We will do nothing here
                         }
                     }
@@ -151,6 +158,7 @@ class DeviceCustomizationFragment : ModelBaseFragment<HomeViewModel, FragmentDev
         super.onDestroyView()
         viewModel.customizationLockResponse.postValue(null)
         viewModel.imageUploadResponse.postValue(null)
+        viewModel.deleteImageResponse.postValue(null)
         mqttConnectionDisposable?.dispose()
     }
 
@@ -262,7 +270,7 @@ class DeviceCustomizationFragment : ModelBaseFragment<HomeViewModel, FragmentDev
             showPanel()
         }
 
-        binding.layoutTextColor.colorPicker.setColorListener { color, string ->
+        binding.layoutTextColor.colorPicker.setColorListener { color, _ ->
             binding.tvBottomViewTitle.setTextColor(color)
         }
 
@@ -381,6 +389,86 @@ class DeviceCustomizationFragment : ModelBaseFragment<HomeViewModel, FragmentDev
                 e.printStackTrace()
             }
         }
+
+        binding.ivScreenLayoutInfo.setOnClickListener {
+            activity?.let { mActivity ->
+                DialogUtil.featureDetailAlert(
+                    mActivity,
+                    getString(R.string.text_screen_layout),
+                    getString(R.string.description_screen_layout)
+                )
+            }
+        }
+
+        binding.ivUploadImageInfo.setOnClickListener {
+            activity?.let { mActivity ->
+                DialogUtil.featureDetailAlert(
+                    mActivity,
+                    getString(R.string.text_upload_image),
+                    getString(R.string.description_upload_image)
+                )
+            }
+        }
+
+        binding.ivSwitchIconsInfo.setOnClickListener {
+            activity?.let { mActivity ->
+                DialogUtil.featureDetailAlert(
+                    mActivity,
+                    getString(R.string.text_switch_icons),
+                    getString(R.string.description_switch_icons)
+                )
+            }
+        }
+
+        binding.ivSwitchIconSizeInfo.setOnClickListener {
+            activity?.let { mActivity ->
+                DialogUtil.featureDetailAlert(
+                    mActivity,
+                    getString(R.string.text_switch_icon_size),
+                    getString(R.string.description_switch_icons_size)
+                )
+            }
+        }
+
+        binding.ivSwitchNameInfo.setOnClickListener {
+            activity?.let { mActivity ->
+                DialogUtil.featureDetailAlert(
+                    mActivity,
+                    getString(R.string.text_switch_name),
+                    getString(R.string.description_switch_name)
+                )
+            }
+        }
+
+        binding.ivTextStyleInfo.setOnClickListener {
+            activity?.let { mActivity ->
+                DialogUtil.featureDetailAlert(
+                    mActivity,
+                    getString(R.string.text_style),
+                    getString(R.string.description_text_style)
+                )
+            }
+        }
+
+        binding.ivTextColorInfo.setOnClickListener {
+            activity?.let { mActivity ->
+                DialogUtil.featureDetailAlert(
+                    mActivity,
+                    getString(R.string.text_color),
+                    getString(R.string.description_text_color)
+                )
+            }
+        }
+
+        binding.ivTextSizeInfo.setOnClickListener {
+            activity?.let { mActivity ->
+                DialogUtil.featureDetailAlert(
+                    mActivity,
+                    getString(R.string.text_size),
+                    getString(R.string.description_text_size)
+                )
+            }
+        }
     }
 
     private fun showPanel() {
@@ -406,39 +494,19 @@ class DeviceCustomizationFragment : ModelBaseFragment<HomeViewModel, FragmentDev
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
-        if (resultCode == RESULT_OK) {
-            if (requestCode == Constants.REQUEST_IMAGE_CAPTURE) {
-                try {
-//                    mPhotoFile = mCompressor.compressToFile(mPhotoFile)
-                    Log.e(logTag, " camera mProfileFile $mProfileFile ")
-                    Log.e(logTag, " camera imagePath $imagePath ")
-                    Log.e(logTag, " camera imageName $imageName ")
-                } catch (e: Exception) {
-                    e.printStackTrace()
-                }
-
-            } else if (requestCode == Constants.REQUEST_GALLERY_IMAGE) {
-                val selectedImage: Uri? = data?.data
-                try {
-                    selectedImage?.let { uri ->
-                        getRealPathFromUri(uri)?.let {
-                            mProfileFile = File(it)
-                            imagePath = mProfileFile!!.absolutePath
-                            imageName = imagePath.substring(imagePath.lastIndexOf("/") + 1)
-
-                            Log.e(logTag, " mProfileFile $mProfileFile ")
-                            Log.e(logTag, " imagePath $imagePath ")
-                            Log.e(logTag, " imageName $imageName ")
-                            mProfileFile?.let {file ->
-                                Log.e(logTag, " image length ${file.length()} ")
-                                Log.e(logTag, " image size ${((file.length() / 1024) / 1024)} ")
-                            }
-                        }
+        if (requestCode == Constants.REQUEST_GALLERY_IMAGE && resultCode == RESULT_OK) {
+            val selectedImage: Uri? = data?.data
+            try {
+                selectedImage?.let { uri ->
+                    getRealPathFromUri(uri)?.let {
+                        mProfileFile = File(it)
+                        imagePath = mProfileFile!!.absolutePath
+                        imageName = imagePath.substring(imagePath.lastIndexOf("/") + 1)
                     }
-
-                } catch (e: Exception) {
-                    e.printStackTrace()
                 }
+
+            } catch (e: Exception) {
+                e.printStackTrace()
             }
         }
 
@@ -452,10 +520,10 @@ class DeviceCustomizationFragment : ModelBaseFragment<HomeViewModel, FragmentDev
                     if (response.values.status && response.values.code == Constants.API_SUCCESS_CODE) {
                         response.values.data?.let {
                             deviceCustomization = it
-                            binding.spinnerIconSize.setSelection(sizeAdapter?.getPosition(it.switchIconSize)!!)
+                            binding.spinnerIconSize.setSelection(sizeAdapter.getPosition(it.switchIconSize))
                             binding.cbSwitchNameSettings.isChecked =
                                 it.switchName.toInt().toBoolean()
-                            binding.spinnerTextSize.setSelection(sizeAdapter?.getPosition(it.textSize)!!)
+                            binding.spinnerTextSize.setSelection(sizeAdapter.getPosition(it.textSize))
                             isDeviceCustomizationLocked = it.isLock.toBoolean()
                             binding.layoutTextColor.colorPicker.setColor(Color.parseColor(it.textColor))
                             if (isDeviceCustomizationLocked) {
@@ -522,7 +590,7 @@ class DeviceCustomizationFragment : ModelBaseFragment<HomeViewModel, FragmentDev
                 }
                 is Resource.Failure -> {
                     DialogUtil.hideDialog()
-                    Log.e(logTag,"imageUploadResponse Failure ${response.errorBody?.string()}")
+                    Log.e(logTag, "imageUploadResponse Failure ${response.errorBody?.string()}")
                 }
                 else -> {
                     //We will do nothing here
@@ -577,7 +645,7 @@ class DeviceCustomizationFragment : ModelBaseFragment<HomeViewModel, FragmentDev
                             // check for permanent denial of any permission
                             if (rep.isAnyPermissionPermanentlyDenied) {
                                 // show alert dialog navigating to Settings
-                                showSettingsDialog();
+                                showSettingsDialog()
                             }
                         }
 
@@ -607,11 +675,11 @@ class DeviceCustomizationFragment : ModelBaseFragment<HomeViewModel, FragmentDev
             builder.setMessage(
                 "This app needs permission to use this feature. You can grant them in app settings."
             )
-            builder.setPositiveButton("GOTO SETTINGS") { dialog, which ->
+            builder.setPositiveButton("GOTO SETTINGS") { dialog, _ ->
                 dialog.cancel()
                 openSettings()
             }
-            builder.setNegativeButton("Cancel") { dialog, which -> dialog.cancel() }
+            builder.setNegativeButton("Cancel") { dialog, _ -> dialog.cancel() }
             builder.show()
         }
 
@@ -632,10 +700,11 @@ class DeviceCustomizationFragment : ModelBaseFragment<HomeViewModel, FragmentDev
         return File.createTempFile(mFileName, ".jpg", storageDir)
     }
 
+    @SuppressLint("QueryPermissionsNeeded")
     private fun dispatchTakePictureIntent() {
         val takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-        context?.let {
-            if (takePictureIntent.resolveActivity(it.packageManager) != null) {
+        context?.let {mContext ->
+            if (takePictureIntent.resolveActivity(mContext.packageManager) != null) {
                 // Create the File where the photo should go
                 var photoFile: File? = null
                 try {
@@ -646,7 +715,7 @@ class DeviceCustomizationFragment : ModelBaseFragment<HomeViewModel, FragmentDev
                 }
                 if (photoFile != null) {
                     val photoURI = FileProvider.getUriForFile(
-                        it, BuildConfig.APPLICATION_ID + ".provider",
+                        mContext, BuildConfig.APPLICATION_ID + ".provider",
                         photoFile
                     )
                     mProfileFile = photoFile

@@ -66,7 +66,7 @@ class ForgotPasswordFragment :
                 }
                 is Resource.Failure -> {
                     DialogUtil.hideDialog()
-                    Log.e(logTag, " Failure ${response.errorBody}")
+                    Log.e(logTag, " Failure ${response.errorBody?.string()}")
                 }else -> {
                     //We will do nothing here
                 }

@@ -45,10 +45,6 @@ class DeviceFeaturesFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.ivBack.setOnClickListener {
-            findNavController().navigateUp()
-        }
-
         mqttConnectionDisposable =
             NotifyManager.getMQTTConnectionInfo().observeOn(AndroidSchedulers.mainThread())
                 .subscribe {
@@ -86,15 +82,6 @@ class DeviceFeaturesFragment :
                 }
             }
         })
-
-        binding.rgDisplayBrightness.setOnCheckedChangeListener { _, checkedId ->
-            binding.seekBarBrightness.isVisible =
-                binding.rgDisplayBrightness.indexOfChild(
-                    binding.rgDisplayBrightness.findViewById(
-                        checkedId
-                    )
-                ) != 0
-        }
 
         viewModel.getDeviceFeatureSettingsResponse.observe(viewLifecycleOwner, { response ->
             when (response) {
@@ -138,6 +125,39 @@ class DeviceFeaturesFragment :
                 }
             }
         })
+
+        clickEvents()
+    }
+
+    override fun getViewModel(): Class<HomeViewModel> = HomeViewModel::class.java
+
+    override fun getFragmentBinding(
+        inflater: LayoutInflater,
+        container: ViewGroup?
+    ): FragmentDeviceFeaturesBinding =
+        FragmentDeviceFeaturesBinding.inflate(inflater, container, false)
+
+    override fun getFragmentRepository(): HomeRepository = HomeRepository(networkModel)
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        mqttConnectionDisposable?.dispose()
+    }
+
+    private fun clickEvents(){
+
+        binding.ivBack.setOnClickListener {
+            findNavController().navigateUp()
+        }
+
+        binding.rgDisplayBrightness.setOnCheckedChangeListener { _, checkedId ->
+            binding.seekBarBrightness.isVisible =
+                binding.rgDisplayBrightness.indexOfChild(
+                    binding.rgDisplayBrightness.findViewById(
+                        checkedId
+                    )
+                ) != 0
+        }
 
         binding.btnSynchronize.setOnClickListener {
             if (AwsMqttSingleton.isConnected()) {
@@ -194,21 +214,42 @@ class DeviceFeaturesFragment :
                 }
             }
         }
-    }
 
-    override fun getViewModel(): Class<HomeViewModel> = HomeViewModel::class.java
-
-    override fun getFragmentBinding(
-        inflater: LayoutInflater,
-        container: ViewGroup?
-    ): FragmentDeviceFeaturesBinding =
-        FragmentDeviceFeaturesBinding.inflate(inflater, container, false)
-
-    override fun getFragmentRepository(): HomeRepository = HomeRepository(networkModel)
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        mqttConnectionDisposable?.dispose()
+        binding.ivSleepModeInfo.setOnClickListener {
+            activity?.let { mActivity ->
+                DialogUtil.featureDetailAlert(mActivity,getString(R.string.text_sleep_mode),getString(R.string.description_sleep_mode))
+            }
+        }
+        binding.ivNightModeInfo.setOnClickListener {
+            activity?.let { mActivity ->
+                DialogUtil.featureDetailAlert(mActivity,getString(R.string.text_night_mode),getString(R.string.description_night_mode))
+            }
+        }
+        binding.ivOutdoorModeInfo.setOnClickListener {
+            activity?.let { mActivity ->
+                DialogUtil.featureDetailAlert(mActivity,getString(R.string.text_outdoor_mode),getString(R.string.description_outdoor_mode))
+            }
+        }
+        binding.ivTimeInfo.setOnClickListener {
+            activity?.let { mActivity ->
+                DialogUtil.featureDetailAlert(mActivity,getString(R.string.text_time),getString(R.string.description_time_mode))
+            }
+        }
+        binding.ivWeatherReportInfo.setOnClickListener {
+            activity?.let { mActivity ->
+                DialogUtil.featureDetailAlert(mActivity,getString(R.string.text_weather_report),getString(R.string.description_weather_report))
+            }
+        }
+        binding.ivRoomTemperatureInfo.setOnClickListener {
+            activity?.let { mActivity ->
+                DialogUtil.featureDetailAlert(mActivity,getString(R.string.text_room_temperature),getString(R.string.description_room_temperature))
+            }
+        }
+        binding.ivDisplayBrightnessInfo.setOnClickListener {
+            activity?.let { mActivity ->
+                DialogUtil.featureDetailAlert(mActivity,getString(R.string.text_display_brightness),getString(R.string.description_display_brightness))
+            }
+        }
     }
 
     //

@@ -351,13 +351,13 @@
                             android:text="@string/text_size"
                             android:textColor="@color/daintree"
                             android:textSize="@dimen/_12ssp"
-                            app:layout_constraintBottom_toBottomOf="@+id/tv_text_size_info"
+                            app:layout_constraintBottom_toBottomOf="@+id/iv_text_size_info"
                             app:layout_constraintEnd_toEndOf="@+id/guideline"
                             app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="@+id/tv_text_size_info" />
+                            app:layout_constraintTop_toTopOf="@+id/iv_text_size_info" />
 
                         <ImageView
-                            android:id="@+id/tv_text_size_info"
+                            android:id="@+id/iv_text_size_info"
                             android:layout_width="@dimen/_14sdp"
                             android:layout_height="@dimen/_14sdp"
                             android:src="@drawable/img_info"

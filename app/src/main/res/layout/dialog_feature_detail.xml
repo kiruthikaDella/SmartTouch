@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.jcminarro.roundkornerlayout.RoundKornerLinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:background="@color/dialog_background_color"
+    android:orientation="vertical"
+    android:paddingTop="@dimen/_20sdp"
+    app:corner_radius="@dimen/dialog_corner_radius"
+    tools:ignore="Autofill,LabelFor">
+
+    <TextView
+        android:id="@+id/tv_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:fontFamily="@font/roboto_bold"
+        android:text="@string/text_edit"
+        android:textColor="@color/theme_color"
+        android:textSize="@dimen/_16ssp" />
+
+    <TextView
+        android:id="@+id/tv_detail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/_15sdp"
+        android:fontFamily="@font/roboto_regular"
+        android:gravity="center"
+        android:text="@string/dialog_title_device_offline"
+        android:textColor="@color/daintree"
+        android:textSize="@dimen/dialog_description_size" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_1sdp"
+        android:background="@color/silver" />
+
+    <TextView
+        android:id="@+id/tv_close"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_35sdp"
+        android:fontFamily="@font/roboto_medium"
+        android:gravity="center"
+        android:text="@string/text_ok"
+        android:textSize="@dimen/dialog_button_size"
+        android:textColor="@color/theme_color" />
+
+</com.jcminarro.roundkornerlayout.RoundKornerLinearLayout>

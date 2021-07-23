@@ -102,7 +102,7 @@ class CreateAccountFragment :
                 }
                 is Resource.Failure -> {
                     DialogUtil.hideDialog()
-                    Log.e(logTag, "registration error ${response.errorBody}")
+                    Log.e(logTag, "registration error ${response.errorBody?.string()}")
                 }else -> {
                     //We will do nothing here
                 }

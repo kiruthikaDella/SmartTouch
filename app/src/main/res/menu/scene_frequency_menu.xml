@@ -12,10 +12,5 @@
         android:orderInCategory="102"
         android:title="@string/text_weekly"
         app:showAsAction="never" />
-    <item
-        android:id="@+id/action_monthly"
-        android:orderInCategory="103"
-        android:title="@string/text_monthly"
-        app:showAsAction="never" />
 
 </menu>

@@ -188,7 +188,7 @@ class HomeViewModel @ViewModelInject constructor(
         get() = _imageUploadResponse
 
     private val _deleteImageResponse: MutableLiveData<Resource<CommonResponse>> = MutableLiveData()
-    val deleteImageResponse: LiveData<Resource<CommonResponse>>
+    val deleteImageResponse: MutableLiveData<Resource<CommonResponse>>
         get() = _deleteImageResponse
 
     private val _getSceneResponse: MutableLiveData<Resource<GetSceneResponse>> = MutableLiveData()
@@ -218,6 +218,10 @@ class HomeViewModel @ViewModelInject constructor(
     private val _factoryResetAllDeviceResponse: MutableLiveData<Resource<CommonResponse>> = MutableLiveData()
     val factoryResetAllDeviceResponse: MutableLiveData<Resource<CommonResponse>>
         get() = _factoryResetAllDeviceResponse
+
+    private val _updateSceneStatusResponse: MutableLiveData<Resource<CommonResponse>> = MutableLiveData()
+    val updateSceneStatusResponse: MutableLiveData<Resource<CommonResponse>>
+        get() = _updateSceneStatusResponse
 
     fun addDevice(bodyAddDevice: BodyAddDevice) = viewModelScope.launch {
         _addDeviceResponse.value = Resource.Loading
@@ -317,6 +321,11 @@ class HomeViewModel @ViewModelInject constructor(
     fun factoryResetAllDevice() = viewModelScope.launch {
         _factoryResetAllDeviceResponse.value = Resource.Loading
         _factoryResetAllDeviceResponse.value = homeRepository.factoryResetAllDevice()
+    }
+
+    fun updateSceneStatus(sceneId: String,bodyUpdateSceneStatus: BodyUpdateSceneStatus) = viewModelScope.launch {
+        _updateSceneStatusResponse.value = Resource.Loading
+        _updateSceneStatusResponse.value = homeRepository.updateSceneStatus(sceneId,bodyUpdateSceneStatus)
     }
 
     //

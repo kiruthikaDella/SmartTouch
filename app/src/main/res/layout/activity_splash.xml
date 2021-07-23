@@ -7,8 +7,8 @@
     tools:ignore="contentDescription">
 
     <ImageView
-        android:layout_width="@dimen/_144sdp"
-        android:layout_height="@dimen/_119sdp"
+        android:layout_width="@dimen/_141sdp"
+        android:layout_height="@dimen/_80sdp"
         android:layout_centerInParent="true"
         android:src="@drawable/ic_splash_logo" />
 
