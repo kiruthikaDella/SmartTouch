@@ -283,5 +283,7 @@
     <string name="text_wifi_ssid">WiFi SSID</string>
     <string name="hint_text_wifi_ssid">Ex. SMT2028189</string>
     <string name="hint_text_wifi_password">Ex. abcd@12%34*5</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>

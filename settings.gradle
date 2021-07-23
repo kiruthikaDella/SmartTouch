@@ -1,2 +1,4 @@
 include ':app'
 rootProject.name = "SmartTouch"
+include ':tcpudplibrary'
+include ':wifilibrary'

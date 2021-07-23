@@ -44,8 +44,8 @@
             android:id="@+id/action_roomPanelFragment_to_deviceSettingsFragment"
             app:destination="@id/deviceSettingsFragment" />
         <action
-            android:id="@+id/action_deviceFragment_to_configWifiFragment"
-            app:destination="@id/configWifiFragment" />
+            android:id="@+id/action_deviceFragment_to_connectingWifiFragment"
+            app:destination="@id/connectingWifiFragment" />
     </fragment>
     <fragment
         android:id="@+id/controlModeFragment"
@@ -210,5 +210,34 @@
         android:id="@+id/configWifiFragment"
         android:name="com.dellainfotech.smartTouch.ui.fragments.main.home.ConfigWifiFragment"
         android:label="fragment_config_wifi"
-        tools:layout="@layout/fragment_config_wifi" />
+        tools:layout="@layout/fragment_config_wifi" >
+        <action
+            android:id="@+id/action_configWifiFragment_to_connectingWifiFragment"
+            app:destination="@id/connectingWifiFragment" />
+
+        <argument
+            android:name="roomDetail"
+            app:argType="com.dellainfotech.smartTouch.api.model.GetRoomData" />
+    </fragment>
+    <fragment
+        android:id="@+id/connectingWifiFragment"
+        android:name="com.dellainfotech.smartTouch.ui.fragments.main.home.ConnectingWifiFragment"
+        android:label="ConnectingWifiFragment" >
+        <action
+            android:id="@+id/action_connectingWifiFragment_to_configWifiFragment"
+            app:destination="@id/configWifiFragment"
+            app:popUpTo="@id/connectingWifiFragment"
+            app:popUpToInclusive="true" />
+        <argument
+            android:name="isRegistering"
+            app:argType="boolean" />
+        <argument
+            android:name="roomDetail"
+            app:argType="com.dellainfotech.smartTouch.api.model.GetRoomData" />
+        <action
+            android:id="@+id/action_connectingWifiFragment_to_deviceFragment"
+            app:destination="@id/deviceFragment"
+            app:popUpTo="@id/deviceFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
 </navigation>

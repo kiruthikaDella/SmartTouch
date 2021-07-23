@@ -6,7 +6,6 @@
     android:layout_height="match_parent"
     android:background="@color/app_background_color"
     android:orientation="vertical"
-    tools:context=".ui.fragments.main.home.ConfigWifiFragment"
     tools:ignore="contentDescription,Autofill,LabelFor">
 
     <RelativeLayout
@@ -52,11 +51,10 @@
         app:top_right_corner_radius="@dimen/corner_radius_20dp">
 
         <include
-            android:id="@+id/layout_config_wifi_panel"
-            layout="@layout/config_wifi_panel_layout"
+            android:id="@+id/layout_config_wifi_process"
+            layout="@layout/config_wifi_process_layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
-
     </com.jcminarro.roundkornerlayout.RoundKornerLinearLayout>
 
 </LinearLayout>

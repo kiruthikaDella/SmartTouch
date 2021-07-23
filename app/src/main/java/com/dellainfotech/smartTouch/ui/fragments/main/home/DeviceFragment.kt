@@ -1,17 +1,34 @@
 package com.dellainfotech.smartTouch.ui.fragments.main.home
 
+import android.Manifest
 import android.annotation.SuppressLint
+import android.app.Activity
+import android.app.AlertDialog
+import android.content.BroadcastReceiver
+import android.content.Context
+import android.content.Intent
+import android.content.IntentFilter
+import android.net.Uri
+import android.net.wifi.SupplicantState
+import android.net.wifi.WifiManager
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.provider.Settings
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.view.isVisible
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleObserver
+import androidx.lifecycle.OnLifecycleEvent
+import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import com.binjal.wifilibrary.WifiUtils
 import com.dellainfotech.smartTouch.R
 import com.dellainfotech.smartTouch.adapters.DeviceAdapter
 import com.dellainfotech.smartTouch.adapters.spinneradapter.SpinnerAdapter
@@ -30,9 +47,20 @@ import com.dellainfotech.smartTouch.common.utils.Utils.clearError
 import com.dellainfotech.smartTouch.common.utils.Utils.toEditable
 import com.dellainfotech.smartTouch.databinding.FragmentDeviceBinding
 import com.dellainfotech.smartTouch.mqtt.NotifyManager
+import com.dellainfotech.smartTouch.ui.activities.MainActivity
 import com.dellainfotech.smartTouch.ui.fragments.ModelBaseFragment
 import com.dellainfotech.smartTouch.ui.viewmodel.HomeViewModel
+import com.google.android.datatransport.runtime.scheduling.jobscheduling.SchedulerConfig
+import com.karumi.dexter.Dexter
+import com.karumi.dexter.MultiplePermissionsReport
+import com.karumi.dexter.PermissionToken
+import com.karumi.dexter.listener.PermissionRequest
+import com.karumi.dexter.listener.multi.MultiplePermissionsListener
 import com.sothree.slidinguppanel.SlidingUpPanelLayout
+import com.teksun.tcpudplibrary.TCPClientService
+import com.teksun.tcpudplibrary.listener.ConnectCResultListener
+import dagger.hilt.android.qualifiers.ApplicationContext
+import java.lang.Exception
 
 /**
  * Created by Jignesh Dangar on 09-04-2021.
@@ -50,9 +78,13 @@ class DeviceFragment : ModelBaseFragment<HomeViewModel, FragmentDeviceBinding, H
     private var deviceData: GetDeviceData? = null
     private var roomData: GetRoomData? = null
     private lateinit var deviceTypeAdapter: SpinnerAdapter
+    private val WIFI_REQUEST_CODE = 101
+    private var isSelectedSmartAck = false
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        WifiUtils.init(context)
 
         val deviceTypeList = arrayOf(getString(R.string.text_smart_touch), getString(R.string.text_smart_tack))
 
@@ -91,18 +123,20 @@ class DeviceFragment : ModelBaseFragment<HomeViewModel, FragmentDeviceBinding, H
 //                showLoading()
                 viewModel.getDevice(args.roomDetail.id)
             } else {
-                activity?.let {
-                    DialogUtil.deviceOfflineAlert(
-                        it,
-                        getString(R.string.text_no_internet_available),
-                        object : DialogShowListener {
-                            override fun onClick() {
-                                DialogUtil.hideDialog()
-                                findNavController().navigateUp()
-                            }
+                if (!isSelectedSmartAck) {
+                    activity?.let {
+                        DialogUtil.deviceOfflineAlert(
+                            it,
+                            getString(R.string.text_no_internet_available),
+                            object : DialogShowListener {
+                                override fun onClick() {
+                                    DialogUtil.hideDialog()
+                                    findNavController().navigateUp()
+                                }
 
-                        }
-                    )
+                            }
+                        )
+                    }
                 }
             }
         })
@@ -371,6 +405,20 @@ class DeviceFragment : ModelBaseFragment<HomeViewModel, FragmentDeviceBinding, H
             binding.layoutSelectDevice.spinnerDeviceType.performClick()
         }
 
+        /*val wifiIntentLauncher = registerForActivityResult(
+            ActivityResultContracts.StartActivityForResult()
+        ) { result ->
+            if (WifiUtils.isSSIDWifiConnected("Binjal")) {
+                Log.e(logTag, "Connected ")
+                findNavController().navigate(DeviceFragmentDirections.actionDeviceFragmentToConfigWifiFragment())
+            } else {
+                Log.e(logTag, "Not Connected")
+
+                val wifiIntent = Intent(WifiManager.ACTION_PICK_WIFI_NETWORK)
+                wifiIntentLauncher.launch(wifiIntent)
+            }
+        }*/
+
         binding.layoutSelectDevice.btnSave.setOnClickListener {
             if (binding.layoutSelectDevice.spinnerDeviceType.selectedItem == getString(R.string.text_smart_touch)){
                 hidePanel()
@@ -380,10 +428,9 @@ class DeviceFragment : ModelBaseFragment<HomeViewModel, FragmentDeviceBinding, H
                 showPanel()
             }else if (binding.layoutSelectDevice.spinnerDeviceType.selectedItem == getString(R.string.text_smart_tack)){
                 hidePanel()
-                Handler(Looper.getMainLooper()).postDelayed({
-                    findNavController().navigate(DeviceFragmentDirections.actionDeviceFragmentToConfigWifiFragment())
-                }, 600)
+                isSelectedSmartAck = true
 
+                checkPermission()
             }
         }
 
@@ -559,4 +606,171 @@ class DeviceFragment : ModelBaseFragment<HomeViewModel, FragmentDeviceBinding, H
 
     }
 
+    private fun checkPermission() {
+        activity?.let {
+
+            Dexter.withActivity(it)
+                .withPermissions(
+                    Manifest.permission.ACCESS_FINE_LOCATION,
+                    Manifest.permission.ACCESS_COARSE_LOCATION,
+                )
+                .withListener(object : MultiplePermissionsListener {
+                    override fun onPermissionsChecked(report: MultiplePermissionsReport?) {
+                        report?.let { rep ->
+                            if (rep.areAllPermissionsGranted()) {
+                                redirectToWifiSetting()
+                                return
+                            }
+                            // check for permanent denial of any permission
+                            if (rep.isAnyPermissionPermanentlyDenied) {
+                                // show alert dialog navigating to Settings
+                                showSettingsDialog()
+                            }
+                        }
+
+                    }
+
+                    override fun onPermissionRationaleShouldBeShown(
+                        permissions: MutableList<PermissionRequest>?,
+                        token: PermissionToken?
+                    ) {
+                        token?.continuePermissionRequest()
+                    }
+
+                })
+                .withErrorListener { error ->
+                    Log.e(logTag, " error $error")
+                    Toast.makeText(it, " Error occurred! ", Toast.LENGTH_SHORT).show()
+                }
+                .onSameThread()
+                .check()
+        }
+    }
+
+    private fun redirectToWifiSetting() {
+        DialogUtil.featureDetailAlert(requireActivity(), "Wifi SSID and Password",
+            "1. Click on ok button and redirect to wifi settings\n2. Select gateway default wifi SSID and enter password and connect\n3. And go back to application\nSSID is : XYZ\nPassword is : XYZ", object: DialogShowListener {
+                override fun onClick() {
+
+                    /*val intentFilter = IntentFilter()
+                    intentFilter.addAction(WifiManager.SUPPLICANT_STATE_CHANGED_ACTION)
+                    requireContext().registerReceiver(wifiReceiver, intentFilter)
+*/
+                    val wifiIntent = Intent(WifiManager.ACTION_PICK_WIFI_NETWORK)
+//                wifiIntentLauncher.launch(wifiIntent)
+                    startActivityForResult(wifiIntent, WIFI_REQUEST_CODE)
+
+
+
+                }
+
+            })
+    }
+
+
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        Log.e("bb", "onActivityResultCde $requestCode")
+
+        if (requestCode == WIFI_REQUEST_CODE) {
+             Handler(Looper.getMainLooper()).postDelayed({
+            findNavController().navigate(DeviceFragmentDirections.actionDeviceFragmentToConnectingWifiFragment(false, args.roomDetail))
+        }, 600)
+        }
+
+
+       /* if (WifiUtils.isSSIDWifiConnected("Binjal")) {
+            Log.e(logTag, "Connected ")
+
+            Handler(Looper.getMainLooper()).postDelayed({
+                findNavController().navigate(DeviceFragmentDirections.actionDeviceFragmentToConnectingWifiFragment(false, args.roomDetail))
+            }, 600)
+        } else {
+            Log.e(logTag, "Not Connected")
+
+            redirectToWifiSetting()
+        }*/
+    }
+
+    private fun showSettingsDialog() {
+        activity?.let {
+            val builder: AlertDialog.Builder = AlertDialog.Builder(it)
+            builder.setTitle("Need Permissions")
+            builder.setMessage(
+                "This app needs permission to use this feature. You can grant them in app settings."
+            )
+            builder.setPositiveButton("GOTO SETTINGS") { dialog, _ ->
+                dialog.cancel()
+                openSettings()
+            }
+            builder.setNegativeButton("Cancel") { dialog, _ -> dialog.cancel() }
+            builder.show()
+        }
+
+    }
+
+    private fun openSettings() {
+        val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
+        val uri: Uri = Uri.fromParts("package", context?.packageName, null)
+        intent.data = uri
+        startActivityForResult(intent, Constants.REQUEST_OPEN_SETTINGS)
+    }
+
+    val wifiReceiver = object : BroadcastReceiver() {
+        override fun onReceive(context: Context?, intent: Intent?) {
+            if (intent?.action == WifiManager.SUPPLICANT_STATE_CHANGED_ACTION) {
+                val state = intent.getParcelableExtra(WifiManager.EXTRA_NEW_STATE) as SupplicantState?
+
+                if ((SupplicantState.isValidState(state)) && state == SupplicantState.COMPLETED) {
+                    if (WifiUtils.isSSIDWifiConnected("Binjal")) {
+                        Log.e("Binjal", "OnRecive called")
+
+                        /*startActivity(Intent(context, MainActivity::class.java).apply {
+                            putExtra("WIFI_CONNECTED", true)
+                        })*/
+
+//                        findNavController().navigate(findNavController().currentDestination?.id!!)
+
+                        /*val launchIntent = requireContext().packageManager.getLaunchIntentForPackage("com.dellainfotech.smartTouch")
+                        launchIntent?.let {
+                            startActivity(launchIntent)
+                            findNavController().navigate(findNavController().currentDestination?.id!!)
+                        }*/
+
+                        val first = findNavController().currentDestination
+
+                        Log.e("Binjal", (first?.id == R.id.deviceFragment).toString())
+                        /*findNavController().resumedNavigation(
+                            lifecycle, R.id.main_fragment_container)
+*/
+                        /*startActivity(Intent(requireActivity(), MainActivity::class.java))
+                        Handler(Looper.getMainLooper()).postDelayed({
+                            findNavController().navigate(DeviceFragmentDirections.actionDeviceFragmentToConnectingWifiFragment(false, args.roomDetail))
+                        }, 600)*/
+                    }
+                }
+            }
+
+        }
+    }
+
+    fun NavController.resumedNavigation(lifecycle: Lifecycle, destination: Int) {
+        if (lifecycle.currentState.isAtLeast(Lifecycle.State.RESUMED)) {
+            //App is resumed, continue navigation.
+                Log.e("Binjal", "App is resumed, continue navigation.")
+            navigate(destination)
+        } else {
+            //When app is resumed, remove observer and navigate to destination/
+            Log.e("Binjal", "app is resumed, remove observer and navigate to destination")
+
+            lifecycle.addObserver(object: LifecycleObserver {
+                @OnLifecycleEvent(value = Lifecycle.Event.ON_RESUME)
+                fun onResume() {
+                    lifecycle.removeObserver(this)
+                    navigate(destination)
+                }
+            })
+        }
+    }
 }

@@ -75,6 +75,17 @@ class MainActivity : AppCompatActivity() {
 
         navController = navHostFragment.navController
 
+        /*val graphInflater = navHostFragment.navController.navInflater
+        val navGraph = graphInflater.inflate(R.navigation.nav_main)
+
+        val destination = if (intent.getBooleanExtra(
+                "WIFI_CONNECTED",
+                false
+            )
+        ) R.id.addUserFragment else R.id.homeFragment
+        navGraph.startDestination = destination
+        navController.graph = navGraph*/
+
         navHostFragment.navController.addOnDestinationChangedListener { _, destination, _ ->
             when (destination.id) {
                 R.id.homeFragment, R.id.controlModeFragment, R.id.userManagementFragment, R.id.sceneFragment -> {

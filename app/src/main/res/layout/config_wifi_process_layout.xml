@@ -32,7 +32,9 @@
             android:layout_width="@dimen/_50sdp"
             android:layout_height="@dimen/_50sdp"
             android:layout_centerInParent="true"
-            android:src="@drawable/ic_wifi" />
+            android:src="@drawable/ic_wifi"
+            android:clickable="false"
+            />
 
     </com.skyfishjy.library.RippleBackground>
 
