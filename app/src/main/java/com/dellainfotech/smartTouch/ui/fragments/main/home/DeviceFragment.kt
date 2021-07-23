@@ -652,16 +652,13 @@ class DeviceFragment : ModelBaseFragment<HomeViewModel, FragmentDeviceBinding, H
             "1. Click on ok button and redirect to wifi settings\n2. Select gateway default wifi SSID and enter password and connect\n3. And go back to application\nSSID is : XYZ\nPassword is : XYZ", object: DialogShowListener {
                 override fun onClick() {
 
-                    /*val intentFilter = IntentFilter()
+                   /* val intentFilter = IntentFilter()
                     intentFilter.addAction(WifiManager.SUPPLICANT_STATE_CHANGED_ACTION)
-                    requireContext().registerReceiver(wifiReceiver, intentFilter)
-*/
+                    requireContext().registerReceiver(wifiReceiver, intentFilter)*/
+
                     val wifiIntent = Intent(WifiManager.ACTION_PICK_WIFI_NETWORK)
 //                wifiIntentLauncher.launch(wifiIntent)
                     startActivityForResult(wifiIntent, WIFI_REQUEST_CODE)
-
-
-
                 }
 
             })
@@ -674,10 +671,16 @@ class DeviceFragment : ModelBaseFragment<HomeViewModel, FragmentDeviceBinding, H
         Log.e("bb", "onActivityResultCde $requestCode")
 
         if (requestCode == WIFI_REQUEST_CODE) {
-             Handler(Looper.getMainLooper()).postDelayed({
-            findNavController().navigate(DeviceFragmentDirections.actionDeviceFragmentToConnectingWifiFragment(false, args.roomDetail))
-        }, 600)
+            Handler(Looper.getMainLooper()).postDelayed({
+                findNavController().navigate(
+                    DeviceFragmentDirections.actionDeviceFragmentToConnectingWifiFragment(
+                        false,
+                        args.roomDetail
+                    )
+                )
+            }, 600)
         }
+
 
 
        /* if (WifiUtils.isSSIDWifiConnected("Binjal")) {

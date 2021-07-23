@@ -55,23 +55,26 @@ class ConnectingWifiFragment :
 
         binding.layoutConfigWifiProcess.pulsator.startRippleAnimation()
 
-        runnable = Runnable {
+
         if (isRegistering) {
+            runnable = Runnable {
             Log.e("Binjal", args.roomDetail.toString())
             binding.layoutConfigWifiProcess.tvConfigStatus.text = "Registering..."
             binding.layoutConfigWifiProcess.centerImage.isClickable = true
 
-
-                findNavController().navigate(
+            findNavController().navigate(
                     ConnectingWifiFragmentDirections.actionConnectingWifiFragmentToDeviceFragment(
                         args.roomDetail
                     )
                 )
+            }
+            handler?.postDelayed(runnable!!, 5000)
         } else {
-            initializeTCP()
+            runnable = Runnable {
+                initializeTCP()
+            }
+            handler?.postDelayed(runnable!!, 2000)
         }
-        }
-        handler?.postDelayed(runnable!!, 5000)
 
     }
 
@@ -114,11 +117,11 @@ class ConnectingWifiFragment :
 
                 override fun onServerDisconnect(message: String) {
                     Log.e(logTag, message)
-                    runnable = Runnable {
+                    /*runnable = Runnable {
                         binding.layoutConfigWifiProcess.tvConfigStatus.text = "Connection Failed"
                         findNavController().navigateUp()
                     }
-                    handler?.postDelayed(runnable!!, 5000)
+                    handler?.postDelayed(runnable!!, 5000)*/
                 }
 
             })
