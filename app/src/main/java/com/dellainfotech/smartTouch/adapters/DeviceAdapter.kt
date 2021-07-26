@@ -124,6 +124,15 @@ class DeviceAdapter(
         val tvSwitchNameSeven = itemView.findViewById(R.id.tv_switch_seven_name) as TextView
         val tvSwitchNameEight = itemView.findViewById(R.id.tv_switch_eight_name) as TextView
 
+        val tvSwitchNameOneDesc = itemView.findViewById(R.id.tv_switch_one_type) as TextView
+        val tvSwitchNameTwoDesc = itemView.findViewById(R.id.tv_switch_two_type) as TextView
+        val tvSwitchNameThreeDesc = itemView.findViewById(R.id.tv_switch_three_type) as TextView
+        val tvSwitchNameFourDesc = itemView.findViewById(R.id.tv_switch_four_type) as TextView
+        val tvSwitchNameFiveDesc = itemView.findViewById(R.id.tv_switch_five_type) as TextView
+        val tvSwitchNameSixDesc = itemView.findViewById(R.id.tv_switch_six_type) as TextView
+        val tvSwitchNameSevenDesc = itemView.findViewById(R.id.tv_switch_seven_type) as TextView
+        val tvSwitchNameEightDesc = itemView.findViewById(R.id.tv_switch_eight_type) as TextView
+
         val tvSwitchOneEdit = itemView.findViewById(R.id.tv_switch_one_edit) as TextView
         val tvSwitchTwoEdit = itemView.findViewById(R.id.tv_switch_two_edit) as TextView
         val tvSwitchThreeEdit = itemView.findViewById(R.id.tv_switch_three_edit) as TextView
@@ -168,6 +177,11 @@ class DeviceAdapter(
         val tvSwitchNameTwo = itemView.findViewById(R.id.tv_switch_two_name) as TextView
         val tvSwitchNameThree = itemView.findViewById(R.id.tv_switch_three_name) as TextView
         val tvSwitchNameFour = itemView.findViewById(R.id.tv_switch_four_name) as TextView
+
+        val tvSwitchNameOneDesc = itemView.findViewById(R.id.tv_switch_one_type) as TextView
+        val tvSwitchNameTwoDesc = itemView.findViewById(R.id.tv_switch_two_type) as TextView
+        val tvSwitchNameThreeDesc = itemView.findViewById(R.id.tv_switch_three_type) as TextView
+        val tvSwitchNameFourDesc = itemView.findViewById(R.id.tv_switch_four_type) as TextView
 
         val tvSwitchOneEdit = itemView.findViewById(R.id.tv_switch_one_edit) as TextView
         val tvSwitchTwoEdit = itemView.findViewById(R.id.tv_switch_two_edit) as TextView
@@ -216,41 +230,65 @@ class DeviceAdapter(
                             val switchName = value.name
                             tvSwitchNameOne.text = switchName
                             switchOne.isChecked = value.switchStatus.toBoolean()
+                            value.desc?.let {
+                                tvSwitchNameOneDesc.text = it
+                            }
                         }
                         "2" -> {
                             val switchName = value.name
                             tvSwitchNameTwo.text = switchName
                             switchTwo.isChecked = value.switchStatus.toBoolean()
+                            value.desc?.let {
+                                tvSwitchNameTwoDesc.text = it
+                            }
                         }
                         "3" -> {
                             val switchName = value.name
                             tvSwitchNameThree.text = switchName
                             switchThree.isChecked = value.switchStatus.toBoolean()
+                            value.desc?.let {
+                                tvSwitchNameThreeDesc.text = it
+                            }
                         }
                         "4" -> {
                             val switchName = value.name
                             tvSwitchNameFour.text = switchName
                             switchFour.isChecked = value.switchStatus.toBoolean()
+                            value.desc?.let {
+                                tvSwitchNameFourDesc.text = it
+                            }
                         }
                         "5" -> {
                             val switchName = value.name
                             tvSwitchNameFive.text = switchName
                             switchFive.isChecked = value.switchStatus.toBoolean()
+                            value.desc?.let {
+                                tvSwitchNameFiveDesc.text = it
+                            }
                         }
                         "6" -> {
                             val switchName = value.name
                             tvSwitchNameSix.text = switchName
                             switchSix.isChecked = value.switchStatus.toBoolean()
+                            value.desc?.let {
+                                tvSwitchNameSixDesc.text = it
+                            }
                         }
                         "7" -> {
                             val switchName = value.name
                             tvSwitchNameSeven.text = switchName
                             switchSeven.isChecked = value.switchStatus.toBoolean()
+                            value.desc?.let {
+                                tvSwitchNameSevenDesc.text = it
+                            }
                         }
                         "8" -> {
                             val switchName = value.name
                             tvSwitchNameEight.text = switchName
                             switchEight.isChecked = value.switchStatus.toBoolean()
+                            value.desc?.let {
+                                tvSwitchNameEightDesc.text = it
+                            }
                         }
                         "9" -> {
                             seekBar.setProgress(value.switchStatus.toFloat())
@@ -467,21 +505,33 @@ class DeviceAdapter(
                             val switchName = value.name
                             tvSwitchNameOne.text = switchName
                             switchOne.isChecked = value.switchStatus.toBoolean()
+                            value.desc?.let {
+                                tvSwitchNameOneDesc.text = it
+                            }
                         }
                         "2" -> {
                             val switchName = value.name
                             tvSwitchNameTwo.text = switchName
                             switchTwo.isChecked = value.switchStatus.toBoolean()
+                            value.desc?.let {
+                                tvSwitchNameTwoDesc.text = it
+                            }
                         }
                         "3" -> {
                             val switchName = value.name
                             tvSwitchNameThree.text = switchName
                             switchThree.isChecked = value.switchStatus.toBoolean()
+                            value.desc?.let {
+                                tvSwitchNameThreeDesc.text = it
+                            }
                         }
                         "4" -> {
                             val switchName = value.name
                             tvSwitchNameFour.text = switchName
                             switchFour.isChecked = value.switchStatus.toBoolean()
+                            value.desc?.let {
+                                tvSwitchNameFourDesc.text = it
+                            }
                         }
                         "5" -> {
                             seekBar.setProgress(value.switchStatus.toFloat())
