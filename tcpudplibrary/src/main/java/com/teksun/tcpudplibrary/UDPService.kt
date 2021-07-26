@@ -1,6 +1,5 @@
 package com.teksun.tcpudplibrary
 
-import android.content.Context
 import android.os.StrictMode
 import android.util.Log
 import com.teksun.tcpudplibrary.listener.CloseSocketListener
@@ -45,19 +44,12 @@ object UDPService {
      * @param connectResultListener = get result of success or failed
      */
     fun connect(
-        context: Context,
         ip: String,
         targetPort: Int,
         localPort: Int,
         connectResultListener:
         ConnectCResultListener
     ) {
-        if (!WifiUtils.checkWifiStatus(context)) {
-
-            WifiUtils.enableWifi()
-            Thread.sleep(3000)
-            if (!WifiUtils.checkWifiStatus(context)) return
-        }
 
         mTargetPort = targetPort
         mLocalPort = localPort
@@ -171,7 +163,7 @@ object UDPService {
      * @param message - print message in log
      */
     private fun printLog(message: String) {
-        if (isEnableLog) Log.e(logTag, message)
+        if (isEnableLog) Log.i(logTag, message)
     }
 
     /**

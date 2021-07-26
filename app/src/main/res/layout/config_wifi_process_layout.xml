@@ -13,7 +13,7 @@
         android:layout_gravity="center"
         android:layout_marginTop="@dimen/_20sdp"
         android:fontFamily="@font/roboto_bold"
-        android:text="Connecting..."
+        android:text="@string/text_connecting"
         android:textColor="@color/daintree"
         android:textSize="@dimen/_18ssp" />
 

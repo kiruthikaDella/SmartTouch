@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.jcminarro.roundkornerlayout.RoundKornerLinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:background="@color/dialog_background_color"
+    android:orientation="vertical"
+    app:corner_radius="@dimen/dialog_corner_radius">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/_20sdp"
+        android:layout_marginTop="@dimen/_20sdp"
+        android:fontFamily="@font/roboto_medium"
+        android:text="@string/below_given_default_gateway_wifi_ssid_and_password"
+        android:textColor="@color/theme_color"
+        android:textSize="@dimen/_13ssp"/>
+
+    <TextView
+        android:id="@+id/tvInstructionsInfo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/_20sdp"
+        android:layout_marginTop="@dimen/_15sdp"
+        android:fontFamily="@font/roboto_regular"
+        android:lineSpacingExtra="@dimen/_5sdp"
+        android:text="@string/text_wifi_instruction"
+        android:textColor="@color/daintree"
+        android:textSize="@dimen/_12ssp" />
+
+    <TextView
+        android:id="@+id/tv_default_ssid"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="start"
+        android:layout_marginStart="@dimen/_20sdp"
+        android:layout_marginTop="@dimen/_20sdp"
+        android:fontFamily="@font/roboto_regular"
+        android:text="@string/text_ssid"
+        android:textColor="@color/daintree"
+        android:textSize="@dimen/_15sdp" />
+
+    <TextView
+        android:id="@+id/tv_default_password"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="start"
+        android:layout_marginStart="@dimen/_20sdp"
+        android:layout_marginTop="@dimen/_15sdp"
+        android:fontFamily="@font/roboto_regular"
+        android:text="@string/text_password"
+        android:textColor="@color/daintree"
+        android:textSize="@dimen/_15sdp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/_15sdp"
+        android:layout_marginTop="@dimen/_10sdp"
+        android:layout_marginEnd="@dimen/_15sdp"
+        android:layout_marginBottom="@dimen/_20sdp"
+        android:orientation="horizontal">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_cancel"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/_30sdp"
+            android:layout_marginHorizontal="@dimen/_5sdp"
+            android:layout_weight="0.5"
+            android:background="@drawable/nepal_background_4dp_corner"
+            android:fontFamily="@font/roboto_medium"
+            android:letterSpacing="0"
+            android:text="@string/text_cancel"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            android:textSize="@dimen/dialog_button_size"
+            app:backgroundTint="@null" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_ok"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/_30sdp"
+            android:layout_marginHorizontal="@dimen/_5sdp"
+            android:layout_weight="0.5"
+            android:background="@drawable/dodger_blue_background_4dp_corner"
+            android:fontFamily="@font/roboto_medium"
+            android:letterSpacing="0"
+            android:text="@string/text_ok"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            android:textSize="@dimen/dialog_button_size"
+            app:backgroundTint="@null" />
+    </LinearLayout>
+
+</com.jcminarro.roundkornerlayout.RoundKornerLinearLayout>

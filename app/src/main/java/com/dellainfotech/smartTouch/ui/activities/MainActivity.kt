@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
-import android.view.MenuItem
 import android.view.View
 import android.widget.AdapterView
 import android.widget.Toast
@@ -13,7 +12,6 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
-import androidx.navigation.ui.onNavDestinationSelected
 import com.appizona.yehiahd.fastsave.FastSave
 import com.dellainfotech.smartTouch.R
 import com.dellainfotech.smartTouch.adapters.spinneradapter.RoomTypeAdapter
@@ -35,7 +33,6 @@ import com.dellainfotech.smartTouch.mqtt.NotifyManager
 import com.dellainfotech.smartTouch.ui.fragments.main.home.HomeFragmentDirections
 import com.dellainfotech.smartTouch.ui.viewmodel.HomeViewModel
 import com.dellainfotech.smartTouch.ui.viewmodel.ViewModelFactory
-import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.sothree.slidinguppanel.SlidingUpPanelLayout
 
 /**
@@ -74,17 +71,6 @@ class MainActivity : AppCompatActivity() {
             supportFragmentManager.findFragmentById(R.id.main_fragment_container) as NavHostFragment
 
         navController = navHostFragment.navController
-
-        /*val graphInflater = navHostFragment.navController.navInflater
-        val navGraph = graphInflater.inflate(R.navigation.nav_main)
-
-        val destination = if (intent.getBooleanExtra(
-                "WIFI_CONNECTED",
-                false
-            )
-        ) R.id.addUserFragment else R.id.homeFragment
-        navGraph.startDestination = destination
-        navController.graph = navGraph*/
 
         navHostFragment.navController.addOnDestinationChangedListener { _, destination, _ ->
             when (destination.id) {

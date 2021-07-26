@@ -1,10 +1,8 @@
 package com.dellainfotech.smartTouch.ui.fragments.main.home
 
-import android.net.wifi.WifiInfo
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.util.JsonReader
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -13,21 +11,14 @@ import android.widget.Toast
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.binjal.wifilibrary.WifiUtils
-import com.binjal.wifilibrary.listener.WifiInfoResultListener
 import com.dellainfotech.smartTouch.R
-import com.dellainfotech.smartTouch.api.model.GetRoomData
 import com.dellainfotech.smartTouch.api.repository.HomeRepository
 import com.dellainfotech.smartTouch.databinding.FragmentConnectingWifiBinding
 import com.dellainfotech.smartTouch.ui.fragments.ModelBaseFragment
 import com.dellainfotech.smartTouch.ui.viewmodel.HomeViewModel
-import com.google.gson.JsonObject
-import com.teksun.tcpudplibrary.IPConfigService
-import com.teksun.tcpudplibrary.SettingsService
 import com.teksun.tcpudplibrary.TCPClientService
 import com.teksun.tcpudplibrary.listener.ConnectCResultListener
 import com.teksun.tcpudplibrary.listener.ReadWriteValueListener
-import org.json.JSONObject
-import java.lang.Exception
 
 class ConnectingWifiFragment :
     ModelBaseFragment<HomeViewModel, FragmentConnectingWifiBinding, HomeRepository>(),
@@ -35,8 +26,6 @@ class ConnectingWifiFragment :
     private val logTag = ConnectingWifiFragment::class.java.simpleName
     private val args: ConnectingWifiFragmentArgs by navArgs()
     private var isRegistering = false
-    private var isConnected = false
-
     private var handler: Handler? = null
     private var runnable: Runnable? = null
 
@@ -55,14 +44,11 @@ class ConnectingWifiFragment :
 
         binding.layoutConfigWifiProcess.pulsator.startRippleAnimation()
 
-
         if (isRegistering) {
-            runnable = Runnable {
-            Log.e("Binjal", args.roomDetail.toString())
-            binding.layoutConfigWifiProcess.tvConfigStatus.text = "Registering..."
-            binding.layoutConfigWifiProcess.centerImage.isClickable = true
+            binding.layoutConfigWifiProcess.tvConfigStatus.text = getString(R.string.text_registering)
 
-            findNavController().navigate(
+            runnable = Runnable {
+                findNavController().navigate(
                     ConnectingWifiFragmentDirections.actionConnectingWifiFragmentToDeviceFragment(
                         args.roomDetail
                     )
@@ -84,12 +70,12 @@ class ConnectingWifiFragment :
 
             TCPClientService.setReadWriteListener(this)
 
-            TCPClientService.connectToAddress(requireContext(), WifiUtils.getGatewayIpAddress(), 8881, connectCResultListener = object :
+            TCPClientService.connectToAddress(WifiUtils.getGatewayIpAddress(), getString(R.string.receiver_port).toInt(), connectCResultListener = object :
                 ConnectCResultListener {
                 override fun onSuccess(message: String) {
                     Log.e(logTag, "Connection successful $message")
                     runnable = Runnable {
-                        binding.layoutConfigWifiProcess.tvConfigStatus.text = "Connected"
+                        binding.layoutConfigWifiProcess.tvConfigStatus.text = getString(R.string.text_connected)
                         binding.layoutConfigWifiProcess.centerImage.setImageResource(R.drawable.ic_wifi_done)
                         binding.layoutConfigWifiProcess.centerImage.isClickable = true
 
@@ -106,22 +92,24 @@ class ConnectingWifiFragment :
 
                 override fun onFailure(message: String) {
                     Log.e(logTag, "Connect failed")
-                    Toast.makeText(requireContext(), "Connection Failed", Toast.LENGTH_LONG).show()
+                    binding.layoutConfigWifiProcess.tvConfigStatus.text = getString(R.string.text_connection_failed)
                     runnable = Runnable {
-                        binding.layoutConfigWifiProcess.tvConfigStatus.text = "Connection Failed"
+                        Toast.makeText(requireContext(), "Connection Failed", Toast.LENGTH_LONG).show()
                         findNavController().navigateUp()
                     }
-                    handler?.postDelayed(runnable!!, 5000)
+                    handler?.postDelayed(runnable!!, 2000)
 
                 }
 
                 override fun onServerDisconnect(message: String) {
                     Log.e(logTag, message)
-                    /*runnable = Runnable {
-                        binding.layoutConfigWifiProcess.tvConfigStatus.text = "Connection Failed"
-                        findNavController().navigateUp()
+                    activity?.runOnUiThread {
+                        binding.layoutConfigWifiProcess.tvConfigStatus.text = getString(R.string.text_connection_failed)
+                        runnable = Runnable {
+                            findNavController().navigateUp()
+                        }
+                        handler?.postDelayed(runnable!!, 3000)
                     }
-                    handler?.postDelayed(runnable!!, 5000)*/
                 }
 
             })
@@ -135,7 +123,7 @@ class ConnectingWifiFragment :
     }
 
     override fun onFailure(message: String) {
-        Log.e(logTag, "On Fail $message")
+        Log.e(logTag, "On Fail read $message")
     }
 
     override fun onPause() {
