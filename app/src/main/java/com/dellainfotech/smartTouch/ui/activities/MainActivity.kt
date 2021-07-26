@@ -4,16 +4,15 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
-import android.view.MenuItem
 import android.view.View
 import android.widget.AdapterView
+import android.widget.Spinner
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
-import androidx.navigation.ui.onNavDestinationSelected
 import com.appizona.yehiahd.fastsave.FastSave
 import com.dellainfotech.smartTouch.R
 import com.dellainfotech.smartTouch.adapters.spinneradapter.RoomTypeAdapter
@@ -35,8 +34,9 @@ import com.dellainfotech.smartTouch.mqtt.NotifyManager
 import com.dellainfotech.smartTouch.ui.fragments.main.home.HomeFragmentDirections
 import com.dellainfotech.smartTouch.ui.viewmodel.HomeViewModel
 import com.dellainfotech.smartTouch.ui.viewmodel.ViewModelFactory
-import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.sothree.slidinguppanel.SlidingUpPanelLayout
+import java.lang.reflect.Field
+
 
 /**
  * Created by Jignesh Dangar on 09-04-2021.
@@ -312,7 +312,6 @@ class MainActivity : AppCompatActivity() {
                         if (roomTypeList.isNotEmpty()) {
                             val roomAdapter = RoomTypeAdapter(this, roomTypeList)
                             binding.layoutAddRoom.spinnerRoom.adapter = roomAdapter
-
                             binding.layoutAddRoom.spinnerRoom.onItemSelectedListener =
                                 object : AdapterView.OnItemSelectedListener {
                                     override fun onItemSelected(
