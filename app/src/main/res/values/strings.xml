@@ -98,6 +98,7 @@
     <string name="side_nav_text_logout">Logout</string>
 
     <!--    Room Panel-->
+    <!--    Room Panel-->
     <string name="text_add_panel">Add Panel</string>
     <string name="text_edit">Edit</string>
     <string name="text_customization">Customization</string>
