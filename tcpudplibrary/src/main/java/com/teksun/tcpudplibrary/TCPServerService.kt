@@ -40,7 +40,7 @@ object TCPServerService {
     /**
      * Set listener for communication between library module and project class
      */
-    fun setReadWriteListener(readWriteValueListener: ReadWriteValueListener<String>) {
+    fun setReadWriteListener(readWriteValueListener: ReadWriteValueListener<String>?) {
         TCPServerService.readWriteValueListener = readWriteValueListener
     }
 

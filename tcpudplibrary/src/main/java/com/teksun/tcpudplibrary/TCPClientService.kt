@@ -38,7 +38,7 @@ object TCPClientService {
     /**
      * Set listener for communication between library module and project class
      */
-    fun setReadWriteListener(readWriteValueListener: ReadWriteValueListener<String>) {
+    fun setReadWriteListener(readWriteValueListener: ReadWriteValueListener<String>?) {
         TCPClientService.readWriteValueListener = readWriteValueListener
     }
 
@@ -58,46 +58,50 @@ object TCPClientService {
     ) {
         threadPolicyCall()
 
-        try {
-            if (socket != null) {
-                if (socket?.isConnected!!) {
-                    printLog("Already connected")
-                    connectCResultListener.onSuccess("Already connected")
-                    return
+        val thread = Thread {
+            try {
+                if (socket != null) {
+                    if (socket?.isConnected!!) {
+                        printLog("Already connected")
+                        connectCResultListener.onSuccess("Already connected")
+                        return@Thread
+                    }
                 }
-            }
 
-            socket = Socket()
+                socket = Socket()
 
-            val ipAddress = InetAddress.getByName(ip)
-            printLog("IPAddress ${ipAddress.hostName}")
+                val ipAddress = InetAddress.getByName(ip)
+                printLog("IPAddress ${ipAddress.hostName}")
 
-            val socketAddress = InetSocketAddress(ipAddress.hostName, port)
-            printLog("socketAddress $socketAddress")
+                val socketAddress = InetSocketAddress(ipAddress.hostName, port)
+                printLog("socketAddress $socketAddress")
 
-            if (timeOut != null) {
-                socket?.connect(socketAddress, timeOut)
-            } else {
-                socket?.connect(socketAddress)
-            }
-
-            socket?.let {
-                if (it.isConnected) {
-                    printLog("Connection is successful")
-                    connectCResultListener.onSuccess(Utils.concatDateAndTime("Connect"))
-
-                    val sh = ServerHandlerNew(connectCResultListener)
-                    sh.start()
+                if (timeOut != null) {
+                    socket?.connect(socketAddress, timeOut)
+                } else {
+                    socket?.connect(socketAddress)
                 }
-            }
 
-        } catch (e: IOException) {
-            printLog("Connected failed : IOException $e")
-            connectCResultListener.onFailure(Utils.concatDateAndTime("Can't connect"))
-        } catch (e: SocketTimeoutException) {
-            printLog("Connected failed : SocketTimeoutException $e")
-            connectCResultListener.onFailure(Utils.concatDateAndTime("Can't connect"))
+                socket?.let {
+                    if (it.isConnected) {
+                        printLog("Connection is successful")
+                        connectCResultListener.onSuccess(Utils.concatDateAndTime("Connect"))
+
+                        val sh = ServerHandlerNew(connectCResultListener)
+                        sh.start()
+                    }
+                }
+
+            } catch (e: IOException) {
+                printLog("Connected failed : IOException $e")
+                connectCResultListener.onFailure(Utils.concatDateAndTime("Can't connect"))
+            } catch (e: SocketTimeoutException) {
+                printLog("Connected failed : SocketTimeoutException $e")
+                connectCResultListener.onFailure(Utils.concatDateAndTime("Can't connect"))
+            }
         }
+        thread.start()
+
     }
 
     /**

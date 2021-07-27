@@ -10,8 +10,8 @@ import androidx.navigation.fragment.navArgs
 import com.dellainfotech.smartTouch.api.repository.HomeRepository
 import com.dellainfotech.smartTouch.common.interfaces.DialogShowListener
 import com.dellainfotech.smartTouch.common.utils.DialogUtil
-import com.dellainfotech.smartTouch.common.utils.Utils
 import com.dellainfotech.smartTouch.databinding.FragmentConfigWifiBinding
+import com.dellainfotech.smartTouch.mqtt.NotifyManager
 import com.dellainfotech.smartTouch.ui.fragments.ModelBaseFragment
 import com.dellainfotech.smartTouch.ui.viewmodel.HomeViewModel
 import com.google.gson.JsonObject
@@ -28,6 +28,8 @@ class ConfigWifiFragment :
     private val logTag = ConfigWifiFragment::class.java.simpleName
     private val args: ConfigWifiFragmentArgs by navArgs()
     private var jsonObject = JsonObject()
+    private var isSendDataToDevice = false
+    private var isInternetConnected = false
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -37,8 +39,14 @@ class ConfigWifiFragment :
         }
 
         binding.layoutConfigWifiPanel.btnSubmit.setOnClickListener {
-            validateUserInformation()
+            if (isSendDataToDevice) sendDataToCloud()
+            else validateUserInformation()
         }
+
+        NotifyManager.internetInfo.observe(viewLifecycleOwner, { isConnected ->
+            Log.e("$logTag Is Internet connected ", isConnected.toString())
+            isInternetConnected = isConnected
+        })
 
         /*viewModel.deviceRegistrationResponse.observe(viewLifecycleOwner, { response ->
             when (response) {
@@ -80,7 +88,7 @@ class ConfigWifiFragment :
                     TCPClientService.sendDefaultValue(jsonObject.toString(), object : ReadWriteValueListener<String> {
                         override fun onSuccess(message: String, value: String?) {
                             Log.e(logTag, "$message $value")
-
+                            isSendDataToDevice = true
                             disconnectTCPClient()
                             sendDataToCloud()
                         }
@@ -88,7 +96,7 @@ class ConfigWifiFragment :
                         override fun onFailure(message: String) {
                             Log.e(logTag, "Send data failed $message")
 
-                            DialogUtil.deviceOfflineAlert(requireActivity(), "Device is Disconnected", object: DialogShowListener {
+                            DialogUtil.deviceOfflineAlert(requireActivity(), "Device Disconnected", object: DialogShowListener {
                                 override fun onClick() {
                                     DialogUtil.hideDialog()
                                     findNavController().navigateUp()
@@ -104,15 +112,17 @@ class ConfigWifiFragment :
     }
 
     private fun sendDataToCloud() {
-        if (Utils.isInternetAvailable()) {
-            /*activity?.let { DialogUtil.loadingAlert(it) }
+        if (isInternetConnected) {
+           /* activity?.let { DialogUtil.loadingAlert(it) }
             viewModel.deviceRegister(jsonObject)*/
+
+            //TODO Binjal Testing purpose navigate After call api remove below navigate
             findNavController().navigate(ConfigWifiFragmentDirections.actionConfigWifiFragmentToConnectingWifiFragment(true, args.roomDetail))
+
         } else {
             DialogUtil.deviceOfflineAlert(requireActivity(), "Please check your internet connection", object : DialogShowListener {
                 override fun onClick() {
                     DialogUtil.hideDialog()
-                    sendDataToCloud()
                 }
             })
         }

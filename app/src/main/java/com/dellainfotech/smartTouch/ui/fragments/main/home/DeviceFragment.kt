@@ -22,6 +22,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.result.ActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.view.isVisible
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
@@ -59,6 +61,7 @@ import com.sothree.slidinguppanel.SlidingUpPanelLayout
  * Created by Jignesh Dangar on 09-04-2021.
  */
 
+
 @SuppressLint("ClickableViewAccessibility")
 class DeviceFragment : ModelBaseFragment<HomeViewModel, FragmentDeviceBinding, HomeRepository>() {
 
@@ -71,15 +74,23 @@ class DeviceFragment : ModelBaseFragment<HomeViewModel, FragmentDeviceBinding, H
     private var deviceData: GetDeviceData? = null
     private var roomData: GetRoomData? = null
     private lateinit var deviceTypeAdapter: SpinnerAdapter
-    private val WIFI_REQUEST_CODE = 101
     private var isSelectedSmartAck = false
+
+    private val wifiRegister = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        onActivityResult(Constants.REQUEST_WIFI_CODE, result)
+    }
+
+    private val openSettingRegister = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        onActivityResult(Constants.REQUEST_OPEN_SETTINGS, result)
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         WifiUtils.init(context)
 
-        val deviceTypeList = arrayOf(getString(R.string.text_smart_touch), getString(R.string.text_smart_tack))
+        val deviceTypeList =
+            arrayOf(getString(R.string.text_smart_touch), getString(R.string.text_smart_tack))
 
         deviceList.clear()
         activity?.let {
@@ -112,6 +123,7 @@ class DeviceFragment : ModelBaseFragment<HomeViewModel, FragmentDeviceBinding, H
         binding.tvTitle.text = args.roomDetail.roomName
 
         NotifyManager.internetInfo.observe(viewLifecycleOwner, { isConnected ->
+            Log.e(logTag, " isConnected $isConnected isSelectedSmartAck $isSelectedSmartAck")
             if (isConnected) {
 //                showLoading()
                 viewModel.getDevice(args.roomDetail.id)
@@ -154,6 +166,7 @@ class DeviceFragment : ModelBaseFragment<HomeViewModel, FragmentDeviceBinding, H
 
     override fun onDestroyView() {
         super.onDestroyView()
+        isSelectedSmartAck = false
         viewModel.updateRoomResponse.postValue(null)
         viewModel.addDeviceResponse.postValue(null)
         viewModel.updateDeviceNameResponse.postValue(null)
@@ -399,13 +412,13 @@ class DeviceFragment : ModelBaseFragment<HomeViewModel, FragmentDeviceBinding, H
         }
 
         binding.layoutSelectDevice.btnSave.setOnClickListener {
-            if (binding.layoutSelectDevice.spinnerDeviceType.selectedItem == getString(R.string.text_smart_touch)){
+            if (binding.layoutSelectDevice.spinnerDeviceType.selectedItem == getString(R.string.text_smart_touch)) {
                 hidePanel()
                 binding.layoutSelectDevice.linearSelectDevice.isVisible = false
                 binding.layoutRoomPanel.linearPanel.isVisible = true
                 binding.tvBottomViewTitle.text = getString(R.string.text_add_panel)
                 showPanel()
-            }else if (binding.layoutSelectDevice.spinnerDeviceType.selectedItem == getString(R.string.text_smart_tack)){
+            } else if (binding.layoutSelectDevice.spinnerDeviceType.selectedItem == getString(R.string.text_smart_tack)) {
                 hidePanel()
                 isSelectedSmartAck = true
 
@@ -415,7 +428,7 @@ class DeviceFragment : ModelBaseFragment<HomeViewModel, FragmentDeviceBinding, H
 
     }
 
-    private fun showPanel(){
+    private fun showPanel() {
         Handler(Looper.getMainLooper()).postDelayed({
             binding.layoutSlidingUpPanel.panelState = SlidingUpPanelLayout.PanelState.EXPANDED
         }, 600)
@@ -629,61 +642,59 @@ class DeviceFragment : ModelBaseFragment<HomeViewModel, FragmentDeviceBinding, H
     @SuppressLint("SetTextI18n")
     private fun redirectToWifiSetting() {
 
-            var dialog: Dialog? = null
-            dialog = Dialog(requireContext())
-            dialog.setContentView(R.layout.dialog_wifi_info)
-            dialog.setCancelable(true)
+        val dialog = Dialog(requireContext())
 
-            val tvSSID = dialog.findViewById(R.id.tv_default_ssid) as TextView
-            val tvPassword = dialog.findViewById(R.id.tv_default_password) as TextView
-            val btnOk = dialog.findViewById(R.id.btn_ok) as MaterialButton
-            val btnCancel = dialog.findViewById(R.id.btn_cancel) as MaterialButton
+        dialog.setContentView(R.layout.dialog_wifi_info)
+        dialog.setCancelable(true)
 
-            tvSSID.text = "SSID: ${getString(R.string.str_gateway_name)}"
-            tvPassword.text = "Password: ${getString(R.string.str_gateway_password)}"
+        val tvSSID = dialog.findViewById(R.id.tv_default_ssid) as TextView
+        val tvPassword = dialog.findViewById(R.id.tv_default_password) as TextView
+        val btnOk = dialog.findViewById(R.id.btn_ok) as MaterialButton
+        val btnCancel = dialog.findViewById(R.id.btn_cancel) as MaterialButton
 
-            btnCancel.setOnClickListener {
-                dialog.dismiss()
-            }
+        tvSSID.text = "SSID: ${getString(R.string.str_gateway_name)}"
+        tvPassword.text = "Password: ${getString(R.string.str_gateway_password)}"
 
-            btnOk.setOnClickListener {
-                dialog.dismiss()
-                if (VersionUtils.isAndroidQOrLater) {
-                    val panelIntent = Intent(Settings.Panel.ACTION_WIFI)
-                    startActivityForResult(panelIntent, WIFI_REQUEST_CODE)
-                } else {
-                    val wifiIntent = Intent(WifiManager.ACTION_PICK_WIFI_NETWORK)
-                    startActivityForResult(wifiIntent, WIFI_REQUEST_CODE)
-                }
-            }
+        btnCancel.setOnClickListener {
+            dialog.dismiss()
+        }
 
-            val dpHeight: Float
-            val dpWidth: Float
-
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-                val display: Display? = requireContext().display
-                val displayMetrics = DisplayMetrics()
-                display?.getRealMetrics(displayMetrics)
-                dpHeight = displayMetrics.heightPixels * Constants.COMMON_DIALOG_HEIGHT
-                dpWidth = displayMetrics.widthPixels * 0.85.toFloat()
+        btnOk.setOnClickListener {
+            dialog.dismiss()
+            if (VersionUtils.isAndroidQOrLater) {
+                val panelIntent = Intent(Settings.Panel.ACTION_WIFI)
+                wifiRegister.launch(panelIntent)
             } else {
-                val display: Display = requireActivity().windowManager.defaultDisplay
-                val outMetrics = DisplayMetrics()
-                display.getMetrics(outMetrics)
-                dpHeight = outMetrics.heightPixels * Constants.COMMON_DIALOG_HEIGHT
-                dpWidth = outMetrics.widthPixels * 0.85.toFloat()
+                val wifiIntent = Intent(WifiManager.ACTION_PICK_WIFI_NETWORK)
+                wifiRegister.launch(wifiIntent)
             }
+        }
 
-            dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-            dialog.window?.setLayout(dpWidth.toInt(), dpHeight.toInt())
-            dialog.show()
+        val dpHeight: Float
+        val dpWidth: Float
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            val display: Display? = requireContext().display
+            val displayMetrics = DisplayMetrics()
+            display?.getRealMetrics(displayMetrics)
+            dpHeight = displayMetrics.heightPixels * Constants.COMMON_DIALOG_HEIGHT
+            dpWidth = displayMetrics.widthPixels * 0.85.toFloat()
+        } else {
+            val display: Display = requireActivity().windowManager.defaultDisplay
+            val outMetrics = DisplayMetrics()
+            display.getMetrics(outMetrics)
+            dpHeight = outMetrics.heightPixels * Constants.COMMON_DIALOG_HEIGHT
+            dpWidth = outMetrics.widthPixels * 0.85.toFloat()
+        }
+
+        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        dialog.window?.setLayout(dpWidth.toInt(), dpHeight.toInt())
+        dialog.show()
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        Log.e("bb", "onActivityResultCde $requestCode")
-
-        if (requestCode == WIFI_REQUEST_CODE) {
+    private fun onActivityResult(requestCode: Int, result: ActivityResult) {
+        Log.e(logTag, result.resultCode.toString())
+        if (requestCode == Constants.REQUEST_WIFI_CODE) {
             if (WifiUtils.isSSIDWifiConnected(getString(R.string.str_gateway_name))) {
                 DialogUtil.loadingAlert(requireActivity(), isCancelable = false)
                 Handler(Looper.getMainLooper()).postDelayed({
@@ -722,6 +733,6 @@ class DeviceFragment : ModelBaseFragment<HomeViewModel, FragmentDeviceBinding, H
         val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
         val uri: Uri = Uri.fromParts("package", context?.packageName, null)
         intent.data = uri
-        startActivityForResult(intent, Constants.REQUEST_OPEN_SETTINGS)
+        openSettingRegister.launch(intent)
     }
 }

@@ -22,6 +22,8 @@ object Constants {
     const val REQUEST_GALLERY_IMAGE = 103
     const val REQUEST_OPEN_SETTINGS = 104
 
+    const val REQUEST_WIFI_CODE = 105
+
     const val DEVICE_TYPE_EIGHT = 8
     const val DEVICE_TYPE_FOUR = 4
 

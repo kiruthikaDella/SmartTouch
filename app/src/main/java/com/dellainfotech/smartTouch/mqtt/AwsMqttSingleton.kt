@@ -90,6 +90,7 @@ object AwsMqttSingleton {
     }
 
     private fun updateObserver(isConnected: Boolean){
+        Log.e(logTag, " updateObserver isConnected $isConnected isInternetConnected $isInternetConnected ")
         if (isInternetConnected != isConnected){
             isInternetConnected = isConnected
             NotifyManager.internetInfo.postValue(isConnected)

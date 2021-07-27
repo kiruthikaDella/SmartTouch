@@ -33,7 +33,7 @@ object UDPService {
     /**
      * Set listener for communication between library module and project class
      */
-    fun setReadWriteListener(readWriteValueListener: ReadWriteValueListenerUDP<String>) {
+    fun setReadWriteListener(readWriteValueListener: ReadWriteValueListenerUDP<String>?) {
         this.readWriteValueListener = readWriteValueListener
     }
 

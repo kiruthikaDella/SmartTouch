@@ -12,7 +12,6 @@ import com.dellainfotech.smartTouch.api.repository.HomeRepository
 import kotlinx.coroutines.launch
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
-import okhttp3.ResponseBody
 
 class HomeViewModel @ViewModelInject constructor(
     private val homeRepository: HomeRepository
@@ -369,4 +368,13 @@ class HomeViewModel @ViewModelInject constructor(
     //
     //endregion
     //
+
+    /*private val _deviceRegisterResponse: MutableLiveData<Resource<CommonResponse>> = MutableLiveData()
+    val deviceRegistrationResponse: MutableLiveData<Resource<CommonResponse>>
+        get() = _deviceRegisterResponse
+
+    fun deviceRegister(jsonObject: JsonObject) = viewModelScope.launch {
+        _deviceRegisterResponse.value = Resource.Loading
+        _deviceRegisterResponse.value = homeRepository.deviceRegister(jsonObject)
+    }*/
 }

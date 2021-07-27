@@ -34,6 +34,8 @@ import com.dellainfotech.smartTouch.ui.fragments.main.home.HomeFragmentDirection
 import com.dellainfotech.smartTouch.ui.viewmodel.HomeViewModel
 import com.dellainfotech.smartTouch.ui.viewmodel.ViewModelFactory
 import com.sothree.slidinguppanel.SlidingUpPanelLayout
+import com.teksun.tcpudplibrary.TCPClientService
+import com.teksun.tcpudplibrary.listener.CloseSocketListener
 
 /**
  * Created by Jignesh Dangar on 09-04-2021.
@@ -162,9 +164,24 @@ class MainActivity : AppCompatActivity() {
             binding.ivHome.performClick()
         } else if (navController.currentDestination?.id == R.id.homeFragment) {
             finishAffinity()
+        } else if (navController.currentDestination?.id == R.id.connectingWifiFragment && TCPClientService.getSocket() != null) {
+            disconnectTCPClient()
         } else {
             super.onBackPressed()
         }
+    }
+
+    private fun disconnectTCPClient() {
+        TCPClientService.closeSocket(object : CloseSocketListener {
+            override fun onSuccess(message: String) {
+                Log.e(logTag, message)
+                navController.navigateUp()
+            }
+
+            override fun onFailure(message: String) {
+                Log.e(logTag, message)
+            }
+        })
     }
 
     //
@@ -371,5 +388,7 @@ class MainActivity : AppCompatActivity() {
     //
     //endregion
     //
+
+
 
 }
