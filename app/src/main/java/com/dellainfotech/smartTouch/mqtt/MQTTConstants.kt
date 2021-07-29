@@ -37,6 +37,7 @@ object MQTTConstants {
     const val AWS_DMR = "DMR"
     const val AWS_USB_PORT_A = "USB1"
     const val AWS_USB_PORT_C = "USB2"
+    const val AWS_NAME = "name"
 
     //Device
     const val AWS_STATUS = "st" //Status
