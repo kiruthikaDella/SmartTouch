@@ -477,7 +477,7 @@ class DeviceFragment : ModelBaseFragment<HomeViewModel, FragmentDeviceBinding, H
                 is Resource.Success -> {
                     DialogUtil.hideDialog()
                     context?.let {
-                        Toast.makeText(it, response.values.message, Toast.LENGTH_SHORT).show()
+//                        Toast.makeText(it, response.values.message, Toast.LENGTH_SHORT).show()
                     }
                     if (response.values.status && response.values.code == Constants.API_SUCCESS_CODE) {
                         response.values.data?.let {
@@ -488,7 +488,7 @@ class DeviceFragment : ModelBaseFragment<HomeViewModel, FragmentDeviceBinding, H
                 }
                 is Resource.Failure -> {
                     DialogUtil.hideDialog()
-                    Log.e(logTag, "addDeviceResponse Failure ${response.errorBody?.string()}")
+//                    Log.e(logTag, "addDeviceResponse Failure ${response.errorBody?.string()}")
                 }
                 else -> {
                     //We will do nothing here
@@ -508,13 +508,13 @@ class DeviceFragment : ModelBaseFragment<HomeViewModel, FragmentDeviceBinding, H
                         }
                     } else {
                         context?.let {
-                            Toast.makeText(it, response.values.message, Toast.LENGTH_SHORT).show()
+//                            Toast.makeText(it, response.values.message, Toast.LENGTH_SHORT).show()
                         }
                     }
                 }
                 is Resource.Failure -> {
                     DialogUtil.hideDialog()
-                    Log.e(logTag, "getDeviceResponse Failure ${response.errorBody?.string()}")
+//                    Log.e(logTag, "getDeviceResponse Failure ${response.errorBody?.string()}")
                 }
                 else -> {
                     // We will do nothing here
@@ -647,6 +647,7 @@ class DeviceFragment : ModelBaseFragment<HomeViewModel, FragmentDeviceBinding, H
         dialog.setContentView(R.layout.dialog_wifi_info)
         dialog.setCancelable(true)
 
+        val tvInstructionInfo = dialog.findViewById(R.id.tvInstructionsInfo) as TextView
         val tvSSID = dialog.findViewById(R.id.tv_default_ssid) as TextView
         val tvPassword = dialog.findViewById(R.id.tv_default_password) as TextView
         val btnOk = dialog.findViewById(R.id.btn_ok) as MaterialButton
@@ -654,6 +655,12 @@ class DeviceFragment : ModelBaseFragment<HomeViewModel, FragmentDeviceBinding, H
 
         tvSSID.text = "SSID: ${getString(R.string.str_gateway_name)}"
         tvPassword.text = "Password: ${getString(R.string.str_gateway_password)}"
+
+        if (VersionUtils.isAndroidQOrLater) {
+            tvInstructionInfo.setText(getString(R.string.text_wifi_instruction_10))
+        } else {
+            tvInstructionInfo.setText(getString(R.string.text_wifi_instruction))
+        }
 
         btnCancel.setOnClickListener {
             dialog.dismiss()

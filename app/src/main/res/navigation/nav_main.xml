@@ -216,7 +216,7 @@
         <action
             android:id="@+id/action_configWifiFragment_to_connectingWifiFragment"
             app:destination="@id/connectingWifiFragment"
-            app:popUpTo="@id/connectingWifiFragment"
+            app:popUpTo="@id/configWifiFragment"
             app:popUpToInclusive="true" />
 
         <argument

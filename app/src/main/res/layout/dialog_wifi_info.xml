@@ -26,7 +26,7 @@
         android:layout_marginTop="@dimen/_15sdp"
         android:fontFamily="@font/roboto_regular"
         android:lineSpacingExtra="@dimen/_5sdp"
-        android:text="@string/text_wifi_instruction"
+        android:text="@string/text_wifi_instruction_10"
         android:textColor="@color/daintree"
         android:textSize="@dimen/_12ssp" />
 

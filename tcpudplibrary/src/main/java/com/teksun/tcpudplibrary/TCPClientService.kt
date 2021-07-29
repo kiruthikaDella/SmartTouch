@@ -43,6 +43,9 @@ object TCPClientService {
         TCPClientService.readWriteValueListener = readWriteValueListener
     }
 
+    /**
+     * Set listener for connection
+     */
     fun setConnectionListener(connectCResultListener: ConnectCResultListener?) {
         TCPClientService.connectCResultListener = connectCResultListener
     }
@@ -51,14 +54,12 @@ object TCPClientService {
      * @param ip - server ip address
      * @param port - port number
      * @param timeOut - the timeout value to be used in milliseconds
-     * @param connectCResultListener - Connection Result Interface get result of success or failed
      * @see ConnectCResultListener
      */
     fun connectToAddress(
         ip: String,
         port: Int,
-        timeOut: Int? = null,
-//        connectCResultListener: ConnectCResultListener
+        timeOut: Int? = null
     ) {
         threadPolicyCall()
 
@@ -91,7 +92,7 @@ object TCPClientService {
                         printLog("Connection is successful")
                         connectCResultListener?.onSuccess(Utils.concatDateAndTime("Connect"))
 
-                        val sh = ServerHandlerNew(connectCResultListener!!)
+                        val sh = ServerHandlerNew()
                         sh.start()
                     }
                 }
@@ -162,7 +163,7 @@ object TCPClientService {
     //region server handler class
     //
 
-    class ServerHandlerNew(private val connectCResultListener: ConnectCResultListener) : Thread() {
+    class ServerHandlerNew() : Thread() {
         override fun run() {
             printLog("ServerHandlerNew called")
 
@@ -182,25 +183,25 @@ object TCPClientService {
 
             } catch (e: EOFException) {
                 printLog("Exception EOF in ServerHandler $e")
-                exceptionHandler(connectCResultListener)
+                exceptionHandler()
             } catch (e: Exception) {
                 printLog("Exception in ServerHandler $e")
-                exceptionHandler(connectCResultListener)
+                exceptionHandler()
             } finally {
                 printLog("Finally in ServerHandler")
-                exceptionHandler(connectCResultListener)
+                exceptionHandler()
             }
         }
     }
 
-    private fun exceptionHandler(connectCResultListener: ConnectCResultListener) {
+    private fun exceptionHandler() {
         if (socket != null && !socket?.isClosed!!) {
             socket?.close()
             socket = null
             remainingByteArray = byteArrayOf()
             remainingStringData = null
             printLog("Server is disconnected")
-            connectCResultListener.onServerDisconnect(Utils.concatDateAndTime("Server is disconnected"))
+            connectCResultListener?.onServerDisconnect(Utils.concatDateAndTime("Server is disconnected"))
         }
     }
 

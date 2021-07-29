@@ -37,7 +37,6 @@ class ConfigWifiFragment :
         binding.layoutConfigWifiPanel.btnSubmit.setOnClickListener {
             validateUserInformation()
         }
-
     }
 
     private fun validateUserInformation() {
@@ -55,6 +54,9 @@ class ConfigWifiFragment :
                 }
                 password.isEmpty() -> {
                     binding.layoutConfigWifiPanel.edtWifiPassword.error = "Please enter password"
+                }
+                password.length < 8 -> {
+                    binding.layoutConfigWifiPanel.edtWifiPassword.error = "Password length must be 8 characters"
                 }
                 else -> {
                     jsonObject.apply {

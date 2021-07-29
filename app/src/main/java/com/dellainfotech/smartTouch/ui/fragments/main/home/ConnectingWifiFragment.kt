@@ -11,6 +11,7 @@ import android.widget.Toast
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.binjal.wifilibrary.WifiUtils
+import com.bumptech.glide.Glide
 import com.dellainfotech.smartTouch.R
 import com.dellainfotech.smartTouch.api.Resource
 import com.dellainfotech.smartTouch.api.body.BodyAddDevice
@@ -62,12 +63,8 @@ class ConnectingWifiFragment :
         TCPClientService.setConnectionListener(this)
 
         binding.ivBack.setOnClickListener {
-
-            if (isRegistering) {
-                findNavController().navigateUp()
-            } else {
-                if (TCPClientService.getSocket() != null) (activity as MainActivity).disconnectTCPClient()
-            }
+            if (TCPClientService.getSocket() != null) (activity as MainActivity).disconnectTCPClient()
+            findNavController().navigateUp()
         }
 
         binding.layoutConfigWifiProcess.pulsator.startRippleAnimation()
@@ -114,15 +111,32 @@ class ConnectingWifiFragment :
             }
         })
 
-
         if (isRegistering) {
-            binding.layoutConfigWifiProcess.tvConfigStatus.text =
-                getString(R.string.text_configuring)
+            binding.layoutConfigWifiProcess.tvConfigStatus.text = getString(R.string.text_configuring)
+
+            //@TODO Configure
+            context?.let {
+                Glide.with(it)
+                    .asGif()
+                    .load(R.raw.ic_configure)
+                    .placeholder(R.drawable.ic_wifi)
+                    .into(binding.layoutConfigWifiProcess.centerImage)
+            }
+
         } else {
+            //@TODO Connecting
+            context?.let {
+                Glide.with(it)
+                    .asGif()
+                    .load(R.raw.ic_connecting)
+                    .placeholder(R.drawable.ic_wifi)
+                    .into(binding.layoutConfigWifiProcess.centerImage)
+            }
+
             runnable = Runnable {
                 connectTCP()
             }
-            handler?.postDelayed(runnable!!, 2000)
+            handler?.postDelayed(runnable!!, 3000)
         }
 
     }
@@ -139,12 +153,12 @@ class ConnectingWifiFragment :
     }
 
     override fun onSuccess(message: String) {
+
         Log.e(logTag, "Connection successful $message")
         activity?.runOnUiThread {
             binding.layoutConfigWifiProcess.tvConfigStatus.text =
                 getString(R.string.text_connected)
             binding.layoutConfigWifiProcess.centerImage.setImageResource(R.drawable.ic_wifi_done)
-            binding.layoutConfigWifiProcess.centerImage.isClickable = false
 
             runnable = Runnable {
                 findNavController().navigate(
@@ -168,7 +182,7 @@ class ConnectingWifiFragment :
                     binding.layoutConfigWifiProcess.tvConfigStatus.text =
                         getString(R.string.text_connection_failed)
                     binding.layoutConfigWifiProcess.centerImage.setImageResource(R.drawable.ic_cancel)
-                    binding.layoutConfigWifiProcess.centerImage.isClickable = false
+
 
                     runnable = Runnable {
                         findNavController().navigateUp()
@@ -186,21 +200,13 @@ class ConnectingWifiFragment :
     }
 
     override fun onServerDisconnect(message: String) {
-
         Log.e(logTag, "Server disconnect $activity")
-
-        /*Handler(Looper.getMainLooper()).postDelayed({
-            Log.e(logTag, "Server disconnect $activity")
-        }, 2000)
-        test()
-*/
 
         activity?.runOnUiThread {
 
             binding.layoutConfigWifiProcess.tvConfigStatus.text =
                 activity?.getString(R.string.text_connection_failed)
             binding.layoutConfigWifiProcess.centerImage.setImageResource(R.drawable.ic_cancel)
-            binding.layoutConfigWifiProcess.centerImage.isClickable = false
 
             runnable = Runnable {
                 findNavController().navigateUp()
@@ -209,88 +215,10 @@ class ConnectingWifiFragment :
         }
     }
 
-    /*  private fun connectTCP() {
-        Log.e(logTag, "Server connectTCP ")
-        try {
-//            TCPClientService.connectToAddress(WifiUtils.getGatewayIpAddress(), getString(R.string.receiver_port).toInt(), connectCResultListener = this)
-            TCPClientService.connectToAddress(
-                WifiUtils.getGatewayIpAddress(),
-                getString(R.string.receiver_port).toInt(),
-                connectCResultListener = object :
-                    ConnectCResultListener {
-                    override fun onSuccess(message: String) {
-                        Log.e(logTag, "Connection successful $message")
-                        activity?.runOnUiThread {
-                            binding.layoutConfigWifiProcess.tvConfigStatus.text =
-                                getString(R.string.text_connected)
-                            binding.layoutConfigWifiProcess.centerImage.setImageResource(R.drawable.ic_wifi_done)
-                            binding.layoutConfigWifiProcess.centerImage.isClickable = false
-
-                            runnable = Runnable {
-                                findNavController().navigate(
-                                    ConnectingWifiFragmentDirections.actionConnectingWifiFragmentToConfigWifiFragment(
-                                        args.roomDetail
-                                    )
-                                )
-                            }
-                            handler?.postDelayed(runnable!!, 3000)
-
-                        }
-                    }
-
-                    override fun onConnectFailure(message: String) {
-                        Log.e(logTag, "On Failure $triedToConnectTCP")
-                        activity?.runOnUiThread {
-                            if (triedToConnectTCP == 4) {
-                                triedToConnectTCP = 0
-
-                                context?.let {
-                                    binding.layoutConfigWifiProcess.tvConfigStatus.text =
-                                        getString(R.string.text_connection_failed)
-                                    binding.layoutConfigWifiProcess.centerImage.setImageResource(R.drawable.ic_cancel)
-                                    binding.layoutConfigWifiProcess.centerImage.isClickable = false
-
-                                    runnable = Runnable {
-
-                                        findNavController().navigateUp()
-                                    }
-                                    handler?.postDelayed(runnable!!, 2000)
-                                }
-
-                            } else {
-                                runnable = Runnable {
-                                    connectTCP()
-                                }
-                                handler?.postDelayed(runnable!!, 5000)
-                            }
-                        }
-                    }
-
-                    override fun onServerDisconnect(message: String) {
-                        Log.e(logTag, "Server disconnect $activity")
-                        activity?.runOnUiThread {
-
-                            binding.layoutConfigWifiProcess.tvConfigStatus.text =
-                                activity?.getString(R.string.text_connection_failed)
-                            binding.layoutConfigWifiProcess.centerImage.setImageResource(R.drawable.ic_cancel)
-                            binding.layoutConfigWifiProcess.centerImage.isClickable = false
-
-                            runnable = Runnable {
-                                findNavController().popBackStack()
-                            }
-                            handler?.postDelayed(runnable!!, 2000)
-                        }
-                    }
-                })
-            triedToConnectTCP++
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
-    }
-*/
-
     override fun onSuccess(message: String, value: String?) {
         Log.e(logTag, " onSuccess activity $activity")
+        Log.e(logTag, "current fragment ${findNavController().currentDestination}")
+
         Log.e(logTag, message + value)
         var msg = ""
         value?.let {
@@ -299,10 +227,18 @@ class ConnectingWifiFragment :
                 msg = jsonObject.getString("data")
             }
 
-            if (msg == "1234") {
+            if (msg == "123") {
                 runnable = Runnable {
-                    binding.layoutConfigWifiProcess.tvConfigStatus.text =
-                        getString(R.string.text_registering)
+                    binding.layoutConfigWifiProcess.tvConfigStatus.text = getString(R.string.text_registering)
+
+                    //@TODO Registering
+                    context?.let {
+                        Glide.with(it)
+                            .asGif()
+                            .load(R.raw.ic_register)
+                            .placeholder(R.drawable.ic_wifi_done)
+                            .into(binding.layoutConfigWifiProcess.centerImage)
+                    }
 
                     if (TCPClientService.getSocket() != null) disconnectTCPClient()
 
@@ -311,10 +247,6 @@ class ConnectingWifiFragment :
                 handler?.postDelayed(runnable!!, 3000)
             }
         }
-    }
-
-    fun test(){
-        Log.e(logTag, " test activity $activity")
     }
 
     override fun onFailure(message: String) {
@@ -353,7 +285,6 @@ class ConnectingWifiFragment :
             })
     }
 
-
     private fun disconnectTCPClient() {
         if (TCPClientService.getSocket() != null) {
             TCPClientService.closeSocket(object : CloseSocketListener {
@@ -367,7 +298,6 @@ class ConnectingWifiFragment :
             })
         }
     }
-
 
     override fun onDestroyView() {
 
@@ -384,6 +314,7 @@ class ConnectingWifiFragment :
         TCPClientService.setReadWriteListener(null)
         TCPClientService.setConnectionListener(null)
 
+        Log.e(logTag, "OnDestroy view callled")
     }
 
     override fun getViewModel(): Class<HomeViewModel> = HomeViewModel::class.java
