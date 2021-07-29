@@ -477,7 +477,7 @@ class DeviceFragment : ModelBaseFragment<HomeViewModel, FragmentDeviceBinding, H
                 is Resource.Success -> {
                     DialogUtil.hideDialog()
                     context?.let {
-//                        Toast.makeText(it, response.values.message, Toast.LENGTH_SHORT).show()
+                        Toast.makeText(it, response.values.message, Toast.LENGTH_SHORT).show()
                     }
                     if (response.values.status && response.values.code == Constants.API_SUCCESS_CODE) {
                         response.values.data?.let {
@@ -488,7 +488,7 @@ class DeviceFragment : ModelBaseFragment<HomeViewModel, FragmentDeviceBinding, H
                 }
                 is Resource.Failure -> {
                     DialogUtil.hideDialog()
-//                    Log.e(logTag, "addDeviceResponse Failure ${response.errorBody?.string()}")
+                    Log.e(logTag, "addDeviceResponse Failure ${response.errorBody?.string()}")
                 }
                 else -> {
                     //We will do nothing here
@@ -508,13 +508,13 @@ class DeviceFragment : ModelBaseFragment<HomeViewModel, FragmentDeviceBinding, H
                         }
                     } else {
                         context?.let {
-//                            Toast.makeText(it, response.values.message, Toast.LENGTH_SHORT).show()
+                            Toast.makeText(it, response.values.message, Toast.LENGTH_SHORT).show()
                         }
                     }
                 }
                 is Resource.Failure -> {
                     DialogUtil.hideDialog()
-//                    Log.e(logTag, "getDeviceResponse Failure ${response.errorBody?.string()}")
+                    Log.e(logTag, "getDeviceResponse Failure ${response.errorBody?.string()}")
                 }
                 else -> {
                     // We will do nothing here
