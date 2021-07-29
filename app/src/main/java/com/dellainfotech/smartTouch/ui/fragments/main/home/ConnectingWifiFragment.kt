@@ -63,8 +63,13 @@ class ConnectingWifiFragment :
         TCPClientService.setConnectionListener(this)
 
         binding.ivBack.setOnClickListener {
-            if (TCPClientService.getSocket() != null) (activity as MainActivity).disconnectTCPClient()
-            findNavController().navigateUp()
+            if (TCPClientService.getSocket() != null) {
+                    (activity as MainActivity).disconnectTCPClient()
+            } else {
+                context?.let {
+                    findNavController().navigateUp()
+                }
+            }
         }
 
         binding.layoutConfigWifiProcess.pulsator.startRippleAnimation()
@@ -153,23 +158,27 @@ class ConnectingWifiFragment :
     }
 
     override fun onSuccess(message: String) {
-
         Log.e(logTag, "Connection successful $message")
-        activity?.runOnUiThread {
-            binding.layoutConfigWifiProcess.tvConfigStatus.text =
-                getString(R.string.text_connected)
-            binding.layoutConfigWifiProcess.centerImage.setImageResource(R.drawable.ic_wifi_done)
+        try {
+            activity?.runOnUiThread {
+                binding.layoutConfigWifiProcess.tvConfigStatus.text =
+                    getString(R.string.text_connected)
+                binding.layoutConfigWifiProcess.centerImage.setImageResource(R.drawable.ic_wifi_done)
 
-            runnable = Runnable {
-                findNavController().navigate(
-                    ConnectingWifiFragmentDirections.actionConnectingWifiFragmentToConfigWifiFragment(
-                        args.roomDetail
+                runnable = Runnable {
+                    findNavController().navigate(
+                        ConnectingWifiFragmentDirections.actionConnectingWifiFragmentToConfigWifiFragment(
+                            args.roomDetail
+                        )
                     )
-                )
-            }
-            handler?.postDelayed(runnable!!, 3000)
+                }
+                handler?.postDelayed(runnable!!, 3000)
 
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
         }
+
     }
 
     override fun onConnectFailure(message: String) {
