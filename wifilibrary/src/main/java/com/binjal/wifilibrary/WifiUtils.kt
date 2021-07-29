@@ -17,7 +17,6 @@ import android.net.wifi.*
 import android.os.Build
 import android.provider.Settings
 import android.util.Log
-import androidx.annotation.RequiresApi
 import androidx.annotation.RequiresPermission
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
@@ -531,10 +530,10 @@ object WifiUtils {
      */
     fun getGatewayIpAddress(): String {
         val dhcpWifiInfo = mWifiManager?.dhcpInfo
-        return intToIp(dhcpWifiInfo?.gateway!!).toString()
+        return intToIp(dhcpWifiInfo?.gateway!!)
     }
 
-    private fun intToIp(addr: Int): String? {
+    private fun intToIp(addr: Int): String {
         var address = addr
         return (address and 0xFF).toString() + "." +
                 (8.let { address = address ushr it; address } and 0xFF) + "." +

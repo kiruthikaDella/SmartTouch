@@ -171,7 +171,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun disconnectTCPClient() {
+     fun disconnectTCPClient() {
         TCPClientService.closeSocket(object : CloseSocketListener {
             override fun onSuccess(message: String) {
                 Log.e(logTag, message)

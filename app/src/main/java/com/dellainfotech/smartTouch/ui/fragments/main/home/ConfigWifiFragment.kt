@@ -11,12 +11,10 @@ import com.dellainfotech.smartTouch.api.repository.HomeRepository
 import com.dellainfotech.smartTouch.common.interfaces.DialogShowListener
 import com.dellainfotech.smartTouch.common.utils.DialogUtil
 import com.dellainfotech.smartTouch.databinding.FragmentConfigWifiBinding
-import com.dellainfotech.smartTouch.mqtt.NotifyManager
 import com.dellainfotech.smartTouch.ui.fragments.ModelBaseFragment
 import com.dellainfotech.smartTouch.ui.viewmodel.HomeViewModel
 import com.google.gson.JsonObject
 import com.teksun.tcpudplibrary.TCPClientService
-import com.teksun.tcpudplibrary.listener.CloseSocketListener
 import com.teksun.tcpudplibrary.listener.ReadWriteValueListener
 
 /**
@@ -28,8 +26,6 @@ class ConfigWifiFragment :
     private val logTag = ConfigWifiFragment::class.java.simpleName
     private val args: ConfigWifiFragmentArgs by navArgs()
     private var jsonObject = JsonObject()
-    private var isSendDataToDevice = false
-    private var isInternetConnected = false
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -39,27 +35,9 @@ class ConfigWifiFragment :
         }
 
         binding.layoutConfigWifiPanel.btnSubmit.setOnClickListener {
-            if (isSendDataToDevice) sendDataToCloud()
-            else validateUserInformation()
+            validateUserInformation()
         }
 
-        NotifyManager.internetInfo.observe(viewLifecycleOwner, { isConnected ->
-            Log.e("$logTag Is Internet connected ", isConnected.toString())
-            isInternetConnected = isConnected
-        })
-
-        /*viewModel.deviceRegistrationResponse.observe(viewLifecycleOwner, { response ->
-            when (response) {
-                is Resource.Success -> {
-                    DialogUtil.hideDialog()
-                    findNavController().navigate(ConfigWifiFragmentDirections.actionConfigWifiFragmentToConnectingWifiFragment(true, args.roomDetail))
-                }
-                is Resource.Failure -> {
-                    DialogUtil.hideDialog()
-                    Log.e(logTag, "device registration error ${response.errorBody?.string()}")
-                } else -> {}
-            }
-        })*/
     }
 
     private fun validateUserInformation() {
@@ -88,9 +66,8 @@ class ConfigWifiFragment :
                     TCPClientService.sendDefaultValue(jsonObject.toString(), object : ReadWriteValueListener<String> {
                         override fun onSuccess(message: String, value: String?) {
                             Log.e(logTag, "$message $value")
-                            isSendDataToDevice = true
-                            disconnectTCPClient()
-                            sendDataToCloud()
+                            findNavController().navigate(ConfigWifiFragmentDirections.actionConfigWifiFragmentToConnectingWifiFragment(true, args.roomDetail))
+//                            findNavController().navigateUp()
                         }
 
                         override fun onFailure(message: String) {
@@ -111,34 +88,7 @@ class ConfigWifiFragment :
         }
     }
 
-    private fun sendDataToCloud() {
-        if (isInternetConnected) {
-           /* activity?.let { DialogUtil.loadingAlert(it) }
-            viewModel.deviceRegister(jsonObject)*/
 
-            //TODO Binjal Testing purpose navigate After call api remove below navigate
-            findNavController().navigate(ConfigWifiFragmentDirections.actionConfigWifiFragmentToConnectingWifiFragment(true, args.roomDetail))
-
-        } else {
-            DialogUtil.deviceOfflineAlert(requireActivity(), "Please check your internet connection", object : DialogShowListener {
-                override fun onClick() {
-                    DialogUtil.hideDialog()
-                }
-            })
-        }
-    }
-
-    private fun disconnectTCPClient() {
-        TCPClientService.closeSocket(object : CloseSocketListener {
-            override fun onSuccess(message: String) {
-                Log.e(logTag, message)
-            }
-
-            override fun onFailure(message: String) {
-                Log.e(logTag, message)
-            }
-        })
-    }
 
     override fun getViewModel(): Class<HomeViewModel> = HomeViewModel::class.java
 
@@ -149,8 +99,4 @@ class ConfigWifiFragment :
 
     override fun getFragmentRepository(): HomeRepository = HomeRepository(networkModel)
 
-    override fun onDestroyView() {
-        disconnectTCPClient()
-        super.onDestroyView()
-    }
 }

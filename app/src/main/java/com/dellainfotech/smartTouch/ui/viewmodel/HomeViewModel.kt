@@ -46,7 +46,7 @@ class HomeViewModel @ViewModelInject constructor(
         get() = _deleteRoomResponse
 
     private val _faqResponse: MutableLiveData<Resource<FAQResponse>> = MutableLiveData()
-    val faqResponse: LiveData<Resource<FAQResponse>>
+    val faqResponse: MutableLiveData<Resource<FAQResponse>>
         get() = _faqResponse
 
     private val _getUserProfileResponse: MutableLiveData<Resource<GetProfileResponse>> =
@@ -368,8 +368,8 @@ class HomeViewModel @ViewModelInject constructor(
     //
     //endregion
     //
-
-    /*private val _deviceRegisterResponse: MutableLiveData<Resource<CommonResponse>> = MutableLiveData()
+/*
+    private val _deviceRegisterResponse: MutableLiveData<Resource<CommonResponse>> = MutableLiveData()
     val deviceRegistrationResponse: MutableLiveData<Resource<CommonResponse>>
         get() = _deviceRegisterResponse
 

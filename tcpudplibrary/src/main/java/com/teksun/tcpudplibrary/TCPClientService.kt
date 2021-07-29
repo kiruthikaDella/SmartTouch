@@ -22,6 +22,7 @@ object TCPClientService {
     private var socket: Socket? = null
     private var isEnableLog = false
     private var readWriteValueListener: ReadWriteValueListener<String>? = null
+    private var connectCResultListener: ConnectCResultListener? = null
     private var packetLength: Int? = null
 
     private var remainingByteArray = byteArrayOf()
@@ -42,6 +43,9 @@ object TCPClientService {
         TCPClientService.readWriteValueListener = readWriteValueListener
     }
 
+    fun setConnectionListener(connectCResultListener: ConnectCResultListener?) {
+        TCPClientService.connectCResultListener = connectCResultListener
+    }
     /**
      * Connection
      * @param ip - server ip address
@@ -54,7 +58,7 @@ object TCPClientService {
         ip: String,
         port: Int,
         timeOut: Int? = null,
-        connectCResultListener: ConnectCResultListener
+//        connectCResultListener: ConnectCResultListener
     ) {
         threadPolicyCall()
 
@@ -63,7 +67,7 @@ object TCPClientService {
                 if (socket != null) {
                     if (socket?.isConnected!!) {
                         printLog("Already connected")
-                        connectCResultListener.onSuccess("Already connected")
+                        connectCResultListener?.onSuccess("Already connected")
                         return@Thread
                     }
                 }
@@ -85,19 +89,19 @@ object TCPClientService {
                 socket?.let {
                     if (it.isConnected) {
                         printLog("Connection is successful")
-                        connectCResultListener.onSuccess(Utils.concatDateAndTime("Connect"))
+                        connectCResultListener?.onSuccess(Utils.concatDateAndTime("Connect"))
 
-                        val sh = ServerHandlerNew(connectCResultListener)
+                        val sh = ServerHandlerNew(connectCResultListener!!)
                         sh.start()
                     }
                 }
 
             } catch (e: IOException) {
                 printLog("Connected failed : IOException $e")
-                connectCResultListener.onFailure(Utils.concatDateAndTime("Can't connect"))
+                connectCResultListener?.onConnectFailure(Utils.concatDateAndTime("Can't connect"))
             } catch (e: SocketTimeoutException) {
                 printLog("Connected failed : SocketTimeoutException $e")
-                connectCResultListener.onFailure(Utils.concatDateAndTime("Can't connect"))
+                connectCResultListener?.onConnectFailure(Utils.concatDateAndTime("Can't connect"))
             }
         }
         thread.start()

@@ -68,7 +68,7 @@ object UDPService {
 
             } catch (e: Exception) {
                 printLog("Connection failed $e")
-                connectResultListener.onFailure(Utils.concatDateAndTime("Can't Connect"))
+                connectResultListener.onConnectFailure(Utils.concatDateAndTime("Can't Connect"))
             }
         }
         thread.start()

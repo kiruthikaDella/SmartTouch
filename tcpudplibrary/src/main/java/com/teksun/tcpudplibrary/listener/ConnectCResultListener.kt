@@ -4,7 +4,7 @@ interface ConnectCResultListener {
 
     fun onSuccess(message: String)
 
-    fun onFailure(message: String)
+    fun onConnectFailure(message: String)
 
     fun onServerDisconnect(message: String)
 }
