@@ -155,12 +155,11 @@ class ConnectingWifiFragment :
     //
     private fun connectTCP() {
         try {
-            activity?.runOnUiThread {
                 TCPClientService.connectToAddress(
                     WifiUtils.getGatewayIpAddress(),
                     getString(R.string.receiver_port).toInt())
                 triedToConnectTCP++
-            }
+
         } catch (e: Exception) {
             e.printStackTrace()
             Log.e(logTag, "Exception in connectTCP ${e.message}")
@@ -285,7 +284,7 @@ class ConnectingWifiFragment :
 
                         sendDataToCloud()
                     }
-                    handler?.postDelayed(runnable!!, 3000)
+                    handler?.postDelayed(runnable!!, 4000)
                 }
             }
 
