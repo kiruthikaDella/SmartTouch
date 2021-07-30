@@ -91,6 +91,7 @@ class SwitchIconsDetailFragment :
             }
         })
 
+        switchIconList.clear()
         adapter = SwitchIconsDetailAdapter(switchIconList)
         context?.let {
             binding.recyclerSwitchIcons.layoutManager = GridLayoutManager(it, 4)
@@ -119,6 +120,7 @@ class SwitchIconsDetailFragment :
         viewModel.iconListResponse.observe(viewLifecycleOwner, { response ->
             when (response) {
                 is Resource.Success -> {
+                    switchIconList.clear()
                     DialogUtil.hideDialog()
                     if (response.values.status && response.values.code == Constants.API_SUCCESS_CODE) {
                         response.values.data?.let {
@@ -133,9 +135,13 @@ class SwitchIconsDetailFragment :
 
                             })
                         }
+                    }else {
+                        adapter.notifyDataSetChanged()
                     }
                 }
                 is Resource.Failure -> {
+                    switchIconList.clear()
+                    adapter.notifyDataSetChanged()
                     DialogUtil.hideDialog()
                     Log.e(logTag, " iconListResponse Failure ${response.errorBody?.string()} ")
                 }
@@ -155,6 +161,7 @@ class SwitchIconsDetailFragment :
                     if (response.values.status && response.values.code == Constants.API_SUCCESS_CODE) {
                         iconData?.let {
                             args.switchDetail.icon = it.icon
+                            args.switchDetail.iconFile = it.iconFile
                             findNavController().navigateUp()
                         }
                     }

@@ -30,6 +30,7 @@ import com.dellainfotech.smartTouch.common.interfaces.DialogAskListener
 import com.dellainfotech.smartTouch.common.interfaces.DialogEditListener
 import com.dellainfotech.smartTouch.common.utils.Constants
 import com.dellainfotech.smartTouch.common.utils.DialogUtil
+import com.dellainfotech.smartTouch.common.utils.Utils
 import com.dellainfotech.smartTouch.databinding.FragmentAccountSettingsBinding
 import com.dellainfotech.smartTouch.mqtt.NotifyManager
 import com.dellainfotech.smartTouch.ui.fragments.ModelBaseFragment
@@ -334,6 +335,21 @@ class AccountSettingsFragment :
             binding.tvTitlePassword.visibility = View.INVISIBLE
             binding.tvPassword.visibility = View.INVISIBLE
             binding.ivEditPassword.visibility = View.INVISIBLE
+        }
+
+        if (!Utils.isMasterUser()){
+            binding.tvOwnershipTransfer.visibility = View.GONE
+            binding.tvForMasterUsers.visibility = View.GONE
+            binding.ivInfo.visibility = View.GONE
+            binding.ivMasterName.visibility = View.GONE
+            binding.tvMasterTitleName.visibility = View.GONE
+            binding.tvMasterName.visibility = View.GONE
+            binding.ivMasterEditName.visibility = View.GONE
+            binding.ivMasterEmail.visibility = View.GONE
+            binding.tvMasterTitleEmail.visibility = View.GONE
+            binding.tvMasterEmail.visibility = View.GONE
+            binding.ivMasterEditEmail.visibility = View.GONE
+            binding.btnTransferOwnership.visibility = View.GONE
         }
 
         apiCall()

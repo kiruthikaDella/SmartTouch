@@ -111,7 +111,6 @@ class DeviceFragment : ModelBaseFragment<HomeViewModel, FragmentDeviceBinding, H
                                 panelAdapter.notifyDataSetChanged()
                             }
                         }
-                        Log.e(logTag, "" + it.values.data)
                     }
                     else -> {
                         panelAdapter.notifyDataSetChanged()
@@ -569,15 +568,17 @@ class DeviceFragment : ModelBaseFragment<HomeViewModel, FragmentDeviceBinding, H
 
                         devicePosition?.let { dPosition ->
                             switchPosition?.let { sPosition ->
-                                deviceData?.switchData?.get(sPosition)?.let { sData ->
-                                    deviceList[dPosition].switchData?.let {
-                                        it[sPosition] = sData
-                                        panelAdapter.notifyDataSetChanged()
-                                        devicePosition = null
-                                        switchPosition = null
+                                deviceData?.let {dData ->
+                                    dData.switchData?.get(sPosition)?.let { sData ->
+                                        deviceList[dPosition].switchData?.let {
+                                            it[sPosition] = sData
+                                            panelAdapter.notifyDataSetChanged()
+                                            panelAdapter.publish(dData.deviceSerialNo,"SW0${sPosition +1}", sData.switchStatus.toString(),sData.name)
+                                            devicePosition = null
+                                            switchPosition = null
+                                        }
                                     }
                                 }
-
                             }
                         }
 

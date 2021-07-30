@@ -29,7 +29,7 @@ class AuthViewModel @ViewModelInject constructor(
 
     private val _forgotPasswordResponse: MutableLiveData<Resource<CommonResponse>> =
         MutableLiveData()
-    val forgotPasswordResponse: LiveData<Resource<CommonResponse>>
+    val forgotPasswordResponse: MutableLiveData<Resource<CommonResponse>>
         get() = _forgotPasswordResponse
 
     private val _socialLoginResponse: MutableLiveData<Resource<LoginResponse>> = MutableLiveData()
