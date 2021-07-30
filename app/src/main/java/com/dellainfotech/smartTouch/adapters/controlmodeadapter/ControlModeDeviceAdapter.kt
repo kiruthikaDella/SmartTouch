@@ -228,7 +228,8 @@ class ControlModeDeviceAdapter(
                 publish(
                     device.deviceSerialNo,
                     MQTTConstants.AWS_SWITCH_1,
-                    switchOne.isChecked.toInt().toString()
+                    switchOne.isChecked.toInt().toString(),
+                    tvSwitchNameOne.text.toString()
                 )
             }
 
@@ -236,7 +237,8 @@ class ControlModeDeviceAdapter(
                 publish(
                     device.deviceSerialNo,
                     MQTTConstants.AWS_SWITCH_2,
-                    switchTwo.isChecked.toInt().toString()
+                    switchTwo.isChecked.toInt().toString(),
+                    tvSwitchNameTwo.text.toString()
                 )
             }
 
@@ -244,7 +246,8 @@ class ControlModeDeviceAdapter(
                 publish(
                     device.deviceSerialNo,
                     MQTTConstants.AWS_SWITCH_3,
-                    switchThree.isChecked.toInt().toString()
+                    switchThree.isChecked.toInt().toString(),
+                    tvSwitchNameThree.text.toString()
                 )
             }
 
@@ -252,7 +255,8 @@ class ControlModeDeviceAdapter(
                 publish(
                     device.deviceSerialNo,
                     MQTTConstants.AWS_SWITCH_4,
-                    switchFour.isChecked.toInt().toString()
+                    switchFour.isChecked.toInt().toString(),
+                    tvSwitchNameFour.text.toString()
                 )
             }
 
@@ -260,7 +264,8 @@ class ControlModeDeviceAdapter(
                 publish(
                     device.deviceSerialNo,
                     MQTTConstants.AWS_SWITCH_5,
-                    switchFive.isChecked.toInt().toString()
+                    switchFive.isChecked.toInt().toString(),
+                    tvSwitchNameFive.text.toString()
                 )
             }
 
@@ -268,7 +273,8 @@ class ControlModeDeviceAdapter(
                 publish(
                     device.deviceSerialNo,
                     MQTTConstants.AWS_SWITCH_6,
-                    switchSix.isChecked.toInt().toString()
+                    switchSix.isChecked.toInt().toString(),
+                    tvSwitchNameSix.text.toString()
                 )
             }
 
@@ -276,7 +282,8 @@ class ControlModeDeviceAdapter(
                 publish(
                     device.deviceSerialNo,
                     MQTTConstants.AWS_SWITCH_7,
-                    switchSeven.isChecked.toInt().toString()
+                    switchSeven.isChecked.toInt().toString(),
+                    tvSwitchNameSeven.text.toString()
                 )
             }
 
@@ -284,7 +291,8 @@ class ControlModeDeviceAdapter(
                 publish(
                     device.deviceSerialNo,
                     MQTTConstants.AWS_SWITCH_8,
-                    switchEight.isChecked.toInt().toString()
+                    switchEight.isChecked.toInt().toString(),
+                    tvSwitchNameEight.text.toString()
                 )
             }
 
@@ -393,7 +401,8 @@ class ControlModeDeviceAdapter(
                 publish(
                     device.deviceSerialNo,
                     MQTTConstants.AWS_SWITCH_1,
-                    switchOne.isChecked.toInt().toString()
+                    switchOne.isChecked.toInt().toString(),
+                    tvSwitchNameOne.text.toString()
                 )
             }
 
@@ -401,7 +410,8 @@ class ControlModeDeviceAdapter(
                 publish(
                     device.deviceSerialNo,
                     MQTTConstants.AWS_SWITCH_2,
-                    switchTwo.isChecked.toInt().toString()
+                    switchTwo.isChecked.toInt().toString(),
+                    tvSwitchNameTwo.text.toString()
                 )
             }
 
@@ -409,7 +419,8 @@ class ControlModeDeviceAdapter(
                 publish(
                     device.deviceSerialNo,
                     MQTTConstants.AWS_SWITCH_3,
-                    switchThree.isChecked.toInt().toString()
+                    switchThree.isChecked.toInt().toString(),
+                    tvSwitchNameThree.text.toString()
                 )
             }
 
@@ -417,7 +428,8 @@ class ControlModeDeviceAdapter(
                 publish(
                     device.deviceSerialNo,
                     MQTTConstants.AWS_SWITCH_4,
-                    switchFour.isChecked.toInt().toString()
+                    switchFour.isChecked.toInt().toString(),
+                    tvSwitchNameFour.text.toString()
                 )
             }
 
@@ -592,9 +604,16 @@ class ControlModeDeviceAdapter(
         }
     }
 
-    private fun publish(deviceId: String, switchIndex: String, switchValue: String) {
+    private fun publish(
+        deviceId: String,
+        switchIndex: String,
+        switchValue: String,
+        switchName: String = ""
+    ) {
         val payload = JSONObject()
         payload.put(switchIndex, switchValue)
+        if (switchName.isNotEmpty())
+            payload.put(MQTTConstants.AWS_NAME, switchName)
 
         Log.e(logTag, " publish payload $payload")
 
