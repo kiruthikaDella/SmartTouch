@@ -69,5 +69,6 @@ object MQTTConstants {
     const val AWS_TEXT_COLOR = "tc"   //Text Color
     const val AWS_TEXT_SIZE = "tsz"   //Text Size
     const val AWS_CUSTOMIZATION_LOCK = "cl"   //Customization lock
+    const val AWS_SWITCH_ICONS = "swicons"   //Customization lock
 
 }
