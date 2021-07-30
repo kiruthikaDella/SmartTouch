@@ -23,6 +23,7 @@ object TCPServerService {
     private var serverSocket: ServerSocket? = null
     private var socket: Socket? = null
     private var isEnableLog = false
+    private var connectResultListener: ConnectResultListener<Socket>? = null
     private var readWriteValueListener: ReadWriteValueListener<String>? = null
     private var packetLength: Int? = null
     private var connectedMap: HashMap<String, Socket>? = HashMap()
@@ -50,14 +51,11 @@ object TCPServerService {
      * listen - establish connection
      * @param port - port number
      * @param timeOut - the specified timeout in millisecond
-     * @param connectResultListener - Connection Result Interface get result of success or failed
      * @see ConnectResultListener
      */
     fun connectWithPort(
         port: Int,
-        timeOut: Int? = null,
-        connectResultListener: ConnectResultListener<Socket>
-    ) {
+        timeOut: Int? = null) {
 
         threadPolicyCall()
 
@@ -75,20 +73,20 @@ object TCPServerService {
                     connectedMap?.put("Client $clientId", socket!!)
 
                     printLog("Just Connected with Client $clientId and Port is ${socket?.port} ")
-                    connectResultListener.onSuccess(
+                    connectResultListener?.onSuccess(
                         Utils.concatDateAndTime("Connected Client $clientId"),
                         connectedMap
                     )
                     clientId++
 
-                    val ct1 = ClientHandlerNew(socket!!, connectResultListener)
+                    val ct1 = ClientHandlerNew(socket!!)
                     ct1.start()
                 }
             } catch (e: SocketException) {
                 printLog("connection failed Socket closed $e")
             } catch (e: IOException) {
                 printLog("Connect failed $e")
-                connectResultListener.onFailure(Utils.concatDateAndTime("Can't connect"))
+                connectResultListener?.onFailure(Utils.concatDateAndTime("Can't connect"))
             }
         }
         thread.start()
@@ -195,9 +193,7 @@ object TCPServerService {
     //region Client handler new and method
     //
     class ClientHandlerNew(
-        val socket: Socket,
-        val connectResultListener: ConnectResultListener<Socket>
-    ) : Thread() {
+        val socket: Socket) : Thread() {
         override fun run() {
             printLog("ClientHandlerNew called")
 
@@ -216,21 +212,18 @@ object TCPServerService {
                 }
             } catch (e: EOFException) {
                 printLog("Exception EOF in ClientHandler $e")
-                exceptionHandle(socket, connectResultListener)
+                exceptionHandle(socket)
             } catch (e: Exception) {
                 printLog("Exception in ClientHandler $e")
-                exceptionHandle(socket, connectResultListener)
+                exceptionHandle(socket)
             } finally {
                 printLog("Finally in ClientHandler")
-                exceptionHandle(socket, connectResultListener)
+                exceptionHandle(socket)
             }
         }
     }
 
-    private fun exceptionHandle(
-        socket: Socket,
-        connectResultListener: ConnectResultListener<Socket>
-    ) {
+    private fun exceptionHandle(socket: Socket) {
         if (!socket.isClosed) {
             connectedMap?.let { it ->
 
@@ -242,7 +235,7 @@ object TCPServerService {
 
                     Log.e("Binjal", "hh $it")
 
-                    connectResultListener.onSuccess(
+                    connectResultListener?.onSuccess(
                         (Utils.concatDateAndTime("${mKey.keys} is disconnected")),
                         it
                     )
@@ -250,7 +243,7 @@ object TCPServerService {
                     FastSave.getInstance().deleteValue(Utils.REMAINING_STRING_DATA + mKey.filterValues { it == socket }.keys)
 
                 } else {
-                    connectResultListener.onFailure("Disconnect failed")
+                    connectResultListener?.onFailure("Disconnect failed")
                 }
 
                 if (connectedMap.isNullOrEmpty()) {

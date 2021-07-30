@@ -39,6 +39,8 @@ class ConnectingWifiFragment :
     private var runnable: Runnable? = null
     private var triedToConnectTCP = 0
     private var isInternetConnected = false
+    private var isConnectFailed = false
+    private var isConnected = false
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -148,41 +150,45 @@ class ConnectingWifiFragment :
 
     private fun connectTCP() {
         try {
-            TCPClientService.connectToAddress(
-                WifiUtils.getGatewayIpAddress(),
-                getString(R.string.receiver_port).toInt())
-            triedToConnectTCP++
+            activity?.runOnUiThread {
+                TCPClientService.connectToAddress(
+                    WifiUtils.getGatewayIpAddress(),
+                    getString(R.string.receiver_port).toInt())
+                triedToConnectTCP++
+            }
         } catch (e: Exception) {
             e.printStackTrace()
+            Log.e(logTag, "Exception in connectTCP ${e.message}")
         }
     }
 
     override fun onSuccess(message: String) {
         Log.e(logTag, "Connection successful $message")
-        try {
-            activity?.runOnUiThread {
+        isConnected = true
+        isConnectFailed = false
+        activity?.runOnUiThread {
                 binding.layoutConfigWifiProcess.tvConfigStatus.text =
                     getString(R.string.text_connected)
                 binding.layoutConfigWifiProcess.centerImage.setImageResource(R.drawable.ic_wifi_done)
 
                 runnable = Runnable {
-                    findNavController().navigate(
-                        ConnectingWifiFragmentDirections.actionConnectingWifiFragmentToConfigWifiFragment(
-                            args.roomDetail
+                    if (!isConnectFailed) {
+                        findNavController().navigate(
+                            ConnectingWifiFragmentDirections.actionConnectingWifiFragmentToConfigWifiFragment(
+                                args.roomDetail
+                            )
                         )
-                    )
+                    }
                 }
                 handler?.postDelayed(runnable!!, 3000)
 
             }
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
-
     }
 
     override fun onConnectFailure(message: String) {
         Log.e(logTag, "On Failure $triedToConnectTCP")
+        isConnectFailed = true
+        isConnected = false
         activity?.runOnUiThread {
             if (triedToConnectTCP == 4) {
                 triedToConnectTCP = 0
@@ -194,7 +200,7 @@ class ConnectingWifiFragment :
 
 
                     runnable = Runnable {
-                        findNavController().navigateUp()
+                        if (!isConnected) findNavController().navigateUp()
                     }
                     handler?.postDelayed(runnable!!, 2000)
                 }
@@ -210,6 +216,8 @@ class ConnectingWifiFragment :
 
     override fun onServerDisconnect(message: String) {
         Log.e(logTag, "Server disconnect $activity")
+        isConnectFailed = true
+        isConnected = false
 
         activity?.runOnUiThread {
 
@@ -218,7 +226,7 @@ class ConnectingWifiFragment :
             binding.layoutConfigWifiProcess.centerImage.setImageResource(R.drawable.ic_cancel)
 
             runnable = Runnable {
-                findNavController().navigateUp()
+                if (!isConnected) findNavController().navigateUp()
             }
             handler?.postDelayed(runnable!!, 2000)
         }

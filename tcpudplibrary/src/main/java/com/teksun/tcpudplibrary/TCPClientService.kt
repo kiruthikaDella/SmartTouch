@@ -63,13 +63,13 @@ object TCPClientService {
     ) {
         threadPolicyCall()
 
-        val thread = Thread {
+//        val thread = Thread {
             try {
                 if (socket != null) {
                     if (socket?.isConnected!!) {
                         printLog("Already connected")
                         connectCResultListener?.onSuccess("Already connected")
-                        return@Thread
+                        return
                     }
                 }
 
@@ -104,8 +104,8 @@ object TCPClientService {
                 printLog("Connected failed : SocketTimeoutException $e")
                 connectCResultListener?.onConnectFailure(Utils.concatDateAndTime("Can't connect"))
             }
-        }
-        thread.start()
+       // }
+//        thread.start()
 
     }
 
