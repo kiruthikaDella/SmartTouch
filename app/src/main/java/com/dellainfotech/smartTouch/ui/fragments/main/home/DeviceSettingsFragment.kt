@@ -19,7 +19,6 @@ import com.dellainfotech.smartTouch.common.utils.Constants
 import com.dellainfotech.smartTouch.common.utils.DialogUtil
 import com.dellainfotech.smartTouch.common.utils.Utils.toBoolean
 import com.dellainfotech.smartTouch.common.utils.Utils.toInt
-import com.dellainfotech.smartTouch.common.utils.Utils.toReverseInt
 import com.dellainfotech.smartTouch.databinding.FragmentDeviceSettingsBinding
 import com.dellainfotech.smartTouch.mqtt.NotifyManager
 import com.dellainfotech.smartTouch.ui.fragments.ModelBaseFragment

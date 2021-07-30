@@ -9,11 +9,8 @@ import android.text.Editable
 import android.util.Base64
 import android.util.Log
 import android.widget.EditText
-import androidx.appcompat.app.AlertDialog
 import com.appizona.yehiahd.fastsave.FastSave
 import com.dellainfotech.smartTouch.AppDelegate
-import com.dellainfotech.smartTouch.R
-import com.dellainfotech.smartTouch.common.interfaces.DialogShowListener
 import com.facebook.appevents.internal.AppEventUtility.bytesToHex
 import java.net.InetSocketAddress
 import java.net.Socket
@@ -22,7 +19,6 @@ import java.security.MessageDigest
 import java.util.*
 import javax.crypto.Mac
 import javax.crypto.spec.SecretKeySpec
-import kotlin.collections.ArrayList
 
 /**
  * Created by Jignesh Dangar on 13-04-2021.
@@ -123,7 +119,8 @@ object Utils {
     }
 
     fun isControlModePin(): Boolean {
-        return FastSave.getInstance().getBoolean(Constants.isControlModePinned, Constants.DEFAULT_CONTROL_MODE_STATUS)
+        return FastSave.getInstance()
+            .getBoolean(Constants.isControlModePinned, Constants.DEFAULT_CONTROL_MODE_STATUS)
     }
 
     fun String.toEditable(): Editable = Editable.Factory.getInstance().newEditable(this)

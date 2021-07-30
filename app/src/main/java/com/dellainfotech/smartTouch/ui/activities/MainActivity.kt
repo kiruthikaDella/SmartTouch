@@ -6,7 +6,6 @@ import android.os.Looper
 import android.util.Log
 import android.view.View
 import android.widget.AdapterView
-import android.widget.Spinner
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
@@ -37,7 +36,6 @@ import com.dellainfotech.smartTouch.ui.viewmodel.ViewModelFactory
 import com.sothree.slidinguppanel.SlidingUpPanelLayout
 import com.teksun.tcpudplibrary.TCPClientService
 import com.teksun.tcpudplibrary.listener.CloseSocketListener
-import java.lang.reflect.Field
 
 /**
  * Created by Jignesh Dangar on 09-04-2021.
@@ -173,7 +171,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-     fun disconnectTCPClient() {
+    fun disconnectTCPClient() {
         TCPClientService.closeSocket(object : CloseSocketListener {
             override fun onSuccess(message: String) {
                 Log.e(logTag, message)
