@@ -17,6 +17,7 @@ import com.dellainfotech.smartTouch.api.Resource
 import com.dellainfotech.smartTouch.api.body.BodyAddDevice
 import com.dellainfotech.smartTouch.api.repository.HomeRepository
 import com.dellainfotech.smartTouch.common.interfaces.DialogShowListener
+import com.dellainfotech.smartTouch.common.utils.Constants
 import com.dellainfotech.smartTouch.common.utils.DialogUtil
 import com.dellainfotech.smartTouch.databinding.FragmentConnectingWifiBinding
 import com.dellainfotech.smartTouch.mqtt.NotifyManager
@@ -130,6 +131,8 @@ class ConnectingWifiFragment :
                     .into(binding.layoutConfigWifiProcess.centerImage)
             }
 
+            sendRequestForPanelAndDeviceInfo()
+
         } else {
             //@TODO Connecting
             context?.let {
@@ -145,9 +148,11 @@ class ConnectingWifiFragment :
             }
             handler?.postDelayed(runnable!!, 3000)
         }
-
     }
 
+    //
+    //region Connection
+    //
     private fun connectTCP() {
         try {
             activity?.runOnUiThread {
@@ -232,19 +237,59 @@ class ConnectingWifiFragment :
         }
     }
 
+    //
+    //endregion
+    //
+
+
+    private fun sendRequestForPanelAndDeviceInfo() {
+        TCPClientService.sendDefaultValue(Constants.GET_DEVICE_INFO, object : ReadWriteValueListener<String> {
+            override fun onSuccess(message: String, value: String?) {
+                Log.e(logTag, "sendRequestForPanelAndDeviceInfo $message")
+            }
+
+            override fun onFailure(message: String) {
+                Log.e(logTag, "sendRequestForPanelAndDeviceInfo $message")
+            }
+
+        })
+    }
+
     override fun onSuccess(message: String, value: String?) {
         Log.e(logTag, " onSuccess activity $activity")
-        Log.e(logTag, "current fragment ${findNavController().currentDestination}")
-
         Log.e(logTag, message + value)
+
         var msg = ""
         value?.let {
             val jsonObject = JSONObject(value)
             if (jsonObject.has("data")) {
-                msg = jsonObject.getString("data")
+                val secondJsonObject = JSONObject(jsonObject.getString("data"))
+                if (secondJsonObject.has(Constants.GET_DEVICE_INFO)) {
+                    msg = secondJsonObject.get(Constants.GET_DEVICE_INFO).toString()
+
+                    Log.e(logTag, "Get Device info $msg")
+
+                    runnable = Runnable {
+                        binding.layoutConfigWifiProcess.tvConfigStatus.text = getString(R.string.text_registering)
+
+                        //@TODO Registering
+                        context?.let {
+                            Glide.with(it)
+                                .asGif()
+                                .load(R.raw.ic_register)
+                                .placeholder(R.drawable.ic_wifi_done)
+                                .into(binding.layoutConfigWifiProcess.centerImage)
+                        }
+
+                        if (TCPClientService.getSocket() != null) disconnectTCPClient()
+
+                        sendDataToCloud()
+                    }
+                    handler?.postDelayed(runnable!!, 3000)
+                }
             }
 
-            if (msg == "123") {
+            /*if (msg == "123") {
                 runnable = Runnable {
                     binding.layoutConfigWifiProcess.tvConfigStatus.text = getString(R.string.text_registering)
 
@@ -262,7 +307,7 @@ class ConnectingWifiFragment :
                     sendDataToCloud()
                 }
                 handler?.postDelayed(runnable!!, 3000)
-            }
+            }*/
         }
     }
 
