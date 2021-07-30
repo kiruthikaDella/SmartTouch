@@ -59,6 +59,7 @@ import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
+import org.json.JSONArray
 import org.json.JSONObject
 import java.io.File
 import java.nio.charset.StandardCharsets
@@ -381,6 +382,18 @@ class DeviceCustomizationFragment :
                     MQTTConstants.AWS_CUSTOMIZATION_LOCK,
                     isDeviceCustomizationLocked.toInt()
                 )
+                val switchIconsArray = JSONArray()
+                args.deviceDetail.switchData?.let {
+                    for (switch in it) {
+                        if (switch.typeOfSwitch == 0) {
+                            val switchIconsObject = JSONObject()
+                            switchIconsObject.put("SW0${switch.index.toInt()}", switch.iconFile)
+                            switchIconsArray.put(switchIconsObject)
+                        }
+                    }
+                }
+                payload.put(MQTTConstants.AWS_SWITCH_ICONS, switchIconsArray)
+
                 Log.e(logTag, " payload $payload")
                 if (AwsMqttSingleton.isConnected()) {
                     publish(payload.toString())

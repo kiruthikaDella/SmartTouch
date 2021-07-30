@@ -84,4 +84,9 @@ class ForgotPasswordFragment :
 
     override fun getFragmentRepository(): AuthRepository = AuthRepository(networkModel)
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        viewModel.forgotPasswordResponse.postValue(null)
+    }
+
 }

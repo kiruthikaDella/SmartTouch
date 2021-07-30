@@ -98,6 +98,7 @@
     <string name="side_nav_text_logout">Logout</string>
 
     <!--    Room Panel-->
+    <!--    Room Panel-->
     <string name="text_add_panel">Add Panel</string>
     <string name="text_edit">Edit</string>
     <string name="text_customization">Customization</string>
@@ -120,7 +121,7 @@
     <string name="text_switch_six">Switch 6</string>
     <string name="text_switch_seven">Switch 7</string>
     <string name="text_switch_eight">Switch 8</string>
-    <string name="text_switch_20_amp">20 Amp</string>
+    <string name="text_switch_15_amp">15 Amp</string>
     <string name="text_switch_3_pin">3 Pin</string>
     <string name="text_switch_dimmer">Dimmer</string>
 
@@ -163,14 +164,14 @@
     <string name="text_select_font">Select font</string>
     <string name="text_save">Save</string>
     <string name="text_done">Done</string>
-    <string name="description_screen_layout">Set screen layout to the device</string>
-    <string name="description_upload_image">Upload or remove image of the device</string>
-    <string name="description_switch_icons">Update switch icons</string>
-    <string name="description_switch_icons_size">Update size of switch icons</string>
-    <string name="description_switch_name">Manage visibility of switch name in the device</string>
-    <string name="description_text_style">Change text style of the device</string>
-    <string name="description_text_color">Change text color of the device</string>
-    <string name="description_text_size">Change text size of the device</string>
+    <string name="description_screen_layout">Few predefined layouts will be available where icons are arranged center, top, bottom, right and left on the screen.</string>
+    <string name="description_upload_image">Image here refers to the user pictures, photos that they like to have on the touch</string>
+    <string name="description_switch_icons">Icon here refers to the Symbols used to turn ON/OFF e.g., Light, Lamp, fan. etc..</string>
+    <string name="description_switch_icons_size">Size of the Icon can be changed with the scale of Small, Medium and Large.</string>
+    <string name="description_switch_name">To enable / disable switch name under icons in touch device.</string>
+    <string name="description_text_style">Text Font can be changed as per user, like Calibri, Times New Roman, Brush Script MT,Cooper Black, and Verdana.</string>
+    <string name="description_text_color">Color of the Icon can be changed with Standard colors like Red, Green, Blue, Black, White, Brown, Yellow, Orange, Purple and Pink.</string>
+    <string name="description_text_size">Size of the Text can be changed with the scale of Small, Medium and Large.</string>
 
     <!--    Device Features-->
     <string name="title_text_device_features">Device Features</string>
@@ -191,12 +192,12 @@
     <string name="text_display_brightness">Display Brightness</string>
     <string name="text_auto">Auto</string>
     <string name="text_manual">Manual</string>
-    <string name="description_sleep_mode">Manage sleep mode settings of the device</string>
-    <string name="description_night_mode">Manage night mode settings of the device</string>
-    <string name="description_outdoor_mode">Manage outdoor mode settings of the device</string>
-    <string name="description_time_mode">Manage time settings of the device</string>
-    <string name="description_weather_report">Turn on to get weather report</string>
-    <string name="description_room_temperature">Turn on to get room temperature</string>
+    <string name="description_sleep_mode">Display will turn off when touch is not used for the period specified by the application.</string>
+    <string name="description_night_mode">It will blacken the image and OEM logo and make the sole icon glow at bedtime.</string>
+    <string name="description_outdoor_mode">It needs to switch the whole device and only then can it return to your home</string>
+    <string name="description_time_mode">The date and time should be displayed on the touch screen on the bottom left or bottom right along with the day.</string>
+    <string name="description_weather_report">The weather report needs to be displayed on the touch screen at the bottom left or right. It is also necessary to indicate the weather conditions with predefined symbols like cloudy, sunny.</string>
+    <string name="description_room_temperature">Devices need to display room temperature on a screen using a temperature sensor.</string>
     <string name="description_display_brightness">Change brightness settings of the device</string>
 
     <!--    Create Scene   -->

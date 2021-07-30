@@ -129,11 +129,13 @@ data class DeviceSwitchData(
     @SerializedName("tiSwitchStatus")
     var switchStatus: Int,
     @SerializedName("vDesc")
-    var desc: String? = null
+    var desc: String? = null,
+    @SerializedName("vIconFile")
+    var iconFile: String? = null
 ) : Parcelable, Serializable {
 
     override fun toString(): String {
-        return "DeviceSwitchData(id='$id', typeOfSwitch=$typeOfSwitch, index='$index', name='$name', icon='$icon', switchStatus=$switchStatus, desc=$desc)"
+        return "DeviceSwitchData(id='$id', typeOfSwitch=$typeOfSwitch, index='$index', name='$name', icon='$icon', switchStatus=$switchStatus, desc=$desc, iconFile=$iconFile)"
     }
 
     override fun equals(other: Any?): Boolean {
@@ -149,6 +151,7 @@ data class DeviceSwitchData(
         if (icon != other.icon) return false
         if (switchStatus != other.switchStatus) return false
         if (desc != other.desc) return false
+        if (iconFile != other.iconFile) return false
 
         return true
     }
@@ -161,6 +164,7 @@ data class DeviceSwitchData(
         result = 31 * result + icon.hashCode()
         result = 31 * result + switchStatus
         result = 31 * result + (desc?.hashCode() ?: 0)
+        result = 31 * result + (iconFile?.hashCode() ?: 0)
         return result
     }
 

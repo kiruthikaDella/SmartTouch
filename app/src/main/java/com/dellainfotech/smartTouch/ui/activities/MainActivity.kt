@@ -171,7 +171,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-     fun disconnectTCPClient() {
+    fun disconnectTCPClient() {
         TCPClientService.closeSocket(object : CloseSocketListener {
             override fun onSuccess(message: String) {
                 Log.e(logTag, message)
@@ -326,7 +326,6 @@ class MainActivity : AppCompatActivity() {
                         if (roomTypeList.isNotEmpty()) {
                             val roomAdapter = RoomTypeAdapter(this, roomTypeList)
                             binding.layoutAddRoom.spinnerRoom.adapter = roomAdapter
-
                             binding.layoutAddRoom.spinnerRoom.onItemSelectedListener =
                                 object : AdapterView.OnItemSelectedListener {
                                     override fun onItemSelected(
@@ -388,7 +387,5 @@ class MainActivity : AppCompatActivity() {
     //
     //endregion
     //
-
-
 
 }
