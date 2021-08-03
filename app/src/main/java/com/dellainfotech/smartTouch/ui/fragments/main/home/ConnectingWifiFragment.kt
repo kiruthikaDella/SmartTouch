@@ -14,7 +14,7 @@ import com.binjal.wifilibrary.WifiUtils
 import com.bumptech.glide.Glide
 import com.dellainfotech.smartTouch.R
 import com.dellainfotech.smartTouch.api.Resource
-import com.dellainfotech.smartTouch.api.body.BodyAddDevice
+import com.dellainfotech.smartTouch.api.body.BodyRegisterDevice
 import com.dellainfotech.smartTouch.api.repository.HomeRepository
 import com.dellainfotech.smartTouch.common.interfaces.DialogShowListener
 import com.dellainfotech.smartTouch.common.utils.Constants
@@ -42,13 +42,12 @@ class ConnectingWifiFragment :
     private var isInternetConnected = false
     private var isConnectFailed = false
     private var isConnected = false
+    private var getDeviceStr: String? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         handler = Handler(Looper.getMainLooper())
-
-        Log.e(logTag, "onViewCreated activity $activity")
 
         args.isRegistering.let {
             isRegistering = it
@@ -67,7 +66,7 @@ class ConnectingWifiFragment :
 
         binding.ivBack.setOnClickListener {
             if (TCPClientService.getSocket() != null) {
-                    (activity as MainActivity).disconnectTCPClient()
+                (activity as MainActivity).disconnectTCPClient()
             } else {
                 context?.let {
                     findNavController().navigateUp()
@@ -77,38 +76,28 @@ class ConnectingWifiFragment :
 
         binding.layoutConfigWifiProcess.pulsator.startRippleAnimation()
 
-        /*viewModel.deviceRegistrationResponse.observe(viewLifecycleOwner, { response ->
-           when (response) {
-               is Resource.Success -> {
-                   DialogUtil.hideDialog()
-                   findNavController().navigate(ConfigWifiFragmentDirections.actionConfigWifiFragmentToConnectingWifiFragment(true, args.roomDetail))
-               }
-               is Resource.Failure -> {
-                   DialogUtil.hideDialog()
-                   Log.e(logTag, "device registration error ${response.errorBody?.string()}")
-                   if (response.isNetworkError) {
-                       sendDataToCloud()
-                   }
-               } else -> {}
-           }
-       })*/
-
-        viewModel.addDeviceResponse.observe(viewLifecycleOwner, { response ->
+        viewModel.deviceRegistrationResponse.observe(viewLifecycleOwner, { response ->
             when (response) {
                 is Resource.Success -> {
-                    Log.e(logTag, "Response success")
+                    Log.e(logTag, "Response ${response.values.message}")
                     context?.let {
-                        Toast.makeText(it, "Response success", Toast.LENGTH_LONG).show()
+                        Toast.makeText(it, response.values.message, Toast.LENGTH_LONG).show()
                     }
-                    findNavController().navigate(
-                        ConnectingWifiFragmentDirections.actionConnectingWifiFragmentToDeviceFragment(
-                            args.roomDetail
+
+                    if (response.values.status && response.values.code == Constants.API_SUCCESS_CODE){
+                        findNavController().navigate(
+                            ConnectingWifiFragmentDirections.actionConnectingWifiFragmentToDeviceFragment(
+                                args.roomDetail
+                            )
                         )
-                    )
+                    } else {
+                        findNavController().navigateUp()
+                    }
+
                 }
                 is Resource.Failure -> {
                     DialogUtil.hideDialog()
-                    Log.e(logTag, "addDeviceResponse Failure ${response.errorBody?.string()}")
+                    Log.e(logTag, "deviceRegistrationResponse Failure ${response.errorBody?.string()}")
                     if (response.isNetworkError) {
                         showOfflineAlert()
                     }
@@ -120,7 +109,8 @@ class ConnectingWifiFragment :
         })
 
         if (isRegistering) {
-            binding.layoutConfigWifiProcess.tvConfigStatus.text = getString(R.string.text_configuring)
+            binding.layoutConfigWifiProcess.tvConfigStatus.text =
+                getString(R.string.text_configuring)
 
             //@TODO Configure
             context?.let {
@@ -131,7 +121,10 @@ class ConnectingWifiFragment :
                     .into(binding.layoutConfigWifiProcess.centerImage)
             }
 
-            sendRequestForPanelAndDeviceInfo()
+            runnable = Runnable {
+                sendRequestForPanelAndDeviceInfo()
+            }
+            handler?.postDelayed(runnable!!, 3000)
 
         } else {
             //@TODO Connecting
@@ -157,8 +150,10 @@ class ConnectingWifiFragment :
         try {
                 TCPClientService.connectToAddress(
                     WifiUtils.getGatewayIpAddress(),
-                    getString(R.string.receiver_port).toInt())
-                triedToConnectTCP++
+                    getString(R.string.receiver_port).toInt()
+                )
+
+            triedToConnectTCP++
 
         } catch (e: Exception) {
             e.printStackTrace()
@@ -171,22 +166,22 @@ class ConnectingWifiFragment :
         isConnected = true
         isConnectFailed = false
         activity?.runOnUiThread {
-                binding.layoutConfigWifiProcess.tvConfigStatus.text =
-                    getString(R.string.text_connected)
-                binding.layoutConfigWifiProcess.centerImage.setImageResource(R.drawable.ic_wifi_done)
+            binding.layoutConfigWifiProcess.tvConfigStatus.text =
+                getString(R.string.text_connected)
+            binding.layoutConfigWifiProcess.centerImage.setImageResource(R.drawable.ic_wifi_done)
 
-                runnable = Runnable {
-                    if (!isConnectFailed) {
-                        findNavController().navigate(
-                            ConnectingWifiFragmentDirections.actionConnectingWifiFragmentToConfigWifiFragment(
-                                args.roomDetail
-                            )
+            runnable = Runnable {
+                if (!isConnectFailed) {
+                    findNavController().navigate(
+                        ConnectingWifiFragmentDirections.actionConnectingWifiFragmentToConfigWifiFragment(
+                            args.roomDetail
                         )
-                    }
+                    )
                 }
-                handler?.postDelayed(runnable!!, 3000)
-
             }
+            handler?.postDelayed(runnable!!, 3000)
+
+        }
     }
 
     override fun onConnectFailure(message: String) {
@@ -219,7 +214,7 @@ class ConnectingWifiFragment :
     }
 
     override fun onServerDisconnect(message: String) {
-        Log.e(logTag, "Server disconnect $activity")
+        Log.e(logTag, "Disconnect")
         isConnectFailed = true
         isConnected = false
 
@@ -242,34 +237,35 @@ class ConnectingWifiFragment :
 
 
     private fun sendRequestForPanelAndDeviceInfo() {
-        TCPClientService.sendDefaultValue(Constants.GET_DEVICE_INFO, object : ReadWriteValueListener<String> {
-            override fun onSuccess(message: String, value: String?) {
-                Log.e(logTag, "sendRequestForPanelAndDeviceInfo $message")
-            }
+            TCPClientService.sendDefaultValue(
+                Constants.GET_DEVICE_INFO,
+                object : ReadWriteValueListener<String> {
+                    override fun onSuccess(message: String, value: String?) {
+                        Log.e(logTag, "sendRequestForPanelAndDeviceInfo $message")
+                    }
 
-            override fun onFailure(message: String) {
-                Log.e(logTag, "sendRequestForPanelAndDeviceInfo $message")
-            }
-
-        })
+                    override fun onFailure(message: String) {
+                        Log.e(logTag, "sendRequestForPanelAndDeviceInfo $message")
+                    }
+                })
     }
 
     override fun onSuccess(message: String, value: String?) {
         Log.e(logTag, " onSuccess activity $activity")
         Log.e(logTag, message + value)
 
-        var msg = ""
         value?.let {
             val jsonObject = JSONObject(value)
             if (jsonObject.has("data")) {
                 val secondJsonObject = JSONObject(jsonObject.getString("data"))
                 if (secondJsonObject.has(Constants.GET_DEVICE_INFO)) {
-                    msg = secondJsonObject.get(Constants.GET_DEVICE_INFO).toString()
+                    getDeviceStr = secondJsonObject.get(Constants.GET_DEVICE_INFO).toString()
 
-                    Log.e(logTag, "Get Device info $msg")
+                    Log.e(logTag, "Get Device info $getDeviceStr")
 
                     runnable = Runnable {
-                        binding.layoutConfigWifiProcess.tvConfigStatus.text = getString(R.string.text_registering)
+                        binding.layoutConfigWifiProcess.tvConfigStatus.text =
+                            getString(R.string.text_registering)
 
                         //@TODO Registering
                         context?.let {
@@ -284,29 +280,9 @@ class ConnectingWifiFragment :
 
                         sendDataToCloud()
                     }
-                    handler?.postDelayed(runnable!!, 4000)
+                    handler?.postDelayed(runnable!!, 5000)
                 }
             }
-
-            /*if (msg == "123") {
-                runnable = Runnable {
-                    binding.layoutConfigWifiProcess.tvConfigStatus.text = getString(R.string.text_registering)
-
-                    //@TODO Registering
-                    context?.let {
-                        Glide.with(it)
-                            .asGif()
-                            .load(R.raw.ic_register)
-                            .placeholder(R.drawable.ic_wifi_done)
-                            .into(binding.layoutConfigWifiProcess.centerImage)
-                    }
-
-                    if (TCPClientService.getSocket() != null) disconnectTCPClient()
-
-                    sendDataToCloud()
-                }
-                handler?.postDelayed(runnable!!, 3000)
-            }*/
         }
     }
 
@@ -317,15 +293,17 @@ class ConnectingWifiFragment :
     private fun sendDataToCloud() {
         runnable = Runnable {
             if (isInternetConnected) {
-//                 viewModel.deviceRegister(jsonObject)
-
-                viewModel.addDevice(
-                    BodyAddDevice(
-                        "SR0005",
-                        args.roomDetail.id,
-                        "Panel 5"
-                    )
-                )
+                getDeviceStr?.let {
+                    val jsonObject = JSONObject(it)
+                    viewModel.deviceRegister(BodyRegisterDevice(
+                        deviceSerialNum = jsonObject.get("device_serial_number").toString(),
+                        roomId = args.roomDetail.id,
+                        deviceName = jsonObject.get("device_name").toString(),
+                        wifiSSID = jsonObject.get("wifi_ssid").toString(),
+                        password = jsonObject.get("password").toString(),
+                        macImei = jsonObject.get("mac_imei").toString()
+                    ))
+                }
             } else {
                 showOfflineAlert()
             }
@@ -369,8 +347,7 @@ class ConnectingWifiFragment :
                 handler.removeCallbacks(it)
             }
         }
-        viewModel.faqResponse.postValue(null)
-        viewModel.addDeviceResponse.postValue(null)
+        viewModel.deviceRegistrationResponse.postValue(null)
 
         TCPClientService.setReadWriteListener(null)
         TCPClientService.setConnectionListener(null)

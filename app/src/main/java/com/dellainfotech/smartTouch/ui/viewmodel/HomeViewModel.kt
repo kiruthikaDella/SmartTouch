@@ -363,18 +363,17 @@ class HomeViewModel @ViewModelInject constructor(
         _cancelOwnershipResponse.value = homeRepository.cancelTransferOwnership(ownershipId)
     }
 
-
-
     //
     //endregion
     //
-/*
+
+    //SmarTack
     private val _deviceRegisterResponse: MutableLiveData<Resource<CommonResponse>> = MutableLiveData()
     val deviceRegistrationResponse: MutableLiveData<Resource<CommonResponse>>
         get() = _deviceRegisterResponse
 
-    fun deviceRegister(jsonObject: JsonObject) = viewModelScope.launch {
+    fun deviceRegister(bodyRegisterDevice: BodyRegisterDevice) = viewModelScope.launch {
         _deviceRegisterResponse.value = Resource.Loading
-        _deviceRegisterResponse.value = homeRepository.deviceRegister(jsonObject)
-    }*/
+        _deviceRegisterResponse.value = homeRepository.deviceRegister(bodyRegisterDevice)
+    }
 }

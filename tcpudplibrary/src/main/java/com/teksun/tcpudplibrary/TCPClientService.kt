@@ -24,7 +24,6 @@ object TCPClientService {
     private var readWriteValueListener: ReadWriteValueListener<String>? = null
     private var connectCResultListener: ConnectCResultListener? = null
     private var packetLength: Int? = null
-
     private var remainingByteArray = byteArrayOf()
     private var remainingStringData: String? = null
 

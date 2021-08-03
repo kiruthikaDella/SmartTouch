@@ -6,7 +6,6 @@ import com.dellainfotech.smartTouch.common.utils.Constants
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import retrofit2.HttpException
-import java.lang.Exception
 import javax.inject.Singleton
 
 @Singleton
