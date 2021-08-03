@@ -6,6 +6,7 @@ import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.text.InputType
 import android.util.DisplayMetrics
+import android.view.View
 import android.widget.EditText
 import android.widget.TextView
 import androidx.core.view.isVisible
@@ -210,7 +211,12 @@ object DialogUtil {
         val tvDetail = dialog?.findViewById(R.id.tv_detail) as TextView
         val tvClose = dialog?.findViewById(R.id.tv_close) as TextView
 
-        tvTitle.text = title
+        if (title.isNotEmpty()){
+            tvTitle.text = title
+        }else {
+            tvTitle.visibility = View.GONE
+        }
+
         tvDetail.text = detail
 
         tvClose.setOnClickListener {

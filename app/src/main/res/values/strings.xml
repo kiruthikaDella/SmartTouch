@@ -124,6 +124,7 @@
     <string name="text_switch_15_amp">15 Amp</string>
     <string name="text_switch_3_pin">3 Pin</string>
     <string name="text_switch_dimmer">Dimmer</string>
+    <string name="text_switch_fan_speed">Fan Speed</string>
 
     <string name="text_usb_port_a">USB Port <font fgcolor='#1A8EFF'>A</font></string>
     <string name="text_usb_port_c">USB Port <font fgcolor='#1A8EFF'>C</font></string>
@@ -246,6 +247,7 @@
     <string name="hint_text_new_password">New Password</string>
     <string name="hint_text_confirm_new_password">Confirm New Password</string>
     <string name="text_hidden_password">******************</string>
+    <string name="text_info_ownership_transfer">For transfer the ownership to one user to another user. Only Master user can perform this action.</string>
 
     <!--    Faqs Screen-->
     <string name="title_text_faqs">FAQ\'s</string>

@@ -61,7 +61,6 @@ import com.sothree.slidinguppanel.SlidingUpPanelLayout
  * Created by Jignesh Dangar on 09-04-2021.
  */
 
-
 @SuppressLint("ClickableViewAccessibility")
 class DeviceFragment : ModelBaseFragment<HomeViewModel, FragmentDeviceBinding, HomeRepository>() {
 
@@ -76,13 +75,15 @@ class DeviceFragment : ModelBaseFragment<HomeViewModel, FragmentDeviceBinding, H
     private lateinit var deviceTypeAdapter: SpinnerAdapter
     private var isSelectedSmartAck = false
 
-    private val wifiRegister = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-        onActivityResult(Constants.REQUEST_WIFI_CODE, result)
-    }
+    private val wifiRegister =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            onActivityResult(Constants.REQUEST_WIFI_CODE, result)
+        }
 
-    private val openSettingRegister = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-        onActivityResult(Constants.REQUEST_OPEN_SETTINGS, result)
-    }
+    private val openSettingRegister =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            onActivityResult(Constants.REQUEST_OPEN_SETTINGS, result)
+        }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -98,33 +99,12 @@ class DeviceFragment : ModelBaseFragment<HomeViewModel, FragmentDeviceBinding, H
             binding.recyclerRoomPanels.adapter = panelAdapter
         }
 
-        if (viewModel.getDeviceResponse.value == null) {
-            showLoading()
-            viewModel.getDevice(args.roomDetail.id)
-        } else {
-            viewModel.getDeviceResponse.value?.let {
-                when (it) {
-                    is Resource.Success -> {
-                        if (it.values.status && it.values.code == Constants.API_SUCCESS_CODE) {
-                            it.values.data?.let { deviceData ->
-                                deviceList.addAll(deviceData)
-                                panelAdapter.notifyDataSetChanged()
-                            }
-                        }
-                    }
-                    else -> {
-                        panelAdapter.notifyDataSetChanged()
-                    }
-                }
-            }
-        }
-
         binding.tvTitle.text = args.roomDetail.roomName
 
         NotifyManager.internetInfo.observe(viewLifecycleOwner, { isConnected ->
             Log.e(logTag, " isConnected $isConnected isSelectedSmartAck $isSelectedSmartAck")
             if (isConnected) {
-//                showLoading()
+                showLoading()
                 viewModel.getDevice(args.roomDetail.id)
             } else {
                 if (!isSelectedSmartAck) {
@@ -568,12 +548,17 @@ class DeviceFragment : ModelBaseFragment<HomeViewModel, FragmentDeviceBinding, H
 
                         devicePosition?.let { dPosition ->
                             switchPosition?.let { sPosition ->
-                                deviceData?.let {dData ->
+                                deviceData?.let { dData ->
                                     dData.switchData?.get(sPosition)?.let { sData ->
                                         deviceList[dPosition].switchData?.let {
                                             it[sPosition] = sData
                                             panelAdapter.notifyDataSetChanged()
-                                            panelAdapter.publish(dData.deviceSerialNo,"SW0${sPosition +1}", sData.switchStatus.toString(),sData.name)
+                                            panelAdapter.publish(
+                                                dData.deviceSerialNo,
+                                                "SW0${sPosition + 1}",
+                                                sData.switchStatus.toString(),
+                                                sData.name
+                                            )
                                             devicePosition = null
                                             switchPosition = null
                                         }
