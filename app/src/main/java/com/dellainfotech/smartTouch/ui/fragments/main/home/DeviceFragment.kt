@@ -49,18 +49,11 @@ import com.dellainfotech.smartTouch.databinding.FragmentDeviceBinding
 import com.dellainfotech.smartTouch.mqtt.NotifyManager
 import com.dellainfotech.smartTouch.ui.fragments.ModelBaseFragment
 import com.dellainfotech.smartTouch.ui.viewmodel.HomeViewModel
-import com.google.android.material.button.MaterialButton
-import com.karumi.dexter.Dexter
-import com.karumi.dexter.MultiplePermissionsReport
-import com.karumi.dexter.PermissionToken
-import com.karumi.dexter.listener.PermissionRequest
-import com.karumi.dexter.listener.multi.MultiplePermissionsListener
 import com.sothree.slidinguppanel.SlidingUpPanelLayout
 
 /**
  * Created by Jignesh Dangar on 09-04-2021.
  */
-
 
 @SuppressLint("ClickableViewAccessibility")
 class DeviceFragment : ModelBaseFragment<HomeViewModel, FragmentDeviceBinding, HomeRepository>() {
@@ -98,25 +91,8 @@ class DeviceFragment : ModelBaseFragment<HomeViewModel, FragmentDeviceBinding, H
             binding.recyclerRoomPanels.adapter = panelAdapter
         }
 
-        if (viewModel.getDeviceResponse.value == null) {
-            showLoading()
-            viewModel.getDevice(args.roomDetail.id)
-        } else {
-            viewModel.getDeviceResponse.value?.let {
-                when (it) {
-                    is Resource.Success -> {
-                        if (it.values.status && it.values.code == Constants.API_SUCCESS_CODE) {
-                            it.values.data?.let { deviceData ->
-                                deviceList.addAll(deviceData)
-                                panelAdapter.notifyDataSetChanged()
-                            }
-                        }
-                    }
-                    else -> {
-                        panelAdapter.notifyDataSetChanged()
-                    }
-                }
-            }
+        binding.ivBack.setOnClickListener {
+            findNavController().navigateUp()
         }
 
         binding.tvTitle.text = args.roomDetail.roomName
@@ -124,7 +100,7 @@ class DeviceFragment : ModelBaseFragment<HomeViewModel, FragmentDeviceBinding, H
         NotifyManager.internetInfo.observe(viewLifecycleOwner, { isConnected ->
             Log.e(logTag, " isConnected $isConnected isSelectedSmartAck $isSelectedSmartAck")
             if (isConnected) {
-//                showLoading()
+                showLoading()
                 viewModel.getDevice(args.roomDetail.id)
             } else {
                 if (!isSelectedSmartAck) {

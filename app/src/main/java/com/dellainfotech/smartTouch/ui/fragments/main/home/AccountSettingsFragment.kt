@@ -337,7 +337,7 @@ class AccountSettingsFragment :
             binding.ivEditPassword.visibility = View.INVISIBLE
         }
 
-        if (!Utils.isMasterUser()){
+        if (!Utils.isMasterUser()) {
             binding.tvOwnershipTransfer.visibility = View.GONE
             binding.tvForMasterUsers.visibility = View.GONE
             binding.ivInfo.visibility = View.GONE
@@ -350,6 +350,16 @@ class AccountSettingsFragment :
             binding.tvMasterEmail.visibility = View.GONE
             binding.ivMasterEditEmail.visibility = View.GONE
             binding.btnTransferOwnership.visibility = View.GONE
+        }
+
+        binding.ivInfo.setOnClickListener {
+            activity?.let { mActivity ->
+                DialogUtil.featureDetailAlert(
+                    mActivity,
+                    "",
+                    getString(R.string.text_info_ownership_transfer)
+                )
+            }
         }
 
         apiCall()
