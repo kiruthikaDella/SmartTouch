@@ -24,7 +24,6 @@ object TCPClientService {
     private var readWriteValueListener: ReadWriteValueListener<String>? = null
     private var connectCResultListener: ConnectCResultListener? = null
     private var packetLength: Int? = null
-
     private var remainingByteArray = byteArrayOf()
     private var remainingStringData: String? = null
 
@@ -63,13 +62,13 @@ object TCPClientService {
     ) {
         threadPolicyCall()
 
-//        val thread = Thread {
+        val thread = Thread {
             try {
                 if (socket != null) {
                     if (socket?.isConnected!!) {
                         printLog("Already connected")
                         connectCResultListener?.onSuccess("Already connected")
-                        return
+                        return@Thread
                     }
                 }
 
@@ -104,9 +103,8 @@ object TCPClientService {
                 printLog("Connected failed : SocketTimeoutException $e")
                 connectCResultListener?.onConnectFailure(Utils.concatDateAndTime("Can't connect"))
             }
-       // }
-//        thread.start()
-
+        }
+        thread.start()
     }
 
     /**

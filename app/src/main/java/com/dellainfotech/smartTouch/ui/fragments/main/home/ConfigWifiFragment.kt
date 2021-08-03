@@ -11,11 +11,13 @@ import com.dellainfotech.smartTouch.api.repository.HomeRepository
 import com.dellainfotech.smartTouch.common.interfaces.DialogShowListener
 import com.dellainfotech.smartTouch.common.utils.DialogUtil
 import com.dellainfotech.smartTouch.databinding.FragmentConfigWifiBinding
+import com.dellainfotech.smartTouch.ui.activities.MainActivity
 import com.dellainfotech.smartTouch.ui.fragments.ModelBaseFragment
 import com.dellainfotech.smartTouch.ui.viewmodel.HomeViewModel
-import com.google.gson.JsonObject
 import com.teksun.tcpudplibrary.TCPClientService
 import com.teksun.tcpudplibrary.listener.ReadWriteValueListener
+import org.json.JSONObject
+
 
 /**
  * Created by Jignesh Dangar on 21-07-2021.
@@ -25,13 +27,18 @@ class ConfigWifiFragment :
     ModelBaseFragment<HomeViewModel, FragmentConfigWifiBinding, HomeRepository>() {
     private val logTag = ConfigWifiFragment::class.java.simpleName
     private val args: ConfigWifiFragmentArgs by navArgs()
-    private var jsonObject = JsonObject()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         binding.ivBack.setOnClickListener {
-            findNavController().navigateUp()
+            if (TCPClientService.getSocket() != null) {
+                (activity as MainActivity).disconnectTCPClient()
+            } else {
+                context?.let {
+                    findNavController().navigateUp()
+                }
+            }
         }
 
         binding.layoutConfigWifiPanel.btnSubmit.setOnClickListener {
@@ -48,41 +55,33 @@ class ConfigWifiFragment :
             when {
                 panelName.isEmpty() -> {
                     binding.layoutConfigWifiPanel.edtPanelName.error = "Please Enter panel name"
+                    binding.layoutConfigWifiPanel.edtPanelName.requestFocus()
                 }
                 ssid.isEmpty() -> {
                     binding.layoutConfigWifiPanel.edtWifiSsid.error = "Please enter SSID"
+                    binding.layoutConfigWifiPanel.edtWifiSsid.requestFocus()
                 }
                 password.isEmpty() -> {
                     binding.layoutConfigWifiPanel.edtWifiPassword.error = "Please enter password"
+                    binding.layoutConfigWifiPanel.edtWifiPassword.requestFocus()
                 }
                 password.length < 8 -> {
                     binding.layoutConfigWifiPanel.edtWifiPassword.error = "Password length must be 8 characters"
+                    binding.layoutConfigWifiPanel.edtWifiPassword.requestFocus()
                 }
                 else -> {
-                    jsonObject.apply {
-                        addProperty("panel_name", panelName)
-                        addProperty("ssid", ssid)
-                        addProperty("password", password)
+                    val jObject =  JSONObject()
+                    jObject.apply {
+                        put("device_name", panelName)
+                        put("wifi_ssid", ssid)
+                        put("password", password)
                     }
-
-                    TCPClientService.sendDefaultValue(jsonObject.toString(), object : ReadWriteValueListener<String> {
-                        override fun onSuccess(message: String, value: String?) {
-                            Log.e(logTag, "$message $value")
-                            findNavController().navigate(ConfigWifiFragmentDirections.actionConfigWifiFragmentToConnectingWifiFragment(true, args.roomDetail))
-//                            findNavController().navigateUp()
-                        }
-
-                        override fun onFailure(message: String) {
-                            Log.e(logTag, "Send data failed $message")
-
-                            DialogUtil.deviceOfflineAlert(requireActivity(), "Device Disconnected", object: DialogShowListener {
-                                override fun onClick() {
-                                    DialogUtil.hideDialog()
-                                    findNavController().navigateUp()
-                                }
-                            })
-                        }
-                    })
+                    val jsonObject = JSONObject()
+                    jsonObject.apply {
+                        put("deviceConfigure", jObject)
+                    }
+                    Log.e(logTag, " deviceConfigure $jsonObject ")
+                    sendTCPData(jsonObject.toString())
                 }
             }
         } catch (e: Exception) {
@@ -90,6 +89,25 @@ class ConfigWifiFragment :
         }
     }
 
+    private fun sendTCPData(configData: String) {
+            TCPClientService.sendDefaultValue(configData, object : ReadWriteValueListener<String> {
+                override fun onSuccess(message: String, value: String?) {
+                    Log.e(logTag, "$message $value")
+                    findNavController().navigate(ConfigWifiFragmentDirections.actionConfigWifiFragmentToConnectingWifiFragment(true, args.roomDetail))
+                }
+
+                override fun onFailure(message: String) {
+                    Log.e(logTag, "Send data failed $message")
+
+                    DialogUtil.deviceOfflineAlert(requireActivity(), "Device Disconnected", object: DialogShowListener {
+                        override fun onClick() {
+                            DialogUtil.hideDialog()
+                            findNavController().navigateUp()
+                        }
+                    })
+                }
+            })
+    }
 
 
     override fun getViewModel(): Class<HomeViewModel> = HomeViewModel::class.java

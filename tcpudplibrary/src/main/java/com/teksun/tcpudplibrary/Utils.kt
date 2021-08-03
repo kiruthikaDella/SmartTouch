@@ -74,7 +74,7 @@ object Utils {
      */
     fun convertStringToHex(str: String): String {
         val getBytesFromString: ByteArray = str.toByteArray(Charset.defaultCharset())
-        return getBytesFromString.joinToString(separator = " ") { String.format("%02X", it) }.toUpperCase()
+        return getBytesFromString.joinToString(separator = " ") { String.format("%02X", it) }.uppercase()
     }
 
     fun remove(arr: ByteArray, index: Int): ByteArray {
@@ -122,5 +122,5 @@ val ByteArray.toPreservedString: String
  * @return string
  */
 fun ByteArray.toHexString(): String {
-    return this.joinToString(separator = " ") { String.format("%02x", it) }.toUpperCase()
+    return this.joinToString(separator = " ") { String.format("%02x", it) }.uppercase()
 }

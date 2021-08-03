@@ -8,13 +8,11 @@ data class CommonResponse(
     @SerializedName("code")
     var code: Int,
     @SerializedName("message")
-    var message: String,
-    @SerializedName("data")
-    var data: String? = null
+    var message: String
 ) {
 
     override fun toString(): String {
-        return "CommonResponse(status=$status, code=$code, message='$message', data=$data)"
+        return "CommonResponse(status=$status, code=$code, message='$message')"
     }
 
     override fun equals(other: Any?): Boolean {
@@ -26,7 +24,6 @@ data class CommonResponse(
         if (status != other.status) return false
         if (code != other.code) return false
         if (message != other.message) return false
-        if (data != other.data) return false
 
         return true
     }
@@ -35,7 +32,6 @@ data class CommonResponse(
         var result = status.hashCode()
         result = 31 * result + code
         result = 31 * result + message.hashCode()
-        result = 31 * result + (data?.hashCode() ?: 0)
         return result
     }
 

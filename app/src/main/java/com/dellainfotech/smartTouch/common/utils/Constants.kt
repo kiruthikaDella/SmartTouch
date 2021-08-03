@@ -60,4 +60,8 @@ object Constants {
     const val DEFAULT_REMEMBER_STATUS = false
     const val IS_LOGGED_IN = "is_logged_in"
 
+    const val REQUEST_FOR = "requestFor"
+    const val GET_DEVICE_INFO = "getDeviceInfo"
+
+
 }
