@@ -25,6 +25,10 @@ object Constants {
     const val DEVICE_TYPE_EIGHT = 8
     const val DEVICE_TYPE_FOUR = 4
 
+    const val PRODUCT_SMART_TOUCH = "Smartouch"
+    const val PRODUCT_SMART_ACK = "Smartack"
+    const val PRODUCT_SMART_AP = "Smartap"
+
     const val EXTRA_FILE_PATH = "extra.file_path"
 
     const val DEFAULT_CONTROL_MODE_STATUS = false
