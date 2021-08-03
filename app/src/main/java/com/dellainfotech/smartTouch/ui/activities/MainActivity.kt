@@ -166,6 +166,8 @@ class MainActivity : AppCompatActivity() {
             finishAffinity()
         } else if (navController.currentDestination?.id == R.id.connectingWifiFragment && TCPClientService.getSocket() != null) {
             disconnectTCPClient()
+        } else if (navController.currentDestination?.id == R.id.configWifiFragment && TCPClientService.getSocket() != null) {
+            disconnectTCPClient()
         } else {
             super.onBackPressed()
         }

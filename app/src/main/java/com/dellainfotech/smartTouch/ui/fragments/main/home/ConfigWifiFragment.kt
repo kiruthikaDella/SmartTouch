@@ -11,6 +11,7 @@ import com.dellainfotech.smartTouch.api.repository.HomeRepository
 import com.dellainfotech.smartTouch.common.interfaces.DialogShowListener
 import com.dellainfotech.smartTouch.common.utils.DialogUtil
 import com.dellainfotech.smartTouch.databinding.FragmentConfigWifiBinding
+import com.dellainfotech.smartTouch.ui.activities.MainActivity
 import com.dellainfotech.smartTouch.ui.fragments.ModelBaseFragment
 import com.dellainfotech.smartTouch.ui.viewmodel.HomeViewModel
 import com.teksun.tcpudplibrary.TCPClientService
@@ -31,7 +32,13 @@ class ConfigWifiFragment :
         super.onViewCreated(view, savedInstanceState)
 
         binding.ivBack.setOnClickListener {
-            findNavController().navigateUp()
+            if (TCPClientService.getSocket() != null) {
+                (activity as MainActivity).disconnectTCPClient()
+            } else {
+                context?.let {
+                    findNavController().navigateUp()
+                }
+            }
         }
 
         binding.layoutConfigWifiPanel.btnSubmit.setOnClickListener {
@@ -48,15 +55,19 @@ class ConfigWifiFragment :
             when {
                 panelName.isEmpty() -> {
                     binding.layoutConfigWifiPanel.edtPanelName.error = "Please Enter panel name"
+                    binding.layoutConfigWifiPanel.edtPanelName.requestFocus()
                 }
                 ssid.isEmpty() -> {
                     binding.layoutConfigWifiPanel.edtWifiSsid.error = "Please enter SSID"
+                    binding.layoutConfigWifiPanel.edtWifiSsid.requestFocus()
                 }
                 password.isEmpty() -> {
                     binding.layoutConfigWifiPanel.edtWifiPassword.error = "Please enter password"
+                    binding.layoutConfigWifiPanel.edtWifiPassword.requestFocus()
                 }
                 password.length < 8 -> {
                     binding.layoutConfigWifiPanel.edtWifiPassword.error = "Password length must be 8 characters"
+                    binding.layoutConfigWifiPanel.edtWifiPassword.requestFocus()
                 }
                 else -> {
                     val jObject =  JSONObject()
