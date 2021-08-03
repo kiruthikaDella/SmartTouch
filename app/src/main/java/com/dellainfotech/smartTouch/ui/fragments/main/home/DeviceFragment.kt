@@ -49,6 +49,12 @@ import com.dellainfotech.smartTouch.databinding.FragmentDeviceBinding
 import com.dellainfotech.smartTouch.mqtt.NotifyManager
 import com.dellainfotech.smartTouch.ui.fragments.ModelBaseFragment
 import com.dellainfotech.smartTouch.ui.viewmodel.HomeViewModel
+import com.google.android.material.button.MaterialButton
+import com.karumi.dexter.Dexter
+import com.karumi.dexter.MultiplePermissionsReport
+import com.karumi.dexter.PermissionToken
+import com.karumi.dexter.listener.PermissionRequest
+import com.karumi.dexter.listener.multi.MultiplePermissionsListener
 import com.sothree.slidinguppanel.SlidingUpPanelLayout
 
 /**
@@ -69,13 +75,15 @@ class DeviceFragment : ModelBaseFragment<HomeViewModel, FragmentDeviceBinding, H
     private lateinit var deviceTypeAdapter: SpinnerAdapter
     private var isSelectedSmartAck = false
 
-    private val wifiRegister = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-        onActivityResult(Constants.REQUEST_WIFI_CODE, result)
-    }
+    private val wifiRegister =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            onActivityResult(Constants.REQUEST_WIFI_CODE, result)
+        }
 
-    private val openSettingRegister = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-        onActivityResult(Constants.REQUEST_OPEN_SETTINGS, result)
-    }
+    private val openSettingRegister =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            onActivityResult(Constants.REQUEST_OPEN_SETTINGS, result)
+        }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -89,10 +97,6 @@ class DeviceFragment : ModelBaseFragment<HomeViewModel, FragmentDeviceBinding, H
         activity?.let {
             panelAdapter = DeviceAdapter(it, deviceList)
             binding.recyclerRoomPanels.adapter = panelAdapter
-        }
-
-        binding.ivBack.setOnClickListener {
-            findNavController().navigateUp()
         }
 
         binding.tvTitle.text = args.roomDetail.roomName
@@ -544,12 +548,17 @@ class DeviceFragment : ModelBaseFragment<HomeViewModel, FragmentDeviceBinding, H
 
                         devicePosition?.let { dPosition ->
                             switchPosition?.let { sPosition ->
-                                deviceData?.let {dData ->
+                                deviceData?.let { dData ->
                                     dData.switchData?.get(sPosition)?.let { sData ->
                                         deviceList[dPosition].switchData?.let {
                                             it[sPosition] = sData
                                             panelAdapter.notifyDataSetChanged()
-                                            panelAdapter.publish(dData.deviceSerialNo,"SW0${sPosition +1}", sData.switchStatus.toString(),sData.name)
+                                            panelAdapter.publish(
+                                                dData.deviceSerialNo,
+                                                "SW0${sPosition + 1}",
+                                                sData.switchStatus.toString(),
+                                                sData.name
+                                            )
                                             devicePosition = null
                                             switchPosition = null
                                         }
