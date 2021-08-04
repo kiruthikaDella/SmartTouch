@@ -27,6 +27,7 @@ import com.dellainfotech.smartTouch.common.utils.Utils
 import com.dellainfotech.smartTouch.common.utils.Utils.clearError
 import com.dellainfotech.smartTouch.common.utils.Utils.isControlModePin
 import com.dellainfotech.smartTouch.common.utils.Utils.toEditable
+import com.dellainfotech.smartTouch.common.utils.hideSoftKeyboard
 import com.dellainfotech.smartTouch.databinding.ActivityMainBinding
 import com.dellainfotech.smartTouch.mqtt.NetworkConnectionLiveData
 import com.dellainfotech.smartTouch.mqtt.NotifyManager
@@ -157,6 +158,12 @@ class MainActivity : AppCompatActivity() {
         })
 
         apiResponses()
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        hideSoftKeyboard()
     }
 
     override fun onBackPressed() {

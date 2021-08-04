@@ -627,78 +627,81 @@ class DeviceFragment : ModelBaseFragment<HomeViewModel, FragmentDeviceBinding, H
 
     @SuppressLint("SetTextI18n")
     private fun redirectToWifiSetting() {
+        context?.let {
+            val dialog = Dialog(it)
 
-        val dialog = Dialog(requireContext())
+            dialog.setContentView(R.layout.dialog_wifi_info)
+            dialog.setCancelable(true)
 
-        dialog.setContentView(R.layout.dialog_wifi_info)
-        dialog.setCancelable(true)
+            val tvInstructionInfo = dialog.findViewById(R.id.tvInstructionsInfo) as TextView
+            val tvSSID = dialog.findViewById(R.id.tv_default_ssid) as TextView
+            val tvPassword = dialog.findViewById(R.id.tv_default_password) as TextView
+            val btnOk = dialog.findViewById(R.id.btn_ok) as MaterialButton
+            val btnCancel = dialog.findViewById(R.id.btn_cancel) as MaterialButton
 
-        val tvInstructionInfo = dialog.findViewById(R.id.tvInstructionsInfo) as TextView
-        val tvSSID = dialog.findViewById(R.id.tv_default_ssid) as TextView
-        val tvPassword = dialog.findViewById(R.id.tv_default_password) as TextView
-        val btnOk = dialog.findViewById(R.id.btn_ok) as MaterialButton
-        val btnCancel = dialog.findViewById(R.id.btn_cancel) as MaterialButton
+            tvSSID.text = "SSID: ${getString(R.string.str_gateway_name)}"
+            tvPassword.text = "Password: ${getString(R.string.str_gateway_password)}"
 
-        tvSSID.text = "SSID: ${getString(R.string.str_gateway_name)}"
-        tvPassword.text = "Password: ${getString(R.string.str_gateway_password)}"
-
-        if (VersionUtils.isAndroidQOrLater) {
-            tvInstructionInfo.setText(getString(R.string.text_wifi_instruction_10))
-        } else {
-            tvInstructionInfo.setText(getString(R.string.text_wifi_instruction))
-        }
-
-        btnCancel.setOnClickListener {
-            dialog.dismiss()
-        }
-
-        btnOk.setOnClickListener {
-            dialog.dismiss()
             if (VersionUtils.isAndroidQOrLater) {
-                val panelIntent = Intent(Settings.Panel.ACTION_WIFI)
-                wifiRegister.launch(panelIntent)
+                tvInstructionInfo.text = getString(R.string.text_wifi_instruction_10)
             } else {
-                val wifiIntent = Intent(WifiManager.ACTION_PICK_WIFI_NETWORK)
-                wifiRegister.launch(wifiIntent)
+                tvInstructionInfo.text = getString(R.string.text_wifi_instruction)
             }
+
+            btnCancel.setOnClickListener {
+                dialog.dismiss()
+            }
+
+            btnOk.setOnClickListener {
+                dialog.dismiss()
+                if (VersionUtils.isAndroidQOrLater) {
+                    val panelIntent = Intent(Settings.Panel.ACTION_WIFI)
+                    wifiRegister.launch(panelIntent)
+                } else {
+                    val wifiIntent = Intent(WifiManager.ACTION_PICK_WIFI_NETWORK)
+                    wifiRegister.launch(wifiIntent)
+                }
+            }
+
+            val dpHeight: Float
+            val dpWidth: Float
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                val display: Display? = requireContext().display
+                val displayMetrics = DisplayMetrics()
+                display?.getRealMetrics(displayMetrics)
+                dpHeight = displayMetrics.heightPixels * Constants.COMMON_DIALOG_HEIGHT
+                dpWidth = displayMetrics.widthPixels * 0.85.toFloat()
+            } else {
+                val display: Display = requireActivity().windowManager.defaultDisplay
+                val outMetrics = DisplayMetrics()
+                display.getMetrics(outMetrics)
+                dpHeight = outMetrics.heightPixels * Constants.COMMON_DIALOG_HEIGHT
+                dpWidth = outMetrics.widthPixels * 0.85.toFloat()
+            }
+
+            dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+            dialog.window?.setLayout(dpWidth.toInt(), dpHeight.toInt())
+            dialog.show()
         }
-
-        val dpHeight: Float
-        val dpWidth: Float
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            val display: Display? = requireContext().display
-            val displayMetrics = DisplayMetrics()
-            display?.getRealMetrics(displayMetrics)
-            dpHeight = displayMetrics.heightPixels * Constants.COMMON_DIALOG_HEIGHT
-            dpWidth = displayMetrics.widthPixels * 0.85.toFloat()
-        } else {
-            val display: Display = requireActivity().windowManager.defaultDisplay
-            val outMetrics = DisplayMetrics()
-            display.getMetrics(outMetrics)
-            dpHeight = outMetrics.heightPixels * Constants.COMMON_DIALOG_HEIGHT
-            dpWidth = outMetrics.widthPixels * 0.85.toFloat()
-        }
-
-        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-        dialog.window?.setLayout(dpWidth.toInt(), dpHeight.toInt())
-        dialog.show()
     }
 
     private fun onActivityResult(requestCode: Int, result: ActivityResult) {
         Log.e(logTag, result.resultCode.toString())
         if (requestCode == Constants.REQUEST_WIFI_CODE) {
             if (WifiUtils.isSSIDWifiConnected(getString(R.string.str_gateway_name))) {
-                DialogUtil.loadingAlert(requireActivity(), isCancelable = false)
-                Handler(Looper.getMainLooper()).postDelayed({
-                    DialogUtil.hideDialog()
-                    findNavController().navigate(
-                        DeviceFragmentDirections.actionDeviceFragmentToConnectingWifiFragment(
-                            false,
-                            args.roomDetail
+                activity?.let {
+                    DialogUtil.loadingAlert(it, isCancelable = false)
+                    Handler(Looper.getMainLooper()).postDelayed({
+                        DialogUtil.hideDialog()
+                        findNavController().navigate(
+                            DeviceFragmentDirections.actionDeviceFragmentToConnectingWifiFragment(
+                                false,
+                                args.roomDetail
+                            )
                         )
-                    )
-                }, 1000)
+                    }, 1000)
+                }
             } else {
                 redirectToWifiSetting()
             }

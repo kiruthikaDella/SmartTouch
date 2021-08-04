@@ -26,7 +26,7 @@ object TCPClientService {
     private var packetLength: Int? = null
     private var remainingByteArray = byteArrayOf()
     private var remainingStringData: String? = null
-
+    private var thread: Thread? = null
     /**
      * Enable / Disable print Log
      * @param boolean - true than enable else disable
@@ -62,7 +62,8 @@ object TCPClientService {
     ) {
         threadPolicyCall()
 
-        val thread = Thread {
+        thread = Thread {
+            Log.e(logTag, "Current Thread ${Thread.currentThread()}")
             try {
                 if (socket != null) {
                     if (socket?.isConnected!!) {
@@ -104,7 +105,7 @@ object TCPClientService {
                 connectCResultListener?.onConnectFailure(Utils.concatDateAndTime("Can't connect"))
             }
         }
-        thread.start()
+        thread?.start()
     }
 
     /**

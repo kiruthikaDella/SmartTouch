@@ -1,5 +1,6 @@
 package com.dellainfotech.smartTouch.common.utils
 
+import android.app.Activity
 import android.content.Context
 import android.content.pm.PackageManager
 import android.net.ConnectivityManager
@@ -8,7 +9,9 @@ import android.os.Build
 import android.text.Editable
 import android.util.Base64
 import android.util.Log
+import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
+import androidx.core.content.ContextCompat
 import com.appizona.yehiahd.fastsave.FastSave
 import com.dellainfotech.smartTouch.AppDelegate
 import com.facebook.appevents.internal.AppEventUtility.bytesToHex
@@ -137,4 +140,11 @@ object Utils {
         error = null
     }
 
+}
+
+fun Activity.hideSoftKeyboard() {
+    currentFocus?.let {
+        val inputMethodManager = ContextCompat.getSystemService(this, InputMethodManager::class.java)!!
+        inputMethodManager.hideSoftInputFromWindow(it.windowToken, 0)
+    }
 }

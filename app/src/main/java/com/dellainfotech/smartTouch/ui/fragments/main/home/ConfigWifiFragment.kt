@@ -99,12 +99,14 @@ class ConfigWifiFragment :
                 override fun onFailure(message: String) {
                     Log.e(logTag, "Send data failed $message")
 
-                    DialogUtil.deviceOfflineAlert(requireActivity(), "Device Disconnected", object: DialogShowListener {
-                        override fun onClick() {
-                            DialogUtil.hideDialog()
-                            findNavController().navigateUp()
-                        }
-                    })
+                    activity?.let {
+                        DialogUtil.deviceOfflineAlert(it, "Device Disconnected", object: DialogShowListener {
+                            override fun onClick() {
+                                DialogUtil.hideDialog()
+                                findNavController().navigateUp()
+                            }
+                        })
+                    }
                 }
             })
     }

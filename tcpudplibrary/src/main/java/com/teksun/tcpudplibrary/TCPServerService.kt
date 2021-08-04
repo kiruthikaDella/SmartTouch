@@ -79,14 +79,18 @@ object TCPServerService {
                     )
                     clientId++
 
-                    val ct1 = ClientHandlerNew(socket!!)
-                    ct1.start()
+                    socket?.let {
+                        val ct1 = ClientHandlerNew(it)
+                        ct1.start()
+                    }
                 }
             } catch (e: SocketException) {
                 printLog("connection failed Socket closed $e")
             } catch (e: IOException) {
                 printLog("Connect failed $e")
                 connectResultListener?.onFailure(Utils.concatDateAndTime("Can't connect"))
+            } catch (e: Exception) {
+                printLog("Exception $e")
             }
         }
         thread.start()
