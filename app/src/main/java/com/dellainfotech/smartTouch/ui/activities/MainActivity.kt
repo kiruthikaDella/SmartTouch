@@ -163,10 +163,12 @@ class MainActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
 
+
         hideSoftKeyboard()
     }
 
     override fun onBackPressed() {
+
         if (navController.currentDestination?.id == R.id.userManagementFragment || navController.currentDestination?.id == R.id.controlModeFragment || navController.currentDestination?.id == R.id.sceneFragment) {
             binding.ivHome.performClick()
         } else if (navController.currentDestination?.id == R.id.homeFragment) {

@@ -28,6 +28,7 @@ import com.teksun.tcpudplibrary.TCPClientService
 import com.teksun.tcpudplibrary.listener.CloseSocketListener
 import com.teksun.tcpudplibrary.listener.ConnectCResultListener
 import com.teksun.tcpudplibrary.listener.ReadWriteValueListener
+import org.json.JSONException
 import org.json.JSONObject
 
 class ConnectingWifiFragment :
@@ -259,37 +260,40 @@ class ConnectingWifiFragment :
 
     override fun onSuccess(message: String, value: String?) {
         Log.e(logTag, message + value)
+        try {
+            value?.let {
+                val jsonObject = JSONObject(value)
+                if (jsonObject.has("data")) {
+                    val secondJsonObject = JSONObject(jsonObject.getString("data"))
+                    if (secondJsonObject.has(Constants.GET_DEVICE_INFO)) {
+                        getDeviceStr = secondJsonObject.get(Constants.GET_DEVICE_INFO).toString()
 
-        value?.let {
-            val jsonObject = JSONObject(value)
-            if (jsonObject.has("data")) {
-                val secondJsonObject = JSONObject(jsonObject.getString("data"))
-                if (secondJsonObject.has(Constants.GET_DEVICE_INFO)) {
-                    getDeviceStr = secondJsonObject.get(Constants.GET_DEVICE_INFO).toString()
+                        Log.e(logTag, "Get Device info $getDeviceStr")
 
-                    Log.e(logTag, "Get Device info $getDeviceStr")
+                        runnable = Runnable {
 
-                    runnable = Runnable {
+                            //@TODO Registering
+                            context?.let {
+                                binding.layoutConfigWifiProcess.tvConfigStatus.text =
+                                    getString(R.string.text_registering)
 
-                        //@TODO Registering
-                        context?.let {
-                            binding.layoutConfigWifiProcess.tvConfigStatus.text =
-                                getString(R.string.text_registering)
+                                Glide.with(it)
+                                    .asGif()
+                                    .load(R.raw.ic_register)
+                                    .placeholder(R.drawable.ic_wifi_done)
+                                    .into(binding.layoutConfigWifiProcess.centerImage)
+                            }
 
-                            Glide.with(it)
-                                .asGif()
-                                .load(R.raw.ic_register)
-                                .placeholder(R.drawable.ic_wifi_done)
-                                .into(binding.layoutConfigWifiProcess.centerImage)
+                            if (TCPClientService.getSocket() != null) disconnectTCPClient()
+
+                            sendDataToCloud()
                         }
-
-                        if (TCPClientService.getSocket() != null) disconnectTCPClient()
-
-                        sendDataToCloud()
+                        handler?.postDelayed(runnable!!, 3000)
                     }
-                    handler?.postDelayed(runnable!!, 3000)
                 }
             }
+        } catch (e: JSONException) {
+            Log.e(logTag, "JSONException $e")
         }
     }
 
@@ -299,7 +303,7 @@ class ConnectingWifiFragment :
 
     private fun sendDataToCloud() {
         runnable = Runnable {
-            if (isInternetConnected) {
+            if (isInternetConnected ) {
                 getDeviceStr?.let {
                     val jsonObject = JSONObject(it)
                     viewModel.deviceRegister(
@@ -317,7 +321,7 @@ class ConnectingWifiFragment :
                 showOfflineAlert()
             }
         }
-        handler?.postDelayed(runnable!!, 2000)
+        handler?.postDelayed(runnable!!, 1500)
     }
 
     private fun showOfflineAlert() {

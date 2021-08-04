@@ -63,7 +63,6 @@ object TCPClientService {
         threadPolicyCall()
 
         thread = Thread {
-            Log.e(logTag, "Current Thread ${Thread.currentThread()}")
             try {
                 if (socket != null) {
                     if (socket?.isConnected!!) {

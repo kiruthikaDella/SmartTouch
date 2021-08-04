@@ -120,24 +120,34 @@ class CreateAccountFragment :
 
         if (fullName.isEmpty()) {
             binding.edtFullName.error = getString(R.string.error_text_full_name)
+            binding.edtFullName.requestFocus()
         } else if (fullName.length < 3) {
             binding.edtFullName.error = getString(R.string.error_text_full_name_length)
+            binding.edtFullName.requestFocus()
         } else if (userName.isEmpty()) {
             binding.edtUserName.error = getString(R.string.error_text_user_name)
+            binding.edtUserName.requestFocus()
         } else if (userName.length < 3) {
             binding.edtUserName.error = getString(R.string.error_text_user_name_length)
+            binding.edtUserName.requestFocus()
         } else if (phoneNumber.isEmpty()) {
             binding.edtPhoneNumber.error = getString(R.string.error_text_phone_number)
+            binding.edtPhoneNumber.requestFocus()
         } else if (email.isEmpty()) {
             binding.edtEmail.error = getString(R.string.error_text_email)
+            binding.edtEmail.requestFocus()
         } else if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
             binding.edtEmail.error = getString(R.string.error_text_valid_email)
+            binding.edtEmail.requestFocus()
         } else if (password.isEmpty()) {
             binding.edtPassword.error = getString(R.string.error_text_password)
+            binding.edtPassword.requestFocus()
         } else if (password.length < Constants.PASSWORD_LENGTH) {
             binding.edtPassword.error = getString(R.string.error_text_password_length)
+            binding.edtPassword.requestFocus()
         } else if (password != confirmPassword) {
             binding.edtConfirmPassword.error = getString(R.string.error_text_confirm_password)
+            binding.edtPassword.requestFocus()
         } else {
             activity?.let {
                 DialogUtil.loadingAlert(it)
