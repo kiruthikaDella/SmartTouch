@@ -26,6 +26,7 @@ import com.dellainfotech.smartTouch.common.utils.Constants
 import com.dellainfotech.smartTouch.common.utils.DialogUtil
 import com.dellainfotech.smartTouch.common.utils.Utils.clearError
 import com.dellainfotech.smartTouch.common.utils.Utils.toEditable
+import com.dellainfotech.smartTouch.common.utils.hideKeyboard
 import com.dellainfotech.smartTouch.databinding.FragmentDeviceBinding
 import com.dellainfotech.smartTouch.mqtt.NotifyManager
 import com.dellainfotech.smartTouch.ui.fragments.ModelBaseFragment
@@ -112,7 +113,9 @@ class DeviceFragment : ModelBaseFragment<HomeViewModel, FragmentDeviceBinding, H
 
     private fun clickEvents() {
 
-        binding.layoutSlidingUpPanel.setFadeOnClickListener { hidePanel() }
+        binding.layoutSlidingUpPanel.setFadeOnClickListener {
+            hidePanel()
+        }
 
         binding.layoutSlidingUpPanel.addPanelSlideListener(object :
             SlidingUpPanelLayout.PanelSlideListener {
@@ -130,6 +133,7 @@ class DeviceFragment : ModelBaseFragment<HomeViewModel, FragmentDeviceBinding, H
                     binding.layoutRoomPanel.edtSerialNumber.text = "".toEditable()
                     binding.layoutRoomPanel.edtPanelName.clearError()
                     binding.layoutRoomPanel.edtSerialNumber.clearError()
+                    hideKeyboard()
                 }
             }
         })
@@ -161,6 +165,7 @@ class DeviceFragment : ModelBaseFragment<HomeViewModel, FragmentDeviceBinding, H
 
                         override fun onNoClicked() {
                             DialogUtil.hideDialog()
+                            hideKeyboard()
                         }
 
                     }
@@ -309,12 +314,12 @@ class DeviceFragment : ModelBaseFragment<HomeViewModel, FragmentDeviceBinding, H
 
             when {
                 deviceName.isEmpty() -> {
-                    binding.layoutRoomPanel.edtPanelName.error =
-                        getString(R.string.error_text_panel_name)
+                    binding.layoutRoomPanel.edtPanelName.error = getString(R.string.error_text_panel_name)
+                    binding.layoutRoomPanel.edtPanelName.requestFocus()
                 }
                 serialNumber.isEmpty() -> {
-                    binding.layoutRoomPanel.edtSerialNumber.error =
-                        getString(R.string.error_text_serial_number)
+                    binding.layoutRoomPanel.edtSerialNumber.error = getString(R.string.error_text_serial_number)
+                    binding.layoutRoomPanel.edtSerialNumber.requestFocus()
                 }
                 else -> {
                     hidePanel()

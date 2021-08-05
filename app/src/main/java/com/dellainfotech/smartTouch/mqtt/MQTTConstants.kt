@@ -23,7 +23,8 @@ object MQTTConstants {
     const val DEVICE_FEATURE_ACK = "/smarttouch/$AWS_DEVICE_ID/features-settings-ack/" // Device Feature Settings ACK
     const val UPDATE_DEVICE_CUSTOMIZATION = "/smarttouch/$AWS_DEVICE_ID/customization/" // Update Device Customization Settings
     const val DEVICE_CUSTOMIZATION_ACK = "/smarttouch/$AWS_DEVICE_ID/customization-ack/" // Device Customization Settings ACK
-
+    const val RESTART_DEVICE = "/smarttouch/$AWS_DEVICE_ID/restart/"        //Restart device
+    const val RESTORE_FACTORY_SETTINGS = "/smarttouch/$AWS_DEVICE_ID/restore/"  //Restore factory settings
 
     //MQTT Parameter
     const val AWS_SWITCH_1 = "SW01"
@@ -70,5 +71,11 @@ object MQTTConstants {
     const val AWS_TEXT_SIZE = "tsz"   //Text Size
     const val AWS_CUSTOMIZATION_LOCK = "cl"   //Customization lock
     const val AWS_SWITCH_ICONS = "swicons"   //Customization lock
+
+    //Restart
+    const val AWS_RESTART_DEVICE = "rd"
+
+    //Factory Reset Settings
+    const val AWS_FACTORY_RESET = "rsf"
 
 }
