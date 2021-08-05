@@ -55,9 +55,11 @@ class AddUserFragment : ModelBaseFragment<UserManagementViewModel, FragmentAddUs
             when {
                 userName.isEmpty() -> {
                     binding.edtFullName.error = "Please enter name."
+                    binding.edtFullName.requestFocus()
                 }
                 email.isEmpty() -> {
                     binding.edtEmailAddress.error = "Please enter email."
+                    binding.edtEmailAddress.requestFocus()
                 }
                 else -> {
                     activity?.let {

@@ -19,11 +19,13 @@ import com.dellainfotech.smartTouch.common.utils.Constants
 import com.dellainfotech.smartTouch.common.utils.DialogUtil
 import com.dellainfotech.smartTouch.common.utils.Utils.toBoolean
 import com.dellainfotech.smartTouch.common.utils.Utils.toInt
-import com.dellainfotech.smartTouch.common.utils.Utils.toReverseInt
 import com.dellainfotech.smartTouch.databinding.FragmentDeviceSettingsBinding
+import com.dellainfotech.smartTouch.mqtt.AwsMqttSingleton
+import com.dellainfotech.smartTouch.mqtt.MQTTConstants
 import com.dellainfotech.smartTouch.mqtt.NotifyManager
 import com.dellainfotech.smartTouch.ui.fragments.ModelBaseFragment
 import com.dellainfotech.smartTouch.ui.viewmodel.HomeViewModel
+import org.json.JSONObject
 
 /**
  * Created by Jignesh Dangar on 27-04-2021.
@@ -46,7 +48,18 @@ class DeviceSettingsFragment :
                     it,
                     getString(R.string.dialog_title_restart_device),
                     getString(R.string.text_ok),
-                    getString(R.string.text_cancel)
+                    getString(R.string.text_cancel),
+                    object : DialogAskListener {
+                        override fun onYesClicked() {
+                            DialogUtil.hideDialog()
+                            publishTopic(MQTTConstants.RESTART_DEVICE.replace(MQTTConstants.AWS_DEVICE_ID, args.deviceDetail.deviceSerialNo), MQTTConstants.AWS_RESTART_DEVICE)
+                        }
+
+                        override fun onNoClicked() {
+                            DialogUtil.hideDialog()
+                        }
+
+                    }
                 )
             }
         }
@@ -65,6 +78,7 @@ class DeviceSettingsFragment :
                         }
 
                         override fun onNoClicked() {
+                            DialogUtil.hideDialog()
                         }
 
                     }
@@ -140,6 +154,16 @@ class DeviceSettingsFragment :
         apiCall()
     }
 
+    private fun publishTopic(topicName: String, stringIndex: String) {
+        val payload = JSONObject()
+        payload.put(stringIndex, 1)
+
+        if (AwsMqttSingleton.isConnected()) {
+            Log.e(logTag, " publish settings topic $topicName payload $payload")
+            AwsMqttSingleton.publish(topicName, payload.toString())
+        }
+    }
+
     override fun getViewModel(): Class<HomeViewModel> = HomeViewModel::class.java
 
     override fun getFragmentBinding(
@@ -205,6 +229,7 @@ class DeviceSettingsFragment :
                 is Resource.Success -> {
                     DialogUtil.hideDialog()
                     if (response.values.status && response.values.code == Constants.API_SUCCESS_CODE){
+                        publishTopic(MQTTConstants.RESTORE_FACTORY_SETTINGS.replace(MQTTConstants.AWS_DEVICE_ID, args.deviceDetail.deviceSerialNo), MQTTConstants.AWS_FACTORY_RESET)
                         activity?.let {
                             DialogUtil.deviceOfflineAlert(it, response.values.message, object : DialogShowListener {
                                 override fun onClick() {

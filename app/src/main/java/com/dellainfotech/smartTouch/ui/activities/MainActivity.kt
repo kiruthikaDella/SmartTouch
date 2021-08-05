@@ -6,7 +6,6 @@ import android.os.Looper
 import android.util.Log
 import android.view.View
 import android.widget.AdapterView
-import android.widget.Spinner
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
@@ -28,6 +27,7 @@ import com.dellainfotech.smartTouch.common.utils.Utils
 import com.dellainfotech.smartTouch.common.utils.Utils.clearError
 import com.dellainfotech.smartTouch.common.utils.Utils.isControlModePin
 import com.dellainfotech.smartTouch.common.utils.Utils.toEditable
+import com.dellainfotech.smartTouch.common.utils.hideSoftKeyboard
 import com.dellainfotech.smartTouch.databinding.ActivityMainBinding
 import com.dellainfotech.smartTouch.mqtt.NetworkConnectionLiveData
 import com.dellainfotech.smartTouch.mqtt.NotifyManager
@@ -35,7 +35,6 @@ import com.dellainfotech.smartTouch.ui.fragments.main.home.HomeFragmentDirection
 import com.dellainfotech.smartTouch.ui.viewmodel.HomeViewModel
 import com.dellainfotech.smartTouch.ui.viewmodel.ViewModelFactory
 import com.sothree.slidinguppanel.SlidingUpPanelLayout
-import java.lang.reflect.Field
 
 
 /**
@@ -115,6 +114,7 @@ class MainActivity : AppCompatActivity() {
                 }
                 roomName.isBlank() -> {
                     binding.layoutAddRoom.edtRoomName.error = "Please enter Room Name"
+                    binding.layoutAddRoom.edtRoomName.requestFocus()
                 }
                 else -> {
                     hidePanel()
@@ -139,9 +139,11 @@ class MainActivity : AppCompatActivity() {
                 previousState: SlidingUpPanelLayout.PanelState?,
                 newState: SlidingUpPanelLayout.PanelState?
             ) {
+                Log.e(logTag, "newState $newState")
                 if (newState == SlidingUpPanelLayout.PanelState.COLLAPSED) {
                     binding.layoutAddRoom.edtRoomName.text = "".toEditable()
                     binding.layoutAddRoom.edtRoomName.clearError()
+                    hideSoftKeyboard()
                 }
             }
         })
