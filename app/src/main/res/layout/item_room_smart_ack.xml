@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_marginStart="@dimen/screen_start_margin"
     android:layout_marginTop="@dimen/_10sdp"
     android:layout_marginEnd="@dimen/screen_end_margin"
@@ -58,9 +58,9 @@
                         android:id="@+id/img_panel_edit"
                         android:layout_width="@dimen/_30sdp"
                         android:layout_height="match_parent"
-                        android:padding="@dimen/_8sdp"
                         android:layout_alignParentEnd="true"
                         android:layout_centerVertical="true"
+                        android:padding="@dimen/_8sdp"
                         android:src="@drawable/ic_panel_edit"
                         app:tint="@color/theme_color" />
 
@@ -127,7 +127,6 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="start"
                     android:fontFamily="@font/roboto_medium"
-                    android:maxLength="8"
                     android:singleLine="true"
                     android:textColor="@color/gull_gray"
                     android:textSize="@dimen/_11ssp"
@@ -195,7 +194,6 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="start"
                     android:fontFamily="@font/roboto_medium"
-                    android:maxLength="8"
                     android:singleLine="true"
                     android:textColor="@color/gull_gray"
                     android:textSize="@dimen/_11ssp"
@@ -264,7 +262,6 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="start"
                     android:fontFamily="@font/roboto_medium"
-                    android:maxLength="8"
                     android:singleLine="true"
                     android:text="@string/text_switch_15_amp"
                     android:textColor="@color/gull_gray"
@@ -334,7 +331,6 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="start"
                     android:fontFamily="@font/roboto_medium"
-                    android:maxLength="8"
                     android:singleLine="true"
                     android:text="@string/text_switch_dimmer"
                     android:textColor="@color/gull_gray"
@@ -400,7 +396,6 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="start"
                     android:fontFamily="@font/roboto_medium"
-                    android:maxLength="8"
                     android:singleLine="true"
                     android:text="@string/text_switch_fan_speed"
                     android:textColor="@color/gull_gray"
@@ -473,47 +468,7 @@
                     <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/_20sdp"
-                        android:layout_marginBottom="@dimen/_20sdp"
                         android:orientation="vertical">
-
-                        <TextView
-                            android:id="@+id/tv_customization"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical"
-                            android:layout_marginStart="@dimen/_15sdp"
-                            android:layout_marginEnd="@dimen/_15sdp"
-                            android:background="@drawable/device_menu_bottom_line"
-                            android:drawablePadding="@dimen/_20sdp"
-                            android:fontFamily="@font/roboto_medium"
-                            android:paddingStart="@dimen/_10sdp"
-                            android:paddingEnd="@dimen/_10sdp"
-                            android:paddingBottom="@dimen/_10sdp"
-                            android:text="@string/text_customization"
-                            android:textColor="@color/white"
-                            android:textSize="@dimen/_12ssp"
-                            app:drawableStartCompat="@drawable/ic_panel_menu_customization" />
-
-                        <TextView
-                            android:id="@+id/tv_features"
-                            android:layout_width="fill_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical"
-                            android:layout_marginStart="@dimen/_15sdp"
-                            android:layout_marginTop="@dimen/_10sdp"
-                            android:layout_marginEnd="@dimen/_15sdp"
-                            android:background="@drawable/device_menu_bottom_line"
-                            android:drawablePadding="@dimen/_20sdp"
-                            android:fontFamily="@font/roboto_medium"
-                            android:paddingStart="@dimen/_10sdp"
-                            android:paddingEnd="@dimen/_10sdp"
-                            android:paddingBottom="@dimen/_10sdp"
-                            android:text="@string/text_features"
-                            android:textColor="@color/white"
-                            android:textSize="@dimen/_12ssp"
-                            app:drawableStartCompat="@drawable/ic_panel_menu_features" />
-
 
                         <TextView
                             android:id="@+id/tv_device_settings"

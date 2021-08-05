@@ -6,8 +6,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.LinearLayout
 import android.widget.RelativeLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
@@ -78,7 +76,8 @@ class ControlModeDeviceAdapter(
                 setFourSwitchViewHolder(fourPanelViewHolder, data)
             }
             smartAckPanelView -> {
-                val smartAckPanelViewHolder: SmartAckPanelViewHolder = holder as SmartAckPanelViewHolder
+                val smartAckPanelViewHolder: SmartAckPanelViewHolder =
+                    holder as SmartAckPanelViewHolder
                 setSmartAckViewHolder(smartAckPanelViewHolder, data)
             }
         }
@@ -712,14 +711,21 @@ class ControlModeDeviceAdapter(
                                             MQTTConstants.AWS_USB_C
                                         ) //USB C
                                 } else {
-                                    deviceData?.switchData?.get(4)?.switchStatus =
-                                        jsonObject.getInt(
-                                            MQTTConstants.AWS_DIMMER
-                                        ) //Dimmer
-                                    deviceData?.switchData?.get(5)?.switchStatus =
-                                        jsonObject.getInt(
-                                            MQTTConstants.AWS_USB_C
-                                        ) //USB C
+                                    if (jsonObject.has(MQTTConstants.AWS_USB_C)) {
+                                        deviceData?.switchData?.get(4)?.switchStatus =
+                                            jsonObject.getInt(
+                                                MQTTConstants.AWS_DIMMER
+                                            ) //Dimmer
+                                        deviceData?.switchData?.get(5)?.switchStatus =
+                                            jsonObject.getInt(
+                                                MQTTConstants.AWS_USB_C
+                                            ) //USB C
+                                    } else {
+                                        deviceData?.switchData?.get(5)?.switchStatus =
+                                            jsonObject.getInt(
+                                                MQTTConstants.AWS_DIMMER
+                                            ) //Dimmer
+                                    }
                                 }
                             }
                         }

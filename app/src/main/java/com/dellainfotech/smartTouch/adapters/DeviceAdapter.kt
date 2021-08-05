@@ -221,8 +221,6 @@ class DeviceAdapter(
         val constraintLayout = itemView.findViewById(R.id.relative_main) as RelativeLayout
         val relativeLayout = itemView.findViewById(R.id.relative_layout) as RelativeLayout
 
-        val tvCustomization = itemView.findViewById(R.id.tv_customization) as TextView
-        val tvFeature = itemView.findViewById(R.id.tv_features) as TextView
         val tvDeviceSettings = itemView.findViewById(R.id.tv_device_settings) as TextView
 
         val tvSwitchNameOne = itemView.findViewById(R.id.tv_switch_one_name) as TextView
@@ -805,14 +803,6 @@ class DeviceAdapter(
                 updateDeviceNameClickListener?.onItemClick(device, adapterPosition)
             }
 
-            tvCustomization.setOnClickListener {
-                customizationClickListener?.onItemClick(device)
-            }
-
-            tvFeature.setOnClickListener {
-                featuresClickListener?.onItemClick(device)
-            }
-
             tvDeviceSettings.setOnClickListener {
                 settingsClickListener?.onItemClick(device)
             }
@@ -844,8 +834,7 @@ class DeviceAdapter(
                 publish(
                     device.deviceSerialNo,
                     MQTTConstants.AWS_SWITCH_1,
-                    switchOne.isChecked.toInt().toString(),
-                    tvSwitchNameOne.text.toString()
+                    switchOne.isChecked.toInt().toString()
                 )
             }
 
@@ -853,8 +842,7 @@ class DeviceAdapter(
                 publish(
                     device.deviceSerialNo,
                     MQTTConstants.AWS_SWITCH_2,
-                    switchTwo.isChecked.toInt().toString(),
-                    tvSwitchNameTwo.text.toString()
+                    switchTwo.isChecked.toInt().toString()
                 )
             }
 
@@ -862,8 +850,7 @@ class DeviceAdapter(
                 publish(
                     device.deviceSerialNo,
                     MQTTConstants.AWS_SWITCH_3,
-                    switchThree.isChecked.toInt().toString(),
-                    tvSwitchNameThree.text.toString()
+                    switchThree.isChecked.toInt().toString()
                 )
             }
 
@@ -871,8 +858,7 @@ class DeviceAdapter(
                 publish(
                     device.deviceSerialNo,
                     MQTTConstants.AWS_SWITCH_4,
-                    switchFour.isChecked.toInt().toString(),
-                    tvSwitchNameFour.text.toString()
+                    switchFour.isChecked.toInt().toString()
                 )
             }
 
@@ -984,14 +970,21 @@ class DeviceAdapter(
                                             MQTTConstants.AWS_USB_C
                                         ) //USB C
                                 } else {
-                                    deviceData?.switchData?.get(4)?.switchStatus =
-                                        jsonObject.getInt(
-                                            MQTTConstants.AWS_DIMMER
-                                        ) //Dimmer
-                                    deviceData?.switchData?.get(5)?.switchStatus =
-                                        jsonObject.getInt(
-                                            MQTTConstants.AWS_USB_C
-                                        ) //USB C
+                                    if (jsonObject.has(MQTTConstants.AWS_USB_C)){
+                                        deviceData?.switchData?.get(4)?.switchStatus =
+                                            jsonObject.getInt(
+                                                MQTTConstants.AWS_DIMMER
+                                            ) //Dimmer
+                                        deviceData?.switchData?.get(5)?.switchStatus =
+                                            jsonObject.getInt(
+                                                MQTTConstants.AWS_USB_C
+                                            ) //USB C
+                                    }else {
+                                        deviceData?.switchData?.get(5)?.switchStatus =
+                                            jsonObject.getInt(
+                                                MQTTConstants.AWS_DIMMER
+                                            ) //Dimmer
+                                    }
                                 }
                             }
                         }
