@@ -14,5 +14,7 @@ data class BodyRegisterDevice(
     @SerializedName("vPassword")
     val password: String,
     @SerializedName("vMacImei")
-    val macImei: String
+    val macImei: String,
+    @SerializedName("vProductGroup")
+    val productGroup: String
 )

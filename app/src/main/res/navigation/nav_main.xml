@@ -222,6 +222,9 @@
         <argument
             android:name="roomDetail"
             app:argType="com.dellainfotech.smartTouch.api.model.GetRoomData" />
+        <argument
+            android:name="isSmarTack"
+            app:argType="boolean" />
     </fragment>
     <fragment
         android:id="@+id/connectingWifiFragment"
@@ -243,5 +246,8 @@
             app:destination="@id/deviceFragment"
             app:popUpTo="@id/deviceFragment"
             app:popUpToInclusive="true" />
+        <argument
+            android:name="isSmarTack"
+            app:argType="boolean" />
     </fragment>
 </navigation>

@@ -180,7 +180,7 @@ class ConnectingWifiFragment :
                 if (isConnection!!) {
                     findNavController().navigate(
                         ConnectingWifiFragmentDirections.actionConnectingWifiFragmentToConfigWifiFragment(
-                            args.roomDetail
+                            args.roomDetail, args.isSmarTack
                         )
                     )
                 }
@@ -302,8 +302,14 @@ class ConnectingWifiFragment :
     }
 
     private fun sendDataToCloud() {
+        val productGroup = if (args.isSmarTack) {
+            Constants.PRODUCT_SMART_ACK
+        } else {
+            Constants.PRODUCT_SMART_AP
+        }
+        Log.e("Binjal", "productGroup $productGroup")
         runnable = Runnable {
-            if (isInternetConnected ) {
+            if (isInternetConnected) {
                 getDeviceStr?.let {
                     val jsonObject = JSONObject(it)
                     viewModel.deviceRegister(
@@ -313,7 +319,8 @@ class ConnectingWifiFragment :
                             deviceName = jsonObject.get("device_name").toString(),
                             wifiSSID = jsonObject.get("wifi_ssid").toString(),
                             password = jsonObject.get("password").toString(),
-                            macImei = jsonObject.get("mac_imei").toString()
+                            macImei = jsonObject.get("mac_imei").toString(),
+                            productGroup = productGroup
                         )
                     )
                 }
@@ -358,7 +365,7 @@ class ConnectingWifiFragment :
             if (it) {
                 findNavController().navigate(
                     ConnectingWifiFragmentDirections.actionConnectingWifiFragmentToConfigWifiFragment(
-                        args.roomDetail
+                        args.roomDetail, args.isSmarTack
                     )
                 )
             } else {

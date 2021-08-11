@@ -73,7 +73,8 @@ class DeviceFragment : ModelBaseFragment<HomeViewModel, FragmentDeviceBinding, H
     private var deviceData: GetDeviceData? = null
     private var roomData: GetRoomData? = null
     private lateinit var deviceTypeAdapter: SpinnerAdapter
-    private var isSelectedSmartAck = false
+    private var isSelectedSmarTouch = true
+    private var isSelectedSmartAck: Boolean ?= null
 
     private val wifiRegister =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
@@ -91,7 +92,7 @@ class DeviceFragment : ModelBaseFragment<HomeViewModel, FragmentDeviceBinding, H
         WifiUtils.init(context)
 
         val deviceTypeList =
-            arrayOf(getString(R.string.text_smart_touch), getString(R.string.text_smart_tack))
+            arrayOf(getString(R.string.text_smart_touch), getString(R.string.text_smart_tack), getString(R.string.text_smart_tap))
 
         deviceList.clear()
         activity?.let {
@@ -102,12 +103,12 @@ class DeviceFragment : ModelBaseFragment<HomeViewModel, FragmentDeviceBinding, H
         binding.tvTitle.text = args.roomDetail.roomName
 
         NotifyManager.internetInfo.observe(viewLifecycleOwner, { isConnected ->
-            Log.e(logTag, " isConnected $isConnected isSelectedSmartAck $isSelectedSmartAck")
+            Log.e(logTag, " isConnected $isConnected isSelectedSmartAck $isSelectedSmarTouch")
             if (isConnected) {
                 showLoading()
                 viewModel.getDevice(args.roomDetail.id)
             } else {
-                if (!isSelectedSmartAck) {
+                if (isSelectedSmarTouch) {
                     activity?.let {
                         DialogUtil.deviceOfflineAlert(
                             it,
@@ -145,7 +146,7 @@ class DeviceFragment : ModelBaseFragment<HomeViewModel, FragmentDeviceBinding, H
 
     override fun onDestroyView() {
         super.onDestroyView()
-        isSelectedSmartAck = false
+        isSelectedSmarTouch = true
         viewModel.updateRoomResponse.postValue(null)
         viewModel.addDeviceResponse.postValue(null)
         viewModel.updateDeviceNameResponse.postValue(null)
@@ -399,8 +400,13 @@ class DeviceFragment : ModelBaseFragment<HomeViewModel, FragmentDeviceBinding, H
                 showPanel()
             } else if (binding.layoutSelectDevice.spinnerDeviceType.selectedItem == getString(R.string.text_smart_tack)) {
                 hidePanel()
+                isSelectedSmarTouch = false
                 isSelectedSmartAck = true
-
+                checkPermission()
+            } else if (binding.layoutSelectDevice.spinnerDeviceType.selectedItem == getString(R.string.text_smart_tap)) {
+                hidePanel()
+                isSelectedSmarTouch = false
+                isSelectedSmartAck = false
                 checkPermission()
             }
         }
@@ -694,12 +700,14 @@ class DeviceFragment : ModelBaseFragment<HomeViewModel, FragmentDeviceBinding, H
                     DialogUtil.loadingAlert(it, isCancelable = false)
                     Handler(Looper.getMainLooper()).postDelayed({
                         DialogUtil.hideDialog()
-                        findNavController().navigate(
-                            DeviceFragmentDirections.actionDeviceFragmentToConnectingWifiFragment(
-                                false,
-                                args.roomDetail
+                        isSelectedSmartAck?.let { isSmarTack ->
+                            findNavController().navigate(
+                                DeviceFragmentDirections.actionDeviceFragmentToConnectingWifiFragment(
+                                    false,
+                                    args.roomDetail, isSmarTack
+                                )
                             )
-                        )
+                        }
                     }, 1000)
                 }
             } else {

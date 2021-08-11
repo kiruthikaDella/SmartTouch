@@ -93,7 +93,7 @@ class ConfigWifiFragment :
             TCPClientService.sendDefaultValue(configData, object : ReadWriteValueListener<String> {
                 override fun onSuccess(message: String, value: String?) {
                     Log.e(logTag, "$message $value")
-                    findNavController().navigate(ConfigWifiFragmentDirections.actionConfigWifiFragmentToConnectingWifiFragment(true, args.roomDetail))
+                    findNavController().navigate(ConfigWifiFragmentDirections.actionConfigWifiFragmentToConnectingWifiFragment(true, args.roomDetail, args.isSmarTack))
                 }
 
                 override fun onFailure(message: String) {
