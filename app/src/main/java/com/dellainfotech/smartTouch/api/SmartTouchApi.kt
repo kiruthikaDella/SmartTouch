@@ -43,7 +43,7 @@ interface SmartTouchApi {
         const val API_GET_DEVICE_DATA = "device/device-data/{id}"
         const val API_GET_DEVICE_CUSTOMIZATION_SETTINGS = "device/device-customization-setting/{id}"
         const val API_GET_DEVICE_FEATURES_SETTINGS = "device/device-feature-setting/{id}"
-        const val API_DELETE_DEVICE = "device/device/{room_id}/{device_id}"
+        const val API_DELETE_DEVICE = "device/device/{vProductGroup}/{room_id}/{device_id}"
         const val API_UPDATE_DEVICE_NAME = "device/device-name"
         const val API_UPDATE_CUSTOMIZATION_LOCK = "device/customization-lock"
         const val API_UPDATE_SWITCH_NAME = "device/switch"
@@ -77,8 +77,8 @@ interface SmartTouchApi {
         const val API_POST_OWNER_TRANSFER = "owner/owner-transfer"
         const val API_CANCEL_OWNER_TRANSFER = "owner/owner-transfer-cancel/{id}"
 
-        //Device register [SmarTack]
-        const val API_DEVICE_REGISTER = "device-tap/add"
+        //Device register [SmarTack and SmarTap]
+        const val API_DEVICE_REGISTER = "device-tap-tack/add"
     }
 
     //
@@ -248,6 +248,7 @@ interface SmartTouchApi {
     @DELETE(API_DELETE_DEVICE)
     suspend fun deleteDevice(
         @Header("access_key") access_key: String,
+        @Path("vProductGroup") productGroup: String,
         @Path("room_id") roomId: String,
         @Path("device_id") deviceId: String
     ): CommonResponse
@@ -379,7 +380,7 @@ interface SmartTouchApi {
     //endregion
     //
 
-    //SmarTack
+    //SmarTack and SmarTap
     @POST(API_DEVICE_REGISTER)
    suspend fun deviceRegister(
        @Header("access_key") access_key: String,

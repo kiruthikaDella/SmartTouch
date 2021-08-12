@@ -72,8 +72,8 @@ class HomeRepository @Inject constructor(
     suspend fun getDeviceFeaturesSettings(deviceId: String) =
         safeApiCall { smartTouchApi.getDeviceFeatureSettings(getAccessKey(), deviceId) }
 
-    suspend fun deleteDevice(roomId: String, deviceId: String) =
-        safeApiCall { smartTouchApi.deleteDevice(getAccessKey(), roomId, deviceId) }
+    suspend fun deleteDevice(productGroup: String, roomId: String, deviceId: String) =
+        safeApiCall { smartTouchApi.deleteDevice(getAccessKey(), productGroup, roomId, deviceId) }
 
     suspend fun updateDeviceName(bodyUpdateDeviceName: BodyUpdateDeviceName) =
         safeApiCall { smartTouchApi.updateDeviceName(getAccessKey(), bodyUpdateDeviceName) }

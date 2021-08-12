@@ -242,9 +242,9 @@ class HomeViewModel @ViewModelInject constructor(
         _getDeviceFeatureSettingsResponse.value = homeRepository.getDeviceFeaturesSettings(deviceId)
     }
 
-    fun deleteDevice(roomId: String,deviceId: String) = viewModelScope.launch {
+    fun deleteDevice(productGroup: String, roomId: String,deviceId: String) = viewModelScope.launch {
         _deleteDeviceResponse.value = Resource.Loading
-        _deleteDeviceResponse.value = homeRepository.deleteDevice(roomId,deviceId)
+        _deleteDeviceResponse.value = homeRepository.deleteDevice(productGroup, roomId, deviceId)
     }
 
     fun updateDeviceName(bodyUpdateDeviceName: BodyUpdateDeviceName) = viewModelScope.launch {
