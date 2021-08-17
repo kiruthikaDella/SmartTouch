@@ -53,6 +53,7 @@ class DeviceAdapter(
     private val eightPanelView = 1
     private val fourPanelView = 2
     private val smartAckPanelView = 3
+    private val smartApPanelView = 4
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return when (viewType) {
@@ -66,10 +67,15 @@ class DeviceAdapter(
                     .inflate(R.layout.item_room_four_panel, parent, false)
                 FourPanelViewHolder(v)
             }
-            else -> {
+            smartAckPanelView -> {
                 val v = LayoutInflater.from(parent.context)
                     .inflate(R.layout.item_room_smart_ack, parent, false)
                 SmartAckPanelViewHolder(v)
+            }
+            else -> {
+                val v = LayoutInflater.from(parent.context)
+                    .inflate(R.layout.item_room_smart_ack, parent, false)
+                SmartApPanelViewHolder(v)
             }
         }
     }
@@ -92,8 +98,14 @@ class DeviceAdapter(
                 setFourSwitchViewHolder(fourPanelViewHolder, data)
             }
             smartAckPanelView -> {
-                val smartAckPanelViewHolder: SmartAckPanelViewHolder = holder as SmartAckPanelViewHolder
+                val smartAckPanelViewHolder: SmartAckPanelViewHolder =
+                    holder as SmartAckPanelViewHolder
                 setSmartAckViewHolder(smartAckPanelViewHolder, data)
+            }
+            smartApPanelView -> {
+                val smartApPanelViewHolder: SmartApPanelViewHolder =
+                    holder as SmartApPanelViewHolder
+                setSmartApViewHolder(smartApPanelViewHolder, data)
             }
         }
 
@@ -110,8 +122,10 @@ class DeviceAdapter(
             } else {
                 fourPanelView
             }
-        } else {
+        } else if (deviceList[position].productGroup == Constants.PRODUCT_SMART_ACK) {
             smartAckPanelView
+        } else {
+            smartApPanelView
         }
     }
 
@@ -214,6 +228,43 @@ class DeviceAdapter(
     }
 
     inner class SmartAckPanelViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        val imgBtnPanelMenu = itemView.findViewById(R.id.img_panel_menu) as ImageView
+        val imgBtnPanelEdit = itemView.findViewById(R.id.img_panel_edit) as ImageView
+        val tvPanelName = itemView.findViewById(R.id.tv_panel_name) as TextView
+        val linearPanelMenu = itemView.findViewById(R.id.linear_panel_menu) as LinearLayout
+        val constraintLayout = itemView.findViewById(R.id.relative_main) as RelativeLayout
+        val relativeLayout = itemView.findViewById(R.id.relative_layout) as RelativeLayout
+
+        val tvDeviceSettings = itemView.findViewById(R.id.tv_device_settings) as TextView
+
+        val tvSwitchNameOne = itemView.findViewById(R.id.tv_switch_one_name) as TextView
+        val tvSwitchNameTwo = itemView.findViewById(R.id.tv_switch_two_name) as TextView
+        val tvSwitchNameThree = itemView.findViewById(R.id.tv_switch_three_name) as TextView
+        val tvSwitchNameFour = itemView.findViewById(R.id.tv_switch_four_name) as TextView
+        val tvSwitchNameFive = itemView.findViewById(R.id.tv_switch_five_name) as TextView
+
+        val tvSwitchNameOneDesc = itemView.findViewById(R.id.tv_switch_one_type) as TextView
+        val tvSwitchNameTwoDesc = itemView.findViewById(R.id.tv_switch_two_type) as TextView
+        val tvSwitchNameThreeDesc = itemView.findViewById(R.id.tv_switch_three_type) as TextView
+        val tvSwitchNameFourDesc = itemView.findViewById(R.id.tv_switch_four_type) as TextView
+        val tvSwitchNameFiveDesc = itemView.findViewById(R.id.tv_switch_five_type) as TextView
+
+        val tvSwitchOneEdit = itemView.findViewById(R.id.tv_switch_one_edit) as TextView
+        val tvSwitchTwoEdit = itemView.findViewById(R.id.tv_switch_two_edit) as TextView
+        val tvSwitchThreeEdit = itemView.findViewById(R.id.tv_switch_three_edit) as TextView
+        val tvSwitchFourEdit = itemView.findViewById(R.id.tv_switch_four_edit) as TextView
+
+        val switchOne = itemView.findViewById(R.id.switch_one) as SwitchMaterial
+        val switchTwo = itemView.findViewById(R.id.switch_two) as SwitchMaterial
+        val switchThree = itemView.findViewById(R.id.switch_three) as SwitchMaterial
+        val switchFour = itemView.findViewById(R.id.switch_four) as SwitchMaterial
+        val switchFive = itemView.findViewById(R.id.switch_five) as SwitchMaterial
+
+        val seekBar = itemView.findViewById(R.id.seek_bar) as IndicatorSeekBar
+
+    }
+
+    inner class SmartApPanelViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val imgBtnPanelMenu = itemView.findViewById(R.id.img_panel_menu) as ImageView
         val imgBtnPanelEdit = itemView.findViewById(R.id.img_panel_edit) as ImageView
         val tvPanelName = itemView.findViewById(R.id.tv_panel_name) as TextView
@@ -892,6 +943,182 @@ class DeviceAdapter(
         }
     }
 
+    private fun setSmartApViewHolder(holder: SmartApPanelViewHolder, device: GetDeviceData) {
+        holder.apply {
+
+            try {
+
+                val wrapSpec = View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED)
+                constraintLayout.measure(wrapSpec, wrapSpec)
+
+                val relativeParams = relativeLayout.layoutParams as RelativeLayout.LayoutParams
+
+                relativeParams.height = constraintLayout.measuredHeight
+                relativeParams.width = RelativeLayout.LayoutParams.MATCH_PARENT
+
+                relativeLayout.layoutParams = relativeParams
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+
+            tvPanelName.text = device.deviceName
+            if (device.isDeviceAvailable == 0) {
+                relativeLayout.visibility = View.VISIBLE
+            } else {
+                relativeLayout.visibility = View.GONE
+            }
+
+            device.switchData?.let { switchData ->
+                for (value in switchData) {
+                    when (value.index) {
+                        "1" -> {
+                            val switchName = value.name
+                            tvSwitchNameOne.text = switchName
+                            switchOne.isChecked = value.switchStatus.toBoolean()
+                            value.desc?.let {
+                                tvSwitchNameOneDesc.text = it
+                            }
+                        }
+                        "2" -> {
+                            val switchName = value.name
+                            tvSwitchNameTwo.text = switchName
+                            switchTwo.isChecked = value.switchStatus.toBoolean()
+                            value.desc?.let {
+                                tvSwitchNameTwoDesc.text = it
+                            }
+                        }
+                        "3" -> {
+                            val switchName = value.name
+                            tvSwitchNameThree.text = switchName
+                            switchThree.isChecked = value.switchStatus.toBoolean()
+                            value.desc?.let {
+                                tvSwitchNameThreeDesc.text = it
+                            }
+                        }
+                        "4" -> {
+                            val switchName = value.name
+                            tvSwitchNameFour.text = switchName
+                            switchFour.isChecked = value.switchStatus.toBoolean()
+                            value.desc?.let {
+                                tvSwitchNameFourDesc.text = it
+                            }
+                        }
+                        "5" -> {
+                            val switchName = value.name
+                            tvSwitchNameFive.text = switchName
+                            switchFive.isChecked = value.switchStatus.toBoolean()
+                            value.desc?.let {
+                                tvSwitchNameFiveDesc.text = it
+                            }
+                        }
+                        "6" -> {
+                            seekBar.setProgress(value.switchStatus.toFloat())
+                        }
+                    }
+                }
+            }
+
+            imgBtnPanelMenu.setOnClickListener {
+                if (linearPanelMenu.isVisible) {
+                    linearPanelMenu.visibility = View.GONE
+                } else {
+                    linearPanelMenu.visibility = View.VISIBLE
+                }
+            }
+
+            imgBtnPanelEdit.setOnClickListener {
+                updateDeviceNameClickListener?.onItemClick(device, adapterPosition)
+            }
+
+            tvDeviceSettings.setOnClickListener {
+                settingsClickListener?.onItemClick(device)
+            }
+
+            tvSwitchOneEdit.setOnClickListener {
+                device.switchData?.let { switchData ->
+                    editSwitchNameClickListener?.onItemClick(device, adapterPosition, switchData[0])
+                }
+
+            }
+
+            tvSwitchTwoEdit.setOnClickListener {
+                device.switchData?.let { switchData ->
+                    editSwitchNameClickListener?.onItemClick(device, adapterPosition, switchData[1])
+                }
+            }
+            tvSwitchThreeEdit.setOnClickListener {
+                device.switchData?.let { switchData ->
+                    editSwitchNameClickListener?.onItemClick(device, adapterPosition, switchData[2])
+                }
+            }
+            tvSwitchFourEdit.setOnClickListener {
+                device.switchData?.let { switchData ->
+                    editSwitchNameClickListener?.onItemClick(device, adapterPosition, switchData[3])
+                }
+            }
+
+            switchOne.setOnClickListener {
+                publish(
+                    device.deviceSerialNo,
+                    MQTTConstants.AWS_SWITCH_1,
+                    switchOne.isChecked.toInt().toString()
+                )
+            }
+
+            switchTwo.setOnClickListener {
+                publish(
+                    device.deviceSerialNo,
+                    MQTTConstants.AWS_SWITCH_2,
+                    switchTwo.isChecked.toInt().toString()
+                )
+            }
+
+            switchThree.setOnClickListener {
+                publish(
+                    device.deviceSerialNo,
+                    MQTTConstants.AWS_SWITCH_3,
+                    switchThree.isChecked.toInt().toString()
+                )
+            }
+
+            switchFour.setOnClickListener {
+                publish(
+                    device.deviceSerialNo,
+                    MQTTConstants.AWS_SWITCH_4,
+                    switchFour.isChecked.toInt().toString()
+                )
+            }
+
+            /*switchFive.setOnClickListener {
+                publish(
+                    device.deviceSerialNo,
+                    MQTTConstants.AWS_SWITCH_5,
+                    switchFive.isChecked.toInt().toString(),
+                    tvSwitchNameFive.text.toString()
+                )
+            }*/
+
+            seekBar.onSeekChangeListener = object : OnSeekChangeListener {
+                override fun onSeeking(seekParams: SeekParams?) {
+                    seekParams?.progress?.let {
+                        publishDimmer(
+                            device.deviceSerialNo,
+                            MQTTConstants.AWS_DMR,
+                            it
+                        )
+                    }
+                }
+
+                override fun onStartTrackingTouch(seekBar: IndicatorSeekBar?) {
+                }
+
+                override fun onStopTrackingTouch(seekBar: IndicatorSeekBar?) {
+                }
+
+            }
+        }
+    }
+
 
     //
     //endregion
@@ -970,7 +1197,7 @@ class DeviceAdapter(
                                             MQTTConstants.AWS_USB_C
                                         ) //USB C
                                 } else {
-                                    if (jsonObject.has(MQTTConstants.AWS_USB_C)){
+                                    if (jsonObject.has(MQTTConstants.AWS_USB_C)) {
                                         deviceData?.switchData?.get(4)?.switchStatus =
                                             jsonObject.getInt(
                                                 MQTTConstants.AWS_DIMMER
@@ -979,7 +1206,7 @@ class DeviceAdapter(
                                             jsonObject.getInt(
                                                 MQTTConstants.AWS_USB_C
                                             ) //USB C
-                                    }else {
+                                    } else {
                                         deviceData?.switchData?.get(5)?.switchStatus =
                                             jsonObject.getInt(
                                                 MQTTConstants.AWS_DIMMER
