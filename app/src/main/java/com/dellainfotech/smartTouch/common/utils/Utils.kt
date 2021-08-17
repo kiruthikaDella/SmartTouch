@@ -1,5 +1,6 @@
 package com.dellainfotech.smartTouch.common.utils
 
+import android.app.Activity
 import android.content.Context
 import android.content.pm.PackageManager
 import android.net.ConnectivityManager
@@ -8,12 +9,13 @@ import android.os.Build
 import android.text.Editable
 import android.util.Base64
 import android.util.Log
+import android.view.View
+import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
-import androidx.appcompat.app.AlertDialog
+import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
 import com.appizona.yehiahd.fastsave.FastSave
 import com.dellainfotech.smartTouch.AppDelegate
-import com.dellainfotech.smartTouch.R
-import com.dellainfotech.smartTouch.common.interfaces.DialogShowListener
 import com.facebook.appevents.internal.AppEventUtility.bytesToHex
 import java.net.InetSocketAddress
 import java.net.Socket
@@ -22,7 +24,6 @@ import java.security.MessageDigest
 import java.util.*
 import javax.crypto.Mac
 import javax.crypto.spec.SecretKeySpec
-import kotlin.collections.ArrayList
 
 /**
  * Created by Jignesh Dangar on 13-04-2021.
@@ -140,4 +141,20 @@ object Utils {
         error = null
     }
 
+}
+
+fun Fragment.hideKeyboard() {
+    view?.let { activity?.hideKeyboard(it) }
+}
+
+fun Context.hideKeyboard(view: View) {
+    val inputMethodManager = getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+    inputMethodManager.hideSoftInputFromWindow(view.windowToken, 0)
+}
+
+fun Activity.hideSoftKeyboard() {
+    currentFocus?.let {
+        val inputMethodManager = ContextCompat.getSystemService(this, InputMethodManager::class.java)!!
+        inputMethodManager.hideSoftInputFromWindow(it.windowToken, 0)
+    }
 }

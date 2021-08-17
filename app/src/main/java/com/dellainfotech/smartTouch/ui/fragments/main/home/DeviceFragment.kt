@@ -26,6 +26,7 @@ import com.dellainfotech.smartTouch.common.utils.Constants
 import com.dellainfotech.smartTouch.common.utils.DialogUtil
 import com.dellainfotech.smartTouch.common.utils.Utils.clearError
 import com.dellainfotech.smartTouch.common.utils.Utils.toEditable
+import com.dellainfotech.smartTouch.common.utils.hideKeyboard
 import com.dellainfotech.smartTouch.databinding.FragmentDeviceBinding
 import com.dellainfotech.smartTouch.mqtt.NotifyManager
 import com.dellainfotech.smartTouch.ui.fragments.ModelBaseFragment
@@ -57,27 +58,6 @@ class DeviceFragment : ModelBaseFragment<HomeViewModel, FragmentDeviceBinding, H
             binding.recyclerRoomPanels.adapter = panelAdapter
         }
 
-        if (viewModel.getDeviceResponse.value == null) {
-            showLoading()
-            viewModel.getDevice(args.roomDetail.id)
-        } else {
-            viewModel.getDeviceResponse.value?.let {
-                when (it) {
-                    is Resource.Success -> {
-                        if (it.values.status && it.values.code == Constants.API_SUCCESS_CODE) {
-                            it.values.data?.let { deviceData ->
-                                deviceList.addAll(deviceData)
-                                panelAdapter.notifyDataSetChanged()
-                            }
-                        }
-                    }
-                    else -> {
-                        panelAdapter.notifyDataSetChanged()
-                    }
-                }
-            }
-        }
-
         binding.ivBack.setOnClickListener {
             findNavController().navigateUp()
         }
@@ -86,7 +66,7 @@ class DeviceFragment : ModelBaseFragment<HomeViewModel, FragmentDeviceBinding, H
 
         NotifyManager.internetInfo.observe(viewLifecycleOwner, { isConnected ->
             if (isConnected) {
-//                showLoading()
+                showLoading()
                 viewModel.getDevice(args.roomDetail.id)
             } else {
                 activity?.let {
@@ -133,7 +113,9 @@ class DeviceFragment : ModelBaseFragment<HomeViewModel, FragmentDeviceBinding, H
 
     private fun clickEvents() {
 
-        binding.layoutSlidingUpPanel.setFadeOnClickListener { hidePanel() }
+        binding.layoutSlidingUpPanel.setFadeOnClickListener {
+            hidePanel()
+        }
 
         binding.layoutSlidingUpPanel.addPanelSlideListener(object :
             SlidingUpPanelLayout.PanelSlideListener {
@@ -151,6 +133,7 @@ class DeviceFragment : ModelBaseFragment<HomeViewModel, FragmentDeviceBinding, H
                     binding.layoutRoomPanel.edtSerialNumber.text = "".toEditable()
                     binding.layoutRoomPanel.edtPanelName.clearError()
                     binding.layoutRoomPanel.edtSerialNumber.clearError()
+                    hideKeyboard()
                 }
             }
         })
@@ -182,6 +165,7 @@ class DeviceFragment : ModelBaseFragment<HomeViewModel, FragmentDeviceBinding, H
 
                         override fun onNoClicked() {
                             DialogUtil.hideDialog()
+                            hideKeyboard()
                         }
 
                     }
@@ -330,12 +314,12 @@ class DeviceFragment : ModelBaseFragment<HomeViewModel, FragmentDeviceBinding, H
 
             when {
                 deviceName.isEmpty() -> {
-                    binding.layoutRoomPanel.edtPanelName.error =
-                        getString(R.string.error_text_panel_name)
+                    binding.layoutRoomPanel.edtPanelName.error = getString(R.string.error_text_panel_name)
+                    binding.layoutRoomPanel.edtPanelName.requestFocus()
                 }
                 serialNumber.isEmpty() -> {
-                    binding.layoutRoomPanel.edtSerialNumber.error =
-                        getString(R.string.error_text_serial_number)
+                    binding.layoutRoomPanel.edtSerialNumber.error = getString(R.string.error_text_serial_number)
+                    binding.layoutRoomPanel.edtSerialNumber.requestFocus()
                 }
                 else -> {
                     hidePanel()
