@@ -98,7 +98,7 @@ class DeviceSettingsFragment :
                             activity?.let { myActivity ->
                                 DialogUtil.loadingAlert(myActivity)
                             }
-                            viewModel.deleteDevice(args.roomDetail.id, args.deviceDetail.id)
+                            viewModel.deleteDevice(args.deviceDetail.productGroup, args.roomDetail.id, args.deviceDetail.id)
                         }
 
                         override fun onNoClicked() {

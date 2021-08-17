@@ -12,7 +12,6 @@ import com.dellainfotech.smartTouch.api.repository.HomeRepository
 import kotlinx.coroutines.launch
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
-import okhttp3.ResponseBody
 
 class HomeViewModel @ViewModelInject constructor(
     private val homeRepository: HomeRepository
@@ -243,9 +242,9 @@ class HomeViewModel @ViewModelInject constructor(
         _getDeviceFeatureSettingsResponse.value = homeRepository.getDeviceFeaturesSettings(deviceId)
     }
 
-    fun deleteDevice(roomId: String,deviceId: String) = viewModelScope.launch {
+    fun deleteDevice(productGroup: String, roomId: String,deviceId: String) = viewModelScope.launch {
         _deleteDeviceResponse.value = Resource.Loading
-        _deleteDeviceResponse.value = homeRepository.deleteDevice(roomId,deviceId)
+        _deleteDeviceResponse.value = homeRepository.deleteDevice(productGroup, roomId, deviceId)
     }
 
     fun updateDeviceName(bodyUpdateDeviceName: BodyUpdateDeviceName) = viewModelScope.launch {
