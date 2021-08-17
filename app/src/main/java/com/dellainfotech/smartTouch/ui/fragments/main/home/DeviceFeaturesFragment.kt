@@ -388,6 +388,8 @@ class DeviceFeaturesFragment :
 
     private fun publish(payload: String) {
 
+        Log.e(logTag, " payload $payload ")
+
         AwsMqttSingleton.publish(
             MQTTConstants.UPDATE_DEVICE_FEATURE.replace(
                 MQTTConstants.AWS_DEVICE_ID,
