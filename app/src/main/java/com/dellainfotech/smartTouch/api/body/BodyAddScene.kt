@@ -7,11 +7,13 @@ class BodyAddScene(
     @SerializedName("vSceneTime") var sceneTime: String,
     @SerializedName("vSceneTimeZone") var sceneTimeZone: String,
     @SerializedName("vSceneInterval") var sceneInterval: String,
+    @SerializedName("iSchedulerTime") var schedulerTime: Long,
     @SerializedName("vSceneIntervalValue") var sceneIntervalValue: ArrayList<String>,
     @SerializedName("scene") var scenes: ArrayList<BodySceneData>
 ){
+
     override fun toString(): String {
-        return "BodyScene(sceneName='$sceneName', sceneTime='$sceneTime', sceneInterval='$sceneInterval', scenes=$scenes)"
+        return "BodyAddScene(sceneName='$sceneName', sceneTime='$sceneTime', sceneTimeZone='$sceneTimeZone', sceneInterval='$sceneInterval', schedulerTime=$schedulerTime, sceneIntervalValue=$sceneIntervalValue, scenes=$scenes)"
     }
 
     override fun equals(other: Any?): Boolean {
@@ -22,7 +24,10 @@ class BodyAddScene(
 
         if (sceneName != other.sceneName) return false
         if (sceneTime != other.sceneTime) return false
+        if (sceneTimeZone != other.sceneTimeZone) return false
         if (sceneInterval != other.sceneInterval) return false
+        if (schedulerTime != other.schedulerTime) return false
+        if (sceneIntervalValue != other.sceneIntervalValue) return false
         if (scenes != other.scenes) return false
 
         return true
@@ -31,7 +36,10 @@ class BodyAddScene(
     override fun hashCode(): Int {
         var result = sceneName.hashCode()
         result = 31 * result + sceneTime.hashCode()
+        result = 31 * result + sceneTimeZone.hashCode()
         result = 31 * result + sceneInterval.hashCode()
+        result = 31 * result + schedulerTime.hashCode()
+        result = 31 * result + sceneIntervalValue.hashCode()
         result = 31 * result + scenes.hashCode()
         return result
     }
@@ -45,6 +53,7 @@ class BodySceneData(
     @SerializedName("iDeviceSwitchId") var deviceSwitchId: String,
     @SerializedName("tiDeviceSwitchSettingValue") var deviceSwitchSettingValue: Int
 ){
+
     override fun toString(): String {
         return "BodySceneData(roomId='$roomId', deviceId='$deviceId', deviceSwitchId='$deviceSwitchId', deviceSwitchSettingValue=$deviceSwitchSettingValue)"
     }

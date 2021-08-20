@@ -8,11 +8,13 @@ class BodyUpdateScene(
     @SerializedName("vSceneTime") var sceneTime: String,
     @SerializedName("vSceneTimeZone") var sceneTimeZone: String,
     @SerializedName("vSceneInterval") var sceneInterval: String,
+    @SerializedName("iSchedulerTime") var schedulerTime: Long,
     @SerializedName("vSceneIntervalValue") var sceneIntervalValue: ArrayList<String>,
     @SerializedName("scene") var scenes: ArrayList<BodyUpdateSceneData>
 ){
+
     override fun toString(): String {
-        return "BodyUpdateScene(sceneName='$sceneName', sceneTime='$sceneTime', sceneInterval='$sceneInterval', scenes=$scenes)"
+        return "BodyUpdateScene(sceneId='$sceneId', sceneName='$sceneName', sceneTime='$sceneTime', sceneTimeZone='$sceneTimeZone', sceneInterval='$sceneInterval', schedulerTime=$schedulerTime, sceneIntervalValue=$sceneIntervalValue, scenes=$scenes)"
     }
 
     override fun equals(other: Any?): Boolean {
@@ -21,18 +23,26 @@ class BodyUpdateScene(
 
         other as BodyUpdateScene
 
+        if (sceneId != other.sceneId) return false
         if (sceneName != other.sceneName) return false
         if (sceneTime != other.sceneTime) return false
+        if (sceneTimeZone != other.sceneTimeZone) return false
         if (sceneInterval != other.sceneInterval) return false
+        if (schedulerTime != other.schedulerTime) return false
+        if (sceneIntervalValue != other.sceneIntervalValue) return false
         if (scenes != other.scenes) return false
 
         return true
     }
 
     override fun hashCode(): Int {
-        var result = sceneName.hashCode()
+        var result = sceneId.hashCode()
+        result = 31 * result + sceneName.hashCode()
         result = 31 * result + sceneTime.hashCode()
+        result = 31 * result + sceneTimeZone.hashCode()
         result = 31 * result + sceneInterval.hashCode()
+        result = 31 * result + schedulerTime.hashCode()
+        result = 31 * result + sceneIntervalValue.hashCode()
         result = 31 * result + scenes.hashCode()
         return result
     }
@@ -49,7 +59,7 @@ class BodyUpdateSceneData(
 ){
 
     override fun toString(): String {
-        return "BodyUpdateSceneData(roomId=$roomId, deviceId=$deviceId, sceneDetailId='$sceneDetailId', deviceSwitchId='$deviceSwitchId', deviceSwitchSettingValue=$deviceSwitchSettingValue)"
+        return "BodyUpdateSceneData(roomId='$roomId', deviceId='$deviceId', sceneDetailId=$sceneDetailId, deviceSwitchId='$deviceSwitchId', deviceSwitchSettingValue=$deviceSwitchSettingValue)"
     }
 
     override fun equals(other: Any?): Boolean {
@@ -68,9 +78,9 @@ class BodyUpdateSceneData(
     }
 
     override fun hashCode(): Int {
-        var result = roomId?.hashCode() ?: 0
-        result = 31 * result + (deviceId?.hashCode() ?: 0)
-        result = 31 * result + sceneDetailId.hashCode()
+        var result = roomId.hashCode()
+        result = 31 * result + deviceId.hashCode()
+        result = 31 * result + (sceneDetailId?.hashCode() ?: 0)
         result = 31 * result + deviceSwitchId.hashCode()
         result = 31 * result + deviceSwitchSettingValue
         return result

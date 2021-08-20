@@ -54,6 +54,7 @@ class CreateSceneFragment :
     private val daysList = arrayListOf<WeeklyDaysModel>()
     private var isUpdatingScene: Boolean = false
     private var itemPosition: Int? = null
+    private var schedulerTime: Long = Calendar.getInstance().timeInMillis / 1000
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -210,6 +211,7 @@ class CreateSceneFragment :
                         val cal = Calendar.getInstance()
                         cal[Calendar.HOUR_OF_DAY] = hourOfDay
                         cal[Calendar.MINUTE] = min
+
                         val formatter: Format
                         formatter = SimpleDateFormat("hh:mm a", Locale.US)
                         val time = "<font color='#1A8EFF'>${
@@ -224,6 +226,10 @@ class CreateSceneFragment :
                         } else {
                             binding.tvTime.text = Html.fromHtml(time)
                         }
+
+                        cal.timeZone = TimeZone.getTimeZone("gmt")
+                        schedulerTime = cal.timeInMillis / 1000
+                        Log.e(logTag, " current ${cal.timeInMillis} UTC ${cal.timeInMillis}")
                     },
                     hour,
                     minute,
@@ -295,6 +301,7 @@ class CreateSceneFragment :
                                         sceneTime,
                                         TimeZone.getDefault().id,
                                         sceneFrequency,
+                                        schedulerTime,
                                         weeklyDayList,
                                         updateDeviceSceneAdapter.getScenes()
                                     )
@@ -336,6 +343,7 @@ class CreateSceneFragment :
                                         sceneTime,
                                         TimeZone.getDefault().id,
                                         sceneFrequency,
+                                        schedulerTime,
                                         weeklyDayList,
                                         deviceSceneAdapter.getScenes()
                                     )
@@ -353,7 +361,11 @@ class CreateSceneFragment :
 
             if (weeklyDaysAdapter.getDayList().size <= 0) {
                 context?.let { mContext ->
-                    Toast.makeText(mContext, getString(R.string.error_text_empty_weekly_days), Toast.LENGTH_SHORT)
+                    Toast.makeText(
+                        mContext,
+                        getString(R.string.error_text_empty_weekly_days),
+                        Toast.LENGTH_SHORT
+                    )
                         .show()
                 }
             } else {
@@ -461,6 +473,7 @@ class CreateSceneFragment :
     }
 
     private fun setSceneData(sceneData: GetSceneData) {
+        schedulerTime = sceneData.schedulerTime
         binding.edtSceneName.text = sceneData.sceneName.toEditable()
 
         val time =

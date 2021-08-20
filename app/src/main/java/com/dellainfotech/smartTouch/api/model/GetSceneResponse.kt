@@ -56,6 +56,8 @@ data class GetSceneData(
     var sceneName: String,
     @SerializedName("vSceneTime")
     var sceneTime: String,
+    @SerializedName("iSchedulerTime")
+    var schedulerTime: Long,
     @SerializedName("vSceneInterval")
     var sceneInterval: String,
     @SerializedName("isDeviceDisable")
@@ -69,7 +71,7 @@ data class GetSceneData(
 ) : Parcelable, Serializable {
 
     override fun toString(): String {
-        return "GetSceneData(id='$id', sceneName='$sceneName', sceneTime='$sceneTime', sceneInterval='$sceneInterval', isDeviceDisable=$isDeviceDisable, sceneIntervalValue=$sceneIntervalValue, userId='$userId', scene=$scene)"
+        return "GetSceneData(id='$id', sceneName='$sceneName', sceneTime='$sceneTime', schedulerTime=$schedulerTime, sceneInterval='$sceneInterval', isDeviceDisable=$isDeviceDisable, sceneIntervalValue=$sceneIntervalValue, userId='$userId', scene=$scene)"
     }
 
     override fun equals(other: Any?): Boolean {
@@ -81,6 +83,7 @@ data class GetSceneData(
         if (id != other.id) return false
         if (sceneName != other.sceneName) return false
         if (sceneTime != other.sceneTime) return false
+        if (schedulerTime != other.schedulerTime) return false
         if (sceneInterval != other.sceneInterval) return false
         if (isDeviceDisable != other.isDeviceDisable) return false
         if (sceneIntervalValue != other.sceneIntervalValue) return false
@@ -94,6 +97,7 @@ data class GetSceneData(
         var result = id.hashCode()
         result = 31 * result + sceneName.hashCode()
         result = 31 * result + sceneTime.hashCode()
+        result = 31 * result + schedulerTime.hashCode()
         result = 31 * result + sceneInterval.hashCode()
         result = 31 * result + isDeviceDisable
         result = 31 * result + (sceneIntervalValue?.hashCode() ?: 0)
@@ -101,6 +105,7 @@ data class GetSceneData(
         result = 31 * result + (scene?.hashCode() ?: 0)
         return result
     }
+
 
 }
 
@@ -117,6 +122,7 @@ data class Scene(
     @SerializedName("tiDeviceSwitchSettingValue")
     var deviceSwitchSettingValue: Int
 ) : Parcelable, Serializable {
+
     override fun toString(): String {
         return "Scene(id='$id', roomData=$roomData, deviceData=$deviceData, switchData=$switchData, deviceSwitchSettingValue=$deviceSwitchSettingValue)"
     }
