@@ -22,7 +22,6 @@ import com.dellainfotech.smartTouch.databinding.FragmentFaqsBinding
 import com.dellainfotech.smartTouch.mqtt.NotifyManager
 import com.dellainfotech.smartTouch.ui.fragments.ModelBaseFragment
 import com.dellainfotech.smartTouch.ui.viewmodel.HomeViewModel
-import java.util.*
 
 /**
  * Created by Jignesh Dangar on 26-04-2021.
@@ -39,6 +38,7 @@ class FaqsFragment : ModelBaseFragment<HomeViewModel, FragmentFaqsBinding, HomeR
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         binding.ivBack.setOnClickListener {
             findNavController().navigateUp()
         }
@@ -47,6 +47,8 @@ class FaqsFragment : ModelBaseFragment<HomeViewModel, FragmentFaqsBinding, HomeR
         if (animator is DefaultItemAnimator) {
             animator.supportsChangeAnimations = false
         }
+
+        faqAdapter = FAQAdapter(faqList)
 
         binding.edtSearch.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
@@ -126,13 +128,13 @@ class FaqsFragment : ModelBaseFragment<HomeViewModel, FragmentFaqsBinding, HomeR
 
     private fun filter(string: String) {
         var charText = string
-        charText = charText.toLowerCase(Locale.getDefault())
+        charText = charText.lowercase()
         faqList.clear()
         if (charText.isEmpty()) {
             faqList.addAll(filteredItems)
         } else {
             for (wp in filteredItems) {
-                if (wp.title.toLowerCase(Locale.getDefault()).contains(charText)) {
+                if (wp.title.lowercase().contains(charText)) {
                     faqList.add(wp)
                 }
             }

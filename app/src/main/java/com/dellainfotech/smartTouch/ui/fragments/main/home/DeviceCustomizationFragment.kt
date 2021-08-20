@@ -361,6 +361,7 @@ class DeviceCustomizationFragment :
         binding.btnSynchronize.setOnClickListener {
             try {
                 val payload = JSONObject()
+                Log.e(logTag, " uploadImage ${deviceCustomization?.uploadImage}")
                 payload.put(MQTTConstants.AWS_UPLOAD_IMAGE, deviceCustomization?.uploadImage)
                 payload.put(
                     MQTTConstants.AWS_SCREEN_LAYOUT_TYPE,
