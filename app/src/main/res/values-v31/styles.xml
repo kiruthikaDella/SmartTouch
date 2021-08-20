@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.MaterialComponents.Light.DarkActionBar">
+        <!-- Primary brand color. -->
+        <item name="colorPrimary">@color/daintree</item>
+        <item name="colorPrimaryVariant">@color/daintree</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <!-- Secondary brand color. -->
+        <item name="colorSecondary">@color/theme_color</item>
+        <item name="colorSecondaryVariant">@color/theme_color</item>
+        <item name="colorOnSecondary">@color/black</item>
+        <!-- Customize your theme here. -->
+        <item name="windowActionBar">false</item>
+        <item name="android:windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:windowLightStatusBar">true</item>
+        <item name="android:windowDisablePreview">true</item>
+        <item name="android:popupMenuStyle">@style/PopupMenu</item>
+        <item name="android:textAppearanceLargePopupMenu">@style/myPopupMenuTextAppearanceLarge</item>
+        <item name="android:textAppearanceSmallPopupMenu">@style/myPopupMenuTextAppearanceSmall</item>
+
+        <item name="android:windowSplashScreenAnimatedIcon">@mipmap/ic_app_icon</item>
+    </style>
+
+    <style name="PopupMenu" parent="@android:style/Widget.PopupMenu">
+        <item name="android:popupBackground">@android:color/white</item>
+        <item name="android:textColor">@color/daintree</item>
+        <item name="android:fontFamily">@font/roboto_regular</item>
+        <item name="android:textSize">@dimen/_10ssp</item>
+    </style>
+
+    <style name="myPopupMenuTextAppearanceSmall" parent="@android:style/TextAppearance.DeviceDefault.Widget.PopupMenu.Small">
+        <item name="android:textSize">@dimen/_10ssp</item>
+        <item name="android:fontFamily">@font/roboto_regular</item>
+    </style>
+    <style name="myPopupMenuTextAppearanceLarge" parent="@android:style/TextAppearance.DeviceDefault.Widget.PopupMenu.Large">
+        <item name="android:textSize">@dimen/_10ssp</item>
+        <item name="android:fontFamily">@font/roboto_regular</item>
+    </style>
+
+    <style name="DialogTheme" parent="@style/ThemeOverlay.MaterialComponents.Dialog">
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:colorBackgroundCacheHint">@null</item>
+        <item name="android:windowFrame">@null</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowAnimationStyle">@null</item>
+        <item name="android:windowIsFloating">false</item>
+        <item name="android:backgroundDimEnabled">false</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowNoTitle">true</item>
+    </style>
+
+    <style name="BackArrowImageStyle">
+        <item name="android:layout_width">@dimen/_40sdp</item>
+        <item name="android:layout_height">@dimen/_30sdp</item>
+        <item name="android:layout_marginTop">@dimen/_8sdp</item>
+        <item name="android:src">@drawable/ic_back_arrow</item>
+        <item name="android:padding">@dimen/_10sdp</item>
+    </style>
+
+    <style name="BackImageStyle">
+        <item name="android:layout_width">@dimen/_30sdp</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:paddingStart">@dimen/screen_start_margin</item>
+        <item name="android:paddingEnd">@dimen/_5sdp</item>
+        <item name="android:src">@drawable/ic_back</item>
+    </style>
+
+    <style name="ScreenTitleAuthenticationStyle" parent="Widget.AppCompat.TextView">
+        <item name="android:layout_marginTop">@dimen/_8sdp</item>
+        <item name="android:fontFamily">@font/roboto_bold</item>
+        <item name="android:textColor">@color/theme_color</item>
+        <item name="android:textSize">@dimen/_18ssp</item>
+    </style>
+
+    <style name="ScreenTitleHomeStyle" parent="Widget.AppCompat.TextView">
+        <item name="android:fontFamily">@font/roboto_medium</item>
+        <item name="android:textColor">@color/theme_color</item>
+        <item name="android:textSize">@dimen/_18ssp</item>
+    </style>
+
+    <style name="ScreenAuthentication" parent="Widget.AppCompat.TextView">
+        <item name="android:fontFamily">@font/roboto_bold</item>
+        <item name="android:textColor">@color/theme_color</item>
+        <item name="android:textSize">@dimen/_18ssp</item>
+    </style>
+
+    <style name="CreateAccountCardView" parent="CardView">
+        <item name="android:layout_marginStart">@dimen/login_component_start_margin</item>
+        <item name="android:layout_marginEnd">@dimen/login_component_end_margin</item>
+        <item name="android:layout_marginTop">@dimen/_20sdp</item>
+        <item name="cardBackgroundColor">@color/catskill_white</item>
+        <item name="cardElevation">0dp</item>
+        <item name="cardCornerRadius">@dimen/_6sdp</item>
+    </style>
+
+    <style name="DodgerBlueButtonStyle" parent="Widget.MaterialComponents.Button">
+        <item name="backgroundTint">@null</item>
+        <item name="android:background">@drawable/dodger_blue_background_6dp_corner</item>
+    </style>
+
+    <style name="CreateAccountEditText" parent="Widget.AppCompat.EditText">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">@dimen/login_component_height</item>
+        <item name="android:layout_gravity">center_vertical</item>
+        <item name="android:paddingStart">@dimen/_10sdp</item>
+        <item name="android:paddingEnd">@dimen/_10sdp</item>
+        <item name="android:textSize">@dimen/_12ssp</item>
+        <item name="android:background">@drawable/catskill_white_background_without_border</item>
+        <item name="android:textColor">@color/daintree</item>
+        <item name="android:textColorHint">@color/silver</item>
+        <item name="android:fontFamily">@font/roboto_regular</item>
+        <item name="android:layout_marginStart">@dimen/login_component_start_margin</item>
+        <item name="android:layout_marginEnd">@dimen/login_component_end_margin</item>
+        <item name="android:layout_marginTop">@dimen/_20sdp</item>
+    </style>
+
+    <style name="SideNavigationTextStyle" parent="Widget.AppCompat.TextView">
+        <item name="android:textColor">@color/daintree</item>
+        <item name="android:textSize">@dimen/_12ssp</item>
+        <item name="android:fontFamily">@font/roboto_medium</item>
+    </style>
+
+    <style name="PanelSwitchColorStyle" parent="Widget.MaterialComponents.CompoundButton.Switch">
+        <item name="trackTint">@color/panel_switch_color_selector</item>
+        <item name="thumbTint">@color/white</item>
+    </style>
+
+    <style name="DialogAnimation">
+        <item name="android:windowEnterAnimation">@anim/slide_up_dialog</item>
+        <item name="android:windowExitAnimation">@anim/slide_out_down</item>
+    </style>
+
+    <style name="DialogSlideAnim" parent="@android:style/Theme.Dialog">
+        <item name="android:windowAnimationStyle">@style/DialogAnimation</item>
+    </style>
+
+    <style name="TextAppearence.App.TextInputLayout" parent="@android:style/TextAppearance">
+        <item name="android:textColor">@color/daintree</item>
+        <item name="android:textSize">@dimen/_12ssp</item>
+    </style>
+
+    <style name="NavigationTheme" parent="AppTheme">
+        <item name="android:layout_marginBottom">@dimen/_5sdp</item>
+    </style>
+</resources>
