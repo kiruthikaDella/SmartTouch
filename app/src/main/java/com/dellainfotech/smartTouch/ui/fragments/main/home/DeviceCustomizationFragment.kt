@@ -4,8 +4,11 @@ import android.Manifest
 import android.annotation.SuppressLint
 import android.app.Activity.RESULT_OK
 import android.app.AlertDialog
+import android.app.Dialog
 import android.content.Intent
+import android.graphics.Bitmap
 import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
@@ -13,6 +16,7 @@ import android.os.Handler
 import android.os.Looper
 import android.provider.MediaStore
 import android.provider.Settings
+import android.util.DisplayMetrics
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -25,6 +29,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.amazonaws.mobileconnectors.iot.AWSIotMqttQos
 import com.appizona.yehiahd.fastsave.FastSave
+import com.canhub.cropper.CropImageView
 import com.dellainfotech.smartTouch.BuildConfig
 import com.dellainfotech.smartTouch.R
 import com.dellainfotech.smartTouch.adapters.spinneradapter.SpinnerAdapter
@@ -37,6 +42,7 @@ import com.dellainfotech.smartTouch.common.interfaces.DialogShowListener
 import com.dellainfotech.smartTouch.common.utils.Constants
 import com.dellainfotech.smartTouch.common.utils.DialogUtil
 import com.dellainfotech.smartTouch.common.utils.FileHelper.getRealPathFromUri
+import com.dellainfotech.smartTouch.common.utils.Utils.getImageUri
 import com.dellainfotech.smartTouch.common.utils.Utils.toBoolean
 import com.dellainfotech.smartTouch.common.utils.Utils.toInt
 import com.dellainfotech.smartTouch.common.utils.Utils.toReverseInt
@@ -47,6 +53,7 @@ import com.dellainfotech.smartTouch.mqtt.MQTTConstants
 import com.dellainfotech.smartTouch.mqtt.NotifyManager
 import com.dellainfotech.smartTouch.ui.fragments.ModelBaseFragment
 import com.dellainfotech.smartTouch.ui.viewmodel.HomeViewModel
+import com.google.android.material.button.MaterialButton
 import com.karumi.dexter.Dexter
 import com.karumi.dexter.MultiplePermissionsReport
 import com.karumi.dexter.PermissionToken
@@ -65,6 +72,10 @@ import java.io.File
 import java.nio.charset.StandardCharsets
 import java.text.SimpleDateFormat
 import java.util.*
+import android.graphics.BitmapFactory
+import android.widget.ImageView
+import androidx.core.net.toUri
+
 
 /**
  * Created by Jignesh Dangar on 22-04-2021.
@@ -87,6 +98,9 @@ class DeviceCustomizationFragment :
     private var imagePath = ""
     private var imageName = ""
     private var mProfileFile: File? = null
+    private var mCroppedImageFile: File? = null
+
+    private var dialogCropImage: Dialog? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -293,7 +307,7 @@ class DeviceCustomizationFragment :
 
         binding.layoutUploadImage.linearUploadImage.setOnClickListener {
 
-            if (mProfileFile == null) {
+            if (mCroppedImageFile == null) {
                 context?.let { mContext ->
                     Toast.makeText(mContext, "Please select image.", Toast.LENGTH_SHORT).show()
                 }
@@ -304,14 +318,12 @@ class DeviceCustomizationFragment :
                     DialogUtil.loadingAlert(it)
                 }
 
-                val fileExtension = mProfileFile!!.extension
-
-                Log.e(logTag, " linearUploadImage mProfileFile $mProfileFile ")
+                val fileExtension = mCroppedImageFile!!.extension
 
                 imageParts.add(
                     MultipartBody.Part.createFormData(
                         "image", imageName,
-                        mProfileFile!!.asRequestBody("image/$fileExtension".toMediaTypeOrNull())
+                        mCroppedImageFile!!.asRequestBody("image/$fileExtension".toMediaTypeOrNull())
                     )
                 )
 
@@ -324,6 +336,7 @@ class DeviceCustomizationFragment :
                 imagePath = ""
                 imageName = ""
                 mProfileFile = null
+                mCroppedImageFile = null
             }
         }
 
@@ -517,10 +530,35 @@ class DeviceCustomizationFragment :
                         imagePath = mProfileFile!!.absolutePath
                         imageName = imagePath.substring(imagePath.lastIndexOf("/") + 1)
                     }
+
+                    val bitMapOption = BitmapFactory.Options()
+                    bitMapOption.inJustDecodeBounds = true
+                    BitmapFactory.decodeFile(imagePath, bitMapOption)
+                    val imageWidth = bitMapOption.outWidth
+                    val imageHeight = bitMapOption.outHeight
+
+                    Log.e(logTag, " imageWidth $imageWidth imageHeight $imageHeight ")
+
+                    dialogCropImage(uri)
                 }
 
             } catch (e: Exception) {
                 e.printStackTrace()
+            }
+        }else if (requestCode == Constants.REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK){
+
+            Log.e(logTag, " requestCode $requestCode")
+
+            val bitMapOption = BitmapFactory.Options()
+            bitMapOption.inJustDecodeBounds = true
+            BitmapFactory.decodeFile(imagePath, bitMapOption)
+            val imageWidth = bitMapOption.outWidth
+            val imageHeight = bitMapOption.outHeight
+
+            Log.e(logTag, " imageWidth $imageWidth imageHeight $imageHeight ")
+
+            mProfileFile?.let { mFile ->
+                dialogCropImage(mFile.toUri())
             }
         }
 
@@ -717,7 +755,7 @@ class DeviceCustomizationFragment :
     @SuppressLint("QueryPermissionsNeeded")
     private fun dispatchTakePictureIntent() {
         val takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-        context?.let {mContext ->
+        context?.let { mContext ->
             if (takePictureIntent.resolveActivity(mContext.packageManager) != null) {
                 // Create the File where the photo should go
                 var photoFile: File? = null
@@ -750,6 +788,64 @@ class DeviceCustomizationFragment :
         )
         pickPhoto.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
         startActivityForResult(pickPhoto, Constants.REQUEST_GALLERY_IMAGE)
+    }
+
+    private fun dialogCropImage(imageUri: Uri) {
+        activity?.let { mActivity ->
+            dialogCropImage = Dialog(mActivity)
+            dialogCropImage?.setContentView(R.layout.dialog_crop_image)
+            dialogCropImage?.setCancelable(true)
+
+            val cropImageView = dialogCropImage?.findViewById(R.id.crop_image_view) as CropImageView
+            val btnCrop = dialogCropImage?.findViewById(R.id.btn_crop) as MaterialButton
+            val btnSave = dialogCropImage?.findViewById(R.id.btn_save) as MaterialButton
+            val ivBack = dialogCropImage?.findViewById(R.id.iv_back) as ImageView
+
+            btnSave.isEnabled = false
+            btnSave.background = ContextCompat.getDrawable(mActivity, R.drawable.gray_background_6dp_corner)
+
+            cropImageView.setImageUriAsync(imageUri)
+
+            btnCrop.setOnClickListener {
+
+                val croppedImage: Bitmap? = cropImageView.croppedImage
+                cropImageView.setImageBitmap(croppedImage)
+
+                btnSave.isEnabled = true
+                btnSave.background = ContextCompat.getDrawable(mActivity, R.drawable.dodger_blue_background_6dp_corner)
+            }
+
+            btnSave.setOnClickListener {
+
+                val croppedImageUri = getImageUri(mActivity, cropImageView.croppedImage!!, imageName)
+
+                croppedImageUri?.let { uri ->
+                    getRealPathFromUri(uri)?.let {
+                        mCroppedImageFile = File(it)
+                        imagePath = mProfileFile!!.absolutePath
+                        imageName = imagePath.substring(imagePath.lastIndexOf("/") + 1)
+                    }
+
+                    dialogCropImage?.dismiss()
+                    Toast.makeText(mActivity, "Image is selected", Toast.LENGTH_SHORT).show()
+                }
+
+            }
+
+            ivBack.setOnClickListener {
+                dialogCropImage?.dismiss()
+            }
+
+            val displayMetrics = DisplayMetrics()
+            mActivity.windowManager?.defaultDisplay?.getMetrics(displayMetrics)
+            val width = displayMetrics.widthPixels
+            val height = displayMetrics.heightPixels
+
+            dialogCropImage?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+            dialogCropImage?.window?.setLayout(width, height)
+            dialogCropImage?.show()
+        }
+
     }
 
     //

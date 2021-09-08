@@ -162,6 +162,7 @@
     <string name="text_select_font">Select font</string>
     <string name="text_save">Save</string>
     <string name="text_done">Done</string>
+    <string name="text_crop">Crop</string>
     <string name="description_screen_layout">Few predefined layouts will be available where icons are arranged center, top, bottom, right and left on the screen.</string>
     <string name="description_upload_image">Image here refers to the user pictures, photos that they like to have on the touch</string>
     <string name="description_switch_icons">Icon here refers to the Symbols used to turn ON/OFF e.g., Light, Lamp, fan. etc..</string>
@@ -277,5 +278,7 @@
     <string name="text_restart">Restart</string>
     <string name="text_factory_reset">Factory Reset</string>
     <string name="text_verify_update">Verifying Update</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>
