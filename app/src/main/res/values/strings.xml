@@ -282,16 +282,12 @@
     <string name="text_restart">Restart</string>
     <string name="text_factory_reset">Factory Reset</string>
     <string name="text_verify_update">Verifying Update</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
 
     <string name="title_text_config_wifi">Config Wi-Fi</string>
     <string name="text_panel_name">Panel Name</string>
     <string name="text_wifi_ssid">WiFi SSID</string>
     <string name="hint_text_wifi_ssid">Ex. SMT2028189</string>
     <string name="hint_text_wifi_password">Ex. abcd@12%34*5</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
 
     <string name="str_gateway_name">Teksun</string>
     <string name="str_gateway_password">12345678</string>
