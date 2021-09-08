@@ -9,11 +9,13 @@ import android.os.Build
 import android.text.Editable
 import android.util.Base64
 import android.util.Log
+
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+
 import com.appizona.yehiahd.fastsave.FastSave
 import com.dellainfotech.smartTouch.AppDelegate
 import com.facebook.appevents.internal.AppEventUtility.bytesToHex
@@ -24,12 +26,12 @@ import java.security.MessageDigest
 import java.util.*
 import javax.crypto.Mac
 import javax.crypto.spec.SecretKeySpec
+
 import android.provider.MediaStore
 
 import android.graphics.Bitmap
 import android.net.Uri
 import java.io.ByteArrayOutputStream
-
 
 /**
  * Created by Jignesh Dangar on 13-04-2021.
@@ -130,7 +132,8 @@ object Utils {
     }
 
     fun isControlModePin(): Boolean {
-        return FastSave.getInstance().getBoolean(Constants.isControlModePinned, Constants.DEFAULT_CONTROL_MODE_STATUS)
+        return FastSave.getInstance()
+            .getBoolean(Constants.isControlModePinned, Constants.DEFAULT_CONTROL_MODE_STATUS)
     }
 
     fun getImageUri(inContext: Context, inImage: Bitmap, imageName: String): Uri? {
@@ -156,6 +159,7 @@ object Utils {
 
 }
 
+
 fun Fragment.hideKeyboard() {
     view?.let { activity?.hideKeyboard(it) }
 }
@@ -164,6 +168,7 @@ fun Context.hideKeyboard(view: View) {
     val inputMethodManager = getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
     inputMethodManager.hideSoftInputFromWindow(view.windowToken, 0)
 }
+
 
 fun Activity.hideSoftKeyboard() {
     currentFocus?.let {

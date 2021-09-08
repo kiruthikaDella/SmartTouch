@@ -46,7 +46,7 @@ class HomeViewModel @ViewModelInject constructor(
         get() = _deleteRoomResponse
 
     private val _faqResponse: MutableLiveData<Resource<FAQResponse>> = MutableLiveData()
-    val faqResponse: LiveData<Resource<FAQResponse>>
+    val faqResponse: MutableLiveData<Resource<FAQResponse>>
         get() = _faqResponse
 
     private val _getUserProfileResponse: MutableLiveData<Resource<GetProfileResponse>> =
@@ -363,9 +363,17 @@ class HomeViewModel @ViewModelInject constructor(
         _cancelOwnershipResponse.value = homeRepository.cancelTransferOwnership(ownershipId)
     }
 
-
-
     //
     //endregion
     //
+
+    //SmarTack
+    private val _deviceRegisterResponse: MutableLiveData<Resource<CommonResponse>> = MutableLiveData()
+    val deviceRegistrationResponse: MutableLiveData<Resource<CommonResponse>>
+        get() = _deviceRegisterResponse
+
+    fun deviceRegister(bodyRegisterDevice: BodyRegisterDevice) = viewModelScope.launch {
+        _deviceRegisterResponse.value = Resource.Loading
+        _deviceRegisterResponse.value = homeRepository.deviceRegister(bodyRegisterDevice)
+    }
 }

@@ -36,6 +36,9 @@ import com.dellainfotech.smartTouch.ui.viewmodel.HomeViewModel
 import com.dellainfotech.smartTouch.ui.viewmodel.ViewModelFactory
 import com.sothree.slidinguppanel.SlidingUpPanelLayout
 
+import com.teksun.tcpudplibrary.TCPClientService
+import com.teksun.tcpudplibrary.listener.CloseSocketListener
+
 
 /**
  * Created by Jignesh Dangar on 09-04-2021.
@@ -162,14 +165,39 @@ class MainActivity : AppCompatActivity() {
         apiResponses()
     }
 
+    override fun onResume() {
+        super.onResume()
+
+
+        hideSoftKeyboard()
+    }
+
     override fun onBackPressed() {
+
         if (navController.currentDestination?.id == R.id.userManagementFragment || navController.currentDestination?.id == R.id.controlModeFragment || navController.currentDestination?.id == R.id.sceneFragment) {
             binding.ivHome.performClick()
         } else if (navController.currentDestination?.id == R.id.homeFragment) {
             finishAffinity()
+        } else if (navController.currentDestination?.id == R.id.connectingWifiFragment && TCPClientService.getSocket() != null) {
+            disconnectTCPClient()
+        } else if (navController.currentDestination?.id == R.id.configWifiFragment && TCPClientService.getSocket() != null) {
+            disconnectTCPClient()
         } else {
             super.onBackPressed()
         }
+    }
+
+    fun disconnectTCPClient() {
+        TCPClientService.closeSocket(object : CloseSocketListener {
+            override fun onSuccess(message: String) {
+                Log.e(logTag, message)
+                navController.navigateUp()
+            }
+
+            override fun onFailure(message: String) {
+                Log.e(logTag, message)
+            }
+        })
     }
 
     //

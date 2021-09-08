@@ -326,10 +326,13 @@ class LoginFragment : ModelBaseFragment<AuthViewModel, FragmentLoginBinding, Aut
 
         if (email.isEmpty()) {
             binding.edtEmail.error = getString(R.string.error_text_email)
+            binding.edtEmail.requestFocus()
         } else if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
             binding.edtEmail.error = getString(R.string.error_text_valid_email)
+            binding.edtEmail.requestFocus()
         } else if (password.isEmpty()) {
             binding.edtPassword.error = getString(R.string.error_text_password)
+            binding.edtPassword.requestFocus()
         } else {
             Log.e(logTag, "Valid")
             activity?.let {

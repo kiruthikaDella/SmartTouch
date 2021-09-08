@@ -1,18 +1,37 @@
 package com.dellainfotech.smartTouch.ui.fragments.main.home
 
+import android.Manifest
 import android.annotation.SuppressLint
+import android.app.AlertDialog
+import android.app.Dialog
+import android.content.Intent
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
+import android.net.Uri
+import android.net.wifi.WifiManager
+import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.provider.Settings
+import android.util.DisplayMetrics
 import android.util.Log
+import android.view.Display
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.result.ActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.view.isVisible
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import com.binjal.wifilibrary.VersionUtils
+import com.binjal.wifilibrary.WifiUtils
 import com.dellainfotech.smartTouch.R
 import com.dellainfotech.smartTouch.adapters.DeviceAdapter
+import com.dellainfotech.smartTouch.adapters.spinneradapter.SpinnerAdapter
 import com.dellainfotech.smartTouch.api.Resource
 import com.dellainfotech.smartTouch.api.body.*
 import com.dellainfotech.smartTouch.api.model.DeviceSwitchData
@@ -31,6 +50,12 @@ import com.dellainfotech.smartTouch.databinding.FragmentDeviceBinding
 import com.dellainfotech.smartTouch.mqtt.NotifyManager
 import com.dellainfotech.smartTouch.ui.fragments.ModelBaseFragment
 import com.dellainfotech.smartTouch.ui.viewmodel.HomeViewModel
+import com.google.android.material.button.MaterialButton
+import com.karumi.dexter.Dexter
+import com.karumi.dexter.MultiplePermissionsReport
+import com.karumi.dexter.PermissionToken
+import com.karumi.dexter.listener.PermissionRequest
+import com.karumi.dexter.listener.multi.MultiplePermissionsListener
 import com.sothree.slidinguppanel.SlidingUpPanelLayout
 
 /**
@@ -48,9 +73,27 @@ class DeviceFragment : ModelBaseFragment<HomeViewModel, FragmentDeviceBinding, H
     private var switchPosition: Int? = null
     private var deviceData: GetDeviceData? = null
     private var roomData: GetRoomData? = null
+    private lateinit var deviceTypeAdapter: SpinnerAdapter
+    private var isSelectedSmarTouch = true
+    private var isSelectedSmartAck: Boolean ?= null
+
+    private val wifiRegister =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            onActivityResult(Constants.REQUEST_WIFI_CODE, result)
+        }
+
+    private val openSettingRegister =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            onActivityResult(Constants.REQUEST_OPEN_SETTINGS, result)
+        }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        WifiUtils.init(context)
+
+        val deviceTypeList =
+            arrayOf(getString(R.string.text_smart_touch), getString(R.string.text_smart_tack), getString(R.string.text_smart_tap))
 
         deviceList.clear()
         activity?.let {
@@ -58,32 +101,36 @@ class DeviceFragment : ModelBaseFragment<HomeViewModel, FragmentDeviceBinding, H
             binding.recyclerRoomPanels.adapter = panelAdapter
         }
 
-        binding.ivBack.setOnClickListener {
-            findNavController().navigateUp()
-        }
-
         binding.tvTitle.text = args.roomDetail.roomName
 
         NotifyManager.internetInfo.observe(viewLifecycleOwner, { isConnected ->
+            Log.e(logTag, " isConnected $isConnected isSelectedSmartAck $isSelectedSmarTouch")
             if (isConnected) {
                 showLoading()
                 viewModel.getDevice(args.roomDetail.id)
             } else {
-                activity?.let {
-                    DialogUtil.deviceOfflineAlert(
-                        it,
-                        getString(R.string.text_no_internet_available),
-                        object : DialogShowListener {
-                            override fun onClick() {
-                                DialogUtil.hideDialog()
-                                findNavController().navigateUp()
-                            }
+                if (isSelectedSmarTouch) {
+                    activity?.let {
+                        DialogUtil.deviceOfflineAlert(
+                            it,
+                            getString(R.string.text_no_internet_available),
+                            object : DialogShowListener {
+                                override fun onClick() {
+                                    DialogUtil.hideDialog()
+                                    findNavController().navigateUp()
+                                }
 
-                        }
-                    )
+                            }
+                        )
+                    }
                 }
             }
         })
+
+        activity?.let { mActivity ->
+            deviceTypeAdapter = SpinnerAdapter(mActivity, deviceTypeList.toMutableList())
+            binding.layoutSelectDevice.spinnerDeviceType.adapter = deviceTypeAdapter
+        }
 
         clickEvents()
         apiCall()
@@ -100,6 +147,7 @@ class DeviceFragment : ModelBaseFragment<HomeViewModel, FragmentDeviceBinding, H
 
     override fun onDestroyView() {
         super.onDestroyView()
+        isSelectedSmarTouch = true
         viewModel.updateRoomResponse.postValue(null)
         viewModel.addDeviceResponse.postValue(null)
         viewModel.updateDeviceNameResponse.postValue(null)
@@ -113,9 +161,13 @@ class DeviceFragment : ModelBaseFragment<HomeViewModel, FragmentDeviceBinding, H
 
     private fun clickEvents() {
 
-        binding.layoutSlidingUpPanel.setFadeOnClickListener {
-            hidePanel()
+
+        binding.ivBack.setOnClickListener {
+            findNavController().navigateUp()
         }
+
+        binding.layoutSlidingUpPanel.setFadeOnClickListener { hidePanel() }
+
 
         binding.layoutSlidingUpPanel.addPanelSlideListener(object :
             SlidingUpPanelLayout.PanelSlideListener {
@@ -300,12 +352,15 @@ class DeviceFragment : ModelBaseFragment<HomeViewModel, FragmentDeviceBinding, H
             }
         })
 
-        binding.layoutRoomPanel.ivHidePanel.setOnClickListener {
+        binding.ivHidePanel.setOnClickListener {
             hidePanel()
         }
 
         binding.btnAddPanel.setOnClickListener {
-            binding.layoutSlidingUpPanel.panelState = SlidingUpPanelLayout.PanelState.EXPANDED
+            binding.layoutSelectDevice.linearSelectDevice.isVisible = true
+            binding.layoutRoomPanel.linearPanel.isVisible = false
+            binding.tvBottomViewTitle.text = getString(R.string.text_select_device)
+            showPanel()
         }
 
         binding.layoutRoomPanel.btnAddPanel.setOnClickListener {
@@ -337,6 +392,36 @@ class DeviceFragment : ModelBaseFragment<HomeViewModel, FragmentDeviceBinding, H
             }
         }
 
+        binding.layoutSelectDevice.ivDown.setOnClickListener {
+            binding.layoutSelectDevice.spinnerDeviceType.performClick()
+        }
+
+        binding.layoutSelectDevice.btnSave.setOnClickListener {
+            if (binding.layoutSelectDevice.spinnerDeviceType.selectedItem == getString(R.string.text_smart_touch)) {
+                hidePanel()
+                binding.layoutSelectDevice.linearSelectDevice.isVisible = false
+                binding.layoutRoomPanel.linearPanel.isVisible = true
+                binding.tvBottomViewTitle.text = getString(R.string.text_add_panel)
+                showPanel()
+            } else if (binding.layoutSelectDevice.spinnerDeviceType.selectedItem == getString(R.string.text_smart_tack)) {
+                hidePanel()
+                isSelectedSmarTouch = false
+                isSelectedSmartAck = true
+                checkPermission()
+            } else if (binding.layoutSelectDevice.spinnerDeviceType.selectedItem == getString(R.string.text_smart_tap)) {
+                hidePanel()
+                isSelectedSmarTouch = false
+                isSelectedSmartAck = false
+                checkPermission()
+            }
+        }
+
+    }
+
+    private fun showPanel() {
+        Handler(Looper.getMainLooper()).postDelayed({
+            binding.layoutSlidingUpPanel.panelState = SlidingUpPanelLayout.PanelState.EXPANDED
+        }, 600)
     }
 
     private fun hidePanel() {
@@ -474,12 +559,17 @@ class DeviceFragment : ModelBaseFragment<HomeViewModel, FragmentDeviceBinding, H
 
                         devicePosition?.let { dPosition ->
                             switchPosition?.let { sPosition ->
-                                deviceData?.let {dData ->
+                                deviceData?.let { dData ->
                                     dData.switchData?.get(sPosition)?.let { sData ->
                                         deviceList[dPosition].switchData?.let {
                                             it[sPosition] = sData
                                             panelAdapter.notifyDataSetChanged()
-                                            panelAdapter.publish(dData.deviceSerialNo,"SW0${sPosition +1}", sData.switchStatus.toString(),sData.name)
+                                            panelAdapter.publish(
+                                                dData.deviceSerialNo,
+                                                "SW0${sPosition + 1}",
+                                                sData.switchStatus.toString(),
+                                                sData.name
+                                            )
                                             devicePosition = null
                                             switchPosition = null
                                         }
@@ -505,4 +595,153 @@ class DeviceFragment : ModelBaseFragment<HomeViewModel, FragmentDeviceBinding, H
 
     }
 
+    private fun checkPermission() {
+        activity?.let {
+
+            Dexter.withContext(it)
+                .withPermissions(
+                    Manifest.permission.ACCESS_FINE_LOCATION,
+                    Manifest.permission.ACCESS_COARSE_LOCATION,
+                )
+                .withListener(object : MultiplePermissionsListener {
+                    override fun onPermissionsChecked(report: MultiplePermissionsReport?) {
+                        report?.let { rep ->
+                            if (rep.areAllPermissionsGranted()) {
+                                redirectToWifiSetting()
+                                return
+                            }
+                            // check for permanent denial of any permission
+                            if (rep.isAnyPermissionPermanentlyDenied) {
+                                // show alert dialog navigating to Settings
+                                showSettingsDialog()
+                            }
+                        }
+
+                    }
+
+                    override fun onPermissionRationaleShouldBeShown(
+                        permissions: MutableList<PermissionRequest>?,
+                        token: PermissionToken?
+                    ) {
+                        token?.continuePermissionRequest()
+                    }
+
+                })
+                .withErrorListener { error ->
+                    Log.e(logTag, " error $error")
+                    Toast.makeText(it, " Error occurred! ", Toast.LENGTH_SHORT).show()
+                }
+                .onSameThread()
+                .check()
+        }
+    }
+
+    @SuppressLint("SetTextI18n")
+    private fun redirectToWifiSetting() {
+        context?.let {
+            val dialog = Dialog(it)
+
+            dialog.setContentView(R.layout.dialog_wifi_info)
+            dialog.setCancelable(true)
+
+            val tvInstructionInfo = dialog.findViewById(R.id.tvInstructionsInfo) as TextView
+            val tvSSID = dialog.findViewById(R.id.tv_default_ssid) as TextView
+            val tvPassword = dialog.findViewById(R.id.tv_default_password) as TextView
+            val btnOk = dialog.findViewById(R.id.btn_ok) as MaterialButton
+            val btnCancel = dialog.findViewById(R.id.btn_cancel) as MaterialButton
+
+            tvSSID.text = "SSID: ${getString(R.string.str_gateway_name)}"
+            tvPassword.text = "Password: ${getString(R.string.str_gateway_password)}"
+
+            if (VersionUtils.isAndroidQOrLater) {
+                tvInstructionInfo.text = getString(R.string.text_wifi_instruction_10)
+            } else {
+                tvInstructionInfo.text = getString(R.string.text_wifi_instruction)
+            }
+
+            btnCancel.setOnClickListener {
+                dialog.dismiss()
+            }
+
+            btnOk.setOnClickListener {
+                dialog.dismiss()
+                if (VersionUtils.isAndroidQOrLater) {
+                    val panelIntent = Intent(Settings.Panel.ACTION_WIFI)
+                    wifiRegister.launch(panelIntent)
+                } else {
+                    val wifiIntent = Intent(WifiManager.ACTION_PICK_WIFI_NETWORK)
+                    wifiRegister.launch(wifiIntent)
+                }
+            }
+
+            val dpHeight: Float
+            val dpWidth: Float
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                val display: Display? = requireContext().display
+                val displayMetrics = DisplayMetrics()
+                display?.getRealMetrics(displayMetrics)
+                dpHeight = displayMetrics.heightPixels * Constants.COMMON_DIALOG_HEIGHT
+                dpWidth = displayMetrics.widthPixels * 0.85.toFloat()
+            } else {
+                val display: Display = requireActivity().windowManager.defaultDisplay
+                val outMetrics = DisplayMetrics()
+                display.getMetrics(outMetrics)
+                dpHeight = outMetrics.heightPixels * Constants.COMMON_DIALOG_HEIGHT
+                dpWidth = outMetrics.widthPixels * 0.85.toFloat()
+            }
+
+            dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+            dialog.window?.setLayout(dpWidth.toInt(), dpHeight.toInt())
+            dialog.show()
+        }
+    }
+
+    private fun onActivityResult(requestCode: Int, result: ActivityResult) {
+        Log.e(logTag, result.resultCode.toString())
+        if (requestCode == Constants.REQUEST_WIFI_CODE) {
+            if (WifiUtils.isSSIDWifiConnected(getString(R.string.str_gateway_name))) {
+                activity?.let {
+                    DialogUtil.loadingAlert(it, isCancelable = false)
+                    Handler(Looper.getMainLooper()).postDelayed({
+                        DialogUtil.hideDialog()
+                        isSelectedSmartAck?.let { isSmarTack ->
+                            findNavController().navigate(
+                                DeviceFragmentDirections.actionDeviceFragmentToConnectingWifiFragment(
+                                    false,
+                                    args.roomDetail, isSmarTack
+                                )
+                            )
+                        }
+                    }, 1000)
+                }
+            } else {
+                redirectToWifiSetting()
+            }
+        }
+    }
+
+    private fun showSettingsDialog() {
+        activity?.let {
+            val builder: AlertDialog.Builder = AlertDialog.Builder(it)
+            builder.setTitle("Need Permissions")
+            builder.setMessage(
+                "This app needs permission to use this feature. You can grant them in app settings."
+            )
+            builder.setPositiveButton("GOTO SETTINGS") { dialog, _ ->
+                dialog.cancel()
+                openSettings()
+            }
+            builder.setNegativeButton("Cancel") { dialog, _ -> dialog.cancel() }
+            builder.show()
+        }
+
+    }
+
+    private fun openSettings() {
+        val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
+        val uri: Uri = Uri.fromParts("package", context?.packageName, null)
+        intent.data = uri
+        openSettingRegister.launch(intent)
+    }
 }

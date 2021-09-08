@@ -143,4 +143,7 @@ class HomeRepository @Inject constructor(
     //
     //endregion
     //
+
+    //SmarTack
+    suspend fun deviceRegister(bodyRegisterDevice: BodyRegisterDevice) = safeApiCall { smartTouchApi.deviceRegister(getAccessKey(), bodyRegisterDevice) }
 }

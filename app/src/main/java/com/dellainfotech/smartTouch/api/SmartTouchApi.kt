@@ -76,6 +76,9 @@ interface SmartTouchApi {
         const val API_GET_OWNER_TRANSFER = "owner/owner-transfer"
         const val API_POST_OWNER_TRANSFER = "owner/owner-transfer"
         const val API_CANCEL_OWNER_TRANSFER = "owner/owner-transfer-cancel/{id}"
+
+        //Device register [SmarTack and SmarTap]
+        const val API_DEVICE_REGISTER = "device-tap-tack/add"
     }
 
     //
@@ -377,4 +380,11 @@ interface SmartTouchApi {
     //
     //endregion
     //
+
+    //SmarTack and SmarTap
+    @POST(API_DEVICE_REGISTER)
+   suspend fun deviceRegister(
+       @Header("access_key") access_key: String,
+       @Body bodyRegisterDevice: BodyRegisterDevice
+   ): CommonResponse
 }

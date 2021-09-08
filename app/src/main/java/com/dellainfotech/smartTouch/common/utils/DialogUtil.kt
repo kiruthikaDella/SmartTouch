@@ -5,7 +5,6 @@ import android.app.Dialog
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.text.InputType
-import android.text.method.PasswordTransformationMethod
 import android.util.DisplayMetrics
 import android.view.View
 import android.widget.EditText

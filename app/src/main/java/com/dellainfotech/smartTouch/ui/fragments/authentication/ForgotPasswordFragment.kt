@@ -41,6 +41,7 @@ class ForgotPasswordFragment :
             val email = binding.edtEmail.text.toString().trim()
             if (email.isBlank()){
                 binding.edtEmail.error = getString(R.string.error_text_email)
+                binding.edtEmail.requestFocus()
             }else{
                 activity?.let {
                     DialogUtil.loadingAlert(it)
