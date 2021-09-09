@@ -7,7 +7,9 @@ import android.app.AlertDialog
 import android.app.Dialog
 import android.content.Intent
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.graphics.Color
+import android.graphics.Matrix
 import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import android.os.Bundle
@@ -21,10 +23,15 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
+import android.widget.ProgressBar
 import android.widget.Toast
+import androidx.annotation.MainThread
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
+import androidx.core.net.toUri
 import androidx.core.view.isVisible
+import androidx.lifecycle.viewModelScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.amazonaws.mobileconnectors.iot.AWSIotMqttQos
@@ -41,7 +48,9 @@ import com.dellainfotech.smartTouch.common.interfaces.DialogAskListener
 import com.dellainfotech.smartTouch.common.interfaces.DialogShowListener
 import com.dellainfotech.smartTouch.common.utils.Constants
 import com.dellainfotech.smartTouch.common.utils.DialogUtil
+import com.dellainfotech.smartTouch.common.utils.FileHelper.getImageOrientation
 import com.dellainfotech.smartTouch.common.utils.FileHelper.getRealPathFromUri
+import com.dellainfotech.smartTouch.common.utils.FileHelper.sizeInMb
 import com.dellainfotech.smartTouch.common.utils.Utils.getImageUri
 import com.dellainfotech.smartTouch.common.utils.Utils.toBoolean
 import com.dellainfotech.smartTouch.common.utils.Utils.toInt
@@ -62,6 +71,8 @@ import com.karumi.dexter.listener.multi.MultiplePermissionsListener
 import com.sothree.slidinguppanel.SlidingUpPanelLayout
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
@@ -72,9 +83,6 @@ import java.io.File
 import java.nio.charset.StandardCharsets
 import java.text.SimpleDateFormat
 import java.util.*
-import android.graphics.BitmapFactory
-import android.widget.ImageView
-import androidx.core.net.toUri
 
 
 /**
@@ -307,37 +315,52 @@ class DeviceCustomizationFragment :
 
         binding.layoutUploadImage.linearUploadImage.setOnClickListener {
 
-            if (mCroppedImageFile == null) {
-                context?.let { mContext ->
-                    Toast.makeText(mContext, "Please select image.", Toast.LENGTH_SHORT).show()
+            activity?.let { mActivity ->
+
+                if (mCroppedImageFile == null) {
+                    Toast.makeText(mActivity, "Please select image.", Toast.LENGTH_SHORT).show()
+                } else {
+
+                    Log.e(logTag, " mCroppedImageFile size ${mCroppedImageFile!!.sizeInMb} ")
+
+                    mCroppedImageFile?.let { cropFile ->
+
+                        if (cropFile.sizeInMb > 5.0) {
+                            Toast.makeText(
+                                mActivity,
+                                " Image size must be less than 5MB",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        } else {
+                            imageParts.clear()
+
+                            DialogUtil.loadingAlert(mActivity)
+
+                            val fileExtension = mCroppedImageFile!!.extension
+
+                            imageParts.add(
+                                MultipartBody.Part.createFormData(
+                                    "image", imageName,
+                                    mCroppedImageFile!!.asRequestBody("image/$fileExtension".toMediaTypeOrNull())
+                                )
+                            )
+
+                            hidePanel()
+                            viewModel.imageUpload(
+                                args.deviceDetail.id.toRequestBody("text/plain".toMediaTypeOrNull()),
+                                imageParts
+                            )
+
+                            imagePath = ""
+                            imageName = ""
+                            mProfileFile = null
+                        }
+                    }
+
                 }
-            } else {
-                imageParts.clear()
 
-                activity?.let {
-                    DialogUtil.loadingAlert(it)
-                }
-
-                val fileExtension = mCroppedImageFile!!.extension
-
-                imageParts.add(
-                    MultipartBody.Part.createFormData(
-                        "image", imageName,
-                        mCroppedImageFile!!.asRequestBody("image/$fileExtension".toMediaTypeOrNull())
-                    )
-                )
-
-                hidePanel()
-                viewModel.imageUpload(
-                    args.deviceDetail.id.toRequestBody("text/plain".toMediaTypeOrNull()),
-                    imageParts
-                )
-
-                imagePath = ""
-                imageName = ""
-                mProfileFile = null
-                mCroppedImageFile = null
             }
+
         }
 
         binding.layoutUploadImage.ivRemove.setOnClickListener {
@@ -545,9 +568,7 @@ class DeviceCustomizationFragment :
             } catch (e: Exception) {
                 e.printStackTrace()
             }
-        }else if (requestCode == Constants.REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK){
-
-            Log.e(logTag, " requestCode $requestCode")
+        } else if (requestCode == Constants.REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
 
             val bitMapOption = BitmapFactory.Options()
             bitMapOption.inJustDecodeBounds = true
@@ -569,6 +590,7 @@ class DeviceCustomizationFragment :
             when (response) {
                 is Resource.Success -> {
                     DialogUtil.hideDialog()
+
                     if (response.values.status && response.values.code == Constants.API_SUCCESS_CODE) {
                         response.values.data?.let {
                             deviceCustomization = it
@@ -630,6 +652,17 @@ class DeviceCustomizationFragment :
             when (response) {
                 is Resource.Success -> {
                     DialogUtil.hideDialog()
+
+                    Log.e(
+                        logTag,
+                        " mCroppedImageFile?.exists() == true ${mCroppedImageFile?.exists()} "
+                    )
+
+                    if (mCroppedImageFile?.exists() == true) {
+                        mCroppedImageFile?.delete()
+                    }
+                    mCroppedImageFile = null
+
                     context?.let {
                         Toast.makeText(it, response.values.message, Toast.LENGTH_SHORT).show()
                     }
@@ -643,6 +676,16 @@ class DeviceCustomizationFragment :
                 is Resource.Failure -> {
                     DialogUtil.hideDialog()
                     Log.e(logTag, "imageUploadResponse Failure ${response.errorBody?.string()}")
+
+                    Log.e(logTag, " mCroppedImageFile?.exists() ${mCroppedImageFile?.exists()} ")
+                    if (mCroppedImageFile?.exists() == true) {
+                        Log.e(
+                            logTag,
+                            " mCroppedImageFile?.exists() == true ${mCroppedImageFile?.exists()} "
+                        )
+                        mCroppedImageFile?.delete()
+                    }
+                    mCroppedImageFile = null
                 }
                 else -> {
                     //We will do nothing here
@@ -800,11 +843,52 @@ class DeviceCustomizationFragment :
             val btnCrop = dialogCropImage?.findViewById(R.id.btn_crop) as MaterialButton
             val btnSave = dialogCropImage?.findViewById(R.id.btn_save) as MaterialButton
             val ivBack = dialogCropImage?.findViewById(R.id.iv_back) as ImageView
+            val progressBar = dialogCropImage?.findViewById(R.id.progress_bar) as ProgressBar
+
+            progressBar.isVisible = false
 
             btnSave.isEnabled = false
-            btnSave.background = ContextCompat.getDrawable(mActivity, R.drawable.gray_background_6dp_corner)
+            btnSave.background =
+                ContextCompat.getDrawable(mActivity, R.drawable.gray_background_6dp_corner)
 
-            cropImageView.setImageUriAsync(imageUri)
+            val originalImage: Bitmap =
+                MediaStore.Images.Media.getBitmap(mActivity.contentResolver, imageUri)
+
+            if (originalImage.width > 6000 || originalImage.height > 5000) {
+
+                progressBar.isVisible = true
+
+                val matrix = Matrix()
+                matrix.postRotate(getImageOrientation(getRealPathFromUri(imageUri)).toFloat())
+
+                viewModel.viewModelScope.launch(Dispatchers.Main){
+
+                    val scaledBitmap = Bitmap.createScaledBitmap(
+                        originalImage,
+                        (originalImage.width * 0.6).toInt(),
+                        (originalImage.height * 0.6).toInt(),
+                        true
+                    )
+
+                    val rotatedBitmap = Bitmap.createBitmap(
+                        scaledBitmap,
+                        0,
+                        0,
+                        scaledBitmap.width,
+                        scaledBitmap.height,
+                        matrix,
+                        true
+                    )
+
+                    Log.e(logTag, " resized width ${rotatedBitmap.width} height ${rotatedBitmap.height}")
+
+                    progressBar.isVisible = false
+                    cropImageView.setImageBitmap(rotatedBitmap)
+                }
+
+            } else {
+                cropImageView.setImageUriAsync(imageUri)
+            }
 
             btnCrop.setOnClickListener {
 
@@ -812,12 +896,16 @@ class DeviceCustomizationFragment :
                 cropImageView.setImageBitmap(croppedImage)
 
                 btnSave.isEnabled = true
-                btnSave.background = ContextCompat.getDrawable(mActivity, R.drawable.dodger_blue_background_6dp_corner)
+                btnSave.background = ContextCompat.getDrawable(
+                    mActivity,
+                    R.drawable.dodger_blue_background_6dp_corner
+                )
             }
 
             btnSave.setOnClickListener {
 
-                val croppedImageUri = getImageUri(mActivity, cropImageView.croppedImage!!, imageName)
+                val croppedImageUri =
+                    getImageUri(mActivity, cropImageView.croppedImage!!, imageName)
 
                 croppedImageUri?.let { uri ->
                     getRealPathFromUri(uri)?.let {
