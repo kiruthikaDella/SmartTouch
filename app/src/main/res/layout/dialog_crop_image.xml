@@ -28,9 +28,9 @@
         android:layout_marginBottom="@dimen/_8sdp"
         app:cropAspectRatioX="16"
         app:cropAspectRatioY="10"
-        app:cropFixAspectRatio="true"
-        app:cropMinCropWindowHeight="800px"
-        app:cropMinCropWindowWidth="1280px" />
+        app:cropMinCropResultWidthPX="1280"
+        app:cropMinCropResultHeightPX="800"
+        app:cropFixAspectRatio="true" />
 
     <LinearLayout
         android:id="@+id/linear_crop_buttons"
@@ -68,5 +68,11 @@
             android:textSize="@dimen/_13ssp" />
 
     </LinearLayout>
+
+    <ProgressBar
+        android:id="@+id/progress_bar"
+        android:layout_width="@dimen/_35sdp"
+        android:layout_height="@dimen/_35sdp"
+        android:layout_centerInParent="true"/>
 
 </RelativeLayout>
