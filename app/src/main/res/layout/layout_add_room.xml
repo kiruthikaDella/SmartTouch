@@ -34,7 +34,7 @@
         android:layout_marginStart="@dimen/screen_start_margin"
         android:layout_marginTop="@dimen/_20sdp"
         android:fontFamily="@font/roboto_medium"
-        android:text="@string/title_text_add_room"
+        android:text="@string/text_room_name"
         android:textColor="@color/daintree"
         android:textSize="@dimen/_12ssp" />
 

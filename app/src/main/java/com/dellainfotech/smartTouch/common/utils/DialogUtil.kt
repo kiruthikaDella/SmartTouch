@@ -5,7 +5,7 @@ import android.app.Dialog
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.text.InputType
-import android.text.method.PasswordTransformationMethod
+import android.text.method.DigitsKeyListener
 import android.util.DisplayMetrics
 import android.view.View
 import android.widget.EditText
@@ -140,6 +140,8 @@ object DialogUtil {
         if (inputType == activity.getString(R.string.dialog_input_type_phone)){
             editText.setRawInputType(InputType.TYPE_CLASS_PHONE)
             editTextNoLimit.setRawInputType(InputType.TYPE_CLASS_PHONE)
+            editText.keyListener = DigitsKeyListener.getInstance("0123456789")
+            editTextNoLimit.keyListener = DigitsKeyListener.getInstance("0123456789")
         }
 
         btnCancel.setOnClickListener {

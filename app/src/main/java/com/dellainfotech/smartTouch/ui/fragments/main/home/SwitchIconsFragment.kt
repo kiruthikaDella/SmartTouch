@@ -139,8 +139,8 @@ class SwitchIconsFragment :
                         val jsonObject = JSONObject(message)
 
                         if (jsonObject.has(MQTTConstants.AWS_STATUS)) {
-                            val deviceStatus = jsonObject.getInt(MQTTConstants.AWS_STATUS)
-                            if (deviceStatus == 1) {
+                            val deviceStatus = jsonObject.getString(MQTTConstants.AWS_STATUS)
+                            if (deviceStatus == "1") {
                                 DialogUtil.hideDialog()
                             } else {
                                 DialogUtil.deviceOfflineAlert(

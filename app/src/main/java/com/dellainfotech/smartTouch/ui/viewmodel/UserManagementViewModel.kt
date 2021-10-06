@@ -1,6 +1,5 @@
 package com.dellainfotech.smartTouch.ui.viewmodel
 
-import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -10,9 +9,12 @@ import com.dellainfotech.smartTouch.api.body.BodyAddSubordinateUser
 import com.dellainfotech.smartTouch.api.model.CommonResponse
 import com.dellainfotech.smartTouch.api.model.SubordinateUserResponse
 import com.dellainfotech.smartTouch.api.repository.UserManagementRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class UserManagementViewModel @ViewModelInject constructor(
+@HiltViewModel
+class UserManagementViewModel @Inject constructor(
     private val userManagementRepository: UserManagementRepository
 ) : ViewModel() {
 

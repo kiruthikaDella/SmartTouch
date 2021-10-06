@@ -65,7 +65,7 @@ data class GetDeviceData(
     @SerializedName("tiRetainState")
     var retainState: Int,
     @SerializedName("tiIsDeviceAvailable")
-    var isDeviceAvailable: Int,
+    var isDeviceAvailable: String,
     @SerializedName("iActiveSwitchCount")
     var activeSwitchCount: Int,
     @SerializedName("switchData")
@@ -105,7 +105,7 @@ data class GetDeviceData(
         result = 31 * result + deviceName.hashCode()
         result = 31 * result + deviceType
         result = 31 * result + retainState
-        result = 31 * result + isDeviceAvailable
+        result = 31 * result + isDeviceAvailable.hashCode()
         result = 31 * result + activeSwitchCount
         result = 31 * result + (switchData?.hashCode() ?: 0)
         return result
@@ -127,7 +127,7 @@ data class DeviceSwitchData(
     @SerializedName("vIcon")
     var icon: String,
     @SerializedName("tiSwitchStatus")
-    var switchStatus: Int,
+    var switchStatus: String,
     @SerializedName("vDesc")
     var desc: String? = null,
     @SerializedName("vIconFile")
@@ -162,7 +162,7 @@ data class DeviceSwitchData(
         result = 31 * result + index.hashCode()
         result = 31 * result + name.hashCode()
         result = 31 * result + icon.hashCode()
-        result = 31 * result + switchStatus
+        result = 31 * result + switchStatus.hashCode()
         result = 31 * result + (desc?.hashCode() ?: 0)
         result = 31 * result + (iconFile?.hashCode() ?: 0)
         return result

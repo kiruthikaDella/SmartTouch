@@ -202,7 +202,7 @@ class ControlModeDeviceAdapter(
                 e.printStackTrace()
             }
 
-            if (device.isDeviceAvailable == 0) {
+            if (device.isDeviceAvailable == "0") {
                 relativeLayout.visibility = View.VISIBLE
             } else {
                 relativeLayout.visibility = View.GONE
@@ -213,41 +213,41 @@ class ControlModeDeviceAdapter(
                     when (value.index) {
                         "1" -> {
                             tvSwitchNameOne.text = value.name
-                            switchOne.isChecked = value.switchStatus.toBoolean()
+                            switchOne.isChecked = value.switchStatus.toInt().toBoolean()
                         }
                         "2" -> {
                             tvSwitchNameTwo.text = value.name
-                            switchTwo.isChecked = value.switchStatus.toBoolean()
+                            switchTwo.isChecked = value.switchStatus.toInt().toBoolean()
                         }
                         "3" -> {
                             tvSwitchNameThree.text = value.name
-                            switchThree.isChecked = value.switchStatus.toBoolean()
+                            switchThree.isChecked = value.switchStatus.toInt().toBoolean()
                         }
                         "4" -> {
                             tvSwitchNameFour.text = value.name
-                            switchFour.isChecked = value.switchStatus.toBoolean()
+                            switchFour.isChecked = value.switchStatus.toInt().toBoolean()
                         }
                         "5" -> {
                             tvSwitchNameFive.text = value.name
-                            switchFive.isChecked = value.switchStatus.toBoolean()
+                            switchFive.isChecked = value.switchStatus.toInt().toBoolean()
                         }
                         "6" -> {
                             tvSwitchNameSix.text = value.name
-                            switchSix.isChecked = value.switchStatus.toBoolean()
+                            switchSix.isChecked = value.switchStatus.toInt().toBoolean()
                             value.desc?.let {
                                 tvSwitchNameSixDesc.text = it
                             }
                         }
                         "7" -> {
                             tvSwitchNameSeven.text = value.name
-                            switchSeven.isChecked = value.switchStatus.toBoolean()
+                            switchSeven.isChecked = value.switchStatus.toInt().toBoolean()
                             value.desc?.let {
                                 tvSwitchNameSevenDesc.text = it
                             }
                         }
                         "8" -> {
                             tvSwitchNameEight.text = value.name
-                            switchEight.isChecked = value.switchStatus.toBoolean()
+                            switchEight.isChecked = value.switchStatus.toInt().toBoolean()
                             value.desc?.let {
                                 tvSwitchNameEightDesc.text = it
                             }
@@ -256,10 +256,10 @@ class ControlModeDeviceAdapter(
                             seekBar.setProgress(value.switchStatus.toFloat())
                         }
                         "10" -> {
-                            switchPortA.isChecked = value.switchStatus.toBoolean()
+                            switchPortA.isChecked = value.switchStatus.toInt().toBoolean()
                         }
                         "11" -> {
-                            switchPortC.isChecked = value.switchStatus.toBoolean()
+                            switchPortC.isChecked = value.switchStatus.toInt().toBoolean()
                         }
                     }
                 }
@@ -391,7 +391,7 @@ class ControlModeDeviceAdapter(
                 e.printStackTrace()
             }
 
-            if (device.isDeviceAvailable == 0) {
+            if (device.isDeviceAvailable == "0") {
                 relativeLayout.visibility = View.VISIBLE
             } else {
                 relativeLayout.visibility = View.GONE
@@ -402,28 +402,28 @@ class ControlModeDeviceAdapter(
                     when (value.index) {
                         "1" -> {
                             tvSwitchNameOne.text = value.name
-                            switchOne.isChecked = value.switchStatus.toBoolean()
+                            switchOne.isChecked = value.switchStatus.toInt().toBoolean()
                             value.desc?.let {
                                 tvSwitchNameOneDesc.text = it
                             }
                         }
                         "2" -> {
                             tvSwitchNameTwo.text = value.name
-                            switchTwo.isChecked = value.switchStatus.toBoolean()
+                            switchTwo.isChecked = value.switchStatus.toInt().toBoolean()
                             value.desc?.let {
                                 tvSwitchNameTwoDesc.text = it
                             }
                         }
                         "3" -> {
                             tvSwitchNameThree.text = value.name
-                            switchThree.isChecked = value.switchStatus.toBoolean()
+                            switchThree.isChecked = value.switchStatus.toInt().toBoolean()
                             value.desc?.let {
                                 tvSwitchNameThreeDesc.text = it
                             }
                         }
                         "4" -> {
                             tvSwitchNameFour.text = value.name
-                            switchFour.isChecked = value.switchStatus.toBoolean()
+                            switchFour.isChecked = value.switchStatus.toInt().toBoolean()
                             value.desc?.let {
                                 tvSwitchNameFourDesc.text = it
                             }
@@ -432,7 +432,7 @@ class ControlModeDeviceAdapter(
                             seekBar.setProgress(value.switchStatus.toFloat())
                         }
                         "6" -> {
-                            switchPortC.isChecked = value.switchStatus.toBoolean()
+                            switchPortC.isChecked = value.switchStatus.toInt().toBoolean()
                         }
                     }
                 }
@@ -519,7 +519,7 @@ class ControlModeDeviceAdapter(
                 e.printStackTrace()
             }
 
-            if (device.isDeviceAvailable == 0) {
+            if (device.isDeviceAvailable == "0") {
                 relativeLayout.visibility = View.VISIBLE
             } else {
                 relativeLayout.visibility = View.GONE
@@ -530,28 +530,28 @@ class ControlModeDeviceAdapter(
                     when (value.index) {
                         "1" -> {
                             tvSwitchNameOne.text = value.name
-                            switchOne.isChecked = value.switchStatus.toBoolean()
+                            switchOne.isChecked = value.switchStatus.toInt().toBoolean()
                             value.desc?.let {
                                 tvSwitchNameOneDesc.text = it
                             }
                         }
                         "2" -> {
                             tvSwitchNameTwo.text = value.name
-                            switchTwo.isChecked = value.switchStatus.toBoolean()
+                            switchTwo.isChecked = value.switchStatus.toInt().toBoolean()
                             value.desc?.let {
                                 tvSwitchNameTwoDesc.text = it
                             }
                         }
                         "3" -> {
                             tvSwitchNameThree.text = value.name
-                            switchThree.isChecked = value.switchStatus.toBoolean()
+                            switchThree.isChecked = value.switchStatus.toInt().toBoolean()
                             value.desc?.let {
                                 tvSwitchNameThreeDesc.text = it
                             }
                         }
                         "4" -> {
                             tvSwitchNameFour.text = value.name
-                            switchFour.isChecked = value.switchStatus.toBoolean()
+                            switchFour.isChecked = value.switchStatus.toInt().toBoolean()
                             value.desc?.let {
                                 tvSwitchNameFourDesc.text = it
                             }
@@ -559,7 +559,7 @@ class ControlModeDeviceAdapter(
                         "5" -> {
                             val switchName = value.name
                             tvSwitchNameFive.text = switchName
-                            switchFive.isChecked = value.switchStatus.toBoolean()
+                            switchFive.isChecked = value.switchStatus.toInt().toBoolean()
                             value.desc?.let {
                                 tvSwitchNameFiveDesc.text = it
                             }
@@ -683,46 +683,46 @@ class ControlModeDeviceAdapter(
                             // topic [7] = Switch 7 Status (if DT = 8)
                             // topic [8] = Switch 8 Status (if DT = 8)
 
-                            deviceData?.switchData?.get(0)?.switchStatus = switchStatus[0].toInt()
-                            deviceData?.switchData?.get(1)?.switchStatus = switchStatus[1].toInt()
-                            deviceData?.switchData?.get(2)?.switchStatus = switchStatus[2].toInt()
-                            deviceData?.switchData?.get(3)?.switchStatus = switchStatus[3].toInt()
+                            deviceData?.switchData?.get(0)?.switchStatus = switchStatus[0]
+                            deviceData?.switchData?.get(1)?.switchStatus = switchStatus[1]
+                            deviceData?.switchData?.get(2)?.switchStatus = switchStatus[2]
+                            deviceData?.switchData?.get(3)?.switchStatus = switchStatus[3]
 
                             if (jsonObject.has(MQTTConstants.AWS_DEVICE_TYPE)) {
                                 if (jsonObject.getString(MQTTConstants.AWS_DEVICE_TYPE) == "8") {
                                     deviceData?.switchData?.get(4)?.switchStatus =
-                                        switchStatus[4].toInt()
+                                        switchStatus[4]
                                     deviceData?.switchData?.get(5)?.switchStatus =
-                                        switchStatus[5].toInt()
+                                        switchStatus[5]
                                     deviceData?.switchData?.get(6)?.switchStatus =
-                                        switchStatus[6].toInt()
+                                        switchStatus[6]
                                     deviceData?.switchData?.get(7)?.switchStatus =
-                                        switchStatus[7].toInt()
+                                        switchStatus[7]
                                     deviceData?.switchData?.get(8)?.switchStatus =
-                                        jsonObject.getInt(
+                                        jsonObject.getString(
                                             MQTTConstants.AWS_DIMMER
                                         ) //Dimmer
                                     deviceData?.switchData?.get(9)?.switchStatus =
-                                        jsonObject.getInt(
+                                        jsonObject.getString(
                                             MQTTConstants.AWS_USB_A
                                         ) //USB A
                                     deviceData?.switchData?.get(10)?.switchStatus =
-                                        jsonObject.getInt(
+                                        jsonObject.getString(
                                             MQTTConstants.AWS_USB_C
                                         ) //USB C
                                 } else {
                                     if (jsonObject.has(MQTTConstants.AWS_USB_C)) {
                                         deviceData?.switchData?.get(4)?.switchStatus =
-                                            jsonObject.getInt(
+                                            jsonObject.getString(
                                                 MQTTConstants.AWS_DIMMER
                                             ) //Dimmer
                                         deviceData?.switchData?.get(5)?.switchStatus =
-                                            jsonObject.getInt(
+                                            jsonObject.getString(
                                                 MQTTConstants.AWS_USB_C
                                             ) //USB C
                                     } else {
                                         deviceData?.switchData?.get(5)?.switchStatus =
-                                            jsonObject.getInt(
+                                            jsonObject.getString(
                                                 MQTTConstants.AWS_DIMMER
                                             ) //Dimmer
                                     }
@@ -765,7 +765,7 @@ class ControlModeDeviceAdapter(
 
                         if (jsonObject.has(MQTTConstants.AWS_STATUS)) {
                             deviceData?.isDeviceAvailable =
-                                jsonObject.getInt(MQTTConstants.AWS_STATUS)
+                                jsonObject.getString(MQTTConstants.AWS_STATUS)
                             deviceData?.let { dData ->
                                 val firstIndex = deviceList.indexOfFirst { it.id == dData.id }
                                 deviceList[firstIndex] = dData
