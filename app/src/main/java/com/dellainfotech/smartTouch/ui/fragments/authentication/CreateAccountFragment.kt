@@ -7,7 +7,6 @@ import android.text.method.PasswordTransformationMethod
 import android.util.Log
 import android.util.Patterns
 import android.view.LayoutInflater
-import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
@@ -166,5 +165,10 @@ class CreateAccountFragment :
         FragmentCreateAccountBinding.inflate(inflater, container, false)
 
     override fun getFragmentRepository(): AuthRepository = AuthRepository(networkModel)
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        viewModel.signUpResponse.postValue(null)
+    }
 
 }

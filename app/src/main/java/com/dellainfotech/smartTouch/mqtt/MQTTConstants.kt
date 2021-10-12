@@ -12,7 +12,6 @@ object MQTTConstants {
     const val CERTIFICATE_ID = ""
     const val AWS_IOT_POLICY_NAME = "smart_touch_policy"
     const val CUSTOMER_SPECIFIC_ENDPOINT = "a3gjsr00gjuzw5-ats.iot.us-west-1.amazonaws.com"
-    const val topicForExerciseName = ""
 
     //MQTT TOPIC
     const val AWS_DEVICE_ID = "{deviceid}" //Device Serial number

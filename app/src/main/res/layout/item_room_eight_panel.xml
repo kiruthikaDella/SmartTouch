@@ -717,8 +717,8 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/card_title"
                 android:layout_marginTop="@dimen/_minus10sdp"
-                android:orientation="vertical"
-                android:visibility="gone">
+                android:visibility="gone"
+                android:orientation="vertical">
 
                 <ImageView
                     android:layout_width="@dimen/_24sdp"
@@ -752,7 +752,7 @@
                             android:layout_marginStart="@dimen/_15sdp"
                             android:layout_marginEnd="@dimen/_15sdp"
                             android:background="@drawable/device_menu_bottom_line"
-                            android:drawablePadding="@dimen/_20sdp"
+                            android:drawablePadding="@dimen/_15sdp"
                             android:fontFamily="@font/roboto_medium"
                             android:paddingStart="@dimen/_10sdp"
                             android:paddingEnd="@dimen/_10sdp"
@@ -771,7 +771,7 @@
                             android:layout_marginTop="@dimen/_10sdp"
                             android:layout_marginEnd="@dimen/_15sdp"
                             android:background="@drawable/device_menu_bottom_line"
-                            android:drawablePadding="@dimen/_20sdp"
+                            android:drawablePadding="@dimen/_15sdp"
                             android:fontFamily="@font/roboto_medium"
                             android:paddingStart="@dimen/_10sdp"
                             android:paddingEnd="@dimen/_10sdp"
@@ -790,7 +790,7 @@
                             android:layout_marginStart="@dimen/_15sdp"
                             android:layout_marginTop="@dimen/_10sdp"
                             android:layout_marginEnd="@dimen/_15sdp"
-                            android:drawablePadding="@dimen/_20sdp"
+                            android:drawablePadding="@dimen/_15sdp"
                             android:fontFamily="@font/roboto_medium"
                             android:paddingStart="@dimen/_10sdp"
                             android:paddingEnd="@dimen/_10sdp"

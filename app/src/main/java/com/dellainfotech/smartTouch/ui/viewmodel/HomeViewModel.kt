@@ -1,6 +1,5 @@
 package com.dellainfotech.smartTouch.ui.viewmodel
 
-import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -9,11 +8,14 @@ import com.dellainfotech.smartTouch.api.Resource
 import com.dellainfotech.smartTouch.api.body.*
 import com.dellainfotech.smartTouch.api.model.*
 import com.dellainfotech.smartTouch.api.repository.HomeRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
+import javax.inject.Inject
 
-class HomeViewModel @ViewModelInject constructor(
+@HiltViewModel
+class HomeViewModel @Inject constructor(
     private val homeRepository: HomeRepository
 ) : ViewModel() {
 
@@ -37,7 +39,8 @@ class HomeViewModel @ViewModelInject constructor(
     val retainStateResponse: MutableLiveData<Resource<CommonResponse>>
         get() = _retainStateResponse
 
-    private val _updateRoomResponse: MutableLiveData<Resource<UpdateRoomResponse>> = MutableLiveData()
+    private val _updateRoomResponse: MutableLiveData<Resource<UpdateRoomResponse>> =
+        MutableLiveData()
     val updateRoomResponse: MutableLiveData<Resource<UpdateRoomResponse>>
         get() = _updateRoomResponse
 
@@ -54,11 +57,13 @@ class HomeViewModel @ViewModelInject constructor(
     val getUserProfileResponse: LiveData<Resource<GetProfileResponse>>
         get() = _getUserProfileResponse
 
-    private val _updateUserProfileResponse: MutableLiveData<Resource<GetProfileResponse>> = MutableLiveData()
+    private val _updateUserProfileResponse: MutableLiveData<Resource<GetProfileResponse>> =
+        MutableLiveData()
     val updateUserProfileResponse: MutableLiveData<Resource<GetProfileResponse>>
         get() = _updateUserProfileResponse
 
-    private val _changePasswordResponse: MutableLiveData<Resource<CommonResponse>> = MutableLiveData()
+    private val _changePasswordResponse: MutableLiveData<Resource<CommonResponse>> =
+        MutableLiveData()
     val changePasswordResponse: MutableLiveData<Resource<CommonResponse>>
         get() = _changePasswordResponse
 
@@ -146,11 +151,13 @@ class HomeViewModel @ViewModelInject constructor(
         (getDeviceResponse.value as Resource<GetDeviceResponse>)
     }
 
-    private val _getDeviceCustomizationSettingsResponse: MutableLiveData<Resource<DeviceCustomizationResponse>> = MutableLiveData()
+    private val _getDeviceCustomizationSettingsResponse: MutableLiveData<Resource<DeviceCustomizationResponse>> =
+        MutableLiveData()
     val getDeviceCustomizationSettingsResponse: LiveData<Resource<DeviceCustomizationResponse>>
         get() = _getDeviceCustomizationSettingsResponse
 
-    private val _getDeviceFeatureSettingsResponse: MutableLiveData<Resource<DeviceFeatureResponse>> = MutableLiveData()
+    private val _getDeviceFeatureSettingsResponse: MutableLiveData<Resource<DeviceFeatureResponse>> =
+        MutableLiveData()
     val getDeviceFeatureSettingsResponse: LiveData<Resource<DeviceFeatureResponse>>
         get() = _getDeviceFeatureSettingsResponse
 
@@ -158,15 +165,18 @@ class HomeViewModel @ViewModelInject constructor(
     val deleteDeviceResponse: MutableLiveData<Resource<CommonResponse>>
         get() = _deleteDeviceResponse
 
-    private val _updateDeviceNameResponse: MutableLiveData<Resource<AddDeviceResponse>> = MutableLiveData()
+    private val _updateDeviceNameResponse: MutableLiveData<Resource<AddDeviceResponse>> =
+        MutableLiveData()
     val updateDeviceNameResponse: MutableLiveData<Resource<AddDeviceResponse>>
         get() = _updateDeviceNameResponse
 
-    private val _updateSwitchNameResponse: MutableLiveData<Resource<UpdateSwitchNameResponse>> = MutableLiveData()
+    private val _updateSwitchNameResponse: MutableLiveData<Resource<UpdateSwitchNameResponse>> =
+        MutableLiveData()
     val updateSwitchNameResponse: MutableLiveData<Resource<UpdateSwitchNameResponse>>
         get() = _updateSwitchNameResponse
 
-    private val _customizationLockResponse: MutableLiveData<Resource<CommonResponse>> = MutableLiveData()
+    private val _customizationLockResponse: MutableLiveData<Resource<CommonResponse>> =
+        MutableLiveData()
     val customizationLockResponse: MutableLiveData<Resource<CommonResponse>>
         get() = _customizationLockResponse
 
@@ -174,15 +184,18 @@ class HomeViewModel @ViewModelInject constructor(
     val iconListResponse: LiveData<Resource<IconListResponse>>
         get() = _iconListResponse
 
-    private val _updateSwitchIconResponse: MutableLiveData<Resource<UpdateSwitchIconResponse>> = MutableLiveData()
+    private val _updateSwitchIconResponse: MutableLiveData<Resource<UpdateSwitchIconResponse>> =
+        MutableLiveData()
     val updateSwitchIconResponse: MutableLiveData<Resource<UpdateSwitchIconResponse>>
         get() = _updateSwitchIconResponse
 
-    private val _getControlResponse: MutableLiveData<Resource<ControlModeResponse>> = MutableLiveData()
+    private val _getControlResponse: MutableLiveData<Resource<ControlModeResponse>> =
+        MutableLiveData()
     val getControlResponse: LiveData<Resource<ControlModeResponse>>
         get() = _getControlResponse
 
-    private val _imageUploadResponse: MutableLiveData<Resource<ImageUploadResponse>> = MutableLiveData()
+    private val _imageUploadResponse: MutableLiveData<Resource<ImageUploadResponse>> =
+        MutableLiveData()
     val imageUploadResponse: MutableLiveData<Resource<ImageUploadResponse>>
         get() = _imageUploadResponse
 
@@ -198,7 +211,8 @@ class HomeViewModel @ViewModelInject constructor(
     val addSceneResponse: MutableLiveData<Resource<AddSceneResponse>>
         get() = _addSceneResponse
 
-    private val _updateSceneResponse: MutableLiveData<Resource<AddSceneResponse>> = MutableLiveData()
+    private val _updateSceneResponse: MutableLiveData<Resource<AddSceneResponse>> =
+        MutableLiveData()
     val updateSceneResponse: MutableLiveData<Resource<AddSceneResponse>>
         get() = _updateSceneResponse
 
@@ -206,7 +220,8 @@ class HomeViewModel @ViewModelInject constructor(
     val deleteSceneResponse: MutableLiveData<Resource<CommonResponse>>
         get() = _deleteSceneResponse
 
-    private val _deleteSceneDetailResponse: MutableLiveData<Resource<CommonResponse>> = MutableLiveData()
+    private val _deleteSceneDetailResponse: MutableLiveData<Resource<CommonResponse>> =
+        MutableLiveData()
     val deleteSceneDetailResponse: MutableLiveData<Resource<CommonResponse>>
         get() = _deleteSceneDetailResponse
 
@@ -214,11 +229,13 @@ class HomeViewModel @ViewModelInject constructor(
     val factoryResetResponse: MutableLiveData<Resource<CommonResponse>>
         get() = _factoryResetResponse
 
-    private val _factoryResetAllDeviceResponse: MutableLiveData<Resource<CommonResponse>> = MutableLiveData()
+    private val _factoryResetAllDeviceResponse: MutableLiveData<Resource<CommonResponse>> =
+        MutableLiveData()
     val factoryResetAllDeviceResponse: MutableLiveData<Resource<CommonResponse>>
         get() = _factoryResetAllDeviceResponse
 
-    private val _updateSceneStatusResponse: MutableLiveData<Resource<CommonResponse>> = MutableLiveData()
+    private val _updateSceneStatusResponse: MutableLiveData<Resource<CommonResponse>> =
+        MutableLiveData()
     val updateSceneStatusResponse: MutableLiveData<Resource<CommonResponse>>
         get() = _updateSceneStatusResponse
 
@@ -234,7 +251,8 @@ class HomeViewModel @ViewModelInject constructor(
 
     fun getDeviceCustomization(deviceId: String) = viewModelScope.launch {
         _getDeviceCustomizationSettingsResponse.value = Resource.Loading
-        _getDeviceCustomizationSettingsResponse.value = homeRepository.getDeviceCustomizationSettings(deviceId)
+        _getDeviceCustomizationSettingsResponse.value =
+            homeRepository.getDeviceCustomizationSettings(deviceId)
     }
 
     fun getDeviceFeatures(deviceId: String) = viewModelScope.launch {
@@ -242,10 +260,12 @@ class HomeViewModel @ViewModelInject constructor(
         _getDeviceFeatureSettingsResponse.value = homeRepository.getDeviceFeaturesSettings(deviceId)
     }
 
-    fun deleteDevice(productGroup: String, roomId: String,deviceId: String) = viewModelScope.launch {
-        _deleteDeviceResponse.value = Resource.Loading
-        _deleteDeviceResponse.value = homeRepository.deleteDevice(productGroup, roomId, deviceId)
-    }
+    fun deleteDevice(productGroup: String, roomId: String, deviceId: String) =
+        viewModelScope.launch {
+            _deleteDeviceResponse.value = Resource.Loading
+            _deleteDeviceResponse.value =
+                homeRepository.deleteDevice(productGroup, roomId, deviceId)
+        }
 
     fun updateDeviceName(bodyUpdateDeviceName: BodyUpdateDeviceName) = viewModelScope.launch {
         _updateDeviceNameResponse.value = Resource.Loading
@@ -277,10 +297,11 @@ class HomeViewModel @ViewModelInject constructor(
         _getControlResponse.value = homeRepository.getControl()
     }
 
-    fun imageUpload(deviceId: RequestBody, image: MutableList<MultipartBody.Part>) = viewModelScope.launch {
-        _imageUploadResponse.value = Resource.Loading
-        _imageUploadResponse.value = homeRepository.imageUpload(deviceId,image)
-    }
+    fun imageUpload(deviceId: RequestBody, image: MutableList<MultipartBody.Part>) =
+        viewModelScope.launch {
+            _imageUploadResponse.value = Resource.Loading
+            _imageUploadResponse.value = homeRepository.imageUpload(deviceId, image)
+        }
 
     fun deleteImage(deviceId: String) = viewModelScope.launch {
         _deleteImageResponse.value = Resource.Loading
@@ -307,9 +328,9 @@ class HomeViewModel @ViewModelInject constructor(
         _deleteSceneResponse.value = homeRepository.deleteScene(sceneId)
     }
 
-    fun deleteSceneDetail(sceneId: String,sceneDetailId: String) = viewModelScope.launch {
+    fun deleteSceneDetail(sceneId: String, sceneDetailId: String) = viewModelScope.launch {
         _deleteSceneDetailResponse.value = Resource.Loading
-        _deleteSceneDetailResponse.value = homeRepository.deleteSceneDetail(sceneId,sceneDetailId)
+        _deleteSceneDetailResponse.value = homeRepository.deleteSceneDetail(sceneId, sceneDetailId)
     }
 
     fun factoryReset(bodyFactoryReset: BodyFactoryReset) = viewModelScope.launch {
@@ -322,10 +343,12 @@ class HomeViewModel @ViewModelInject constructor(
         _factoryResetAllDeviceResponse.value = homeRepository.factoryResetAllDevice()
     }
 
-    fun updateSceneStatus(sceneId: String,bodyUpdateSceneStatus: BodyUpdateSceneStatus) = viewModelScope.launch {
-        _updateSceneStatusResponse.value = Resource.Loading
-        _updateSceneStatusResponse.value = homeRepository.updateSceneStatus(sceneId,bodyUpdateSceneStatus)
-    }
+    fun updateSceneStatus(sceneId: String, bodyUpdateSceneStatus: BodyUpdateSceneStatus) =
+        viewModelScope.launch {
+            _updateSceneStatusResponse.value = Resource.Loading
+            _updateSceneStatusResponse.value =
+                homeRepository.updateSceneStatus(sceneId, bodyUpdateSceneStatus)
+        }
 
     //
     //endregion
@@ -336,15 +359,18 @@ class HomeViewModel @ViewModelInject constructor(
     //region ownership transfer
     //
 
-    private val _getOwnershipResponse: MutableLiveData<Resource<OwnershipResponse>> = MutableLiveData()
+    private val _getOwnershipResponse: MutableLiveData<Resource<OwnershipResponse>> =
+        MutableLiveData()
     val getOwnershipResponse: LiveData<Resource<OwnershipResponse>>
         get() = _getOwnershipResponse
 
-    private val _transferOwnershipResponse: MutableLiveData<Resource<OwnershipResponse>> = MutableLiveData()
+    private val _transferOwnershipResponse: MutableLiveData<Resource<OwnershipResponse>> =
+        MutableLiveData()
     val transferOwnershipResponse: MutableLiveData<Resource<OwnershipResponse>>
         get() = _transferOwnershipResponse
 
-    private val _cancelOwnershipResponse: MutableLiveData<Resource<CommonResponse>> = MutableLiveData()
+    private val _cancelOwnershipResponse: MutableLiveData<Resource<CommonResponse>> =
+        MutableLiveData()
     val cancelOwnershipResponse: MutableLiveData<Resource<CommonResponse>>
         get() = _cancelOwnershipResponse
 
@@ -362,7 +388,6 @@ class HomeViewModel @ViewModelInject constructor(
         _cancelOwnershipResponse.value = Resource.Loading
         _cancelOwnershipResponse.value = homeRepository.cancelTransferOwnership(ownershipId)
     }
-
 
 
     //

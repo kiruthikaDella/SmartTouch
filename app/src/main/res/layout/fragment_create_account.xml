@@ -46,7 +46,8 @@
                 android:id="@+id/edt_phone_number"
                 style="@style/CreateAccountEditText"
                 android:hint="@string/hint_phone_number"
-                android:inputType="phone" />
+                android:inputType="phone"
+                android:digits="0123456789"/>
 
             <EditText
                 android:id="@+id/edt_email"

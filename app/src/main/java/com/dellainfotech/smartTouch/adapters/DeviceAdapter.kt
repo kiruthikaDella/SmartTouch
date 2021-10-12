@@ -319,7 +319,7 @@ class DeviceAdapter(
             }
 
             tvPanelName.text = device.deviceName
-            if (device.isDeviceAvailable == 0) {
+            if (device.isDeviceAvailable == "0") {
                 relativeLayout.visibility = View.VISIBLE
             } else {
                 relativeLayout.visibility = View.GONE
@@ -331,7 +331,7 @@ class DeviceAdapter(
                         "1" -> {
                             val switchName = value.name
                             tvSwitchNameOne.text = switchName
-                            switchOne.isChecked = value.switchStatus.toBoolean()
+                            switchOne.isChecked = value.switchStatus.toInt().toBoolean()
                             value.desc?.let {
                                 tvSwitchNameOneDesc.text = it
                             }
@@ -339,7 +339,7 @@ class DeviceAdapter(
                         "2" -> {
                             val switchName = value.name
                             tvSwitchNameTwo.text = switchName
-                            switchTwo.isChecked = value.switchStatus.toBoolean()
+                            switchTwo.isChecked = value.switchStatus.toInt().toBoolean()
                             value.desc?.let {
                                 tvSwitchNameTwoDesc.text = it
                             }
@@ -347,7 +347,7 @@ class DeviceAdapter(
                         "3" -> {
                             val switchName = value.name
                             tvSwitchNameThree.text = switchName
-                            switchThree.isChecked = value.switchStatus.toBoolean()
+                            switchThree.isChecked = value.switchStatus.toInt().toBoolean()
                             value.desc?.let {
                                 tvSwitchNameThreeDesc.text = it
                             }
@@ -355,7 +355,7 @@ class DeviceAdapter(
                         "4" -> {
                             val switchName = value.name
                             tvSwitchNameFour.text = switchName
-                            switchFour.isChecked = value.switchStatus.toBoolean()
+                            switchFour.isChecked = value.switchStatus.toInt().toBoolean()
                             value.desc?.let {
                                 tvSwitchNameFourDesc.text = it
                             }
@@ -363,7 +363,7 @@ class DeviceAdapter(
                         "5" -> {
                             val switchName = value.name
                             tvSwitchNameFive.text = switchName
-                            switchFive.isChecked = value.switchStatus.toBoolean()
+                            switchFive.isChecked = value.switchStatus.toInt().toBoolean()
                             value.desc?.let {
                                 tvSwitchNameFiveDesc.text = it
                             }
@@ -371,7 +371,7 @@ class DeviceAdapter(
                         "6" -> {
                             val switchName = value.name
                             tvSwitchNameSix.text = switchName
-                            switchSix.isChecked = value.switchStatus.toBoolean()
+                            switchSix.isChecked = value.switchStatus.toInt().toBoolean()
                             value.desc?.let {
                                 tvSwitchNameSixDesc.text = it
                             }
@@ -379,7 +379,7 @@ class DeviceAdapter(
                         "7" -> {
                             val switchName = value.name
                             tvSwitchNameSeven.text = switchName
-                            switchSeven.isChecked = value.switchStatus.toBoolean()
+                            switchSeven.isChecked = value.switchStatus.toInt().toBoolean()
                             value.desc?.let {
                                 tvSwitchNameSevenDesc.text = it
                             }
@@ -387,7 +387,7 @@ class DeviceAdapter(
                         "8" -> {
                             val switchName = value.name
                             tvSwitchNameEight.text = switchName
-                            switchEight.isChecked = value.switchStatus.toBoolean()
+                            switchEight.isChecked = value.switchStatus.toInt().toBoolean()
                             value.desc?.let {
                                 tvSwitchNameEightDesc.text = it
                             }
@@ -398,12 +398,12 @@ class DeviceAdapter(
                         "10" -> {
                             val switchName = value.name
                             tvSwitchPortA.text = switchName
-                            switchPortA.isChecked = value.switchStatus.toBoolean()
+                            switchPortA.isChecked = value.switchStatus.toInt().toBoolean()
                         }
                         "11" -> {
                             val switchName = value.name
                             tvSwitchPortC.text = switchName
-                            switchPortC.isChecked = value.switchStatus.toBoolean()
+                            switchPortC.isChecked = value.switchStatus.toInt().toBoolean()
                         }
                     }
                 }
@@ -602,7 +602,7 @@ class DeviceAdapter(
             }
 
             tvPanelName.text = device.deviceName
-            if (device.isDeviceAvailable == 0) {
+            if (device.isDeviceAvailable == "0") {
                 relativeLayout.visibility = View.VISIBLE
             } else {
                 relativeLayout.visibility = View.GONE
@@ -614,7 +614,7 @@ class DeviceAdapter(
                         "1" -> {
                             val switchName = value.name
                             tvSwitchNameOne.text = switchName
-                            switchOne.isChecked = value.switchStatus.toBoolean()
+                            switchOne.isChecked = value.switchStatus.toInt().toBoolean()
                             value.desc?.let {
                                 tvSwitchNameOneDesc.text = it
                             }
@@ -622,7 +622,7 @@ class DeviceAdapter(
                         "2" -> {
                             val switchName = value.name
                             tvSwitchNameTwo.text = switchName
-                            switchTwo.isChecked = value.switchStatus.toBoolean()
+                            switchTwo.isChecked = value.switchStatus.toInt().toBoolean()
                             value.desc?.let {
                                 tvSwitchNameTwoDesc.text = it
                             }
@@ -630,7 +630,7 @@ class DeviceAdapter(
                         "3" -> {
                             val switchName = value.name
                             tvSwitchNameThree.text = switchName
-                            switchThree.isChecked = value.switchStatus.toBoolean()
+                            switchThree.isChecked = value.switchStatus.toInt().toBoolean()
                             value.desc?.let {
                                 tvSwitchNameThreeDesc.text = it
                             }
@@ -638,7 +638,7 @@ class DeviceAdapter(
                         "4" -> {
                             val switchName = value.name
                             tvSwitchNameFour.text = switchName
-                            switchFour.isChecked = value.switchStatus.toBoolean()
+                            switchFour.isChecked = value.switchStatus.toInt().toBoolean()
                             value.desc?.let {
                                 tvSwitchNameFourDesc.text = it
                             }
@@ -649,7 +649,7 @@ class DeviceAdapter(
                         "6" -> {
                             val switchName = value.name
                             tvSwitchPortC.text = switchName
-                            switchPortC.isChecked = value.switchStatus.toBoolean()
+                            switchPortC.isChecked = value.switchStatus.toInt().toBoolean()
                         }
                     }
                 }
@@ -786,7 +786,7 @@ class DeviceAdapter(
             }
 
             tvPanelName.text = device.deviceName
-            if (device.isDeviceAvailable == 0) {
+            if (device.isDeviceAvailable == "0") {
                 relativeLayout.visibility = View.VISIBLE
             } else {
                 relativeLayout.visibility = View.GONE
@@ -798,7 +798,7 @@ class DeviceAdapter(
                         "1" -> {
                             val switchName = value.name
                             tvSwitchNameOne.text = switchName
-                            switchOne.isChecked = value.switchStatus.toBoolean()
+                            switchOne.isChecked = value.switchStatus.toInt().toBoolean()
                             value.desc?.let {
                                 tvSwitchNameOneDesc.text = it
                             }
@@ -806,7 +806,7 @@ class DeviceAdapter(
                         "2" -> {
                             val switchName = value.name
                             tvSwitchNameTwo.text = switchName
-                            switchTwo.isChecked = value.switchStatus.toBoolean()
+                            switchTwo.isChecked = value.switchStatus.toInt().toBoolean()
                             value.desc?.let {
                                 tvSwitchNameTwoDesc.text = it
                             }
@@ -814,7 +814,7 @@ class DeviceAdapter(
                         "3" -> {
                             val switchName = value.name
                             tvSwitchNameThree.text = switchName
-                            switchThree.isChecked = value.switchStatus.toBoolean()
+                            switchThree.isChecked = value.switchStatus.toInt().toBoolean()
                             value.desc?.let {
                                 tvSwitchNameThreeDesc.text = it
                             }
@@ -822,7 +822,7 @@ class DeviceAdapter(
                         "4" -> {
                             val switchName = value.name
                             tvSwitchNameFour.text = switchName
-                            switchFour.isChecked = value.switchStatus.toBoolean()
+                            switchFour.isChecked = value.switchStatus.toInt().toBoolean()
                             value.desc?.let {
                                 tvSwitchNameFourDesc.text = it
                             }
@@ -830,7 +830,7 @@ class DeviceAdapter(
                         "5" -> {
                             val switchName = value.name
                             tvSwitchNameFive.text = switchName
-                            switchFive.isChecked = value.switchStatus.toBoolean()
+                            switchFive.isChecked = value.switchStatus.toInt().toBoolean()
                             value.desc?.let {
                                 tvSwitchNameFiveDesc.text = it
                             }
@@ -962,7 +962,7 @@ class DeviceAdapter(
             }
 
             tvPanelName.text = device.deviceName
-            if (device.isDeviceAvailable == 0) {
+            if (device.isDeviceAvailable == "0") {
                 relativeLayout.visibility = View.VISIBLE
             } else {
                 relativeLayout.visibility = View.GONE
@@ -974,7 +974,7 @@ class DeviceAdapter(
                         "1" -> {
                             val switchName = value.name
                             tvSwitchNameOne.text = switchName
-                            switchOne.isChecked = value.switchStatus.toBoolean()
+                            switchOne.isChecked = value.switchStatus.toInt().toBoolean()
                             value.desc?.let {
                                 tvSwitchNameOneDesc.text = it
                             }
@@ -982,7 +982,7 @@ class DeviceAdapter(
                         "2" -> {
                             val switchName = value.name
                             tvSwitchNameTwo.text = switchName
-                            switchTwo.isChecked = value.switchStatus.toBoolean()
+                            switchTwo.isChecked = value.switchStatus.toInt().toBoolean()
                             value.desc?.let {
                                 tvSwitchNameTwoDesc.text = it
                             }
@@ -990,7 +990,7 @@ class DeviceAdapter(
                         "3" -> {
                             val switchName = value.name
                             tvSwitchNameThree.text = switchName
-                            switchThree.isChecked = value.switchStatus.toBoolean()
+                            switchThree.isChecked = value.switchStatus.toInt().toBoolean()
                             value.desc?.let {
                                 tvSwitchNameThreeDesc.text = it
                             }
@@ -998,7 +998,7 @@ class DeviceAdapter(
                         "4" -> {
                             val switchName = value.name
                             tvSwitchNameFour.text = switchName
-                            switchFour.isChecked = value.switchStatus.toBoolean()
+                            switchFour.isChecked = value.switchStatus.toInt().toBoolean()
                             value.desc?.let {
                                 tvSwitchNameFourDesc.text = it
                             }
@@ -1006,7 +1006,7 @@ class DeviceAdapter(
                         "5" -> {
                             val switchName = value.name
                             tvSwitchNameFive.text = switchName
-                            switchFive.isChecked = value.switchStatus.toBoolean()
+                            switchFive.isChecked = value.switchStatus.toInt().toBoolean()
                             value.desc?.let {
                                 tvSwitchNameFiveDesc.text = it
                             }
@@ -1169,46 +1169,46 @@ class DeviceAdapter(
                             // topic [7] = Switch 7 Status (if DT = 8)
                             // topic [8] = Switch 8 Status (if DT = 8)
 
-                            deviceData?.switchData?.get(0)?.switchStatus = switchStatus[0].toInt()
-                            deviceData?.switchData?.get(1)?.switchStatus = switchStatus[1].toInt()
-                            deviceData?.switchData?.get(2)?.switchStatus = switchStatus[2].toInt()
-                            deviceData?.switchData?.get(3)?.switchStatus = switchStatus[3].toInt()
+                            deviceData?.switchData?.get(0)?.switchStatus = switchStatus[0]
+                            deviceData?.switchData?.get(1)?.switchStatus = switchStatus[1]
+                            deviceData?.switchData?.get(2)?.switchStatus = switchStatus[2]
+                            deviceData?.switchData?.get(3)?.switchStatus = switchStatus[3]
 
                             if (jsonObject.has(MQTTConstants.AWS_DEVICE_TYPE)) {
                                 if (jsonObject.getString(MQTTConstants.AWS_DEVICE_TYPE) == "8") {
                                     deviceData?.switchData?.get(4)?.switchStatus =
-                                        switchStatus[4].toInt()
+                                        switchStatus[4]
                                     deviceData?.switchData?.get(5)?.switchStatus =
-                                        switchStatus[5].toInt()
+                                        switchStatus[5]
                                     deviceData?.switchData?.get(6)?.switchStatus =
-                                        switchStatus[6].toInt()
+                                        switchStatus[6]
                                     deviceData?.switchData?.get(7)?.switchStatus =
-                                        switchStatus[7].toInt()
+                                        switchStatus[7]
                                     deviceData?.switchData?.get(8)?.switchStatus =
-                                        jsonObject.getInt(
+                                        jsonObject.getString(
                                             MQTTConstants.AWS_DIMMER
                                         ) //Dimmer
                                     deviceData?.switchData?.get(9)?.switchStatus =
-                                        jsonObject.getInt(
+                                        jsonObject.getString(
                                             MQTTConstants.AWS_USB_A
                                         ) //USB A
                                     deviceData?.switchData?.get(10)?.switchStatus =
-                                        jsonObject.getInt(
+                                        jsonObject.getString(
                                             MQTTConstants.AWS_USB_C
                                         ) //USB C
                                 } else {
                                     if (jsonObject.has(MQTTConstants.AWS_USB_C)) {
                                         deviceData?.switchData?.get(4)?.switchStatus =
-                                            jsonObject.getInt(
+                                            jsonObject.getString(
                                                 MQTTConstants.AWS_DIMMER
                                             ) //Dimmer
                                         deviceData?.switchData?.get(5)?.switchStatus =
-                                            jsonObject.getInt(
+                                            jsonObject.getString(
                                                 MQTTConstants.AWS_USB_C
                                             ) //USB C
                                     } else {
                                         deviceData?.switchData?.get(5)?.switchStatus =
-                                            jsonObject.getInt(
+                                            jsonObject.getString(
                                                 MQTTConstants.AWS_DIMMER
                                             ) //Dimmer
                                     }
@@ -1252,7 +1252,7 @@ class DeviceAdapter(
 
                         if (jsonObject.has(MQTTConstants.AWS_STATUS)) {
                             deviceData?.isDeviceAvailable =
-                                jsonObject.getInt(MQTTConstants.AWS_STATUS)
+                                jsonObject.getString(MQTTConstants.AWS_STATUS)
 
                             deviceData?.let { dData ->
                                 val firstIndex =

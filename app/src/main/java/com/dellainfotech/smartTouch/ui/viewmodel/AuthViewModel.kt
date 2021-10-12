@@ -1,7 +1,5 @@
 package com.dellainfotech.smartTouch.ui.viewmodel
 
-import androidx.hilt.lifecycle.ViewModelInject
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -13,9 +11,12 @@ import com.dellainfotech.smartTouch.api.body.BodySocialLogin
 import com.dellainfotech.smartTouch.api.model.CommonResponse
 import com.dellainfotech.smartTouch.api.model.LoginResponse
 import com.dellainfotech.smartTouch.api.repository.AuthRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class AuthViewModel @ViewModelInject constructor(
+@HiltViewModel
+class AuthViewModel @Inject constructor(
     private val authRepository: AuthRepository
 ) : ViewModel() {
 
@@ -24,7 +25,7 @@ class AuthViewModel @ViewModelInject constructor(
         get() = _loginResponse
 
     private val _signUpResponse: MutableLiveData<Resource<CommonResponse>> = MutableLiveData()
-    val signUpResponse: LiveData<Resource<CommonResponse>>
+    val signUpResponse: MutableLiveData<Resource<CommonResponse>>
         get() = _signUpResponse
 
     private val _forgotPasswordResponse: MutableLiveData<Resource<CommonResponse>> =
