@@ -1,6 +1,5 @@
 package com.dellainfotech.smartTouch.ui.viewmodel
 
-import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -9,11 +8,14 @@ import com.dellainfotech.smartTouch.api.Resource
 import com.dellainfotech.smartTouch.api.body.*
 import com.dellainfotech.smartTouch.api.model.*
 import com.dellainfotech.smartTouch.api.repository.HomeRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
+import javax.inject.Inject
 
-class HomeViewModel @ViewModelInject constructor(
+@HiltViewModel
+class HomeViewModel @Inject constructor(
     private val homeRepository: HomeRepository
 ) : ViewModel() {
 
@@ -307,9 +309,9 @@ class HomeViewModel @ViewModelInject constructor(
         _deleteSceneResponse.value = homeRepository.deleteScene(sceneId)
     }
 
-    fun deleteSceneDetail(sceneId: String,sceneDetailId: String) = viewModelScope.launch {
+    fun deleteSceneDetail(sceneId: String, sceneDetailId: String) = viewModelScope.launch {
         _deleteSceneDetailResponse.value = Resource.Loading
-        _deleteSceneDetailResponse.value = homeRepository.deleteSceneDetail(sceneId,sceneDetailId)
+        _deleteSceneDetailResponse.value = homeRepository.deleteSceneDetail(sceneId, sceneDetailId)
     }
 
     fun factoryReset(bodyFactoryReset: BodyFactoryReset) = viewModelScope.launch {
@@ -362,6 +364,7 @@ class HomeViewModel @ViewModelInject constructor(
         _cancelOwnershipResponse.value = Resource.Loading
         _cancelOwnershipResponse.value = homeRepository.cancelTransferOwnership(ownershipId)
     }
+
 
     //
     //endregion

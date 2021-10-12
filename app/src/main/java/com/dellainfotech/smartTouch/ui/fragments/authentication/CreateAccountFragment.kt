@@ -176,4 +176,9 @@ class CreateAccountFragment :
 
     override fun getFragmentRepository(): AuthRepository = AuthRepository(networkModel)
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        viewModel.signUpResponse.postValue(null)
+    }
+
 }

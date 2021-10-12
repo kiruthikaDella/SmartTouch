@@ -11,7 +11,7 @@ import com.teksun.tcpudplibrary.SettingsService
  * Created by Jignesh Dangar on 09-04-2021.
  */
 
-class AppDelegate: Application(), LifecycleObserver {
+class AppDelegate : Application(), LifecycleObserver {
 
     companion object {
         lateinit var instance: AppDelegate

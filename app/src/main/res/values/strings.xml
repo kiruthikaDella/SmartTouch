@@ -98,7 +98,6 @@
     <string name="side_nav_text_logout">Logout</string>
 
     <!--    Room Panel-->
-    <!--    Room Panel-->
     <string name="text_add_panel">Add Panel</string>
     <string name="text_edit">Edit</string>
     <string name="text_customization">Customization</string>
@@ -106,6 +105,7 @@
     <string name="text_settings">Settings</string>
     <string name="text_retain_state">Retain State</string>
     <string name="text_serial_number">Serial Number</string>
+    <string name="text_panel_name">Panel name</string>
     <string name="hint_text_enter_panel_name">Enter panel name</string>
     <string name="hint_text_enter_serial_number">Enter serial number</string>
     <string name="text_device_type">Device Type</string>

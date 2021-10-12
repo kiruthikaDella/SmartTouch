@@ -166,7 +166,7 @@ class UpdateDeviceSceneAdapter(
                                         mActivity.getString(R.string.text_select_device),
                                         0,
                                         0,
-                                        0,
+                                        "0",
                                         0,
                                         null
                                     )
@@ -181,7 +181,7 @@ class UpdateDeviceSceneAdapter(
                                         mActivity.getString(R.string.text_no_device),
                                         0,
                                         0,
-                                        0,
+                                        "0",
                                         0,
                                         null
                                     )
@@ -197,7 +197,7 @@ class UpdateDeviceSceneAdapter(
                                     mActivity.getString(R.string.text_no_device),
                                     0,
                                     0,
-                                    0,
+                                    "0",
                                     0,
                                     null
                                 )
@@ -226,7 +226,7 @@ class UpdateDeviceSceneAdapter(
                                 mActivity.getString(R.string.text_no_device),
                                 0,
                                 0,
-                                0,
+                                "0",
                                 0,
                                 null
                             )
@@ -268,7 +268,7 @@ class UpdateDeviceSceneAdapter(
                                     "",
                                     mActivity.getString(R.string.text_select_switch),
                                     "",
-                                    0,
+                                    "0",
                                     null
                                 )
                                 switchList.add(switch)
@@ -283,7 +283,7 @@ class UpdateDeviceSceneAdapter(
                                     "",
                                     mActivity.getString(R.string.text_no_switch),
                                     "",
-                                    0,
+                                    "0",
                                     null
                                 )
                                 switchList.add(switch)
@@ -297,7 +297,7 @@ class UpdateDeviceSceneAdapter(
                                 "",
                                 mActivity.getString(R.string.text_no_switch),
                                 "",
-                                0,
+                                "0",
                                 null
                             )
                             switchList.add(switch)
