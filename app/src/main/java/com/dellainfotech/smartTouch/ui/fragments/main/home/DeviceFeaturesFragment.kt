@@ -45,6 +45,18 @@ class DeviceFeaturesFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        binding.rgTimeFormat.check(
+            binding.rgTimeFormat[0].id
+        )
+        binding.rgTemperatureUnit.check(
+            binding.rgTemperatureUnit[0].id
+        )
+        binding.rgDisplayBrightness.check(
+            binding.rgDisplayBrightness[0].id
+        )
+
+        binding.seekBarBrightness.isVisible = false
+
         mqttConnectionDisposable =
             NotifyManager.getMQTTConnectionInfo().observeOn(AndroidSchedulers.mainThread())
                 .subscribe {
@@ -89,23 +101,28 @@ class DeviceFeaturesFragment :
                     DialogUtil.hideDialog()
                     if (response.values.status && response.values.code == Constants.API_SUCCESS_CODE) {
                         response.values.data?.let { deviceFeatureData ->
-                            binding.switchSleepMode.isChecked =
-                                deviceFeatureData.sleepMode.toBoolean()
-                            binding.switchNightMode.isChecked =
-                                deviceFeatureData.nightMode.toBoolean()
-                            binding.switchOutdoorMode.isChecked =
-                                deviceFeatureData.outdoorMode.toBoolean()
-                            binding.switchTime.isChecked = deviceFeatureData.time.toBoolean()
-                            binding.switchWeatherReport.isChecked =
-                                deviceFeatureData.weatherReport.toBoolean()
-                            binding.switchRoomTemperature.isChecked =
-                                deviceFeatureData.roomTemperature.toBoolean()
-                            binding.seekBarBrightness.progress =
-                                deviceFeatureData.displayBrightnessValue.toInt()
 
-                            binding.rgTimeFormat.check(binding.rgTimeFormat[deviceFeatureData.timeFormat].id)
-                            binding.rgTemperatureUnit.check(binding.rgTemperatureUnit[deviceFeatureData.temperatureUnit].id)
-                            binding.rgDisplayBrightness.check(binding.rgDisplayBrightness[deviceFeatureData.displayBrightnessMode.toInt()].id)
+                            try {
+                                binding.switchSleepMode.isChecked =
+                                    deviceFeatureData.sleepMode.toBoolean()
+                                binding.switchNightMode.isChecked =
+                                    deviceFeatureData.nightMode.toBoolean()
+                                binding.switchOutdoorMode.isChecked =
+                                    deviceFeatureData.outdoorMode.toBoolean()
+                                binding.switchTime.isChecked = deviceFeatureData.time.toBoolean()
+                                binding.switchWeatherReport.isChecked =
+                                    deviceFeatureData.weatherReport.toBoolean()
+                                binding.switchRoomTemperature.isChecked =
+                                    deviceFeatureData.roomTemperature.toBoolean()
+                                binding.seekBarBrightness.progress =
+                                    deviceFeatureData.displayBrightnessValue.toInt()
+
+                                binding.rgTimeFormat.check(binding.rgTimeFormat[deviceFeatureData.timeFormat].id)
+                                binding.rgTemperatureUnit.check(binding.rgTemperatureUnit[deviceFeatureData.temperatureUnit].id)
+                                binding.rgDisplayBrightness.check(binding.rgDisplayBrightness[deviceFeatureData.displayBrightnessMode.toInt()].id)
+                            }catch (e: Exception){
+                                e.printStackTrace()
+                            }
                         }
                     } else {
                         context?.let {

@@ -194,9 +194,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_10sdp"
+                app:layout_constraintBottom_toBottomOf="@+id/iv_retain_state"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintBottom_toBottomOf="@+id/tv_retain_state"
-                app:layout_constraintTop_toTopOf="@+id/tv_retain_state" />
+                app:layout_constraintTop_toTopOf="@+id/iv_retain_state" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
