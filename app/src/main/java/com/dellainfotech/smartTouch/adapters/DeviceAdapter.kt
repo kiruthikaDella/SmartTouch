@@ -567,8 +567,7 @@ class DeviceAdapter(
                     seekParams?.progress?.let {
                         publishDimmer(
                             device.deviceSerialNo,
-                            MQTTConstants.AWS_DMR,
-                            it
+                            it.toString()
                         )
                     }
                 }
@@ -751,8 +750,7 @@ class DeviceAdapter(
                     seekParams?.progress?.let {
                         publishDimmer(
                             device.deviceSerialNo,
-                            MQTTConstants.AWS_DMR,
-                            it
+                            it.toString()
                         )
                     }
                 }
@@ -913,22 +911,20 @@ class DeviceAdapter(
                 )
             }
 
-            /*switchFive.setOnClickListener {
+            switchFive.setOnClickListener {
                 publish(
                     device.deviceSerialNo,
                     MQTTConstants.AWS_SWITCH_5,
-                    switchFive.isChecked.toInt().toString(),
-                    tvSwitchNameFive.text.toString()
+                    switchFive.isChecked.toInt().toString()
                 )
-            }*/
+            }
 
             seekBar.onSeekChangeListener = object : OnSeekChangeListener {
                 override fun onSeeking(seekParams: SeekParams?) {
                     seekParams?.progress?.let {
                         publishDimmer(
                             device.deviceSerialNo,
-                            MQTTConstants.AWS_DMR,
-                            it
+                            it.toString()
                         )
                     }
                 }
@@ -1012,7 +1008,12 @@ class DeviceAdapter(
                             }
                         }
                         "6" -> {
-                            seekBar.setProgress(value.switchStatus.toFloat())
+                            try {
+                                seekBar.setProgress(value.switchStatus.toFloat())
+                            }catch (e: Exception){
+                                e.printStackTrace()
+                            }
+
                         }
                     }
                 }
@@ -1089,22 +1090,20 @@ class DeviceAdapter(
                 )
             }
 
-            /*switchFive.setOnClickListener {
+            switchFive.setOnClickListener {
                 publish(
                     device.deviceSerialNo,
                     MQTTConstants.AWS_SWITCH_5,
-                    switchFive.isChecked.toInt().toString(),
-                    tvSwitchNameFive.text.toString()
+                    switchFive.isChecked.toInt().toString()
                 )
-            }*/
+            }
 
             seekBar.onSeekChangeListener = object : OnSeekChangeListener {
                 override fun onSeeking(seekParams: SeekParams?) {
                     seekParams?.progress?.let {
                         publishDimmer(
                             device.deviceSerialNo,
-                            MQTTConstants.AWS_DMR,
-                            it
+                            it.toString()
                         )
                     }
                 }
@@ -1207,6 +1206,8 @@ class DeviceAdapter(
                                                 MQTTConstants.AWS_USB_C
                                             ) //USB C
                                     } else {
+                                        deviceData?.switchData?.get(4)?.switchStatus = switchStatus[4] //Fan speed
+
                                         deviceData?.switchData?.get(5)?.switchStatus =
                                             jsonObject.getString(
                                                 MQTTConstants.AWS_DIMMER
@@ -1295,9 +1296,9 @@ class DeviceAdapter(
         )
     }
 
-    private fun publishDimmer(deviceId: String, switchIndex: String, progress: Int) {
+    private fun publishDimmer(deviceId: String, progress: String) {
         val payload = JSONObject()
-        payload.put(switchIndex, progress)
+        payload.put(MQTTConstants.AWS_DMR, progress)
 
         Log.e(logTag, " publishDimmer payload $payload  ")
 

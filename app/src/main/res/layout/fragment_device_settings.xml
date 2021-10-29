@@ -168,6 +168,15 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/iv_update" />
 
+            <ImageView
+                android:id="@+id/iv_retain_state"
+                android:layout_width="@dimen/_16sdp"
+                android:layout_height="@dimen/_16sdp"
+                android:layout_marginTop="@dimen/_25sdp"
+                android:src="@drawable/ic_retain_state"
+                app:layout_constraintStart_toStartOf="@+id/iv_update"
+                app:layout_constraintTop_toBottomOf="@+id/iv_update" />
+
             <TextView
                 android:id="@+id/tv_retain_state"
                 android:layout_width="wrap_content"
@@ -176,9 +185,9 @@
                 android:text="@string/text_retain_state"
                 android:textColor="@color/daintree"
                 android:textSize="@dimen/_12ssp"
-                app:layout_constraintBottom_toBottomOf="@+id/switch_retain_state"
+                app:layout_constraintBottom_toBottomOf="@+id/iv_retain_state"
                 app:layout_constraintStart_toStartOf="@+id/tv_restart"
-                app:layout_constraintTop_toTopOf="@+id/switch_retain_state" />
+                app:layout_constraintTop_toTopOf="@+id/iv_retain_state" />
 
             <com.google.android.material.switchmaterial.SwitchMaterial
                 android:id="@+id/switch_retain_state"
@@ -186,8 +195,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_10sdp"
+                app:layout_constraintBottom_toBottomOf="@+id/iv_retain_state"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/iv_update_arrow" />
+                app:layout_constraintTop_toTopOf="@+id/iv_retain_state" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
