@@ -16,6 +16,7 @@ import com.dellainfotech.smartTouch.R
 import com.dellainfotech.smartTouch.api.Resource
 import com.dellainfotech.smartTouch.api.body.BodySignUp
 import com.dellainfotech.smartTouch.api.repository.AuthRepository
+import com.dellainfotech.smartTouch.common.interfaces.DialogShowListener
 import com.dellainfotech.smartTouch.common.utils.Constants
 import com.dellainfotech.smartTouch.common.utils.DialogUtil
 import com.dellainfotech.smartTouch.databinding.FragmentCreateAccountBinding
@@ -32,6 +33,7 @@ class CreateAccountFragment :
     private val logTag = this::class.java.simpleName
     private var isPasswordVisible = false
     private var isConfirmPasswordVisible = false
+    private var isInternetConnected = false
 
     @SuppressLint("ClickableViewAccessibility")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -46,7 +48,23 @@ class CreateAccountFragment :
         }
 
         binding.btnSignUp.setOnClickListener {
-            validateUserInformation()
+            if (isInternetConnected){
+                validateUserInformation()
+            }else {
+                activity?.let {
+                    DialogUtil.deviceOfflineAlert(
+                        it,
+                        getString(R.string.text_no_internet_available),
+                        object : DialogShowListener {
+                            override fun onClick() {
+                                DialogUtil.hideDialog()
+                                findNavController().navigateUp()
+                            }
+
+                        }
+                    )
+                }
+            }
         }
 
         binding.ivHidePassword.setOnClickListener {

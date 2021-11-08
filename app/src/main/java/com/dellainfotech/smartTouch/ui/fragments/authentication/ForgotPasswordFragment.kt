@@ -11,6 +11,7 @@ import com.dellainfotech.smartTouch.R
 import com.dellainfotech.smartTouch.api.Resource
 import com.dellainfotech.smartTouch.api.body.BodyForgotPassword
 import com.dellainfotech.smartTouch.api.repository.AuthRepository
+import com.dellainfotech.smartTouch.common.interfaces.DialogShowListener
 import com.dellainfotech.smartTouch.common.utils.Constants
 import com.dellainfotech.smartTouch.common.utils.DialogUtil
 import com.dellainfotech.smartTouch.databinding.FragmentForgotPasswordBinding
@@ -25,6 +26,7 @@ class ForgotPasswordFragment :
     ModelBaseFragment<AuthViewModel, FragmentForgotPasswordBinding, AuthRepository>() {
 
     private val logTag = this::class.java.simpleName
+    private var isInternetConnected = false
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -38,14 +40,31 @@ class ForgotPasswordFragment :
         }
 
         binding.btnSend.setOnClickListener {
-            val email = binding.edtEmail.text.toString().trim()
-            if (email.isBlank()){
-                binding.edtEmail.error = getString(R.string.error_text_email)
-            }else{
-                activity?.let {
-                    DialogUtil.loadingAlert(it)
+
+            if (isInternetConnected){
+                val email = binding.edtEmail.text.toString().trim()
+                if (email.isBlank()){
+                    binding.edtEmail.error = getString(R.string.error_text_email)
+                }else{
+                    activity?.let {
+                        DialogUtil.loadingAlert(it)
+                    }
+                    viewModel.forgotPassword(BodyForgotPassword(email))
                 }
-                viewModel.forgotPassword(BodyForgotPassword(email))
+            }else {
+                activity?.let {
+                    DialogUtil.deviceOfflineAlert(
+                        it,
+                        getString(R.string.text_no_internet_available),
+                        object : DialogShowListener {
+                            override fun onClick() {
+                                DialogUtil.hideDialog()
+                                findNavController().navigateUp()
+                            }
+
+                        }
+                    )
+                }
             }
         }
 
