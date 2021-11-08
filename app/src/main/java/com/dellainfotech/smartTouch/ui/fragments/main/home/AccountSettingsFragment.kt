@@ -428,6 +428,9 @@ class AccountSettingsFragment :
                 }
                 is Resource.Failure -> {
                     DialogUtil.hideDialog()
+                    context?.let {
+                        Toast.makeText(it, getString(R.string.error_something_went_wrong), Toast.LENGTH_SHORT).show()
+                    }
                     Log.e(logTag, "getUserProfileResponse Failure ${response.errorBody?.string()}")
                 }
                 else -> {
@@ -472,6 +475,9 @@ class AccountSettingsFragment :
                 }
                 is Resource.Failure -> {
                     DialogUtil.hideDialog()
+                    context?.let {
+                        Toast.makeText(it, getString(R.string.error_something_went_wrong), Toast.LENGTH_SHORT).show()
+                    }
                     Log.e(logTag, "getUserProfileResponse Failure ${response.errorBody?.string()}")
                 }
                 else -> {
@@ -490,6 +496,9 @@ class AccountSettingsFragment :
                 }
                 is Resource.Failure -> {
                     DialogUtil.hideDialog()
+                    context?.let {
+                        Toast.makeText(it, getString(R.string.error_something_went_wrong), Toast.LENGTH_SHORT).show()
+                    }
                     Log.e(
                         logTag,
                         " changePasswordResponse Failure ${response.errorBody?.string()} "
@@ -533,6 +542,9 @@ class AccountSettingsFragment :
                 }
                 is Resource.Failure -> {
                     DialogUtil.hideDialog()
+                    context?.let {
+                        Toast.makeText(it, getString(R.string.error_something_went_wrong), Toast.LENGTH_SHORT).show()
+                    }
                     Log.e(logTag, " getOwnershipResponse Failure ${response.errorBody?.string()} ")
                 }
                 else -> {
@@ -554,6 +566,9 @@ class AccountSettingsFragment :
                 }
                 is Resource.Failure -> {
                     DialogUtil.hideDialog()
+                    context?.let {
+                        Toast.makeText(it, getString(R.string.error_something_went_wrong), Toast.LENGTH_SHORT).show()
+                    }
                     Log.e(
                         logTag,
                         " transferOwnershipResponse Failure ${response.errorBody?.string()} "
@@ -578,6 +593,9 @@ class AccountSettingsFragment :
                 }
                 is Resource.Failure -> {
                     DialogUtil.hideDialog()
+                    context?.let {
+                        Toast.makeText(it, getString(R.string.error_something_went_wrong), Toast.LENGTH_SHORT).show()
+                    }
                     Log.e(
                         logTag,
                         " cancelOwnershipResponse Failure ${response.errorBody?.string()} "

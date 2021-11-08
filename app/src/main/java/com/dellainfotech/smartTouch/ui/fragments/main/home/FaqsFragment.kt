@@ -11,6 +11,7 @@ import android.widget.Toast
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.RecyclerView
+import com.dellainfotech.smartTouch.R
 import com.dellainfotech.smartTouch.adapters.faqadapter.AnswerModel
 import com.dellainfotech.smartTouch.adapters.faqadapter.FAQAdapter
 import com.dellainfotech.smartTouch.adapters.faqadapter.QuestionModel
@@ -108,6 +109,9 @@ class FaqsFragment : ModelBaseFragment<HomeViewModel, FragmentFaqsBinding, HomeR
                 }
                 is Resource.Failure -> {
                     DialogUtil.hideDialog()
+                    context?.let {
+                        Toast.makeText(it, getString(R.string.error_something_went_wrong), Toast.LENGTH_SHORT).show()
+                    }
                     Log.e(logTag, "faqResponse error ${response.errorBody}")
                 }
                 else -> {

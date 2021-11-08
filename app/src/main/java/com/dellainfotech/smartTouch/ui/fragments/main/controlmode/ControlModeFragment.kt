@@ -194,6 +194,9 @@ class ControlModeFragment :
                 }
                 is Resource.Failure -> {
                     DialogUtil.hideDialog()
+                    context?.let {
+                        Toast.makeText(it, getString(R.string.error_something_went_wrong), Toast.LENGTH_SHORT).show()
+                    }
                     Log.e(logTag, "logout error ${response.errorBody?.string()}")
                 }
                 else -> {
@@ -225,6 +228,9 @@ class ControlModeFragment :
                 }
                 is Resource.Failure -> {
                     DialogUtil.hideDialog()
+                    context?.let {
+                        Toast.makeText(it, getString(R.string.error_something_went_wrong), Toast.LENGTH_SHORT).show()
+                    }
                     Log.e(logTag, " getControlResponse Failure ${response.errorBody?.string()} ")
                 }
                 else -> {
@@ -266,6 +272,9 @@ class ControlModeFragment :
                 }
                 is Resource.Failure -> {
                     DialogUtil.hideDialog()
+                    context?.let {
+                        Toast.makeText(it, getString(R.string.error_something_went_wrong), Toast.LENGTH_SHORT).show()
+                    }
                     Log.e(logTag, " updatePinStatusResponse Failure $response ")
                 }
                 else -> {

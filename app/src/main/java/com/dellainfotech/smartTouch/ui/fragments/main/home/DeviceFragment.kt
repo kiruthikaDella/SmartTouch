@@ -369,6 +369,9 @@ class DeviceFragment : ModelBaseFragment<HomeViewModel, FragmentDeviceBinding, H
                 }
                 is Resource.Failure -> {
                     DialogUtil.hideDialog()
+                    context?.let {
+                        Toast.makeText(it, getString(R.string.error_something_went_wrong), Toast.LENGTH_SHORT).show()
+                    }
                     Log.e(logTag, " updateRoomResponse Failure ${response.errorBody?.string()}")
                 }
                 else -> {
@@ -393,6 +396,9 @@ class DeviceFragment : ModelBaseFragment<HomeViewModel, FragmentDeviceBinding, H
                 }
                 is Resource.Failure -> {
                     DialogUtil.hideDialog()
+                    context?.let {
+                        Toast.makeText(it, getString(R.string.error_something_went_wrong), Toast.LENGTH_SHORT).show()
+                    }
                     Log.e(logTag, "addDeviceResponse Failure ${response.errorBody?.string()}")
                 }
                 else -> {
@@ -419,6 +425,9 @@ class DeviceFragment : ModelBaseFragment<HomeViewModel, FragmentDeviceBinding, H
                 }
                 is Resource.Failure -> {
                     DialogUtil.hideDialog()
+                    context?.let {
+                        Toast.makeText(it, getString(R.string.error_something_went_wrong), Toast.LENGTH_SHORT).show()
+                    }
                     Log.e(logTag, "getDeviceResponse Failure ${response.errorBody?.string()}")
                 }
                 else -> {
@@ -450,6 +459,9 @@ class DeviceFragment : ModelBaseFragment<HomeViewModel, FragmentDeviceBinding, H
                 }
                 is Resource.Failure -> {
                     DialogUtil.hideDialog()
+                    context?.let {
+                        Toast.makeText(it, getString(R.string.error_something_went_wrong), Toast.LENGTH_SHORT).show()
+                    }
                     Log.e(
                         logTag,
                         " updateDeviceNameResponse Failure ${response.errorBody?.string()} "
@@ -492,6 +504,9 @@ class DeviceFragment : ModelBaseFragment<HomeViewModel, FragmentDeviceBinding, H
                 }
                 is Resource.Failure -> {
                     DialogUtil.hideDialog()
+                    context?.let {
+                        Toast.makeText(it, getString(R.string.error_something_went_wrong), Toast.LENGTH_SHORT).show()
+                    }
                     Log.e(
                         logTag,
                         " updateSwitchNameResponse Failure ${response.errorBody?.string()} "

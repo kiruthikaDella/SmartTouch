@@ -143,6 +143,9 @@ class SwitchIconsDetailFragment :
                     switchIconList.clear()
                     adapter.notifyDataSetChanged()
                     DialogUtil.hideDialog()
+                    context?.let {
+                        Toast.makeText(it, getString(R.string.error_something_went_wrong), Toast.LENGTH_SHORT).show()
+                    }
                     Log.e(logTag, " iconListResponse Failure ${response.errorBody?.string()} ")
                 }
                 else -> {
@@ -168,6 +171,9 @@ class SwitchIconsDetailFragment :
                 }
                 is Resource.Failure -> {
                     DialogUtil.hideDialog()
+                    context?.let {
+                        Toast.makeText(it, getString(R.string.error_something_went_wrong), Toast.LENGTH_SHORT).show()
+                    }
                     Log.e(
                         logTag,
                         " updateSwitchIconResponse Failure ${response.errorBody?.string()} "

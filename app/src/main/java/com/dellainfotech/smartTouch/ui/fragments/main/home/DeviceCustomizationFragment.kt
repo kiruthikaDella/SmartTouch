@@ -610,6 +610,9 @@ class DeviceCustomizationFragment :
                 }
                 is Resource.Failure -> {
                     DialogUtil.hideDialog()
+                    context?.let {
+                        Toast.makeText(it, getString(R.string.error_something_went_wrong), Toast.LENGTH_SHORT).show()
+                    }
                 }
                 else -> {
                     // We will do nothing here
@@ -637,6 +640,9 @@ class DeviceCustomizationFragment :
                 }
                 is Resource.Failure -> {
                     DialogUtil.hideDialog()
+                    context?.let {
+                        Toast.makeText(it, getString(R.string.error_something_went_wrong), Toast.LENGTH_SHORT).show()
+                    }
                     Log.e(
                         logTag,
                         " customizationLockResponse Failure ${response.errorBody?.string()}"
@@ -652,11 +658,6 @@ class DeviceCustomizationFragment :
             when (response) {
                 is Resource.Success -> {
                     DialogUtil.hideDialog()
-
-                    Log.e(
-                        logTag,
-                        " mCroppedImageFile?.exists() == true ${mCroppedImageFile?.exists()} "
-                    )
 
                     if (mCroppedImageFile?.exists() == true) {
                         mCroppedImageFile?.delete()
@@ -675,14 +676,10 @@ class DeviceCustomizationFragment :
                 }
                 is Resource.Failure -> {
                     DialogUtil.hideDialog()
-                    Log.e(logTag, "imageUploadResponse Failure ${response.errorBody?.string()}")
-
-                    Log.e(logTag, " mCroppedImageFile?.exists() ${mCroppedImageFile?.exists()} ")
+                    context?.let {
+                        Toast.makeText(it, getString(R.string.error_something_went_wrong), Toast.LENGTH_SHORT).show()
+                    }
                     if (mCroppedImageFile?.exists() == true) {
-                        Log.e(
-                            logTag,
-                            " mCroppedImageFile?.exists() == true ${mCroppedImageFile?.exists()} "
-                        )
                         mCroppedImageFile?.delete()
                     }
                     mCroppedImageFile = null
@@ -706,6 +703,9 @@ class DeviceCustomizationFragment :
                 }
                 is Resource.Failure -> {
                     DialogUtil.hideDialog()
+                    context?.let {
+                        Toast.makeText(it, getString(R.string.error_something_went_wrong), Toast.LENGTH_SHORT).show()
+                    }
                 }
                 else -> {
                     //We will do nothing here

@@ -51,6 +51,7 @@
     <string name="error_text_scene_name_length">Scene name must be more than 3 character</string>
     <string name="error_text_only_master_user_can_edit">Only master user can edit this settings</string>
     <string name="error_text_unauthorized">You are not authorized to access this action.</string>
+    <string name="error_something_went_wrong">Something went wrong. Please try again after sometime</string>
 
     <!--    Forgot Password-->
     <string name="title_text_forgot_password">Forgot your password?</string>

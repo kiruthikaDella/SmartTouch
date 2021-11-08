@@ -101,6 +101,9 @@ class UserManagementFragment :
                 }
                 is Resource.Failure -> {
                     DialogUtil.hideDialog()
+                    context?.let {
+                        Toast.makeText(it, getString(R.string.error_something_went_wrong), Toast.LENGTH_SHORT).show()
+                    }
                     Log.e(
                         logTag,
                         " getSubordinateUserResponse Failure ${response.errorBody?.string()}  "
@@ -130,6 +133,9 @@ class UserManagementFragment :
                 }
                 is Resource.Failure -> {
                     DialogUtil.hideDialog()
+                    context?.let {
+                        Toast.makeText(it, getString(R.string.error_something_went_wrong), Toast.LENGTH_SHORT).show()
+                    }
                     Log.e(
                         logTag,
                         " deleteSubordinateUserResponse Failure ${response.errorBody?.string()}  "
