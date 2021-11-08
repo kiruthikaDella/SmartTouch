@@ -63,7 +63,7 @@ dependencies {
     implementation 'com.daimajia.swipelayout:library:1.2.0' // ----> Swipe to delete
     implementation 'com.github.CanHub:Android-Image-Cropper:3.3.5' // ----> Crop image
 
-
+    implementation 'com.skyfishjy.ripplebackground:library:1.0.1' // ----> Pulse view
 
     // For managing request permission
     implementation 'com.karumi:dexter:6.2.2'
