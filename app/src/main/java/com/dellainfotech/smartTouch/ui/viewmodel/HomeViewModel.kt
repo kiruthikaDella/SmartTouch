@@ -1,7 +1,5 @@
 package com.dellainfotech.smartTouch.ui.viewmodel
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.dellainfotech.smartTouch.api.Resource
@@ -341,12 +339,11 @@ class HomeViewModel @Inject constructor(
     //
 
     //SmarTack
-    private val _deviceRegisterResponse: MutableLiveData<Resource<CommonResponse>> = MutableLiveData()
-    val deviceRegistrationResponse: MutableLiveData<Resource<CommonResponse>>
-        get() = _deviceRegisterResponse
+    private val _deviceRegisterResponse = MutableSharedFlow<Resource<CommonResponse>>()
+    val deviceRegistrationResponse = _deviceRegisterResponse.asSharedFlow()
 
     fun deviceRegister(bodyRegisterDevice: BodyRegisterDevice) = viewModelScope.launch {
-        _deviceRegisterResponse.value = Resource.Loading
-        _deviceRegisterResponse.value = homeRepository.deviceRegister(bodyRegisterDevice)
+        _deviceRegisterResponse.emit(Resource.Loading)
+        _deviceRegisterResponse.emit(homeRepository.deviceRegister(bodyRegisterDevice))
     }
 }

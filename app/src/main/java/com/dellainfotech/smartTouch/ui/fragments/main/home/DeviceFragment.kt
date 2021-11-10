@@ -25,6 +25,9 @@ import android.widget.Toast
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.view.isVisible
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.binjal.wifilibrary.VersionUtils
@@ -332,7 +335,7 @@ class DeviceFragment : ModelBaseFragment<HomeViewModel, FragmentDeviceBinding, H
             }
         })
 
-        binding.layoutRoomPanel.ivHidePanel.setOnClickListener {
+        binding.ivHidePanel.setOnClickListener {
             hidePanel()
         }
 

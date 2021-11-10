@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.binjal.wifilibrary.WifiUtils
@@ -20,7 +21,6 @@ import com.dellainfotech.smartTouch.common.interfaces.DialogShowListener
 import com.dellainfotech.smartTouch.common.utils.Constants
 import com.dellainfotech.smartTouch.common.utils.DialogUtil
 import com.dellainfotech.smartTouch.databinding.FragmentConnectingWifiBinding
-import com.dellainfotech.smartTouch.mqtt.NotifyManager
 import com.dellainfotech.smartTouch.ui.activities.MainActivity
 import com.dellainfotech.smartTouch.ui.fragments.ModelBaseFragment
 import com.dellainfotech.smartTouch.ui.viewmodel.HomeViewModel
@@ -28,6 +28,7 @@ import com.teksun.tcpudplibrary.TCPClientService
 import com.teksun.tcpudplibrary.listener.CloseSocketListener
 import com.teksun.tcpudplibrary.listener.ConnectCResultListener
 import com.teksun.tcpudplibrary.listener.ReadWriteValueListener
+import kotlinx.coroutines.flow.collectLatest
 import org.json.JSONException
 import org.json.JSONObject
 
@@ -40,7 +41,6 @@ class ConnectingWifiFragment :
     private var handler: Handler? = null
     private var runnable: Runnable? = null
     private var triedToConnectTCP = 0
-    private var isInternetConnected = false
     private var isConnection: Boolean? = null
     private var isApiResponseSuccess: Boolean? = null
     private var getDeviceStr: String? = null
@@ -53,11 +53,6 @@ class ConnectingWifiFragment :
         args.isRegistering.let {
             isRegistering = it
         }
-
-        NotifyManager.internetInfo.observe(viewLifecycleOwner, { isConnected ->
-            Log.e("$logTag Is Internet connected ", isConnected.toString())
-            isInternetConnected = isConnected
-        })
 
         TCPClientService.enableLog(true)
 
@@ -77,42 +72,45 @@ class ConnectingWifiFragment :
 
         binding.layoutConfigWifiProcess.pulsator.startRippleAnimation()
 
-        viewModel.deviceRegistrationResponse.observe(viewLifecycleOwner, { response ->
-            when (response) {
-                is Resource.Success -> {
-                    Log.e(logTag, "Response ${response.values.message}")
-                    context?.let {
-                        Toast.makeText(it, response.values.message, Toast.LENGTH_LONG).show()
-                    }
+        viewLifecycleOwner.lifecycleScope.launchWhenStarted {
+            viewModel.deviceRegistrationResponse.collectLatest { response ->
+                when (response) {
+                    is Resource.Success -> {
+                        Log.e(logTag, "Response ${response.values.message}")
+                        context?.let {
+                            Toast.makeText(it, response.values.message, Toast.LENGTH_LONG).show()
+                        }
 
-                    if (response.values.status && response.values.code == Constants.API_SUCCESS_CODE) {
-                        isApiResponseSuccess = true
-                        findNavController().navigate(
-                            ConnectingWifiFragmentDirections.actionConnectingWifiFragmentToDeviceFragment(
-                                args.roomDetail
+                        if (response.values.status && response.values.code == Constants.API_SUCCESS_CODE) {
+                            isApiResponseSuccess = true
+                            findNavController().navigate(
+                                ConnectingWifiFragmentDirections.actionConnectingWifiFragmentToDeviceFragment(
+                                    args.roomDetail
+                                )
                             )
-                        )
-                    } else {
-                        isApiResponseSuccess = false
-                        findNavController().navigateUp()
-                    }
+                        } else {
+                            isApiResponseSuccess = false
+                            findNavController().navigateUp()
+                        }
 
-                }
-                is Resource.Failure -> {
-                    DialogUtil.hideDialog()
-                    Log.e(
-                        logTag,
-                        "deviceRegistrationResponse Failure ${response.errorBody?.string()}"
-                    )
-                    if (response.isNetworkError) {
-                        showOfflineAlert()
                     }
-                }
-                else -> {
-                    //We will do nothing here
+                    is Resource.Failure -> {
+                        DialogUtil.hideDialog()
+                        Log.e(
+                            logTag,
+                            "deviceRegistrationResponse Failure ${response.errorBody?.string()}"
+                        )
+                        if (response.isNetworkError) {
+                            showOfflineAlert()
+                        }
+                    }
+                    else -> {
+                        //We will do nothing here
+                    }
                 }
             }
-        })
+
+        }
 
         if (isRegistering) {
 
@@ -307,9 +305,8 @@ class ConnectingWifiFragment :
         } else {
             Constants.PRODUCT_SMART_AP
         }
-        Log.e("Binjal", "productGroup $productGroup")
         runnable = Runnable {
-            if (isInternetConnected) {
+            if (isInternetConnected()) {
                 getDeviceStr?.let {
                     val jsonObject = JSONObject(it)
                     viewModel.deviceRegister(
@@ -394,8 +391,6 @@ class ConnectingWifiFragment :
                 handler.removeCallbacks(it)
             }
         }
-
-        viewModel.deviceRegistrationResponse.postValue(null)
 
         TCPClientService.setReadWriteListener(null)
         TCPClientService.setConnectionListener(null)
