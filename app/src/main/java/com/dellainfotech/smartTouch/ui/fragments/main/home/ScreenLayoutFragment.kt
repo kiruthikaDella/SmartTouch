@@ -9,7 +9,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.Window
-import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.DialogFragment
 import androidx.navigation.fragment.findNavController
@@ -18,6 +17,7 @@ import com.amazonaws.mobileconnectors.iot.AWSIotMqttQos
 import com.dellainfotech.smartTouch.R
 import com.dellainfotech.smartTouch.common.interfaces.DialogShowListener
 import com.dellainfotech.smartTouch.common.utils.DialogUtil
+import com.dellainfotech.smartTouch.common.utils.showToast
 import com.dellainfotech.smartTouch.databinding.FragmentScreenLayoutBinding
 import com.dellainfotech.smartTouch.mqtt.AwsMqttSingleton
 import com.dellainfotech.smartTouch.mqtt.MQTTConnectionStatus
@@ -51,7 +51,7 @@ class ScreenLayoutFragment : DialogFragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setStyle(STYLE_NO_TITLE,R.style.DialogTheme)
+        setStyle(STYLE_NO_TITLE, R.style.DialogTheme)
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
@@ -152,9 +152,7 @@ class ScreenLayoutFragment : DialogFragment() {
             args.deviceCustomizationDetail.screenLayoutType =
                 screenLayoutModel?.storedViewType ?: ""
             args.deviceCustomizationDetail.screenLayout = screenLayoutModel?.screenLayout ?: ""
-            context?.let {
-                Toast.makeText(it, "Settings Saved!", Toast.LENGTH_SHORT).show()
-            }
+            context?.showToast("Settings Saved!")
             findNavController().navigateUp()
         }
 

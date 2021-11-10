@@ -1,7 +1,5 @@
 package com.dellainfotech.smartTouch.ui.viewmodel
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.dellainfotech.smartTouch.api.Resource
@@ -10,6 +8,8 @@ import com.dellainfotech.smartTouch.api.model.CommonResponse
 import com.dellainfotech.smartTouch.api.model.SubordinateUserResponse
 import com.dellainfotech.smartTouch.api.repository.UserManagementRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -18,32 +18,37 @@ class UserManagementViewModel @Inject constructor(
     private val userManagementRepository: UserManagementRepository
 ) : ViewModel() {
 
-    private val _addSubordinateUserResponse: MutableLiveData<Resource<CommonResponse>> = MutableLiveData()
-    val addSubordinateUserResponse: MutableLiveData<Resource<CommonResponse>>
-        get() = _addSubordinateUserResponse
+    private val _addSubordinateUserResponse = MutableSharedFlow<Resource<CommonResponse>>()
+    val addSubordinateUserResponse = _addSubordinateUserResponse.asSharedFlow()
 
-    private val _getSubordinateUserResponse: MutableLiveData<Resource<SubordinateUserResponse>> = MutableLiveData()
-    val getSubordinateUserResponse: LiveData<Resource<SubordinateUserResponse>>
-        get() = _getSubordinateUserResponse
+    private val _getSubordinateUserResponse = MutableSharedFlow<Resource<SubordinateUserResponse>>()
+    val getSubordinateUserResponse = _getSubordinateUserResponse.asSharedFlow()
 
-    private val _deleteSubordinateUserResponse: MutableLiveData<Resource<CommonResponse>> = MutableLiveData()
-    val deleteSubordinateUserResponse: MutableLiveData<Resource<CommonResponse>>
-        get() = _deleteSubordinateUserResponse
+    private val _deleteSubordinateUserResponse = MutableSharedFlow<Resource<CommonResponse>>()
+    val deleteSubordinateUserResponse = _deleteSubordinateUserResponse.asSharedFlow()
 
     fun addSubordinateUser(bodyAddSubordinateUser: BodyAddSubordinateUser) = viewModelScope.launch {
-        _addSubordinateUserResponse.value = Resource.Loading
-        _addSubordinateUserResponse.value = userManagementRepository.addSubordinateUser(bodyAddSubordinateUser)
+        _addSubordinateUserResponse.emit(Resource.Loading)
+        _addSubordinateUserResponse.emit(
+            userManagementRepository.addSubordinateUser(
+                bodyAddSubordinateUser
+            )
+        )
     }
 
     fun getSubordinateUser() = viewModelScope.launch {
-        _getSubordinateUserResponse.value = Resource.Loading
-        _getSubordinateUserResponse.value = userManagementRepository.getSubordinateUser()
+        _getSubordinateUserResponse.emit(Resource.Loading)
+        _getSubordinateUserResponse.emit(userManagementRepository.getSubordinateUser())
     }
 
     fun deleteSubordinateUser(subordinateUserId: String) =
         viewModelScope.launch {
-            _deleteSubordinateUserResponse.value = Resource.Loading
-            _deleteSubordinateUserResponse.value = userManagementRepository.deleteSubordinateUser(subordinateUserId)
+            _deleteSubordinateUserResponse.emit(Resource.Loading)
+            _deleteSubordinateUserResponse.emit(
+                userManagementRepository.deleteSubordinateUser(
+                    subordinateUserId
+                )
+            )
         }
 
 }

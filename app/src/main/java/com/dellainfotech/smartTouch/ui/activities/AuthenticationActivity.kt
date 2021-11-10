@@ -4,9 +4,9 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import com.appizona.yehiahd.fastsave.FastSave
 import com.dellainfotech.smartTouch.R
 import com.dellainfotech.smartTouch.api.NetworkModule
@@ -17,11 +17,15 @@ import com.dellainfotech.smartTouch.api.repository.AuthRepository
 import com.dellainfotech.smartTouch.common.utils.Constants
 import com.dellainfotech.smartTouch.common.utils.DialogUtil
 import com.dellainfotech.smartTouch.common.utils.Utils.toBoolean
+import com.dellainfotech.smartTouch.common.utils.showToast
 import com.dellainfotech.smartTouch.ui.viewmodel.AuthViewModel
 import com.dellainfotech.smartTouch.ui.viewmodel.ViewModelFactory
 import com.facebook.*
 import com.facebook.login.LoginManager
 import com.facebook.login.LoginResult
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.withContext
 import org.json.JSONObject
 import java.util.*
 
@@ -50,57 +54,87 @@ class AuthenticationActivity : AppCompatActivity() {
 
         initFacebookCallback()
 
-        viewModel.socialLoginResponse.observe(this, { response ->
-            when (response) {
-                is Resource.Success -> {
-                    DialogUtil.hideDialog()
-                    Log.e(logTag, "code ${response.values.code}")
-                    if (response.values.status && response.values.code == Constants.API_SUCCESS_CODE) {
+        lifecycleScope.launchWhenStarted {
+            viewModel.socialLoginResponse.collectLatest { response ->
+                when (response) {
+                    is Resource.Success -> {
+                        DialogUtil.hideDialog()
+                        Log.e(logTag, "code ${response.values.code}")
+                        if (response.values.status && response.values.code == Constants.API_SUCCESS_CODE) {
 
-                        val userProfile: UserProfile? = response.values.data?.user_data
-                        userProfile?.let { userData ->
-                            FastSave.getInstance().saveString(Constants.USER_ID, userData.iUserId)
-                            FastSave.getInstance()
-                                .saveString(Constants.USER_FULL_NAME, userData.vFullName)
-                            FastSave.getInstance()
-                                .saveString(Constants.USERNAME, userData.vUserName)
-                            FastSave.getInstance().saveString(Constants.USER_EMAIL, userData.vEmail)
-                            FastSave.getInstance()
-                                .saveString(Constants.USER_PHONE_NUMBER, userData.bPhoneNumber)
-                            FastSave.getInstance().saveString(Constants.SOCIAL_ID, userData.socialId)
-                            FastSave.getInstance().saveBoolean(Constants.isControlModePinned, userData.iIsPinStatus!!.toBoolean())
+                            val userProfile: UserProfile? = response.values.data?.user_data
+                            userProfile?.let { userData ->
+                                FastSave.getInstance()
+                                    .saveString(Constants.USER_ID, userData.iUserId)
+                                FastSave.getInstance()
+                                    .saveString(Constants.USER_FULL_NAME, userData.vFullName)
+                                FastSave.getInstance()
+                                    .saveString(Constants.USERNAME, userData.vUserName)
+                                FastSave.getInstance()
+                                    .saveString(Constants.USER_EMAIL, userData.vEmail)
+                                FastSave.getInstance()
+                                    .saveString(Constants.USER_PHONE_NUMBER, userData.bPhoneNumber)
+                                FastSave.getInstance()
+                                    .saveString(Constants.SOCIAL_ID, userData.socialId)
+                                FastSave.getInstance().saveBoolean(
+                                    Constants.isControlModePinned,
+                                    userData.iIsPinStatus!!.toBoolean()
+                                )
 
-                            if (userData.userRole == Constants.MASTER_USER){
-                                FastSave.getInstance().saveBoolean(Constants.IS_MASTER_USER,true)
-                            }else{
-                                FastSave.getInstance().saveBoolean(Constants.IS_MASTER_USER,false)
+                                if (userData.userRole == Constants.MASTER_USER) {
+                                    FastSave.getInstance()
+                                        .saveBoolean(Constants.IS_MASTER_USER, true)
+                                } else {
+                                    FastSave.getInstance()
+                                        .saveBoolean(Constants.IS_MASTER_USER, false)
+                                }
+
+                                val sharedPreference = getSharedPreferences(
+                                    Constants.SHARED_PREF,
+                                    Context.MODE_PRIVATE
+                                )
+                                val editor = sharedPreference?.edit()
+                                editor?.putString(
+                                    Constants.LOGGED_IN_TYPE,
+                                    Constants.LOGIN_TYPE_FACEBOOK
+                                )
+                                editor?.apply()
+
+                                FastSave.getInstance()
+                                    .saveString(Constants.LOGIN_TYPE, Constants.LOGIN_TYPE_FACEBOOK)
+                                withContext(Dispatchers.Main) {
+                                    startActivity(
+                                        Intent(
+                                            this@AuthenticationActivity,
+                                            MainActivity::class.java
+                                        )
+                                    )
+                                    finishAffinity()
+                                }
+
                             }
+                            FastSave.getInstance()
+                                .saveString(
+                                    Constants.ACCESS_TOKEN,
+                                    response.values.data?.accessToken
+                                )
 
-                            val sharedPreference =  getSharedPreferences(Constants.SHARED_PREF, Context.MODE_PRIVATE)
-                            val editor = sharedPreference?.edit()
-                            editor?.putString(Constants.LOGGED_IN_TYPE,Constants.LOGIN_TYPE_FACEBOOK)
-                            editor?.apply()
-
-                            FastSave.getInstance().saveString(Constants.LOGIN_TYPE, Constants.LOGIN_TYPE_FACEBOOK)
-                            startActivity(Intent(this, MainActivity::class.java))
-                            finishAffinity()
+                        } else {
+                            withContext(Dispatchers.Main) {
+                                this@AuthenticationActivity.showToast(response.values.message)
+                            }
                         }
-                        FastSave.getInstance()
-                            .saveString(Constants.ACCESS_TOKEN, response.values.data?.accessToken)
-
-                    } else {
-                        Toast.makeText(this, response.values.message, Toast.LENGTH_SHORT).show()
+                    }
+                    is Resource.Failure -> {
+                        DialogUtil.hideDialog()
+                        Log.e(logTag, "login error ${response.errorBody?.string()}")
+                    }
+                    else -> {
+                        // We will do nothing here
                     }
                 }
-                is Resource.Failure -> {
-                    DialogUtil.hideDialog()
-                    Log.e(logTag, "login error ${response.errorBody?.string()}")
-                }
-                else -> {
-                    // We will do nothing here
-                }
             }
-        })
+        }
     }
 
     fun performFacebookLogin() {
@@ -193,20 +227,12 @@ class AuthenticationActivity : AppCompatActivity() {
                     }
 
                     override fun onCancel() {
-                        Toast.makeText(
-                            this@AuthenticationActivity,
-                            "Login Cancel",
-                            Toast.LENGTH_SHORT
-                        ).show()
+                        showToast("Login Cancel")
                         Log.i(logTag, "Success Facebook Login onCancel")
                     }
 
                     override fun onError(error: FacebookException?) {
-                        Toast.makeText(
-                            this@AuthenticationActivity,
-                            "${error?.message}",
-                            Toast.LENGTH_SHORT
-                        ).show()
+                        showToast("${error?.message}")
                         Log.i(logTag, "Success Facebook Login onError")
                         Log.e(logTag, "FacebookException $error")
                     }

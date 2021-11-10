@@ -28,6 +28,7 @@ import android.provider.MediaStore
 
 import android.graphics.Bitmap
 import android.net.Uri
+import android.widget.Toast
 import java.io.ByteArrayOutputStream
 
 
@@ -35,20 +36,6 @@ import java.io.ByteArrayOutputStream
  * Created by Jignesh Dangar on 13-04-2021.
  */
 object Utils {
-
-    fun isInternetAvailable(): Boolean {
-        return try {
-            val timeoutMs = 1500
-            val sock = Socket()
-            val sockAddress: SocketAddress = InetSocketAddress("8.8.8.8", 53)
-            sock.connect(sockAddress, timeoutMs)
-            sock.close()
-            true
-        } catch (e: Exception) {
-            e.printStackTrace()
-            false
-        }
-    }
 
     fun isNetworkConnectivityAvailable(): Boolean {
         var isConnected = false
@@ -171,3 +158,5 @@ fun Activity.hideSoftKeyboard() {
         inputMethodManager.hideSoftInputFromWindow(it.windowToken, 0)
     }
 }
+
+fun Context.showToast(message: String) = Toast.makeText(this, message,Toast.LENGTH_SHORT).show()

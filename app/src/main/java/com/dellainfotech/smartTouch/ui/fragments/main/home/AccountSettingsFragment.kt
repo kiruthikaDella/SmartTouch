@@ -16,8 +16,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.ImageView
-import android.widget.Toast
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import com.appizona.yehiahd.fastsave.FastSave
 import com.dellainfotech.smartTouch.R
@@ -31,11 +33,14 @@ import com.dellainfotech.smartTouch.common.interfaces.DialogEditListener
 import com.dellainfotech.smartTouch.common.utils.Constants
 import com.dellainfotech.smartTouch.common.utils.DialogUtil
 import com.dellainfotech.smartTouch.common.utils.Utils
+import com.dellainfotech.smartTouch.common.utils.showToast
 import com.dellainfotech.smartTouch.databinding.FragmentAccountSettingsBinding
 import com.dellainfotech.smartTouch.mqtt.NotifyManager
 import com.dellainfotech.smartTouch.ui.fragments.ModelBaseFragment
 import com.dellainfotech.smartTouch.ui.viewmodel.HomeViewModel
 import com.google.android.material.button.MaterialButton
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
 /**
  * Created by Jignesh Dangar on 26-04-2021.
@@ -71,18 +76,10 @@ class AccountSettingsFragment :
                         override fun onYesClicked(string: String) {
                             when {
                                 string.isEmpty() -> {
-                                    Toast.makeText(
-                                        it,
-                                        getString(R.string.error_text_full_name),
-                                        Toast.LENGTH_SHORT
-                                    ).show()
+                                    it.showToast(getString(R.string.error_text_full_name))
                                 }
                                 string.length < 3 -> {
-                                    Toast.makeText(
-                                        it,
-                                        getString(R.string.error_text_full_name_length),
-                                        Toast.LENGTH_SHORT
-                                    ).show()
+                                    it.showToast(getString(R.string.error_text_full_name_length))
                                 }
                                 else -> {
                                     DialogUtil.hideDialog()
@@ -114,18 +111,10 @@ class AccountSettingsFragment :
                         override fun onYesClicked(string: String) {
                             when {
                                 string.isEmpty() -> {
-                                    Toast.makeText(
-                                        it,
-                                        getString(R.string.error_text_full_name),
-                                        Toast.LENGTH_SHORT
-                                    ).show()
+                                    it.showToast(getString(R.string.error_text_full_name))
                                 }
                                 string.length < 3 -> {
-                                    Toast.makeText(
-                                        it,
-                                        getString(R.string.error_text_full_name_length),
-                                        Toast.LENGTH_SHORT
-                                    ).show()
+                                    it.showToast(getString(R.string.error_text_full_name_length))
                                 }
                                 else -> {
                                     DialogUtil.hideDialog()
@@ -162,6 +151,12 @@ class AccountSettingsFragment :
                     binding.tvPhoneNumber.error = getString(R.string.error_text_phone_number)
                 }
                 else -> {
+
+                    if (!isInternetConnected()) {
+                        context?.showToast(getString(R.string.text_no_internet_available))
+                        return@setOnClickListener
+                    }
+
                     activity?.let {
                         DialogUtil.loadingAlert(it)
                         viewModel.updateUserProfile(
@@ -188,18 +183,10 @@ class AccountSettingsFragment :
                         override fun onYesClicked(string: String) {
                             when {
                                 string.isEmpty() -> {
-                                    Toast.makeText(
-                                        it,
-                                        getString(R.string.error_text_name),
-                                        Toast.LENGTH_SHORT
-                                    ).show()
+                                    it.showToast(getString(R.string.error_text_name))
                                 }
                                 string.length < 3 -> {
-                                    Toast.makeText(
-                                        it,
-                                        getString(R.string.error_text_name_length),
-                                        Toast.LENGTH_SHORT
-                                    ).show()
+                                    it.showToast(getString(R.string.error_text_name_length))
                                 }
                                 else -> {
                                     DialogUtil.hideDialog()
@@ -229,17 +216,9 @@ class AccountSettingsFragment :
                     onClick = object : DialogEditListener {
                         override fun onYesClicked(string: String) {
                             if (string.isEmpty()) {
-                                Toast.makeText(
-                                    it,
-                                    getString(R.string.error_text_email),
-                                    Toast.LENGTH_SHORT
-                                ).show()
+                                it.showToast(getString(R.string.error_text_email))
                             } else if (!Patterns.EMAIL_ADDRESS.matcher(string).matches()) {
-                                Toast.makeText(
-                                    it,
-                                    getString(R.string.error_text_valid_email),
-                                    Toast.LENGTH_SHORT
-                                ).show()
+                                it.showToast(getString(R.string.error_text_valid_email))
                             } else {
                                 DialogUtil.hideDialog()
                                 binding.tvMasterEmail.text = string
@@ -263,30 +242,20 @@ class AccountSettingsFragment :
             activity?.let { mActivity ->
 
                 if (name.isEmpty()) {
-                    Toast.makeText(
-                        mActivity,
-                        getString(R.string.error_text_name),
-                        Toast.LENGTH_SHORT
-                    ).show()
+                    mActivity.showToast(getString(R.string.error_text_name))
                 } else if (name.length < 3) {
-                    Toast.makeText(
-                        mActivity,
-                        getString(R.string.error_text_full_name_length),
-                        Toast.LENGTH_SHORT
-                    ).show()
+                    mActivity.showToast(getString(R.string.error_text_full_name_length))
                 } else if (email.isEmpty()) {
-                    Toast.makeText(
-                        mActivity,
-                        getString(R.string.error_text_email),
-                        Toast.LENGTH_SHORT
-                    ).show()
+                    mActivity.showToast(getString(R.string.error_text_email))
                 } else if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-                    Toast.makeText(
-                        mActivity,
-                        getString(R.string.error_text_valid_email),
-                        Toast.LENGTH_SHORT
-                    ).show()
+                    mActivity.showToast(getString(R.string.error_text_valid_email))
                 } else {
+
+                    if (!isInternetConnected()) {
+                        context?.showToast(getString(R.string.text_no_internet_available))
+                        return@setOnClickListener
+                    }
+
                     if (cancelOwnership) {
                         DialogUtil.askAlert(
                             mActivity,
@@ -380,14 +349,6 @@ class AccountSettingsFragment :
         dialog?.dismiss()
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        viewModel.updateUserProfileResponse.postValue(null)
-        viewModel.changePasswordResponse.postValue(null)
-        viewModel.transferOwnershipResponse.postValue(null)
-        viewModel.cancelOwnershipResponse.postValue(null)
-    }
-
     private fun apiCall() {
 
         NotifyManager.internetInfo.observe(viewLifecycleOwner, { isConnected ->
@@ -402,210 +363,227 @@ class AccountSettingsFragment :
             }
         })
 
-        viewModel.getUserProfileResponse.observe(viewLifecycleOwner, { response ->
-            when (response) {
-                is Resource.Success -> {
-                    DialogUtil.hideDialog()
-                    if (response.values.status && response.values.code == Constants.API_SUCCESS_CODE) {
+        viewLifecycleOwner.lifecycleScope.launchWhenStarted {
 
-                        response.values.data?.let { userData ->
-                            userData.vEmail?.let {
-                                binding.tvEmail.text = it
+            viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+
+                launch {
+                    viewModel.getUserProfileResponse.collectLatest { response ->
+                        when (response) {
+                            is Resource.Success -> {
+                                DialogUtil.hideDialog()
+                                if (response.values.status && response.values.code == Constants.API_SUCCESS_CODE) {
+
+                                    response.values.data?.let { userData ->
+                                        userData.vEmail?.let {
+                                            binding.tvEmail.text = it
+                                        }
+                                        userData.vFullName?.let {
+                                            binding.tvName.text = it
+                                        }
+                                        userData.bPhoneNumber?.let {
+                                            binding.tvPhoneNumber.text = it
+                                        }
+                                    }
+
+                                } else {
+                                    context?.showToast(response.values.message)
+                                }
                             }
-                            userData.vFullName?.let {
-                                binding.tvName.text = it
+                            is Resource.Failure -> {
+                                DialogUtil.hideDialog()
+                                context?.showToast(getString(R.string.error_something_went_wrong))
+                                Log.e(
+                                    logTag,
+                                    "getUserProfileResponse Failure ${response.errorBody?.string()}"
+                                )
                             }
-                            userData.bPhoneNumber?.let {
-                                binding.tvPhoneNumber.text = it
+                            else -> {
+                                // We will do nothing here
                             }
                         }
+                    }
+                }
 
-                    } else {
-                        context?.let {
-                            Toast.makeText(it, response.values.message, Toast.LENGTH_SHORT).show()
+                launch {
+                    viewModel.updateUserProfileResponse.collectLatest { response ->
+                        when (response) {
+                            is Resource.Success -> {
+                                DialogUtil.hideDialog()
+                                Log.e(logTag, " ${response.values.message} ")
+                                context?.showToast(response.values.message)
+                                if (response.values.status && response.values.code == Constants.API_SUCCESS_CODE) {
+
+                                    response.values.data?.let { userData ->
+                                        userData.vEmail?.let {
+                                            binding.tvEmail.text = it
+                                        }
+                                        userData.vFullName?.let {
+                                            binding.tvName.text = it
+                                        }
+                                        userData.bPhoneNumber?.let {
+                                            binding.tvPhoneNumber.text = it
+                                        }
+
+                                        FastSave.getInstance()
+                                            .saveString(Constants.USER_ID, userData.iUserId)
+                                        FastSave.getInstance()
+                                            .saveString(
+                                                Constants.USER_FULL_NAME,
+                                                userData.vFullName
+                                            )
+                                        FastSave.getInstance()
+                                            .saveString(Constants.USERNAME, userData.vUserName)
+                                        FastSave.getInstance()
+                                            .saveString(Constants.USER_EMAIL, userData.vEmail)
+                                        FastSave.getInstance()
+                                            .saveString(
+                                                Constants.USER_PHONE_NUMBER,
+                                                userData.bPhoneNumber
+                                            )
+
+                                    }
+
+                                }
+                            }
+                            is Resource.Failure -> {
+                                DialogUtil.hideDialog()
+                                context?.showToast(getString(R.string.error_something_went_wrong))
+                                Log.e(
+                                    logTag,
+                                    "getUserProfileResponse Failure ${response.errorBody?.string()}"
+                                )
+                            }
+                            else -> {
+                                // We will do nothing here
+                            }
                         }
                     }
                 }
-                is Resource.Failure -> {
-                    DialogUtil.hideDialog()
-                    context?.let {
-                        Toast.makeText(it, getString(R.string.error_something_went_wrong), Toast.LENGTH_SHORT).show()
-                    }
-                    Log.e(logTag, "getUserProfileResponse Failure ${response.errorBody?.string()}")
-                }
-                else -> {
-                    // We will do nothing here
-                }
-            }
-        })
 
-        viewModel.updateUserProfileResponse.observe(viewLifecycleOwner, { response ->
-            when (response) {
-                is Resource.Success -> {
-                    DialogUtil.hideDialog()
-                    Log.e(logTag, " ${response.values.message} ")
-                    activity?.let {
-                        Toast.makeText(it, response.values.message, Toast.LENGTH_SHORT).show()
-                    }
-                    if (response.values.status && response.values.code == Constants.API_SUCCESS_CODE) {
-
-                        response.values.data?.let { userData ->
-                            userData.vEmail?.let {
-                                binding.tvEmail.text = it
+                launch {
+                    viewModel.changePasswordResponse.collectLatest { response ->
+                        when (response) {
+                            is Resource.Success -> {
+                                DialogUtil.hideDialog()
+                                context?.showToast(response.values.message)
                             }
-                            userData.vFullName?.let {
-                                binding.tvName.text = it
+                            is Resource.Failure -> {
+                                DialogUtil.hideDialog()
+                                context?.showToast(getString(R.string.error_something_went_wrong))
+                                Log.e(
+                                    logTag,
+                                    " changePasswordResponse Failure ${response.errorBody?.string()} "
+                                )
                             }
-                            userData.bPhoneNumber?.let {
-                                binding.tvPhoneNumber.text = it
+                            else -> {
+                                // We will do nothing here
                             }
-
-                            FastSave.getInstance().saveString(Constants.USER_ID, userData.iUserId)
-                            FastSave.getInstance()
-                                .saveString(Constants.USER_FULL_NAME, userData.vFullName)
-                            FastSave.getInstance()
-                                .saveString(Constants.USERNAME, userData.vUserName)
-                            FastSave.getInstance().saveString(Constants.USER_EMAIL, userData.vEmail)
-                            FastSave.getInstance()
-                                .saveString(Constants.USER_PHONE_NUMBER, userData.bPhoneNumber)
-
                         }
+                    }
+                }
 
-                    }
-                }
-                is Resource.Failure -> {
-                    DialogUtil.hideDialog()
-                    context?.let {
-                        Toast.makeText(it, getString(R.string.error_something_went_wrong), Toast.LENGTH_SHORT).show()
-                    }
-                    Log.e(logTag, "getUserProfileResponse Failure ${response.errorBody?.string()}")
-                }
-                else -> {
-                    // We will do nothing here
-                }
-            }
-        })
-
-        viewModel.changePasswordResponse.observe(viewLifecycleOwner, { response ->
-            when (response) {
-                is Resource.Success -> {
-                    DialogUtil.hideDialog()
-                    context?.let {
-                        Toast.makeText(it, response.values.message, Toast.LENGTH_SHORT).show()
-                    }
-                }
-                is Resource.Failure -> {
-                    DialogUtil.hideDialog()
-                    context?.let {
-                        Toast.makeText(it, getString(R.string.error_something_went_wrong), Toast.LENGTH_SHORT).show()
-                    }
-                    Log.e(
-                        logTag,
-                        " changePasswordResponse Failure ${response.errorBody?.string()} "
-                    )
-                }
-                else -> {
-                    // We will do nothing here
-                }
-            }
-        })
-
-        viewModel.getOwnershipResponse.observe(viewLifecycleOwner, { response ->
-            when (response) {
-                is Resource.Success -> {
-                    DialogUtil.hideDialog()
-                    if (response.values.status && response.values.code == Constants.API_SUCCESS_CODE) {
-                        response.values.data?.let {
-                            binding.tvMasterName.text = it.name
-                            binding.tvMasterEmail.text = it.email
+                launch {
+                    viewModel.getOwnershipResponse.collectLatest { response ->
+                        when (response) {
+                            is Resource.Success -> {
+                                DialogUtil.hideDialog()
+                                if (response.values.status && response.values.code == Constants.API_SUCCESS_CODE) {
+                                    response.values.data?.let {
+                                        binding.tvMasterName.text = it.name
+                                        binding.tvMasterEmail.text = it.email
 //                            binding.btnUpdate.isEnabled = false
-                            if (it.isEmailVerified == 0) {
-                                cancelOwnership = true
-                                ownershipId = it.id
-                                binding.btnTransferOwnership.text = getString(R.string.text_cancel)
-                                binding.tvMasterName.clearFocus()
-                                binding.tvMasterEmail.clearFocus()
-                                binding.ivMasterEditName.isEnabled = false
-                                binding.ivMasterEditEmail.isEnabled = false
+                                        if (it.isEmailVerified == 0) {
+                                            cancelOwnership = true
+                                            ownershipId = it.id
+                                            binding.btnTransferOwnership.text =
+                                                getString(R.string.text_cancel)
+                                            binding.tvMasterName.clearFocus()
+                                            binding.tvMasterEmail.clearFocus()
+                                            binding.ivMasterEditName.isEnabled = false
+                                            binding.ivMasterEditEmail.isEnabled = false
+                                        }
+                                    }
+                                } else {
+                                    binding.tvMasterName.text = ""
+                                    binding.tvMasterEmail.text = ""
+                                    cancelOwnership = false
+                                    ownershipId = null
+                                    binding.btnTransferOwnership.text =
+                                        getString(R.string.text_transfer_ownership)
+                                    binding.ivMasterEditName.isEnabled = true
+                                    binding.ivMasterEditEmail.isEnabled = true
+                                }
+                            }
+                            is Resource.Failure -> {
+                                DialogUtil.hideDialog()
+                                context?.showToast(getString(R.string.error_something_went_wrong))
+                                Log.e(
+                                    logTag,
+                                    " getOwnershipResponse Failure ${response.errorBody?.string()} "
+                                )
+                            }
+                            else -> {
+                                //We will do nothing here
                             }
                         }
-                    } else {
-                        binding.tvMasterName.text = ""
-                        binding.tvMasterEmail.text = ""
-                        cancelOwnership = false
-                        ownershipId = null
-                        binding.btnTransferOwnership.text =
-                            getString(R.string.text_transfer_ownership)
-                        binding.ivMasterEditName.isEnabled = true
-                        binding.ivMasterEditEmail.isEnabled = true
                     }
                 }
-                is Resource.Failure -> {
-                    DialogUtil.hideDialog()
-                    context?.let {
-                        Toast.makeText(it, getString(R.string.error_something_went_wrong), Toast.LENGTH_SHORT).show()
-                    }
-                    Log.e(logTag, " getOwnershipResponse Failure ${response.errorBody?.string()} ")
-                }
-                else -> {
-                    //We will do nothing here
-                }
-            }
-        })
 
-        viewModel.transferOwnershipResponse.observe(viewLifecycleOwner, { response ->
-            when (response) {
-                is Resource.Success -> {
-                    DialogUtil.hideDialog()
-                    context?.let {
-                        Toast.makeText(it, response.values.message, Toast.LENGTH_SHORT).show()
-                    }
-                    if (response.values.status && response.values.code == Constants.API_SUCCESS_CODE) {
-                        getOwnership()
+                launch {
+                    viewModel.transferOwnershipResponse.collectLatest { response ->
+                        when (response) {
+                            is Resource.Success -> {
+                                DialogUtil.hideDialog()
+                                context?.showToast(response.values.message)
+                                if (response.values.status && response.values.code == Constants.API_SUCCESS_CODE) {
+                                    getOwnership()
+                                }
+                            }
+                            is Resource.Failure -> {
+                                DialogUtil.hideDialog()
+                                context?.showToast(getString(R.string.error_something_went_wrong))
+                                Log.e(
+                                    logTag,
+                                    " transferOwnershipResponse Failure ${response.errorBody?.string()} "
+                                )
+                            }
+                            else -> {
+                                //We will do nothing here
+                            }
+                        }
                     }
                 }
-                is Resource.Failure -> {
-                    DialogUtil.hideDialog()
-                    context?.let {
-                        Toast.makeText(it, getString(R.string.error_something_went_wrong), Toast.LENGTH_SHORT).show()
-                    }
-                    Log.e(
-                        logTag,
-                        " transferOwnershipResponse Failure ${response.errorBody?.string()} "
-                    )
-                }
-                else -> {
-                    //We will do nothing here
-                }
-            }
-        })
 
-        viewModel.cancelOwnershipResponse.observe(viewLifecycleOwner, { response ->
-            when (response) {
-                is Resource.Success -> {
-                    DialogUtil.hideDialog()
-                    context?.let {
-                        Toast.makeText(it, response.values.message, Toast.LENGTH_SHORT).show()
-                    }
-                    if (response.values.status && response.values.code == Constants.API_SUCCESS_CODE) {
-                        getOwnership()
+                launch {
+                    viewModel.cancelOwnershipResponse.collectLatest { response ->
+                        when (response) {
+                            is Resource.Success -> {
+                                DialogUtil.hideDialog()
+                                context?.showToast(response.values.message)
+                                if (response.values.status && response.values.code == Constants.API_SUCCESS_CODE) {
+                                    getOwnership()
+                                }
+                            }
+                            is Resource.Failure -> {
+                                DialogUtil.hideDialog()
+                                context?.showToast(getString(R.string.error_something_went_wrong))
+                                Log.e(
+                                    logTag,
+                                    " cancelOwnershipResponse Failure ${response.errorBody?.string()} "
+                                )
+                            }
+                            else -> {
+                                //We will do nothing here
+                            }
+                        }
                     }
                 }
-                is Resource.Failure -> {
-                    DialogUtil.hideDialog()
-                    context?.let {
-                        Toast.makeText(it, getString(R.string.error_something_went_wrong), Toast.LENGTH_SHORT).show()
-                    }
-                    Log.e(
-                        logTag,
-                        " cancelOwnershipResponse Failure ${response.errorBody?.string()} "
-                    )
-                }
-                else -> {
-                    //We will do nothing here
-                }
+
             }
-        })
+
+        }
+
     }
 
     private fun getOwnership() {

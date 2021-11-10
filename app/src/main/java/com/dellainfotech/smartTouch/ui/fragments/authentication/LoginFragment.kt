@@ -12,9 +12,11 @@ import android.util.Patterns
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import com.appizona.yehiahd.fastsave.FastSave
 import com.dellainfotech.smartTouch.R
@@ -30,8 +32,8 @@ import com.dellainfotech.smartTouch.common.utils.Utils
 import com.dellainfotech.smartTouch.common.utils.Utils.isNetworkConnectivityAvailable
 import com.dellainfotech.smartTouch.common.utils.Utils.toBoolean
 import com.dellainfotech.smartTouch.common.utils.Utils.toEditable
+import com.dellainfotech.smartTouch.common.utils.showToast
 import com.dellainfotech.smartTouch.databinding.FragmentLoginBinding
-import com.dellainfotech.smartTouch.mqtt.NotifyManager
 import com.dellainfotech.smartTouch.ui.activities.AuthenticationActivity
 import com.dellainfotech.smartTouch.ui.activities.MainActivity
 import com.dellainfotech.smartTouch.ui.fragments.ModelBaseFragment
@@ -41,6 +43,8 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 import java.util.*
 
 
@@ -53,7 +57,6 @@ class LoginFragment : ModelBaseFragment<AuthViewModel, FragmentLoginBinding, Aut
 
     private val logTag = this::class.java.simpleName
     private var isPasswordVisible = false
-    private var isInternetConnected = false
 
     //Google SignIn
     private var mGoogleSingInClient: GoogleSignInClient? = null
@@ -94,10 +97,6 @@ class LoginFragment : ModelBaseFragment<AuthViewModel, FragmentLoginBinding, Aut
             }
         }
 
-        NotifyManager.internetInfo.observe(viewLifecycleOwner, { isConnected ->
-            isInternetConnected = isConnected
-        })
-
         clickEvents()
         apiCall()
     }
@@ -113,9 +112,9 @@ class LoginFragment : ModelBaseFragment<AuthViewModel, FragmentLoginBinding, Aut
         }
 
         binding.btnLogin.setOnClickListener {
-            if (isInternetConnected){
+            if (isInternetConnected()) {
                 validateUserInformation()
-            }else {
+            } else {
                 activity?.let {
                     DialogUtil.deviceOfflineAlert(
                         it,
@@ -244,160 +243,193 @@ class LoginFragment : ModelBaseFragment<AuthViewModel, FragmentLoginBinding, Aut
     }
 
     private fun apiCall() {
-        viewModel.loginResponse.observe(viewLifecycleOwner, { response ->
-            when (response) {
-                is Resource.Success -> {
-                    DialogUtil.hideDialog()
-                    Log.e(logTag, "code ${response.values.code}")
-                    if (response.values.status && response.values.code == Constants.API_SUCCESS_CODE) {
 
-                        val userProfile: UserProfile? = response.values.data?.user_data
-                        userProfile?.let { userData ->
-                            FastSave.getInstance().saveString(Constants.USER_ID, userData.iUserId)
-                            FastSave.getInstance()
-                                .saveString(Constants.USER_FULL_NAME, userData.vFullName)
-                            FastSave.getInstance()
-                                .saveString(Constants.USERNAME, userData.vUserName)
-                            FastSave.getInstance().saveString(Constants.USER_EMAIL, userData.vEmail)
-                            FastSave.getInstance()
-                                .saveString(Constants.USER_PHONE_NUMBER, userData.bPhoneNumber)
+        viewLifecycleOwner.lifecycleScope.launchWhenStarted {
 
-                            if (userData.userRole == Constants.MASTER_USER) {
-                                FastSave.getInstance().saveBoolean(Constants.IS_MASTER_USER, true)
-                            } else {
-                                FastSave.getInstance().saveBoolean(Constants.IS_MASTER_USER, false)
+            viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+
+                launch {
+                    viewModel.loginResponse.collectLatest { response ->
+                        when (response) {
+                            is Resource.Success -> {
+                                DialogUtil.hideDialog()
+                                Log.e(logTag, "code ${response.values.code}")
+                                if (response.values.status && response.values.code == Constants.API_SUCCESS_CODE) {
+
+                                    val userProfile: UserProfile? = response.values.data?.user_data
+                                    userProfile?.let { userData ->
+                                        FastSave.getInstance()
+                                            .saveString(Constants.USER_ID, userData.iUserId)
+                                        FastSave.getInstance()
+                                            .saveString(
+                                                Constants.USER_FULL_NAME,
+                                                userData.vFullName
+                                            )
+                                        FastSave.getInstance()
+                                            .saveString(Constants.USERNAME, userData.vUserName)
+                                        FastSave.getInstance()
+                                            .saveString(Constants.USER_EMAIL, userData.vEmail)
+                                        FastSave.getInstance()
+                                            .saveString(
+                                                Constants.USER_PHONE_NUMBER,
+                                                userData.bPhoneNumber
+                                            )
+
+                                        if (userData.userRole == Constants.MASTER_USER) {
+                                            FastSave.getInstance()
+                                                .saveBoolean(Constants.IS_MASTER_USER, true)
+                                        } else {
+                                            FastSave.getInstance()
+                                                .saveBoolean(Constants.IS_MASTER_USER, false)
+                                        }
+
+                                        FastSave.getInstance()
+                                            .saveString(Constants.SOCIAL_ID, userData.socialId)
+                                        FastSave.getInstance().saveBoolean(
+                                            Constants.isControlModePinned,
+                                            userData.iIsPinStatus!!.toBoolean()
+                                        )
+                                        FastSave.getInstance()
+                                            .saveString(
+                                                Constants.LOGIN_TYPE,
+                                                Constants.LOGIN_TYPE_NORMAL
+                                            )
+
+                                        if (binding.checkboxRemember.isChecked) {
+                                            val sharedPreference = activity?.getSharedPreferences(
+                                                Constants.SHARED_PREF,
+                                                Context.MODE_PRIVATE
+                                            )
+                                            val editor = sharedPreference?.edit()
+                                            editor?.putString(
+                                                Constants.LOGGED_IN_EMAIL,
+                                                binding.edtEmail.text.toString()
+                                            )
+                                            editor?.putString(
+                                                Constants.LOGGED_IN_PASSWORD,
+                                                binding.edtPassword.text.toString()
+                                            )
+                                            editor?.putString(
+                                                Constants.LOGGED_IN_TYPE,
+                                                Constants.LOGIN_TYPE_NORMAL
+                                            )
+                                            editor?.apply()
+                                        }
+                                        activity?.let {
+                                            startActivity(Intent(it, MainActivity::class.java))
+                                            it.finishAffinity()
+                                        }
+                                    }
+                                    FastSave.getInstance()
+                                        .saveString(
+                                            Constants.ACCESS_TOKEN,
+                                            response.values.data?.accessToken
+                                        )
+
+                                } else {
+                                    context?.showToast(response.values.message)
+                                }
                             }
-
-                            FastSave.getInstance()
-                                .saveString(Constants.SOCIAL_ID, userData.socialId)
-                            FastSave.getInstance().saveBoolean(
-                                Constants.isControlModePinned,
-                                userData.iIsPinStatus!!.toBoolean()
-                            )
-                            FastSave.getInstance()
-                                .saveString(Constants.LOGIN_TYPE, Constants.LOGIN_TYPE_NORMAL)
-
-                            if (binding.checkboxRemember.isChecked) {
-                                val sharedPreference = activity?.getSharedPreferences(
-                                    Constants.SHARED_PREF,
-                                    Context.MODE_PRIVATE
-                                )
-                                val editor = sharedPreference?.edit()
-                                editor?.putString(
-                                    Constants.LOGGED_IN_EMAIL,
-                                    binding.edtEmail.text.toString()
-                                )
-                                editor?.putString(
-                                    Constants.LOGGED_IN_PASSWORD,
-                                    binding.edtPassword.text.toString()
-                                )
-                                editor?.putString(
-                                    Constants.LOGGED_IN_TYPE,
-                                    Constants.LOGIN_TYPE_NORMAL
-                                )
-                                editor?.apply()
+                            is Resource.Failure -> {
+                                DialogUtil.hideDialog()
+                                context?.getString(R.string.error_something_went_wrong)
+                                Log.e(logTag, "login error ${response.errorBody?.string()}")
                             }
-                            activity?.let {
-                                startActivity(Intent(it, MainActivity::class.java))
-                                it.finishAffinity()
+                            else -> {
+                                // We will do nothing here
                             }
-                        }
-                        FastSave.getInstance()
-                            .saveString(Constants.ACCESS_TOKEN, response.values.data?.accessToken)
-
-                    } else {
-                        context?.let {
-                            Toast.makeText(it, response.values.message, Toast.LENGTH_SHORT).show()
                         }
                     }
                 }
-                is Resource.Failure -> {
-                    DialogUtil.hideDialog()
-                    context?.let {
-                        Toast.makeText(
-                            it,
-                            getString(R.string.error_something_went_wrong),
-                            Toast.LENGTH_SHORT
-                        ).show()
+
+                launch {
+                    viewModel.socialLoginResponse.collectLatest { response ->
+                        when (response) {
+                            is Resource.Success -> {
+                                DialogUtil.hideDialog()
+
+                                if (response.values.status && response.values.code == Constants.API_SUCCESS_CODE) {
+
+                                    val userProfile: UserProfile? = response.values.data?.user_data
+                                    userProfile?.let { userData ->
+                                        FastSave.getInstance()
+                                            .saveString(Constants.USER_ID, userData.iUserId)
+                                        FastSave.getInstance()
+                                            .saveString(
+                                                Constants.USER_FULL_NAME,
+                                                userData.vFullName
+                                            )
+                                        FastSave.getInstance()
+                                            .saveString(Constants.USERNAME, userData.vUserName)
+                                        FastSave.getInstance()
+                                            .saveString(Constants.USER_EMAIL, userData.vEmail)
+                                        FastSave.getInstance()
+                                            .saveString(
+                                                Constants.USER_PHONE_NUMBER,
+                                                userData.bPhoneNumber
+                                            )
+                                        FastSave.getInstance()
+                                            .saveString(Constants.SOCIAL_ID, userData.socialId)
+                                        FastSave.getInstance().saveBoolean(
+                                            Constants.isControlModePinned,
+                                            userData.iIsPinStatus!!.toBoolean()
+                                        )
+
+                                        if (userData.userRole == Constants.MASTER_USER) {
+                                            FastSave.getInstance()
+                                                .saveBoolean(Constants.IS_MASTER_USER, true)
+                                        } else {
+                                            FastSave.getInstance()
+                                                .saveBoolean(Constants.IS_MASTER_USER, false)
+                                        }
+
+                                        val sharedPreference = activity?.getSharedPreferences(
+                                            Constants.SHARED_PREF,
+                                            Context.MODE_PRIVATE
+                                        )
+                                        val editor = sharedPreference?.edit()
+                                        editor?.putString(
+                                            Constants.LOGGED_IN_TYPE,
+                                            Constants.LOGIN_TYPE_GOOGLE
+                                        )
+                                        editor?.apply()
+
+                                        activity?.let {
+                                            FastSave.getInstance()
+                                                .saveString(
+                                                    Constants.LOGIN_TYPE,
+                                                    Constants.LOGIN_TYPE_GOOGLE
+                                                )
+                                            startActivity(Intent(it, MainActivity::class.java))
+                                            it.finishAffinity()
+                                        }
+                                    }
+                                    FastSave.getInstance()
+                                        .saveString(
+                                            Constants.ACCESS_TOKEN,
+                                            response.values.data?.accessToken
+                                        )
+
+                                } else {
+                                    context?.showToast(response.values.message)
+                                }
+                            }
+                            is Resource.Failure -> {
+                                DialogUtil.hideDialog()
+                                context?.showToast(getString(R.string.error_something_went_wrong))
+                                Log.e(logTag, "login error ${response.errorBody?.string()}")
+                            }
+                            else -> {
+                                // We will do nothing here
+                            }
+                        }
                     }
-                    Log.e(logTag, "login error ${response.errorBody?.string()}")
                 }
-                else -> {
-                    // We will do nothing here
-                }
+
             }
-        })
 
-        viewModel.socialLoginResponse.observe(viewLifecycleOwner, { response ->
-            when (response) {
-                is Resource.Success -> {
-                    DialogUtil.hideDialog()
+        }
 
-                    if (response.values.status && response.values.code == Constants.API_SUCCESS_CODE) {
-
-                        val userProfile: UserProfile? = response.values.data?.user_data
-                        userProfile?.let { userData ->
-                            FastSave.getInstance().saveString(Constants.USER_ID, userData.iUserId)
-                            FastSave.getInstance()
-                                .saveString(Constants.USER_FULL_NAME, userData.vFullName)
-                            FastSave.getInstance()
-                                .saveString(Constants.USERNAME, userData.vUserName)
-                            FastSave.getInstance().saveString(Constants.USER_EMAIL, userData.vEmail)
-                            FastSave.getInstance()
-                                .saveString(Constants.USER_PHONE_NUMBER, userData.bPhoneNumber)
-                            FastSave.getInstance()
-                                .saveString(Constants.SOCIAL_ID, userData.socialId)
-                            FastSave.getInstance().saveBoolean(
-                                Constants.isControlModePinned,
-                                userData.iIsPinStatus!!.toBoolean()
-                            )
-
-                            if (userData.userRole == Constants.MASTER_USER) {
-                                FastSave.getInstance().saveBoolean(Constants.IS_MASTER_USER, true)
-                            } else {
-                                FastSave.getInstance().saveBoolean(Constants.IS_MASTER_USER, false)
-                            }
-
-                            val sharedPreference = activity?.getSharedPreferences(
-                                Constants.SHARED_PREF,
-                                Context.MODE_PRIVATE
-                            )
-                            val editor = sharedPreference?.edit()
-                            editor?.putString(Constants.LOGGED_IN_TYPE, Constants.LOGIN_TYPE_GOOGLE)
-                            editor?.apply()
-
-                            activity?.let {
-                                FastSave.getInstance()
-                                    .saveString(Constants.LOGIN_TYPE, Constants.LOGIN_TYPE_GOOGLE)
-                                startActivity(Intent(it, MainActivity::class.java))
-                                it.finishAffinity()
-                            }
-                        }
-                        FastSave.getInstance()
-                            .saveString(Constants.ACCESS_TOKEN, response.values.data?.accessToken)
-
-                    } else {
-                        context?.let {
-                            Toast.makeText(it, response.values.message, Toast.LENGTH_SHORT).show()
-                        }
-                    }
-                }
-                is Resource.Failure -> {
-                    DialogUtil.hideDialog()
-                    context?.let {
-                        Toast.makeText(
-                            it,
-                            getString(R.string.error_something_went_wrong),
-                            Toast.LENGTH_SHORT
-                        ).show()
-                    }
-                    Log.e(logTag, "login error ${response.errorBody?.string()}")
-                }
-                else -> {
-                    // We will do nothing here
-                }
-            }
-        })
     }
 
     private fun validateUserInformation() {
@@ -439,11 +471,5 @@ class LoginFragment : ModelBaseFragment<AuthViewModel, FragmentLoginBinding, Aut
     ): FragmentLoginBinding = FragmentLoginBinding.inflate(inflater, container, false)
 
     override fun getFragmentRepository(): AuthRepository = AuthRepository(networkModel)
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        viewModel.loginResponse.postValue(null)
-        viewModel.socialLoginResponse.postValue(null)
-    }
 
 }

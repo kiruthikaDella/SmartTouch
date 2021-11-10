@@ -5,9 +5,9 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.core.view.get
 import androidx.core.view.isVisible
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.amazonaws.mobileconnectors.iot.AWSIotMqttQos
@@ -19,6 +19,7 @@ import com.dellainfotech.smartTouch.common.utils.Constants
 import com.dellainfotech.smartTouch.common.utils.DialogUtil
 import com.dellainfotech.smartTouch.common.utils.Utils.toBoolean
 import com.dellainfotech.smartTouch.common.utils.Utils.toInt
+import com.dellainfotech.smartTouch.common.utils.showToast
 import com.dellainfotech.smartTouch.databinding.FragmentDeviceFeaturesBinding
 import com.dellainfotech.smartTouch.mqtt.AwsMqttSingleton
 import com.dellainfotech.smartTouch.mqtt.MQTTConnectionStatus
@@ -28,6 +29,7 @@ import com.dellainfotech.smartTouch.ui.fragments.ModelBaseFragment
 import com.dellainfotech.smartTouch.ui.viewmodel.HomeViewModel
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
+import kotlinx.coroutines.flow.collectLatest
 import org.json.JSONObject
 import java.nio.charset.StandardCharsets
 
@@ -95,56 +97,56 @@ class DeviceFeaturesFragment :
             }
         })
 
-        viewModel.getDeviceFeatureSettingsResponse.observe(viewLifecycleOwner, { response ->
-            when (response) {
-                is Resource.Success -> {
-                    DialogUtil.hideDialog()
-                    if (response.values.status && response.values.code == Constants.API_SUCCESS_CODE) {
-                        response.values.data?.let { deviceFeatureData ->
+        viewLifecycleOwner.lifecycleScope.launchWhenStarted {
+            viewModel.getDeviceFeatureSettingsResponse.collectLatest { response ->
+                when (response) {
+                    is Resource.Success -> {
+                        DialogUtil.hideDialog()
+                        if (response.values.status && response.values.code == Constants.API_SUCCESS_CODE) {
+                            response.values.data?.let { deviceFeatureData ->
 
-                            try {
-                                binding.switchSleepMode.isChecked =
-                                    deviceFeatureData.sleepMode.toBoolean()
-                                binding.switchNightMode.isChecked =
-                                    deviceFeatureData.nightMode.toBoolean()
-                                binding.switchOutdoorMode.isChecked =
-                                    deviceFeatureData.outdoorMode.toBoolean()
-                                binding.switchTime.isChecked = deviceFeatureData.time.toBoolean()
-                                binding.switchWeatherReport.isChecked =
-                                    deviceFeatureData.weatherReport.toBoolean()
-                                binding.switchRoomTemperature.isChecked =
-                                    deviceFeatureData.roomTemperature.toBoolean()
-                                binding.seekBarBrightness.progress =
-                                    deviceFeatureData.displayBrightnessValue.toInt()
+                                try {
+                                    binding.switchSleepMode.isChecked =
+                                        deviceFeatureData.sleepMode.toBoolean()
+                                    binding.switchNightMode.isChecked =
+                                        deviceFeatureData.nightMode.toBoolean()
+                                    binding.switchOutdoorMode.isChecked =
+                                        deviceFeatureData.outdoorMode.toBoolean()
+                                    binding.switchTime.isChecked =
+                                        deviceFeatureData.time.toBoolean()
+                                    binding.switchWeatherReport.isChecked =
+                                        deviceFeatureData.weatherReport.toBoolean()
+                                    binding.switchRoomTemperature.isChecked =
+                                        deviceFeatureData.roomTemperature.toBoolean()
+                                    binding.seekBarBrightness.progress =
+                                        deviceFeatureData.displayBrightnessValue.toInt()
 
-                                binding.rgTimeFormat.check(binding.rgTimeFormat[deviceFeatureData.timeFormat].id)
-                                binding.rgTemperatureUnit.check(binding.rgTemperatureUnit[deviceFeatureData.temperatureUnit].id)
-                                binding.rgDisplayBrightness.check(binding.rgDisplayBrightness[deviceFeatureData.displayBrightnessMode.toInt()].id)
-                            }catch (e: Exception){
-                                e.printStackTrace()
+                                    binding.rgTimeFormat.check(binding.rgTimeFormat[deviceFeatureData.timeFormat].id)
+                                    binding.rgTemperatureUnit.check(binding.rgTemperatureUnit[deviceFeatureData.temperatureUnit].id)
+                                    binding.rgDisplayBrightness.check(binding.rgDisplayBrightness[deviceFeatureData.displayBrightnessMode.toInt()].id)
+                                } catch (e: Exception) {
+                                    e.printStackTrace()
+                                }
                             }
-                        }
-                    } else {
-                        context?.let {
-                            Toast.makeText(it, response.values.message, Toast.LENGTH_SHORT).show()
+                        } else {
+                            context?.showToast(response.values.message)
                         }
                     }
-                }
-                is Resource.Failure -> {
-                    DialogUtil.hideDialog()
-                    context?.let {
-                        Toast.makeText(it, getString(R.string.error_something_went_wrong), Toast.LENGTH_SHORT).show()
+                    is Resource.Failure -> {
+                        DialogUtil.hideDialog()
+                        context?.showToast(getString(R.string.error_something_went_wrong))
+                        Log.e(
+                            logTag,
+                            " getDeviceFeatureSettingsResponse Failure ${response.errorBody?.string()} "
+                        )
                     }
-                    Log.e(
-                        logTag,
-                        " getDeviceFeatureSettingsResponse Failure ${response.errorBody?.string()} "
-                    )
-                }
-                else -> {
-                    // We will do nothing here
+                    else -> {
+                        // We will do nothing here
+                    }
                 }
             }
-        })
+        }
+
 
         clickEvents()
     }
@@ -164,7 +166,7 @@ class DeviceFeaturesFragment :
         mqttConnectionDisposable?.dispose()
     }
 
-    private fun clickEvents(){
+    private fun clickEvents() {
 
         binding.ivBack.setOnClickListener {
             findNavController().navigateUp()
@@ -229,45 +231,71 @@ class DeviceFeaturesFragment :
                     e.printStackTrace()
                 }
             } else {
-                context?.let {
-                    Toast.makeText(it, "Please try again later!", Toast.LENGTH_SHORT).show()
-                }
+                context?.showToast(getString(R.string.error_something_went_wrong))
             }
         }
 
         binding.ivSleepModeInfo.setOnClickListener {
             activity?.let { mActivity ->
-                DialogUtil.featureDetailAlert(mActivity,getString(R.string.text_sleep_mode),getString(R.string.description_sleep_mode))
+                DialogUtil.featureDetailAlert(
+                    mActivity,
+                    getString(R.string.text_sleep_mode),
+                    getString(R.string.description_sleep_mode)
+                )
             }
         }
         binding.ivNightModeInfo.setOnClickListener {
             activity?.let { mActivity ->
-                DialogUtil.featureDetailAlert(mActivity,getString(R.string.text_night_mode),getString(R.string.description_night_mode))
+                DialogUtil.featureDetailAlert(
+                    mActivity,
+                    getString(R.string.text_night_mode),
+                    getString(R.string.description_night_mode)
+                )
             }
         }
         binding.ivOutdoorModeInfo.setOnClickListener {
             activity?.let { mActivity ->
-                DialogUtil.featureDetailAlert(mActivity,getString(R.string.text_outdoor_mode),getString(R.string.description_outdoor_mode))
+                DialogUtil.featureDetailAlert(
+                    mActivity,
+                    getString(R.string.text_outdoor_mode),
+                    getString(R.string.description_outdoor_mode)
+                )
             }
         }
         binding.ivTimeInfo.setOnClickListener {
             activity?.let { mActivity ->
-                DialogUtil.featureDetailAlert(mActivity,getString(R.string.text_time),getString(R.string.description_time_mode))
+                DialogUtil.featureDetailAlert(
+                    mActivity,
+                    getString(R.string.text_time),
+                    getString(R.string.description_time_mode)
+                )
             }
         }
         binding.ivWeatherReportInfo.setOnClickListener {
             activity?.let { mActivity ->
-                DialogUtil.featureDetailAlert(mActivity,getString(R.string.text_weather_report),getString(R.string.description_weather_report))
+                DialogUtil.featureDetailAlert(
+                    mActivity,
+                    getString(R.string.text_weather_report),
+                    getString(R.string.description_weather_report)
+                )
             }
         }
         binding.ivRoomTemperatureInfo.setOnClickListener {
             activity?.let { mActivity ->
-                DialogUtil.featureDetailAlert(mActivity,getString(R.string.text_room_temperature),getString(R.string.description_room_temperature))
+                DialogUtil.featureDetailAlert(
+                    mActivity,
+                    getString(R.string.text_room_temperature),
+                    getString(R.string.description_room_temperature)
+                )
             }
         }
         binding.ivDisplayBrightnessInfo.setOnClickListener {
             activity?.let { mActivity ->
-                DialogUtil.featureDetailAlert(mActivity,getString(R.string.text_display_brightness),getString(R.string.description_display_brightness))
+                DialogUtil.featureDetailAlert(
+                    mActivity,
+                    getString(R.string.text_display_brightness),
+                    getString(R.string.description_display_brightness)
+                )
             }
         }
     }
@@ -328,11 +356,7 @@ class DeviceFeaturesFragment :
 
                         try {
 
-                            Toast.makeText(
-                                it,
-                                getString(R.string.toast_text_device_synchronized),
-                                Toast.LENGTH_SHORT
-                            ).show()
+                            it.showToast(getString(R.string.toast_text_device_synchronized))
 
                             // val topic1 = topic.split("/")
                             // topic [0] = ''

@@ -5,7 +5,9 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.dellainfotech.smartTouch.R
@@ -19,12 +21,15 @@ import com.dellainfotech.smartTouch.common.utils.Constants
 import com.dellainfotech.smartTouch.common.utils.DialogUtil
 import com.dellainfotech.smartTouch.common.utils.Utils.toBoolean
 import com.dellainfotech.smartTouch.common.utils.Utils.toInt
+import com.dellainfotech.smartTouch.common.utils.showToast
 import com.dellainfotech.smartTouch.databinding.FragmentDeviceSettingsBinding
 import com.dellainfotech.smartTouch.mqtt.AwsMqttSingleton
 import com.dellainfotech.smartTouch.mqtt.MQTTConstants
 import com.dellainfotech.smartTouch.mqtt.NotifyManager
 import com.dellainfotech.smartTouch.ui.fragments.ModelBaseFragment
 import com.dellainfotech.smartTouch.ui.viewmodel.HomeViewModel
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 import org.json.JSONObject
 
 /**
@@ -52,7 +57,12 @@ class DeviceSettingsFragment :
                     object : DialogAskListener {
                         override fun onYesClicked() {
                             DialogUtil.hideDialog()
-                            publishTopic(MQTTConstants.RESTART_DEVICE.replace(MQTTConstants.AWS_DEVICE_ID, args.deviceDetail.deviceSerialNo), MQTTConstants.AWS_RESTART_DEVICE)
+                            publishTopic(
+                                MQTTConstants.RESTART_DEVICE.replace(
+                                    MQTTConstants.AWS_DEVICE_ID,
+                                    args.deviceDetail.deviceSerialNo
+                                ), MQTTConstants.AWS_RESTART_DEVICE
+                            )
                         }
 
                         override fun onNoClicked() {
@@ -74,7 +84,12 @@ class DeviceSettingsFragment :
                     object : DialogAskListener {
                         override fun onYesClicked() {
                             DialogUtil.loadingAlert(it)
-                            viewModel.factoryReset(BodyFactoryReset(args.deviceDetail.id,args.deviceDetail.deviceType.toString()))
+                            viewModel.factoryReset(
+                                BodyFactoryReset(
+                                    args.deviceDetail.id,
+                                    args.deviceDetail.deviceType.toString()
+                                )
+                            )
                         }
 
                         override fun onNoClicked() {
@@ -98,7 +113,11 @@ class DeviceSettingsFragment :
                             activity?.let { myActivity ->
                                 DialogUtil.loadingAlert(myActivity)
                             }
-                            viewModel.deleteDevice(args.deviceDetail.productGroup, args.roomDetail.id, args.deviceDetail.id)
+                            viewModel.deleteDevice(
+                                args.deviceDetail.productGroup,
+                                args.roomDetail.id,
+                                args.deviceDetail.id
+                            )
                         }
 
                         override fun onNoClicked() {
@@ -174,94 +193,108 @@ class DeviceSettingsFragment :
 
     override fun getFragmentRepository(): HomeRepository = HomeRepository(networkModel)
 
-    override fun onDestroy() {
-        super.onDestroy()
-        viewModel.deleteDeviceResponse.postValue(null)
-        viewModel.retainStateResponse.postValue(null)
-        viewModel.factoryResetResponse.postValue(null)
-    }
-
     private fun apiCall() {
-        viewModel.deleteDeviceResponse.observe(viewLifecycleOwner, { response ->
-            when (response) {
-                is Resource.Success -> {
-                    DialogUtil.hideDialog()
-                    context?.let {
-                        Toast.makeText(it, response.values.message, Toast.LENGTH_SHORT).show()
-                    }
-                    if (response.values.status && response.values.code == Constants.API_SUCCESS_CODE) {
-                        findNavController().navigateUp()
-                    }
-                }
-                is Resource.Failure -> {
-                    DialogUtil.hideDialog()
-                    context?.let {
-                        Toast.makeText(it, getString(R.string.error_something_went_wrong), Toast.LENGTH_SHORT).show()
-                    }
-                }
-                else -> {
-                    //We will do nothing here
-                }
-            }
-        })
 
-        viewModel.retainStateResponse.observe(viewLifecycleOwner, { response ->
-            when (response) {
-                is Resource.Success -> {
-                    DialogUtil.hideDialog()
-                    context?.let {
-                        Toast.makeText(it, response.values.message, Toast.LENGTH_SHORT).show()
-                    }
-                    if (!response.values.status || response.values.code != Constants.API_SUCCESS_CODE){
-                        binding.switchRetainState.isChecked = !binding.switchRetainState.isChecked
+        viewLifecycleOwner.lifecycleScope.launchWhenStarted {
 
-                    }
-                }
-                is Resource.Failure -> {
-                    DialogUtil.hideDialog()
-                    context?.let {
-                        Toast.makeText(it, getString(R.string.error_something_went_wrong), Toast.LENGTH_SHORT).show()
-                    }
-                    Log.e(logTag, " retainStateResponse Failure ${response.errorBody?.string()} ")
-                }
-                else -> {
-                    //We will do nothing here
-                }
-            }
-        })
+            viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
 
-        viewModel.factoryResetResponse.observe(viewLifecycleOwner, { response ->
-            when(response){
-                is Resource.Success -> {
-                    DialogUtil.hideDialog()
-                    if (response.values.status && response.values.code == Constants.API_SUCCESS_CODE){
-                        publishTopic(MQTTConstants.RESTORE_FACTORY_SETTINGS.replace(MQTTConstants.AWS_DEVICE_ID, args.deviceDetail.deviceSerialNo), MQTTConstants.AWS_FACTORY_RESET)
-                        activity?.let {
-                            DialogUtil.deviceOfflineAlert(it, response.values.message, object : DialogShowListener {
-                                override fun onClick() {
-                                    DialogUtil.hideDialog()
+                launch {
+                    viewModel.deleteDeviceResponse.collectLatest { response ->
+                        when (response) {
+                            is Resource.Success -> {
+                                DialogUtil.hideDialog()
+                                context?.showToast(response.values.message)
+                                if (response.values.status && response.values.code == Constants.API_SUCCESS_CODE) {
                                     findNavController().navigateUp()
                                 }
-                            })
-                        }
-                    }else {
-                        context?.let {
-                            Toast.makeText(it,response.values.message,Toast.LENGTH_SHORT).show()
+                            }
+                            is Resource.Failure -> {
+                                DialogUtil.hideDialog()
+                                context?.showToast(getString(R.string.error_something_went_wrong))
+                            }
+                            else -> {
+                                //We will do nothing here
+                            }
                         }
                     }
                 }
-                is Resource.Failure -> {
-                    DialogUtil.hideDialog()
-                    context?.let {
-                        Toast.makeText(it, getString(R.string.error_something_went_wrong), Toast.LENGTH_SHORT).show()
+
+                launch {
+                    viewModel.retainStateResponse.collectLatest { response ->
+                        when (response) {
+                            is Resource.Success -> {
+                                DialogUtil.hideDialog()
+                                context?.showToast(response.values.message)
+                                if (!response.values.status || response.values.code != Constants.API_SUCCESS_CODE) {
+                                    binding.switchRetainState.isChecked =
+                                        !binding.switchRetainState.isChecked
+
+                                }
+                            }
+                            is Resource.Failure -> {
+                                DialogUtil.hideDialog()
+                                context?.showToast(getString(R.string.error_something_went_wrong))
+                                Log.e(
+                                    logTag,
+                                    " retainStateResponse Failure ${response.errorBody?.string()} "
+                                )
+                            }
+                            else -> {
+                                //We will do nothing here
+                            }
+                        }
                     }
-                    Log.e(logTag, " factoryResetResponse Failure ${response.errorBody?.string()}")
                 }
-                else -> {
-                    //We will do nothing here
+
+                launch {
+                    viewModel.factoryResetResponse.collectLatest { response ->
+                        when (response) {
+                            is Resource.Success -> {
+                                DialogUtil.hideDialog()
+                                if (response.values.status && response.values.code == Constants.API_SUCCESS_CODE) {
+                                    publishTopic(
+                                        MQTTConstants.RESTORE_FACTORY_SETTINGS.replace(
+                                            MQTTConstants.AWS_DEVICE_ID,
+                                            args.deviceDetail.deviceSerialNo
+                                        ), MQTTConstants.AWS_FACTORY_RESET
+                                    )
+                                    activity?.let {
+                                        DialogUtil.deviceOfflineAlert(
+                                            it,
+                                            response.values.message,
+                                            object : DialogShowListener {
+                                                override fun onClick() {
+                                                    DialogUtil.hideDialog()
+                                                    findNavController().navigateUp()
+                                                }
+                                            })
+                                    }
+                                } else {
+                                    context?.showToast(response.values.message)
+                                }
+                            }
+                            is Resource.Failure -> {
+                                DialogUtil.hideDialog()
+                                context?.showToast(getString(R.string.error_something_went_wrong))
+                                Log.e(
+                                    logTag,
+                                    " factoryResetResponse Failure ${response.errorBody?.string()}"
+                                )
+                            }
+                            else -> {
+                                //We will do nothing here
+                            }
+                        }
+                    }
                 }
+
             }
-        })
+
+
+        }
+
+
     }
 
 }
