@@ -5,7 +5,9 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.GridLayoutManager
@@ -20,6 +22,7 @@ import com.dellainfotech.smartTouch.common.interfaces.AdapterItemClickListener
 import com.dellainfotech.smartTouch.common.interfaces.DialogShowListener
 import com.dellainfotech.smartTouch.common.utils.Constants
 import com.dellainfotech.smartTouch.common.utils.DialogUtil
+import com.dellainfotech.smartTouch.common.utils.showToast
 import com.dellainfotech.smartTouch.databinding.FragmentSwitchIconsDetailBinding
 import com.dellainfotech.smartTouch.mqtt.AwsMqttSingleton
 import com.dellainfotech.smartTouch.mqtt.MQTTConnectionStatus
@@ -29,6 +32,8 @@ import com.dellainfotech.smartTouch.ui.fragments.ModelBaseFragment
 import com.dellainfotech.smartTouch.ui.viewmodel.HomeViewModel
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 import org.json.JSONObject
 import java.nio.charset.StandardCharsets
 
@@ -111,73 +116,86 @@ class SwitchIconsDetailFragment :
                     )
                 }
             } ?: kotlin.run {
-                context?.let {
-                    Toast.makeText(it, "Please select icon", Toast.LENGTH_SHORT).show()
-                }
+                context?.showToast("Please select icon")
             }
         }
 
-        viewModel.iconListResponse.observe(viewLifecycleOwner, { response ->
-            when (response) {
-                is Resource.Success -> {
-                    switchIconList.clear()
-                    DialogUtil.hideDialog()
-                    if (response.values.status && response.values.code == Constants.API_SUCCESS_CODE) {
-                        response.values.data?.let {
-                            switchIconList.addAll(it)
-                            adapter.notifyDataSetChanged()
-                            iconData = adapter.selectIcon(args.switchDetail)
-                            adapter.setOnSwitchClickListener(object :
-                                AdapterItemClickListener<IconListData> {
-                                override fun onItemClick(data: IconListData) {
-                                    iconData = data
+        viewLifecycleOwner.lifecycleScope.launchWhenStarted {
+
+            viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                launch {
+                    viewModel.iconListResponse.collectLatest { response ->
+                        when (response) {
+                            is Resource.Success -> {
+                                switchIconList.clear()
+                                DialogUtil.hideDialog()
+                                if (response.values.status && response.values.code == Constants.API_SUCCESS_CODE) {
+                                    response.values.data?.let {
+                                        switchIconList.addAll(it)
+                                        adapter.notifyDataSetChanged()
+                                        iconData = adapter.selectIcon(args.switchDetail)
+                                        adapter.setOnSwitchClickListener(object :
+                                            AdapterItemClickListener<IconListData> {
+                                            override fun onItemClick(data: IconListData) {
+                                                iconData = data
+                                            }
+
+                                        })
+                                    }
+                                } else {
+                                    adapter.notifyDataSetChanged()
                                 }
-
-                            })
-                        }
-                    }else {
-                        adapter.notifyDataSetChanged()
-                    }
-                }
-                is Resource.Failure -> {
-                    switchIconList.clear()
-                    adapter.notifyDataSetChanged()
-                    DialogUtil.hideDialog()
-                    Log.e(logTag, " iconListResponse Failure ${response.errorBody?.string()} ")
-                }
-                else -> {
-                    //We will do nothing here
-                }
-            }
-        })
-
-        viewModel.updateSwitchIconResponse.observe(viewLifecycleOwner, { response ->
-            when (response) {
-                is Resource.Success -> {
-                    DialogUtil.hideDialog()
-                    context?.let {
-                        Toast.makeText(it, response.values.message, Toast.LENGTH_SHORT).show()
-                    }
-                    if (response.values.status && response.values.code == Constants.API_SUCCESS_CODE) {
-                        iconData?.let {
-                            args.switchDetail.icon = it.icon
-                            args.switchDetail.iconFile = it.iconFile
-                            findNavController().navigateUp()
+                            }
+                            is Resource.Failure -> {
+                                switchIconList.clear()
+                                adapter.notifyDataSetChanged()
+                                DialogUtil.hideDialog()
+                                context?.showToast(getString(R.string.error_something_went_wrong))
+                                Log.e(
+                                    logTag,
+                                    " iconListResponse Failure ${response.errorBody?.string()} "
+                                )
+                            }
+                            else -> {
+                                //We will do nothing here
+                            }
                         }
                     }
                 }
-                is Resource.Failure -> {
-                    DialogUtil.hideDialog()
-                    Log.e(
-                        logTag,
-                        " updateSwitchIconResponse Failure ${response.errorBody?.string()} "
-                    )
-                }
-                else -> {
-                    //We will do nothing here
+
+                launch {
+                    viewModel.updateSwitchIconResponse.collectLatest { response ->
+                        when (response) {
+                            is Resource.Success -> {
+                                DialogUtil.hideDialog()
+                                context?.showToast(response.values.message)
+                                if (response.values.status && response.values.code == Constants.API_SUCCESS_CODE) {
+                                    iconData?.let {
+                                        args.switchDetail.icon = it.icon
+                                        args.switchDetail.iconFile = it.iconFile
+                                        findNavController().navigateUp()
+                                    }
+                                }
+                            }
+                            is Resource.Failure -> {
+                                DialogUtil.hideDialog()
+                                context?.showToast(getString(R.string.error_something_went_wrong))
+                                Log.e(
+                                    logTag,
+                                    " updateSwitchIconResponse Failure ${response.errorBody?.string()} "
+                                )
+                            }
+                            else -> {
+                                //We will do nothing here
+                            }
+                        }
+                    }
                 }
             }
-        })
+
+        }
+
+
     }
 
     override fun getViewModel(): Class<HomeViewModel> = HomeViewModel::class.java
@@ -193,11 +211,6 @@ class SwitchIconsDetailFragment :
     override fun onDestroyView() {
         super.onDestroyView()
         mqttConnectionDisposable?.dispose()
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        viewModel.updateSwitchIconResponse.postValue(null)
     }
 
     //

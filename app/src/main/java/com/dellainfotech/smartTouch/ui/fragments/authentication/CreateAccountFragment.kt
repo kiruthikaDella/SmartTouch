@@ -9,18 +9,21 @@ import android.util.Patterns
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.dellainfotech.smartTouch.R
 import com.dellainfotech.smartTouch.api.Resource
 import com.dellainfotech.smartTouch.api.body.BodySignUp
 import com.dellainfotech.smartTouch.api.repository.AuthRepository
+import com.dellainfotech.smartTouch.common.interfaces.DialogShowListener
 import com.dellainfotech.smartTouch.common.utils.Constants
 import com.dellainfotech.smartTouch.common.utils.DialogUtil
+import com.dellainfotech.smartTouch.common.utils.showToast
 import com.dellainfotech.smartTouch.databinding.FragmentCreateAccountBinding
 import com.dellainfotech.smartTouch.ui.fragments.ModelBaseFragment
 import com.dellainfotech.smartTouch.ui.viewmodel.AuthViewModel
+import kotlinx.coroutines.flow.collectLatest
 
 /**
  * Created by Jignesh Dangar on 09-04-2021.
@@ -46,21 +49,49 @@ class CreateAccountFragment :
         }
 
         binding.btnSignUp.setOnClickListener {
-            validateUserInformation()
+            if (isInternetConnected()) {
+                validateUserInformation()
+            } else {
+                activity?.let {
+                    DialogUtil.deviceOfflineAlert(
+                        it,
+                        getString(R.string.text_no_internet_available),
+                        object : DialogShowListener {
+                            override fun onClick() {
+                                DialogUtil.hideDialog()
+                                findNavController().navigateUp()
+                            }
+
+                        }
+                    )
+                }
+            }
         }
 
         binding.ivHidePassword.setOnClickListener {
             if (isPasswordVisible) {
                 isPasswordVisible = false
                 context?.let {
-                    binding.ivHidePassword.setImageDrawable(ContextCompat.getDrawable(it,R.drawable.ic_password_hidden))
-                    binding.edtPassword.transformationMethod = PasswordTransformationMethod.getInstance()
+                    binding.ivHidePassword.setImageDrawable(
+                        ContextCompat.getDrawable(
+                            it,
+                            R.drawable.ic_password_hidden
+                        )
+                    )
+                    binding.edtPassword.transformationMethod =
+                        PasswordTransformationMethod.getInstance()
                 }
             } else {
                 isPasswordVisible = true
                 context?.let {
-                    binding.ivHidePassword.setImageDrawable(ContextCompat.getDrawable(it,R.drawable.ic_password_visible))
-                    binding.edtPassword.transformationMethod = HideReturnsTransformationMethod.getInstance()
+                    binding.ivHidePassword.setImageDrawable(
+                        ContextCompat.getDrawable(
+                            it,
+                            R.drawable.ic_password_visible
+                        )
+                    )
+                    binding.edtPassword.transformationMethod =
+                        HideReturnsTransformationMethod.getInstance()
                 }
             }
         }
@@ -70,43 +101,59 @@ class CreateAccountFragment :
             if (isConfirmPasswordVisible) {
                 isConfirmPasswordVisible = false
                 context?.let {
-                    binding.ivHideConfirmPassword.setImageDrawable(ContextCompat.getDrawable(it, R.drawable.ic_password_hidden))
-                    binding.edtConfirmPassword.transformationMethod = PasswordTransformationMethod.getInstance()
+                    binding.ivHideConfirmPassword.setImageDrawable(
+                        ContextCompat.getDrawable(
+                            it,
+                            R.drawable.ic_password_hidden
+                        )
+                    )
+                    binding.edtConfirmPassword.transformationMethod =
+                        PasswordTransformationMethod.getInstance()
                 }
             } else {
                 isConfirmPasswordVisible = true
                 context?.let {
-                    binding.ivHideConfirmPassword.setImageDrawable(ContextCompat.getDrawable(it, R.drawable.ic_password_visible))
-                    binding.edtConfirmPassword.transformationMethod = HideReturnsTransformationMethod.getInstance()
+                    binding.ivHideConfirmPassword.setImageDrawable(
+                        ContextCompat.getDrawable(
+                            it,
+                            R.drawable.ic_password_visible
+                        )
+                    )
+                    binding.edtConfirmPassword.transformationMethod =
+                        HideReturnsTransformationMethod.getInstance()
                 }
             }
 
         }
 
-        viewModel.signUpResponse.observe(viewLifecycleOwner, { response ->
-            when (response) {
-                is Resource.Success -> {
-                    DialogUtil.hideDialog()
-                    if (response.values.status && response.values.code == Constants.API_SUCCESS_CODE) {
-                        context?.let {
-                            Toast.makeText(it, response.values.message, Toast.LENGTH_SHORT).show()
-                        }
-                        findNavController().navigateUp()
-                    } else {
-                        context?.let {
-                            Toast.makeText(it, response.values.message, Toast.LENGTH_SHORT).show()
-                        }
-                    }
+        viewLifecycleOwner.lifecycleScope.launchWhenStarted {
 
-                }
-                is Resource.Failure -> {
-                    DialogUtil.hideDialog()
-                    Log.e(logTag, "registration error ${response.errorBody?.string()}")
-                }else -> {
-                    //We will do nothing here
+            viewModel.signUpResponse.collectLatest { response ->
+                when (response) {
+                    is Resource.Success -> {
+                        DialogUtil.hideDialog()
+                        if (response.values.status && response.values.code == Constants.API_SUCCESS_CODE) {
+                            context?.showToast(response.values.message)
+                            findNavController().navigateUp()
+                        } else {
+                            context?.showToast(response.values.message)
+                        }
+
+                    }
+                    is Resource.Failure -> {
+                        DialogUtil.hideDialog()
+                        context?.showToast(getString(R.string.error_something_went_wrong))
+
+                        Log.e(logTag, "registration error ${response.errorBody?.string()}")
+                    }
+                    else -> {
+                        //We will do nothing here
+                    }
                 }
             }
-        })
+
+        }
+
     }
 
     private fun validateUserInformation() {
@@ -175,10 +222,5 @@ class CreateAccountFragment :
         FragmentCreateAccountBinding.inflate(inflater, container, false)
 
     override fun getFragmentRepository(): AuthRepository = AuthRepository(networkModel)
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        viewModel.signUpResponse.postValue(null)
-    }
 
 }

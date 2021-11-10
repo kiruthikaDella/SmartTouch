@@ -10,7 +10,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.PopupMenu
-import android.widget.Toast
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.dellainfotech.smartTouch.R
@@ -29,10 +31,13 @@ import com.dellainfotech.smartTouch.common.interfaces.DialogEditListener
 import com.dellainfotech.smartTouch.common.utils.Constants
 import com.dellainfotech.smartTouch.common.utils.DialogUtil
 import com.dellainfotech.smartTouch.common.utils.Utils.toEditable
+import com.dellainfotech.smartTouch.common.utils.showToast
 import com.dellainfotech.smartTouch.databinding.FragmentCreateSceneBinding
 import com.dellainfotech.smartTouch.ui.fragments.ModelBaseFragment
 import com.dellainfotech.smartTouch.ui.viewmodel.HomeViewModel
 import com.sothree.slidinguppanel.SlidingUpPanelLayout
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 import java.text.Format
 import java.text.SimpleDateFormat
 import java.util.*
@@ -113,13 +118,6 @@ class CreateSceneFragment :
 
     override fun getFragmentRepository(): HomeRepository = HomeRepository(networkModel)
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        viewModel.addSceneResponse.postValue(null)
-        viewModel.updateSceneResponse.postValue(null)
-        viewModel.deleteSceneDetailResponse.postValue(null)
-    }
-
     private fun clickEvents() {
 
         binding.ivBack.setOnClickListener {
@@ -178,11 +176,7 @@ class CreateSceneFragment :
                     onClick = object : DialogEditListener {
                         override fun onYesClicked(string: String) {
                             if (string.isEmpty()) {
-                                Toast.makeText(
-                                    it,
-                                    "Scene name must not be empty!",
-                                    Toast.LENGTH_SHORT
-                                ).show()
+                                it.showToast("Scene name must not be empty!")
                             } else {
                                 DialogUtil.hideDialog()
                                 binding.edtSceneName.text = string.toEditable()
@@ -229,7 +223,6 @@ class CreateSceneFragment :
 
                         cal.timeZone = TimeZone.getTimeZone("gmt")
                         schedulerTime = cal.timeInMillis / 1000
-                        Log.e(logTag, " current ${cal.timeInMillis} UTC ${cal.timeInMillis}")
                     },
                     hour,
                     minute,
@@ -247,44 +240,26 @@ class CreateSceneFragment :
             val sceneFrequency = binding.tvInterval.text.toString().lowercase(Locale.getDefault())
             when {
                 sceneName.isEmpty() -> {
-                    context?.let {
-                        Toast.makeText(
-                            it,
-                            getString(R.string.error_text_scene_name_empty),
-                            Toast.LENGTH_LONG
-                        ).show()
-                    }
+                    context?.showToast(getString(R.string.error_text_scene_name_empty))
                 }
                 sceneName.length < 3 -> {
-                    context?.let {
-                        Toast.makeText(
-                            it,
-                            getString(R.string.error_text_scene_name_length),
-                            Toast.LENGTH_LONG
-                        ).show()
-                    }
+                    context?.showToast(getString(R.string.error_text_scene_name_length))
                 }
                 else -> {
+
+                    if (!isInternetConnected()){
+                        context?.showToast(getString(R.string.text_no_internet_available))
+                        return@setOnClickListener
+                    }
+
                     if (isUpdatingScene) {
 
                         when {
                             updateDeviceSceneAdapter.isEmptySwitchInList() -> {
-                                context?.let { mContext ->
-                                    Toast.makeText(
-                                        mContext,
-                                        getString(R.string.error_text_empty_switch),
-                                        Toast.LENGTH_SHORT
-                                    ).show()
-                                }
+                                context?.showToast(getString(R.string.error_text_empty_switch))
                             }
                             updateDeviceSceneAdapter.isDuplicateSwitchFound() -> {
-                                context?.let { mContext ->
-                                    Toast.makeText(
-                                        mContext,
-                                        getString(R.string.error_text_duplicate_scene),
-                                        Toast.LENGTH_SHORT
-                                    ).show()
-                                }
+                                context?.showToast(getString(R.string.error_text_duplicate_scene))
                             }
                             else -> {
                                 activity?.let {
@@ -311,22 +286,10 @@ class CreateSceneFragment :
                     } else {
                         when {
                             deviceSceneAdapter.isDuplicateSwitchFound() -> {
-                                context?.let { mContext ->
-                                    Toast.makeText(
-                                        mContext,
-                                        getString(R.string.error_text_duplicate_scene),
-                                        Toast.LENGTH_SHORT
-                                    ).show()
-                                }
+                                context?.showToast(getString(R.string.error_text_duplicate_scene))
                             }
                             deviceSceneAdapter.isEmptySwitchInList() -> {
-                                context?.let { mContext ->
-                                    Toast.makeText(
-                                        mContext,
-                                        getString(R.string.error_text_empty_switch),
-                                        Toast.LENGTH_SHORT
-                                    ).show()
-                                }
+                                context?.showToast(getString(R.string.error_text_empty_switch))
                             }
                             else -> {
                                 activity?.let {
@@ -357,17 +320,9 @@ class CreateSceneFragment :
         }
 
         binding.layoutFrequencyWeekly.btnSave.setOnClickListener {
-            Log.e(logTag, " selected days ${weeklyDaysAdapter.getDayList()}")
 
             if (weeklyDaysAdapter.getDayList().size <= 0) {
-                context?.let { mContext ->
-                    Toast.makeText(
-                        mContext,
-                        getString(R.string.error_text_empty_weekly_days),
-                        Toast.LENGTH_SHORT
-                    )
-                        .show()
-                }
+                context?.showToast(getString(R.string.error_text_empty_weekly_days))
             } else {
                 if (weeklyDaysAdapter.getDayList().size >= 7) {
                     binding.tvInterval.text = getString(R.string.text_daily)
@@ -390,86 +345,101 @@ class CreateSceneFragment :
     }
 
     private fun apiResponse() {
-        viewModel.addSceneResponse.observe(viewLifecycleOwner, { response ->
-            when (response) {
-                is Resource.Success -> {
-                    DialogUtil.hideDialog()
-                    context?.let {
-                        Toast.makeText(it, response.values.message, Toast.LENGTH_SHORT).show()
-                    }
-                    if (response.values.status && response.values.code == Constants.API_SUCCESS_CODE) {
-                        findNavController().navigateUp()
-                    } else if (!response.values.status && response.values.code == Constants.API_FAILURE_CODE) {
-                        response.values.errorData?.let { errorData ->
-                            deviceSceneAdapter.setError(errorData)
+
+        viewLifecycleOwner.lifecycleScope.launchWhenStarted {
+
+            viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+
+                launch {
+                    viewModel.addSceneResponse.collectLatest { response ->
+                        when (response) {
+                            is Resource.Success -> {
+                                DialogUtil.hideDialog()
+                                context?.showToast(response.values.message)
+                                if (response.values.status && response.values.code == Constants.API_SUCCESS_CODE) {
+                                    findNavController().navigateUp()
+                                } else if (!response.values.status && response.values.code == Constants.API_FAILURE_CODE) {
+                                    response.values.errorData?.let { errorData ->
+                                        deviceSceneAdapter.setError(errorData)
+                                    }
+                                }
+                            }
+                            is Resource.Failure -> {
+                                DialogUtil.hideDialog()
+                                context?.showToast(getString(R.string.error_something_went_wrong))
+                                Log.e(
+                                    logTag,
+                                    " addSceneResponse Failure ${response.errorBody?.string()} "
+                                )
+                            }
+                            else -> {
+                                //We will do nothing here
+                            }
                         }
                     }
                 }
-                is Resource.Failure -> {
-                    DialogUtil.hideDialog()
-                    Log.e(logTag, " addSceneResponse Failure ${response.errorBody?.string()} ")
-                }
-                else -> {
-                    //We will do nothing here
-                }
-            }
-        })
 
-        viewModel.updateSceneResponse.observe(viewLifecycleOwner, { response ->
-            when (response) {
-                is Resource.Success -> {
-                    DialogUtil.hideDialog()
-                    context?.let {
-                        Toast.makeText(
-                            it,
-                            response.values.message,
-                            Toast.LENGTH_SHORT
-                        ).show()
-                    }
-                    if (response.values.status && response.values.code == Constants.API_SUCCESS_CODE) {
-                        findNavController().navigateUp()
-                    } else if (!response.values.status && response.values.code == Constants.API_FAILURE_CODE) {
-                        response.values.errorData?.let { errorData ->
-                            updateDeviceSceneAdapter.setError(errorData)
-                        }
-                    }
+                launch {
+                    viewModel.updateSceneResponse.collectLatest { response ->
+                        when (response) {
+                            is Resource.Success -> {
+                                DialogUtil.hideDialog()
+                                context?.showToast(response.values.message)
+                                if (response.values.status && response.values.code == Constants.API_SUCCESS_CODE) {
+                                    findNavController().navigateUp()
+                                } else if (!response.values.status && response.values.code == Constants.API_FAILURE_CODE) {
+                                    response.values.errorData?.let { errorData ->
+                                        updateDeviceSceneAdapter.setError(errorData)
+                                    }
+                                }
 
-                }
-                is Resource.Failure -> {
-                    DialogUtil.hideDialog()
-                    Log.e(logTag, " updateSceneResponse Failure ${response.errorBody?.string()} ")
-                }
-                else -> {
-                    //We will do nothing here
-                }
-            }
-        })
-
-        viewModel.deleteSceneDetailResponse.observe(viewLifecycleOwner, { response ->
-            when (response) {
-                is Resource.Success -> {
-                    DialogUtil.hideDialog()
-                    context?.let {
-                        Toast.makeText(it, response.values.message, Toast.LENGTH_SHORT).show()
-                    }
-                    if (response.values.status && response.values.code == Constants.API_SUCCESS_CODE) {
-                        itemPosition?.let {
-                            updateDeviceSceneAdapter.deleteScene(it)
+                            }
+                            is Resource.Failure -> {
+                                DialogUtil.hideDialog()
+                                context?.showToast(getString(R.string.error_something_went_wrong))
+                                Log.e(
+                                    logTag,
+                                    " updateSceneResponse Failure ${response.errorBody?.string()} "
+                                )
+                            }
+                            else -> {
+                                //We will do nothing here
+                            }
                         }
                     }
                 }
-                is Resource.Failure -> {
-                    DialogUtil.hideDialog()
-                    Log.e(
-                        logTag,
-                        " deleteSceneDetailResponse Failure ${response.errorBody?.string()} "
-                    )
-                }
-                else -> {
-                    //We will do nothing here
+
+                launch {
+                    viewModel.deleteSceneDetailResponse.collectLatest { response ->
+                        when (response) {
+                            is Resource.Success -> {
+                                DialogUtil.hideDialog()
+                                context?.showToast(response.values.message)
+                                if (response.values.status && response.values.code == Constants.API_SUCCESS_CODE) {
+                                    itemPosition?.let {
+                                        updateDeviceSceneAdapter.deleteScene(it)
+                                    }
+                                }
+                            }
+                            is Resource.Failure -> {
+                                DialogUtil.hideDialog()
+                                context?.showToast(getString(R.string.error_something_went_wrong))
+                                Log.e(
+                                    logTag,
+                                    " deleteSceneDetailResponse Failure ${response.errorBody?.string()} "
+                                )
+                            }
+                            else -> {
+                                //We will do nothing here
+                            }
+                        }
+                    }
                 }
             }
-        })
+
+        }
+
+
     }
 
     private fun setSceneData(sceneData: GetSceneData) {

@@ -25,12 +25,13 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.ProgressBar
-import android.widget.Toast
-import androidx.annotation.MainThread
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.core.net.toUri
 import androidx.core.view.isVisible
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
@@ -55,6 +56,7 @@ import com.dellainfotech.smartTouch.common.utils.Utils.getImageUri
 import com.dellainfotech.smartTouch.common.utils.Utils.toBoolean
 import com.dellainfotech.smartTouch.common.utils.Utils.toInt
 import com.dellainfotech.smartTouch.common.utils.Utils.toReverseInt
+import com.dellainfotech.smartTouch.common.utils.showToast
 import com.dellainfotech.smartTouch.databinding.FragmentDeviceCustomizationBinding
 import com.dellainfotech.smartTouch.mqtt.AwsMqttSingleton
 import com.dellainfotech.smartTouch.mqtt.MQTTConnectionStatus
@@ -72,6 +74,7 @@ import com.sothree.slidinguppanel.SlidingUpPanelLayout
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
@@ -179,9 +182,6 @@ class DeviceCustomizationFragment :
 
     override fun onDestroyView() {
         super.onDestroyView()
-        viewModel.customizationLockResponse.postValue(null)
-        viewModel.imageUploadResponse.postValue(null)
-        viewModel.deleteImageResponse.postValue(null)
         mqttConnectionDisposable?.dispose()
     }
 
@@ -318,7 +318,7 @@ class DeviceCustomizationFragment :
             activity?.let { mActivity ->
 
                 if (mCroppedImageFile == null) {
-                    Toast.makeText(mActivity, "Please select image.", Toast.LENGTH_SHORT).show()
+                    mActivity.showToast("Please select image.")
                 } else {
 
                     Log.e(logTag, " mCroppedImageFile size ${mCroppedImageFile!!.sizeInMb} ")
@@ -326,11 +326,7 @@ class DeviceCustomizationFragment :
                     mCroppedImageFile?.let { cropFile ->
 
                         if (cropFile.sizeInMb > 5.0) {
-                            Toast.makeText(
-                                mActivity,
-                                " Image size must be less than 5MB",
-                                Toast.LENGTH_SHORT
-                            ).show()
+                            mActivity.showToast("Image size must be less than 5MB")
                         } else {
                             imageParts.clear()
 
@@ -586,132 +582,148 @@ class DeviceCustomizationFragment :
     }
 
     private fun apiCall() {
-        viewModel.getDeviceCustomizationSettingsResponse.observe(viewLifecycleOwner, { response ->
-            when (response) {
-                is Resource.Success -> {
-                    DialogUtil.hideDialog()
 
-                    if (response.values.status && response.values.code == Constants.API_SUCCESS_CODE) {
-                        response.values.data?.let {
-                            deviceCustomization = it
-                            binding.spinnerIconSize.setSelection(sizeAdapter.getPosition(it.switchIconSize))
-                            binding.cbSwitchNameSettings.isChecked =
-                                it.switchName.toInt().toBoolean()
-                            binding.spinnerTextSize.setSelection(sizeAdapter.getPosition(it.textSize))
-                            isDeviceCustomizationLocked = it.isLock.toBoolean()
-                            binding.layoutTextColor.colorPicker.setColor(Color.parseColor(it.textColor))
-                            if (isDeviceCustomizationLocked) {
-                                lockScreen()
-                            } else {
-                                unLockScreen()
+        viewLifecycleOwner.lifecycleScope.launchWhenStarted {
+
+            viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+
+                launch {
+                    viewModel.getDeviceCustomizationSettingsResponse.collectLatest { response ->
+                        when (response) {
+                            is Resource.Success -> {
+                                DialogUtil.hideDialog()
+
+                                if (response.values.status && response.values.code == Constants.API_SUCCESS_CODE) {
+                                    response.values.data?.let {
+                                        deviceCustomization = it
+                                        binding.spinnerIconSize.setSelection(
+                                            sizeAdapter.getPosition(
+                                                it.switchIconSize
+                                            )
+                                        )
+                                        binding.cbSwitchNameSettings.isChecked =
+                                            it.switchName.toInt().toBoolean()
+                                        binding.spinnerTextSize.setSelection(
+                                            sizeAdapter.getPosition(
+                                                it.textSize
+                                            )
+                                        )
+                                        isDeviceCustomizationLocked = it.isLock.toBoolean()
+                                        binding.layoutTextColor.colorPicker.setColor(
+                                            Color.parseColor(
+                                                it.textColor
+                                            )
+                                        )
+                                        if (isDeviceCustomizationLocked) {
+                                            lockScreen()
+                                        } else {
+                                            unLockScreen()
+                                        }
+                                    }
+                                }
+                            }
+                            is Resource.Failure -> {
+                                DialogUtil.hideDialog()
+                                context?.showToast(getString(R.string.error_something_went_wrong))
+                            }
+                            else -> {
+                                // We will do nothing here
                             }
                         }
                     }
                 }
-                is Resource.Failure -> {
-                    DialogUtil.hideDialog()
-                }
-                else -> {
-                    // We will do nothing here
-                }
-            }
-        })
 
-        viewModel.customizationLockResponse.observe(viewLifecycleOwner, { response ->
-            when (response) {
-                is Resource.Success -> {
-                    DialogUtil.hideDialog()
-                    context?.let {
-                        Toast.makeText(it, response.values.message, Toast.LENGTH_SHORT).show()
-                    }
-                    if (response.values.status && response.values.code == Constants.API_SUCCESS_CODE) {
+                launch {
+                    viewModel.customizationLockResponse.collectLatest { response ->
+                        when (response) {
+                            is Resource.Success -> {
+                                DialogUtil.hideDialog()
+                                context?.showToast(response.values.message)
+                                if (response.values.status && response.values.code == Constants.API_SUCCESS_CODE) {
 
-                        isDeviceCustomizationLocked = !isDeviceCustomizationLocked
-                        if (isDeviceCustomizationLocked) {
-                            lockScreen()
-                        } else {
-                            unLockScreen()
-                        }
+                                    isDeviceCustomizationLocked = !isDeviceCustomizationLocked
+                                    if (isDeviceCustomizationLocked) {
+                                        lockScreen()
+                                    } else {
+                                        unLockScreen()
+                                    }
 
-                    }
-                }
-                is Resource.Failure -> {
-                    DialogUtil.hideDialog()
-                    Log.e(
-                        logTag,
-                        " customizationLockResponse Failure ${response.errorBody?.string()}"
-                    )
-                }
-                else -> {
-                    //We will do nothing here
-                }
-            }
-        })
-
-        viewModel.imageUploadResponse.observe(viewLifecycleOwner, { response ->
-            when (response) {
-                is Resource.Success -> {
-                    DialogUtil.hideDialog()
-
-                    Log.e(
-                        logTag,
-                        " mCroppedImageFile?.exists() == true ${mCroppedImageFile?.exists()} "
-                    )
-
-                    if (mCroppedImageFile?.exists() == true) {
-                        mCroppedImageFile?.delete()
-                    }
-                    mCroppedImageFile = null
-
-                    context?.let {
-                        Toast.makeText(it, response.values.message, Toast.LENGTH_SHORT).show()
-                    }
-
-                    if (response.values.status && response.values.code == Constants.API_SUCCESS_CODE) {
-                        response.values.data?.let {
-                            deviceCustomization?.uploadImage = it.uploadImage
+                                }
+                            }
+                            is Resource.Failure -> {
+                                DialogUtil.hideDialog()
+                                context?.showToast(getString(R.string.error_something_went_wrong))
+                                Log.e(
+                                    logTag,
+                                    " customizationLockResponse Failure ${response.errorBody?.string()}"
+                                )
+                            }
+                            else -> {
+                                //We will do nothing here
+                            }
                         }
                     }
                 }
-                is Resource.Failure -> {
-                    DialogUtil.hideDialog()
-                    Log.e(logTag, "imageUploadResponse Failure ${response.errorBody?.string()}")
 
-                    Log.e(logTag, " mCroppedImageFile?.exists() ${mCroppedImageFile?.exists()} ")
-                    if (mCroppedImageFile?.exists() == true) {
-                        Log.e(
-                            logTag,
-                            " mCroppedImageFile?.exists() == true ${mCroppedImageFile?.exists()} "
-                        )
-                        mCroppedImageFile?.delete()
-                    }
-                    mCroppedImageFile = null
-                }
-                else -> {
-                    //We will do nothing here
-                }
-            }
-        })
+                launch {
+                    viewModel.imageUploadResponse.collectLatest { response ->
+                        when (response) {
+                            is Resource.Success -> {
+                                DialogUtil.hideDialog()
 
-        viewModel.deleteImageResponse.observe(viewLifecycleOwner, { response ->
-            when (response) {
-                is Resource.Success -> {
-                    DialogUtil.hideDialog()
-                    context?.let {
-                        Toast.makeText(it, response.values.message, Toast.LENGTH_SHORT).show()
+                                if (mCroppedImageFile?.exists() == true) {
+                                    mCroppedImageFile?.delete()
+                                }
+                                mCroppedImageFile = null
+
+                                context?.showToast(response.values.message)
+
+                                if (response.values.status && response.values.code == Constants.API_SUCCESS_CODE) {
+                                    response.values.data?.let {
+                                        deviceCustomization?.uploadImage = it.uploadImage
+                                    }
+                                }
+                            }
+                            is Resource.Failure -> {
+                                DialogUtil.hideDialog()
+                                context?.showToast(getString(R.string.error_something_went_wrong))
+                                if (mCroppedImageFile?.exists() == true) {
+                                    mCroppedImageFile?.delete()
+                                }
+                                mCroppedImageFile = null
+                            }
+                            else -> {
+                                //We will do nothing here
+                            }
+                        }
                     }
-                    if (response.values.status && response.values.code == Constants.API_SUCCESS_CODE) {
-                        deviceCustomization?.uploadImage = ""
+                }
+
+                launch {
+                    viewModel.deleteImageResponse.collectLatest { response ->
+                        when (response) {
+                            is Resource.Success -> {
+                                DialogUtil.hideDialog()
+                                context?.showToast(response.values.message)
+                                if (response.values.status && response.values.code == Constants.API_SUCCESS_CODE) {
+                                    deviceCustomization?.uploadImage = ""
+                                }
+                            }
+                            is Resource.Failure -> {
+                                DialogUtil.hideDialog()
+                                context?.showToast(getString(R.string.error_something_went_wrong))
+                            }
+                            else -> {
+                                //We will do nothing here
+                            }
+                        }
                     }
                 }
-                is Resource.Failure -> {
-                    DialogUtil.hideDialog()
-                }
-                else -> {
-                    //We will do nothing here
-                }
+
             }
-        })
+        }
+
+
     }
 
     //
@@ -756,7 +768,7 @@ class DeviceCustomizationFragment :
                 })
                 .withErrorListener { error ->
                     Log.e(logTag, " error $error")
-                    Toast.makeText(it, " Error occurred! ", Toast.LENGTH_SHORT).show()
+                    it.showToast(" Error occurred! ")
                 }
                 .onSameThread()
                 .check()
@@ -861,7 +873,7 @@ class DeviceCustomizationFragment :
                 val matrix = Matrix()
                 matrix.postRotate(getImageOrientation(getRealPathFromUri(imageUri)).toFloat())
 
-                viewModel.viewModelScope.launch(Dispatchers.Main){
+                viewModel.viewModelScope.launch(Dispatchers.Main) {
 
                     val scaledBitmap = Bitmap.createScaledBitmap(
                         originalImage,
@@ -880,7 +892,10 @@ class DeviceCustomizationFragment :
                         true
                     )
 
-                    Log.e(logTag, " resized width ${rotatedBitmap.width} height ${rotatedBitmap.height}")
+                    Log.e(
+                        logTag,
+                        " resized width ${rotatedBitmap.width} height ${rotatedBitmap.height}"
+                    )
 
                     progressBar.isVisible = false
                     cropImageView.setImageBitmap(rotatedBitmap)
@@ -915,7 +930,7 @@ class DeviceCustomizationFragment :
                     }
 
                     dialogCropImage?.dismiss()
-                    Toast.makeText(mActivity, "Image is selected", Toast.LENGTH_SHORT).show()
+                    mActivity.showToast("Image is selected")
                 }
 
             }
@@ -1005,11 +1020,7 @@ class DeviceCustomizationFragment :
 
                     it.runOnUiThread {
 
-                        Toast.makeText(
-                            it,
-                            getString(R.string.toast_text_device_synchronized),
-                            Toast.LENGTH_SHORT
-                        ).show()
+                        it.showToast(getString(R.string.toast_text_device_synchronized))
 
                         val message = String(data, StandardCharsets.UTF_8)
                         Log.d("$logTag ReceivedData", "$topic    $message")

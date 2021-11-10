@@ -5,7 +5,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.dellainfotech.smartTouch.R
 import com.dellainfotech.smartTouch.adapters.UserManagementAdapter
@@ -16,10 +16,12 @@ import com.dellainfotech.smartTouch.common.interfaces.AdapterItemClickListener
 import com.dellainfotech.smartTouch.common.interfaces.DialogAskListener
 import com.dellainfotech.smartTouch.common.utils.Constants
 import com.dellainfotech.smartTouch.common.utils.DialogUtil
+import com.dellainfotech.smartTouch.common.utils.showToast
 import com.dellainfotech.smartTouch.databinding.FragmentUserManagementBinding
 import com.dellainfotech.smartTouch.mqtt.NotifyManager
 import com.dellainfotech.smartTouch.ui.fragments.ModelBaseFragment
 import com.dellainfotech.smartTouch.ui.viewmodel.UserManagementViewModel
+import kotlinx.coroutines.flow.collectLatest
 
 /**
  * Created by Jignesh Dangar on 27-04-2021.
@@ -52,9 +54,14 @@ class UserManagementFragment :
                         getString(R.string.text_no),
                         object : DialogAskListener {
                             override fun onYesClicked() {
-                                showProgressDialog()
-                                userData = data
-                                viewModel.deleteSubordinateUser(data.id)
+
+                                if (!isInternetConnected()){
+                                    context?.showToast(getString(R.string.text_no_internet_available))
+                                }else {
+                                    showProgressDialog()
+                                    userData = data
+                                    viewModel.deleteSubordinateUser(data.id)
+                                }
                             }
 
                             override fun onNoClicked() {
@@ -82,69 +89,65 @@ class UserManagementFragment :
             }
         })
 
-        viewModel.getSubordinateUserResponse.observe(viewLifecycleOwner, { response ->
-            userList.clear()
-            when (response) {
-                is Resource.Success -> {
-                    DialogUtil.hideDialog()
-                    if (response.values.status && response.values.code == Constants.API_SUCCESS_CODE) {
-                        response.values.data?.let { userData ->
-                            userList.addAll(userData)
+        lifecycleScope.launchWhenStarted {
+
+            viewModel.getSubordinateUserResponse.collectLatest { response ->
+                userList.clear()
+                when (response) {
+                    is Resource.Success -> {
+                        DialogUtil.hideDialog()
+                        if (response.values.status && response.values.code == Constants.API_SUCCESS_CODE) {
+                            response.values.data?.let { userData ->
+                                userList.addAll(userData)
+                                userManagementAdapter.notifyDataSetChanged()
+                            }
+                        } else {
                             userManagementAdapter.notifyDataSetChanged()
-                        }
-                    } else {
-                        userManagementAdapter.notifyDataSetChanged()
-                        context?.let {
-                            Toast.makeText(it, response.values.message, Toast.LENGTH_SHORT).show()
+                            context?.showToast(response.values.message)
                         }
                     }
-                }
-                is Resource.Failure -> {
-                    DialogUtil.hideDialog()
-                    Log.e(
-                        logTag,
-                        " getSubordinateUserResponse Failure ${response.errorBody?.string()}  "
-                    )
-                }
-                else -> {
-                    // we will do nothing here
+                    is Resource.Failure -> {
+                        DialogUtil.hideDialog()
+                        context?.showToast(getString(R.string.error_something_went_wrong))
+                        Log.e(
+                            logTag,
+                            " getSubordinateUserResponse Failure ${response.errorBody?.string()}  "
+                        )
+                    }
+                    else -> {
+                        // we will do nothing here
+                    }
                 }
             }
-        })
 
-        viewModel.deleteSubordinateUserResponse.observe(viewLifecycleOwner, { response ->
-            when (response) {
-                is Resource.Success -> {
-                    DialogUtil.hideDialog()
-                    context?.let {
-                        Toast.makeText(it, response.values.message, Toast.LENGTH_SHORT).show()
-                    }
-                    if (response.values.status && response.values.code == Constants.API_SUCCESS_CODE) {
-//                        showProgressDialog()
-//                        viewModel.getSubordinateUser()
-                        userData?.let {
-                            userList.remove(it)
-                            userManagementAdapter.notifyDataSetChanged()
+            viewModel.deleteSubordinateUserResponse.collectLatest { response ->
+                when (response) {
+                    is Resource.Success -> {
+                        DialogUtil.hideDialog()
+                        context?.showToast(response.values.message)
+                        if (response.values.status && response.values.code == Constants.API_SUCCESS_CODE) {
+                            userData?.let {
+                                userList.remove(it)
+                                userManagementAdapter.notifyDataSetChanged()
+                            }
                         }
                     }
-                }
-                is Resource.Failure -> {
-                    DialogUtil.hideDialog()
-                    Log.e(
-                        logTag,
-                        " deleteSubordinateUserResponse Failure ${response.errorBody?.string()}  "
-                    )
-                }
-                else -> {
-                    // we will do nothing here
+                    is Resource.Failure -> {
+                        DialogUtil.hideDialog()
+                        context?.showToast(getString(R.string.error_something_went_wrong))
+                        Log.e(
+                            logTag,
+                            " deleteSubordinateUserResponse Failure ${response.errorBody?.string()}  "
+                        )
+                    }
+                    else -> {
+                        // we will do nothing here
+                    }
                 }
             }
-        })
-    }
 
-    override fun onStop() {
-        super.onStop()
-        viewModel.deleteSubordinateUserResponse.postValue(null)
+        }
+
     }
 
     private fun showProgressDialog() {

@@ -1,8 +1,6 @@
 package com.dellainfotech.smartTouch
 
 import android.app.Application
-import androidx.lifecycle.LifecycleObserver
-import androidx.lifecycle.ProcessLifecycleOwner
 import com.appizona.yehiahd.fastsave.FastSave
 import com.dellainfotech.smartTouch.mqtt.AwsMqttSingleton
 import com.teksun.tcpudplibrary.SettingsService
@@ -11,7 +9,7 @@ import com.teksun.tcpudplibrary.SettingsService
  * Created by Jignesh Dangar on 09-04-2021.
  */
 
-class AppDelegate : Application(), LifecycleObserver {
+class AppDelegate : Application() {
 
     companion object {
         lateinit var instance: AppDelegate
@@ -25,8 +23,6 @@ class AppDelegate : Application(), LifecycleObserver {
         FastSave.init(this)
 
         AwsMqttSingleton.initializeMQTT()
-
-        ProcessLifecycleOwner.get().lifecycle.addObserver(this)
 
         SettingsService.init(this)
     }

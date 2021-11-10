@@ -6,10 +6,12 @@ import android.os.Looper
 import android.util.Log
 import android.view.View
 import android.widget.AdapterView
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import com.appizona.yehiahd.fastsave.FastSave
@@ -21,13 +23,10 @@ import com.dellainfotech.smartTouch.api.body.BodyAddRoom
 import com.dellainfotech.smartTouch.api.model.RoomTypeData
 import com.dellainfotech.smartTouch.api.repository.HomeRepository
 import com.dellainfotech.smartTouch.common.interfaces.DialogShowListener
-import com.dellainfotech.smartTouch.common.utils.Constants
-import com.dellainfotech.smartTouch.common.utils.DialogUtil
-import com.dellainfotech.smartTouch.common.utils.Utils
+import com.dellainfotech.smartTouch.common.utils.*
 import com.dellainfotech.smartTouch.common.utils.Utils.clearError
 import com.dellainfotech.smartTouch.common.utils.Utils.isControlModePin
 import com.dellainfotech.smartTouch.common.utils.Utils.toEditable
-import com.dellainfotech.smartTouch.common.utils.hideSoftKeyboard
 import com.dellainfotech.smartTouch.databinding.ActivityMainBinding
 import com.dellainfotech.smartTouch.mqtt.NetworkConnectionLiveData
 import com.dellainfotech.smartTouch.mqtt.NotifyManager
@@ -35,6 +34,8 @@ import com.dellainfotech.smartTouch.ui.fragments.main.home.HomeFragmentDirection
 import com.dellainfotech.smartTouch.ui.viewmodel.HomeViewModel
 import com.dellainfotech.smartTouch.ui.viewmodel.ViewModelFactory
 import com.sothree.slidinguppanel.SlidingUpPanelLayout
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
 import com.teksun.tcpudplibrary.TCPClientService
 import com.teksun.tcpudplibrary.listener.CloseSocketListener
@@ -113,7 +114,7 @@ class MainActivity : AppCompatActivity() {
             val roomName = binding.layoutAddRoom.edtRoomName.text.toString()
             when {
                 roomTypeId == null -> {
-                    Toast.makeText(this, "Please select Room Type", Toast.LENGTH_SHORT).show()
+                    showToast("Please select Room Type")
                 }
                 roomName.isBlank() -> {
                     binding.layoutAddRoom.edtRoomName.error = "Please enter Room Name"
@@ -332,72 +333,89 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun apiResponses() {
-        viewModel.roomTypeResponse.observe(this, { response ->
-            roomTypeList.toMutableList().clear()
-            when (response) {
-                is Resource.Success -> {
-                    if (response.values.status && response.values.code == Constants.API_SUCCESS_CODE) {
-                        roomTypeList = response.values.data!!
 
-                        if (roomTypeList.isNotEmpty()) {
-                            val roomAdapter = RoomTypeAdapter(this, roomTypeList)
-                            binding.layoutAddRoom.spinnerRoom.adapter = roomAdapter
-                            binding.layoutAddRoom.spinnerRoom.onItemSelectedListener =
-                                object : AdapterView.OnItemSelectedListener {
-                                    override fun onItemSelected(
-                                        parent: AdapterView<*>?,
-                                        view: View?,
-                                        position: Int,
-                                        id: Long
-                                    ) {
-                                        val room = parent?.selectedItem as RoomTypeData
-                                        roomTypeId = room.roomTypeId
+        lifecycleScope.launchWhenStarted {
+
+            lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED){
+
+                launch {
+                    viewModel.roomTypeResponse.collectLatest { response ->
+                        roomTypeList.toMutableList().clear()
+                        when (response) {
+                            is Resource.Success -> {
+                                if (response.values.status && response.values.code == Constants.API_SUCCESS_CODE) {
+                                    roomTypeList = response.values.data!!
+
+                                    if (roomTypeList.isNotEmpty()) {
+                                        val roomAdapter = RoomTypeAdapter(this@MainActivity, roomTypeList)
+                                        binding.layoutAddRoom.spinnerRoom.adapter = roomAdapter
+                                        binding.layoutAddRoom.spinnerRoom.onItemSelectedListener =
+                                            object : AdapterView.OnItemSelectedListener {
+                                                override fun onItemSelected(
+                                                    parent: AdapterView<*>?,
+                                                    view: View?,
+                                                    position: Int,
+                                                    id: Long
+                                                ) {
+                                                    val room = parent?.selectedItem as RoomTypeData
+                                                    roomTypeId = room.roomTypeId
+                                                }
+
+                                                override fun onNothingSelected(parent: AdapterView<*>?) {
+
+                                                }
+
+                                            }
                                     }
 
-                                    override fun onNothingSelected(parent: AdapterView<*>?) {
-
-                                    }
-
+                                } else {
+                                    this@MainActivity.showToast(response.values.message)
                                 }
+                            }
+                            is Resource.Failure -> {
+                                this@MainActivity.showToast(getString(R.string.error_something_went_wrong))
+                                Log.e(logTag, " roomTypeResponse error ${response.errorBody?.string()}")
+                            }
+                            else -> {
+                                // We will do nothing here
+                            }
                         }
-                    } else {
-                        Toast.makeText(this, response.values.message, Toast.LENGTH_SHORT).show()
                     }
                 }
-                is Resource.Failure -> {
-                    Log.e(logTag, " roomTypeResponse error ${response.errorBody?.string()}")
-                }
-                else -> {
-                    // We will do nothing here
-                }
-            }
-        })
 
-        viewModel.addRoomResponse.observe(this, { response ->
-            when (response) {
-                is Resource.Success -> {
-                    DialogUtil.hideDialog()
-                    if (response.values.status && response.values.code == Constants.API_SUCCESS_CODE) {
-                        response.values.data?.let { roomData ->
-                            navController.navigate(
-                                HomeFragmentDirections.actionHomeFragmentToRoomPanelFragment(
-                                    roomData
-                                )
-                            )
+                launch {
+                    viewModel.addRoomResponse.collectLatest { response ->
+                        when (response) {
+                            is Resource.Success -> {
+                                DialogUtil.hideDialog()
+                                if (response.values.status && response.values.code == Constants.API_SUCCESS_CODE) {
+                                    response.values.data?.let { roomData ->
+                                        navController.navigate(
+                                            HomeFragmentDirections.actionHomeFragmentToRoomPanelFragment(
+                                                roomData
+                                            )
+                                        )
+                                    }
+                                } else {
+                                    showToast(response.values.message)
+                                }
+                            }
+                            is Resource.Failure -> {
+                                DialogUtil.hideDialog()
+                                showToast(getString(R.string.error_something_went_wrong))
+                                Log.e(logTag, " addRoomResponse ${response.errorBody?.string()} ")
+                            }
+                            else -> {
+                                // We will do nothing here
+                            }
                         }
-                    } else {
-                        Toast.makeText(this, response.values.message, Toast.LENGTH_SHORT).show()
                     }
                 }
-                is Resource.Failure -> {
-                    DialogUtil.hideDialog()
-                    Log.e(logTag, " addRoomResponse ${response.errorBody?.string()} ")
-                }
-                else -> {
-                    // We will do nothing here
-                }
+
             }
-        })
+
+        }
+
     }
 
     //

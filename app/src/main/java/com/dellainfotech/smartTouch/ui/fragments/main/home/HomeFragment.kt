@@ -8,8 +8,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import android.widget.Toast
 import androidx.core.view.GravityCompat
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import com.appizona.yehiahd.fastsave.FastSave
 import com.dellainfotech.smartTouch.BuildConfig
@@ -23,6 +25,7 @@ import com.dellainfotech.smartTouch.common.interfaces.AdapterItemClickListener
 import com.dellainfotech.smartTouch.common.interfaces.DialogAskListener
 import com.dellainfotech.smartTouch.common.utils.Constants
 import com.dellainfotech.smartTouch.common.utils.DialogUtil
+import com.dellainfotech.smartTouch.common.utils.showToast
 import com.dellainfotech.smartTouch.databinding.FragmentHomeBinding
 import com.dellainfotech.smartTouch.mqtt.NotifyManager
 import com.dellainfotech.smartTouch.ui.activities.AuthenticationActivity
@@ -32,6 +35,8 @@ import com.facebook.login.LoginManager
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
 /**
  * Created by Jignesh Dangar on 09-04-2021.
@@ -43,7 +48,7 @@ class HomeFragment : ModelBaseFragment<HomeViewModel, FragmentHomeBinding, HomeR
     private lateinit var roomsAdapter: RoomsAdapter
     private var roomList = arrayListOf<GetRoomData>()
     private var mGoogleSingInClient: GoogleSignInClient? = null
-    private var roomData: GetRoomData?= null
+    private var roomData: GetRoomData? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -63,11 +68,15 @@ class HomeFragment : ModelBaseFragment<HomeViewModel, FragmentHomeBinding, HomeR
         binding.recyclerRooms.adapter = roomsAdapter
         roomsAdapter.setCallback(object : AdapterItemClickListener<GetRoomData> {
             override fun onItemClick(data: GetRoomData) {
-                findNavController().navigate(HomeFragmentDirections.actionHomeFragmentToRoomPanelFragment(data))
+                findNavController().navigate(
+                    HomeFragmentDirections.actionHomeFragmentToRoomPanelFragment(
+                        data
+                    )
+                )
             }
         })
 
-        roomsAdapter.setDeleteCallback(object : AdapterItemClickListener<GetRoomData>{
+        roomsAdapter.setDeleteCallback(object : AdapterItemClickListener<GetRoomData> {
             override fun onItemClick(data: GetRoomData) {
                 activity?.let {
                     DialogUtil.askAlert(
@@ -75,7 +84,7 @@ class HomeFragment : ModelBaseFragment<HomeViewModel, FragmentHomeBinding, HomeR
                         getString(R.string.dialog_title_delete_room),
                         getString(R.string.text_ok),
                         getString(R.string.text_cancel),
-                        object : DialogAskListener{
+                        object : DialogAskListener {
                             override fun onYesClicked() {
                                 DialogUtil.loadingAlert(it)
                                 roomData = data
@@ -112,12 +121,6 @@ class HomeFragment : ModelBaseFragment<HomeViewModel, FragmentHomeBinding, HomeR
 
     override fun getFragmentRepository(): HomeRepository = HomeRepository(networkModel)
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        viewModel.factoryResetAllDeviceResponse.postValue(null)
-        viewModel.deleteRoomResponse.postValue(null)
-    }
-
     //Initialization object of GoogleSignInClient
     private fun initGoogleSignInClient() {
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -139,121 +142,153 @@ class HomeFragment : ModelBaseFragment<HomeViewModel, FragmentHomeBinding, HomeR
             }
         })
 
-        viewModel.logoutResponse.observe(viewLifecycleOwner, { response ->
-            when (response) {
-                is Resource.Success -> {
-                    DialogUtil.hideDialog()
-                    if (response.values.status && response.values.code == Constants.API_SUCCESS_CODE) {
-                        activity?.let {
+        viewLifecycleOwner.lifecycleScope.launch {
 
-                            val sharedPreference =  it.getSharedPreferences(Constants.SHARED_PREF, Context.MODE_PRIVATE)
-                            val isRemember = sharedPreference.getBoolean(Constants.IS_REMEMBER,Constants.DEFAULT_REMEMBER_STATUS)
-                            val loginType = sharedPreference.getString(Constants.LOGGED_IN_TYPE, "")
+            lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
 
-                            if (loginType == Constants.LOGIN_TYPE_NORMAL){
-                                if (!isRemember){
-                                    val editor = sharedPreference.edit()
-                                    editor.clear()
-                                    editor.apply()
+                launch {
+                    viewModel.logoutResponse.collectLatest { response ->
+                        when (response) {
+                            is Resource.Success -> {
+                                DialogUtil.hideDialog()
+                                if (response.values.status && response.values.code == Constants.API_SUCCESS_CODE) {
+                                    activity?.let {
+
+                                        val sharedPreference = it.getSharedPreferences(
+                                            Constants.SHARED_PREF,
+                                            Context.MODE_PRIVATE
+                                        )
+                                        val isRemember = sharedPreference.getBoolean(
+                                            Constants.IS_REMEMBER,
+                                            Constants.DEFAULT_REMEMBER_STATUS
+                                        )
+                                        val loginType =
+                                            sharedPreference.getString(Constants.LOGGED_IN_TYPE, "")
+
+                                        if (loginType == Constants.LOGIN_TYPE_NORMAL) {
+                                            if (!isRemember) {
+                                                val editor = sharedPreference.edit()
+                                                editor.clear()
+                                                editor.apply()
+                                            }
+                                        } else {
+                                            val editor = sharedPreference.edit()
+                                            editor.clear()
+                                            editor.apply()
+                                        }
+
+                                        FastSave.getInstance().clearSession()
+                                        startActivity(
+                                            Intent(
+                                                it,
+                                                AuthenticationActivity::class.java
+                                            )
+                                        )
+                                        it.finishAffinity()
+                                    }
+                                } else {
+                                    context?.showToast(response.values.message)
                                 }
-                            }else {
-                                val editor = sharedPreference.edit()
-                                editor.clear()
-                                editor.apply()
                             }
-
-                            FastSave.getInstance().clearSession()
-                            startActivity(Intent(it, AuthenticationActivity::class.java))
-                            it.finishAffinity()
-                        }
-                    } else {
-                        context?.let {
-                            Toast.makeText(it, response.values.message, Toast.LENGTH_SHORT).show()
+                            is Resource.Failure -> {
+                                DialogUtil.hideDialog()
+                                context?.showToast(getString(R.string.error_something_went_wrong))
+                                Log.e(logTag, "logout error ${response.errorBody?.string()}")
+                            }
+                            else -> {
+                                // We will do nothing here
+                            }
                         }
                     }
                 }
-                is Resource.Failure -> {
-                    DialogUtil.hideDialog()
-                    Log.e(logTag, "logout error ${response.errorBody?.string()}")
+
+                launch {
+                    viewModel.getRoomResponse.collectLatest { response ->
+                        roomList.clear()
+                        when (response) {
+                            is Resource.Success -> {
+                                DialogUtil.hideDialog()
+                                if (response.values.status && response.values.code == Constants.API_SUCCESS_CODE) {
+                                    response.values.data?.let { roomData ->
+                                        roomList.addAll(roomData)
+                                        roomsAdapter.notifyDataSetChanged()
+                                    }
+                                } else {
+                                    roomsAdapter.notifyDataSetChanged()
+                                    context?.showToast(response.values.message)
+                                }
+                            }
+                            is Resource.Failure -> {
+                                DialogUtil.hideDialog()
+                                context?.showToast(getString(R.string.error_something_went_wrong))
+                                Log.e(
+                                    logTag,
+                                    "getRoomResponse Failure ${response.errorBody?.string()} "
+                                )
+                            }
+                            else -> {
+                                // We will do nothing here
+                            }
+                        }
+                    }
                 }
-                else -> {
-                    // We will do nothing here
+
+                launch {
+                    viewModel.deleteRoomResponse.collectLatest { response ->
+                        when (response) {
+                            is Resource.Success -> {
+                                DialogUtil.hideDialog()
+                                context?.showToast(response.values.message)
+
+                                if (response.values.status && response.values.code == Constants.API_SUCCESS_CODE) {
+                                    roomData?.let {
+                                        roomList.remove(it)
+                                        roomsAdapter.notifyDataSetChanged()
+                                        roomData = null
+                                    }
+                                }
+                            }
+                            is Resource.Failure -> {
+                                DialogUtil.hideDialog()
+                                context?.showToast(getString(R.string.error_something_went_wrong))
+                                Log.e(
+                                    logTag,
+                                    " deleteRoomResponse Failure ${response.errorBody?.string()} "
+                                )
+                            }
+                            else -> {
+                                //We will do nothing here
+                            }
+                        }
+                    }
                 }
+
+                launch {
+                    viewModel.factoryResetAllDeviceResponse.collectLatest { response ->
+                        when (response) {
+                            is Resource.Success -> {
+                                DialogUtil.hideDialog()
+                                context?.showToast(response.values.message)
+                            }
+                            is Resource.Failure -> {
+                                DialogUtil.hideDialog()
+                                context?.showToast(getString(R.string.error_something_went_wrong))
+                                Log.e(
+                                    logTag,
+                                    " profileResetResponse Failure ${response.errorBody?.string()}"
+                                )
+                            }
+                            else -> {
+                                //We will do nothing here
+                            }
+                        }
+                    }
+                }
+
             }
-        })
+        }
 
-        viewModel.getRoomResponse.observe(viewLifecycleOwner, { response ->
-            roomList.clear()
-            when (response) {
-                is Resource.Success -> {
-                    DialogUtil.hideDialog()
-                    if (response.values.status && response.values.code == Constants.API_SUCCESS_CODE) {
-                        response.values.data?.let { roomData ->
-                            roomList.addAll(roomData)
-                            roomsAdapter.notifyDataSetChanged()
-                        }
-                    } else {
-                        roomsAdapter.notifyDataSetChanged()
-                        context?.let {
-                            Toast.makeText(it, response.values.message, Toast.LENGTH_SHORT).show()
-                        }
-                    }
-                }
-                is Resource.Failure -> {
-                    DialogUtil.hideDialog()
-                    context?.let {
-                        Log.e(logTag, "getRoomResponse Failure ${response.errorBody?.string()} ")
-                    }
-                }
-                else -> {
-                    // We will do nothing here
-                }
-            }
-        })
 
-        viewModel.factoryResetAllDeviceResponse.observe(viewLifecycleOwner, { response ->
-            when(response){
-                is Resource.Success -> {
-                    DialogUtil.hideDialog()
-                    context?.let {
-                        Toast.makeText(it,response.values.message,Toast.LENGTH_SHORT).show()
-                    }
-                }
-                is Resource.Failure -> {
-                    DialogUtil.hideDialog()
-                    Log.e(logTag, " profileResetResponse Failure ${response.errorBody?.string()}")
-                }
-                else -> {
-                    //We will do nothing here
-                }
-            }
-        })
-
-        viewModel.deleteRoomResponse.observe(viewLifecycleOwner, { response ->
-            when(response){
-                is Resource.Success -> {
-                    DialogUtil.hideDialog()
-                    context?.let {
-                        Toast.makeText(it,response.values.message,Toast.LENGTH_SHORT).show()
-                    }
-
-                    if (response.values.status && response.values.code == Constants.API_SUCCESS_CODE){
-                        roomData?.let {
-                            roomList.remove(it)
-                            roomsAdapter.notifyDataSetChanged()
-                            roomData = null
-                        }
-                    }
-                }
-                is Resource.Failure -> {
-                    DialogUtil.hideDialog()
-                    Log.e(logTag, " deleteRoomResponse Failure ${response.errorBody?.string()} ")
-                }
-                else -> {
-                    //We will do nothing here
-                }
-            }
-        })
     }
 
     private fun openOrCloseDrawer() {
@@ -313,30 +348,37 @@ class HomeFragment : ModelBaseFragment<HomeViewModel, FragmentHomeBinding, HomeR
                 R.id.nav_logout -> {
 
                     activity?.let { mActivity ->
-                        DialogUtil.askAlert(mActivity, getString(R.string.dialog_title_logout), getString(R.string.text_yes),getString(R.string.text_no), object : DialogAskListener {
-                            override fun onYesClicked() {
-                                DialogUtil.hideDialog()
-                                val loginType = FastSave.getInstance().getString(Constants.LOGIN_TYPE, "")
-                                if (loginType == Constants.LOGIN_TYPE_GOOGLE) {
-                                    mGoogleSingInClient?.signOut()
-                                } else if (loginType == Constants.LOGIN_TYPE_FACEBOOK) {
-                                    LoginManager.getInstance().logOut()
+                        DialogUtil.askAlert(
+                            mActivity,
+                            getString(R.string.dialog_title_logout),
+                            getString(R.string.text_yes),
+                            getString(R.string.text_no),
+                            object : DialogAskListener {
+                                override fun onYesClicked() {
+                                    DialogUtil.hideDialog()
+                                    val loginType =
+                                        FastSave.getInstance().getString(Constants.LOGIN_TYPE, "")
+                                    if (loginType == Constants.LOGIN_TYPE_GOOGLE) {
+                                        mGoogleSingInClient?.signOut()
+                                    } else if (loginType == Constants.LOGIN_TYPE_FACEBOOK) {
+                                        LoginManager.getInstance().logOut()
+                                    }
+
+                                    DialogUtil.loadingAlert(mActivity)
+
+                                    viewModel.logout(
+                                        BodyLogout(
+                                            FastSave.getInstance()
+                                                .getString(Constants.MOBILE_UUID, null)
+                                        )
+                                    )
                                 }
 
-                                DialogUtil.loadingAlert(mActivity)
+                                override fun onNoClicked() {
+                                    DialogUtil.hideDialog()
+                                }
 
-                                viewModel.logout(
-                                    BodyLogout(
-                                        FastSave.getInstance().getString(Constants.MOBILE_UUID, null)
-                                    )
-                                )
-                            }
-
-                            override fun onNoClicked() {
-                                DialogUtil.hideDialog()
-                            }
-
-                        })
+                            })
                     }
 
                 }

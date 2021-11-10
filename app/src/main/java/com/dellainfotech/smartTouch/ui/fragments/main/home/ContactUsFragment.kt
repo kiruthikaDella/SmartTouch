@@ -5,15 +5,18 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import com.dellainfotech.smartTouch.R
 import com.dellainfotech.smartTouch.api.Resource
 import com.dellainfotech.smartTouch.api.body.BodyFeedback
 import com.dellainfotech.smartTouch.api.repository.ContactUsRepository
 import com.dellainfotech.smartTouch.common.utils.DialogUtil
+import com.dellainfotech.smartTouch.common.utils.showToast
 import com.dellainfotech.smartTouch.databinding.FragmentContactUsBinding
 import com.dellainfotech.smartTouch.ui.fragments.ModelBaseFragment
 import com.dellainfotech.smartTouch.ui.viewmodel.ContactUsViewModel
+import kotlinx.coroutines.flow.collectLatest
 
 /**
  * Created by Jignesh Dangar on 27-04-2021.
@@ -34,11 +37,14 @@ class ContactUsFragment :
         binding.btnSend.setOnClickListener {
             val feedback = binding.edtFeedback.text.toString().trim()
             if (feedback.isEmpty()) {
-                context?.let {
-                    Toast.makeText(it, "Please write something in feedback", Toast.LENGTH_SHORT)
-                        .show()
-                }
+                context?.showToast("Please write something in feedback")
             } else {
+
+                if (!isInternetConnected()){
+                    context?.getString(R.string.text_no_internet_available)
+                    return@setOnClickListener
+                }
+
                 activity?.let {
                     DialogUtil.loadingAlert(it)
                     viewModel.addFeedback(BodyFeedback(feedback))
@@ -58,31 +64,29 @@ class ContactUsFragment :
 
     override fun getFragmentRepository(): ContactUsRepository = ContactUsRepository(networkModel)
 
-    override fun onDestroy() {
-        super.onDestroy()
-        viewModel.addFeedbackResponse.postValue(null)
-    }
+    private fun apiCall() {
 
-    private fun apiCall(){
+        viewLifecycleOwner.lifecycleScope.launchWhenStarted {
 
-        viewModel.addFeedbackResponse.observe(viewLifecycleOwner, { response ->
-            when (response) {
-                is Resource.Success -> {
-                    DialogUtil.hideDialog()
-                    context?.let {
-                        Toast.makeText(it, response.values.message, Toast.LENGTH_LONG).show()
+            viewModel.addFeedbackResponse.collectLatest { response ->
+                when (response) {
+                    is Resource.Success -> {
+                        DialogUtil.hideDialog()
+                        context?.showToast(response.values.message)
+                    }
+                    is Resource.Failure -> {
+                        DialogUtil.hideDialog()
+                        context?.showToast(getString(R.string.error_something_went_wrong))
+                        Log.e(logTag, " addFeedbackResponse Failure ${response.errorBody}")
+                    }
+                    else -> {
+                        //we will do nothing here
                     }
                 }
-                is Resource.Failure -> {
-                    DialogUtil.hideDialog()
-                    Log.e(logTag, " addFeedbackResponse Failure ${response.errorBody}")
-                }
-                else -> {
-                    //we will do nothing here
-                }
+
             }
 
-        })
+        }
 
     }
 

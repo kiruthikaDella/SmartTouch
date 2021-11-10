@@ -7,10 +7,11 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.RecyclerView
+import com.dellainfotech.smartTouch.R
 import com.dellainfotech.smartTouch.adapters.faqadapter.AnswerModel
 import com.dellainfotech.smartTouch.adapters.faqadapter.FAQAdapter
 import com.dellainfotech.smartTouch.adapters.faqadapter.QuestionModel
@@ -18,10 +19,12 @@ import com.dellainfotech.smartTouch.api.Resource
 import com.dellainfotech.smartTouch.api.repository.HomeRepository
 import com.dellainfotech.smartTouch.common.utils.Constants
 import com.dellainfotech.smartTouch.common.utils.DialogUtil
+import com.dellainfotech.smartTouch.common.utils.showToast
 import com.dellainfotech.smartTouch.databinding.FragmentFaqsBinding
 import com.dellainfotech.smartTouch.mqtt.NotifyManager
 import com.dellainfotech.smartTouch.ui.fragments.ModelBaseFragment
 import com.dellainfotech.smartTouch.ui.viewmodel.HomeViewModel
+import kotlinx.coroutines.flow.collectLatest
 
 /**
  * Created by Jignesh Dangar on 26-04-2021.
@@ -78,43 +81,47 @@ class FaqsFragment : ModelBaseFragment<HomeViewModel, FragmentFaqsBinding, HomeR
             }
         })
 
-        viewModel.faqResponse.observe(viewLifecycleOwner, { response ->
-            when (response) {
-                is Resource.Success -> {
-                    DialogUtil.hideDialog()
-                    if (response.values.status && response.values.code == Constants.API_SUCCESS_CODE) {
+        viewLifecycleOwner.lifecycleScope.launchWhenStarted {
 
-                        response.values.data?.let { faqData ->
-                            for ((index, value) in faqData.withIndex()) {
-                                try {
-                                    answerList.clear()
-                                    answerList.add(0, AnswerModel(value.description, true))
-                                    faqList.add(index, QuestionModel(value.title, answerList))
-                                } catch (e: Exception) {
-                                    e.printStackTrace()
+            viewModel.faqResponse.collectLatest { response ->
+                when (response) {
+                    is Resource.Success -> {
+                        DialogUtil.hideDialog()
+                        if (response.values.status && response.values.code == Constants.API_SUCCESS_CODE) {
+
+                            response.values.data?.let { faqData ->
+                                for ((index, value) in faqData.withIndex()) {
+                                    try {
+                                        answerList.clear()
+                                        answerList.add(0, AnswerModel(value.description, true))
+                                        faqList.add(index, QuestionModel(value.title, answerList))
+                                    } catch (e: Exception) {
+                                        e.printStackTrace()
+                                    }
                                 }
+
+                                filteredItems.addAll(faqList)
+                                faqAdapter = FAQAdapter(faqList)
+                                binding.recyclerFaq.adapter = faqAdapter
                             }
 
-                            filteredItems.addAll(faqList)
-                            faqAdapter = FAQAdapter(faqList)
-                            binding.recyclerFaq.adapter = faqAdapter
-                        }
-
-                    } else {
-                        context?.let {
-                            Toast.makeText(it, response.values.message, Toast.LENGTH_SHORT).show()
+                        } else {
+                            context?.showToast(response.values.message)
                         }
                     }
-                }
-                is Resource.Failure -> {
-                    DialogUtil.hideDialog()
-                    Log.e(logTag, "faqResponse error ${response.errorBody}")
-                }
-                else -> {
-                    // We will do nothing here
+                    is Resource.Failure -> {
+                        DialogUtil.hideDialog()
+                        context?.showToast(getString(R.string.error_something_went_wrong))
+                        Log.e(logTag, "faqResponse error ${response.errorBody}")
+                    }
+                    else -> {
+                        // We will do nothing here
+                    }
                 }
             }
-        })
+
+        }
+
     }
 
     override fun getViewModel(): Class<HomeViewModel> = HomeViewModel::class.java

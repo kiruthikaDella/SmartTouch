@@ -6,9 +6,13 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import androidx.viewbinding.ViewBinding
 import com.dellainfotech.smartTouch.api.NetworkModule
 import com.dellainfotech.smartTouch.api.repository.BaseRepository
+import com.dellainfotech.smartTouch.common.interfaces.DialogShowListener
+import com.dellainfotech.smartTouch.common.utils.DialogUtil
+import com.dellainfotech.smartTouch.mqtt.NotifyManager
 import com.dellainfotech.smartTouch.ui.viewmodel.ViewModelFactory
 
 abstract class ModelBaseFragment<VM : ViewModel, B : ViewBinding, R : BaseRepository> :
@@ -40,4 +44,12 @@ abstract class ModelBaseFragment<VM : ViewModel, B : ViewBinding, R : BaseReposi
     abstract fun getFragmentBinding(inflater: LayoutInflater, container: ViewGroup?): B
 
     abstract fun getFragmentRepository(): R
+
+    protected fun isInternetConnected(): Boolean {
+        var isInternetConnected = false
+        NotifyManager.internetInfo.observe(viewLifecycleOwner, {
+           isInternetConnected = it
+        })
+        return isInternetConnected
+    }
 }
