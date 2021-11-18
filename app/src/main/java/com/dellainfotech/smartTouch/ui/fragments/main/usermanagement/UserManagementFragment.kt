@@ -5,7 +5,9 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import com.dellainfotech.smartTouch.R
 import com.dellainfotech.smartTouch.adapters.UserManagementAdapter
@@ -14,6 +16,7 @@ import com.dellainfotech.smartTouch.api.model.SubordinateUserData
 import com.dellainfotech.smartTouch.api.repository.UserManagementRepository
 import com.dellainfotech.smartTouch.common.interfaces.AdapterItemClickListener
 import com.dellainfotech.smartTouch.common.interfaces.DialogAskListener
+import com.dellainfotech.smartTouch.common.interfaces.DialogShowListener
 import com.dellainfotech.smartTouch.common.utils.Constants
 import com.dellainfotech.smartTouch.common.utils.DialogUtil
 import com.dellainfotech.smartTouch.common.utils.showToast
@@ -22,6 +25,7 @@ import com.dellainfotech.smartTouch.mqtt.NotifyManager
 import com.dellainfotech.smartTouch.ui.fragments.ModelBaseFragment
 import com.dellainfotech.smartTouch.ui.viewmodel.UserManagementViewModel
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
 /**
  * Created by Jignesh Dangar on 27-04-2021.
@@ -80,8 +84,27 @@ class UserManagementFragment :
 
     private fun apiCall() {
 
+      /*  if (isInternetConnected()){
+            showProgressDialog()
+            viewModel.getSubordinateUser()
+        }else {
+            activity?.let {
+                DialogUtil.deviceOfflineAlert(
+                    it,
+                    getString(R.string.text_no_internet_available),
+                    object : DialogShowListener {
+                        override fun onClick() {
+                            DialogUtil.hideDialog()
+                        }
+
+                    }
+                )
+            }
+        }*/
+
         NotifyManager.internetInfo.observe(viewLifecycleOwner, { isConnected ->
             if (isConnected) {
+                Log.e(logTag, " internet is not available connected $isConnected")
                 showProgressDialog()
                 viewModel.getSubordinateUser()
             } else {
@@ -89,65 +112,69 @@ class UserManagementFragment :
             }
         })
 
-        lifecycleScope.launchWhenStarted {
+        viewLifecycleOwner.lifecycleScope.launchWhenStarted {
 
-            viewModel.getSubordinateUserResponse.collectLatest { response ->
-                userList.clear()
-                when (response) {
-                    is Resource.Success -> {
-                        DialogUtil.hideDialog()
-                        if (response.values.status && response.values.code == Constants.API_SUCCESS_CODE) {
-                            response.values.data?.let { userData ->
-                                userList.addAll(userData)
-                                userManagementAdapter.notifyDataSetChanged()
+            viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED){
+                launch {
+                    viewModel.getSubordinateUserResponse.collectLatest { response ->
+                        userList.clear()
+                        when (response) {
+                            is Resource.Success -> {
+                                DialogUtil.hideDialog()
+                                if (response.values.status && response.values.code == Constants.API_SUCCESS_CODE) {
+                                    response.values.data?.let { userData ->
+                                        userList.addAll(userData)
+                                        userManagementAdapter.notifyDataSetChanged()
+                                    }
+                                } else {
+                                    userManagementAdapter.notifyDataSetChanged()
+                                    context?.showToast(response.values.message)
+                                }
                             }
-                        } else {
-                            userManagementAdapter.notifyDataSetChanged()
-                            context?.showToast(response.values.message)
-                        }
-                    }
-                    is Resource.Failure -> {
-                        DialogUtil.hideDialog()
-                        context?.showToast(getString(R.string.error_something_went_wrong))
-                        Log.e(
-                            logTag,
-                            " getSubordinateUserResponse Failure ${response.errorBody?.string()}  "
-                        )
-                    }
-                    else -> {
-                        // we will do nothing here
-                    }
-                }
-            }
-
-            viewModel.deleteSubordinateUserResponse.collectLatest { response ->
-                when (response) {
-                    is Resource.Success -> {
-                        DialogUtil.hideDialog()
-                        context?.showToast(response.values.message)
-                        if (response.values.status && response.values.code == Constants.API_SUCCESS_CODE) {
-                            userData?.let {
-                                userList.remove(it)
-                                userManagementAdapter.notifyDataSetChanged()
+                            is Resource.Failure -> {
+                                DialogUtil.hideDialog()
+                                context?.showToast(getString(R.string.error_something_went_wrong))
+                                Log.e(
+                                    logTag,
+                                    " getSubordinateUserResponse Failure ${response.errorBody?.string()}  "
+                                )
+                            }
+                            else -> {
+                                // we will do nothing here
                             }
                         }
                     }
-                    is Resource.Failure -> {
-                        DialogUtil.hideDialog()
-                        context?.showToast(getString(R.string.error_something_went_wrong))
-                        Log.e(
-                            logTag,
-                            " deleteSubordinateUserResponse Failure ${response.errorBody?.string()}  "
-                        )
-                    }
-                    else -> {
-                        // we will do nothing here
+                }
+
+                launch {
+                    viewModel.deleteSubordinateUserResponse.collectLatest { response ->
+                        when (response) {
+                            is Resource.Success -> {
+                                DialogUtil.hideDialog()
+                                context?.showToast(response.values.message)
+                                if (response.values.status && response.values.code == Constants.API_SUCCESS_CODE) {
+                                    userData?.let {
+                                        userList.remove(it)
+                                        userManagementAdapter.notifyDataSetChanged()
+                                    }
+                                }
+                            }
+                            is Resource.Failure -> {
+                                DialogUtil.hideDialog()
+                                context?.showToast(getString(R.string.error_something_went_wrong))
+                                Log.e(
+                                    logTag,
+                                    " deleteSubordinateUserResponse Failure ${response.errorBody?.string()}  "
+                                )
+                            }
+                            else -> {
+                                // we will do nothing here
+                            }
+                        }
                     }
                 }
             }
-
         }
-
     }
 
     private fun showProgressDialog() {

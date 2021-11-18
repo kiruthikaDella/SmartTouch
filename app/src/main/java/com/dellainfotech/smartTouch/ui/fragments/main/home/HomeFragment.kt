@@ -23,6 +23,7 @@ import com.dellainfotech.smartTouch.api.model.GetRoomData
 import com.dellainfotech.smartTouch.api.repository.HomeRepository
 import com.dellainfotech.smartTouch.common.interfaces.AdapterItemClickListener
 import com.dellainfotech.smartTouch.common.interfaces.DialogAskListener
+import com.dellainfotech.smartTouch.common.interfaces.DialogShowListener
 import com.dellainfotech.smartTouch.common.utils.Constants
 import com.dellainfotech.smartTouch.common.utils.DialogUtil
 import com.dellainfotech.smartTouch.common.utils.showToast
@@ -109,6 +110,21 @@ class HomeFragment : ModelBaseFragment<HomeViewModel, FragmentHomeBinding, HomeR
         // initializing navigation menu
         setUpNavigationView()
 
+        if (!isInternetConnected()){
+            activity?.let {
+                DialogUtil.deviceOfflineAlert(
+                    it,
+                    getString(R.string.text_no_internet_available),
+                    object : DialogShowListener {
+                        override fun onClick() {
+                            DialogUtil.hideDialog()
+                        }
+
+                    }
+                )
+            }
+        }
+
         apiCall()
     }
 
@@ -144,7 +160,7 @@ class HomeFragment : ModelBaseFragment<HomeViewModel, FragmentHomeBinding, HomeR
 
         viewLifecycleOwner.lifecycleScope.launch {
 
-            lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+            viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
 
                 launch {
                     viewModel.logoutResponse.collectLatest { response ->
