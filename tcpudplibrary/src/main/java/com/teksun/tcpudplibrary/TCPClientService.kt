@@ -1,6 +1,8 @@
 package com.teksun.tcpudplibrary
 
 import android.annotation.SuppressLint
+import android.content.Context
+import android.net.ConnectivityManager
 import android.os.StrictMode
 import android.util.Log
 import com.teksun.tcpudplibrary.listener.CloseSocketListener
@@ -55,7 +57,9 @@ object TCPClientService {
      * @param timeOut - the timeout value to be used in milliseconds
      * @see ConnectCResultListener
      */
+    @SuppressLint("MissingPermission")
     fun connectToAddress(
+        context: Context,
         ip: String,
         port: Int,
         timeOut: Int? = null
@@ -73,6 +77,20 @@ object TCPClientService {
                 }
 
                 socket = Socket()
+
+                val connectivity = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager?
+
+                if (connectivity != null) {
+                    for (network in connectivity.allNetworks) {
+                        val networkInfo = connectivity.getNetworkInfo(network)
+                        if (networkInfo != null && networkInfo.type == ConnectivityManager.TYPE_WIFI) {
+                            if (networkInfo.isConnected) {
+                                socket = network.socketFactory.createSocket()
+                            }
+                        }
+                    }
+                }
+
 
                 val ipAddress = InetAddress.getByName(ip)
                 printLog("IPAddress ${ipAddress.hostName}")

@@ -154,6 +154,7 @@ class ConnectingWifiFragment :
     private fun connectTCP() {
         try {
             TCPClientService.connectToAddress(
+                requireContext(),
                 WifiUtils.getGatewayIpAddress(),
                 getString(R.string.receiver_port).toInt(),
                 1000 * 30
@@ -409,3 +410,15 @@ class ConnectingWifiFragment :
     override fun getFragmentRepository(): HomeRepository = HomeRepository(networkModel)
 
 }
+
+
+
+
+
+
+
+
+
+
+
+

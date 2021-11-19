@@ -4,9 +4,11 @@ import android.Manifest
 import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.app.Dialog
+import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
+import android.location.LocationManager
 import android.net.Uri
 import android.net.wifi.WifiManager
 import android.os.Build
@@ -44,12 +46,9 @@ import com.dellainfotech.smartTouch.api.repository.HomeRepository
 import com.dellainfotech.smartTouch.common.interfaces.AdapterItemClickListener
 import com.dellainfotech.smartTouch.common.interfaces.DialogEditListener
 import com.dellainfotech.smartTouch.common.interfaces.DialogShowListener
-import com.dellainfotech.smartTouch.common.utils.Constants
-import com.dellainfotech.smartTouch.common.utils.DialogUtil
+import com.dellainfotech.smartTouch.common.utils.*
 import com.dellainfotech.smartTouch.common.utils.Utils.clearError
 import com.dellainfotech.smartTouch.common.utils.Utils.toEditable
-import com.dellainfotech.smartTouch.common.utils.hideKeyboard
-import com.dellainfotech.smartTouch.common.utils.showToast
 import com.dellainfotech.smartTouch.databinding.FragmentDeviceBinding
 import com.dellainfotech.smartTouch.mqtt.NotifyManager
 import com.dellainfotech.smartTouch.ui.fragments.ModelBaseFragment
@@ -81,7 +80,7 @@ class DeviceFragment : ModelBaseFragment<HomeViewModel, FragmentDeviceBinding, H
     private var roomData: GetRoomData? = null
     private lateinit var deviceTypeAdapter: SpinnerAdapter
     private var isSelectedSmarTouch = true
-    private var isSelectedSmartAck: Boolean ?= null
+    private var isSelectedSmartAck: Boolean? = null
 
     private val wifiRegister =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
@@ -93,13 +92,22 @@ class DeviceFragment : ModelBaseFragment<HomeViewModel, FragmentDeviceBinding, H
             onActivityResult(Constants.REQUEST_OPEN_SETTINGS, result)
         }
 
+    private val gpsRegister =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            onActivityResult(Constants.REQUEST_GPS_CODE, result)
+        }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         WifiUtils.init(context)
 
         val deviceTypeList =
-            arrayOf(getString(R.string.text_smart_touch), getString(R.string.text_smart_tack), getString(R.string.text_smart_tap))
+            arrayOf(
+                getString(R.string.text_smart_touch),
+                getString(R.string.text_smart_tack),
+                getString(R.string.text_smart_tap)
+            )
 
         deviceList.clear()
         activity?.let {
@@ -156,7 +164,8 @@ class DeviceFragment : ModelBaseFragment<HomeViewModel, FragmentDeviceBinding, H
 
     override fun onDestroyView() {
         super.onDestroyView()
-        isSelectedSmarTouch = true }
+        isSelectedSmarTouch = true
+    }
 
 
     private fun clickEvents() {
@@ -382,22 +391,26 @@ class DeviceFragment : ModelBaseFragment<HomeViewModel, FragmentDeviceBinding, H
         }
 
         binding.layoutSelectDevice.btnSave.setOnClickListener {
-            if (binding.layoutSelectDevice.spinnerDeviceType.selectedItem == getString(R.string.text_smart_touch)) {
-                hidePanel()
-                binding.layoutSelectDevice.linearSelectDevice.isVisible = false
-                binding.layoutRoomPanel.linearPanel.isVisible = true
-                binding.tvBottomViewTitle.text = getString(R.string.text_add_panel)
-                showPanel()
-            } else if (binding.layoutSelectDevice.spinnerDeviceType.selectedItem == getString(R.string.text_smart_tack)) {
-                hidePanel()
-                isSelectedSmarTouch = false
-                isSelectedSmartAck = true
-                checkPermission()
-            } else if (binding.layoutSelectDevice.spinnerDeviceType.selectedItem == getString(R.string.text_smart_tap)) {
-                hidePanel()
-                isSelectedSmarTouch = false
-                isSelectedSmartAck = false
-                checkPermission()
+            when (binding.layoutSelectDevice.spinnerDeviceType.selectedItem) {
+                getString(R.string.text_smart_touch) -> {
+                    hidePanel()
+                    binding.layoutSelectDevice.linearSelectDevice.isVisible = false
+                    binding.layoutRoomPanel.linearPanel.isVisible = true
+                    binding.tvBottomViewTitle.text = getString(R.string.text_add_panel)
+                    showPanel()
+                }
+                getString(R.string.text_smart_tack) -> {
+                    hidePanel()
+                    isSelectedSmarTouch = false
+                    isSelectedSmartAck = true
+                    checkPermission()
+                }
+                getString(R.string.text_smart_tap) -> {
+                    hidePanel()
+                    isSelectedSmarTouch = false
+                    isSelectedSmartAck = false
+                    checkPermission()
+                }
             }
         }
 
@@ -594,53 +607,57 @@ class DeviceFragment : ModelBaseFragment<HomeViewModel, FragmentDeviceBinding, H
                         }
                     }
                 }
-
             }
-
-
         }
-
-
     }
 
     private fun checkPermission() {
-        activity?.let {
+        val locationManager = context?.getSystemService(Context.LOCATION_SERVICE) as LocationManager
+        if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+            context?.let {
+                Toast.makeText(it, "Please turn on GPS", Toast.LENGTH_SHORT).show()
+                val gpsIntent = Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)
+                gpsRegister.launch(gpsIntent)
+            }
+        } else {
+            Log.d(logTag, "checkPermission: GPS Enable")
+            activity?.let {
+                Dexter.withContext(it)
+                    .withPermissions(
+                        Manifest.permission.ACCESS_FINE_LOCATION,
+                        Manifest.permission.ACCESS_COARSE_LOCATION,
+                    )
+                    .withListener(object : MultiplePermissionsListener {
+                        override fun onPermissionsChecked(report: MultiplePermissionsReport?) {
+                            report?.let { rep ->
+                                if (rep.areAllPermissionsGranted()) {
+                                    redirectToWifiSetting()
+                                    return
+                                }
+                                // check for permanent denial of any permission
+                                if (rep.isAnyPermissionPermanentlyDenied) {
+                                    // show alert dialog navigating to Settings
+                                    showSettingsDialog()
+                                }
+                            }
 
-            Dexter.withContext(it)
-                .withPermissions(
-                    Manifest.permission.ACCESS_FINE_LOCATION,
-                    Manifest.permission.ACCESS_COARSE_LOCATION,
-                )
-                .withListener(object : MultiplePermissionsListener {
-                    override fun onPermissionsChecked(report: MultiplePermissionsReport?) {
-                        report?.let { rep ->
-                            if (rep.areAllPermissionsGranted()) {
-                                redirectToWifiSetting()
-                                return
-                            }
-                            // check for permanent denial of any permission
-                            if (rep.isAnyPermissionPermanentlyDenied) {
-                                // show alert dialog navigating to Settings
-                                showSettingsDialog()
-                            }
                         }
 
-                    }
+                        override fun onPermissionRationaleShouldBeShown(
+                            permissions: MutableList<PermissionRequest>?,
+                            token: PermissionToken?
+                        ) {
+                            token?.continuePermissionRequest()
+                        }
 
-                    override fun onPermissionRationaleShouldBeShown(
-                        permissions: MutableList<PermissionRequest>?,
-                        token: PermissionToken?
-                    ) {
-                        token?.continuePermissionRequest()
+                    })
+                    .withErrorListener { error ->
+                        Log.e(logTag, " error $error")
+                        Toast.makeText(it, " Error occurred! ", Toast.LENGTH_SHORT).show()
                     }
-
-                })
-                .withErrorListener { error ->
-                    Log.e(logTag, " error $error")
-                    Toast.makeText(it, " Error occurred! ", Toast.LENGTH_SHORT).show()
-                }
-                .onSameThread()
-                .check()
+                    .onSameThread()
+                    .check()
+            }
         }
     }
 
@@ -706,7 +723,7 @@ class DeviceFragment : ModelBaseFragment<HomeViewModel, FragmentDeviceBinding, H
     }
 
     private fun onActivityResult(requestCode: Int, result: ActivityResult) {
-        Log.e(logTag, result.resultCode.toString())
+        Log.e(logTag, "Request code is $requestCode")
         if (requestCode == Constants.REQUEST_WIFI_CODE) {
             if (WifiUtils.isSSIDWifiConnected(getString(R.string.str_gateway_name))) {
                 activity?.let {
@@ -726,6 +743,8 @@ class DeviceFragment : ModelBaseFragment<HomeViewModel, FragmentDeviceBinding, H
             } else {
                 redirectToWifiSetting()
             }
+        } else if (requestCode == Constants.REQUEST_GPS_CODE) {
+            checkPermission()
         }
     }
 

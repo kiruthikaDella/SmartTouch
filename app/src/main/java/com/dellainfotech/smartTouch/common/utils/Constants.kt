@@ -24,6 +24,8 @@ object Constants {
 
     const val REQUEST_WIFI_CODE = 105
 
+    const val REQUEST_GPS_CODE = 106
+
     const val DEVICE_TYPE_EIGHT = 8
     const val DEVICE_TYPE_FOUR = 4
 
