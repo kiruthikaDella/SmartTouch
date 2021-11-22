@@ -32,7 +32,7 @@ class AddUserFragment :
             findNavController().navigateUp()
         }
 
-        lifecycleScope.launchWhenStarted {
+        viewLifecycleOwner.lifecycleScope.launchWhenStarted {
             viewModel.addSubordinateUserResponse.collectLatest { response ->
                 when (response) {
                     is Resource.Success -> {
