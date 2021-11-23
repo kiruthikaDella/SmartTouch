@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.dellainfotech.smartTouch.ui.activities.SplashActivity"
+    tools:context="com.voinismartiot.voni.ui.activities.SplashActivity"
     tools:ignore="contentDescription">
 
     <ImageView

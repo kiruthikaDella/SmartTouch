@@ -2,5 +2,5 @@
 <paths>
     <external-path
         name="my_images"
-        path="Android/data/com.dellainfotech.smartTouch/files/Pictures" />
+        path="Android/data/com.voinismartiot.smartTouch/files/Pictures" />
 </paths>

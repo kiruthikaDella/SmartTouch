@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@color/app_background_color"
     android:orientation="vertical"
-    tools:context="com.dellainfotech.smartTouch.ui.fragments.main.home.AccountSettingsFragment"
+    tools:context="com.voinismartiot.voni.ui.fragments.main.home.AccountSettingsFragment"
     tools:ignore="contentDescription">
 
     <RelativeLayout

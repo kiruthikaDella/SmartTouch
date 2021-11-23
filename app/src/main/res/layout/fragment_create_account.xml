@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:ignore="contentDescription,Autofill,LabelFor"
-    tools:context="com.dellainfotech.smartTouch.ui.fragments.authentication.CreateAccountFragment">
+    tools:context="com.voinismartiot.voni.ui.fragments.authentication.CreateAccountFragment">
 
     <ImageView
         android:id="@+id/iv_back"

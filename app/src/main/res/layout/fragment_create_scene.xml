@@ -11,7 +11,7 @@
     app:umanoDragView="@id/drag_weekly_days"
     app:umanoOverlay="true"
     app:umanoPanelHeight="0dp"
-    tools:context="com.dellainfotech.smartTouch.ui.fragments.main.scenes.CreateSceneFragment"
+    tools:context="com.voinismartiot.voni.ui.fragments.main.scenes.CreateSceneFragment"
     tools:ignore="contentDescription,Autofill,LabelFor">
 
     <RelativeLayout

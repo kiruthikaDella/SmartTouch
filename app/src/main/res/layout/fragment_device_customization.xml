@@ -10,7 +10,7 @@
     app:umanoDragView="@id/drag_upload_image"
     app:umanoOverlay="true"
     app:umanoPanelHeight="0dp"
-    tools:context="com.dellainfotech.smartTouch.ui.fragments.main.home.DeviceCustomizationFragment"
+    tools:context="com.voinismartiot.voni.ui.fragments.main.home.DeviceCustomizationFragment"
     tools:ignore="contentDescription,Autofill,LabelFor">
 
     <RelativeLayout

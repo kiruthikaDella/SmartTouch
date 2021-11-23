@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/homeFragment"
-        android:name="com.dellainfotech.smartTouch.ui.fragments.main.home.HomeFragment"
+        android:name="com.voinismartiot.voni.ui.fragments.main.home.HomeFragment"
         android:label="fragment_home"
         tools:layout="@layout/fragment_home">
         <action
@@ -28,12 +28,12 @@
         app:destination="@id/homeFragment" />
     <fragment
         android:id="@+id/deviceFragment"
-        android:name="com.dellainfotech.smartTouch.ui.fragments.main.home.DeviceFragment"
+        android:name="com.voinismartiot.voni.ui.fragments.main.home.DeviceFragment"
         android:label="fragment_device"
         tools:layout="@layout/fragment_device">
         <argument
             android:name="roomDetail"
-            app:argType="com.dellainfotech.smartTouch.api.model.GetRoomData" />
+            app:argType="com.voinismartiot.voni.api.model.GetRoomData" />
         <action
             android:id="@+id/action_roomPanelFragment_to_deviceCustomizationFragment"
             app:destination="@id/deviceCustomizationFragment" />
@@ -51,12 +51,12 @@
     </fragment>
     <fragment
         android:id="@+id/controlModeFragment"
-        android:name="com.dellainfotech.smartTouch.ui.fragments.main.controlmode.ControlModeFragment"
+        android:name="com.voinismartiot.voni.ui.fragments.main.controlmode.ControlModeFragment"
         android:label="fragment_control_mode"
         tools:layout="@layout/fragment_control_mode" />
     <fragment
         android:id="@+id/deviceCustomizationFragment"
-        android:name="com.dellainfotech.smartTouch.ui.fragments.main.home.DeviceCustomizationFragment"
+        android:name="com.voinismartiot.voni.ui.fragments.main.home.DeviceCustomizationFragment"
         android:label="fragment_device_customization"
         tools:layout="@layout/fragment_device_customization" >
         <action
@@ -64,28 +64,28 @@
             app:destination="@id/switchIconsFragment" />
         <argument
             android:name="deviceDetail"
-            app:argType="com.dellainfotech.smartTouch.api.model.GetDeviceData" />
+            app:argType="com.voinismartiot.voni.api.model.GetDeviceData" />
         <argument
             android:name="roomDetail"
-            app:argType="com.dellainfotech.smartTouch.api.model.GetRoomData" />
+            app:argType="com.voinismartiot.voni.api.model.GetRoomData" />
         <action
             android:id="@+id/action_deviceCustomizationFragment_to_screenLayoutFragment"
             app:destination="@id/screenLayoutFragment" />
     </fragment>
     <dialog
         android:id="@+id/screenLayoutFragment"
-        android:name="com.dellainfotech.smartTouch.ui.fragments.main.home.ScreenLayoutFragment"
+        android:name="com.voinismartiot.voni.ui.fragments.main.home.ScreenLayoutFragment"
         android:label="fragment_screen_layout"
         tools:layout="@layout/fragment_screen_layout" >
         <argument
             android:name="deviceCustomizationDetail"
-            app:argType="com.dellainfotech.smartTouch.api.model.DeviceCustomizationData" />
+            app:argType="com.voinismartiot.voni.api.model.DeviceCustomizationData" />
         <argument
             android:name="deviceDetail"
-            app:argType="com.dellainfotech.smartTouch.api.model.GetDeviceData" />
+            app:argType="com.voinismartiot.voni.api.model.GetDeviceData" />
         <argument
             android:name="roomDetail"
-            app:argType="com.dellainfotech.smartTouch.api.model.GetRoomData" />
+            app:argType="com.voinismartiot.voni.api.model.GetRoomData" />
         <action
             android:id="@+id/action_screenLayoutFragment_to_roomPanelFragment"
             app:destination="@id/deviceFragment"
@@ -94,47 +94,47 @@
     </dialog>
     <fragment
         android:id="@+id/deviceFeaturesFragment"
-        android:name="com.dellainfotech.smartTouch.ui.fragments.main.home.DeviceFeaturesFragment"
+        android:name="com.voinismartiot.voni.ui.fragments.main.home.DeviceFeaturesFragment"
         android:label="fragment_device_features"
         tools:layout="@layout/fragment_device_features" >
         <argument
             android:name="deviceDetail"
-            app:argType="com.dellainfotech.smartTouch.api.model.GetDeviceData" />
+            app:argType="com.voinismartiot.voni.api.model.GetDeviceData" />
         <argument
             android:name="roomDetail"
-            app:argType="com.dellainfotech.smartTouch.api.model.GetRoomData" />
+            app:argType="com.voinismartiot.voni.api.model.GetRoomData" />
     </fragment>
     <fragment
         android:id="@+id/createSceneFragment"
-        android:name="com.dellainfotech.smartTouch.ui.fragments.main.scenes.CreateSceneFragment"
+        android:name="com.voinismartiot.voni.ui.fragments.main.scenes.CreateSceneFragment"
         android:label="fragment_create_scene"
         tools:layout="@layout/fragment_create_scene" >
         <argument
             android:name="sceneDetail"
-            app:argType="com.dellainfotech.smartTouch.api.model.GetSceneData"
+            app:argType="com.voinismartiot.voni.api.model.GetSceneData"
             app:nullable="true" />
         <argument
             android:name="controlModeList"
-            app:argType="com.dellainfotech.smartTouch.api.model.ControlModeRoomData[]" />
+            app:argType="com.voinismartiot.voni.api.model.ControlModeRoomData[]" />
     </fragment>
     <fragment
         android:id="@+id/accountSettingsFragment"
-        android:name="com.dellainfotech.smartTouch.ui.fragments.main.home.AccountSettingsFragment"
+        android:name="com.voinismartiot.voni.ui.fragments.main.home.AccountSettingsFragment"
         android:label="fragment_account_settings"
         tools:layout="@layout/fragment_account_settings" />
     <fragment
         android:id="@+id/faqsFragment"
-        android:name="com.dellainfotech.smartTouch.ui.fragments.main.home.FaqsFragment"
+        android:name="com.voinismartiot.voni.ui.fragments.main.home.FaqsFragment"
         android:label="fragment_faqs"
         tools:layout="@layout/fragment_faqs" />
     <fragment
         android:id="@+id/contactUsFragment"
-        android:name="com.dellainfotech.smartTouch.ui.fragments.main.home.ContactUsFragment"
+        android:name="com.voinismartiot.voni.ui.fragments.main.home.ContactUsFragment"
         android:label="fragment_contact_us"
         tools:layout="@layout/fragment_contact_us" />
     <fragment
         android:id="@+id/switchIconsFragment"
-        android:name="com.dellainfotech.smartTouch.ui.fragments.main.home.SwitchIconsFragment"
+        android:name="com.voinismartiot.voni.ui.fragments.main.home.SwitchIconsFragment"
         android:label="fragment_switch_icons"
         tools:layout="@layout/fragment_switch_icons" >
         <action
@@ -142,10 +142,10 @@
             app:destination="@id/switchIconsDetailFragment" />
         <argument
             android:name="deviceDetail"
-            app:argType="com.dellainfotech.smartTouch.api.model.GetDeviceData" />
+            app:argType="com.voinismartiot.voni.api.model.GetDeviceData" />
         <argument
             android:name="roomDetail"
-            app:argType="com.dellainfotech.smartTouch.api.model.GetRoomData" />
+            app:argType="com.voinismartiot.voni.api.model.GetRoomData" />
         <action
             android:id="@+id/action_switchIconsFragment_to_roomPanelFragment"
             app:destination="@id/deviceFragment"
@@ -154,26 +154,26 @@
     </fragment>
     <fragment
         android:id="@+id/switchIconsDetailFragment"
-        android:name="com.dellainfotech.smartTouch.ui.fragments.main.home.SwitchIconsDetailFragment"
+        android:name="com.voinismartiot.voni.ui.fragments.main.home.SwitchIconsDetailFragment"
         android:label="fragment_switch_icons_detail"
         tools:layout="@layout/fragment_switch_icons_detail" >
         <argument
             android:name="switchDetail"
-            app:argType="com.dellainfotech.smartTouch.api.model.DeviceSwitchData" />
+            app:argType="com.voinismartiot.voni.api.model.DeviceSwitchData" />
         <argument
             android:name="roomDetail"
-            app:argType="com.dellainfotech.smartTouch.api.model.GetRoomData" />
+            app:argType="com.voinismartiot.voni.api.model.GetRoomData" />
         <action
             android:id="@+id/action_switchIconsDetailFragment_to_roomPanelFragment"
             app:destination="@id/deviceFragment"
             app:popUpTo="@id/deviceFragment"
             app:popUpToInclusive="true" />
         <argument android:name="deviceDetail"
-            app:argType="com.dellainfotech.smartTouch.api.model.GetDeviceData" />
+            app:argType="com.voinismartiot.voni.api.model.GetDeviceData" />
     </fragment>
     <fragment
         android:id="@+id/userManagementFragment"
-        android:name="com.dellainfotech.smartTouch.ui.fragments.main.usermanagement.UserManagementFragment"
+        android:name="com.voinismartiot.voni.ui.fragments.main.usermanagement.UserManagementFragment"
         android:label="fragment_user_management"
         tools:layout="@layout/fragment_user_management" >
         <action
@@ -182,25 +182,25 @@
     </fragment>
     <fragment
         android:id="@+id/addUserFragment"
-        android:name="com.dellainfotech.smartTouch.ui.fragments.main.usermanagement.AddUserFragment"
+        android:name="com.voinismartiot.voni.ui.fragments.main.usermanagement.AddUserFragment"
         android:label="fragment_add_user"
         tools:layout="@layout/fragment_add_user" />
     <fragment
         android:id="@+id/deviceSettingsFragment"
-        android:name="com.dellainfotech.smartTouch.ui.fragments.main.home.DeviceSettingsFragment"
+        android:name="com.voinismartiot.voni.ui.fragments.main.home.DeviceSettingsFragment"
         android:label="fragment_device_settings"
         tools:layout="@layout/fragment_device_settings" >
         <argument
             android:name="deviceDetail"
-            app:argType="com.dellainfotech.smartTouch.api.model.GetDeviceData" />
+            app:argType="com.voinismartiot.voni.api.model.GetDeviceData" />
         <argument
             android:name="roomDetail"
-            app:argType="com.dellainfotech.smartTouch.api.model.GetRoomData" />
+            app:argType="com.voinismartiot.voni.api.model.GetRoomData" />
     </fragment><action android:id="@+id/action_global_userManagementFragment" app:destination="@id/userManagementFragment"/>
     <action android:id="@+id/action_global_controlModeFragment" app:destination="@id/controlModeFragment"/>
     <fragment
         android:id="@+id/sceneFragment"
-        android:name="com.dellainfotech.smartTouch.ui.fragments.main.scenes.SceneFragment"
+        android:name="com.voinismartiot.voni.ui.fragments.main.scenes.SceneFragment"
         android:label="fragment_scene"
         tools:layout="@layout/fragment_scene" >
         <action
@@ -210,7 +210,7 @@
     <action android:id="@+id/action_global_sceneFragment" app:destination="@id/sceneFragment" />
     <fragment
         android:id="@+id/configWifiFragment"
-        android:name="com.dellainfotech.smartTouch.ui.fragments.main.home.ConfigWifiFragment"
+        android:name="com.voinismartiot.voni.ui.fragments.main.home.ConfigWifiFragment"
         android:label="fragment_config_wifi"
         tools:layout="@layout/fragment_config_wifi" >
         <action
@@ -221,14 +221,14 @@
 
         <argument
             android:name="roomDetail"
-            app:argType="com.dellainfotech.smartTouch.api.model.GetRoomData" />
+            app:argType="com.voinismartiot.voni.api.model.GetRoomData" />
         <argument
             android:name="isSmarTack"
             app:argType="boolean" />
     </fragment>
     <fragment
         android:id="@+id/connectingWifiFragment"
-        android:name="com.dellainfotech.smartTouch.ui.fragments.main.home.ConnectingWifiFragment"
+        android:name="com.voinismartiot.voni.ui.fragments.main.home.ConnectingWifiFragment"
         android:label="ConnectingWifiFragment" >
         <action
             android:id="@+id/action_connectingWifiFragment_to_configWifiFragment"
@@ -240,7 +240,7 @@
             app:argType="boolean" />
         <argument
             android:name="roomDetail"
-            app:argType="com.dellainfotech.smartTouch.api.model.GetRoomData" />
+            app:argType="com.voinismartiot.voni.api.model.GetRoomData" />
         <action
             android:id="@+id/action_connectingWifiFragment_to_deviceFragment"
             app:destination="@id/deviceFragment"

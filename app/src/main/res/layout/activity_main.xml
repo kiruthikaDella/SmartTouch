@@ -10,7 +10,7 @@
     app:umanoDragView="@id/drag_add_room"
     app:umanoOverlay="true"
     app:umanoPanelHeight="0dp"
-    tools:context="com.dellainfotech.smartTouch.ui.activities.MainActivity"
+    tools:context="com.voinismartiot.voni.ui.activities.MainActivity"
     tools:ignore="contentDescription">
 
     <androidx.constraintlayout.widget.ConstraintLayout

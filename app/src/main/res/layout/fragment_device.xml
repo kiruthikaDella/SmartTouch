@@ -11,7 +11,7 @@
     app:umanoDragView="@id/drag_add_panel"
     app:umanoOverlay="true"
     app:umanoPanelHeight="0dp"
-    tools:context="com.dellainfotech.smartTouch.ui.fragments.main.home.DeviceFragment"
+    tools:context="com.voinismartiot.voni.ui.fragments.main.home.DeviceFragment"
     tools:ignore="contentDescription,Autofill,LabelFor">
 
     <LinearLayout

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.dellainfotech.smartTouch">
+    package="com.voinismartiot.voni">
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
@@ -24,7 +24,7 @@
     <uses-feature android:name="android.hardware.camera.flash" />
 
     <application
-        android:name=".AppDelegate"
+        android:name="com.voinismartiot.voni.AppDelegate"
         android:icon="@mipmap/ic_app_icon"
         android:label="@string/app_name"
         android:requestLegacyExternalStorage="true"
@@ -33,7 +33,7 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
         <activity
-            android:name=".ui.activities.SplashActivity"
+            android:name="com.voinismartiot.voni.ui.activities.SplashActivity"
             android:exported="true"
             android:noHistory="true"
             android:screenOrientation="portrait">
@@ -54,10 +54,10 @@
                   </intent-filter>-->
         </activity>
         <activity
-            android:name=".ui.activities.AuthenticationActivity"
+            android:name="com.voinismartiot.voni.ui.activities.AuthenticationActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.activities.MainActivity"
+            android:name="com.voinismartiot.voni.ui.activities.MainActivity"
             android:screenOrientation="portrait" />
 
         <meta-data
@@ -83,7 +83,7 @@
 
         <provider
             android:name="androidx.core.content.FileProvider"
-            android:authorities="com.dellainfotech.smartTouch.provider"
+            android:authorities="com.voinismartiot.voni.provider"
             android:exported="false"
             android:grantUriPermissions="true">
             <meta-data

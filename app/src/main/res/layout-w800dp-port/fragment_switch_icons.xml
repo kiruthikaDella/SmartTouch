@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/app_background_color"
-    tools:context="com.dellainfotech.smartTouch.ui.fragments.main.home.SwitchIconsFragment"
+    tools:context="com.voinismartiot.voni.ui.fragments.main.home.SwitchIconsFragment"
     tools:ignore="contentDescription">
 
     <RelativeLayout
