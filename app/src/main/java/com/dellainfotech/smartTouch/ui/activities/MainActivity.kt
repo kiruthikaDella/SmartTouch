@@ -8,6 +8,7 @@ import android.view.View
 import android.widget.AdapterView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
@@ -26,6 +27,7 @@ import com.dellainfotech.smartTouch.common.interfaces.DialogShowListener
 import com.dellainfotech.smartTouch.common.utils.*
 import com.dellainfotech.smartTouch.common.utils.Utils.clearError
 import com.dellainfotech.smartTouch.common.utils.Utils.isControlModePin
+import com.dellainfotech.smartTouch.common.utils.Utils.toBoolean
 import com.dellainfotech.smartTouch.common.utils.Utils.toEditable
 import com.dellainfotech.smartTouch.databinding.ActivityMainBinding
 import com.dellainfotech.smartTouch.mqtt.NetworkConnectionLiveData
@@ -153,6 +155,7 @@ class MainActivity : AppCompatActivity() {
             if (isConnected) {
                 roomTypeList.toMutableList().clear()
                 viewModel.roomType()
+                viewModel.getPinStatus()
             }
         })
 
@@ -379,6 +382,39 @@ class MainActivity : AppCompatActivity() {
                             }
                             else -> {
                                 // We will do nothing here
+                            }
+                        }
+                    }
+                }
+
+                launch {
+                    viewModel.getPinStatusResponse.collectLatest { response ->
+                        when (response) {
+                            is Resource.Success -> {
+                                DialogUtil.hideDialog()
+                                if (response.values.status && response.values.code == Constants.API_SUCCESS_CODE) {
+                                    response.values.data?.let {
+                                        FastSave.getInstance().saveBoolean(
+                                            Constants.isControlModePinned,
+                                            it.isPinStatus.toBoolean()
+                                        )
+
+                                        if (it.isPinStatus.toBoolean()) {
+                                            binding.ivControlMode.performClick()
+                                            hideBottomNavigation()
+                                        } else {
+                                            showBottomNavigation()
+                                        }
+                                    }
+                                }
+                            }
+                            is Resource.Failure -> {
+                                DialogUtil.hideDialog()
+                                showToast(getString(R.string.error_something_went_wrong))
+                                Log.e(logTag, " updatePinStatusResponse Failure $response ")
+                            }
+                            else -> {
+                                //We will do nothing here
                             }
                         }
                     }

@@ -40,6 +40,10 @@ class AnswerModel : Parcelable {
         return 0
     }
 
+    override fun toString(): String {
+        return "AnswerModel(name=$name, isFavorite=$isFavorite)"
+    }
+
     companion object {
         @JvmField val CREATOR: Parcelable.Creator<AnswerModel?> = object : Parcelable.Creator<AnswerModel?> {
             override fun createFromParcel(`in`: Parcel): AnswerModel? {
@@ -51,4 +55,6 @@ class AnswerModel : Parcelable {
             }
         }
     }
+
+
 }

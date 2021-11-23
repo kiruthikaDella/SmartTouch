@@ -75,6 +75,7 @@ class ControlModeFragment :
                     DialogUtil.loadingAlert(it)
                 }
                 viewModel.getControl()
+                viewModel.getPinStatus()
             } else {
                 Log.e(logTag, " internet is not available")
             }
@@ -82,7 +83,7 @@ class ControlModeFragment :
 
         binding.ibPin.setOnClickListener {
 
-            if (!isInternetConnected()){
+            if (!isInternetConnected()) {
                 context?.showToast(getString(R.string.text_no_internet_available))
                 return@setOnClickListener
             }
@@ -254,28 +255,10 @@ class ControlModeFragment :
                                         )
 
                                         if (it.isPinStatus.toBoolean()) {
-                                            (activity as MainActivity).hideBottomNavigation()
-                                            binding.ibLogout.isVisible = true
-                                            context?.let { mContext ->
-                                                binding.ibPin.setImageDrawable(
-                                                    ContextCompat.getDrawable(
-                                                        mContext,
-                                                        R.drawable.ic_pin_straight
-                                                    )
-                                                )
-                                            }
+                                           pinnedControlMode()
 
                                         } else {
-                                            (activity as MainActivity).showBottomNavigation()
-                                            binding.ibLogout.isVisible = false
-                                            context?.let { mContext ->
-                                                binding.ibPin.setImageDrawable(
-                                                    ContextCompat.getDrawable(
-                                                        mContext,
-                                                        R.drawable.ic_pin
-                                                    )
-                                                )
-                                            }
+                                          unpinnedControlMode()
                                         }
                                     }
                                 }
@@ -293,7 +276,6 @@ class ControlModeFragment :
                 }
 
                 launch {
-
                     viewModel.getControlResponse.collectLatest { response ->
                         roomList.clear()
                         when (response) {
@@ -304,8 +286,10 @@ class ControlModeFragment :
                                     response.values.data?.let { roomDataList ->
                                         roomList.addAll(roomDataList)
                                         activity?.let { mActivity ->
-                                            controlModeAdapter = ControlModeAdapter(mActivity, roomList)
-                                            binding.recyclerControlModes.adapter = controlModeAdapter
+                                            controlModeAdapter =
+                                                ControlModeAdapter(mActivity, roomList)
+                                            binding.recyclerControlModes.adapter =
+                                                controlModeAdapter
                                         }
 
                                     }
@@ -316,21 +300,78 @@ class ControlModeFragment :
                             is Resource.Failure -> {
                                 DialogUtil.hideDialog()
                                 context?.showToast(getString(R.string.error_something_went_wrong))
-                                Log.e(logTag, " getControlResponse Failure ${response.errorBody?.string()} ")
+                                Log.e(
+                                    logTag,
+                                    " getControlResponse Failure ${response.errorBody?.string()} "
+                                )
                             }
                             else -> {
                                 //We will do nothing here
                             }
                         }
                     }
+                }
 
+                launch {
+                    viewModel.getPinStatusResponse.collectLatest { response ->
+                        when (response) {
+                            is Resource.Success -> {
+                                DialogUtil.hideDialog()
+                                if (response.values.status && response.values.code == Constants.API_SUCCESS_CODE) {
+                                    response.values.data?.let {
+                                        FastSave.getInstance().saveBoolean(
+                                            Constants.isControlModePinned,
+                                            it.isPinStatus.toBoolean()
+                                        )
+
+                                        if (it.isPinStatus.toBoolean()) {
+                                            pinnedControlMode()
+                                        } else {
+                                            unpinnedControlMode()
+                                        }
+                                    }
+                                }
+                            }
+                            is Resource.Failure -> {
+                                DialogUtil.hideDialog()
+                                context?.showToast(getString(R.string.error_something_went_wrong))
+                                Log.e(logTag, " updatePinStatusResponse Failure $response ")
+                            }
+                            else -> {
+                                //We will do nothing here
+                            }
+                        }
+                    }
                 }
             }
 
         }
 
+    }
 
+    private fun pinnedControlMode() {
+        (activity as MainActivity).hideBottomNavigation()
+        binding.ibLogout.isVisible = true
+        context?.let { mContext ->
+            binding.ibPin.setImageDrawable(
+                ContextCompat.getDrawable(
+                    mContext,
+                    R.drawable.ic_pin_straight
+                )
+            )
+        }
+    }
 
-
+    private fun unpinnedControlMode() {
+        (activity as MainActivity).showBottomNavigation()
+        binding.ibLogout.isVisible = false
+        context?.let { mContext ->
+            binding.ibPin.setImageDrawable(
+                ContextCompat.getDrawable(
+                    mContext,
+                    R.drawable.ic_pin
+                )
+            )
+        }
     }
 }

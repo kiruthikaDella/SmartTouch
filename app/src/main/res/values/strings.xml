@@ -37,6 +37,7 @@
     <string name="error_text_user_name">Please enter user name</string>
     <string name="error_text_user_name_length">UserName must be more than 3 character</string>
     <string name="error_text_phone_number">Please enter phone number</string>
+    <string name="error_text_phone_number_min_length">Phone number must be at least six character</string>
     <string name="error_text_email">Please enter email</string>
     <string name="error_text_valid_email">Please enter valid email</string>
     <string name="error_text_password">Please enter password</string>

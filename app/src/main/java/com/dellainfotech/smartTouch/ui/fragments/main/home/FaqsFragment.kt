@@ -37,7 +37,7 @@ class FaqsFragment : ModelBaseFragment<HomeViewModel, FragmentFaqsBinding, HomeR
 
     private var faqList = arrayListOf<QuestionModel>()
     private var filteredItems = arrayListOf<QuestionModel>()
-    private var answerList = arrayListOf<AnswerModel>()
+    private val answerList = arrayListOf<AnswerModel>()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -90,11 +90,16 @@ class FaqsFragment : ModelBaseFragment<HomeViewModel, FragmentFaqsBinding, HomeR
                         if (response.values.status && response.values.code == Constants.API_SUCCESS_CODE) {
 
                             response.values.data?.let { faqData ->
-                                for ((index, value) in faqData.withIndex()) {
+                                for (value in faqData) {
                                     try {
                                         answerList.clear()
-                                        answerList.add(0, AnswerModel(value.description, true))
-                                        faqList.add(index, QuestionModel(value.title, answerList))
+                                        answerList.add(AnswerModel(value.description, true))
+                                        faqList.add(
+                                            QuestionModel(
+                                                value.title,
+                                                answerList.clone() as List<AnswerModel?>
+                                            )
+                                        )
                                     } catch (e: Exception) {
                                         e.printStackTrace()
                                     }

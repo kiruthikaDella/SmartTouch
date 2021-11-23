@@ -46,6 +46,9 @@ class HomeRepository @Inject constructor(
     suspend fun changePassword(bodyChangePassword: BodyChangePassword) =
         safeApiCall { smartTouchApi.changePassword(getAccessKey(), bodyChangePassword) }
 
+    suspend fun getPinStatus() =
+        safeApiCall { smartTouchApi.getPinStatus(getAccessKey()) }
+
     suspend fun updatePinStatus(bodyPinStatus: BodyPinStatus) =
         safeApiCall { smartTouchApi.updatePinStatus(getAccessKey(), bodyPinStatus) }
 

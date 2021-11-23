@@ -175,6 +175,8 @@ class CreateAccountFragment :
             binding.edtUserName.error = getString(R.string.error_text_user_name_length)
         } else if (phoneNumber.isEmpty()) {
             binding.edtPhoneNumber.error = getString(R.string.error_text_phone_number)
+        }else if (phoneNumber.length < 6) {
+            binding.edtPhoneNumber.error = getString(R.string.error_text_phone_number_min_length)
         } else if (email.isEmpty()) {
             binding.edtEmail.error = getString(R.string.error_text_email)
         } else if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
