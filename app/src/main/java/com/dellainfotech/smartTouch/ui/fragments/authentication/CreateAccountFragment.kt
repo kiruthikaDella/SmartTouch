@@ -180,6 +180,9 @@ class CreateAccountFragment :
         } else if (phoneNumber.isEmpty()) {
             binding.edtPhoneNumber.error = getString(R.string.error_text_phone_number)
             binding.edtPhoneNumber.requestFocus()
+        } else if (phoneNumber.length < 6) {
+            binding.edtPhoneNumber.error = getString(R.string.error_text_phone_number_min_length)
+            binding.edtPhoneNumber.requestFocus()
         } else if (email.isEmpty()) {
             binding.edtEmail.error = getString(R.string.error_text_email)
             binding.edtEmail.requestFocus()

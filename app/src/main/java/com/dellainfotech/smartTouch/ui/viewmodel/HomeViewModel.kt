@@ -52,8 +52,12 @@ class HomeViewModel @Inject constructor(
     private val _changePasswordResponse = MutableSharedFlow<Resource<CommonResponse>>()
     val changePasswordResponse = _changePasswordResponse.asSharedFlow()
 
+    private val _getPinStatusResponse = MutableSharedFlow<Resource<PinResponse>>()
+    val getPinStatusResponse = _getPinStatusResponse.asSharedFlow()
+
     private val _updatePinStatusResponse = MutableSharedFlow<Resource<PinResponse>>()
     val updatePinStatusResponse = _updatePinStatusResponse.asSharedFlow()
+
 
     fun logout(
         bodyLogout: BodyLogout
@@ -110,6 +114,11 @@ class HomeViewModel @Inject constructor(
     fun retainState(bodyRetainState: BodyRetainState) = viewModelScope.launch {
         _retainStateResponse.emit(Resource.Loading)
         _retainStateResponse.emit(homeRepository.retainState(bodyRetainState))
+    }
+
+    fun getPinStatus() = viewModelScope.launch {
+        _getPinStatusResponse.emit(Resource.Loading)
+        _getPinStatusResponse.emit(homeRepository.getPinStatus())
     }
 
     fun updatePinStatus(bodyPinStatus: BodyPinStatus) = viewModelScope.launch {

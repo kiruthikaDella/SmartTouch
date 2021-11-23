@@ -47,6 +47,7 @@
                 style="@style/CreateAccountEditText"
                 android:hint="@string/hint_phone_number"
                 android:inputType="phone"
+                android:maxLength="16"
                 android:digits="0123456789"/>
 
             <EditText
