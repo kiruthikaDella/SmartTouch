@@ -1,92 +1,40 @@
 {
   "project_info": {
-    "project_number": "432636988700",
-    "project_id": "smart-switch-50d64",
-    "storage_bucket": "smart-switch-50d64.appspot.com"
+    "project_number": "506586813601",
+    "project_id": "voni-voice-assistance",
+    "storage_bucket": "voni-voice-assistance.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:432636988700:android:215cd4bf20f8e0a3737ed9",
-        "android_client_info": {
-          "package_name": "com.dellainfotech.smartTouch"
-        }
-      },
-      "oauth_client": [
-        {
-          "client_id": "432636988700-2ub9vs1nsgcgnh1rf70o3ao89lq1doqb.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.dellainfotech.smartTouch",
-            "certificate_hash": "8b1eea18f62cbfaf0556487197ad627dbe497fbe"
-          }
-        },
-        {
-          "client_id": "432636988700-h7qlv1iks3jbkkvq4v790kf40ik9377n.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
-      "api_key": [
-        {
-          "current_key": "AIzaSyCusFbvoi6knNJnuyZ2o_GYKqFj4e2GXJ4"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "432636988700-h7qlv1iks3jbkkvq4v790kf40ik9377n.apps.googleusercontent.com",
-              "client_type": 3
-            },
-            {
-              "client_id": "432636988700-m2vtfr8vd9kjaiflhmd9tngdu2bj0pr0.apps.googleusercontent.com",
-              "client_type": 2,
-              "ios_info": {
-                "bundle_id": "com.dellainfotech.smartTouch"
-              }
-            }
-          ]
-        }
-      }
-    },
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:432636988700:android:bb7513e556551e8f737ed9",
+        "mobilesdk_app_id": "1:506586813601:android:0ad1de4532aa238d3c4ce0",
         "android_client_info": {
           "package_name": "com.voinismartiot.voni"
         }
       },
       "oauth_client": [
         {
-          "client_id": "432636988700-lcromvs8u1pgtocm8r67caf7fsg1igi0.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.voinismartiot.voni",
-            "certificate_hash": "fee262586124b9fdc8651918047aeacc5f77e311"
-          }
-        },
-        {
-          "client_id": "432636988700-h7qlv1iks3jbkkvq4v790kf40ik9377n.apps.googleusercontent.com",
+          "client_id": "506586813601-n5c8ak549n8mebcfei65601imv7qshpd.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyCusFbvoi6knNJnuyZ2o_GYKqFj4e2GXJ4"
+          "current_key": "AIzaSyBNlyO6gGiAJrB7twQgFo_rvU5CtEHn_h8"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "432636988700-h7qlv1iks3jbkkvq4v790kf40ik9377n.apps.googleusercontent.com",
+              "client_id": "506586813601-n5c8ak549n8mebcfei65601imv7qshpd.apps.googleusercontent.com",
               "client_type": 3
             },
             {
-              "client_id": "432636988700-m2vtfr8vd9kjaiflhmd9tngdu2bj0pr0.apps.googleusercontent.com",
+              "client_id": "506586813601-vvjq8mu7ekp57jcpsjm5rjcg40thbppj.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "com.dellainfotech.smartTouch"
+                "bundle_id": "com.voinismartiot.voni"
               }
             }
           ]
