@@ -731,8 +731,16 @@ class DeviceFragment : ModelBaseFragment<HomeViewModel, FragmentDeviceBinding, H
 
     private fun onActivityResult(requestCode: Int, result: ActivityResult) {
         Log.e(logTag, "Request code is $requestCode")
+        var currentSSID = ""
         if (requestCode == Constants.REQUEST_WIFI_CODE) {
-            if (WifiUtils.isSSIDWifiConnected(getString(R.string.str_gateway_name))) {
+            isSelectedSmartAck?.let { isSmartAck ->
+                currentSSID = if (isSmartAck) {
+                    getString(R.string.text_smart_tack)
+                } else {
+                    getString(R.string.text_smart_tap)
+                }
+            }
+            if (WifiUtils.isSSIDWifiConnected(currentSSID)) {
                 activity?.let {
                     DialogUtil.loadingAlert(it, isCancelable = false)
                     Handler(Looper.getMainLooper()).postDelayed({
