@@ -34,6 +34,13 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.binjal.wifilibrary.VersionUtils
 import com.binjal.wifilibrary.WifiUtils
+import com.google.android.material.button.MaterialButton
+import com.karumi.dexter.Dexter
+import com.karumi.dexter.MultiplePermissionsReport
+import com.karumi.dexter.PermissionToken
+import com.karumi.dexter.listener.PermissionRequest
+import com.karumi.dexter.listener.multi.MultiplePermissionsListener
+import com.sothree.slidinguppanel.SlidingUpPanelLayout
 import com.voinismartiot.voni.R
 import com.voinismartiot.voni.adapters.DeviceAdapter
 import com.voinismartiot.voni.adapters.spinneradapter.SpinnerAdapter
@@ -47,19 +54,12 @@ import com.voinismartiot.voni.common.interfaces.AdapterItemClickListener
 import com.voinismartiot.voni.common.interfaces.DialogEditListener
 import com.voinismartiot.voni.common.interfaces.DialogShowListener
 import com.voinismartiot.voni.common.utils.*
+import com.voinismartiot.voni.common.utils.Utils.clearError
 import com.voinismartiot.voni.common.utils.Utils.toEditable
 import com.voinismartiot.voni.databinding.FragmentDeviceBinding
 import com.voinismartiot.voni.mqtt.NotifyManager
 import com.voinismartiot.voni.ui.fragments.ModelBaseFragment
 import com.voinismartiot.voni.ui.viewmodel.HomeViewModel
-import com.google.android.material.button.MaterialButton
-import com.karumi.dexter.Dexter
-import com.karumi.dexter.MultiplePermissionsReport
-import com.karumi.dexter.PermissionToken
-import com.karumi.dexter.listener.PermissionRequest
-import com.karumi.dexter.listener.multi.MultiplePermissionsListener
-import com.sothree.slidinguppanel.SlidingUpPanelLayout
-import com.voinismartiot.voni.common.utils.Utils.clearError
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
@@ -675,7 +675,14 @@ class DeviceFragment : ModelBaseFragment<HomeViewModel, FragmentDeviceBinding, H
             val btnOk = dialog.findViewById(R.id.btn_ok) as MaterialButton
             val btnCancel = dialog.findViewById(R.id.btn_cancel) as MaterialButton
 
-            tvSSID.text = "SSID: ${getString(R.string.str_gateway_name)}"
+            isSelectedSmartAck?.let { isSmartAck ->
+                if (isSmartAck) {
+                    tvSSID.text = "SSID: ${getString(R.string.text_smart_tack)}"
+                } else {
+                    tvSSID.text = "SSID: ${getString(R.string.text_smart_tap)}"
+                }
+            }
+
             tvPassword.text = "Password: ${getString(R.string.str_gateway_password)}"
 
             if (VersionUtils.isAndroidQOrLater) {
