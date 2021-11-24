@@ -14,6 +14,10 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import com.appizona.yehiahd.fastsave.FastSave
+import com.facebook.login.LoginManager
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInClient
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.voinismartiot.voni.BuildConfig
 import com.voinismartiot.voni.R
 import com.voinismartiot.voni.adapters.RoomsAdapter
@@ -26,16 +30,14 @@ import com.voinismartiot.voni.common.interfaces.DialogAskListener
 import com.voinismartiot.voni.common.interfaces.DialogShowListener
 import com.voinismartiot.voni.common.utils.Constants
 import com.voinismartiot.voni.common.utils.DialogUtil
+import com.voinismartiot.voni.common.utils.Utils.toBoolean
 import com.voinismartiot.voni.common.utils.showToast
 import com.voinismartiot.voni.databinding.FragmentHomeBinding
 import com.voinismartiot.voni.mqtt.NotifyManager
 import com.voinismartiot.voni.ui.activities.AuthenticationActivity
+import com.voinismartiot.voni.ui.activities.MainActivity
 import com.voinismartiot.voni.ui.fragments.ModelBaseFragment
 import com.voinismartiot.voni.ui.viewmodel.HomeViewModel
-import com.facebook.login.LoginManager
-import com.google.android.gms.auth.api.signin.GoogleSignIn
-import com.google.android.gms.auth.api.signin.GoogleSignInClient
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
@@ -110,7 +112,7 @@ class HomeFragment : ModelBaseFragment<HomeViewModel, FragmentHomeBinding, HomeR
         // initializing navigation menu
         setUpNavigationView()
 
-        if (!isInternetConnected()){
+        if (!isInternetConnected()) {
             activity?.let {
                 DialogUtil.deviceOfflineAlert(
                     it,
@@ -155,6 +157,7 @@ class HomeFragment : ModelBaseFragment<HomeViewModel, FragmentHomeBinding, HomeR
                     DialogUtil.loadingAlert(it)
                 }
                 viewModel.getRoom()
+                viewModel.getPinStatus()
             }
         })
 
@@ -301,10 +304,49 @@ class HomeFragment : ModelBaseFragment<HomeViewModel, FragmentHomeBinding, HomeR
                     }
                 }
 
+                launch {
+                    viewModel.getPinStatusResponse.collectLatest { response ->
+                        when (response) {
+                            is Resource.Success -> {
+                                DialogUtil.hideDialog()
+                                if (response.values.status && response.values.code == Constants.API_SUCCESS_CODE) {
+                                    response.values.data?.let {
+                                        FastSave.getInstance().saveBoolean(
+                                            Constants.isControlModePinned,
+                                            it.isPinStatus.toBoolean()
+                                        )
+
+                                        if (it.isPinStatus.toBoolean()) {
+                                            pinnedControlMode()
+                                        } else {
+                                            unpinnedControlMode()
+                                        }
+                                    }
+                                }
+                            }
+                            is Resource.Failure -> {
+                                DialogUtil.hideDialog()
+                                context?.showToast(getString(R.string.error_something_went_wrong))
+                                Log.e(logTag, " updatePinStatusResponse Failure $response ")
+                            }
+                            else -> {
+                                //We will do nothing here
+                            }
+                        }
+                    }
+                }
+
             }
         }
 
+    }
 
+    private fun pinnedControlMode() {
+        (activity as MainActivity).hideBottomNavigation()
+    }
+
+    private fun unpinnedControlMode() {
+        (activity as MainActivity).showBottomNavigation()
     }
 
     private fun openOrCloseDrawer() {
