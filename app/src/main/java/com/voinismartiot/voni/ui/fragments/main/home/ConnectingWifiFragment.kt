@@ -13,6 +13,10 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.binjal.wifilibrary.WifiUtils
 import com.bumptech.glide.Glide
+import com.teksun.tcpudplibrary.TCPClientService
+import com.teksun.tcpudplibrary.listener.CloseSocketListener
+import com.teksun.tcpudplibrary.listener.ConnectCResultListener
+import com.teksun.tcpudplibrary.listener.ReadWriteValueListener
 import com.voinismartiot.voni.R
 import com.voinismartiot.voni.api.Resource
 import com.voinismartiot.voni.api.body.BodyRegisterDevice
@@ -24,10 +28,6 @@ import com.voinismartiot.voni.databinding.FragmentConnectingWifiBinding
 import com.voinismartiot.voni.ui.activities.MainActivity
 import com.voinismartiot.voni.ui.fragments.ModelBaseFragment
 import com.voinismartiot.voni.ui.viewmodel.HomeViewModel
-import com.teksun.tcpudplibrary.TCPClientService
-import com.teksun.tcpudplibrary.listener.CloseSocketListener
-import com.teksun.tcpudplibrary.listener.ConnectCResultListener
-import com.teksun.tcpudplibrary.listener.ReadWriteValueListener
 import kotlinx.coroutines.flow.collectLatest
 import org.json.JSONException
 import org.json.JSONObject
@@ -318,7 +318,9 @@ class ConnectingWifiFragment :
                             wifiSSID = jsonObject.get("wifi_ssid").toString(),
                             password = jsonObject.get("password").toString(),
                             macImei = jsonObject.get("mac_imei").toString(),
-                            productGroup = productGroup
+                            productGroup = productGroup,
+                            firmwareVersion = jsonObject.get("vFirmwareVersion").toString(),
+                            manufactureDate = jsonObject.get("vManufactureDate").toString()
                         )
                     )
                 }

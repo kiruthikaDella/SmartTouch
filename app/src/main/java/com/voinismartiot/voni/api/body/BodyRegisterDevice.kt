@@ -16,5 +16,9 @@ data class BodyRegisterDevice(
     @SerializedName("vMacImei")
     val macImei: String,
     @SerializedName("vProductGroup")
-    val productGroup: String
+    val productGroup: String,
+    @SerializedName("vFirmwareVersion")
+    val firmwareVersion: String,
+    @SerializedName("vManufactureDate")
+    val manufactureDate: String
 )
