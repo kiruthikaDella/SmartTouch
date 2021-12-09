@@ -60,8 +60,8 @@ class ScenesAdapter(
                 deleteClickListener?.onItemClick(data)
             }
 
-            switchSceneStatus.setOnCheckedChangeListener { _, isChecked ->
-                switchClickListener?.onItemClick(data, isChecked.toInt())
+            switchSceneStatus.setOnClickListener {
+                switchClickListener?.onItemClick(data, switchSceneStatus.isChecked.toInt())
             }
         }
     }

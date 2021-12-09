@@ -23,6 +23,7 @@ import com.voinismartiot.voni.R
 import com.voinismartiot.voni.adapters.RoomsAdapter
 import com.voinismartiot.voni.api.Resource
 import com.voinismartiot.voni.api.body.BodyLogout
+import com.voinismartiot.voni.api.body.BodySocialLogin
 import com.voinismartiot.voni.api.model.GetRoomData
 import com.voinismartiot.voni.api.repository.HomeRepository
 import com.voinismartiot.voni.common.interfaces.AdapterItemClickListener
@@ -40,6 +41,7 @@ import com.voinismartiot.voni.ui.fragments.ModelBaseFragment
 import com.voinismartiot.voni.ui.viewmodel.HomeViewModel
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import java.util.*
 
 /**
  * Created by Jignesh Dangar on 09-04-2021.
@@ -50,7 +52,6 @@ class HomeFragment : ModelBaseFragment<HomeViewModel, FragmentHomeBinding, HomeR
     private val logTag = this::class.java.simpleName
     private lateinit var roomsAdapter: RoomsAdapter
     private var roomList = arrayListOf<GetRoomData>()
-    private var mGoogleSingInClient: GoogleSignInClient? = null
     private var roomData: GetRoomData? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -107,8 +108,6 @@ class HomeFragment : ModelBaseFragment<HomeViewModel, FragmentHomeBinding, HomeR
 
         binding.tvAppVersion.text = String.format("%s", "Version - ${BuildConfig.VERSION_NAME}")
 
-        initGoogleSignInClient()
-
         // initializing navigation menu
         setUpNavigationView()
 
@@ -138,15 +137,6 @@ class HomeFragment : ModelBaseFragment<HomeViewModel, FragmentHomeBinding, HomeR
     ): FragmentHomeBinding = FragmentHomeBinding.inflate(inflater, container, false)
 
     override fun getFragmentRepository(): HomeRepository = HomeRepository(networkModel)
-
-    //Initialization object of GoogleSignInClient
-    private fun initGoogleSignInClient() {
-        val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-            .requestEmail()
-            .build()
-
-        mGoogleSingInClient = GoogleSignIn.getClient(requireActivity(), gso)
-    }
 
     private fun apiCall() {
 
@@ -416,8 +406,23 @@ class HomeFragment : ModelBaseFragment<HomeViewModel, FragmentHomeBinding, HomeR
                                     DialogUtil.hideDialog()
                                     val loginType =
                                         FastSave.getInstance().getString(Constants.LOGIN_TYPE, "")
+                                    Log.e(logTag, " LOGIN_TYPE $loginType")
                                     if (loginType == Constants.LOGIN_TYPE_GOOGLE) {
-                                        mGoogleSingInClient?.signOut()
+
+                                        activity?.let {
+                                            val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                                                .requestEmail()
+                                                .build()
+
+                                            val mGoogleSingInClient = GoogleSignIn.getClient(it, gso)
+                                            mGoogleSingInClient.signOut().addOnCompleteListener { task ->
+                                                Log.e(logTag, " task $task")
+                                                if (task.isSuccessful) {
+                                                    Log.e(logTag, " Google logout success")
+                                                }
+                                            }
+                                        }
+
                                     } else if (loginType == Constants.LOGIN_TYPE_FACEBOOK) {
                                         LoginManager.getInstance().logOut()
                                     }
@@ -427,7 +432,7 @@ class HomeFragment : ModelBaseFragment<HomeViewModel, FragmentHomeBinding, HomeR
                                     viewModel.logout(
                                         BodyLogout(
                                             FastSave.getInstance()
-                                                .getString(Constants.MOBILE_UUID, null)
+                                                .getString(Constants.MOBILE_UUID, "")
                                         )
                                     )
                                 }

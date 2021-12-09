@@ -39,6 +39,15 @@
                     android:orientation="vertical"
                     app:layout_constraintGuide_percent="0.55" />
 
+                <TextView
+                    android:id="@+id/tv_panel_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/roboto_bold"
+                    android:textColor="@color/daintree"
+                    android:textSize="@dimen/_12ssp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <!--        Switch one        -->
 
@@ -87,8 +96,9 @@
                     style="@style/PanelSwitchColorStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_8sdp"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toBottomOf="@id/tv_panel_name" />
 
 
                 <!--        Switch two        -->

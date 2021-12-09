@@ -564,18 +564,19 @@ class DeviceAdapter(
 
             seekBar.onSeekChangeListener = object : OnSeekChangeListener {
                 override fun onSeeking(seekParams: SeekParams?) {
-                    seekParams?.progress?.let {
-                        publishDimmer(
-                            device.deviceSerialNo,
-                            it.toString()
-                        )
-                    }
+
                 }
 
                 override fun onStartTrackingTouch(seekBar: IndicatorSeekBar?) {
                 }
 
                 override fun onStopTrackingTouch(seekBar: IndicatorSeekBar?) {
+                    seekBar?.progress?.let {
+                        publishDimmer(
+                            device.deviceSerialNo,
+                            it.toString()
+                        )
+                    }
                 }
 
             }
@@ -747,18 +748,18 @@ class DeviceAdapter(
 
             seekBar.onSeekChangeListener = object : OnSeekChangeListener {
                 override fun onSeeking(seekParams: SeekParams?) {
-                    seekParams?.progress?.let {
-                        publishDimmer(
-                            device.deviceSerialNo,
-                            it.toString()
-                        )
-                    }
                 }
 
                 override fun onStartTrackingTouch(seekBar: IndicatorSeekBar?) {
                 }
 
                 override fun onStopTrackingTouch(seekBar: IndicatorSeekBar?) {
+                    seekBar?.progress?.let {
+                        publishDimmer(
+                            device.deviceSerialNo,
+                            it.toString()
+                        )
+                    }
                 }
 
             }
@@ -832,6 +833,8 @@ class DeviceAdapter(
                             value.desc?.let {
                                 tvSwitchNameFiveDesc.text = it
                             }
+
+                            seekBar.isVisible = value.switchStatus.toInt().toBoolean()
                         }
                         "6" -> {
                             seekBar.setProgress(value.switchStatus.toFloat())
@@ -921,18 +924,19 @@ class DeviceAdapter(
 
             seekBar.onSeekChangeListener = object : OnSeekChangeListener {
                 override fun onSeeking(seekParams: SeekParams?) {
-                    seekParams?.progress?.let {
-                        publishDimmer(
-                            device.deviceSerialNo,
-                            it.toString()
-                        )
-                    }
+
                 }
 
                 override fun onStartTrackingTouch(seekBar: IndicatorSeekBar?) {
                 }
 
                 override fun onStopTrackingTouch(seekBar: IndicatorSeekBar?) {
+                    seekBar?.progress?.let {
+                        publishDimmer(
+                            device.deviceSerialNo,
+                            it.toString()
+                        )
+                    }
                 }
 
             }
@@ -1006,6 +1010,7 @@ class DeviceAdapter(
                             value.desc?.let {
                                 tvSwitchNameFiveDesc.text = it
                             }
+                            seekBar.isVisible = value.switchStatus.toInt().toBoolean()
                         }
                         "6" -> {
                             try {
@@ -1100,18 +1105,18 @@ class DeviceAdapter(
 
             seekBar.onSeekChangeListener = object : OnSeekChangeListener {
                 override fun onSeeking(seekParams: SeekParams?) {
-                    seekParams?.progress?.let {
-                        publishDimmer(
-                            device.deviceSerialNo,
-                            it.toString()
-                        )
-                    }
                 }
 
                 override fun onStartTrackingTouch(seekBar: IndicatorSeekBar?) {
                 }
 
                 override fun onStopTrackingTouch(seekBar: IndicatorSeekBar?) {
+                    seekBar?.progress?.let {
+                        publishDimmer(
+                            device.deviceSerialNo,
+                            it.toString()
+                        )
+                    }
                 }
 
             }

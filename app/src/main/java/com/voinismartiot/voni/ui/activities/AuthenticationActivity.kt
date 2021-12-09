@@ -1,33 +1,22 @@
 package com.voinismartiot.voni.ui.activities
 
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.lifecycleScope
-import com.appizona.yehiahd.fastsave.FastSave
-import com.voinismartiot.voni.R
-import com.voinismartiot.voni.api.NetworkModule
-import com.voinismartiot.voni.api.Resource
-import com.voinismartiot.voni.api.body.BodySocialLogin
-import com.voinismartiot.voni.api.model.UserProfile
-import com.voinismartiot.voni.api.repository.AuthRepository
-import com.voinismartiot.voni.common.utils.Constants
-import com.voinismartiot.voni.common.utils.DialogUtil
-import com.voinismartiot.voni.common.utils.Utils.toBoolean
-import com.voinismartiot.voni.common.utils.showToast
-import com.voinismartiot.voni.ui.viewmodel.AuthViewModel
-import com.voinismartiot.voni.ui.viewmodel.ViewModelFactory
 import com.facebook.*
 import com.facebook.login.LoginManager
 import com.facebook.login.LoginResult
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.withContext
+import com.voinismartiot.voni.R
+import com.voinismartiot.voni.api.NetworkModule
+import com.voinismartiot.voni.api.repository.AuthRepository
+import com.voinismartiot.voni.common.interfaces.FacebookLoginListener
+import com.voinismartiot.voni.common.utils.showToast
+import com.voinismartiot.voni.ui.fragments.authentication.LoginFragment
+import com.voinismartiot.voni.ui.viewmodel.AuthViewModel
+import com.voinismartiot.voni.ui.viewmodel.ViewModelFactory
 import org.json.JSONObject
-import java.util.*
 
 /**
  * Created by Jignesh Dangar on 09-04-2021.
@@ -44,6 +33,8 @@ class AuthenticationActivity : AppCompatActivity() {
     private lateinit var viewModel: AuthViewModel
     private val networkModel = NetworkModule.provideSmartTouchApi(NetworkModule.provideRetrofit())
 
+    private var facebookLoginListener: FacebookLoginListener? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_authentication)
@@ -54,87 +45,10 @@ class AuthenticationActivity : AppCompatActivity() {
 
         initFacebookCallback()
 
-        lifecycleScope.launchWhenStarted {
-            viewModel.socialLoginResponse.collectLatest { response ->
-                when (response) {
-                    is Resource.Success -> {
-                        DialogUtil.hideDialog()
-                        Log.e(logTag, "code ${response.values.code}")
-                        if (response.values.status && response.values.code == Constants.API_SUCCESS_CODE) {
+    }
 
-                            val userProfile: UserProfile? = response.values.data?.user_data
-                            userProfile?.let { userData ->
-                                FastSave.getInstance()
-                                    .saveString(Constants.USER_ID, userData.iUserId)
-                                FastSave.getInstance()
-                                    .saveString(Constants.USER_FULL_NAME, userData.vFullName)
-                                FastSave.getInstance()
-                                    .saveString(Constants.USERNAME, userData.vUserName)
-                                FastSave.getInstance()
-                                    .saveString(Constants.USER_EMAIL, userData.vEmail)
-                                FastSave.getInstance()
-                                    .saveString(Constants.USER_PHONE_NUMBER, userData.bPhoneNumber)
-                                FastSave.getInstance()
-                                    .saveString(Constants.SOCIAL_ID, userData.socialId)
-                                FastSave.getInstance().saveBoolean(
-                                    Constants.isControlModePinned,
-                                    userData.iIsPinStatus!!.toBoolean()
-                                )
-
-                                if (userData.userRole == Constants.MASTER_USER) {
-                                    FastSave.getInstance()
-                                        .saveBoolean(Constants.IS_MASTER_USER, true)
-                                } else {
-                                    FastSave.getInstance()
-                                        .saveBoolean(Constants.IS_MASTER_USER, false)
-                                }
-
-                                val sharedPreference = getSharedPreferences(
-                                    Constants.SHARED_PREF,
-                                    Context.MODE_PRIVATE
-                                )
-                                val editor = sharedPreference?.edit()
-                                editor?.putString(
-                                    Constants.LOGGED_IN_TYPE,
-                                    Constants.LOGIN_TYPE_FACEBOOK
-                                )
-                                editor?.apply()
-
-                                FastSave.getInstance()
-                                    .saveString(Constants.LOGIN_TYPE, Constants.LOGIN_TYPE_FACEBOOK)
-                                withContext(Dispatchers.Main) {
-                                    startActivity(
-                                        Intent(
-                                            this@AuthenticationActivity,
-                                            MainActivity::class.java
-                                        )
-                                    )
-                                    finishAffinity()
-                                }
-
-                            }
-                            FastSave.getInstance()
-                                .saveString(
-                                    Constants.ACCESS_TOKEN,
-                                    response.values.data?.accessToken
-                                )
-
-                        } else {
-                            withContext(Dispatchers.Main) {
-                                this@AuthenticationActivity.showToast(response.values.message)
-                            }
-                        }
-                    }
-                    is Resource.Failure -> {
-                        DialogUtil.hideDialog()
-                        Log.e(logTag, "login error ${response.errorBody?.string()}")
-                    }
-                    else -> {
-                        // We will do nothing here
-                    }
-                }
-            }
-        }
+    fun setFacebookLoginListener(listener: FacebookLoginListener){
+        this.facebookLoginListener = listener
     }
 
     fun performFacebookLogin() {
@@ -207,18 +121,8 @@ class AuthenticationActivity : AppCompatActivity() {
                                 "Facebook userId = ${accessToken.userId} firstname = ${it.firstName} lastName = ${it.lastName}"
                             )
 
-                            val uuid: String = UUID.randomUUID().toString()
+                            facebookLoginListener?.performLogin(accessToken.userId, email)
 
-                            DialogUtil.loadingAlert(this@AuthenticationActivity)
-                            viewModel.socialLogin(
-                                BodySocialLogin(
-                                    accessToken.userId,
-                                    uuid,
-                                    Constants.SOCIAL_LOGIN,
-                                    Constants.LOGIN_TYPE_FACEBOOK,
-                                    email
-                                )
-                            )
 
                         } ?: run {
                             performFacebookLogin()

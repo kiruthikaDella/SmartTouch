@@ -198,6 +198,28 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/iv_retain_state" />
 
+            <TextView
+                android:id="@+id/tv_outdoor_mode"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/roboto_medium"
+                android:text="@string/text_outdoor_mode"
+                android:textColor="@color/daintree"
+                android:textSize="@dimen/_12ssp"
+                android:layout_marginTop="@dimen/_25sdp"
+                app:layout_constraintTop_toBottomOf="@+id/tv_retain_state"
+                app:layout_constraintStart_toStartOf="@+id/tv_restart"/>
+
+            <com.google.android.material.switchmaterial.SwitchMaterial
+                android:id="@+id/switch_outdoor_mode"
+                style="@style/PanelSwitchColorStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_10sdp"
+                app:layout_constraintBottom_toBottomOf="@+id/tv_outdoor_mode"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/tv_outdoor_mode" />
+
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.cardview.widget.CardView>
