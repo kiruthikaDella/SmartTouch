@@ -156,7 +156,6 @@ class MainActivity : AppCompatActivity() {
                 Log.d(logTag, "onCreate: isConnected $isConnected currentFrag ${navController.currentDestination?.displayName}")
                 roomTypeList.toMutableList().clear()
                 viewModel.roomType()
-                viewModel.getPinStatus()
             }
         })
 
@@ -409,39 +408,6 @@ class MainActivity : AppCompatActivity() {
                             }
                             else -> {
                                 // We will do nothing here
-                            }
-                        }
-                    }
-                }
-
-                launch {
-                    viewModel.getPinStatusResponse.collectLatest { response ->
-                        when (response) {
-                            is Resource.Success -> {
-                                DialogUtil.hideDialog()
-                                if (response.values.status && response.values.code == Constants.API_SUCCESS_CODE) {
-                                    response.values.data?.let {
-                                        FastSave.getInstance().saveBoolean(
-                                            Constants.isControlModePinned,
-                                            it.isPinStatus.toBoolean()
-                                        )
-
-                                        if (it.isPinStatus.toBoolean()) {
-                                            binding.ivControlMode.performClick()
-                                            hideBottomNavigation()
-                                        } else {
-                                            showBottomNavigation()
-                                        }
-                                    }
-                                }
-                            }
-                            is Resource.Failure -> {
-                                DialogUtil.hideDialog()
-                                showToast(getString(R.string.error_something_went_wrong))
-                                Log.e(logTag, " updatePinStatusResponse Failure $response ")
-                            }
-                            else -> {
-                                //We will do nothing here
                             }
                         }
                     }

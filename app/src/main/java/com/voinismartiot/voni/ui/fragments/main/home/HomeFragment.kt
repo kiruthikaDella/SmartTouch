@@ -16,14 +16,12 @@ import androidx.navigation.fragment.findNavController
 import com.appizona.yehiahd.fastsave.FastSave
 import com.facebook.login.LoginManager
 import com.google.android.gms.auth.api.signin.GoogleSignIn
-import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.voinismartiot.voni.BuildConfig
 import com.voinismartiot.voni.R
 import com.voinismartiot.voni.adapters.RoomsAdapter
 import com.voinismartiot.voni.api.Resource
 import com.voinismartiot.voni.api.body.BodyLogout
-import com.voinismartiot.voni.api.body.BodySocialLogin
 import com.voinismartiot.voni.api.model.GetRoomData
 import com.voinismartiot.voni.api.repository.HomeRepository
 import com.voinismartiot.voni.common.interfaces.AdapterItemClickListener
@@ -410,17 +408,20 @@ class HomeFragment : ModelBaseFragment<HomeViewModel, FragmentHomeBinding, HomeR
                                     if (loginType == Constants.LOGIN_TYPE_GOOGLE) {
 
                                         activity?.let {
-                                            val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                                                .requestEmail()
-                                                .build()
+                                            val gso =
+                                                GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                                                    .requestEmail()
+                                                    .build()
 
-                                            val mGoogleSingInClient = GoogleSignIn.getClient(it, gso)
-                                            mGoogleSingInClient.signOut().addOnCompleteListener { task ->
-                                                Log.e(logTag, " task $task")
-                                                if (task.isSuccessful) {
-                                                    Log.e(logTag, " Google logout success")
+                                            val mGoogleSingInClient =
+                                                GoogleSignIn.getClient(it, gso)
+                                            mGoogleSingInClient.signOut()
+                                                .addOnCompleteListener { task ->
+                                                    Log.e(logTag, " task $task")
+                                                    if (task.isSuccessful) {
+                                                        Log.e(logTag, " Google logout success")
+                                                    }
                                                 }
-                                            }
                                         }
 
                                     } else if (loginType == Constants.LOGIN_TYPE_FACEBOOK) {
