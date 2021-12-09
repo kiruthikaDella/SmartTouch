@@ -3,33 +3,29 @@ package com.voinismartiot.voni.common.utils
 import android.app.Activity
 import android.content.Context
 import android.content.pm.PackageManager
+import android.graphics.Bitmap
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
+import android.net.Uri
 import android.os.Build
+import android.provider.MediaStore
 import android.text.Editable
 import android.util.Base64
 import android.util.Log
-
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
+import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
-
 import com.appizona.yehiahd.fastsave.FastSave
-import com.voinismartiot.voni.AppDelegate
 import com.facebook.appevents.internal.AppEventUtility.bytesToHex
+import com.voinismartiot.voni.AppDelegate
+import java.io.ByteArrayOutputStream
 import java.security.MessageDigest
 import java.util.*
 import javax.crypto.Mac
 import javax.crypto.spec.SecretKeySpec
-
-import android.provider.MediaStore
-
-import android.graphics.Bitmap
-import android.net.Uri
-import android.widget.Toast
-import java.io.ByteArrayOutputStream
 
 /**
  * Created by Jignesh Dangar on 13-04-2021.
@@ -123,7 +119,8 @@ object Utils {
     fun getImageUri(inContext: Context, inImage: Bitmap, imageName: String): Uri? {
         val bytes = ByteArrayOutputStream()
         inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes)
-        val path = MediaStore.Images.Media.insertImage(inContext.contentResolver, inImage, imageName, null)
+        val path =
+            MediaStore.Images.Media.insertImage(inContext.contentResolver, inImage, imageName, null)
         return Uri.parse(path)
     }
 
@@ -141,6 +138,8 @@ object Utils {
         error = null
     }
 
+
+
 }
 
 
@@ -156,9 +155,11 @@ fun Context.hideKeyboard(view: View) {
 
 fun Activity.hideSoftKeyboard() {
     currentFocus?.let {
-        val inputMethodManager = ContextCompat.getSystemService(this, InputMethodManager::class.java)!!
+        val inputMethodManager =
+            ContextCompat.getSystemService(this, InputMethodManager::class.java)!!
         inputMethodManager.hideSoftInputFromWindow(it.windowToken, 0)
     }
 }
 
-fun Context.showToast(message: String) = Toast.makeText(this, message,Toast.LENGTH_SHORT).show()
+fun Context.showToast(message: String) = Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+

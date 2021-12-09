@@ -153,6 +153,12 @@ class DeviceFragment : ModelBaseFragment<HomeViewModel, FragmentDeviceBinding, H
         apiCall()
     }
 
+    override fun onResume() {
+        super.onResume()
+
+        viewModel.checkInternetConnection(5000)
+    }
+
     override fun getViewModel(): Class<HomeViewModel> = HomeViewModel::class.java
 
     override fun getFragmentBinding(
@@ -513,6 +519,7 @@ class DeviceFragment : ModelBaseFragment<HomeViewModel, FragmentDeviceBinding, H
                             }
                             is Resource.Failure -> {
                                 DialogUtil.hideDialog()
+                                if (isSelectedSmarTouch)
                                 context?.showToast(getString(R.string.error_something_went_wrong))
                                 Log.e(
                                     logTag,

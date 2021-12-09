@@ -39,7 +39,6 @@ import com.voinismartiot.voni.ui.viewmodel.HomeViewModel
 import com.voinismartiot.voni.ui.viewmodel.ViewModelFactory
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
-import java.lang.RuntimeException
 
 /**
  * Created by Jignesh Dangar on 09-04-2021.
@@ -152,7 +151,8 @@ class MainActivity : AppCompatActivity() {
         })
 
         NotifyManager.internetInfo.observe(this, { isConnected ->
-            if (isConnected) {
+            if (isConnected && (navController.currentDestination?.id != R.id.connectingWifiFragment && navController.currentDestination?.id != R.id.configWifiFragment)) {
+                Log.d(logTag, "onCreate: isConnected $isConnected currentFrag ${navController.currentDestination?.displayName}")
                 roomTypeList.toMutableList().clear()
                 viewModel.roomType()
                 viewModel.getPinStatus()
@@ -372,11 +372,10 @@ class MainActivity : AppCompatActivity() {
                                 }
                             }
                             is Resource.Failure -> {
-                                this@MainActivity.showToast(getString(R.string.error_something_went_wrong))
-                                Log.e(
-                                    logTag,
-                                    " roomTypeResponse error ${response.errorBody?.string()}"
-                                )
+                                if (navController.currentDestination?.id != R.id.connectingWifiFragment && navController.currentDestination?.id != R.id.configWifiFragment) {
+                                    this@MainActivity.showToast(getString(R.string.error_something_went_wrong))
+                                    Log.e(logTag, " roomTypeResponse error ${response.errorBody?.string()}")
+                                }
                             }
                             else -> {
                                 // We will do nothing here
@@ -437,8 +436,11 @@ class MainActivity : AppCompatActivity() {
                             }
                             is Resource.Failure -> {
                                 DialogUtil.hideDialog()
-                                showToast(getString(R.string.error_something_went_wrong))
-                                Log.e(logTag, " updatePinStatusResponse Failure $response ")
+                                if (navController.currentDestination?.id != R.id.connectingWifiFragment && navController.currentDestination?.id != R.id.configWifiFragment) {
+                                    showToast(getString(R.string.error_something_went_wrong))
+                                    Log.e(logTag, " updatePinStatusResponse Failure $response ")
+                                }
+
                             }
                             else -> {
                                 //We will do nothing here

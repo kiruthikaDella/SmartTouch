@@ -157,7 +157,7 @@ class ConnectingWifiFragment :
                 requireContext(),
                 WifiUtils.getGatewayIpAddress(),
                 getString(R.string.receiver_port).toInt(),
-                1000 * 30
+                1000 * 60
             )
         } catch (e: Exception) {
             e.printStackTrace()
@@ -287,7 +287,7 @@ class ConnectingWifiFragment :
 
                             sendDataToCloud()
                         }
-                        handler?.postDelayed(runnable!!, 3000)
+                        handler?.postDelayed(runnable!!, 2000)
                     }
                 }
             }
@@ -297,7 +297,7 @@ class ConnectingWifiFragment :
     }
 
     override fun onFailure(message: String) {
-        Log.e(logTag, "Read $message")
+        Log.e(logTag, "Read failed $message")
     }
 
     private fun sendDataToCloud() {
@@ -306,8 +306,9 @@ class ConnectingWifiFragment :
         } else {
             Constants.PRODUCT_SMART_AP
         }
-        runnable = Runnable {
-            if (isInternetConnected()) {
+
+        if (isInternetConnected()) {
+            runnable = Runnable {
                 getDeviceStr?.let {
                     val jsonObject = JSONObject(it)
                     viewModel.deviceRegister(
@@ -319,16 +320,16 @@ class ConnectingWifiFragment :
                             password = jsonObject.get("password").toString(),
                             macImei = jsonObject.get("mac_imei").toString(),
                             productGroup = productGroup,
-                            firmwareVersion = jsonObject.get("vFirmwareVersion").toString(),
-                            manufactureDate = jsonObject.get("vManufactureDate").toString()
+                            manufactureDate = jsonObject.get("vManufactureDate").toString(),
+                            firmwareVersion = jsonObject.get("vFirmwareVersion").toString()
                         )
                     )
                 }
-            } else {
-                showOfflineAlert()
             }
+            handler?.postDelayed(runnable!!, 1500)
+        } else {
+            showOfflineAlert()
         }
-        handler?.postDelayed(runnable!!, 1500)
     }
 
     private fun showOfflineAlert() {
@@ -360,6 +361,8 @@ class ConnectingWifiFragment :
     // When app goes to background in handler and navigation can't navigate
     override fun onResume() {
         super.onResume()
+
+        viewModel.checkInternetConnection(5000)
 
         isConnection?.let {
             if (it) {
@@ -410,7 +413,6 @@ class ConnectingWifiFragment :
         FragmentConnectingWifiBinding.inflate(inflater, container, false)
 
     override fun getFragmentRepository(): HomeRepository = HomeRepository(networkModel)
-
 }
 
 

@@ -1,17 +1,23 @@
 package com.voinismartiot.voni.ui.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.voinismartiot.voni.api.Resource
 import com.voinismartiot.voni.api.body.*
 import com.voinismartiot.voni.api.model.*
 import com.voinismartiot.voni.api.repository.HomeRepository
+import com.voinismartiot.voni.mqtt.NotifyManager
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
+import java.io.IOException
+import java.net.InetSocketAddress
+import java.net.Socket
 import javax.inject.Inject
 
 @HiltViewModel
@@ -354,5 +360,25 @@ class HomeViewModel @Inject constructor(
     fun deviceRegister(bodyRegisterDevice: BodyRegisterDevice) = viewModelScope.launch {
         _deviceRegisterResponse.emit(Resource.Loading)
         _deviceRegisterResponse.emit(homeRepository.deviceRegister(bodyRegisterDevice))
+    }
+
+    fun checkInternetConnection(timeoutMs: Int) {
+        Log.i("checkInternetConnection", "checkInternetConnection: called")
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                val socket = Socket()
+                val socketAddress = InetSocketAddress("8.8.8.8", 53)
+
+                socket.connect(socketAddress, timeoutMs)
+                socket.close()
+                Log.i("checkInternetConnection", "Internet true")
+
+                NotifyManager.internetInfo.postValue(true)
+            }
+            catch(ex: IOException) {
+                Log.i("checkInternetConnection", "Internet false")
+                NotifyManager.internetInfo.postValue(false)
+            }
+        }
     }
 }
