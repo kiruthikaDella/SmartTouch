@@ -118,6 +118,7 @@ class ControlModeDeviceAdapter(
         val relativeMain = itemView.findViewById(R.id.relative_main) as RelativeLayout
         val relativeLayout = itemView.findViewById(R.id.relative_layout) as RelativeLayout
 
+        val tvPanelName = itemView.findViewById(R.id.tv_panel_name) as TextView
         val tvSwitchNameOne = itemView.findViewById(R.id.tv_switch_one_name) as TextView
         val tvSwitchNameTwo = itemView.findViewById(R.id.tv_switch_two_name) as TextView
         val tvSwitchNameThree = itemView.findViewById(R.id.tv_switch_three_name) as TextView
@@ -152,6 +153,7 @@ class ControlModeDeviceAdapter(
         val relativeMain = itemView.findViewById(R.id.relative_main) as RelativeLayout
         val relativeLayout = itemView.findViewById(R.id.relative_layout) as RelativeLayout
 
+        val tvPanelName = itemView.findViewById(R.id.tv_panel_name) as TextView
         val tvSwitchNameOne = itemView.findViewById(R.id.tv_switch_one_name) as TextView
         val tvSwitchNameTwo = itemView.findViewById(R.id.tv_switch_two_name) as TextView
         val tvSwitchNameThree = itemView.findViewById(R.id.tv_switch_three_name) as TextView
@@ -176,6 +178,7 @@ class ControlModeDeviceAdapter(
         val relativeMain = itemView.findViewById(R.id.relative_main) as RelativeLayout
         val relativeLayout = itemView.findViewById(R.id.relative_layout) as RelativeLayout
 
+        val tvPanelName = itemView.findViewById(R.id.tv_panel_name) as TextView
         val tvSwitchNameOne = itemView.findViewById(R.id.tv_switch_one_name) as TextView
         val tvSwitchNameTwo = itemView.findViewById(R.id.tv_switch_two_name) as TextView
         val tvSwitchNameThree = itemView.findViewById(R.id.tv_switch_three_name) as TextView
@@ -202,6 +205,7 @@ class ControlModeDeviceAdapter(
         val relativeMain = itemView.findViewById(R.id.relative_main) as RelativeLayout
         val relativeLayout = itemView.findViewById(R.id.relative_layout) as RelativeLayout
 
+        val tvPanelName = itemView.findViewById(R.id.tv_panel_name) as TextView
         val tvSwitchNameOne = itemView.findViewById(R.id.tv_switch_one_name) as TextView
         val tvSwitchNameTwo = itemView.findViewById(R.id.tv_switch_two_name) as TextView
         val tvSwitchNameThree = itemView.findViewById(R.id.tv_switch_three_name) as TextView
@@ -246,6 +250,8 @@ class ControlModeDeviceAdapter(
             } else {
                 relativeLayout.visibility = View.GONE
             }
+
+            tvPanelName.text = device.deviceName
 
             device.switchData?.let { switchData ->
                 for (value in switchData) {
@@ -394,18 +400,18 @@ class ControlModeDeviceAdapter(
 
             seekBar.onSeekChangeListener = object : OnSeekChangeListener {
                 override fun onSeeking(seekParams: SeekParams?) {
-                    seekParams?.progress?.let {
-                        publishDimmer(
-                            device.deviceSerialNo,
-                            it.toString()
-                        )
-                    }
                 }
 
                 override fun onStartTrackingTouch(seekBar: IndicatorSeekBar?) {
                 }
 
                 override fun onStopTrackingTouch(seekBar: IndicatorSeekBar?) {
+                    seekBar?.progress?.let {
+                        publishDimmer(
+                            device.deviceSerialNo,
+                            it.toString()
+                        )
+                    }
                 }
 
             }
@@ -435,6 +441,8 @@ class ControlModeDeviceAdapter(
             } else {
                 relativeLayout.visibility = View.GONE
             }
+
+            tvPanelName.text = device.deviceName
 
             device.switchData?.let { switchData ->
                 for (value in switchData) {
@@ -522,18 +530,18 @@ class ControlModeDeviceAdapter(
             }
             seekBar.onSeekChangeListener = object : OnSeekChangeListener {
                 override fun onSeeking(seekParams: SeekParams?) {
-                    seekParams?.progress?.let {
-                        publishDimmer(
-                            device.deviceSerialNo,
-                            it.toString()
-                        )
-                    }
                 }
 
                 override fun onStartTrackingTouch(seekBar: IndicatorSeekBar?) {
                 }
 
                 override fun onStopTrackingTouch(seekBar: IndicatorSeekBar?) {
+                    seekBar?.progress?.let {
+                        publishDimmer(
+                            device.deviceSerialNo,
+                            it.toString()
+                        )
+                    }
                 }
 
             }
@@ -563,6 +571,8 @@ class ControlModeDeviceAdapter(
             } else {
                 relativeLayout.visibility = View.GONE
             }
+
+            tvPanelName.text = device.deviceName
 
             device.switchData?.let { switchData ->
                 for (value in switchData) {
@@ -656,18 +666,18 @@ class ControlModeDeviceAdapter(
 
             seekBar.onSeekChangeListener = object : OnSeekChangeListener {
                 override fun onSeeking(seekParams: SeekParams?) {
-                    seekParams?.progress?.let {
-                        publishDimmer(
-                            device.deviceSerialNo,
-                            it.toString()
-                        )
-                    }
                 }
 
                 override fun onStartTrackingTouch(seekBar: IndicatorSeekBar?) {
                 }
 
                 override fun onStopTrackingTouch(seekBar: IndicatorSeekBar?) {
+                    seekBar?.progress?.let {
+                        publishDimmer(
+                            device.deviceSerialNo,
+                            it.toString()
+                        )
+                    }
                 }
 
             }
@@ -697,6 +707,8 @@ class ControlModeDeviceAdapter(
             } else {
                 relativeLayout.visibility = View.GONE
             }
+
+            tvPanelName.text = device.deviceName
 
             device.switchData?.let { switchData ->
                 for (value in switchData) {
@@ -795,18 +807,18 @@ class ControlModeDeviceAdapter(
 
             seekBar.onSeekChangeListener = object : OnSeekChangeListener {
                 override fun onSeeking(seekParams: SeekParams?) {
-                    seekParams?.progress?.let {
-                        publishDimmer(
-                            device.deviceSerialNo,
-                            it.toString()
-                        )
-                    }
                 }
 
                 override fun onStartTrackingTouch(seekBar: IndicatorSeekBar?) {
                 }
 
                 override fun onStopTrackingTouch(seekBar: IndicatorSeekBar?) {
+                    seekBar?.progress?.let {
+                        publishDimmer(
+                            device.deviceSerialNo,
+                            it.toString()
+                        )
+                    }
                 }
 
             }

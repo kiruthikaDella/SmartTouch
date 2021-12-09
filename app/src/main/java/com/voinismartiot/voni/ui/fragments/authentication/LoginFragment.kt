@@ -43,6 +43,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
+import com.voinismartiot.voni.common.interfaces.FacebookLoginListener
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import java.util.*
@@ -60,6 +61,8 @@ class LoginFragment : ModelBaseFragment<AuthViewModel, FragmentLoginBinding, Aut
 
     //Google SignIn
     private var mGoogleSingInClient: GoogleSignInClient? = null
+
+    private var loginType = Constants.LOGIN_TYPE_NORMAL
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -173,6 +176,30 @@ class LoginFragment : ModelBaseFragment<AuthViewModel, FragmentLoginBinding, Aut
             }
         }
 
+        (activity as AuthenticationActivity).setFacebookLoginListener(object : FacebookLoginListener{
+            override fun performLogin(userId: String, email: String) {
+                Log.e(logTag, " socialLoginAPI ")
+                val uuid: String = UUID.randomUUID().toString()
+
+                loginType = Constants.LOGIN_TYPE_FACEBOOK
+
+                Log.e(logTag, " activity $activity ")
+                activity?.let {
+                    DialogUtil.loadingAlert(it)
+                    viewModel.socialLogin(
+                        BodySocialLogin(
+                            userId,
+                            uuid,
+                            Constants.SOCIAL_LOGIN,
+                            Constants.LOGIN_TYPE_FACEBOOK,
+                            email
+                        )
+                    )
+                }
+            }
+
+        })
+
         activityLauncher()
     }
 
@@ -204,6 +231,8 @@ class LoginFragment : ModelBaseFragment<AuthViewModel, FragmentLoginBinding, Aut
                             activity?.let { act ->
                                 DialogUtil.loadingAlert(act)
                             }
+
+                            loginType = Constants.LOGIN_TYPE_GOOGLE
 
                             viewModel.socialLogin(
                                 BodySocialLogin(
@@ -292,7 +321,7 @@ class LoginFragment : ModelBaseFragment<AuthViewModel, FragmentLoginBinding, Aut
                                         FastSave.getInstance()
                                             .saveString(
                                                 Constants.LOGIN_TYPE,
-                                                Constants.LOGIN_TYPE_NORMAL
+                                                loginType
                                             )
 
                                         if (binding.checkboxRemember.isChecked) {
@@ -311,7 +340,7 @@ class LoginFragment : ModelBaseFragment<AuthViewModel, FragmentLoginBinding, Aut
                                             )
                                             editor?.putString(
                                                 Constants.LOGGED_IN_TYPE,
-                                                Constants.LOGIN_TYPE_NORMAL
+                                                loginType
                                             )
                                             editor?.apply()
                                         }
@@ -352,35 +381,18 @@ class LoginFragment : ModelBaseFragment<AuthViewModel, FragmentLoginBinding, Aut
 
                                     val userProfile: UserProfile? = response.values.data?.user_data
                                     userProfile?.let { userData ->
-                                        FastSave.getInstance()
-                                            .saveString(Constants.USER_ID, userData.iUserId)
-                                        FastSave.getInstance()
-                                            .saveString(
-                                                Constants.USER_FULL_NAME,
-                                                userData.vFullName
-                                            )
-                                        FastSave.getInstance()
-                                            .saveString(Constants.USERNAME, userData.vUserName)
-                                        FastSave.getInstance()
-                                            .saveString(Constants.USER_EMAIL, userData.vEmail)
-                                        FastSave.getInstance()
-                                            .saveString(
-                                                Constants.USER_PHONE_NUMBER,
-                                                userData.bPhoneNumber
-                                            )
-                                        FastSave.getInstance()
-                                            .saveString(Constants.SOCIAL_ID, userData.socialId)
-                                        FastSave.getInstance().saveBoolean(
-                                            Constants.isControlModePinned,
-                                            userData.iIsPinStatus!!.toBoolean()
-                                        )
+                                        FastSave.getInstance().saveString(Constants.USER_ID, userData.iUserId)
+                                        FastSave.getInstance().saveString(Constants.USER_FULL_NAME, userData.vFullName)
+                                        FastSave.getInstance().saveString(Constants.USERNAME, userData.vUserName)
+                                        FastSave.getInstance().saveString(Constants.USER_EMAIL, userData.vEmail)
+                                        FastSave.getInstance().saveString(Constants.USER_PHONE_NUMBER, userData.bPhoneNumber)
+                                        FastSave.getInstance().saveString(Constants.SOCIAL_ID, userData.socialId)
+                                        FastSave.getInstance().saveBoolean(Constants.isControlModePinned, userData.iIsPinStatus!!.toBoolean())
 
                                         if (userData.userRole == Constants.MASTER_USER) {
-                                            FastSave.getInstance()
-                                                .saveBoolean(Constants.IS_MASTER_USER, true)
+                                            FastSave.getInstance().saveBoolean(Constants.IS_MASTER_USER, true)
                                         } else {
-                                            FastSave.getInstance()
-                                                .saveBoolean(Constants.IS_MASTER_USER, false)
+                                            FastSave.getInstance().saveBoolean(Constants.IS_MASTER_USER, false)
                                         }
 
                                         val sharedPreference = activity?.getSharedPreferences(
@@ -390,7 +402,7 @@ class LoginFragment : ModelBaseFragment<AuthViewModel, FragmentLoginBinding, Aut
                                         val editor = sharedPreference?.edit()
                                         editor?.putString(
                                             Constants.LOGGED_IN_TYPE,
-                                            Constants.LOGIN_TYPE_GOOGLE
+                                            loginType
                                         )
                                         editor?.apply()
 
@@ -398,7 +410,7 @@ class LoginFragment : ModelBaseFragment<AuthViewModel, FragmentLoginBinding, Aut
                                             FastSave.getInstance()
                                                 .saveString(
                                                     Constants.LOGIN_TYPE,
-                                                    Constants.LOGIN_TYPE_GOOGLE
+                                                    loginType
                                                 )
                                             startActivity(Intent(it, MainActivity::class.java))
                                             it.finishAffinity()
@@ -436,7 +448,6 @@ class LoginFragment : ModelBaseFragment<AuthViewModel, FragmentLoginBinding, Aut
         val email = binding.edtEmail.text.toString().trim()
         val password = binding.edtPassword.text.toString().trim()
         val uuid: String = UUID.randomUUID().toString()
-
         FastSave.getInstance().saveString(Constants.MOBILE_UUID, uuid)
 
         if (email.isEmpty()) {

@@ -14,11 +14,16 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import com.appizona.yehiahd.fastsave.FastSave
+import com.facebook.login.LoginManager
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInClient
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.voinismartiot.voni.BuildConfig
 import com.voinismartiot.voni.R
 import com.voinismartiot.voni.adapters.RoomsAdapter
 import com.voinismartiot.voni.api.Resource
 import com.voinismartiot.voni.api.body.BodyLogout
+import com.voinismartiot.voni.api.body.BodySocialLogin
 import com.voinismartiot.voni.api.model.GetRoomData
 import com.voinismartiot.voni.api.repository.HomeRepository
 import com.voinismartiot.voni.common.interfaces.AdapterItemClickListener
@@ -26,18 +31,17 @@ import com.voinismartiot.voni.common.interfaces.DialogAskListener
 import com.voinismartiot.voni.common.interfaces.DialogShowListener
 import com.voinismartiot.voni.common.utils.Constants
 import com.voinismartiot.voni.common.utils.DialogUtil
+import com.voinismartiot.voni.common.utils.Utils.toBoolean
 import com.voinismartiot.voni.common.utils.showToast
 import com.voinismartiot.voni.databinding.FragmentHomeBinding
 import com.voinismartiot.voni.mqtt.NotifyManager
 import com.voinismartiot.voni.ui.activities.AuthenticationActivity
+import com.voinismartiot.voni.ui.activities.MainActivity
 import com.voinismartiot.voni.ui.fragments.ModelBaseFragment
 import com.voinismartiot.voni.ui.viewmodel.HomeViewModel
-import com.facebook.login.LoginManager
-import com.google.android.gms.auth.api.signin.GoogleSignIn
-import com.google.android.gms.auth.api.signin.GoogleSignInClient
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import java.util.*
 
 /**
  * Created by Jignesh Dangar on 09-04-2021.
@@ -48,7 +52,6 @@ class HomeFragment : ModelBaseFragment<HomeViewModel, FragmentHomeBinding, HomeR
     private val logTag = this::class.java.simpleName
     private lateinit var roomsAdapter: RoomsAdapter
     private var roomList = arrayListOf<GetRoomData>()
-    private var mGoogleSingInClient: GoogleSignInClient? = null
     private var roomData: GetRoomData? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -105,12 +108,10 @@ class HomeFragment : ModelBaseFragment<HomeViewModel, FragmentHomeBinding, HomeR
 
         binding.tvAppVersion.text = String.format("%s", "Version - ${BuildConfig.VERSION_NAME}")
 
-        initGoogleSignInClient()
-
         // initializing navigation menu
         setUpNavigationView()
 
-        if (!isInternetConnected()){
+        if (!isInternetConnected()) {
             activity?.let {
                 DialogUtil.deviceOfflineAlert(
                     it,
@@ -137,15 +138,6 @@ class HomeFragment : ModelBaseFragment<HomeViewModel, FragmentHomeBinding, HomeR
 
     override fun getFragmentRepository(): HomeRepository = HomeRepository(networkModel)
 
-    //Initialization object of GoogleSignInClient
-    private fun initGoogleSignInClient() {
-        val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-            .requestEmail()
-            .build()
-
-        mGoogleSingInClient = GoogleSignIn.getClient(requireActivity(), gso)
-    }
-
     private fun apiCall() {
 
         NotifyManager.internetInfo.observe(viewLifecycleOwner, { isConnected ->
@@ -155,6 +147,7 @@ class HomeFragment : ModelBaseFragment<HomeViewModel, FragmentHomeBinding, HomeR
                     DialogUtil.loadingAlert(it)
                 }
                 viewModel.getRoom()
+                viewModel.getPinStatus()
             }
         })
 
@@ -301,10 +294,49 @@ class HomeFragment : ModelBaseFragment<HomeViewModel, FragmentHomeBinding, HomeR
                     }
                 }
 
+                launch {
+                    viewModel.getPinStatusResponse.collectLatest { response ->
+                        when (response) {
+                            is Resource.Success -> {
+                                DialogUtil.hideDialog()
+                                if (response.values.status && response.values.code == Constants.API_SUCCESS_CODE) {
+                                    response.values.data?.let {
+                                        FastSave.getInstance().saveBoolean(
+                                            Constants.isControlModePinned,
+                                            it.isPinStatus.toBoolean()
+                                        )
+
+                                        if (it.isPinStatus.toBoolean()) {
+                                            pinnedControlMode()
+                                        } else {
+                                            unpinnedControlMode()
+                                        }
+                                    }
+                                }
+                            }
+                            is Resource.Failure -> {
+                                DialogUtil.hideDialog()
+                                context?.showToast(getString(R.string.error_something_went_wrong))
+                                Log.e(logTag, " updatePinStatusResponse Failure $response ")
+                            }
+                            else -> {
+                                //We will do nothing here
+                            }
+                        }
+                    }
+                }
+
             }
         }
 
+    }
 
+    private fun pinnedControlMode() {
+        (activity as MainActivity).hideBottomNavigation()
+    }
+
+    private fun unpinnedControlMode() {
+        (activity as MainActivity).showBottomNavigation()
     }
 
     private fun openOrCloseDrawer() {
@@ -374,8 +406,23 @@ class HomeFragment : ModelBaseFragment<HomeViewModel, FragmentHomeBinding, HomeR
                                     DialogUtil.hideDialog()
                                     val loginType =
                                         FastSave.getInstance().getString(Constants.LOGIN_TYPE, "")
+                                    Log.e(logTag, " LOGIN_TYPE $loginType")
                                     if (loginType == Constants.LOGIN_TYPE_GOOGLE) {
-                                        mGoogleSingInClient?.signOut()
+
+                                        activity?.let {
+                                            val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                                                .requestEmail()
+                                                .build()
+
+                                            val mGoogleSingInClient = GoogleSignIn.getClient(it, gso)
+                                            mGoogleSingInClient.signOut().addOnCompleteListener { task ->
+                                                Log.e(logTag, " task $task")
+                                                if (task.isSuccessful) {
+                                                    Log.e(logTag, " Google logout success")
+                                                }
+                                            }
+                                        }
+
                                     } else if (loginType == Constants.LOGIN_TYPE_FACEBOOK) {
                                         LoginManager.getInstance().logOut()
                                     }
@@ -385,7 +432,7 @@ class HomeFragment : ModelBaseFragment<HomeViewModel, FragmentHomeBinding, HomeR
                                     viewModel.logout(
                                         BodyLogout(
                                             FastSave.getInstance()
-                                                .getString(Constants.MOBILE_UUID, null)
+                                                .getString(Constants.MOBILE_UUID, "")
                                         )
                                     )
                                 }

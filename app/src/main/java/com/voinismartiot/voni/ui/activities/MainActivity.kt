@@ -39,6 +39,7 @@ import com.voinismartiot.voni.ui.viewmodel.HomeViewModel
 import com.voinismartiot.voni.ui.viewmodel.ViewModelFactory
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import java.lang.RuntimeException
 
 /**
  * Created by Jignesh Dangar on 09-04-2021.
@@ -436,11 +437,8 @@ class MainActivity : AppCompatActivity() {
                             }
                             is Resource.Failure -> {
                                 DialogUtil.hideDialog()
-                                if (navController.currentDestination?.id != R.id.connectingWifiFragment && navController.currentDestination?.id != R.id.configWifiFragment) {
-                                    showToast(getString(R.string.error_something_went_wrong))
-                                    Log.e(logTag, " updatePinStatusResponse Failure $response ")
-                                }
-
+                                showToast(getString(R.string.error_something_went_wrong))
+                                Log.e(logTag, " updatePinStatusResponse Failure $response ")
                             }
                             else -> {
                                 //We will do nothing here

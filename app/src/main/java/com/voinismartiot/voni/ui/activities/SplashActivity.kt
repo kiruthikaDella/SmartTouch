@@ -52,8 +52,7 @@ class SplashActivity : AppCompatActivity() {
     }
 
     private fun startAnotherActivity() {
-        if (FastSave.getInstance().getBoolean(Constants.IS_LOGGED_IN, false)
-        ) {
+        if (FastSave.getInstance().getBoolean(Constants.IS_LOGGED_IN, false)) {
             startActivity(Intent(this@SplashActivity, MainActivity::class.java))
         } else {
             startActivity(Intent(this@SplashActivity, AuthenticationActivity::class.java))

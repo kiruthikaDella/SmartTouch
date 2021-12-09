@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
@@ -40,12 +41,18 @@ class DeviceSettingsFragment :
 
     private val args: DeviceSettingsFragmentArgs by navArgs()
     private val logTag = this::class.java.simpleName
+    private var isSmartouch = true
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.ivBack.setOnClickListener {
             findNavController().navigateUp()
         }
+
+        isSmartouch = args.deviceDetail.productGroup == Constants.PRODUCT_SMART_TOUCH
+
+        binding.tvOutdoorMode.isVisible = !isSmartouch
+        binding.switchOutdoorMode.isVisible = !isSmartouch
 
         binding.tvRestart.setOnClickListener {
             activity?.let {
@@ -169,6 +176,10 @@ class DeviceSettingsFragment :
                 }
             }
         })
+
+        binding.switchOutdoorMode.setOnClickListener {
+
+        }
 
         apiCall()
     }
