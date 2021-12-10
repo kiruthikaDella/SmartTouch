@@ -302,28 +302,32 @@ class ConnectingWifiFragment :
 
     private fun sendDataToCloud() {
         val productGroup = if (args.isSmarTack) {
-            Constants.PRODUCT_SMART_ACK
+            getString(R.string.text_smart_tack)
         } else {
-            Constants.PRODUCT_SMART_AP
+            getString(R.string.text_smart_tap)
         }
 
         if (isInternetConnected()) {
             runnable = Runnable {
-                getDeviceStr?.let {
-                    val jsonObject = JSONObject(it)
-                    viewModel.deviceRegister(
-                        BodyRegisterDevice(
-                            deviceSerialNum = jsonObject.get("device_serial_number").toString(),
-                            roomId = args.roomDetail.id,
-                            deviceName = jsonObject.get("device_name").toString(),
-                            wifiSSID = jsonObject.get("wifi_ssid").toString(),
-                            password = jsonObject.get("password").toString(),
-                            macImei = jsonObject.get("mac_imei").toString(),
-                            productGroup = productGroup,
-                            manufactureDate = jsonObject.get("vManufactureDate").toString(),
-                            firmwareVersion = jsonObject.get("vFirmwareVersion").toString()
+                try {
+                    getDeviceStr?.let {
+                        val jsonObject = JSONObject(it)
+                        viewModel.deviceRegister(
+                            BodyRegisterDevice(
+                                deviceSerialNum = jsonObject.get("device_serial_number").toString(),
+                                roomId = args.roomDetail.id,
+                                deviceName = jsonObject.get("device_name").toString(),
+                                wifiSSID = jsonObject.get("wifi_ssid").toString(),
+                                password = jsonObject.get("password").toString(),
+                                macImei = jsonObject.get("mac_imei").toString(),
+                                productGroup = productGroup,
+                                manufactureDate = jsonObject.get("vManufactureDate").toString(),
+                                firmwareVersion = jsonObject.get("vFirmwareVersion").toString()
+                            )
                         )
-                    )
+                    }
+                } catch (e: Exception) {
+                    e.printStackTrace()
                 }
             }
             handler?.postDelayed(runnable!!, 1500)

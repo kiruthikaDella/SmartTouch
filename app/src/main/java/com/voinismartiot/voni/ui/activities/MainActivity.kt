@@ -29,7 +29,6 @@ import com.voinismartiot.voni.common.interfaces.DialogShowListener
 import com.voinismartiot.voni.common.utils.*
 import com.voinismartiot.voni.common.utils.Utils.clearError
 import com.voinismartiot.voni.common.utils.Utils.isControlModePin
-import com.voinismartiot.voni.common.utils.Utils.toBoolean
 import com.voinismartiot.voni.common.utils.Utils.toEditable
 import com.voinismartiot.voni.databinding.ActivityMainBinding
 import com.voinismartiot.voni.mqtt.NetworkConnectionLiveData
@@ -39,7 +38,6 @@ import com.voinismartiot.voni.ui.viewmodel.HomeViewModel
 import com.voinismartiot.voni.ui.viewmodel.ViewModelFactory
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
-import java.lang.RuntimeException
 
 /**
  * Created by Jignesh Dangar on 09-04-2021.
@@ -151,19 +149,20 @@ class MainActivity : AppCompatActivity() {
             }
         })
 
-        NotifyManager.internetInfo.observe(this, { isConnected ->
-            if (isConnected && (navController.currentDestination?.id != R.id.connectingWifiFragment && navController.currentDestination?.id != R.id.configWifiFragment)) {
-                Log.d(logTag, "onCreate: isConnected $isConnected currentFrag ${navController.currentDestination?.displayName}")
-                roomTypeList.toMutableList().clear()
-                viewModel.roomType()
-            }
-        })
-
         NetworkConnectionLiveData().observe(this, { isConnected ->
             NotifyManager.internetInfo.postValue(isConnected)
         })
 
         apiResponses()
+    }
+
+    override fun onStart() {
+        super.onStart()
+
+        if (Utils.isNetworkConnectivityAvailable()) {
+            roomTypeList.toMutableList().clear()
+            viewModel.roomType()
+        }
     }
 
     override fun onResume() {
@@ -373,8 +372,11 @@ class MainActivity : AppCompatActivity() {
                             }
                             is Resource.Failure -> {
                                 if (navController.currentDestination?.id != R.id.connectingWifiFragment && navController.currentDestination?.id != R.id.configWifiFragment) {
-                                    this@MainActivity.showToast(getString(R.string.error_something_went_wrong))
-                                    Log.e(logTag, " roomTypeResponse error ${response.errorBody?.string()}")
+//                                    this@MainActivity.showToast(getString(R.string.error_something_went_wrong))
+                                    Log.e(
+                                        logTag,
+                                        " roomTypeResponse error ${response.errorBody?.string()}"
+                                    )
                                 }
                             }
                             else -> {

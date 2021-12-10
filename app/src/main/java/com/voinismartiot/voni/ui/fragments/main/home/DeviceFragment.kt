@@ -483,6 +483,7 @@ class DeviceFragment : ModelBaseFragment<HomeViewModel, FragmentDeviceBinding, H
                                 if (response.values.status && response.values.code == Constants.API_SUCCESS_CODE) {
                                     response.values.data?.let {
                                         deviceList.add(it)
+                                        binding.recyclerRoomPanels.recycledViewPool.clear()
                                         panelAdapter.notifyDataSetChanged()
                                     }
                                 }
@@ -511,6 +512,7 @@ class DeviceFragment : ModelBaseFragment<HomeViewModel, FragmentDeviceBinding, H
                                 if (response.values.status && response.values.code == Constants.API_SUCCESS_CODE) {
                                     response.values.data?.let { deviceData ->
                                         deviceList.addAll(deviceData)
+                                        binding.recyclerRoomPanels.recycledViewPool.clear()
                                         panelAdapter.notifyDataSetChanged()
                                     }
                                 } else {
@@ -519,12 +521,13 @@ class DeviceFragment : ModelBaseFragment<HomeViewModel, FragmentDeviceBinding, H
                             }
                             is Resource.Failure -> {
                                 DialogUtil.hideDialog()
-                                if (isSelectedSmarTouch)
-                                context?.showToast(getString(R.string.error_something_went_wrong))
-                                Log.e(
-                                    logTag,
-                                    "getDeviceResponse Failure ${response.errorBody?.string()}"
-                                )
+                                if (isSelectedSmarTouch) {
+                                    context?.showToast(getString(R.string.error_something_went_wrong))
+                                    Log.e(
+                                        logTag,
+                                        "getDeviceResponse Failure ${response.errorBody?.string()}"
+                                    )
+                                }
                             }
                             else -> {
                                 // We will do nothing here
@@ -544,6 +547,7 @@ class DeviceFragment : ModelBaseFragment<HomeViewModel, FragmentDeviceBinding, H
                                     deviceData?.let { data ->
                                         devicePosition?.let { pos ->
                                             deviceList[pos] = data
+                                            binding.recyclerRoomPanels.recycledViewPool.clear()
                                             panelAdapter.notifyDataSetChanged()
                                             devicePosition = null
                                             deviceData = null
@@ -583,6 +587,7 @@ class DeviceFragment : ModelBaseFragment<HomeViewModel, FragmentDeviceBinding, H
                                                 dData.switchData?.get(sPosition)?.let { sData ->
                                                     deviceList[dPosition].switchData?.let {
                                                         it[sPosition] = sData
+                                                        binding.recyclerRoomPanels.recycledViewPool.clear()
                                                         panelAdapter.notifyDataSetChanged()
                                                         panelAdapter.publish(
                                                             dData.deviceSerialNo,
