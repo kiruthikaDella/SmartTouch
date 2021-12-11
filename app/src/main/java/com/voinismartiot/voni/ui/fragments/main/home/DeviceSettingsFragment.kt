@@ -11,6 +11,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import com.amazonaws.mobileconnectors.iot.AWSIotMqttQos
 import com.voinismartiot.voni.R
 import com.voinismartiot.voni.api.Resource
 import com.voinismartiot.voni.api.body.BodyFactoryReset
@@ -32,6 +33,7 @@ import com.voinismartiot.voni.ui.viewmodel.HomeViewModel
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import org.json.JSONObject
+import java.nio.charset.StandardCharsets
 
 /**
  * Created by Jignesh Dangar on 27-04-2021.
@@ -53,6 +55,13 @@ class DeviceSettingsFragment :
 
         binding.tvOutdoorMode.isVisible = !isSmartouch
         binding.switchOutdoorMode.isVisible = !isSmartouch
+
+        if (!isSmartouch) {
+            binding.switchOutdoorMode.isChecked = args.deviceDetail.outdoorMode.toInt().toBoolean()
+            if (AwsMqttSingleton.isConnected() && !isSmartouch) {
+                subscribeToDevice(args.deviceDetail.deviceSerialNo)
+            }
+        }
 
         binding.tvRestart.setOnClickListener {
             activity?.let {
@@ -178,7 +187,12 @@ class DeviceSettingsFragment :
         })
 
         binding.switchOutdoorMode.setOnClickListener {
-
+            publishOutdoorMode(
+                MQTTConstants.OUTDOOR_MODE_SETTINGS.replace(
+                    MQTTConstants.AWS_DEVICE_ID,
+                    args.deviceDetail.deviceSerialNo
+                ), binding.switchOutdoorMode.isChecked.toInt().toString()
+            )
         }
 
         apiCall()
@@ -187,6 +201,16 @@ class DeviceSettingsFragment :
     private fun publishTopic(topicName: String, stringIndex: String) {
         val payload = JSONObject()
         payload.put(stringIndex, 1)
+
+        if (AwsMqttSingleton.isConnected()) {
+            Log.e(logTag, " publish settings topic $topicName payload $payload")
+            AwsMqttSingleton.publish(topicName, payload.toString())
+        }
+    }
+
+    private fun publishOutdoorMode(topicName: String, value: String) {
+        val payload = JSONObject()
+        payload.put(MQTTConstants.AWS_OUTDOOR_MODE, value)
 
         if (AwsMqttSingleton.isConnected()) {
             Log.e(logTag, " publish settings topic $topicName payload $payload")
@@ -299,13 +323,39 @@ class DeviceSettingsFragment :
                         }
                     }
                 }
-
             }
-
-
         }
+    }
 
+    private fun subscribeToDevice(deviceId: String) {
+        try {
+            AwsMqttSingleton.mqttManager?.subscribeToTopic(
+                MQTTConstants.OUTDOOR_MODE_ACK.replace(
+                    MQTTConstants.AWS_DEVICE_ID,
+                    deviceId
+                ),
+                AWSIotMqttQos.QOS0
+            ) { topic, data ->
+                activity?.runOnUiThread {
 
+                    val message = String(data, StandardCharsets.UTF_8)
+                    Log.d("$logTag ReceivedData", "$topic $message")
+
+                    try {
+                        val jsonObject = JSONObject(message)
+                        if (jsonObject.has(MQTTConstants.AWS_OUTDOOR_MODE)) {
+                            binding.switchOutdoorMode.isChecked =
+                                jsonObject.getString(MQTTConstants.AWS_OUTDOOR_MODE).toInt()
+                                    .toBoolean()
+                        }
+                    } catch (e: Exception) {
+                        e.printStackTrace()
+                    }
+                }
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
     }
 
 }

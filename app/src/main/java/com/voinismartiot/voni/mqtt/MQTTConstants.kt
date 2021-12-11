@@ -17,13 +17,15 @@ object MQTTConstants {
     const val AWS_DEVICE_ID = "{deviceid}" //Device Serial number
     const val DEVICE_STATUS = "/smarttouch/$AWS_DEVICE_ID/status/" // Current Status Update - Online/Offline
     const val CONTROL_DEVICE_SWITCHES = "/smarttouch/$AWS_DEVICE_ID/control/"  //Control Device Switches
-    const val GET_SWITCH_STATUS = "/smarttouch/$AWS_DEVICE_ID/swstatus/" // Responce of Get Switch status
+    const val GET_SWITCH_STATUS = "/smarttouch/$AWS_DEVICE_ID/swstatus/" // Response of Get Switch status
     const val UPDATE_DEVICE_FEATURE = "/smarttouch/$AWS_DEVICE_ID/features-settings/" // Update Device Feature Settings
     const val DEVICE_FEATURE_ACK = "/smarttouch/$AWS_DEVICE_ID/features-settings-ack/" // Device Feature Settings ACK
     const val UPDATE_DEVICE_CUSTOMIZATION = "/smarttouch/$AWS_DEVICE_ID/customization/" // Update Device Customization Settings
     const val DEVICE_CUSTOMIZATION_ACK = "/smarttouch/$AWS_DEVICE_ID/customization-ack/" // Device Customization Settings ACK
     const val RESTART_DEVICE = "/smarttouch/$AWS_DEVICE_ID/restart/"        //Restart device
     const val RESTORE_FACTORY_SETTINGS = "/smarttouch/$AWS_DEVICE_ID/restore/"  //Restore factory settings
+    const val OUTDOOR_MODE_SETTINGS = "/smarttouch/$AWS_DEVICE_ID/outdoor-mode-settings/"  //update outdoor mode settings
+    const val OUTDOOR_MODE_ACK = "/smarttouch/$AWS_DEVICE_ID/outdoor-mode-settings-ack/"  //get outdoor mode settings
 
     //MQTT Parameter
     const val AWS_SWITCH_1 = "SW01"
