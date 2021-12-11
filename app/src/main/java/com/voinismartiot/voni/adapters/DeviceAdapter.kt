@@ -1136,7 +1136,7 @@ class DeviceAdapter(
         try {
 
             //Response of Get Switch status
-            AwsMqttSingleton.mqttManager!!.subscribeToTopic(
+            AwsMqttSingleton.mqttManager?.subscribeToTopic(
                 MQTTConstants.GET_SWITCH_STATUS.replace(
                     MQTTConstants.AWS_DEVICE_ID,
                     deviceId

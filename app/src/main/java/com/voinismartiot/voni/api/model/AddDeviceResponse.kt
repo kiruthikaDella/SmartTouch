@@ -58,6 +58,8 @@ data class GetDeviceData(
     var productGroup: String,
     @SerializedName("vDeviceSerialNo")
     var deviceSerialNo: String,
+    @SerializedName("tiOutdoorMode")
+    var outdoorMode: String,
     @SerializedName("vDeviceName")
     var deviceName: String,
     @SerializedName("tiDeviceType")
@@ -72,9 +74,8 @@ data class GetDeviceData(
     var switchData: ArrayList<DeviceSwitchData>? = null
 ) : Parcelable, Serializable {
 
-
     override fun toString(): String {
-        return "GetDeviceData(id='$id', userId='$userId', productGroup='$productGroup', deviceSerialNo='$deviceSerialNo', deviceName='$deviceName', deviceType=$deviceType, retainState=$retainState, isDeviceAvailable=$isDeviceAvailable, activeSwitchCount=$activeSwitchCount, switchData=$switchData)"
+        return "GetDeviceData(id='$id', userId='$userId', productGroup='$productGroup', deviceSerialNo='$deviceSerialNo', outdoorMode='$outdoorMode', deviceName='$deviceName', deviceType=$deviceType, retainState=$retainState, isDeviceAvailable='$isDeviceAvailable', activeSwitchCount=$activeSwitchCount, switchData=$switchData)"
     }
 
     override fun equals(other: Any?): Boolean {
@@ -87,6 +88,7 @@ data class GetDeviceData(
         if (userId != other.userId) return false
         if (productGroup != other.productGroup) return false
         if (deviceSerialNo != other.deviceSerialNo) return false
+        if (outdoorMode != other.outdoorMode) return false
         if (deviceName != other.deviceName) return false
         if (deviceType != other.deviceType) return false
         if (retainState != other.retainState) return false
@@ -102,6 +104,7 @@ data class GetDeviceData(
         result = 31 * result + userId.hashCode()
         result = 31 * result + productGroup.hashCode()
         result = 31 * result + deviceSerialNo.hashCode()
+        result = 31 * result + outdoorMode.hashCode()
         result = 31 * result + deviceName.hashCode()
         result = 31 * result + deviceType
         result = 31 * result + retainState
