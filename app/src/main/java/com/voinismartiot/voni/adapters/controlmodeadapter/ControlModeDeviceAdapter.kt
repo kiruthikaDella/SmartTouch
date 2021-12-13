@@ -100,13 +100,13 @@ class ControlModeDeviceAdapter(
     }
 
     override fun getItemViewType(position: Int): Int {
-        return if (deviceList[position].productGroup == Constants.PRODUCT_SMART_TOUCH) {
+        return if (deviceList[position].productGroup.lowercase() == Constants.PRODUCT_SMART_TOUCH) {
             if (deviceList[position].deviceType == Constants.DEVICE_TYPE_EIGHT) {
                 eightPanelView
             } else {
                 fourPanelView
             }
-        } else if (deviceList[position].productGroup == Constants.PRODUCT_SMART_ACK) {
+        } else if (deviceList[position].productGroup.lowercase() == Constants.PRODUCT_SMART_ACK) {
             smartAckPanelView
         } else {
             smartApPanelView

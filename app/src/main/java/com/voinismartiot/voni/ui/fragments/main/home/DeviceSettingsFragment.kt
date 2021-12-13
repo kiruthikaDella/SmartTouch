@@ -51,7 +51,7 @@ class DeviceSettingsFragment :
             findNavController().navigateUp()
         }
 
-        isSmartouch = args.deviceDetail.productGroup == Constants.PRODUCT_SMART_TOUCH
+        isSmartouch = args.deviceDetail.productGroup.lowercase() == Constants.PRODUCT_SMART_TOUCH
 
         binding.tvOutdoorMode.isVisible = !isSmartouch
         binding.switchOutdoorMode.isVisible = !isSmartouch
