@@ -113,7 +113,7 @@
                 android:layout_height="@dimen/_16sdp"
                 android:layout_marginTop="@dimen/_25sdp"
                 android:src="@drawable/ic_remove"
-                app:layout_constraintStart_toStartOf="@+id/iv_factory_reset"
+                app:layout_constraintStart_toStartOf="@+id/iv_restart"
                 app:layout_constraintTop_toBottomOf="@+id/iv_factory_reset" />
 
             <TextView
@@ -143,7 +143,8 @@
                 android:layout_height="@dimen/_16sdp"
                 android:layout_marginTop="@dimen/_25sdp"
                 android:src="@drawable/ic_update"
-                app:layout_constraintStart_toStartOf="@+id/iv_remove"
+                android:visibility="gone"
+                app:layout_constraintStart_toStartOf="@+id/iv_restart"
                 app:layout_constraintTop_toBottomOf="@+id/iv_remove" />
 
             <TextView
@@ -153,6 +154,7 @@
                 android:fontFamily="@font/roboto_medium"
                 android:text="@string/text_update"
                 android:textColor="@color/daintree"
+                android:visibility="gone"
                 android:textSize="@dimen/_12ssp"
                 app:layout_constraintBottom_toBottomOf="@+id/iv_update"
                 app:layout_constraintStart_toStartOf="@+id/tv_restart"
@@ -164,6 +166,7 @@
                 android:layout_height="@dimen/_12sdp"
                 android:src="@drawable/ic_arrow_right"
                 app:layout_constraintBottom_toBottomOf="@+id/iv_update"
+                android:visibility="gone"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/iv_update" />
 
@@ -173,8 +176,8 @@
                 android:layout_height="@dimen/_16sdp"
                 android:layout_marginTop="@dimen/_25sdp"
                 android:src="@drawable/ic_retain_state"
-                app:layout_constraintStart_toStartOf="@+id/iv_update"
-                app:layout_constraintTop_toBottomOf="@+id/iv_update" />
+                app:layout_constraintStart_toStartOf="@+id/iv_restart"
+                app:layout_constraintTop_toBottomOf="@+id/iv_remove" />
 
             <TextView
                 android:id="@+id/tv_retain_state"

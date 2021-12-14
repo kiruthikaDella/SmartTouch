@@ -645,6 +645,7 @@
                     android:id="@+id/seek_bar"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:visibility="gone"
                     app:isb_max="5"
                     app:isb_min="0"
                     app:isb_progress="0"
@@ -707,7 +708,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/seek_bar" />
+                    app:layout_constraintTop_toBottomOf="@+id/switch_eight" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -717,8 +718,8 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/card_title"
                 android:layout_marginTop="@dimen/_minus10sdp"
-                android:visibility="gone"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:visibility="gone">
 
                 <ImageView
                     android:layout_width="@dimen/_24sdp"

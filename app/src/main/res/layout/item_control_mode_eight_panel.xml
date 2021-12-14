@@ -463,6 +463,7 @@
                     android:layout_height="wrap_content"
                     app:isb_max="5"
                     app:isb_min="0"
+                    android:visibility="gone"
                     app:isb_progress="0"
                     app:isb_seek_smoothly="false"
                     app:isb_show_indicator="none"
@@ -523,7 +524,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/seek_bar" />
+                    app:layout_constraintTop_toBottomOf="@+id/switch_eight" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 

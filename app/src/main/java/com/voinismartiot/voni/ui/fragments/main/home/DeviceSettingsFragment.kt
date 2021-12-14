@@ -103,7 +103,8 @@ class DeviceSettingsFragment :
                             viewModel.factoryReset(
                                 BodyFactoryReset(
                                     args.deviceDetail.id,
-                                    args.deviceDetail.deviceType.toString()
+                                    args.deviceDetail.deviceType.toString(),
+                                    args.deviceDetail.productGroup
                                 )
                             )
                         }
