@@ -28,6 +28,7 @@ import com.voinismartiot.voni.databinding.FragmentConnectingWifiBinding
 import com.voinismartiot.voni.ui.activities.MainActivity
 import com.voinismartiot.voni.ui.fragments.ModelBaseFragment
 import com.voinismartiot.voni.ui.viewmodel.HomeViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 import org.json.JSONException
 import org.json.JSONObject
@@ -83,6 +84,7 @@ class ConnectingWifiFragment :
 
                         if (response.values.status && response.values.code == Constants.API_SUCCESS_CODE) {
                             isApiResponseSuccess = true
+                            delay(2000)
                             findNavController().navigate(
                                 ConnectingWifiFragmentDirections.actionConnectingWifiFragmentToDeviceFragment(
                                     args.roomDetail
