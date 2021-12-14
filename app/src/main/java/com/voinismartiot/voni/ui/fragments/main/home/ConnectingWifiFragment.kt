@@ -317,6 +317,7 @@ class ConnectingWifiFragment :
                                 deviceSerialNum = jsonObject.get("device_serial_number").toString(),
                                 roomId = args.roomDetail.id,
                                 deviceName = jsonObject.get("device_name").toString(),
+                                deviceType = jsonObject.get("device_type").toString(),
                                 wifiSSID = jsonObject.get("wifi_ssid").toString(),
                                 password = jsonObject.get("password").toString(),
                                 macImei = jsonObject.get("mac_imei").toString(),

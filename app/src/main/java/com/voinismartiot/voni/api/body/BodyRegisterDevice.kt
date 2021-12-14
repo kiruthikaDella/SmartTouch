@@ -9,6 +9,8 @@ data class BodyRegisterDevice(
     val roomId: String,
     @SerializedName("vDeviceName")
     val deviceName: String,
+    @SerializedName("tiDeviceType")
+    val deviceType: String,
     @SerializedName("vWifiSSID")
     val wifiSSID: String,
     @SerializedName("vPassword")
