@@ -251,6 +251,8 @@ class ControlModeDeviceAdapter(
                 relativeLayout.visibility = View.GONE
             }
 
+            seekBar.visibility = View.GONE
+
             tvPanelName.text = device.deviceName
 
             device.switchData?.let { switchData ->
@@ -441,6 +443,8 @@ class ControlModeDeviceAdapter(
             } else {
                 relativeLayout.visibility = View.GONE
             }
+
+            seekBar.visibility = View.GONE
 
             tvPanelName.text = device.deviceName
 

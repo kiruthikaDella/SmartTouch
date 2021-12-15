@@ -417,13 +417,13 @@ class DeviceCustomizationFragment :
                 )
                 val switchIconsArray = JSONArray()
                 args.deviceDetail.switchData?.let {
+                    val switchIconsObject = JSONObject()
                     for (switch in it) {
                         if (switch.typeOfSwitch == 0) {
-                            val switchIconsObject = JSONObject()
                             switchIconsObject.put("SW0${switch.index.toInt()}", switch.iconFile)
-                            switchIconsArray.put(switchIconsObject)
                         }
                     }
+                    switchIconsArray.put(switchIconsObject)
                 }
                 payload.put(MQTTConstants.AWS_SWITCH_ICONS, switchIconsArray)
 

@@ -124,7 +124,8 @@
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recycler_scenes"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="0dp"
+                android:layout_weight="1"
                 android:layout_marginStart="@dimen/screen_start_margin"
                 android:layout_marginEnd="@dimen/screen_end_margin"
                 android:overScrollMode="never"

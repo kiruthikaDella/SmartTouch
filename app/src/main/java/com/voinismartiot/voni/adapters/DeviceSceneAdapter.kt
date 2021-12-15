@@ -1,13 +1,13 @@
 package com.voinismartiot.voni.adapters
 
 import android.app.Activity
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.switchmaterial.SwitchMaterial
 import com.voinismartiot.voni.R
 import com.voinismartiot.voni.adapters.spinneradapter.DeviceAdapter
 import com.voinismartiot.voni.adapters.spinneradapter.RoomAdapter
@@ -17,7 +17,6 @@ import com.voinismartiot.voni.api.model.*
 import com.voinismartiot.voni.common.interfaces.DialogAskListener
 import com.voinismartiot.voni.common.utils.DialogUtil
 import com.voinismartiot.voni.common.utils.Utils.toInt
-import com.google.android.material.switchmaterial.SwitchMaterial
 
 /**
  * Created by Jignesh Dangar on 22-04-2021.
@@ -31,7 +30,7 @@ class DeviceSceneAdapter(
     private val logTag = this::class.java.simpleName
 
     private var roomList = arrayListOf<GetRoomData>()
-    private var errorList : MutableMap<Int,String> = mutableMapOf()
+    private var errorList: MutableMap<Int, String> = mutableMapOf()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
         val v = LayoutInflater.from(parent.context)
@@ -49,7 +48,7 @@ class DeviceSceneAdapter(
                     mActivity.getString(R.string.text_no),
                     object : DialogAskListener {
                         override fun onYesClicked() {
-                            bodyScenes.removeAt(position)
+                            bodyScenes.removeAt(adapterPosition)
                             notifyDataSetChanged()
                         }
 
@@ -75,14 +74,14 @@ class DeviceSceneAdapter(
                     spinnerSwitch.performClick()
             }
 
-            if (errorList.isNotEmpty()){
-                if (errorList.containsKey(position)){
-                    tvError.text = errorList[position]
+            if (errorList.isNotEmpty()) {
+                if (errorList.containsKey(adapterPosition)) {
+                    tvError.text = errorList[adapterPosition]
                     tvError.isVisible = true
-                }else {
+                } else {
                     tvError.isVisible = false
                 }
-            }else {
+            } else {
                 tvError.isVisible = false
             }
         }
@@ -401,17 +400,16 @@ class DeviceSceneAdapter(
 
     fun getScenes(): ArrayList<BodySceneData> = bodyScenes
 
-    fun setError(errorData: List<ErrorSceneData>){
+    fun setError(errorData: List<ErrorSceneData>) {
         errorList.clear()
-        for (error in errorData){
-            for ((index, scene) in getScenes().withIndex()){
-                if (scene.deviceSwitchId == error.deviceSwitchId){
+        for (error in errorData) {
+            for ((index, scene) in getScenes().withIndex()) {
+                if (scene.deviceSwitchId == error.deviceSwitchId) {
                     errorList[index] = error.message
                 }
             }
         }
 
-        Log.e(logTag, " errorList $errorList ")
         notifyDataSetChanged()
     }
 

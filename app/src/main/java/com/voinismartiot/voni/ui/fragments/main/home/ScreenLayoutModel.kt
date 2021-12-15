@@ -103,6 +103,8 @@ class ScreenLayoutModel(context: Context, mBinding: FragmentScreenLayoutBinding)
     private fun changeImagesWithViewType(viewType: VIEW_TYPE) {
         when (viewType) {
             VIEW_TYPE.EIGHT_ICONS_VIEW -> {
+                binding.ivLeftRight.isEnabled = true
+                binding.ivLeftRight.alpha = 1f
                 binding.ivLeftMost.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_eight_left_most))
                 binding.ivLeftRight.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_eight_left_right))
                 binding.ivTopCenter.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_eight_top_center))
@@ -111,6 +113,8 @@ class ScreenLayoutModel(context: Context, mBinding: FragmentScreenLayoutBinding)
                 binding.ivBottomCenter.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_eight_bottom_center))
             }
             VIEW_TYPE.SIX_ICONS_VIEW -> {
+                binding.ivLeftRight.isEnabled = true
+                binding.ivLeftRight.alpha = 1f
                 binding.ivLeftMost.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_six_left_most))
                 binding.ivLeftRight.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_six_left_right))
                 binding.ivTopCenter.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_six_top_center))
@@ -119,6 +123,8 @@ class ScreenLayoutModel(context: Context, mBinding: FragmentScreenLayoutBinding)
                 binding.ivBottomCenter.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_six_bottom_center))
             }
             VIEW_TYPE.FOUR_ICONS_VIEW -> {
+                binding.ivLeftRight.isEnabled = false
+                binding.ivLeftRight.alpha = 0.5f
                 binding.ivLeftMost.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_four_left_most))
                 binding.ivLeftRight.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_four_left_right))
                 binding.ivTopCenter.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_four_top_center))

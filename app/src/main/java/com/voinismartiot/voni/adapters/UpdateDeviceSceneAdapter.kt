@@ -1,13 +1,13 @@
 package com.voinismartiot.voni.adapters
 
 import android.app.Activity
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.switchmaterial.SwitchMaterial
 import com.voinismartiot.voni.R
 import com.voinismartiot.voni.adapters.spinneradapter.DeviceAdapter
 import com.voinismartiot.voni.adapters.spinneradapter.RoomAdapter
@@ -18,7 +18,6 @@ import com.voinismartiot.voni.common.interfaces.DialogAskListener
 import com.voinismartiot.voni.common.utils.DialogUtil
 import com.voinismartiot.voni.common.utils.Utils.toBoolean
 import com.voinismartiot.voni.common.utils.Utils.toInt
-import com.google.android.material.switchmaterial.SwitchMaterial
 
 /**
  * Created by Jignesh Dangar on 22-04-2021.
@@ -32,7 +31,7 @@ class UpdateDeviceSceneAdapter(
 
     private val roomDataList = arrayListOf<ControlModeRoomData>()
     private var roomList = arrayListOf<GetRoomData>()
-    private var errorList : MutableMap<Int,String> = mutableMapOf()
+    private var errorList: MutableMap<Int, String> = mutableMapOf()
 
     private var deleteClickListener: DeleteSceneItemClickListener<Scene>? = null
 
@@ -53,12 +52,12 @@ class UpdateDeviceSceneAdapter(
                     mActivity.getString(R.string.text_no),
                     object : DialogAskListener {
                         override fun onYesClicked() {
-                            if (scenes[position].id == "") {
-                                deleteScene(position)
+                            if (scenes[adapterPosition].id == "") {
+                                deleteScene(adapterPosition)
                             } else {
                                 deleteClickListener?.onItemClick(
-                                    scenes[position],
-                                    position
+                                    scenes[adapterPosition],
+                                    adapterPosition
                                 )
                             }
                         }
@@ -85,14 +84,14 @@ class UpdateDeviceSceneAdapter(
                     spinnerSwitch.performClick()
             }
 
-            if (errorList.isNotEmpty()){
-                if (errorList.containsKey(position)){
+            if (errorList.isNotEmpty()) {
+                if (errorList.containsKey(position)) {
                     tvError.text = errorList[position]
                     tvError.isVisible = true
-                }else {
+                } else {
                     tvError.isVisible = false
                 }
-            }else {
+            } else {
                 tvError.isVisible = false
             }
         }
@@ -440,17 +439,15 @@ class UpdateDeviceSceneAdapter(
         this.deleteClickListener = listener
     }
 
-    fun setError(errorData: List<ErrorSceneData>){
+    fun setError(errorData: List<ErrorSceneData>) {
         errorList.clear()
-        for (error in errorData){
-            for ((index, scene) in getScenes().withIndex()){
-                if (scene.deviceSwitchId == error.deviceSwitchId){
+        for (error in errorData) {
+            for ((index, scene) in getScenes().withIndex()) {
+                if (scene.deviceSwitchId == error.deviceSwitchId) {
                     errorList[index] = error.message
                 }
             }
         }
-
-        Log.e(logTag, " errorList $errorList ")
         notifyDataSetChanged()
     }
 }

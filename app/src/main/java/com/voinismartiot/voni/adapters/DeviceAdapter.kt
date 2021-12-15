@@ -318,6 +318,8 @@ class DeviceAdapter(
                 e.printStackTrace()
             }
 
+            seekBar.visibility = View.GONE
+
             tvPanelName.text = device.deviceName
             if (device.isDeviceAvailable == "0") {
                 relativeLayout.visibility = View.VISIBLE
@@ -600,6 +602,8 @@ class DeviceAdapter(
             } catch (e: Exception) {
                 e.printStackTrace()
             }
+
+            seekBar.visibility = View.GONE
 
             tvPanelName.text = device.deviceName
             if (device.isDeviceAvailable == "0") {

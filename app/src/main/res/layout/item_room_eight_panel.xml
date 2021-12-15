@@ -645,7 +645,6 @@
                     android:id="@+id/seek_bar"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:visibility="gone"
                     app:isb_max="5"
                     app:isb_min="0"
                     app:isb_progress="0"
@@ -708,7 +707,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/switch_eight" />
+                    app:layout_constraintTop_toBottomOf="@+id/seek_bar" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 

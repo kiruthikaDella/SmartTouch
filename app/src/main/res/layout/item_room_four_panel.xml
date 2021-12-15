@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_marginStart="@dimen/screen_start_margin"
     android:layout_marginTop="@dimen/_10sdp"
     android:layout_marginEnd="@dimen/screen_end_margin"
@@ -58,9 +58,9 @@
                         android:id="@+id/img_panel_edit"
                         android:layout_width="@dimen/_30sdp"
                         android:layout_height="match_parent"
-                        android:padding="@dimen/_8sdp"
                         android:layout_alignParentEnd="true"
                         android:layout_centerVertical="true"
+                        android:padding="@dimen/_8sdp"
                         android:src="@drawable/ic_panel_edit"
                         app:tint="@color/theme_color" />
 
@@ -376,7 +376,6 @@
                     app:isb_max="5"
                     app:isb_min="0"
                     app:isb_progress="0"
-                    android:visibility="gone"
                     app:isb_seek_smoothly="false"
                     app:isb_show_indicator="none"
                     app:isb_show_tick_marks_type="none"
@@ -414,7 +413,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/switch_four" />
+                    app:layout_constraintTop_toBottomOf="@+id/seek_bar" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
