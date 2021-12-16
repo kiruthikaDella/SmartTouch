@@ -393,11 +393,13 @@ class MainActivity : AppCompatActivity() {
                                 DialogUtil.hideDialog()
                                 if (response.values.status && response.values.code == Constants.API_SUCCESS_CODE) {
                                     response.values.data?.let { roomData ->
-                                        navController.navigate(
-                                            HomeFragmentDirections.actionHomeFragmentToRoomPanelFragment(
-                                                roomData
+                                        if (navController.currentDestination?.id == R.id.homeFragment) {
+                                            navController.navigate(
+                                                HomeFragmentDirections.actionHomeFragmentToRoomPanelFragment(
+                                                    roomData
+                                                )
                                             )
-                                        )
+                                        }
                                     }
                                 } else {
                                     showToast(response.values.message)
