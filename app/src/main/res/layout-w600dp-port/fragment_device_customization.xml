@@ -231,15 +231,15 @@
                                 android:gravity="center"
                                 android:spinnerMode="dropdown" />
 
-                            <ImageButton
+                            <ImageView
                                 android:id="@+id/iv_icon_size_down"
-                                android:layout_width="@dimen/_10sdp"
-                                android:layout_height="@dimen/_6sdp"
+                                android:layout_width="@dimen/_15sdp"
+                                android:layout_height="match_parent"
                                 android:layout_alignParentEnd="true"
                                 android:layout_centerVertical="true"
-                                android:layout_marginEnd="@dimen/_5sdp"
-                                android:background="@drawable/ic_arrow_down"
-                                android:backgroundTint="@color/daintree" />
+                                android:padding="@dimen/_3sdp"
+                                android:src="@drawable/ic_arrow_down"
+                                app:tint="@color/daintree" />
 
                         </RelativeLayout>
 
@@ -384,15 +384,15 @@
                                 android:gravity="center"
                                 android:spinnerMode="dropdown" />
 
-                            <ImageButton
+                            <ImageView
                                 android:id="@+id/iv_text_size_down"
-                                android:layout_width="@dimen/_10sdp"
-                                android:layout_height="@dimen/_6sdp"
+                                android:layout_width="@dimen/_15sdp"
+                                android:layout_height="match_parent"
                                 android:layout_alignParentEnd="true"
                                 android:layout_centerVertical="true"
-                                android:layout_marginEnd="@dimen/_5sdp"
-                                android:background="@drawable/ic_arrow_down"
-                                android:backgroundTint="@color/daintree" />
+                                android:padding="@dimen/_3sdp"
+                                android:src="@drawable/ic_arrow_down"
+                                app:tint="@color/daintree" />
 
                         </RelativeLayout>
 
