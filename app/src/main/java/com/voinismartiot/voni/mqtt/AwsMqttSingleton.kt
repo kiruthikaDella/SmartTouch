@@ -69,6 +69,7 @@ object AwsMqttSingleton {
                             Log.e(logTag, "ConnectionLost error.", throwable)
                             mqttStatus = MQTTConnectionStatus.CONNECTION_LOST
                             NotifyManager.getMQTTConnectionInfo().onNext(MQTTConnectionStatus.CONNECTION_LOST)
+                            connectAWS()
                         }
                         else -> {
                             Log.d(

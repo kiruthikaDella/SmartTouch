@@ -515,6 +515,14 @@ class DeviceCustomizationFragment :
                 )
             }
         }
+
+        binding.ivIconSizeDown.setOnClickListener {
+            binding.spinnerIconSize.performClick()
+        }
+
+        binding.ivTextSizeDown.setOnClickListener {
+            binding.spinnerTextSize.performClick()
+        }
     }
 
     private fun showPanel() {
