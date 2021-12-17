@@ -313,7 +313,9 @@ class DeviceAdapter(
                 e.printStackTrace()
             }
 
-            seekBar.visibility = View.GONE
+            if (device.productGroup.lowercase() == Constants.PRODUCT_SMART_TOUCH){
+                seekBar.visibility = View.GONE
+            }
 
             tvPanelName.text = device.deviceName
             if (device.isDeviceAvailable == "0") {
@@ -598,7 +600,9 @@ class DeviceAdapter(
                 e.printStackTrace()
             }
 
-            seekBar.visibility = View.GONE
+            if (device.productGroup.lowercase() == Constants.PRODUCT_SMART_TOUCH){
+                seekBar.visibility = View.GONE
+            }
 
             tvPanelName.text = device.deviceName
             if (device.isDeviceAvailable == "0") {
@@ -1065,13 +1069,12 @@ class DeviceAdapter(
                             // topic [7] = Switch 7 Status (if DT = 8)
                             // topic [8] = Switch 8 Status (if DT = 8)
 
-                            deviceData?.switchData?.get(0)?.switchStatus = switchStatus[0]
-                            deviceData?.switchData?.get(1)?.switchStatus = switchStatus[1]
-                            deviceData?.switchData?.get(2)?.switchStatus = switchStatus[2]
-                            deviceData?.switchData?.get(3)?.switchStatus = switchStatus[3]
-
                             if (jsonObject.has(MQTTConstants.AWS_DEVICE_TYPE)) {
                                 if (jsonObject.getString(MQTTConstants.AWS_DEVICE_TYPE) == "8") {
+                                    deviceData?.switchData?.get(0)?.switchStatus = switchStatus[0]
+                                    deviceData?.switchData?.get(1)?.switchStatus = switchStatus[1]
+                                    deviceData?.switchData?.get(2)?.switchStatus = switchStatus[2]
+                                    deviceData?.switchData?.get(3)?.switchStatus = switchStatus[3]
                                     deviceData?.switchData?.get(4)?.switchStatus =
                                         switchStatus[4]
                                     deviceData?.switchData?.get(5)?.switchStatus =
@@ -1092,7 +1095,11 @@ class DeviceAdapter(
                                         jsonObject.getString(
                                             MQTTConstants.AWS_USB_C
                                         ) //USB C
-                                } else {
+                                } else if (jsonObject.getString(MQTTConstants.AWS_DEVICE_TYPE) == "4") {
+                                    deviceData?.switchData?.get(0)?.switchStatus = switchStatus[0]
+                                    deviceData?.switchData?.get(1)?.switchStatus = switchStatus[1]
+                                    deviceData?.switchData?.get(2)?.switchStatus = switchStatus[2]
+                                    deviceData?.switchData?.get(3)?.switchStatus = switchStatus[3]
                                     if (jsonObject.has(MQTTConstants.AWS_USB_C)) {
                                         deviceData?.switchData?.get(4)?.switchStatus =
                                             jsonObject.getString(
@@ -1111,6 +1118,8 @@ class DeviceAdapter(
                                                 MQTTConstants.AWS_DIMMER
                                             ) //Dimmer
                                     }
+                                } else if (jsonObject.getString(MQTTConstants.AWS_DEVICE_TYPE) == "1") {
+                                    deviceData?.switchData?.get(0)?.switchStatus = switchStatus[0]
                                 }
                             }
                         }
