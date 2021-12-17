@@ -201,7 +201,7 @@ class DeviceSettingsFragment :
 
     private fun publishTopic(topicName: String, stringIndex: String) {
         val payload = JSONObject()
-        payload.put(stringIndex, 1)
+        payload.put(stringIndex, "1")
 
         if (AwsMqttSingleton.isConnected()) {
             Log.e(logTag, " publish settings topic $topicName payload $payload")
