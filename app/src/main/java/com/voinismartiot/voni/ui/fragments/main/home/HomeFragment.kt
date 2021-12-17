@@ -142,7 +142,6 @@ class HomeFragment : ModelBaseFragment<HomeViewModel, FragmentHomeBinding, HomeR
                     DialogUtil.loadingAlert(it)
                 }
                 viewModel.getRoom()
-                viewModel.getPinStatus()
             }
         })
 
@@ -289,49 +288,9 @@ class HomeFragment : ModelBaseFragment<HomeViewModel, FragmentHomeBinding, HomeR
                     }
                 }
 
-                launch {
-                    viewModel.getPinStatusResponse.collectLatest { response ->
-                        when (response) {
-                            is Resource.Success -> {
-                                DialogUtil.hideDialog()
-                                if (response.values.status && response.values.code == Constants.API_SUCCESS_CODE) {
-                                    response.values.data?.let {
-                                        FastSave.getInstance().saveBoolean(
-                                            Constants.isControlModePinned,
-                                            it.isPinStatus.toBoolean()
-                                        )
-
-                                        if (it.isPinStatus.toBoolean()) {
-                                            pinnedControlMode()
-                                        } else {
-                                            unpinnedControlMode()
-                                        }
-                                    }
-                                }
-                            }
-                            is Resource.Failure -> {
-                                DialogUtil.hideDialog()
-                                context?.showToast(getString(R.string.error_something_went_wrong))
-                                Log.e(logTag, " updatePinStatusResponse Failure $response ")
-                            }
-                            else -> {
-                                //We will do nothing here
-                            }
-                        }
-                    }
-                }
-
             }
         }
 
-    }
-
-    private fun pinnedControlMode() {
-        (activity as MainActivity).hideBottomNavigation()
-    }
-
-    private fun unpinnedControlMode() {
-        (activity as MainActivity).showBottomNavigation()
     }
 
     private fun openOrCloseDrawer() {
