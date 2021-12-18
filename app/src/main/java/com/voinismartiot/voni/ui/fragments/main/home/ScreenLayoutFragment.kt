@@ -11,6 +11,7 @@ import android.view.ViewGroup
 import android.view.Window
 import androidx.core.view.isVisible
 import androidx.fragment.app.DialogFragment
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.amazonaws.mobileconnectors.iot.AWSIotMqttQos
@@ -34,7 +35,6 @@ import java.nio.charset.StandardCharsets
 class ScreenLayoutFragment : DialogFragment() {
 
     private val logTag = this::class.java.simpleName
-
     private lateinit var binding: FragmentScreenLayoutBinding
     private var screenLayoutModel: ScreenLayoutModel? = null
     private val args: ScreenLayoutFragmentArgs by navArgs()
@@ -143,7 +143,6 @@ class ScreenLayoutFragment : DialogFragment() {
             }
         })
 
-
         binding.ivBack.setOnClickListener {
             findNavController().navigateUp()
         }
@@ -155,7 +154,6 @@ class ScreenLayoutFragment : DialogFragment() {
             context?.showToast("Settings Saved!")
             findNavController().navigateUp()
         }
-
     }
 
     override fun onDestroyView() {
@@ -169,7 +167,6 @@ class ScreenLayoutFragment : DialogFragment() {
 
     private fun subscribeToDevice(deviceId: String) {
         try {
-
             //Current Device Status Update - Online/Offline
             AwsMqttSingleton.mqttManager!!.subscribeToTopic(
                 MQTTConstants.DEVICE_STATUS.replace(MQTTConstants.AWS_DEVICE_ID, deviceId),
@@ -177,7 +174,6 @@ class ScreenLayoutFragment : DialogFragment() {
             ) { topic, data ->
                 activity?.let {
                     it.runOnUiThread {
-
                         val message = String(data, StandardCharsets.UTF_8)
                         Log.d("$logTag ReceivedData", "$topic    $message")
 
@@ -192,13 +188,14 @@ class ScreenLayoutFragment : DialogFragment() {
                                     it,
                                     onClick = object : DialogShowListener {
                                         override fun onClick() {
-                                            findNavController().navigate(
-                                                ScreenLayoutFragmentDirections.actionScreenLayoutFragmentToRoomPanelFragment(
-                                                    args.roomDetail
+                                            lifecycleScope.launchWhenResumed {
+                                                findNavController().navigate(
+                                                    ScreenLayoutFragmentDirections.actionScreenLayoutFragmentToRoomPanelFragment(
+                                                        args.roomDetail
+                                                    )
                                                 )
-                                            )
+                                            }
                                         }
-
                                     })
                             }
                         }

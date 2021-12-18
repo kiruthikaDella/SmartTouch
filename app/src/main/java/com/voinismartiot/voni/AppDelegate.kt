@@ -2,8 +2,8 @@ package com.voinismartiot.voni
 
 import android.app.Application
 import com.appizona.yehiahd.fastsave.FastSave
-import com.voinismartiot.voni.mqtt.AwsMqttSingleton
 import com.teksun.tcpudplibrary.SettingsService
+import com.voinismartiot.voni.mqtt.AwsMqttSingleton
 
 /**
  * Created by Jignesh Dangar on 09-04-2021.
