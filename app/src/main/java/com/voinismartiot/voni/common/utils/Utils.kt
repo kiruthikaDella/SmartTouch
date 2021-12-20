@@ -138,7 +138,9 @@ object Utils {
         error = null
     }
 
-
+    fun getFCMToken(): String {
+        return FastSave.getInstance().getString(Constants.FCM_TOKEN, "")
+    }
 
 }
 

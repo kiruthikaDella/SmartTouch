@@ -5,6 +5,7 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.provider.Settings
 import android.text.method.HideReturnsTransformationMethod
 import android.text.method.PasswordTransformationMethod
 import android.util.Log
@@ -19,6 +20,12 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import com.appizona.yehiahd.fastsave.FastSave
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount
+import com.google.android.gms.auth.api.signin.GoogleSignInClient
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.android.gms.common.api.ApiException
+import com.google.firebase.iid.FirebaseInstanceId
 import com.voinismartiot.voni.R
 import com.voinismartiot.voni.api.Resource
 import com.voinismartiot.voni.api.body.BodyLogin
@@ -26,6 +33,7 @@ import com.voinismartiot.voni.api.body.BodySocialLogin
 import com.voinismartiot.voni.api.model.UserProfile
 import com.voinismartiot.voni.api.repository.AuthRepository
 import com.voinismartiot.voni.common.interfaces.DialogShowListener
+import com.voinismartiot.voni.common.interfaces.FacebookLoginListener
 import com.voinismartiot.voni.common.utils.Constants
 import com.voinismartiot.voni.common.utils.DialogUtil
 import com.voinismartiot.voni.common.utils.Utils
@@ -38,16 +46,9 @@ import com.voinismartiot.voni.ui.activities.AuthenticationActivity
 import com.voinismartiot.voni.ui.activities.MainActivity
 import com.voinismartiot.voni.ui.fragments.ModelBaseFragment
 import com.voinismartiot.voni.ui.viewmodel.AuthViewModel
-import com.google.android.gms.auth.api.signin.GoogleSignIn
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount
-import com.google.android.gms.auth.api.signin.GoogleSignInClient
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions
-import com.google.android.gms.common.api.ApiException
-import com.voinismartiot.voni.common.interfaces.FacebookLoginListener
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import java.util.*
-
 
 /**
  * Created by Jignesh Dangar on 09-04-2021.
@@ -63,11 +64,18 @@ class LoginFragment : ModelBaseFragment<AuthViewModel, FragmentLoginBinding, Aut
     private var mGoogleSingInClient: GoogleSignInClient? = null
 
     private var loginType = Constants.LOGIN_TYPE_NORMAL
+    private var deviceId = ""
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        deviceId = Settings.Secure.getString(context?.contentResolver, Settings.Secure.ANDROID_ID)
+
+        Log.e(logTag, " android id $deviceId")
+
         initGoogleSignInClient()
+
+        messagingServices()
 
         context?.let {
             Utils.generateSSHKey(it)
@@ -176,7 +184,8 @@ class LoginFragment : ModelBaseFragment<AuthViewModel, FragmentLoginBinding, Aut
             }
         }
 
-        (activity as AuthenticationActivity).setFacebookLoginListener(object : FacebookLoginListener{
+        (activity as AuthenticationActivity).setFacebookLoginListener(object :
+            FacebookLoginListener {
             override fun performLogin(userId: String, email: String) {
                 Log.e(logTag, " socialLoginAPI ")
                 val uuid: String = UUID.randomUUID().toString()
@@ -189,10 +198,11 @@ class LoginFragment : ModelBaseFragment<AuthViewModel, FragmentLoginBinding, Aut
                     viewModel.socialLogin(
                         BodySocialLogin(
                             userId,
-                            uuid,
+                            deviceId,
                             Constants.SOCIAL_LOGIN,
                             Constants.LOGIN_TYPE_FACEBOOK,
-                            email
+                            email,
+                            Utils.getFCMToken()
                         )
                     )
                 }
@@ -237,10 +247,11 @@ class LoginFragment : ModelBaseFragment<AuthViewModel, FragmentLoginBinding, Aut
                             viewModel.socialLogin(
                                 BodySocialLogin(
                                     it.id.toString(),
-                                    uuid,
+                                    deviceId,
                                     Constants.SOCIAL_LOGIN,
                                     Constants.LOGIN_TYPE_GOOGLE,
-                                    email
+                                    email,
+                                    Utils.getFCMToken()
                                 )
                             )
                         }
@@ -381,18 +392,33 @@ class LoginFragment : ModelBaseFragment<AuthViewModel, FragmentLoginBinding, Aut
 
                                     val userProfile: UserProfile? = response.values.data?.user_data
                                     userProfile?.let { userData ->
-                                        FastSave.getInstance().saveString(Constants.USER_ID, userData.iUserId)
-                                        FastSave.getInstance().saveString(Constants.USER_FULL_NAME, userData.vFullName)
-                                        FastSave.getInstance().saveString(Constants.USERNAME, userData.vUserName)
-                                        FastSave.getInstance().saveString(Constants.USER_EMAIL, userData.vEmail)
-                                        FastSave.getInstance().saveString(Constants.USER_PHONE_NUMBER, userData.bPhoneNumber)
-                                        FastSave.getInstance().saveString(Constants.SOCIAL_ID, userData.socialId)
-                                        FastSave.getInstance().saveBoolean(Constants.isControlModePinned, userData.iIsPinStatus!!.toBoolean())
+                                        FastSave.getInstance()
+                                            .saveString(Constants.USER_ID, userData.iUserId)
+                                        FastSave.getInstance().saveString(
+                                            Constants.USER_FULL_NAME,
+                                            userData.vFullName
+                                        )
+                                        FastSave.getInstance()
+                                            .saveString(Constants.USERNAME, userData.vUserName)
+                                        FastSave.getInstance()
+                                            .saveString(Constants.USER_EMAIL, userData.vEmail)
+                                        FastSave.getInstance().saveString(
+                                            Constants.USER_PHONE_NUMBER,
+                                            userData.bPhoneNumber
+                                        )
+                                        FastSave.getInstance()
+                                            .saveString(Constants.SOCIAL_ID, userData.socialId)
+                                        FastSave.getInstance().saveBoolean(
+                                            Constants.isControlModePinned,
+                                            userData.iIsPinStatus!!.toBoolean()
+                                        )
 
                                         if (userData.userRole == Constants.MASTER_USER) {
-                                            FastSave.getInstance().saveBoolean(Constants.IS_MASTER_USER, true)
+                                            FastSave.getInstance()
+                                                .saveBoolean(Constants.IS_MASTER_USER, true)
                                         } else {
-                                            FastSave.getInstance().saveBoolean(Constants.IS_MASTER_USER, false)
+                                            FastSave.getInstance()
+                                                .saveBoolean(Constants.IS_MASTER_USER, false)
                                         }
 
                                         val sharedPreference = activity?.getSharedPreferences(
@@ -464,7 +490,11 @@ class LoginFragment : ModelBaseFragment<AuthViewModel, FragmentLoginBinding, Aut
             activity?.let {
                 DialogUtil.loadingAlert(it)
             }
-            viewModel.login(BodyLogin(email, password, uuid))
+            viewModel.login(
+                BodyLogin(
+                    email, password, deviceId, Utils.getFCMToken()
+                )
+            )
         }
     }
 
@@ -485,5 +515,21 @@ class LoginFragment : ModelBaseFragment<AuthViewModel, FragmentLoginBinding, Aut
     ): FragmentLoginBinding = FragmentLoginBinding.inflate(inflater, container, false)
 
     override fun getFragmentRepository(): AuthRepository = AuthRepository(networkModel)
+
+    private fun messagingServices() {
+        /* FirebaseInstallations.getInstance().id.addOnCompleteListener { task: Task<String?> ->
+             if (task.isSuccessful) {
+                 val token = task.result
+                 Log.i("$logTag FirebaseMessagingService token ---->>", "$token")
+                 FastSave.getInstance().saveString(Constants.FCM_TOKEN, token)
+             }
+         }*/
+
+        FirebaseInstanceId.getInstance().instanceId.addOnSuccessListener {
+            val strToken = it.token
+            Log.i("$logTag FirebaseMessagingService token ---->>", "$strToken")
+            FastSave.getInstance().saveString(Constants.FCM_TOKEN, strToken)
+        }
+    }
 
 }

@@ -39,7 +39,7 @@ class DeviceAdapter(
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     //
-    //region Adapter
+    //region Adapter1\8
     //
 
     private val logTag = this::class.java.simpleName
@@ -313,7 +313,7 @@ class DeviceAdapter(
                 e.printStackTrace()
             }
 
-            if (device.productGroup.lowercase() == Constants.PRODUCT_SMART_TOUCH){
+            if (device.productGroup.lowercase() == Constants.PRODUCT_SMART_TOUCH) {
                 seekBar.visibility = View.GONE
             }
 
@@ -600,7 +600,7 @@ class DeviceAdapter(
                 e.printStackTrace()
             }
 
-            if (device.productGroup.lowercase() == Constants.PRODUCT_SMART_TOUCH){
+            if (device.productGroup.lowercase() == Constants.PRODUCT_SMART_TOUCH) {
                 seekBar.visibility = View.GONE
             }
 
@@ -641,7 +641,11 @@ class DeviceAdapter(
                         "4" -> {
                             val switchName = value.name
                             tvSwitchNameFour.text = switchName
-                            switchFour.isChecked = value.switchStatus.toInt().toBoolean()
+                            try {
+                                switchFour.isChecked = value.switchStatus.toInt().toBoolean()
+                            } catch (e: Exception) {
+                                e.printStackTrace()
+                            }
                             value.desc?.let {
                                 tvSwitchNameFourDesc.text = it
                             }

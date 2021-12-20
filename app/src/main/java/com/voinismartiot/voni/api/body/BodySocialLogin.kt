@@ -7,5 +7,6 @@ class BodySocialLogin(
     @SerializedName("iMobileuuid") var mobileUUID: String,
     @SerializedName("tiType") var type: String,
     @SerializedName("tiLoginType") var loginType: String,
-    @SerializedName("vEmail") var userEmail: String
+    @SerializedName("vEmail") var userEmail: String,
+    @SerializedName("vFcmToken") var fcmToken: String
 )

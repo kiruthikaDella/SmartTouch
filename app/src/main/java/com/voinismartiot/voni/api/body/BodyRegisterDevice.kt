@@ -22,5 +22,7 @@ data class BodyRegisterDevice(
     @SerializedName("vFirmwareVersion")
     val firmwareVersion: String,
     @SerializedName("vManufactureDate")
-    val manufactureDate: String
+    val manufactureDate: String,
+    @SerializedName("vDesc")
+    val desc: String
 )

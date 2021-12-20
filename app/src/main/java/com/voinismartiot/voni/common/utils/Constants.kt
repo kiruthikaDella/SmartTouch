@@ -61,6 +61,7 @@ object Constants {
     const val USER_PHONE_NUMBER = "user_phone_number"
     const val SOCIAL_ID = "social_id"
     const val ACCESS_TOKEN = "access_token"
+    const val FCM_TOKEN = "fcm_token"
 
     const val MOBILE_UUID = "mobile_uuid"
     const val DEFAULT_REMEMBER_STATUS = false

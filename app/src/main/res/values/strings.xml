@@ -7,6 +7,9 @@
     <string name="google_client_secret">Q-x9vJg8UGTX-VNma3F7ZKHm</string>
     <string name="google_client_api_key">AIzaSyCusFbvoi6knNJnuyZ2o_GYKqFj4e2GXJ4</string>
 
+    <!-- FCM notification channel -->
+    <string name="default_notification_channel_id">Basecode</string>
+
     <string name="facebook_app_id">1351754321872545</string>
     <string name="fb_login_protocol_scheme">fb1351754321872545</string>
 

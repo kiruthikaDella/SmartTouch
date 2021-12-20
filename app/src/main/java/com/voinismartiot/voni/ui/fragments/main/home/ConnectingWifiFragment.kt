@@ -325,7 +325,8 @@ class ConnectingWifiFragment :
                                 macImei = jsonObject.get("mac_imei").toString(),
                                 productGroup = productGroup,
                                 manufactureDate = jsonObject.get("vManufactureDate").toString(),
-                                firmwareVersion = jsonObject.get("vFirmwareVersion").toString()
+                                firmwareVersion = jsonObject.get("vFirmwareVersion").toString(),
+                                desc = jsonObject.get("vDesc").toString()
                             )
                         )
                     }

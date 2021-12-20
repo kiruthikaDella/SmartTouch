@@ -2,6 +2,7 @@ package com.voinismartiot.voni
 
 import android.app.Application
 import com.appizona.yehiahd.fastsave.FastSave
+import com.google.firebase.FirebaseApp
 import com.teksun.tcpudplibrary.SettingsService
 import com.voinismartiot.voni.mqtt.AwsMqttSingleton
 
@@ -22,6 +23,7 @@ class AppDelegate : Application() {
         //Initialize FastSave
         FastSave.init(this)
 
+        FirebaseApp.initializeApp(this)
         AwsMqttSingleton.initializeMQTT()
 
         SettingsService.init(this)

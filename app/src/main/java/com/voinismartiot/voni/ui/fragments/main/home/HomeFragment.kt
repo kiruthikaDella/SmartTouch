@@ -3,6 +3,7 @@ package com.voinismartiot.voni.ui.fragments.main.home
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.provider.Settings
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -29,6 +30,7 @@ import com.voinismartiot.voni.common.interfaces.DialogAskListener
 import com.voinismartiot.voni.common.interfaces.DialogShowListener
 import com.voinismartiot.voni.common.utils.Constants
 import com.voinismartiot.voni.common.utils.DialogUtil
+import com.voinismartiot.voni.common.utils.Utils
 import com.voinismartiot.voni.common.utils.Utils.toBoolean
 import com.voinismartiot.voni.common.utils.showToast
 import com.voinismartiot.voni.databinding.FragmentHomeBinding
@@ -50,13 +52,18 @@ class HomeFragment : ModelBaseFragment<HomeViewModel, FragmentHomeBinding, HomeR
     private lateinit var roomsAdapter: RoomsAdapter
     private var roomList = arrayListOf<GetRoomData>()
     private var roomData: GetRoomData? = null
+    private var deviceId = ""
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        deviceId = Settings.Secure.getString(context?.contentResolver, Settings.Secure.ANDROID_ID)
+
         binding.ivSideNavigation.setOnClickListener {
             openOrCloseDrawer()
         }
+
+        Log.e(logTag, " FCM Token ${Utils.getFCMToken()}")
 
         val headerView: View = binding.sideNavigationView.getHeaderView(0)
         val navUsername = headerView.findViewById(R.id.tv_user_name) as TextView
@@ -388,8 +395,7 @@ class HomeFragment : ModelBaseFragment<HomeViewModel, FragmentHomeBinding, HomeR
 
                                     viewModel.logout(
                                         BodyLogout(
-                                            FastSave.getInstance()
-                                                .getString(Constants.MOBILE_UUID, "")
+                                            deviceId
                                         )
                                     )
                                 }
