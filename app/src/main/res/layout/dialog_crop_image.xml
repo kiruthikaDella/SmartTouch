@@ -22,57 +22,34 @@
         android:id="@+id/crop_image_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@+id/linear_crop_buttons"
+        android:layout_above="@+id/btn_save"
         android:layout_below="@+id/relative_top"
         android:layout_marginTop="@dimen/_8sdp"
         android:layout_marginBottom="@dimen/_8sdp"
         app:cropAspectRatioX="16"
         app:cropAspectRatioY="10"
-        app:cropMinCropResultWidthPX="1280"
+        app:cropFixAspectRatio="true"
         app:cropMinCropResultHeightPX="800"
-        app:cropFixAspectRatio="true" />
+        app:cropMinCropResultWidthPX="1280" />
 
-    <LinearLayout
-        android:id="@+id/linear_crop_buttons"
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btn_save"
+        style="@style/DodgerBlueButtonStyle"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="@dimen/login_component_height"
         android:layout_alignParentBottom="true"
-        android:orientation="horizontal">
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btn_crop"
-            style="@style/DodgerBlueButtonStyle"
-            android:layout_width="0dp"
-            android:layout_height="@dimen/login_component_height"
-            android:layout_marginStart="@dimen/screen_start_margin"
-            android:layout_marginEnd="@dimen/screen_end_margin"
-            android:layout_marginBottom="@dimen/_8sdp"
-            android:layout_weight="0.5"
-            android:text="@string/text_crop"
-            android:textAllCaps="false"
-            android:textColor="@color/white"
-            android:textSize="@dimen/_13ssp" />
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btn_save"
-            style="@style/DodgerBlueButtonStyle"
-            android:layout_width="0dp"
-            android:layout_height="@dimen/login_component_height"
-            android:layout_marginStart="@dimen/screen_start_margin"
-            android:layout_marginEnd="@dimen/screen_end_margin"
-            android:layout_marginBottom="@dimen/_8sdp"
-            android:layout_weight="0.5"
-            android:text="@string/text_save"
-            android:textAllCaps="false"
-            android:textColor="@color/white"
-            android:textSize="@dimen/_13ssp" />
-
-    </LinearLayout>
+        android:layout_marginStart="@dimen/screen_start_margin"
+        android:layout_marginEnd="@dimen/screen_end_margin"
+        android:layout_marginBottom="@dimen/_8sdp"
+        android:text="@string/text_save"
+        android:textAllCaps="false"
+        android:textColor="@color/white"
+        android:textSize="@dimen/_13ssp" />
 
     <ProgressBar
         android:id="@+id/progress_bar"
         android:layout_width="@dimen/_35sdp"
         android:layout_height="@dimen/_35sdp"
-        android:layout_centerInParent="true"/>
+        android:layout_centerInParent="true" />
 
 </RelativeLayout>

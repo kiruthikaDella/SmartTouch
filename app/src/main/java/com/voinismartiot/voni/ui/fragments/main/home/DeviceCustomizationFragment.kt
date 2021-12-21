@@ -74,8 +74,10 @@ import com.sothree.slidinguppanel.SlidingUpPanelLayout
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
@@ -86,6 +88,7 @@ import java.io.File
 import java.nio.charset.StandardCharsets
 import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.concurrent.timerTask
 
 @Suppress("DEPRECATION")
 class DeviceCustomizationFragment :
@@ -386,6 +389,16 @@ class DeviceCustomizationFragment :
         }
 
         binding.btnSynchronize.setOnClickListener {
+            Log.e(logTag, " sync clicked")
+            binding.btnSynchronize.isEnabled = false
+
+            viewLifecycleOwner.lifecycleScope.launchWhenStarted {
+                withContext(Dispatchers.Main){
+                    delay(Constants.SYNC_DELAY)
+                    binding.btnSynchronize.isEnabled = true
+                }
+            }
+
             try {
                 val payload = JSONObject()
                 Log.e(logTag, " uploadImage ${deviceCustomization?.uploadImage}")
@@ -855,16 +868,11 @@ class DeviceCustomizationFragment :
             dialogCropImage?.setCancelable(true)
 
             val cropImageView = dialogCropImage?.findViewById(R.id.crop_image_view) as CropImageView
-            val btnCrop = dialogCropImage?.findViewById(R.id.btn_crop) as MaterialButton
             val btnSave = dialogCropImage?.findViewById(R.id.btn_save) as MaterialButton
             val ivBack = dialogCropImage?.findViewById(R.id.iv_back) as ImageView
             val progressBar = dialogCropImage?.findViewById(R.id.progress_bar) as ProgressBar
 
             progressBar.isVisible = false
-
-            btnSave.isEnabled = false
-            btnSave.background =
-                ContextCompat.getDrawable(mActivity, R.drawable.gray_background_6dp_corner)
 
             val originalImage: Bitmap =
                 MediaStore.Images.Media.getBitmap(mActivity.contentResolver, imageUri)
@@ -908,7 +916,7 @@ class DeviceCustomizationFragment :
                 cropImageView.setImageUriAsync(imageUri)
             }
 
-            btnCrop.setOnClickListener {
+            btnSave.setOnClickListener {
 
                 val croppedImage: Bitmap? = cropImageView.croppedImage
                 cropImageView.setImageBitmap(croppedImage)
@@ -918,9 +926,6 @@ class DeviceCustomizationFragment :
                     mActivity,
                     R.drawable.dodger_blue_background_6dp_corner
                 )
-            }
-
-            btnSave.setOnClickListener {
 
                 val croppedImageUri =
                     getImageUri(mActivity, cropImageView.croppedImage!!, imageName)

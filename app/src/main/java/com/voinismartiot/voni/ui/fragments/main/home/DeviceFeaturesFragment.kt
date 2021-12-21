@@ -29,9 +29,14 @@ import com.voinismartiot.voni.ui.fragments.ModelBaseFragment
 import com.voinismartiot.voni.ui.viewmodel.HomeViewModel
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.withContext
 import org.json.JSONObject
 import java.nio.charset.StandardCharsets
+import java.util.*
+import kotlin.concurrent.timerTask
 
 class DeviceFeaturesFragment :
     ModelBaseFragment<HomeViewModel, FragmentDeviceFeaturesBinding, HomeRepository>() {
@@ -178,6 +183,17 @@ class DeviceFeaturesFragment :
         }
 
         binding.btnSynchronize.setOnClickListener {
+            Log.e(logTag, " sync clicked")
+
+            binding.btnSynchronize.isEnabled = false
+
+            viewLifecycleOwner.lifecycleScope.launchWhenStarted {
+                withContext(Dispatchers.Main){
+                    delay(Constants.SYNC_DELAY)
+                    binding.btnSynchronize.isEnabled = true
+                }
+            }
+
             if (AwsMqttSingleton.isConnected()) {
                 try {
                     val payload = JSONObject()

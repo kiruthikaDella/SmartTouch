@@ -11,6 +11,8 @@ object Constants {
     var COMMON_DIALOG_WIDTH = 0.8.toFloat()
     var COMMON_DIALOG_HEIGHT = 0.9.toFloat()
 
+    const val SYNC_DELAY = 5000L
+
     const val API_SUCCESS_CODE = 200
     const val API_FAILURE_CODE = 400
 
