@@ -42,10 +42,6 @@ import java.text.Format
 import java.text.SimpleDateFormat
 import java.util.*
 
-/**
- * Created by Jignesh Dangar on 23-04-2021.
- */
-
 @Suppress("DEPRECATION")
 class CreateSceneFragment :
     ModelBaseFragment<HomeViewModel, FragmentCreateSceneBinding, HomeRepository>() {

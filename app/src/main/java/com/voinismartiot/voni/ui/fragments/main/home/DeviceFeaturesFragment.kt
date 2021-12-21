@@ -33,10 +33,6 @@ import kotlinx.coroutines.flow.collectLatest
 import org.json.JSONObject
 import java.nio.charset.StandardCharsets
 
-/**
- * Created by Jignesh Dangar on 09-04-2021.
- */
-
 class DeviceFeaturesFragment :
     ModelBaseFragment<HomeViewModel, FragmentDeviceFeaturesBinding, HomeRepository>() {
 

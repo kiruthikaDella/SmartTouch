@@ -5,10 +5,6 @@ import com.google.gson.annotations.SerializedName
 import kotlinx.android.parcel.Parcelize
 import java.io.Serializable
 
-/**
- * Created by Jignesh Dangar on 26-05-2021.
- */
-
 data class PinResponse(
     @SerializedName("status")
     var status: Boolean,

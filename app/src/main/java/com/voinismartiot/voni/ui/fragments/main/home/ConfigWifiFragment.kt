@@ -18,11 +18,6 @@ import com.teksun.tcpudplibrary.TCPClientService
 import com.teksun.tcpudplibrary.listener.ReadWriteValueListener
 import org.json.JSONObject
 
-
-/**
- * Created by Jignesh Dangar on 21-07-2021.
- */
-
 class ConfigWifiFragment :
     ModelBaseFragment<HomeViewModel, FragmentConfigWifiBinding, HomeRepository>() {
     private val logTag = ConfigWifiFragment::class.java.simpleName

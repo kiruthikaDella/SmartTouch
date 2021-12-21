@@ -19,9 +19,6 @@ import com.voinismartiot.voni.common.utils.DialogUtil
 import com.voinismartiot.voni.common.utils.Utils.toBoolean
 import com.voinismartiot.voni.common.utils.Utils.toInt
 
-/**
- * Created by Jignesh Dangar on 22-04-2021.
- */
 class UpdateDeviceSceneAdapter(
     private val mActivity: Activity,
     private val scenes: ArrayList<Scene>

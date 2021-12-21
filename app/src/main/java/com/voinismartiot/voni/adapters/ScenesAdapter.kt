@@ -14,10 +14,6 @@ import com.voinismartiot.voni.common.utils.Utils.toBoolean
 import com.voinismartiot.voni.common.utils.Utils.toInt
 import com.google.android.material.switchmaterial.SwitchMaterial
 
-/**
- * Created by Jignesh Dangar on 03-06-2021.
- */
-
 class ScenesAdapter(
     private val sceneList: MutableList<GetSceneData>
 ) : RecyclerView.Adapter<ScenesAdapter.MyViewHolder>() {

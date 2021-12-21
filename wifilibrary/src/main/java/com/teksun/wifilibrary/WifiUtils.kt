@@ -1,4 +1,4 @@
-package com.binjal.wifilibrary
+package com.teksun.wifilibrary
 
 import android.Manifest.permission
 import android.annotation.SuppressLint
@@ -20,7 +20,7 @@ import android.util.Log
 import androidx.annotation.RequiresPermission
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
-import com.binjal.wifilibrary.listener.*
+import com.teksun.wifilibrary.listener.*
 
 
 @SuppressLint("StaticFieldLeak")

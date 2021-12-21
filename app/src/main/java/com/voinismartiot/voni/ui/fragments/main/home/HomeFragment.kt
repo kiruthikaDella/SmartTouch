@@ -42,10 +42,6 @@ import com.voinismartiot.voni.ui.viewmodel.HomeViewModel
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
-/**
- * Created by Jignesh Dangar on 09-04-2021.
- */
-
 class HomeFragment : ModelBaseFragment<HomeViewModel, FragmentHomeBinding, HomeRepository>() {
 
     private val logTag = this::class.java.simpleName
@@ -144,7 +140,6 @@ class HomeFragment : ModelBaseFragment<HomeViewModel, FragmentHomeBinding, HomeR
 
         NotifyManager.internetInfo.observe(viewLifecycleOwner, { isConnected ->
             if (isConnected) {
-                roomList.toMutableList().clear()
                 activity?.let {
                     DialogUtil.loadingAlert(it)
                 }

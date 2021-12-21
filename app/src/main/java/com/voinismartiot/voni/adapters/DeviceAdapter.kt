@@ -29,9 +29,6 @@ import com.warkiz.widget.SeekParams
 import org.json.JSONObject
 import java.nio.charset.StandardCharsets
 
-/**
- * Created by Jignesh Dangar on 16-04-2021.
- */
 @SuppressLint("ClickableViewAccessibility")
 class DeviceAdapter(
     private val mActivity: Activity,
@@ -641,11 +638,7 @@ class DeviceAdapter(
                         "4" -> {
                             val switchName = value.name
                             tvSwitchNameFour.text = switchName
-                            try {
-                                switchFour.isChecked = value.switchStatus.toInt().toBoolean()
-                            } catch (e: Exception) {
-                                e.printStackTrace()
-                            }
+                            switchFour.isChecked = value.switchStatus.toInt().toBoolean()
                             value.desc?.let {
                                 tvSwitchNameFourDesc.text = it
                             }

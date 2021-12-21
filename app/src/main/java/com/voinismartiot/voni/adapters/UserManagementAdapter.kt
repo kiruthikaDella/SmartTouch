@@ -10,9 +10,6 @@ import com.voinismartiot.voni.R
 import com.voinismartiot.voni.api.model.SubordinateUserData
 import com.voinismartiot.voni.common.interfaces.AdapterItemClickListener
 
-/**
- * Created by Jignesh Dangar on 27-04-2021.
- */
 class UserManagementAdapter(
     private val userList: List<SubordinateUserData>
 ) : RecyclerView.Adapter<UserManagementAdapter.MyViewHolder>() {

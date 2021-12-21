@@ -9,14 +9,11 @@ import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.voinismartiot.voni.R
 import com.voinismartiot.voni.api.model.DeviceSwitchData
 import com.voinismartiot.voni.api.model.IconListData
 import com.voinismartiot.voni.common.interfaces.AdapterItemClickListener
-
-/**
- * Created by Jignesh Dangar on 27-04-2021.
- */
 
 class SwitchIconsDetailAdapter(
     private val iconList: ArrayList<IconListData>
@@ -43,26 +40,28 @@ class SwitchIconsDetailAdapter(
     }
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
-        val data = iconList[position]
 
         holder.apply {
+            val data = iconList[adapterPosition]
+
             tvSwitchName.text = data.iconName
 
             mContext?.let {
                 Glide
                     .with(it)
                     .load(data.icon)
+                    .diskCacheStrategy(DiskCacheStrategy.DATA)
                     .centerCrop()
                     .into(ivSwitch)
             }
 
             itemView.setOnClickListener {
-                rowIndex = position
+                rowIndex = adapterPosition
                 switchClickListener?.onItemClick(data)
                 notifyDataSetChanged()
             }
 
-            if (rowIndex == position) {
+            if (rowIndex == adapterPosition) {
                 mContext?.let { ctx ->
                     ivSwitch.setColorFilter(ctx.getColor(R.color.white))
                     ivSwitch.backgroundTintList =

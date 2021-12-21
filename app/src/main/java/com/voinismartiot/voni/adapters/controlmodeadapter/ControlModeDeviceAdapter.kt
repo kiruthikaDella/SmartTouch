@@ -24,9 +24,6 @@ import com.warkiz.widget.SeekParams
 import org.json.JSONObject
 import java.nio.charset.StandardCharsets
 
-/**
- * Created by Jignesh Dangar on 16-04-2021.
- */
 @SuppressLint("ClickableViewAccessibility")
 class ControlModeDeviceAdapter(
     private val mActivity: Activity,

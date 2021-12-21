@@ -29,9 +29,6 @@ import io.reactivex.disposables.Disposable
 import org.json.JSONObject
 import java.nio.charset.StandardCharsets
 
-/**
- * Created by Jignesh Dangar on 09-04-2021.
- */
 class ScreenLayoutFragment : DialogFragment() {
 
     private val logTag = this::class.java.simpleName

@@ -11,7 +11,7 @@ import android.widget.Toast
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import com.binjal.wifilibrary.WifiUtils
+import com.teksun.wifilibrary.WifiUtils
 import com.bumptech.glide.Glide
 import com.teksun.tcpudplibrary.TCPClientService
 import com.teksun.tcpudplibrary.listener.CloseSocketListener

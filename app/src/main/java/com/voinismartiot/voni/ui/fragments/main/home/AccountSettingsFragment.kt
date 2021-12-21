@@ -42,10 +42,6 @@ import com.google.android.material.button.MaterialButton
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
-/**
- * Created by Jignesh Dangar on 26-04-2021.
- */
-
 @Suppress("DEPRECATION")
 class AccountSettingsFragment :
     ModelBaseFragment<HomeViewModel, FragmentAccountSettingsBinding, HomeRepository>() {

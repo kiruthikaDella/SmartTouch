@@ -2,9 +2,6 @@ package com.voinismartiot.voni.api.model
 
 import com.google.gson.annotations.SerializedName
 
-/**
- * Created by Jignesh Dangar on 11-05-2021.
- */
 data class RoomTypeResponse(
     @SerializedName("status")
     var status: Boolean,

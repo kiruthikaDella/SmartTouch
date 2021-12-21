@@ -5,10 +5,6 @@ import com.google.gson.annotations.SerializedName
 import kotlinx.android.parcel.Parcelize
 import java.io.Serializable
 
-/**
- * Created by Jignesh Dangar on 03-06-2021.
- */
-
 data class GetSceneResponse(
     @SerializedName("status")
     var status: Boolean,

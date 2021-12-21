@@ -18,9 +18,6 @@ import com.voinismartiot.voni.ui.fragments.ModelBaseFragment
 import com.voinismartiot.voni.ui.viewmodel.UserManagementViewModel
 import kotlinx.coroutines.flow.collectLatest
 
-/**
- * Created by Jignesh Dangar on 27-04-2021.
- */
 class AddUserFragment :
     ModelBaseFragment<UserManagementViewModel, FragmentAddUserBinding, UserManagementRepository>() {
 

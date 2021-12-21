@@ -50,10 +50,6 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import java.util.*
 
-/**
- * Created by Jignesh Dangar on 09-04-2021.
- */
-
 @SuppressLint("ClickableViewAccessibility")
 class LoginFragment : ModelBaseFragment<AuthViewModel, FragmentLoginBinding, AuthRepository>() {
 

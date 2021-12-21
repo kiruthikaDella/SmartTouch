@@ -6,9 +6,6 @@ import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.http.*
 
-/**
- * Created by Jignesh Dangar on 04-05-2021.
- */
 interface SmartTouchApi {
 
     //

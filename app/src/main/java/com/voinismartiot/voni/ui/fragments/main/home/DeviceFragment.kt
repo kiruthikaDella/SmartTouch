@@ -32,8 +32,8 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import com.binjal.wifilibrary.VersionUtils
-import com.binjal.wifilibrary.WifiUtils
+import com.teksun.wifilibrary.VersionUtils
+import com.teksun.wifilibrary.WifiUtils
 import com.google.android.material.button.MaterialButton
 import com.karumi.dexter.Dexter
 import com.karumi.dexter.MultiplePermissionsReport
@@ -62,10 +62,6 @@ import com.voinismartiot.voni.ui.fragments.ModelBaseFragment
 import com.voinismartiot.voni.ui.viewmodel.HomeViewModel
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
-
-/**
- * Created by Jignesh Dangar on 09-04-2021.
- */
 
 @SuppressLint("ClickableViewAccessibility")
 class DeviceFragment : ModelBaseFragment<HomeViewModel, FragmentDeviceBinding, HomeRepository>() {

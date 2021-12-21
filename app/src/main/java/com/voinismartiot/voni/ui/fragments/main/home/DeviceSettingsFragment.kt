@@ -35,9 +35,6 @@ import kotlinx.coroutines.launch
 import org.json.JSONObject
 import java.nio.charset.StandardCharsets
 
-/**
- * Created by Jignesh Dangar on 27-04-2021.
- */
 class DeviceSettingsFragment :
     ModelBaseFragment<HomeViewModel, FragmentDeviceSettingsBinding, HomeRepository>() {
 

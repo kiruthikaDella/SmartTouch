@@ -26,10 +26,6 @@ import com.voinismartiot.voni.ui.fragments.ModelBaseFragment
 import com.voinismartiot.voni.ui.viewmodel.HomeViewModel
 import kotlinx.coroutines.flow.collectLatest
 
-/**
- * Created by Jignesh Dangar on 26-04-2021.
- */
-
 class FaqsFragment : ModelBaseFragment<HomeViewModel, FragmentFaqsBinding, HomeRepository>() {
 
     private val logTag = this::class.java.simpleName

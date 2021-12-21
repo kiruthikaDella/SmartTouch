@@ -1,4 +1,4 @@
-package com.binjal.wifilibrary
+package com.teksun.wifilibrary
 
 import android.os.Build
 

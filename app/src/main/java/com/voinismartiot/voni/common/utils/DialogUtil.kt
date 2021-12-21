@@ -18,9 +18,6 @@ import com.voinismartiot.voni.common.interfaces.DialogShowListener
 import com.voinismartiot.voni.common.utils.Utils.toEditable
 import com.google.android.material.button.MaterialButton
 
-/**
- * Created by Jignesh Dangar on 20-04-2021.
- */
 object DialogUtil {
 
     private var dialog: Dialog? = null
@@ -193,6 +190,7 @@ object DialogUtil {
 
             dialog?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
             dialog?.window?.setLayout(width.toInt(), height.toInt())
+            dialog?.window?.setDimAmount(0.0f)
             dialog?.show()
         }
 

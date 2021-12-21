@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_gravity="center"
-    android:background="@color/dialog_background_color"
+    android:background="@color/transparent"
     android:gravity="center"
     android:orientation="vertical"
     app:corner_radius="@dimen/dialog_corner_radius"
@@ -12,8 +12,8 @@
     android:paddingBottom="@dimen/_20sdp">
 
     <com.wang.avi.AVLoadingIndicatorView
-        android:layout_width="@dimen/_32sdp"
-        android:layout_height="@dimen/_32sdp"
+        android:layout_width="@dimen/_20sdp"
+        android:layout_height="@dimen/_20sdp"
         style="@style/AVLoadingIndicatorView"
         android:visibility="visible"
         app:indicatorName="LineSpinFadeLoaderIndicator"

@@ -5,9 +5,6 @@ import androidx.core.content.ContextCompat
 import com.voinismartiot.voni.R
 import com.voinismartiot.voni.databinding.FragmentScreenLayoutBinding
 
-/**
- * Created by Jignesh Dangar on 21-04-2021.
- */
 class ScreenLayoutModel(context: Context, mBinding: FragmentScreenLayoutBinding) {
 
     private var mContext = context

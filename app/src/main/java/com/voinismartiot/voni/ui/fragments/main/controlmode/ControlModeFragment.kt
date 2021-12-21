@@ -40,10 +40,6 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
-/**
- * Created by Jignesh Dangar on 19-04-2021.
- */
-
 class ControlModeFragment :
     ModelBaseFragment<HomeViewModel, FragmentControlModeBinding, HomeRepository>() {
 

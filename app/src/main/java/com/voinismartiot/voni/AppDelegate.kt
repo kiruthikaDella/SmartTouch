@@ -6,10 +6,6 @@ import com.google.firebase.FirebaseApp
 import com.teksun.tcpudplibrary.SettingsService
 import com.voinismartiot.voni.mqtt.AwsMqttSingleton
 
-/**
- * Created by Jignesh Dangar on 09-04-2021.
- */
-
 class AppDelegate : Application() {
 
     companion object {

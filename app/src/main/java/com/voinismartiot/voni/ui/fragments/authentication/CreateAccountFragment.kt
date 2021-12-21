@@ -25,10 +25,6 @@ import com.voinismartiot.voni.ui.fragments.ModelBaseFragment
 import com.voinismartiot.voni.ui.viewmodel.AuthViewModel
 import kotlinx.coroutines.flow.collectLatest
 
-/**
- * Created by Jignesh Dangar on 09-04-2021.
- */
-
 class CreateAccountFragment :
     ModelBaseFragment<AuthViewModel, FragmentCreateAccountBinding, AuthRepository>() {
 

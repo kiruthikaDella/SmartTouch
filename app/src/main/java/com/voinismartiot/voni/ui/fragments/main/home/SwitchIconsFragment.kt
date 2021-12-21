@@ -27,9 +27,6 @@ import io.reactivex.disposables.Disposable
 import org.json.JSONObject
 import java.nio.charset.StandardCharsets
 
-/**
- * Created by Jignesh Dangar on 27-04-2021.
- */
 class SwitchIconsFragment :
     ModelBaseFragment<HomeViewModel, FragmentSwitchIconsBinding, HomeRepository>() {
 

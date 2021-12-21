@@ -9,14 +9,12 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.voinismartiot.voni.R
 import com.voinismartiot.voni.api.model.GetRoomData
 import com.voinismartiot.voni.common.interfaces.AdapterItemClickListener
 import java.util.regex.Pattern
 
-/**
- * Created by Jignesh Dangar on 14-04-2021.
- */
 class RoomsAdapter(
     private val roomList: List<GetRoomData>
 ) : RecyclerView.Adapter<RoomsAdapter.MyViewHolder>() {
@@ -61,6 +59,7 @@ class RoomsAdapter(
                 Glide
                     .with(it)
                     .load(data.roomTypeId?.file)
+                    .diskCacheStrategy(DiskCacheStrategy.DATA)
                     .centerCrop()
                     .placeholder(R.drawable.ic_room_placeholder)
                     .into(ivRoomImage)

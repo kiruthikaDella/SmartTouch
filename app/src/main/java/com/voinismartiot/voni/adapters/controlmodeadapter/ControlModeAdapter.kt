@@ -9,9 +9,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.voinismartiot.voni.R
 import com.voinismartiot.voni.api.model.ControlModeRoomData
 
-/**
- * Created by Jignesh Dangar on 19-04-2021.
- */
 class ControlModeAdapter(
     private val mActivity: Activity,
     private val panelList: List<ControlModeRoomData>

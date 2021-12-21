@@ -7,7 +7,6 @@ import com.voinismartiot.voni.R
 import com.thoughtbot.expandablerecyclerview.ExpandableRecyclerViewAdapter
 import com.thoughtbot.expandablerecyclerview.models.ExpandableGroup
 
-
 class FAQAdapter(faqList: List<ExpandableGroup<*>?>?) :
     ExpandableRecyclerViewAdapter<QuestionViewHolder, AnswersViewHolder>(
         faqList

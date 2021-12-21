@@ -27,9 +27,6 @@ import java.util.*
 import javax.crypto.Mac
 import javax.crypto.spec.SecretKeySpec
 
-/**
- * Created by Jignesh Dangar on 13-04-2021.
- */
 object Utils {
 
     fun isNetworkConnectivityAvailable(): Boolean {

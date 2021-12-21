@@ -18,9 +18,6 @@ import com.voinismartiot.voni.common.interfaces.DialogAskListener
 import com.voinismartiot.voni.common.utils.DialogUtil
 import com.voinismartiot.voni.common.utils.Utils.toInt
 
-/**
- * Created by Jignesh Dangar on 22-04-2021.
- */
 class DeviceSceneAdapter(
     private val mActivity: Activity,
     private var bodyScenes: ArrayList<BodySceneData>

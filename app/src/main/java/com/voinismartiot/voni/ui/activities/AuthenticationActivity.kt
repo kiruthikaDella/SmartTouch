@@ -18,10 +18,6 @@ import com.voinismartiot.voni.ui.viewmodel.AuthViewModel
 import com.voinismartiot.voni.ui.viewmodel.ViewModelFactory
 import org.json.JSONObject
 
-/**
- * Created by Jignesh Dangar on 09-04-2021.
- */
-
 class AuthenticationActivity : AppCompatActivity() {
 
     private val logTag = this::class.java.simpleName

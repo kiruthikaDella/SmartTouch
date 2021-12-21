@@ -39,10 +39,6 @@ import com.voinismartiot.voni.ui.viewmodel.ViewModelFactory
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
-/**
- * Created by Jignesh Dangar on 09-04-2021.
- */
-
 class MainActivity : AppCompatActivity() {
 
     private lateinit var viewModel: HomeViewModel

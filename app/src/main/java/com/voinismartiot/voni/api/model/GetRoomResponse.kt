@@ -5,9 +5,6 @@ import com.google.gson.annotations.SerializedName
 import kotlinx.android.parcel.Parcelize
 import java.io.Serializable
 
-/**
- * Created by Jignesh Dangar on 11-05-2021.
- */
 data class GetRoomResponse(
     @SerializedName("status")
     var status: Boolean,

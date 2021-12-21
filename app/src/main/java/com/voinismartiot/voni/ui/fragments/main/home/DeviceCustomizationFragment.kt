@@ -87,11 +87,6 @@ import java.nio.charset.StandardCharsets
 import java.text.SimpleDateFormat
 import java.util.*
 
-
-/**
- * Created by Jignesh Dangar on 22-04-2021.
- */
-
 @Suppress("DEPRECATION")
 class DeviceCustomizationFragment :
     ModelBaseFragment<HomeViewModel, FragmentDeviceCustomizationBinding, HomeRepository>() {

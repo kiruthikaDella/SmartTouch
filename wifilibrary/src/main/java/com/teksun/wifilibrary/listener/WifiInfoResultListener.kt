@@ -1,6 +1,5 @@
-package com.binjal.wifilibrary.listener
+package com.teksun.wifilibrary.listener
 
-import android.net.wifi.ScanResult
 import android.net.wifi.WifiInfo
 
 public interface WifiInfoResultListener {

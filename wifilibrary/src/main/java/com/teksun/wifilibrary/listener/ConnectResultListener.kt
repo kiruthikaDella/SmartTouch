@@ -1,4 +1,4 @@
-package com.binjal.wifilibrary.listener
+package com.teksun.wifilibrary.listener
 
 interface ConnectResultListener {
 

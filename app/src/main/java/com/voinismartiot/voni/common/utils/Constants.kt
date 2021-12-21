@@ -1,8 +1,5 @@
 package com.voinismartiot.voni.common.utils
 
-/**
- * Created by Jignesh Dangar on 19-04-2021.
- */
 object Constants {
 
     const val SHARED_PREF = "smarttouch_preference"
