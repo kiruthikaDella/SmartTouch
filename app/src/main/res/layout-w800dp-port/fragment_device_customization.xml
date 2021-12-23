@@ -80,7 +80,6 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/_10sdp"
                         android:layout_marginTop="@dimen/_15sdp"
-                        android:layout_marginEnd="@dimen/_10sdp"
                         android:layout_marginBottom="@dimen/_15sdp">
 
                         <androidx.constraintlayout.widget.Guideline
@@ -107,8 +106,9 @@
 
                         <ImageView
                             android:id="@+id/iv_screen_layout_info"
-                            android:layout_width="@dimen/_14sdp"
-                            android:layout_height="@dimen/_14sdp"
+                            android:layout_width="@dimen/_25sdp"
+                            android:layout_height="@dimen/_25sdp"
+                            android:padding="@dimen/_5sdp"
                             android:src="@drawable/img_info"
                             app:layout_constraintBottom_toBottomOf="@+id/iv_screen_layout_settings"
                             app:layout_constraintStart_toStartOf="@+id/guideline"
@@ -116,8 +116,9 @@
 
                         <ImageView
                             android:id="@+id/iv_screen_layout_settings"
-                            android:layout_width="@dimen/_22sdp"
-                            android:layout_height="@dimen/_22sdp"
+                            android:layout_width="@dimen/_35sdp"
+                            android:layout_height="@dimen/_35sdp"
+                            android:padding="@dimen/_7sdp"
                             android:src="@drawable/ic_customize"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
@@ -139,8 +140,9 @@
 
                         <ImageView
                             android:id="@+id/iv_upload_image_info"
-                            android:layout_width="@dimen/_14sdp"
-                            android:layout_height="@dimen/_14sdp"
+                            android:layout_width="@dimen/_25sdp"
+                            android:layout_height="@dimen/_25sdp"
+                            android:padding="@dimen/_5sdp"
                             android:src="@drawable/img_info"
                             app:layout_constraintBottom_toBottomOf="@+id/iv_upload_image_settings"
                             app:layout_constraintStart_toStartOf="@+id/iv_screen_layout_info"
@@ -148,9 +150,10 @@
 
                         <ImageView
                             android:id="@+id/iv_upload_image_settings"
-                            android:layout_width="@dimen/_22sdp"
-                            android:layout_height="@dimen/_22sdp"
+                            android:layout_width="@dimen/_35sdp"
+                            android:layout_height="@dimen/_35sdp"
                             android:layout_marginTop="@dimen/_15sdp"
+                            android:padding="@dimen/_7sdp"
                             android:src="@drawable/ic_customize"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintTop_toBottomOf="@+id/iv_screen_layout_settings" />
@@ -172,8 +175,9 @@
 
                         <ImageView
                             android:id="@+id/iv_switch_icons_info"
-                            android:layout_width="@dimen/_14sdp"
-                            android:layout_height="@dimen/_14sdp"
+                            android:layout_width="@dimen/_25sdp"
+                            android:layout_height="@dimen/_25sdp"
+                            android:padding="@dimen/_5sdp"
                             android:src="@drawable/img_info"
                             app:layout_constraintBottom_toBottomOf="@+id/iv_switch_icons_settings"
                             app:layout_constraintStart_toStartOf="@+id/iv_screen_layout_info"
@@ -181,9 +185,10 @@
 
                         <ImageView
                             android:id="@+id/iv_switch_icons_settings"
-                            android:layout_width="@dimen/_22sdp"
-                            android:layout_height="@dimen/_22sdp"
+                            android:layout_width="@dimen/_35sdp"
+                            android:layout_height="@dimen/_35sdp"
                             android:layout_marginTop="@dimen/_15sdp"
+                            android:padding="@dimen/_7sdp"
                             android:src="@drawable/ic_customize"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintTop_toBottomOf="@+id/iv_upload_image_settings" />
@@ -205,8 +210,9 @@
 
                         <ImageView
                             android:id="@+id/iv_switch_icon_size_info"
-                            android:layout_width="@dimen/_14sdp"
-                            android:layout_height="@dimen/_14sdp"
+                            android:layout_width="@dimen/_25sdp"
+                            android:layout_height="@dimen/_25sdp"
+                            android:padding="@dimen/_5sdp"
                             android:src="@drawable/img_info"
                             app:layout_constraintBottom_toBottomOf="@+id/rl_switch_icon_size"
                             app:layout_constraintStart_toStartOf="@+id/iv_screen_layout_info"
@@ -217,6 +223,7 @@
                             android:layout_width="@dimen/_80sdp"
                             android:layout_height="@dimen/_30sdp"
                             android:layout_marginTop="@dimen/_15sdp"
+                            android:layout_marginEnd="@dimen/_10sdp"
                             android:background="@drawable/transparent_background_with_catskill_white_dark_border"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintTop_toBottomOf="@+id/iv_switch_icons_settings">
@@ -260,8 +267,9 @@
 
                         <ImageView
                             android:id="@+id/iv_switch_name_info"
-                            android:layout_width="@dimen/_14sdp"
-                            android:layout_height="@dimen/_14sdp"
+                            android:layout_width="@dimen/_25sdp"
+                            android:layout_height="@dimen/_25sdp"
+                            android:padding="@dimen/_5sdp"
                             android:src="@drawable/img_info"
                             app:layout_constraintBottom_toBottomOf="@+id/cb_switch_name_settings"
                             app:layout_constraintStart_toStartOf="@+id/iv_screen_layout_info"
@@ -269,11 +277,13 @@
 
                         <CheckBox
                             android:id="@+id/cb_switch_name_settings"
-                            android:layout_width="@dimen/_22sdp"
-                            android:layout_height="@dimen/_22sdp"
+                            android:layout_width="@dimen/_25sdp"
+                            android:layout_height="@dimen/_25sdp"
                             android:layout_marginTop="@dimen/_15sdp"
-                            android:scaleX="1.6"
-                            android:scaleY="1.6"
+                            android:layout_marginEnd="@dimen/_10sdp"
+                            android:background="@drawable/check_box_selector"
+                            android:button="@null"
+                            android:padding="@dimen/_10sdp"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintTop_toBottomOf="@+id/rl_switch_icon_size" />
 
@@ -294,8 +304,9 @@
 
                         <ImageView
                             android:id="@+id/iv_text_style_info"
-                            android:layout_width="@dimen/_14sdp"
-                            android:layout_height="@dimen/_14sdp"
+                            android:layout_width="@dimen/_25sdp"
+                            android:layout_height="@dimen/_25sdp"
+                            android:padding="@dimen/_5sdp"
                             android:src="@drawable/img_info"
                             app:layout_constraintBottom_toBottomOf="@+id/iv_text_style_settings"
                             app:layout_constraintStart_toStartOf="@+id/iv_screen_layout_info"
@@ -303,9 +314,10 @@
 
                         <ImageView
                             android:id="@+id/iv_text_style_settings"
-                            android:layout_width="@dimen/_22sdp"
-                            android:layout_height="@dimen/_22sdp"
+                            android:layout_width="@dimen/_35sdp"
+                            android:layout_height="@dimen/_35sdp"
                             android:layout_marginTop="@dimen/_15sdp"
+                            android:padding="@dimen/_7sdp"
                             android:src="@drawable/ic_customize"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintTop_toBottomOf="@+id/cb_switch_name_settings" />
@@ -327,8 +339,9 @@
 
                         <ImageView
                             android:id="@+id/iv_text_color_info"
-                            android:layout_width="@dimen/_14sdp"
-                            android:layout_height="@dimen/_14sdp"
+                            android:layout_width="@dimen/_25sdp"
+                            android:layout_height="@dimen/_25sdp"
+                            android:padding="@dimen/_5sdp"
                             android:src="@drawable/img_info"
                             app:layout_constraintBottom_toBottomOf="@+id/iv_text_color_settings"
                             app:layout_constraintStart_toStartOf="@+id/iv_screen_layout_info"
@@ -336,9 +349,10 @@
 
                         <ImageView
                             android:id="@+id/iv_text_color_settings"
-                            android:layout_width="@dimen/_22sdp"
-                            android:layout_height="@dimen/_22sdp"
+                            android:layout_width="@dimen/_35sdp"
+                            android:layout_height="@dimen/_35sdp"
                             android:layout_marginTop="@dimen/_15sdp"
+                            android:padding="@dimen/_7sdp"
                             android:src="@drawable/ic_customize"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintTop_toBottomOf="@+id/iv_text_style_settings" />
@@ -360,8 +374,9 @@
 
                         <ImageView
                             android:id="@+id/iv_text_size_info"
-                            android:layout_width="@dimen/_14sdp"
-                            android:layout_height="@dimen/_14sdp"
+                            android:layout_width="@dimen/_25sdp"
+                            android:layout_height="@dimen/_25sdp"
+                            android:padding="@dimen/_5sdp"
                             android:src="@drawable/img_info"
                             app:layout_constraintBottom_toBottomOf="@+id/rl_text_size_info"
                             app:layout_constraintStart_toStartOf="@+id/iv_screen_layout_info"
@@ -372,6 +387,7 @@
                             android:layout_width="@dimen/_80sdp"
                             android:layout_height="@dimen/_30sdp"
                             android:layout_marginTop="@dimen/_15sdp"
+                            android:layout_marginEnd="@dimen/_10sdp"
                             android:background="@drawable/transparent_background_with_catskill_white_dark_border"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintTop_toBottomOf="@+id/iv_text_color_settings">

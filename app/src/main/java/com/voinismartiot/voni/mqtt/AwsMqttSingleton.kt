@@ -49,26 +49,30 @@ object AwsMqttSingleton {
                         AWSIotMqttClientStatusCallback.AWSIotMqttClientStatus.Connecting -> {
                             Log.e(logTag, "Connecting.", throwable)
                             mqttStatus = MQTTConnectionStatus.CONNECTING
-                            NotifyManager.getMQTTConnectionInfo().onNext(MQTTConnectionStatus.CONNECTING)
+                            NotifyManager.getMQTTConnectionInfo()
+                                .onNext(MQTTConnectionStatus.CONNECTING)
                         }
                         AWSIotMqttClientStatusCallback.AWSIotMqttClientStatus.Connected -> {
                             Log.e(logTag, "Connected.", throwable)
                             mqttStatus = MQTTConnectionStatus.CONNECTED
                             updateObserver(true)
-                            NotifyManager.getMQTTConnectionInfo().onNext(MQTTConnectionStatus.CONNECTED)
+                            NotifyManager.getMQTTConnectionInfo()
+                                .onNext(MQTTConnectionStatus.CONNECTED)
                         }
 
                         AWSIotMqttClientStatusCallback.AWSIotMqttClientStatus.Reconnecting -> {
                             Log.e(logTag, "Reconnecting error.", throwable)
                             mqttStatus = MQTTConnectionStatus.RECONNECTING
                             updateObserver(false)
-                            NotifyManager.getMQTTConnectionInfo().onNext(MQTTConnectionStatus.RECONNECTING)
+                            NotifyManager.getMQTTConnectionInfo()
+                                .onNext(MQTTConnectionStatus.RECONNECTING)
                         }
 
                         AWSIotMqttClientStatusCallback.AWSIotMqttClientStatus.ConnectionLost -> {
                             Log.e(logTag, "ConnectionLost error.", throwable)
                             mqttStatus = MQTTConnectionStatus.CONNECTION_LOST
-                            NotifyManager.getMQTTConnectionInfo().onNext(MQTTConnectionStatus.CONNECTION_LOST)
+                            NotifyManager.getMQTTConnectionInfo()
+                                .onNext(MQTTConnectionStatus.CONNECTION_LOST)
                             connectAWS()
                         }
                         else -> {
@@ -77,7 +81,8 @@ object AwsMqttSingleton {
                                 "Status = Disconnected "
                             )
                             mqttStatus = MQTTConnectionStatus.DISCONNECTED
-                            NotifyManager.getMQTTConnectionInfo().onNext(MQTTConnectionStatus.DISCONNECTED)
+                            NotifyManager.getMQTTConnectionInfo()
+                                .onNext(MQTTConnectionStatus.DISCONNECTED)
                         }
                     }
                 }
@@ -90,9 +95,12 @@ object AwsMqttSingleton {
 
     }
 
-    private fun updateObserver(isConnected: Boolean){
-        Log.e(logTag, " updateObserver isConnected $isConnected isInternetConnected $isInternetConnected ")
-        if (isInternetConnected != isConnected){
+    private fun updateObserver(isConnected: Boolean) {
+        Log.e(
+            logTag,
+            " updateObserver isConnected $isConnected isInternetConnected $isInternetConnected "
+        )
+        if (isInternetConnected != isConnected) {
             isInternetConnected = isConnected
             NotifyManager.internetInfo.postValue(isConnected)
         }

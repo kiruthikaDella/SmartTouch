@@ -38,6 +38,13 @@ import androidx.navigation.fragment.navArgs
 import com.amazonaws.mobileconnectors.iot.AWSIotMqttQos
 import com.appizona.yehiahd.fastsave.FastSave
 import com.canhub.cropper.CropImageView
+import com.google.android.material.button.MaterialButton
+import com.karumi.dexter.Dexter
+import com.karumi.dexter.MultiplePermissionsReport
+import com.karumi.dexter.PermissionToken
+import com.karumi.dexter.listener.PermissionRequest
+import com.karumi.dexter.listener.multi.MultiplePermissionsListener
+import com.sothree.slidinguppanel.SlidingUpPanelLayout
 import com.voinismartiot.voni.BuildConfig
 import com.voinismartiot.voni.R
 import com.voinismartiot.voni.adapters.spinneradapter.SpinnerAdapter
@@ -64,13 +71,6 @@ import com.voinismartiot.voni.mqtt.MQTTConstants
 import com.voinismartiot.voni.mqtt.NotifyManager
 import com.voinismartiot.voni.ui.fragments.ModelBaseFragment
 import com.voinismartiot.voni.ui.viewmodel.HomeViewModel
-import com.google.android.material.button.MaterialButton
-import com.karumi.dexter.Dexter
-import com.karumi.dexter.MultiplePermissionsReport
-import com.karumi.dexter.PermissionToken
-import com.karumi.dexter.listener.PermissionRequest
-import com.karumi.dexter.listener.multi.MultiplePermissionsListener
-import com.sothree.slidinguppanel.SlidingUpPanelLayout
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import kotlinx.coroutines.Dispatchers
@@ -88,7 +88,6 @@ import java.io.File
 import java.nio.charset.StandardCharsets
 import java.text.SimpleDateFormat
 import java.util.*
-import kotlin.concurrent.timerTask
 
 @Suppress("DEPRECATION")
 class DeviceCustomizationFragment :
@@ -393,7 +392,7 @@ class DeviceCustomizationFragment :
             binding.btnSynchronize.isEnabled = false
 
             viewLifecycleOwner.lifecycleScope.launchWhenStarted {
-                withContext(Dispatchers.Main){
+                withContext(Dispatchers.Main) {
                     delay(Constants.SYNC_DELAY)
                     binding.btnSynchronize.isEnabled = true
                 }
@@ -625,11 +624,13 @@ class DeviceCustomizationFragment :
                                             )
                                         )
                                         isDeviceCustomizationLocked = it.isLock.toBoolean()
-                                        binding.layoutTextColor.colorPicker.setColor(
-                                            Color.parseColor(
-                                                it.textColor
+                                        if (it.textColor.isNotEmpty()){
+                                            binding.layoutTextColor.colorPicker.setColor(
+                                                Color.parseColor(
+                                                    it.textColor
+                                                )
                                             )
-                                        )
+                                        }
                                         if (isDeviceCustomizationLocked) {
                                             lockScreen()
                                         } else {

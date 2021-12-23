@@ -83,8 +83,9 @@
 
                     <ImageView
                         android:id="@+id/iv_sleep_mode_info"
-                        android:layout_width="@dimen/_14sdp"
-                        android:layout_height="@dimen/_14sdp"
+                        android:layout_width="@dimen/_25sdp"
+                        android:layout_height="@dimen/_25sdp"
+                        android:padding="@dimen/_5sdp"
                         android:src="@drawable/img_info"
                         app:layout_constraintBottom_toBottomOf="@+id/switch_sleep_mode"
                         app:layout_constraintStart_toStartOf="@+id/guideline"
@@ -117,8 +118,9 @@
 
                     <ImageView
                         android:id="@+id/iv_night_mode_info"
-                        android:layout_width="@dimen/_14sdp"
-                        android:layout_height="@dimen/_14sdp"
+                        android:layout_width="@dimen/_25sdp"
+                        android:layout_height="@dimen/_25sdp"
+                        android:padding="@dimen/_5sdp"
                         android:src="@drawable/img_info"
                         app:layout_constraintBottom_toBottomOf="@+id/switch_night_mode"
                         app:layout_constraintStart_toStartOf="@+id/guideline"
@@ -149,8 +151,9 @@
 
                     <ImageView
                         android:id="@+id/iv_outdoor_mode_info"
-                        android:layout_width="@dimen/_14sdp"
-                        android:layout_height="@dimen/_14sdp"
+                        android:layout_width="@dimen/_25sdp"
+                        android:layout_height="@dimen/_25sdp"
+                        android:padding="@dimen/_5sdp"
                         android:src="@drawable/img_info"
                         app:layout_constraintBottom_toBottomOf="@+id/switch_outdoor_mode"
                         app:layout_constraintStart_toStartOf="@+id/guideline"
@@ -181,8 +184,9 @@
 
                     <ImageView
                         android:id="@+id/iv_time_info"
-                        android:layout_width="@dimen/_14sdp"
-                        android:layout_height="@dimen/_14sdp"
+                        android:layout_width="@dimen/_25sdp"
+                        android:layout_height="@dimen/_25sdp"
+                        android:padding="@dimen/_5sdp"
                         android:src="@drawable/img_info"
                         app:layout_constraintBottom_toBottomOf="@+id/switch_time"
                         app:layout_constraintStart_toStartOf="@+id/guideline"
@@ -266,8 +270,9 @@
 
                     <ImageView
                         android:id="@+id/iv_weather_report_info"
-                        android:layout_width="@dimen/_14sdp"
-                        android:layout_height="@dimen/_14sdp"
+                        android:layout_width="@dimen/_25sdp"
+                        android:layout_height="@dimen/_25sdp"
+                        android:padding="@dimen/_5sdp"
                         android:src="@drawable/img_info"
                         app:layout_constraintBottom_toBottomOf="@+id/switch_weather_report"
                         app:layout_constraintStart_toStartOf="@+id/guideline"
@@ -298,8 +303,9 @@
 
                     <ImageView
                         android:id="@+id/iv_room_temperature_info"
-                        android:layout_width="@dimen/_14sdp"
-                        android:layout_height="@dimen/_14sdp"
+                        android:layout_width="@dimen/_25sdp"
+                        android:layout_height="@dimen/_25sdp"
+                        android:padding="@dimen/_5sdp"
                         android:src="@drawable/img_info"
                         app:layout_constraintBottom_toBottomOf="@+id/switch_room_temperature"
                         app:layout_constraintStart_toStartOf="@+id/guideline"
@@ -383,8 +389,9 @@
 
                     <ImageView
                         android:id="@+id/iv_display_brightness_info"
-                        android:layout_width="@dimen/_14sdp"
-                        android:layout_height="@dimen/_14sdp"
+                        android:layout_width="@dimen/_25sdp"
+                        android:layout_height="@dimen/_25sdp"
+                        android:padding="@dimen/_5sdp"
                         android:src="@drawable/img_info"
                         app:layout_constraintBottom_toBottomOf="@+id/switch_display_brightness"
                         app:layout_constraintStart_toStartOf="@+id/guideline"
