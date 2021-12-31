@@ -196,15 +196,14 @@ object DialogUtil {
 
     }
 
-    fun featureDetailAlert(
-        activity: Activity,
+    fun Activity.featureDetailAlert(
         title: String,
         detail: String,
         onClick: DialogShowListener? = null
     ) {
 
         hideDialog()
-        dialog = Dialog(activity)
+        dialog = Dialog(this)
         dialog?.setContentView(R.layout.dialog_feature_detail)
         dialog?.setCancelable(false)
 
@@ -229,7 +228,7 @@ object DialogUtil {
         }
 
         val displayMetrics = DisplayMetrics()
-        activity.windowManager?.defaultDisplay?.getMetrics(displayMetrics)
+        this.windowManager?.defaultDisplay?.getMetrics(displayMetrics)
         val width = (displayMetrics.widthPixels * Constants.COMMON_DIALOG_WIDTH)
         val height = (displayMetrics.heightPixels * Constants.COMMON_DIALOG_HEIGHT)
 

@@ -27,6 +27,9 @@ object MQTTConstants {
     const val OUTDOOR_MODE_SETTINGS = "/smarttouch/$AWS_DEVICE_ID/outdoor-mode-settings/"  //update outdoor mode settings
     const val OUTDOOR_MODE_ACK = "/smarttouch/$AWS_DEVICE_ID/outdoor-mode-settings-ack/"  //get outdoor mode settings
 
+    const val USB_A = "USB_A"
+    const val USB_C = "USB_C"
+
     //MQTT Parameter
     const val AWS_SWITCH_1 = "SW01"
     const val AWS_SWITCH_2 = "SW02"
@@ -51,6 +54,7 @@ object MQTTConstants {
 
     //Features
     const val AWS_SLEEP_MODE = "sm"   //Sleep Mode
+    const val AWS_SLEEP_MODE_SECOND = "sms"   //Sleep Mode Seconds
     const val AWS_NIGHT_MODE = "nm"   //Night Mode
     const val AWS_TIME_DISPLAY = "ti"   //Time Display
     const val AWS_TIME_FORMAT = "tf"   //Time Format

@@ -229,7 +229,10 @@ object AwsMqttSingleton {
 
     fun publish(topic: String, msg: String) {
         try {
-            if (isConnected()) mqttManager!!.publishString(msg, topic, AWSIotMqttQos.QOS0)
+            if (isConnected()){
+                Log.i(logTag, " topic $topic msg $msg")
+                mqttManager!!.publishString(msg, topic, AWSIotMqttQos.QOS0)
+            }
         } catch (e: Exception) {
             Log.e(logTag, "Publish error.", e)
         }

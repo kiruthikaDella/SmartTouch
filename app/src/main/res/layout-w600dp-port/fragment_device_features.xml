@@ -78,18 +78,36 @@
                         android:textColor="@color/daintree"
                         android:textSize="@dimen/_12ssp"
                         app:layout_constraintBottom_toBottomOf="@+id/switch_sleep_mode"
-                        app:layout_constraintEnd_toEndOf="@+id/iv_sleep_mode_info"
+                        app:layout_constraintEnd_toEndOf="@+id/guideline"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="@+id/switch_sleep_mode" />
 
                     <ImageView
                         android:id="@+id/iv_sleep_mode_info"
-                        android:layout_width="@dimen/_25sdp"
-                        android:layout_height="@dimen/_25sdp"
-                        android:padding="@dimen/_5sdp"
-                        android:src="@drawable/img_info"
+                        style="@style/ToolTipIcon"
                         app:layout_constraintBottom_toBottomOf="@+id/switch_sleep_mode"
                         app:layout_constraintStart_toStartOf="@+id/guideline"
+                        app:layout_constraintTop_toTopOf="@+id/switch_sleep_mode" />
+
+                    <EditText
+                        android:id="@+id/edt_sleep_time"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/_5sdp"
+                        android:layout_marginEnd="@dimen/_5sdp"
+                        android:background="@drawable/white_background_with_catskill_white_dark_border"
+                        android:fontFamily="@font/roboto_regular"
+                        android:digits="0123456789."
+                        android:inputType="number"
+                        android:maxLength="4"
+                        android:padding="@dimen/_10sdp"
+                        android:singleLine="true"
+                        android:textColor="@color/daintree"
+                        android:textColorHint="@color/ghost_2"
+                        android:textSize="@dimen/_12ssp"
+                        app:layout_constraintBottom_toBottomOf="@+id/switch_sleep_mode"
+                        app:layout_constraintEnd_toStartOf="@+id/switch_sleep_mode"
+                        app:layout_constraintStart_toEndOf="@+id/iv_sleep_mode_info"
                         app:layout_constraintTop_toTopOf="@+id/switch_sleep_mode" />
 
                     <com.google.android.material.switchmaterial.SwitchMaterial
@@ -114,16 +132,13 @@
                         android:textColor="@color/daintree"
                         android:textSize="@dimen/_12ssp"
                         app:layout_constraintBottom_toBottomOf="@+id/switch_night_mode"
-                        app:layout_constraintEnd_toEndOf="@+id/iv_night_mode_info"
+                        app:layout_constraintEnd_toEndOf="@+id/guideline"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="@+id/switch_night_mode" />
 
                     <ImageView
                         android:id="@+id/iv_night_mode_info"
-                        android:layout_width="@dimen/_25sdp"
-                        android:layout_height="@dimen/_25sdp"
-                        android:padding="@dimen/_5sdp"
-                        android:src="@drawable/img_info"
+                        style="@style/ToolTipIcon"
                         app:layout_constraintBottom_toBottomOf="@+id/switch_night_mode"
                         app:layout_constraintStart_toStartOf="@+id/guideline"
                         app:layout_constraintTop_toTopOf="@+id/switch_night_mode" />
@@ -141,43 +156,6 @@
                         app:layout_constraintTop_toBottomOf="@+id/switch_sleep_mode" />
 
                     <TextView
-                        android:id="@+id/tv_outdoor_mode"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginEnd="@dimen/_2sdp"
-                        android:fontFamily="@font/roboto_medium"
-                        android:singleLine="true"
-                        android:text="@string/text_outdoor_mode"
-                        android:textColor="@color/daintree"
-                        android:textSize="@dimen/_12ssp"
-                        app:layout_constraintBottom_toBottomOf="@+id/switch_outdoor_mode"
-                        app:layout_constraintEnd_toEndOf="@+id/iv_outdoor_mode_info"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="@+id/switch_outdoor_mode" />
-
-                    <ImageView
-                        android:id="@+id/iv_outdoor_mode_info"
-                        android:layout_width="@dimen/_25sdp"
-                        android:layout_height="@dimen/_25sdp"
-                        android:padding="@dimen/_5sdp"
-                        android:src="@drawable/img_info"
-                        app:layout_constraintBottom_toBottomOf="@+id/switch_outdoor_mode"
-                        app:layout_constraintStart_toStartOf="@+id/guideline"
-                        app:layout_constraintTop_toTopOf="@+id/switch_outdoor_mode" />
-
-                    <com.google.android.material.switchmaterial.SwitchMaterial
-                        android:id="@+id/switch_outdoor_mode"
-                        style="@style/PanelSwitchColorStyle"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/_10sdp"
-                        android:padding="@dimen/_10sdp"
-                        android:scaleX="1.4"
-                        android:scaleY="1.4"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/switch_night_mode" />
-
-                    <TextView
                         android:id="@+id/tv_time"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
@@ -188,16 +166,13 @@
                         android:textColor="@color/daintree"
                         android:textSize="@dimen/_12ssp"
                         app:layout_constraintBottom_toBottomOf="@+id/switch_time"
-                        app:layout_constraintEnd_toEndOf="@+id/iv_time_info"
+                        app:layout_constraintEnd_toEndOf="@+id/guideline"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="@+id/switch_time" />
 
                     <ImageView
                         android:id="@+id/iv_time_info"
-                        android:layout_width="@dimen/_25sdp"
-                        android:layout_height="@dimen/_25sdp"
-                        android:padding="@dimen/_5sdp"
-                        android:src="@drawable/img_info"
+                        style="@style/ToolTipIcon"
                         app:layout_constraintBottom_toBottomOf="@+id/switch_time"
                         app:layout_constraintStart_toStartOf="@+id/guideline"
                         app:layout_constraintTop_toTopOf="@+id/switch_time" />
@@ -212,7 +187,7 @@
                         android:scaleX="1.4"
                         android:scaleY="1.4"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/switch_outdoor_mode" />
+                        app:layout_constraintTop_toBottomOf="@+id/switch_night_mode" />
 
                     <TextView
                         android:id="@+id/tv_time_format"
@@ -278,16 +253,13 @@
                         android:textColor="@color/daintree"
                         android:textSize="@dimen/_12ssp"
                         app:layout_constraintBottom_toBottomOf="@+id/switch_weather_report"
-                        app:layout_constraintEnd_toEndOf="@+id/iv_weather_report_info"
+                        app:layout_constraintEnd_toEndOf="@+id/guideline"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="@+id/switch_weather_report" />
 
                     <ImageView
                         android:id="@+id/iv_weather_report_info"
-                        android:layout_width="@dimen/_25sdp"
-                        android:layout_height="@dimen/_25sdp"
-                        android:padding="@dimen/_5sdp"
-                        android:src="@drawable/img_info"
+                        style="@style/ToolTipIcon"
                         app:layout_constraintBottom_toBottomOf="@+id/switch_weather_report"
                         app:layout_constraintStart_toStartOf="@+id/guideline"
                         app:layout_constraintTop_toTopOf="@+id/switch_weather_report" />
@@ -315,16 +287,13 @@
                         android:textColor="@color/daintree"
                         android:textSize="@dimen/_12ssp"
                         app:layout_constraintBottom_toBottomOf="@+id/switch_room_temperature"
-                        app:layout_constraintEnd_toEndOf="@+id/iv_room_temperature_info"
+                        app:layout_constraintEnd_toEndOf="@+id/guideline"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="@+id/switch_room_temperature" />
 
                     <ImageView
                         android:id="@+id/iv_room_temperature_info"
-                        android:layout_width="@dimen/_25sdp"
-                        android:layout_height="@dimen/_25sdp"
-                        android:padding="@dimen/_5sdp"
-                        android:src="@drawable/img_info"
+                        style="@style/ToolTipIcon"
                         app:layout_constraintBottom_toBottomOf="@+id/switch_room_temperature"
                         app:layout_constraintStart_toStartOf="@+id/guideline"
                         app:layout_constraintTop_toTopOf="@+id/switch_room_temperature" />
@@ -405,16 +374,13 @@
                         android:textColor="@color/daintree"
                         android:textSize="@dimen/_12ssp"
                         app:layout_constraintBottom_toBottomOf="@+id/switch_display_brightness"
-                        app:layout_constraintEnd_toEndOf="@+id/iv_display_brightness_info"
+                        app:layout_constraintEnd_toEndOf="@+id/guideline"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="@+id/switch_display_brightness" />
 
                     <ImageView
                         android:id="@+id/iv_display_brightness_info"
-                        android:layout_width="@dimen/_25sdp"
-                        android:layout_height="@dimen/_25sdp"
-                        android:padding="@dimen/_5sdp"
-                        android:src="@drawable/img_info"
+                        style="@style/ToolTipIcon"
                         app:layout_constraintBottom_toBottomOf="@+id/switch_display_brightness"
                         app:layout_constraintStart_toStartOf="@+id/guideline"
                         app:layout_constraintTop_toTopOf="@+id/switch_display_brightness" />

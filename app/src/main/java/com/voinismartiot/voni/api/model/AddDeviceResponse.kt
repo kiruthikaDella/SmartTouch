@@ -56,6 +56,8 @@ data class GetDeviceData(
     var deviceSerialNo: String,
     @SerializedName("tiOutdoorMode")
     var outdoorMode: String,
+    @SerializedName("tiOutdoorModeSwitch")
+    var outdoorModeSwitch: ArrayList<String>? = null,
     @SerializedName("vDeviceName")
     var deviceName: String,
     @SerializedName("tiDeviceType")
@@ -124,13 +126,14 @@ data class DeviceSwitchData(
     @SerializedName("vName")
     var name: String,
     @SerializedName("vIcon")
-    var icon: String,
+    var icon: String? = null,
     @SerializedName("tiSwitchStatus")
     var switchStatus: String,
     @SerializedName("vDesc")
     var desc: String? = null,
     @SerializedName("vIconFile")
-    var iconFile: String? = null
+    var iconFile: String? = null,
+    var isChecked: Boolean = false
 ) : Parcelable, Serializable {
 
     override fun toString(): String {

@@ -28,42 +28,60 @@
                 app:cardBackgroundColor="@color/white"
                 app:cardElevation="@dimen/_1sdp">
 
-                <RelativeLayout
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/_40sdp">
-
-                    <ImageView
-                        android:id="@+id/img_panel_menu"
-                        android:layout_width="@dimen/_30sdp"
-                        android:layout_height="match_parent"
-                        android:layout_centerVertical="true"
-                        android:paddingStart="@dimen/_10sdp"
-                        android:paddingEnd="@dimen/_10sdp"
-                        android:src="@drawable/ic_panel_menu"
-                        app:tint="@color/theme_color" />
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
 
                     <TextView
-                        android:id="@+id/tv_panel_name"
-                        android:layout_width="wrap_content"
+                        android:id="@+id/tv_outdoor_mode_indication"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_centerVertical="true"
-                        android:layout_toStartOf="@+id/img_panel_edit"
-                        android:layout_toEndOf="@+id/img_panel_menu"
+                        android:layout_marginTop="@dimen/_5sdp"
                         android:fontFamily="@font/roboto_bold"
+                        android:gravity="center"
+                        android:text="@string/text_outdoor_mode_indication"
                         android:textColor="@color/daintree"
                         android:textSize="@dimen/_12ssp" />
 
-                    <ImageView
-                        android:id="@+id/img_panel_edit"
-                        android:layout_width="@dimen/_30sdp"
-                        android:layout_height="match_parent"
-                        android:layout_alignParentEnd="true"
-                        android:layout_centerVertical="true"
-                        android:padding="@dimen/_8sdp"
-                        android:src="@drawable/ic_panel_edit"
-                        app:tint="@color/theme_color" />
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/_40sdp">
 
-                </RelativeLayout>
+                        <ImageView
+                            android:id="@+id/img_panel_menu"
+                            android:layout_width="@dimen/_30sdp"
+                            android:layout_height="match_parent"
+                            android:layout_centerVertical="true"
+                            android:paddingStart="@dimen/_10sdp"
+                            android:paddingEnd="@dimen/_10sdp"
+                            android:src="@drawable/ic_panel_menu"
+                            app:tint="@color/theme_color" />
+
+                        <TextView
+                            android:id="@+id/tv_panel_name"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:layout_toStartOf="@+id/img_panel_edit"
+                            android:layout_toEndOf="@+id/img_panel_menu"
+                            android:fontFamily="@font/roboto_bold"
+                            android:textColor="@color/daintree"
+                            android:textSize="@dimen/_12ssp" />
+
+                        <ImageView
+                            android:id="@+id/img_panel_edit"
+                            android:layout_width="@dimen/_30sdp"
+                            android:layout_height="match_parent"
+                            android:layout_alignParentEnd="true"
+                            android:layout_centerVertical="true"
+                            android:padding="@dimen/_8sdp"
+                            android:src="@drawable/ic_panel_edit"
+                            app:tint="@color/theme_color" />
+
+                    </RelativeLayout>
+
+                </LinearLayout>
 
             </androidx.cardview.widget.CardView>
 

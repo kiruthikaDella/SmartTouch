@@ -5,6 +5,8 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.CompoundButton
+import androidx.core.text.isDigitsOnly
 import androidx.core.view.get
 import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
@@ -17,7 +19,9 @@ import com.voinismartiot.voni.api.repository.HomeRepository
 import com.voinismartiot.voni.common.interfaces.DialogShowListener
 import com.voinismartiot.voni.common.utils.Constants
 import com.voinismartiot.voni.common.utils.DialogUtil
+import com.voinismartiot.voni.common.utils.DialogUtil.featureDetailAlert
 import com.voinismartiot.voni.common.utils.Utils.toBoolean
+import com.voinismartiot.voni.common.utils.Utils.toEditable
 import com.voinismartiot.voni.common.utils.Utils.toInt
 import com.voinismartiot.voni.common.utils.showToast
 import com.voinismartiot.voni.databinding.FragmentDeviceFeaturesBinding
@@ -35,8 +39,6 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.withContext
 import org.json.JSONObject
 import java.nio.charset.StandardCharsets
-import java.util.*
-import kotlin.concurrent.timerTask
 
 class DeviceFeaturesFragment :
     ModelBaseFragment<HomeViewModel, FragmentDeviceFeaturesBinding, HomeRepository>() {
@@ -111,8 +113,6 @@ class DeviceFeaturesFragment :
                                         deviceFeatureData.sleepMode.toBoolean()
                                     binding.switchNightMode.isChecked =
                                         deviceFeatureData.nightMode.toBoolean()
-                                    binding.switchOutdoorMode.isChecked =
-                                        deviceFeatureData.outdoorMode.toBoolean()
                                     binding.switchTime.isChecked =
                                         deviceFeatureData.time.toBoolean()
                                     binding.switchWeatherReport.isChecked =
@@ -121,6 +121,7 @@ class DeviceFeaturesFragment :
                                         deviceFeatureData.roomTemperature.toBoolean()
                                     binding.seekBarBrightness.progress =
                                         deviceFeatureData.displayBrightnessValue.toInt()
+                                    binding.edtSleepTime.text = deviceFeatureData.sleepModeSecond?.toEditable()
 
                                     binding.rgTimeFormat.check(binding.rgTimeFormat[deviceFeatureData.timeFormat].id)
                                     binding.rgTemperatureUnit.check(binding.rgTemperatureUnit[deviceFeatureData.temperatureUnit].id)
@@ -147,7 +148,6 @@ class DeviceFeaturesFragment :
                 }
             }
         }
-
 
         clickEvents()
     }
@@ -183,12 +183,16 @@ class DeviceFeaturesFragment :
         }
 
         binding.btnSynchronize.setOnClickListener {
-            Log.e(logTag, " sync clicked")
+
+            if (!binding.edtSleepTime.text.toString().isDigitsOnly()) {
+                activity?.showToast(getString(R.string.error_sleep_mode_digit_only))
+                return@setOnClickListener
+            }
 
             binding.btnSynchronize.isEnabled = false
 
             viewLifecycleOwner.lifecycleScope.launchWhenStarted {
-                withContext(Dispatchers.Main){
+                withContext(Dispatchers.Main) {
                     delay(Constants.SYNC_DELAY)
                     binding.btnSynchronize.isEnabled = true
                 }
@@ -196,18 +200,23 @@ class DeviceFeaturesFragment :
 
             if (AwsMqttSingleton.isConnected()) {
                 try {
+
+                    var sleepModeSeconds = ""
+                    if (binding.edtSleepTime.text.toString().isNotEmpty()){
+                        sleepModeSeconds = binding.edtSleepTime.text.toString()
+                    }
                     val payload = JSONObject()
                     payload.put(
                         MQTTConstants.AWS_SLEEP_MODE,
                         binding.switchSleepMode.isChecked.toInt()
                     )
                     payload.put(
-                        MQTTConstants.AWS_NIGHT_MODE,
-                        binding.switchNightMode.isChecked.toInt()
+                        MQTTConstants.AWS_SLEEP_MODE_SECOND,
+                        sleepModeSeconds
                     )
                     payload.put(
-                        MQTTConstants.AWS_OUTDOOR_MODE,
-                        binding.switchOutdoorMode.isChecked.toInt()
+                        MQTTConstants.AWS_NIGHT_MODE,
+                        binding.switchNightMode.isChecked.toInt()
                     )
                     payload.put(
                         MQTTConstants.AWS_TIME_DISPLAY,
@@ -248,67 +257,44 @@ class DeviceFeaturesFragment :
         }
 
         binding.ivSleepModeInfo.setOnClickListener {
-            activity?.let { mActivity ->
-                DialogUtil.featureDetailAlert(
-                    mActivity,
-                    getString(R.string.text_sleep_mode),
-                    getString(R.string.description_sleep_mode)
-                )
-            }
+            activity?.featureDetailAlert(
+                getString(R.string.text_sleep_mode),
+                getString(R.string.description_sleep_mode)
+            )
         }
         binding.ivNightModeInfo.setOnClickListener {
-            activity?.let { mActivity ->
-                DialogUtil.featureDetailAlert(
-                    mActivity,
-                    getString(R.string.text_night_mode),
-                    getString(R.string.description_night_mode)
-                )
-            }
-        }
-        binding.ivOutdoorModeInfo.setOnClickListener {
-            activity?.let { mActivity ->
-                DialogUtil.featureDetailAlert(
-                    mActivity,
-                    getString(R.string.text_outdoor_mode),
-                    getString(R.string.description_outdoor_mode)
-                )
-            }
+            activity?.featureDetailAlert(
+                getString(R.string.text_night_mode),
+                getString(R.string.description_night_mode)
+            )
         }
         binding.ivTimeInfo.setOnClickListener {
-            activity?.let { mActivity ->
-                DialogUtil.featureDetailAlert(
-                    mActivity,
-                    getString(R.string.text_time),
-                    getString(R.string.description_time_mode)
-                )
-            }
+            activity?.featureDetailAlert(
+                getString(R.string.text_time),
+                getString(R.string.description_time_mode)
+            )
         }
         binding.ivWeatherReportInfo.setOnClickListener {
-            activity?.let { mActivity ->
-                DialogUtil.featureDetailAlert(
-                    mActivity,
-                    getString(R.string.text_weather_report),
-                    getString(R.string.description_weather_report)
-                )
-            }
+            activity?.featureDetailAlert(
+                getString(R.string.text_weather_report),
+                getString(R.string.description_weather_report)
+            )
         }
         binding.ivRoomTemperatureInfo.setOnClickListener {
-            activity?.let { mActivity ->
-                DialogUtil.featureDetailAlert(
-                    mActivity,
-                    getString(R.string.text_room_temperature),
-                    getString(R.string.description_room_temperature)
-                )
-            }
+            activity?.featureDetailAlert(
+                getString(R.string.text_room_temperature),
+                getString(R.string.description_room_temperature)
+            )
         }
         binding.ivDisplayBrightnessInfo.setOnClickListener {
-            activity?.let { mActivity ->
-                DialogUtil.featureDetailAlert(
-                    mActivity,
-                    getString(R.string.text_display_brightness),
-                    getString(R.string.description_display_brightness)
-                )
-            }
+            activity?.featureDetailAlert(
+                getString(R.string.text_display_brightness),
+                getString(R.string.description_display_brightness)
+            )
+        }
+        binding.edtSleepTime.isEnabled = binding.switchSleepMode.isChecked
+        binding.switchSleepMode.setOnCheckedChangeListener { p0, p1 ->
+            binding.edtSleepTime.isEnabled = p1
         }
     }
 
@@ -382,13 +368,12 @@ class DeviceFeaturesFragment :
                                 binding.switchSleepMode.isChecked =
                                     jsonObject.getInt(MQTTConstants.AWS_SLEEP_MODE).toBoolean()
                             }
+                            if (jsonObject.has(MQTTConstants.AWS_SLEEP_MODE_SECOND)) {
+                                binding.edtSleepTime.text = jsonObject.getString(MQTTConstants.AWS_SLEEP_MODE_SECOND).toEditable()
+                            }
                             if (jsonObject.has(MQTTConstants.AWS_NIGHT_MODE)) {
                                 binding.switchNightMode.isChecked =
                                     jsonObject.getInt(MQTTConstants.AWS_NIGHT_MODE).toBoolean()
-                            }
-                            if (jsonObject.has(MQTTConstants.AWS_OUTDOOR_MODE)) {
-                                binding.switchOutdoorMode.isChecked =
-                                    jsonObject.getInt(MQTTConstants.AWS_OUTDOOR_MODE).toBoolean()
                             }
                             if (jsonObject.has(MQTTConstants.AWS_TIME_DISPLAY)) {
                                 binding.switchTime.isChecked =
@@ -443,9 +428,6 @@ class DeviceFeaturesFragment :
     }
 
     private fun publish(payload: String) {
-
-        Log.e(logTag, " payload $payload ")
-
         AwsMqttSingleton.publish(
             MQTTConstants.UPDATE_DEVICE_FEATURE.replace(
                 MQTTConstants.AWS_DEVICE_ID,

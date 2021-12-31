@@ -56,6 +56,7 @@ import com.voinismartiot.voni.common.interfaces.DialogAskListener
 import com.voinismartiot.voni.common.interfaces.DialogShowListener
 import com.voinismartiot.voni.common.utils.Constants
 import com.voinismartiot.voni.common.utils.DialogUtil
+import com.voinismartiot.voni.common.utils.DialogUtil.featureDetailAlert
 import com.voinismartiot.voni.common.utils.FileHelper.getImageOrientation
 import com.voinismartiot.voni.common.utils.FileHelper.getRealPathFromUri
 import com.voinismartiot.voni.common.utils.FileHelper.sizeInMb
@@ -434,7 +435,6 @@ class DeviceCustomizationFragment :
                 }
                 payload.put(MQTTConstants.AWS_SWITCH_ICONS, switchIconsArray)
 
-                Log.e(logTag, " payload $payload")
                 if (AwsMqttSingleton.isConnected()) {
                     publish(payload.toString())
                 }
@@ -444,83 +444,59 @@ class DeviceCustomizationFragment :
         }
 
         binding.ivScreenLayoutInfo.setOnClickListener {
-            activity?.let { mActivity ->
-                DialogUtil.featureDetailAlert(
-                    mActivity,
-                    getString(R.string.text_screen_layout),
-                    getString(R.string.description_screen_layout)
-                )
-            }
+            activity?.featureDetailAlert(
+                getString(R.string.text_screen_layout),
+                getString(R.string.description_screen_layout)
+            )
         }
 
         binding.ivUploadImageInfo.setOnClickListener {
-            activity?.let { mActivity ->
-                DialogUtil.featureDetailAlert(
-                    mActivity,
-                    getString(R.string.text_upload_image),
-                    getString(R.string.description_upload_image)
-                )
-            }
+            activity?.featureDetailAlert(
+                getString(R.string.text_upload_image),
+                getString(R.string.description_upload_image)
+            )
         }
 
         binding.ivSwitchIconsInfo.setOnClickListener {
-            activity?.let { mActivity ->
-                DialogUtil.featureDetailAlert(
-                    mActivity,
-                    getString(R.string.text_switch_icons),
-                    getString(R.string.description_switch_icons)
-                )
-            }
+            activity?.featureDetailAlert(
+                getString(R.string.text_switch_icons),
+                getString(R.string.description_switch_icons)
+            )
         }
 
         binding.ivSwitchIconSizeInfo.setOnClickListener {
-            activity?.let { mActivity ->
-                DialogUtil.featureDetailAlert(
-                    mActivity,
-                    getString(R.string.text_switch_icon_size),
-                    getString(R.string.description_switch_icons_size)
-                )
-            }
+            activity?.featureDetailAlert(
+                getString(R.string.text_switch_icon_size),
+                getString(R.string.description_switch_icons_size)
+            )
         }
 
         binding.ivSwitchNameInfo.setOnClickListener {
-            activity?.let { mActivity ->
-                DialogUtil.featureDetailAlert(
-                    mActivity,
-                    getString(R.string.text_switch_name),
-                    getString(R.string.description_switch_name)
-                )
-            }
+            activity?.featureDetailAlert(
+                getString(R.string.text_switch_name),
+                getString(R.string.description_switch_name)
+            )
         }
 
         binding.ivTextStyleInfo.setOnClickListener {
-            activity?.let { mActivity ->
-                DialogUtil.featureDetailAlert(
-                    mActivity,
-                    getString(R.string.text_style),
-                    getString(R.string.description_text_style)
-                )
-            }
+            activity?.featureDetailAlert(
+                getString(R.string.text_style),
+                getString(R.string.description_text_style)
+            )
         }
 
         binding.ivTextColorInfo.setOnClickListener {
-            activity?.let { mActivity ->
-                DialogUtil.featureDetailAlert(
-                    mActivity,
-                    getString(R.string.text_color),
-                    getString(R.string.description_text_color)
-                )
-            }
+            activity?.featureDetailAlert(
+                getString(R.string.text_color),
+                getString(R.string.description_text_color)
+            )
         }
 
         binding.ivTextSizeInfo.setOnClickListener {
-            activity?.let { mActivity ->
-                DialogUtil.featureDetailAlert(
-                    mActivity,
-                    getString(R.string.text_size),
-                    getString(R.string.description_text_size)
-                )
-            }
+            activity?.featureDetailAlert(
+                getString(R.string.text_size),
+                getString(R.string.description_text_size)
+            )
         }
 
         binding.ivIconSizeDown.setOnClickListener {
@@ -624,7 +600,7 @@ class DeviceCustomizationFragment :
                                             )
                                         )
                                         isDeviceCustomizationLocked = it.isLock.toBoolean()
-                                        if (it.textColor.isNotEmpty()){
+                                        if (it.textColor.isNotEmpty()) {
                                             binding.layoutTextColor.colorPicker.setColor(
                                                 Color.parseColor(
                                                     it.textColor

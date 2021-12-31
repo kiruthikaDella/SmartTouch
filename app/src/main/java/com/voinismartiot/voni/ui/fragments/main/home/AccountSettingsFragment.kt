@@ -22,6 +22,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import com.appizona.yehiahd.fastsave.FastSave
+import com.google.android.material.button.MaterialButton
 import com.voinismartiot.voni.R
 import com.voinismartiot.voni.api.Resource
 import com.voinismartiot.voni.api.body.BodyChangePassword
@@ -32,13 +33,13 @@ import com.voinismartiot.voni.common.interfaces.DialogAskListener
 import com.voinismartiot.voni.common.interfaces.DialogEditListener
 import com.voinismartiot.voni.common.utils.Constants
 import com.voinismartiot.voni.common.utils.DialogUtil
+import com.voinismartiot.voni.common.utils.DialogUtil.featureDetailAlert
 import com.voinismartiot.voni.common.utils.Utils
 import com.voinismartiot.voni.common.utils.showToast
 import com.voinismartiot.voni.databinding.FragmentAccountSettingsBinding
 import com.voinismartiot.voni.mqtt.NotifyManager
 import com.voinismartiot.voni.ui.fragments.ModelBaseFragment
 import com.voinismartiot.voni.ui.viewmodel.HomeViewModel
-import com.google.android.material.button.MaterialButton
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
@@ -318,13 +319,10 @@ class AccountSettingsFragment :
         }
 
         binding.ivInfo.setOnClickListener {
-            activity?.let { mActivity ->
-                DialogUtil.featureDetailAlert(
-                    mActivity,
-                    "",
-                    getString(R.string.text_info_ownership_transfer)
-                )
-            }
+            activity?.featureDetailAlert(
+                "",
+                getString(R.string.text_info_ownership_transfer)
+            )
         }
 
         apiCall()

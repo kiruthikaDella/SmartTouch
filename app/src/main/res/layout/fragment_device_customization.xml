@@ -106,10 +106,7 @@
 
                         <ImageView
                             android:id="@+id/iv_screen_layout_info"
-                            android:layout_width="@dimen/_25sdp"
-                            android:layout_height="@dimen/_25sdp"
-                            android:padding="@dimen/_5sdp"
-                            android:src="@drawable/img_info"
+                            style="@style/ToolTipIcon"
                             app:layout_constraintBottom_toBottomOf="@+id/iv_screen_layout_settings"
                             app:layout_constraintStart_toStartOf="@+id/guideline"
                             app:layout_constraintTop_toTopOf="@+id/iv_screen_layout_settings" />
@@ -140,10 +137,7 @@
 
                         <ImageView
                             android:id="@+id/iv_upload_image_info"
-                            android:layout_width="@dimen/_25sdp"
-                            android:layout_height="@dimen/_25sdp"
-                            android:padding="@dimen/_5sdp"
-                            android:src="@drawable/img_info"
+                            style="@style/ToolTipIcon"
                             app:layout_constraintBottom_toBottomOf="@+id/iv_upload_image_settings"
                             app:layout_constraintStart_toStartOf="@+id/iv_screen_layout_info"
                             app:layout_constraintTop_toTopOf="@+id/iv_upload_image_settings" />
@@ -175,10 +169,7 @@
 
                         <ImageView
                             android:id="@+id/iv_switch_icons_info"
-                            android:layout_width="@dimen/_25sdp"
-                            android:layout_height="@dimen/_25sdp"
-                            android:padding="@dimen/_5sdp"
-                            android:src="@drawable/img_info"
+                            style="@style/ToolTipIcon"
                             app:layout_constraintBottom_toBottomOf="@+id/iv_switch_icons_settings"
                             app:layout_constraintStart_toStartOf="@+id/iv_screen_layout_info"
                             app:layout_constraintTop_toTopOf="@+id/iv_switch_icons_settings" />
@@ -210,10 +201,7 @@
 
                         <ImageView
                             android:id="@+id/iv_switch_icon_size_info"
-                            android:layout_width="@dimen/_25sdp"
-                            android:layout_height="@dimen/_25sdp"
-                            android:padding="@dimen/_5sdp"
-                            android:src="@drawable/img_info"
+                            style="@style/ToolTipIcon"
                             app:layout_constraintBottom_toBottomOf="@+id/rl_switch_icon_size"
                             app:layout_constraintStart_toStartOf="@+id/iv_screen_layout_info"
                             app:layout_constraintTop_toTopOf="@+id/rl_switch_icon_size" />
@@ -267,10 +255,7 @@
 
                         <ImageView
                             android:id="@+id/iv_switch_name_info"
-                            android:layout_width="@dimen/_25sdp"
-                            android:layout_height="@dimen/_25sdp"
-                            android:padding="@dimen/_5sdp"
-                            android:src="@drawable/img_info"
+                            style="@style/ToolTipIcon"
                             app:layout_constraintBottom_toBottomOf="@+id/cb_switch_name_settings"
                             app:layout_constraintStart_toStartOf="@+id/iv_screen_layout_info"
                             app:layout_constraintTop_toTopOf="@+id/cb_switch_name_settings" />
@@ -303,10 +288,7 @@
 
                         <ImageView
                             android:id="@+id/iv_text_style_info"
-                            android:layout_width="@dimen/_25sdp"
-                            android:layout_height="@dimen/_25sdp"
-                            android:padding="@dimen/_5sdp"
-                            android:src="@drawable/img_info"
+                            style="@style/ToolTipIcon"
                             app:layout_constraintBottom_toBottomOf="@+id/iv_text_style_settings"
                             app:layout_constraintStart_toStartOf="@+id/iv_screen_layout_info"
                             app:layout_constraintTop_toTopOf="@+id/iv_text_style_settings" />
@@ -338,10 +320,7 @@
 
                         <ImageView
                             android:id="@+id/iv_text_color_info"
-                            android:layout_width="@dimen/_25sdp"
-                            android:layout_height="@dimen/_25sdp"
-                            android:padding="@dimen/_5sdp"
-                            android:src="@drawable/img_info"
+                            style="@style/ToolTipIcon"
                             app:layout_constraintBottom_toBottomOf="@+id/iv_text_color_settings"
                             app:layout_constraintStart_toStartOf="@+id/iv_screen_layout_info"
                             app:layout_constraintTop_toTopOf="@+id/iv_text_color_settings" />
@@ -373,10 +352,7 @@
 
                         <ImageView
                             android:id="@+id/iv_text_size_info"
-                            android:layout_width="@dimen/_25sdp"
-                            android:layout_height="@dimen/_25sdp"
-                            android:padding="@dimen/_5sdp"
-                            android:src="@drawable/img_info"
+                            style="@style/ToolTipIcon"
                             app:layout_constraintBottom_toBottomOf="@+id/rl_text_size_info"
                             app:layout_constraintStart_toStartOf="@+id/iv_screen_layout_info"
                             app:layout_constraintTop_toTopOf="@+id/rl_text_size_info" />

@@ -34,6 +34,7 @@
     <string name="hint_confirm_password">Confirm Password</string>
     <string name="text_already_have_account">Already have an account?</string>
 
+
     <!--    Error message -->
     <string name="error_text_full_name">Please enter full name</string>
     <string name="error_text_full_name_length">FullName must be more than 3 character</string>
@@ -56,6 +57,7 @@
     <string name="error_text_only_master_user_can_edit">Only master user can edit this settings</string>
     <string name="error_text_unauthorized">You are not authorized to access this action.</string>
     <string name="error_something_went_wrong">Something went wrong. Please try again after sometime</string>
+    <string name="error_sleep_mode_digit_only">Sleep mode value must be digit</string>
 
     <!--    Forgot Password-->
     <string name="title_text_forgot_password">Forgot your password?</string>
@@ -102,7 +104,7 @@
     <string name="side_nav_text_contact_us">Contact us</string>
     <string name="side_nav_text_logout">Logout</string>
 
-    <!--    Room Panel-->
+    <!--    Device screen -->
     <string name="text_add_panel">Add Panel</string>
     <string name="text_edit">Edit</string>
     <string name="text_customization">Customization</string>
@@ -117,6 +119,7 @@
     <string name="text_smart_touch">SmarTouch</string>
     <string name="text_smart_tack">SmarTack</string>
     <string name="text_smart_tap">SmarTap</string>
+    <string name="text_outdoor_mode_indication">Outdoor mode is ON</string>
 
     <!--    Switch name-->
     <string name="text_switch_one">Switch 1</string>
@@ -153,8 +156,8 @@
     <string name="button_text_synchronize">Synchronize</string>
     <string name="button_text_submit">Submit</string>
     <string name="toast_text_device_synchronized">Device synchronized successful</string>
-    <string name="dialog_title_text_lock">Do you want to lock customisation with your account?</string>
-    <string name="dialog_title_text_unlock">Do you want to unlock customisation with your account?</string>
+    <string name="dialog_title_text_lock">Do you want to lock customization with your account?</string>
+    <string name="dialog_title_text_unlock">Do you want to unlock customization with your account?</string>
     <string name="text_eight_icons_view">8 Icons</string>
     <string name="text_six_icons_view">6 Icons</string>
     <string name="text_four_icons_view">4 Icons</string>
@@ -202,7 +205,6 @@
     <string name="text_manual">Manual</string>
     <string name="description_sleep_mode">Display will turn off when touch is not used for the period specified by the application.</string>
     <string name="description_night_mode">It will blacken the image and OEM logo and make the sole icon glow at bedtime.</string>
-    <string name="description_outdoor_mode">It needs to switch the whole device and only then can it return to your home</string>
     <string name="description_time_mode">The date and time should be displayed on the touch screen on the bottom left or bottom right along with the day.</string>
     <string name="description_weather_report">The weather report needs to be displayed on the touch screen at the bottom left or right. It is also necessary to indicate the weather conditions with predefined symbols like cloudy, sunny.</string>
     <string name="description_room_temperature">Devices need to display room temperature on a screen using a temperature sensor.</string>
@@ -287,6 +289,12 @@
     <string name="text_restart">Restart</string>
     <string name="text_factory_reset">Factory Reset</string>
     <string name="text_verify_update">Verifying Update</string>
+    <string name="description_restart">Device will be restart</string>
+    <string name="description_factory_reset">This will set default settings to the device</string>
+    <string name="description_remove">To remove device from this account</string>
+    <string name="description_retain_state">If this switch is on in that case if house face power cut and when power supply restores, whichever relay was ON it will be ON and whichever was OFF it will be OFF</string>
+    <string name="description_outdoor_mode">It needs to switch the whole device and only then can it return to your home</string>
+
 
     <string name="title_text_config_wifi">Config Wi-Fi</string>
     <string name="text_wifi_ssid">WiFi SSID</string>

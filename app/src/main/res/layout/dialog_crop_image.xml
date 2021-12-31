@@ -26,11 +26,7 @@
         android:layout_below="@+id/relative_top"
         android:layout_marginTop="@dimen/_8sdp"
         android:layout_marginBottom="@dimen/_8sdp"
-        app:cropAspectRatioX="16"
-        app:cropAspectRatioY="10"
-        app:cropFixAspectRatio="true"
-        app:cropMinCropResultHeightPX="800"
-        app:cropMinCropResultWidthPX="1280" />
+        app:cropFixAspectRatio="false" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btn_save"

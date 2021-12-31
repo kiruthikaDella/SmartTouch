@@ -152,6 +152,9 @@ class DeviceAdapter(
         val tvFeature = itemView.findViewById(R.id.tv_features) as TextView
         val tvDeviceSettings = itemView.findViewById(R.id.tv_device_settings) as TextView
 
+        val tvOutdoorModeIndication =
+            itemView.findViewById(R.id.tv_outdoor_mode_indication) as TextView
+
         val tvSwitchNameOne = itemView.findViewById(R.id.tv_switch_one_name) as TextView
         val tvSwitchNameTwo = itemView.findViewById(R.id.tv_switch_two_name) as TextView
         val tvSwitchNameThree = itemView.findViewById(R.id.tv_switch_three_name) as TextView
@@ -210,6 +213,9 @@ class DeviceAdapter(
         val tvFeature = itemView.findViewById(R.id.tv_features) as TextView
         val tvDeviceSettings = itemView.findViewById(R.id.tv_device_settings) as TextView
 
+        val tvOutdoorModeIndication =
+            itemView.findViewById(R.id.tv_outdoor_mode_indication) as TextView
+
         val tvSwitchNameOne = itemView.findViewById(R.id.tv_switch_one_name) as TextView
         val tvSwitchNameTwo = itemView.findViewById(R.id.tv_switch_two_name) as TextView
         val tvSwitchNameThree = itemView.findViewById(R.id.tv_switch_three_name) as TextView
@@ -245,6 +251,9 @@ class DeviceAdapter(
         val relativeLayout = itemView.findViewById(R.id.relative_layout) as RelativeLayout
 
         val tvDeviceSettings = itemView.findViewById(R.id.tv_device_settings) as TextView
+
+        val tvOutdoorModeIndication =
+            itemView.findViewById(R.id.tv_outdoor_mode_indication) as TextView
 
         val tvSwitchNameOne = itemView.findViewById(R.id.tv_switch_one_name) as TextView
         val tvSwitchNameTwo = itemView.findViewById(R.id.tv_switch_two_name) as TextView
@@ -283,6 +292,9 @@ class DeviceAdapter(
 
         val tvDeviceSettings = itemView.findViewById(R.id.tv_device_settings) as TextView
 
+        val tvOutdoorModeIndication =
+            itemView.findViewById(R.id.tv_outdoor_mode_indication) as TextView
+
         val tvSwitchNameOne = itemView.findViewById(R.id.tv_switch_one_name) as TextView
 
         val tvSwitchNameOneDesc = itemView.findViewById(R.id.tv_switch_one_type) as TextView
@@ -315,11 +327,8 @@ class DeviceAdapter(
             }
 
             tvPanelName.text = device.deviceName
-            if (device.isDeviceAvailable == "0") {
-                relativeLayout.visibility = View.VISIBLE
-            } else {
-                relativeLayout.visibility = View.GONE
-            }
+            relativeLayout.isVisible = !device.isDeviceAvailable.toBoolean()
+            tvOutdoorModeIndication.isVisible = device.outdoorMode.toBoolean()
 
             device.switchData?.let { switchData ->
                 for (value in switchData) {
@@ -602,11 +611,8 @@ class DeviceAdapter(
             }
 
             tvPanelName.text = device.deviceName
-            if (device.isDeviceAvailable == "0") {
-                relativeLayout.visibility = View.VISIBLE
-            } else {
-                relativeLayout.visibility = View.GONE
-            }
+            relativeLayout.isVisible = !device.isDeviceAvailable.toBoolean()
+            tvOutdoorModeIndication.isVisible = device.outdoorMode.toBoolean()
 
             device.switchData?.let { switchData ->
                 for (value in switchData) {
@@ -785,11 +791,8 @@ class DeviceAdapter(
             }
 
             tvPanelName.text = device.deviceName
-            if (device.isDeviceAvailable == "0") {
-                relativeLayout.visibility = View.VISIBLE
-            } else {
-                relativeLayout.visibility = View.GONE
-            }
+            relativeLayout.isVisible = !device.isDeviceAvailable.toBoolean()
+            tvOutdoorModeIndication.isVisible = device.outdoorMode.toBoolean()
 
             device.switchData?.let { switchData ->
                 for (value in switchData) {
@@ -962,11 +965,8 @@ class DeviceAdapter(
             }
 
             tvPanelName.text = device.deviceName
-            if (device.isDeviceAvailable == "0") {
-                relativeLayout.visibility = View.VISIBLE
-            } else {
-                relativeLayout.visibility = View.GONE
-            }
+            relativeLayout.isVisible = !device.isDeviceAvailable.toBoolean()
+            tvOutdoorModeIndication.isVisible = device.outdoorMode.toBoolean()
 
             device.switchData?.let { switchData ->
                 for (value in switchData) {
@@ -1127,6 +1127,7 @@ class DeviceAdapter(
                         }
 
                         notifyDataSetChanged()
+
                     } catch (e: Exception) {
                         e.printStackTrace()
                     }
@@ -1164,9 +1165,9 @@ class DeviceAdapter(
                                     deviceList.indexOfFirst { it.deviceSerialNo == dData.deviceSerialNo }
                                 deviceList[firstIndex] = dData
                             }
-
-                            notifyDataSetChanged()
                         }
+
+                        notifyDataSetChanged()
 
                     } catch (e: Exception) {
                         e.printStackTrace()
@@ -1174,6 +1175,50 @@ class DeviceAdapter(
 
                 }
             }
+
+            //Device outdoor mode update - ON/OFF
+            AwsMqttSingleton.mqttManager?.subscribeToTopic(
+                MQTTConstants.OUTDOOR_MODE_ACK.replace(
+                    MQTTConstants.AWS_DEVICE_ID,
+                    deviceId
+                ),
+                AWSIotMqttQos.QOS0
+            ) { topic, data ->
+                mActivity.runOnUiThread {
+
+                    val message = String(data, StandardCharsets.UTF_8)
+                    Log.d("$logTag ReceivedData", "$topic $message")
+
+                    try {
+                        val topic1 = topic.split("/")
+                        // topic [0] = ''
+                        // topic [1] = smarttouch
+                        // topic [2] = deviceId
+                        // topic [3] = status
+
+                        val deviceData = deviceList.find { it.deviceSerialNo == topic1[2] }
+
+                        val jsonObject = JSONObject(message)
+
+                        if (jsonObject.has(MQTTConstants.AWS_OUTDOOR_MODE)) {
+                            deviceData?.outdoorMode =
+                                jsonObject.getString(MQTTConstants.AWS_OUTDOOR_MODE)
+
+                            deviceData?.let { dData ->
+                                val firstIndex =
+                                    deviceList.indexOfFirst { it.deviceSerialNo == dData.deviceSerialNo }
+                                deviceList[firstIndex] = dData
+                            }
+
+                        }
+                        notifyDataSetChanged()
+                    } catch (e: Exception) {
+                        e.printStackTrace()
+                    }
+
+                }
+            }
+
         } catch (e: Exception) {
             Log.e(logTag, "Subscription error.", e)
         }
@@ -1194,7 +1239,6 @@ class DeviceAdapter(
             MQTTConstants.AWS_DEVICE_ID,
             deviceId
         )
-        Log.e(logTag, " publishSwitch topic $topic payload $payload  ")
         AwsMqttSingleton.publish(
             topic, payload.toString()
         )
@@ -1203,8 +1247,6 @@ class DeviceAdapter(
     private fun publishDimmer(deviceId: String, progress: String) {
         val payload = JSONObject()
         payload.put(MQTTConstants.AWS_DMR, progress)
-
-        Log.e(logTag, " publishDimmer payload $payload  ")
 
         AwsMqttSingleton.publish(
             MQTTConstants.CONTROL_DEVICE_SWITCHES.replace(

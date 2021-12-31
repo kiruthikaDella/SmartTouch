@@ -276,7 +276,7 @@
                 android:layout_width="@dimen/_12sdp"
                 android:layout_height="@dimen/_12sdp"
                 android:layout_marginStart="@dimen/_5sdp"
-                android:src="@drawable/img_info"
+                android:src="@drawable/ic_tooltip"
                 app:layout_constraintBottom_toBottomOf="@+id/tv_ownership_transfer"
                 app:layout_constraintStart_toEndOf="@+id/tv_ownership_transfer"
                 app:layout_constraintTop_toTopOf="@+id/tv_ownership_transfer"

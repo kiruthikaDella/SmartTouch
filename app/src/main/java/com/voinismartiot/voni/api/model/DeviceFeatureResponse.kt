@@ -52,6 +52,8 @@ data class DeviceFeatureData(
     var sleepMode: Int,
     @SerializedName("tiNightMode")
     var nightMode: Int,
+    @SerializedName("vSleepModeSecond")
+    var sleepModeSecond: String? = null,
     @SerializedName("tiTime")
     var time: Int,
     @SerializedName("tiOutdoorMode")
@@ -69,8 +71,9 @@ data class DeviceFeatureData(
     @SerializedName("tiDisplayBrightnessValue")
     var displayBrightnessValue: String,
 ) : Parcelable, Serializable {
+
     override fun toString(): String {
-        return "DeviceFeatureData(id='$id', sleepMode=$sleepMode, nightMode=$nightMode, time=$time, outdoorMode=$outdoorMode, timeFormat=$timeFormat, weatherReport=$weatherReport, roomTemperature=$roomTemperature, temperatureUnit=$temperatureUnit, displayBrightnessMode='$displayBrightnessMode', displayBrightnessValue='$displayBrightnessValue')"
+        return "DeviceFeatureData(id='$id', sleepMode=$sleepMode, nightMode=$nightMode, sleepModeSecond=$sleepModeSecond, time=$time, outdoorMode=$outdoorMode, timeFormat=$timeFormat, weatherReport=$weatherReport, roomTemperature=$roomTemperature, temperatureUnit=$temperatureUnit, displayBrightnessMode='$displayBrightnessMode', displayBrightnessValue='$displayBrightnessValue')"
     }
 
     override fun equals(other: Any?): Boolean {
@@ -82,6 +85,7 @@ data class DeviceFeatureData(
         if (id != other.id) return false
         if (sleepMode != other.sleepMode) return false
         if (nightMode != other.nightMode) return false
+        if (sleepModeSecond != other.sleepModeSecond) return false
         if (time != other.time) return false
         if (outdoorMode != other.outdoorMode) return false
         if (timeFormat != other.timeFormat) return false
@@ -98,6 +102,7 @@ data class DeviceFeatureData(
         var result = id.hashCode()
         result = 31 * result + sleepMode
         result = 31 * result + nightMode
+        result = 31 * result + (sleepModeSecond?.hashCode() ?: 0)
         result = 31 * result + time
         result = 31 * result + outdoorMode
         result = 31 * result + timeFormat

@@ -5,22 +5,25 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.view.isVisible
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.amazonaws.mobileconnectors.iot.AWSIotMqttQos
+import com.sothree.slidinguppanel.SlidingUpPanelLayout
 import com.voinismartiot.voni.R
+import com.voinismartiot.voni.adapters.SwitchesAdapter
 import com.voinismartiot.voni.api.Resource
 import com.voinismartiot.voni.api.body.BodyFactoryReset
 import com.voinismartiot.voni.api.body.BodyRetainState
+import com.voinismartiot.voni.api.model.DeviceSwitchData
 import com.voinismartiot.voni.api.repository.HomeRepository
 import com.voinismartiot.voni.common.interfaces.DialogAskListener
 import com.voinismartiot.voni.common.interfaces.DialogShowListener
 import com.voinismartiot.voni.common.utils.Constants
 import com.voinismartiot.voni.common.utils.DialogUtil
+import com.voinismartiot.voni.common.utils.DialogUtil.featureDetailAlert
 import com.voinismartiot.voni.common.utils.Utils.toBoolean
 import com.voinismartiot.voni.common.utils.Utils.toInt
 import com.voinismartiot.voni.common.utils.showToast
@@ -32,6 +35,7 @@ import com.voinismartiot.voni.ui.fragments.ModelBaseFragment
 import com.voinismartiot.voni.ui.viewmodel.HomeViewModel
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import org.json.JSONArray
 import org.json.JSONObject
 import java.nio.charset.StandardCharsets
 
@@ -40,27 +44,71 @@ class DeviceSettingsFragment :
 
     private val args: DeviceSettingsFragmentArgs by navArgs()
     private val logTag = this::class.java.simpleName
-    private var isSmartouch = true
+    private val switchList = arrayListOf<DeviceSwitchData>()
+    private lateinit var switchAdapter: SwitchesAdapter
+    private var isOutdoorSaved = false
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        binding.switchRetainState.isChecked = args.deviceDetail.retainState.toBoolean()
+
+        subscribeToDevice(args.deviceDetail.deviceSerialNo)
+
+        args.deviceDetail.switchData?.let { switches ->
+            for (switch in switches) {
+                if (switch.typeOfSwitch != 1) {
+                    switchList.add(
+                        DeviceSwitchData(
+                            switch.id,
+                            switch.typeOfSwitch,
+                            switch.index,
+                            switch.name,
+                            switch.icon,
+                            switch.switchStatus,
+                            switch.desc,
+                            switch.iconFile,
+                            args.deviceDetail.outdoorModeSwitch?.contains(switch.id) ?: false
+                        )
+                    )
+                }
+            }
+            switchAdapter = SwitchesAdapter(switchList)
+            binding.layoutSwitches.tvTitle.text = getString(R.string.text_select_switch)
+            binding.layoutSwitches.rvDays.adapter = switchAdapter
+        }
+
+
+        NotifyManager.internetInfo.observe(viewLifecycleOwner, { isConnected ->
+            if (!isConnected) {
+                activity?.let {
+                    DialogUtil.deviceOfflineAlert(
+                        it,
+                        getString(R.string.text_no_internet_available),
+                        object : DialogShowListener {
+                            override fun onClick() {
+                                DialogUtil.hideDialog()
+                                findNavController().navigate(DeviceSettingsFragmentDirections.actionGlobalHomeFragment())
+                            }
+
+                        }
+                    )
+                }
+            }
+        })
+
+        clickEvents()
+
+        apiCall()
+    }
+
+    private fun clickEvents() {
+
         binding.ivBack.setOnClickListener {
             findNavController().navigateUp()
         }
 
-        isSmartouch = args.deviceDetail.productGroup.lowercase() == Constants.PRODUCT_SMART_TOUCH
-
-        binding.tvOutdoorMode.isVisible = !isSmartouch
-        binding.switchOutdoorMode.isVisible = !isSmartouch
-
-        if (!isSmartouch) {
-            binding.switchOutdoorMode.isChecked = args.deviceDetail.outdoorMode.toInt().toBoolean()
-            if (AwsMqttSingleton.isConnected() && !isSmartouch) {
-                subscribeToDevice(args.deviceDetail.deviceSerialNo)
-            }
-        }
-
-        binding.tvRestart.setOnClickListener {
+        binding.layoutRestart.setOnClickListener {
             activity?.let {
                 DialogUtil.askAlert(
                     it,
@@ -87,7 +135,7 @@ class DeviceSettingsFragment :
             }
         }
 
-        binding.tvFactoryReset.setOnClickListener {
+        binding.layoutFactoryReset.setOnClickListener {
             activity?.let {
                 DialogUtil.askAlert(
                     it,
@@ -115,7 +163,7 @@ class DeviceSettingsFragment :
             }
         }
 
-        binding.tvRemove.setOnClickListener {
+        binding.layoutRemove.setOnClickListener {
             activity?.let {
                 DialogUtil.askAlert(
                     it,
@@ -142,8 +190,6 @@ class DeviceSettingsFragment :
             }
         }
 
-        binding.switchRetainState.isChecked = args.deviceDetail.retainState.toBoolean()
-
         binding.switchRetainState.setOnClickListener {
             activity?.let {
                 DialogUtil.loadingAlert(it)
@@ -156,59 +202,98 @@ class DeviceSettingsFragment :
             }
         }
 
-        /*  binding.tvUpdate.setOnClickListener {
-              activity?.let {
-                  DialogUtil.loadingAlert(
-                      it,
-                      getString(R.string.text_verify_update),
-                      true
-                  )
-              }
-          }*/
-
-        NotifyManager.internetInfo.observe(viewLifecycleOwner, { isConnected ->
-            if (!isConnected) {
-                activity?.let {
-                    DialogUtil.deviceOfflineAlert(
-                        it,
-                        getString(R.string.text_no_internet_available),
-                        object : DialogShowListener {
-                            override fun onClick() {
-                                DialogUtil.hideDialog()
-                                findNavController().navigate(DeviceSettingsFragmentDirections.actionGlobalHomeFragment())
-                            }
-
-                        }
-                    )
-                }
-            }
-        })
-
         binding.switchOutdoorMode.setOnClickListener {
+
+            if (binding.switchOutdoorMode.isChecked) {
+                showPanel()
+            } else {
+                publishOutdoorMode(
+                    MQTTConstants.OUTDOOR_MODE_SETTINGS.replace(
+                        MQTTConstants.AWS_DEVICE_ID,
+                        args.deviceDetail.deviceSerialNo
+                    ),
+                    binding.switchOutdoorMode.isChecked.toInt().toString(),
+                    switchAdapter.getSelectedSwitchNames()
+                )
+            }
+        }
+
+        binding.ivRestartInfo.setOnClickListener {
+            activity?.featureDetailAlert(
+                getString(R.string.text_restart),
+                getString(R.string.description_restart)
+            )
+        }
+
+        binding.ivFactoryResetInfo.setOnClickListener {
+            activity?.featureDetailAlert(
+                getString(R.string.text_factory_reset),
+                getString(R.string.description_factory_reset)
+            )
+        }
+
+        binding.ivRemoveInfo.setOnClickListener {
+            activity?.featureDetailAlert(
+                getString(R.string.text_remove),
+                getString(R.string.description_remove)
+            )
+        }
+
+        binding.ivRetainStateInfo.setOnClickListener {
+            activity?.featureDetailAlert(
+                getString(R.string.text_retain_state),
+                getString(R.string.description_retain_state)
+            )
+        }
+
+        binding.ivOutdoorModeInfo.setOnClickListener {
+            activity?.featureDetailAlert(
+                getString(R.string.text_outdoor_mode),
+                getString(R.string.description_outdoor_mode)
+            )
+        }
+
+        binding.layoutSwitches.btnSave.setOnClickListener {
             publishOutdoorMode(
                 MQTTConstants.OUTDOOR_MODE_SETTINGS.replace(
                     MQTTConstants.AWS_DEVICE_ID,
                     args.deviceDetail.deviceSerialNo
-                ), binding.switchOutdoorMode.isChecked.toInt().toString()
+                ), binding.switchOutdoorMode.isChecked.toInt().toString(),
+                switchAdapter.getSelectedSwitchNames()
             )
+            isOutdoorSaved = true
+            hidePanel()
         }
 
-        apiCall()
+        binding.layoutSlidingUpPanel.addPanelSlideListener( object : SlidingUpPanelLayout.PanelSlideListener {
+            override fun onPanelSlide(panel: View?, slideOffset: Float) {
+
+            }
+
+            override fun onPanelStateChanged(
+                panel: View?,
+                previousState: SlidingUpPanelLayout.PanelState?,
+                newState: SlidingUpPanelLayout.PanelState?
+            ) {
+                if (newState == SlidingUpPanelLayout.PanelState.COLLAPSED && !isOutdoorSaved){
+                    binding.switchOutdoorMode.isChecked = false
+                }
+            }
+
+        })
+    }
+
+    private fun showPanel() {
+        binding.layoutSlidingUpPanel.panelState = SlidingUpPanelLayout.PanelState.EXPANDED
+    }
+
+    private fun hidePanel() {
+        binding.layoutSlidingUpPanel.panelState = SlidingUpPanelLayout.PanelState.HIDDEN
     }
 
     private fun publishTopic(topicName: String, stringIndex: String) {
         val payload = JSONObject()
         payload.put(stringIndex, "1")
-
-        if (AwsMqttSingleton.isConnected()) {
-            Log.e(logTag, " publish settings topic $topicName payload $payload")
-            AwsMqttSingleton.publish(topicName, payload.toString())
-        }
-    }
-
-    private fun publishOutdoorMode(topicName: String, value: String) {
-        val payload = JSONObject()
-        payload.put(MQTTConstants.AWS_OUTDOOR_MODE, value)
 
         if (AwsMqttSingleton.isConnected()) {
             Log.e(logTag, " publish settings topic $topicName payload $payload")
@@ -353,6 +438,21 @@ class DeviceSettingsFragment :
             }
         } catch (e: Exception) {
             e.printStackTrace()
+        }
+    }
+
+    private fun publishOutdoorMode(
+        topicName: String,
+        value: String,
+        selectedSwitch: ArrayList<String>
+    ) {
+        isOutdoorSaved = false
+        val payload = JSONObject()
+        payload.put(MQTTConstants.AWS_OUTDOOR_MODE, value)
+        payload.put(MQTTConstants.AWS_SWITCH, JSONArray(selectedSwitch))
+
+        if (AwsMqttSingleton.isConnected()) {
+            AwsMqttSingleton.publish(topicName, payload.toString())
         }
     }
 

@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.RelativeLayout
 import android.widget.TextView
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.amazonaws.mobileconnectors.iot.AWSIotMqttQos
 import com.google.android.material.switchmaterial.SwitchMaterial
@@ -127,6 +128,9 @@ class ControlModeDeviceAdapter(
         val relativeMain = itemView.findViewById(R.id.relative_main) as RelativeLayout
         val relativeLayout = itemView.findViewById(R.id.relative_layout) as RelativeLayout
 
+        val tvOutdoorModeIndication =
+            itemView.findViewById(R.id.tv_outdoor_mode_indication) as TextView
+
         val tvPanelName = itemView.findViewById(R.id.tv_panel_name) as TextView
         val tvSwitchNameOne = itemView.findViewById(R.id.tv_switch_one_name) as TextView
         val tvSwitchNameTwo = itemView.findViewById(R.id.tv_switch_two_name) as TextView
@@ -162,6 +166,9 @@ class ControlModeDeviceAdapter(
         val relativeMain = itemView.findViewById(R.id.relative_main) as RelativeLayout
         val relativeLayout = itemView.findViewById(R.id.relative_layout) as RelativeLayout
 
+        val tvOutdoorModeIndication =
+            itemView.findViewById(R.id.tv_outdoor_mode_indication) as TextView
+
         val tvPanelName = itemView.findViewById(R.id.tv_panel_name) as TextView
         val tvSwitchNameOne = itemView.findViewById(R.id.tv_switch_one_name) as TextView
         val tvSwitchNameTwo = itemView.findViewById(R.id.tv_switch_two_name) as TextView
@@ -186,6 +193,9 @@ class ControlModeDeviceAdapter(
     inner class SmartAckPanelViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val relativeMain = itemView.findViewById(R.id.relative_main) as RelativeLayout
         val relativeLayout = itemView.findViewById(R.id.relative_layout) as RelativeLayout
+
+        val tvOutdoorModeIndication =
+            itemView.findViewById(R.id.tv_outdoor_mode_indication) as TextView
 
         val tvPanelName = itemView.findViewById(R.id.tv_panel_name) as TextView
         val tvSwitchNameOne = itemView.findViewById(R.id.tv_switch_one_name) as TextView
@@ -215,6 +225,8 @@ class ControlModeDeviceAdapter(
         val relativeLayout = itemView.findViewById(R.id.relative_layout) as RelativeLayout
         val tvPanelName = itemView.findViewById(R.id.tv_panel_name) as TextView
 
+        val tvOutdoorModeIndication =
+            itemView.findViewById(R.id.tv_outdoor_mode_indication) as TextView
 
         val tvSwitchNameOne = itemView.findViewById(R.id.tv_switch_one_name) as TextView
 
@@ -241,15 +253,10 @@ class ControlModeDeviceAdapter(
                 e.printStackTrace()
             }
 
-            if (device.isDeviceAvailable == "0") {
-                relativeLayout.visibility = View.VISIBLE
-            } else {
-                relativeLayout.visibility = View.GONE
-            }
-
-            seekBar.visibility = View.GONE
-
             tvPanelName.text = device.deviceName
+            relativeLayout.isVisible = !device.isDeviceAvailable.toBoolean()
+            seekBar.visibility = View.GONE
+            tvOutdoorModeIndication.isVisible = device.outdoorMode.toBoolean()
 
             device.switchData?.let { switchData ->
                 for (value in switchData) {
@@ -434,15 +441,10 @@ class ControlModeDeviceAdapter(
                 e.printStackTrace()
             }
 
-            if (device.isDeviceAvailable == "0") {
-                relativeLayout.visibility = View.VISIBLE
-            } else {
-                relativeLayout.visibility = View.GONE
-            }
-
-            seekBar.visibility = View.GONE
-
             tvPanelName.text = device.deviceName
+            relativeLayout.isVisible = !device.isDeviceAvailable.toBoolean()
+            seekBar.visibility = View.GONE
+            tvOutdoorModeIndication.isVisible = device.outdoorMode.toBoolean()
 
             device.switchData?.let { switchData ->
                 for (value in switchData) {
@@ -566,13 +568,9 @@ class ControlModeDeviceAdapter(
                 e.printStackTrace()
             }
 
-            if (device.isDeviceAvailable == "0") {
-                relativeLayout.visibility = View.VISIBLE
-            } else {
-                relativeLayout.visibility = View.GONE
-            }
-
             tvPanelName.text = device.deviceName
+            relativeLayout.isVisible = !device.isDeviceAvailable.toBoolean()
+            tvOutdoorModeIndication.isVisible = device.outdoorMode.toBoolean()
 
             device.switchData?.let { switchData ->
                 for (value in switchData) {
@@ -704,11 +702,8 @@ class ControlModeDeviceAdapter(
             }
 
             tvPanelName.text = device.deviceName
-            if (device.isDeviceAvailable == "0") {
-                relativeLayout.visibility = View.VISIBLE
-            } else {
-                relativeLayout.visibility = View.GONE
-            }
+            relativeLayout.isVisible = !device.isDeviceAvailable.toBoolean()
+            tvOutdoorModeIndication.isVisible = device.outdoorMode.toBoolean()
 
             device.switchData?.let { switchData ->
                 for (value in switchData) {
@@ -790,9 +785,12 @@ class ControlModeDeviceAdapter(
                                     deviceData?.switchData?.get(5)?.switchStatus = switchStatus[5]
                                     deviceData?.switchData?.get(6)?.switchStatus = switchStatus[6]
                                     deviceData?.switchData?.get(7)?.switchStatus = switchStatus[7]
-                                    deviceData?.switchData?.get(8)?.switchStatus = jsonObject.getString(MQTTConstants.AWS_DIMMER) //Dimmer
-                                    deviceData?.switchData?.get(9)?.switchStatus = jsonObject.getString(MQTTConstants.AWS_USB_A) //USB A
-                                    deviceData?.switchData?.get(10)?.switchStatus = jsonObject.getString(MQTTConstants.AWS_USB_C) //USB C
+                                    deviceData?.switchData?.get(8)?.switchStatus =
+                                        jsonObject.getString(MQTTConstants.AWS_DIMMER) //Dimmer
+                                    deviceData?.switchData?.get(9)?.switchStatus =
+                                        jsonObject.getString(MQTTConstants.AWS_USB_A) //USB A
+                                    deviceData?.switchData?.get(10)?.switchStatus =
+                                        jsonObject.getString(MQTTConstants.AWS_USB_C) //USB C
                                 } else if (jsonObject.getString(MQTTConstants.AWS_DEVICE_TYPE) == "4") {
                                     deviceData?.switchData?.get(0)?.switchStatus = switchStatus[0]
                                     deviceData?.switchData?.get(1)?.switchStatus = switchStatus[1]
@@ -862,9 +860,53 @@ class ControlModeDeviceAdapter(
                                 val firstIndex = deviceList.indexOfFirst { it.id == dData.id }
                                 deviceList[firstIndex] = dData
                             }
-                            notifyDataSetChanged()
                         }
 
+                        notifyDataSetChanged()
+
+                    } catch (e: Exception) {
+                        e.printStackTrace()
+                    }
+
+                }
+            }
+
+            //Device outdoor mode update - ON/OFF
+            AwsMqttSingleton.mqttManager?.subscribeToTopic(
+                MQTTConstants.OUTDOOR_MODE_ACK.replace(
+                    MQTTConstants.AWS_DEVICE_ID,
+                    deviceId
+                ),
+                AWSIotMqttQos.QOS0
+            ) { topic, data ->
+                mActivity.runOnUiThread {
+
+                    val message = String(data, StandardCharsets.UTF_8)
+                    Log.d("$logTag ReceivedData", "$topic $message")
+
+                    try {
+                        val topic1 = topic.split("/")
+                        // topic [0] = ''
+                        // topic [1] = smarttouch
+                        // topic [2] = deviceId
+                        // topic [3] = status
+
+                        val deviceData = deviceList.find { it.deviceSerialNo == topic1[2] }
+
+                        val jsonObject = JSONObject(message)
+
+                        if (jsonObject.has(MQTTConstants.AWS_OUTDOOR_MODE)) {
+                            deviceData?.outdoorMode =
+                                jsonObject.getString(MQTTConstants.AWS_OUTDOOR_MODE)
+
+                            deviceData?.let { dData ->
+                                val firstIndex =
+                                    deviceList.indexOfFirst { it.deviceSerialNo == dData.deviceSerialNo }
+                                deviceList[firstIndex] = dData
+                            }
+                        }
+
+                        notifyDataSetChanged()
                     } catch (e: Exception) {
                         e.printStackTrace()
                     }
@@ -886,8 +928,6 @@ class ControlModeDeviceAdapter(
         payload.put(switchIndex, switchValue)
         if (switchName.isNotEmpty())
             payload.put(MQTTConstants.AWS_NAME, switchName)
-
-        Log.e(logTag, " publish payload $payload")
 
         AwsMqttSingleton.publish(
             MQTTConstants.CONTROL_DEVICE_SWITCHES.replace(

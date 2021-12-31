@@ -22,6 +22,7 @@ import com.appizona.yehiahd.fastsave.FastSave
 import com.facebook.appevents.internal.AppEventUtility.bytesToHex
 import com.voinismartiot.voni.AppDelegate
 import java.io.ByteArrayOutputStream
+import java.lang.Double.parseDouble
 import java.security.MessageDigest
 import java.util.*
 import javax.crypto.Mac
@@ -124,6 +125,8 @@ object Utils {
     fun String.toEditable(): Editable = Editable.Factory.getInstance().newEditable(this)
 
     fun Int.toBoolean(): Boolean = this == 1 // return true if value is 1, else return false
+
+    fun String.toBoolean(): Boolean = this == "1" // return true if value is 1, else return false
 
     fun Boolean.toInt(): Int = if (this) 1 else 0 // return 1 if true, else return 0
 
