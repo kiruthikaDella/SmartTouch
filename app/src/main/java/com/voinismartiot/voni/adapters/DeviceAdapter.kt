@@ -614,6 +614,11 @@ class DeviceAdapter(
             relativeLayout.isVisible = !device.isDeviceAvailable.toBoolean()
             tvOutdoorModeIndication.isVisible = device.outdoorMode.toBoolean()
 
+            if (device.productGroup.lowercase() == Constants.PRODUCT_SMART_AP){
+                tvCustomization.visibility = View.GONE
+                tvFeature.visibility = View.GONE
+            }
+
             device.switchData?.let { switchData ->
                 for (value in switchData) {
                     when (value.index) {

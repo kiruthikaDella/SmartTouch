@@ -5,7 +5,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.CompoundButton
 import androidx.core.text.isDigitsOnly
 import androidx.core.view.get
 import androidx.core.view.isVisible
@@ -121,7 +120,8 @@ class DeviceFeaturesFragment :
                                         deviceFeatureData.roomTemperature.toBoolean()
                                     binding.seekBarBrightness.progress =
                                         deviceFeatureData.displayBrightnessValue.toInt()
-                                    binding.edtSleepTime.text = deviceFeatureData.sleepModeSecond?.toEditable()
+                                    binding.edtSleepTime.text =
+                                        deviceFeatureData.sleepModeSecond?.toEditable()
 
                                     binding.rgTimeFormat.check(binding.rgTimeFormat[deviceFeatureData.timeFormat].id)
                                     binding.rgTemperatureUnit.check(binding.rgTemperatureUnit[deviceFeatureData.temperatureUnit].id)
@@ -202,7 +202,7 @@ class DeviceFeaturesFragment :
                 try {
 
                     var sleepModeSeconds = ""
-                    if (binding.edtSleepTime.text.toString().isNotEmpty()){
+                    if (binding.edtSleepTime.text.toString().isNotEmpty()) {
                         sleepModeSeconds = binding.edtSleepTime.text.toString()
                     }
                     val payload = JSONObject()
@@ -369,7 +369,9 @@ class DeviceFeaturesFragment :
                                     jsonObject.getInt(MQTTConstants.AWS_SLEEP_MODE).toBoolean()
                             }
                             if (jsonObject.has(MQTTConstants.AWS_SLEEP_MODE_SECOND)) {
-                                binding.edtSleepTime.text = jsonObject.getString(MQTTConstants.AWS_SLEEP_MODE_SECOND).toEditable()
+                                binding.edtSleepTime.text =
+                                    jsonObject.getString(MQTTConstants.AWS_SLEEP_MODE_SECOND)
+                                        .toEditable()
                             }
                             if (jsonObject.has(MQTTConstants.AWS_NIGHT_MODE)) {
                                 binding.switchNightMode.isChecked =

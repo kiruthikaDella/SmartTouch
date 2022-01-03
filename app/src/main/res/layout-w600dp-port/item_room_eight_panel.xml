@@ -788,8 +788,6 @@
                     <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/_20sdp"
-                        android:layout_marginBottom="@dimen/_20sdp"
                         android:orientation="vertical">
 
                         <TextView
@@ -798,6 +796,7 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
                             android:layout_marginStart="@dimen/_15sdp"
+                            android:layout_marginTop="@dimen/_20sdp"
                             android:layout_marginEnd="@dimen/_15sdp"
                             android:background="@drawable/device_menu_bottom_line"
                             android:drawablePadding="@dimen/_15sdp"

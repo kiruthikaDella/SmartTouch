@@ -73,10 +73,8 @@ class ScreenLayoutFragment : DialogFragment() {
         mqttConnectionDisposable =
             NotifyManager.getMQTTConnectionInfo().observeOn(AndroidSchedulers.mainThread())
                 .subscribe {
-                    Log.e(logTag, " MQTTConnectionStatus = $it ")
                     when (it) {
                         MQTTConnectionStatus.CONNECTED -> {
-                            Log.e(logTag, " MQTTConnectionStatus.CONNECTED ")
                             subscribeToDevice(args.deviceDetail.deviceSerialNo)
                         }
                         else -> {
