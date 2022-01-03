@@ -19,6 +19,9 @@ import com.voinismartiot.voni.api.model.DeviceSwitchData
 import com.voinismartiot.voni.api.model.GetDeviceData
 import com.voinismartiot.voni.common.interfaces.AdapterItemClickListener
 import com.voinismartiot.voni.common.utils.Constants
+import com.voinismartiot.voni.common.utils.Utils.isSmartAck
+import com.voinismartiot.voni.common.utils.Utils.isSmartAp
+import com.voinismartiot.voni.common.utils.Utils.isSmartouch
 import com.voinismartiot.voni.common.utils.Utils.toBoolean
 import com.voinismartiot.voni.common.utils.Utils.toInt
 import com.voinismartiot.voni.mqtt.AwsMqttSingleton
@@ -113,15 +116,15 @@ class DeviceAdapter(
     }
 
     override fun getItemViewType(position: Int): Int {
-        return if (deviceList[position].productGroup.lowercase() == Constants.PRODUCT_SMART_TOUCH) {
+        return if (deviceList[position].productGroup.isSmartouch()) {
             if (deviceList[position].deviceType == Constants.DEVICE_TYPE_EIGHT) {
                 eightPanelView
             } else {
                 fourPanelView
             }
-        } else if (deviceList[position].productGroup.lowercase() == Constants.PRODUCT_SMART_ACK) {
+        } else if (deviceList[position].productGroup.isSmartAck()) {
             smartAckPanelView
-        } else if (deviceList[position].productGroup.lowercase() == Constants.PRODUCT_SMART_AP) {
+        } else if (deviceList[position].productGroup.isSmartAp()) {
             when (deviceList[position].deviceType) {
                 Constants.DEVICE_TYPE_EIGHT -> {
                     eightPanelView
@@ -322,7 +325,7 @@ class DeviceAdapter(
                 e.printStackTrace()
             }
 
-            if (device.productGroup.lowercase() == Constants.PRODUCT_SMART_TOUCH) {
+            if (device.productGroup.isSmartouch()) {
                 seekBar.visibility = View.GONE
             }
 
@@ -606,7 +609,7 @@ class DeviceAdapter(
                 e.printStackTrace()
             }
 
-            if (device.productGroup.lowercase() == Constants.PRODUCT_SMART_TOUCH) {
+            if (device.productGroup.isSmartouch()) {
                 seekBar.visibility = View.GONE
             }
 
@@ -614,7 +617,7 @@ class DeviceAdapter(
             relativeLayout.isVisible = !device.isDeviceAvailable.toBoolean()
             tvOutdoorModeIndication.isVisible = device.outdoorMode.toBoolean()
 
-            if (device.productGroup.lowercase() == Constants.PRODUCT_SMART_AP){
+            if (device.productGroup.isSmartAp()) {
                 tvCustomization.visibility = View.GONE
                 tvFeature.visibility = View.GONE
             }
@@ -650,6 +653,9 @@ class DeviceAdapter(
                             val switchName = value.name
                             tvSwitchNameFour.text = switchName
                             switchFour.isChecked = value.switchStatus.toInt().toBoolean()
+                            if (device.productGroup.isSmartAp()) {
+                                seekBar.isVisible = switchFour.isChecked
+                            }
                             value.desc?.let {
                                 tvSwitchNameFourDesc.text = it
                             }
@@ -747,6 +753,12 @@ class DeviceAdapter(
                     switchFour.isChecked.toInt().toString(),
                     tvSwitchNameFour.text.toString()
                 )
+            }
+
+            switchFour.setOnCheckedChangeListener { _, p1 ->
+                if (device.productGroup.isSmartAp()) {
+                    seekBar.isVisible = p1
+                }
             }
 
             switchPortC.setOnClickListener {

@@ -142,6 +142,12 @@ object Utils {
         return FastSave.getInstance().getString(Constants.FCM_TOKEN, "")
     }
 
+    fun String.isSmartouch(): Boolean = this.lowercase() == Constants.PRODUCT_SMART_TOUCH
+
+    fun String.isSmartAck(): Boolean = this.lowercase() == Constants.PRODUCT_SMART_ACK
+
+    fun String.isSmartAp(): Boolean = this.lowercase() == Constants.PRODUCT_SMART_AP
+
 }
 
 

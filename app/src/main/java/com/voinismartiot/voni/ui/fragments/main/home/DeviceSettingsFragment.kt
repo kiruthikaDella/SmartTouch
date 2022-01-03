@@ -52,6 +52,7 @@ class DeviceSettingsFragment :
         super.onViewCreated(view, savedInstanceState)
 
         binding.switchRetainState.isChecked = args.deviceDetail.retainState.toBoolean()
+        binding.switchOutdoorMode.isChecked = args.deviceDetail.outdoorMode.toBoolean()
 
         subscribeToDevice(args.deviceDetail.deviceSerialNo)
 

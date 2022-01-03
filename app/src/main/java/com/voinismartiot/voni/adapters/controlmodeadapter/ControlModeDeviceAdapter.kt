@@ -15,6 +15,9 @@ import com.google.android.material.switchmaterial.SwitchMaterial
 import com.voinismartiot.voni.R
 import com.voinismartiot.voni.api.model.GetDeviceData
 import com.voinismartiot.voni.common.utils.Constants
+import com.voinismartiot.voni.common.utils.Utils.isSmartAck
+import com.voinismartiot.voni.common.utils.Utils.isSmartAp
+import com.voinismartiot.voni.common.utils.Utils.isSmartouch
 import com.voinismartiot.voni.common.utils.Utils.toBoolean
 import com.voinismartiot.voni.common.utils.Utils.toInt
 import com.voinismartiot.voni.mqtt.AwsMqttSingleton
@@ -98,15 +101,15 @@ class ControlModeDeviceAdapter(
     }
 
     override fun getItemViewType(position: Int): Int {
-        return if (deviceList[position].productGroup.lowercase() == Constants.PRODUCT_SMART_TOUCH) {
+        return if (deviceList[position].productGroup.isSmartouch()) {
             if (deviceList[position].deviceType == Constants.DEVICE_TYPE_EIGHT) {
                 eightPanelView
             } else {
                 fourPanelView
             }
-        } else if (deviceList[position].productGroup.lowercase() == Constants.PRODUCT_SMART_ACK) {
+        } else if (deviceList[position].productGroup.isSmartAck()) {
             smartAckPanelView
-        } else if (deviceList[position].productGroup.lowercase() == Constants.PRODUCT_SMART_AP) {
+        } else if (deviceList[position].productGroup.isSmartAp()) {
             when (deviceList[position].deviceType) {
                 Constants.DEVICE_TYPE_EIGHT -> {
                     eightPanelView
@@ -473,6 +476,9 @@ class ControlModeDeviceAdapter(
                         "4" -> {
                             tvSwitchNameFour.text = value.name
                             switchFour.isChecked = value.switchStatus.toInt().toBoolean()
+                            if (device.productGroup.isSmartAp()) {
+                                seekBar.isVisible = switchFour.isChecked
+                            }
                             value.desc?.let {
                                 tvSwitchNameFourDesc.text = it
                             }
@@ -521,6 +527,12 @@ class ControlModeDeviceAdapter(
                     switchFour.isChecked.toInt().toString(),
                     tvSwitchNameFour.text.toString()
                 )
+            }
+
+            switchFour.setOnCheckedChangeListener { _, p1 ->
+                if (device.productGroup.isSmartAp()) {
+                    seekBar.isVisible = p1
+                }
             }
 
             switchPortC.setOnClickListener {
