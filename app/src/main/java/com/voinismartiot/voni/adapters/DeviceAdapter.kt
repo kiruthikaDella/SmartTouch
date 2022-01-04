@@ -18,6 +18,7 @@ import com.voinismartiot.voni.R
 import com.voinismartiot.voni.api.model.DeviceSwitchData
 import com.voinismartiot.voni.api.model.GetDeviceData
 import com.voinismartiot.voni.common.interfaces.AdapterItemClickListener
+import com.voinismartiot.voni.common.interfaces.PingHoleStatusListener
 import com.voinismartiot.voni.common.utils.Constants
 import com.voinismartiot.voni.common.utils.Utils.isSmartAck
 import com.voinismartiot.voni.common.utils.Utils.isSmartAp
@@ -49,6 +50,7 @@ class DeviceAdapter(
     private var settingsClickListener: AdapterItemClickListener<GetDeviceData>? = null
     private var editSwitchNameClickListener: SwitchItemClickListener<GetDeviceData>? = null
     private var updateDeviceNameClickListener: DeviceItemClickListener<GetDeviceData>? = null
+    private var pingHoleStatusListener: PingHoleStatusListener? = null
 
     private val eightPanelView = 1
     private val fourPanelView = 2
@@ -1236,6 +1238,38 @@ class DeviceAdapter(
                 }
             }
 
+            //Device pin hole reset
+            AwsMqttSingleton.mqttManager!!.subscribeToTopic(
+                MQTTConstants.PIN_HOLE_RESET.replace(MQTTConstants.AWS_DEVICE_ID, deviceId),
+                AWSIotMqttQos.QOS0
+            ) { topic, data ->
+                mActivity.runOnUiThread {
+
+                    val message = String(data, StandardCharsets.UTF_8)
+                    Log.d("$logTag ReceivedData", "$topic    $message")
+
+                    try {
+                        val topic1 = topic.split("/")
+                        // topic [0] = ''
+                        // topic [1] = smarttouch
+                        // topic [2] = deviceId
+                        // topic [3] = status
+
+                        val jsonObject = JSONObject(message)
+
+                        if (jsonObject.has(MQTTConstants.AWS_PIN_HOLE_RESET)) {
+                            if (jsonObject.getInt(MQTTConstants.AWS_PIN_HOLE_RESET) == 1) {
+                                pingHoleStatusListener?.statusArrived()
+                            }
+                        }
+
+                    } catch (e: Exception) {
+                        e.printStackTrace()
+                    }
+
+                }
+            }
+
         } catch (e: Exception) {
             Log.e(logTag, "Subscription error.", e)
         }
@@ -1315,6 +1349,10 @@ class DeviceAdapter(
 
     fun setOnUpdateDeviceNameClickListener(listener: DeviceItemClickListener<GetDeviceData>) {
         this.updateDeviceNameClickListener = listener
+    }
+
+    fun setOnPingHoleListener(listener: PingHoleStatusListener) {
+        this.pingHoleStatusListener = listener
     }
 
     //

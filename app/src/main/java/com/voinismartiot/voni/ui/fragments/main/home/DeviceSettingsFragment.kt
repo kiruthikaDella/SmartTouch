@@ -33,8 +33,11 @@ import com.voinismartiot.voni.mqtt.MQTTConstants
 import com.voinismartiot.voni.mqtt.NotifyManager
 import com.voinismartiot.voni.ui.fragments.ModelBaseFragment
 import com.voinismartiot.voni.ui.viewmodel.HomeViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.json.JSONArray
 import org.json.JSONObject
 import java.nio.charset.StandardCharsets
@@ -204,6 +207,14 @@ class DeviceSettingsFragment :
         }
 
         binding.switchOutdoorMode.setOnClickListener {
+            binding.switchOutdoorMode.isEnabled = false
+
+            viewLifecycleOwner.lifecycleScope.launchWhenStarted {
+                withContext(Dispatchers.Main) {
+                    delay(Constants.OUTDOOR_MODE_DELAY)
+                    binding.switchOutdoorMode.isEnabled = true
+                }
+            }
 
             if (binding.switchOutdoorMode.isChecked) {
                 showPanel()
@@ -213,7 +224,7 @@ class DeviceSettingsFragment :
                         MQTTConstants.AWS_DEVICE_ID,
                         args.deviceDetail.deviceSerialNo
                     ),
-                    binding.switchOutdoorMode.isChecked.toInt().toString(),
+                    "0",
                     switchAdapter.getSelectedSwitchNames()
                 )
             }
@@ -297,7 +308,6 @@ class DeviceSettingsFragment :
         payload.put(stringIndex, "1")
 
         if (AwsMqttSingleton.isConnected()) {
-            Log.e(logTag, " publish settings topic $topicName payload $payload")
             AwsMqttSingleton.publish(topicName, payload.toString())
         }
     }
@@ -450,7 +460,7 @@ class DeviceSettingsFragment :
         isOutdoorSaved = false
         val payload = JSONObject()
         payload.put(MQTTConstants.AWS_OUTDOOR_MODE, value)
-        payload.put(MQTTConstants.AWS_SWITCH, JSONArray(selectedSwitch))
+        payload.put(MQTTConstants.AWS_OUTDOOR_MODE_SWITCH, JSONArray(selectedSwitch))
 
         if (AwsMqttSingleton.isConnected()) {
             AwsMqttSingleton.publish(topicName, payload.toString())

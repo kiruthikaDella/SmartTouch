@@ -12,6 +12,8 @@ object Constants {
     var COMMON_DIALOG_HEIGHT = 0.9.toFloat()
 
     const val SYNC_DELAY = 5000L
+    const val PING_HOLE_DELAY = 3000L
+    const val OUTDOOR_MODE_DELAY = 2000L
 
     const val API_SUCCESS_CODE = 200
     const val API_FAILURE_CODE = 400

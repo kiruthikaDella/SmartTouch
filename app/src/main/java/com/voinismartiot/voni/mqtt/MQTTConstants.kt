@@ -26,6 +26,7 @@ object MQTTConstants {
     const val RESTORE_FACTORY_SETTINGS = "/smarttouch/$AWS_DEVICE_ID/restore/"  //Restore factory settings
     const val OUTDOOR_MODE_SETTINGS = "/smarttouch/$AWS_DEVICE_ID/outdoor-mode-settings/"  //update outdoor mode settings
     const val OUTDOOR_MODE_ACK = "/smarttouch/$AWS_DEVICE_ID/outdoor-mode-settings-ack/"  //get outdoor mode settings
+    const val PIN_HOLE_RESET = "/smarttouch/$AWS_DEVICE_ID/pin-hole-reset/"  //Refresh device list
 
     const val USB_A = "USB_A"
     const val USB_C = "USB_C"
@@ -77,10 +78,10 @@ object MQTTConstants {
     const val AWS_CUSTOMIZATION_LOCK = "cl"   //Customization lock
     const val AWS_SWITCH_ICONS = "swicons"   //Customization lock
 
-    //Restart
-    const val AWS_RESTART_DEVICE = "rd"
-
-    //Factory Reset Settings
-    const val AWS_FACTORY_RESET = "rsf"
+    //Device Settings
+    const val AWS_RESTART_DEVICE = "rd" //Restart
+    const val AWS_FACTORY_RESET = "rsf" //Factory Reset Settings
+    const val AWS_PIN_HOLE_RESET = "phr" //Pin hole reset
+    const val AWS_OUTDOOR_MODE_SWITCH = "sw" //Pin hole reset
 
 }

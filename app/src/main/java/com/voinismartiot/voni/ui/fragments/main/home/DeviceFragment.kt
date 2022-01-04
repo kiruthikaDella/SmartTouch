@@ -32,8 +32,6 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import com.teksun.wifilibrary.VersionUtils
-import com.teksun.wifilibrary.WifiUtils
 import com.google.android.material.button.MaterialButton
 import com.karumi.dexter.Dexter
 import com.karumi.dexter.MultiplePermissionsReport
@@ -41,6 +39,8 @@ import com.karumi.dexter.PermissionToken
 import com.karumi.dexter.listener.PermissionRequest
 import com.karumi.dexter.listener.multi.MultiplePermissionsListener
 import com.sothree.slidinguppanel.SlidingUpPanelLayout
+import com.teksun.wifilibrary.VersionUtils
+import com.teksun.wifilibrary.WifiUtils
 import com.voinismartiot.voni.R
 import com.voinismartiot.voni.adapters.DeviceAdapter
 import com.voinismartiot.voni.adapters.spinneradapter.SpinnerAdapter
@@ -50,9 +50,7 @@ import com.voinismartiot.voni.api.model.DeviceSwitchData
 import com.voinismartiot.voni.api.model.GetDeviceData
 import com.voinismartiot.voni.api.model.GetRoomData
 import com.voinismartiot.voni.api.repository.HomeRepository
-import com.voinismartiot.voni.common.interfaces.AdapterItemClickListener
-import com.voinismartiot.voni.common.interfaces.DialogEditListener
-import com.voinismartiot.voni.common.interfaces.DialogShowListener
+import com.voinismartiot.voni.common.interfaces.*
 import com.voinismartiot.voni.common.utils.*
 import com.voinismartiot.voni.common.utils.Utils.clearError
 import com.voinismartiot.voni.common.utils.Utils.toEditable
@@ -60,8 +58,11 @@ import com.voinismartiot.voni.databinding.FragmentDeviceBinding
 import com.voinismartiot.voni.mqtt.NotifyManager
 import com.voinismartiot.voni.ui.fragments.ModelBaseFragment
 import com.voinismartiot.voni.ui.viewmodel.HomeViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 @SuppressLint("ClickableViewAccessibility")
 class DeviceFragment : ModelBaseFragment<HomeViewModel, FragmentDeviceBinding, HomeRepository>() {
@@ -119,8 +120,7 @@ class DeviceFragment : ModelBaseFragment<HomeViewModel, FragmentDeviceBinding, H
 
         NotifyManager.internetInfo.observe(viewLifecycleOwner, { isConnected ->
             if (isConnected) {
-                showLoading()
-                viewModel.getDevice(args.roomDetail.id)
+                getDeviceData()
             } else {
                 if (isSelectedSmarTouch) {
                     activity?.let {
@@ -149,9 +149,13 @@ class DeviceFragment : ModelBaseFragment<HomeViewModel, FragmentDeviceBinding, H
         apiCall()
     }
 
+    private fun getDeviceData(){
+        showLoading()
+        viewModel.getDevice(args.roomDetail.id)
+    }
+
     override fun onResume() {
         super.onResume()
-
         viewModel.checkInternetConnection(5000)
     }
 
@@ -169,11 +173,9 @@ class DeviceFragment : ModelBaseFragment<HomeViewModel, FragmentDeviceBinding, H
         isSelectedSmarTouch = true
     }
 
-
     private fun clickEvents() {
 
         binding.layoutSlidingUpPanel.setFadeOnClickListener { hidePanel() }
-
 
         binding.layoutSlidingUpPanel.addPanelSlideListener(object :
             SlidingUpPanelLayout.PanelSlideListener {
@@ -346,6 +348,18 @@ class DeviceFragment : ModelBaseFragment<HomeViewModel, FragmentDeviceBinding, H
             }
         })
 
+        panelAdapter.setOnPingHoleListener(object : PingHoleStatusListener{
+            override fun statusArrived() {
+                viewLifecycleOwner.lifecycleScope.launchWhenStarted {
+                    withContext(Dispatchers.Main) {
+                        delay(Constants.PING_HOLE_DELAY)
+                        getDeviceData()
+                    }
+                }
+            }
+
+        })
+
         binding.ivHidePanel.setOnClickListener {
             hidePanel()
         }
@@ -509,11 +523,11 @@ class DeviceFragment : ModelBaseFragment<HomeViewModel, FragmentDeviceBinding, H
                                     response.values.data?.let { deviceData ->
                                         deviceList.addAll(deviceData)
                                         binding.recyclerRoomPanels.recycledViewPool.clear()
-                                        panelAdapter.notifyDataSetChanged()
                                     }
                                 } else {
                                     context?.showToast(response.values.message)
                                 }
+                                panelAdapter.notifyDataSetChanged()
                             }
                             is Resource.Failure -> {
                                 DialogUtil.hideDialog()
@@ -794,4 +808,5 @@ class DeviceFragment : ModelBaseFragment<HomeViewModel, FragmentDeviceBinding, H
         intent.data = uri
         openSettingRegister.launch(intent)
     }
+
 }
