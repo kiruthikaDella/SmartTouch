@@ -189,6 +189,11 @@ class DeviceFeaturesFragment :
                 return@setOnClickListener
             }
 
+            if (binding.edtSleepTime.text.toString().toInt() > Constants.SLEEP_MODE_LIMIT) {
+                activity?.showToast(getString(R.string.error_sleep_mode_limit_reached))
+                return@setOnClickListener
+            }
+
             binding.btnSynchronize.isEnabled = false
 
             viewLifecycleOwner.lifecycleScope.launchWhenStarted {
