@@ -389,7 +389,6 @@ class DeviceCustomizationFragment :
         }
 
         binding.btnSynchronize.setOnClickListener {
-            Log.e(logTag, " sync clicked")
             binding.btnSynchronize.isEnabled = false
 
             viewLifecycleOwner.lifecycleScope.launchWhenStarted {
@@ -401,7 +400,6 @@ class DeviceCustomizationFragment :
 
             try {
                 val payload = JSONObject()
-                Log.e(logTag, " uploadImage ${deviceCustomization?.uploadImage}")
                 payload.put(MQTTConstants.AWS_UPLOAD_IMAGE, deviceCustomization?.uploadImage)
                 payload.put(
                     MQTTConstants.AWS_SCREEN_LAYOUT_TYPE,
@@ -410,7 +408,7 @@ class DeviceCustomizationFragment :
                 payload.put(MQTTConstants.AWS_SCREEN_LAYOUT, deviceCustomization?.screenLayout)
                 payload.put(
                     MQTTConstants.AWS_SWITCH_NAME,
-                    binding.cbSwitchNameSettings.isChecked.toInt()
+                    binding.cbSwitchNameSettings.isChecked.toInt().toString()
                 )
                 payload.put(
                     MQTTConstants.AWS_SWITCH_ICON_SIZE,

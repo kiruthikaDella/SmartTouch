@@ -788,7 +788,7 @@ class ControlModeDeviceAdapter(
                             // topic [8] = Switch 8 Status (if DT = 8)
 
                             if (jsonObject.has(MQTTConstants.AWS_DEVICE_TYPE)) {
-                                if (jsonObject.getString(MQTTConstants.AWS_DEVICE_TYPE) == "8") {
+                                if (jsonObject.getInt(MQTTConstants.AWS_DEVICE_TYPE) == Constants.DEVICE_TYPE_EIGHT || jsonObject.getInt(MQTTConstants.AWS_DEVICE_TYPE) == Constants.DEVICE_TYPE_SIX) {
                                     deviceData?.switchData?.get(0)?.switchStatus = switchStatus[0]
                                     deviceData?.switchData?.get(1)?.switchStatus = switchStatus[1]
                                     deviceData?.switchData?.get(2)?.switchStatus = switchStatus[2]
@@ -803,7 +803,7 @@ class ControlModeDeviceAdapter(
                                         jsonObject.getString(MQTTConstants.AWS_USB_A) //USB A
                                     deviceData?.switchData?.get(10)?.switchStatus =
                                         jsonObject.getString(MQTTConstants.AWS_USB_C) //USB C
-                                } else if (jsonObject.getString(MQTTConstants.AWS_DEVICE_TYPE) == "4") {
+                                } else if (jsonObject.getInt(MQTTConstants.AWS_DEVICE_TYPE) == Constants.DEVICE_TYPE_FOUR) {
                                     deviceData?.switchData?.get(0)?.switchStatus = switchStatus[0]
                                     deviceData?.switchData?.get(1)?.switchStatus = switchStatus[1]
                                     deviceData?.switchData?.get(2)?.switchStatus = switchStatus[2]
@@ -826,7 +826,7 @@ class ControlModeDeviceAdapter(
                                                 MQTTConstants.AWS_DIMMER
                                             ) //Dimmer
                                     }
-                                } else if (jsonObject.getString(MQTTConstants.AWS_DEVICE_TYPE) == "1") {
+                                } else if (jsonObject.getInt(MQTTConstants.AWS_DEVICE_TYPE) == Constants.DEVICE_TYPE_ONE) {
                                     deviceData?.switchData?.get(0)?.switchStatus = switchStatus[0]
                                 }
                             }
