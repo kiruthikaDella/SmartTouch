@@ -342,7 +342,7 @@ class ConnectingWifiFragment :
 
     private fun showOfflineAlert() {
         activity?.let {
-            DialogUtil.deviceOfflineAlert(it, "Please check your internet connection",
+            DialogUtil.deviceOfflineAlert(it, getString(R.string.message_wait_for_internet),
                 object : DialogShowListener {
                     override fun onClick() {
                         DialogUtil.hideDialog()

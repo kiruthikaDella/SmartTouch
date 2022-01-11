@@ -203,6 +203,9 @@ class HomeViewModel @Inject constructor(
     private val _updateSceneStatusResponse = MutableSharedFlow<Resource<CommonResponse>>()
     val updateSceneStatusResponse = _updateSceneStatusResponse.asSharedFlow()
 
+    private val _getDeviceAppliancesResponse = MutableSharedFlow<Resource<GetDeviceAppliancesResponse>>()
+    val getDeviceAppliancesResponse = _getDeviceAppliancesResponse.asSharedFlow()
+
     fun addDevice(bodyAddDevice: BodyAddDevice) = viewModelScope.launch {
         _addDeviceResponse.emit(Resource.Loading)
         _addDeviceResponse.emit(homeRepository.addDevice(bodyAddDevice))
@@ -313,6 +316,12 @@ class HomeViewModel @Inject constructor(
         viewModelScope.launch {
             _updateSceneStatusResponse.emit(Resource.Loading)
             _updateSceneStatusResponse.emit(homeRepository.updateSceneStatus(sceneId, bodyUpdateSceneStatus))
+        }
+
+    fun getDeviceAppliances() =
+        viewModelScope.launch {
+            _getDeviceAppliancesResponse.emit(Resource.Loading)
+            _getDeviceAppliancesResponse.emit(homeRepository.getDeviceAppliances())
         }
 
     //

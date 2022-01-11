@@ -112,6 +112,38 @@
                     app:layout_constraintGuide_percent="0.5" />
 
 
+                <RelativeLayout
+                    android:id="@+id/rl_select_appliances"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_30sdp"
+                    android:layout_marginTop="@dimen/_10sdp"
+                    android:background="@drawable/white_background_with_catskill_white_dark_border"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <Spinner
+                        android:id="@+id/spinner_appliances"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginEnd="@dimen/_2sdp"
+                        android:layout_toStartOf="@+id/iv_appliances_down"
+                        android:background="@android:color/transparent"
+                        android:gravity="center"
+                        android:spinnerMode="dropdown" />
+
+                    <ImageView
+                        android:id="@+id/iv_appliances_down"
+                        android:layout_width="@dimen/_20sdp"
+                        android:layout_height="match_parent"
+                        android:layout_alignParentEnd="true"
+                        android:padding="@dimen/_5sdp"
+                        android:layout_centerVertical="true"
+                        android:src="@drawable/ic_arrow_down"
+                        app:tint="@color/daintree" />
+
+                </RelativeLayout>
+
+
                 <!--        Switch one        -->
 
                 <ImageView
@@ -175,11 +207,12 @@
                     style="@style/PanelSwitchColorStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_5sdp"
                     android:padding="@dimen/_10sdp"
                     android:scaleX="1.4"
                     android:scaleY="1.4"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toBottomOf="@+id/rl_select_appliances" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 

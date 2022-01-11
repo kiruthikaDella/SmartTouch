@@ -61,7 +61,7 @@ class DeviceSettingsFragment :
 
         args.deviceDetail.switchData?.let { switches ->
             for (switch in switches) {
-                if (switch.typeOfSwitch != 1) {
+                if (switch.typeOfSwitch != 1 && switch.desc.toString().lowercase() != getString(R.string.text_switch_fan_speed).lowercase()) {
                     switchList.add(
                         DeviceSwitchData(
                             switch.id,

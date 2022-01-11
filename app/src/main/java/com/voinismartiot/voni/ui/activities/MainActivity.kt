@@ -23,6 +23,7 @@ import com.voinismartiot.voni.adapters.spinneradapter.RoomTypeAdapter
 import com.voinismartiot.voni.api.NetworkModule
 import com.voinismartiot.voni.api.Resource
 import com.voinismartiot.voni.api.body.BodyAddRoom
+import com.voinismartiot.voni.api.model.DeviceAppliances
 import com.voinismartiot.voni.api.model.RoomTypeData
 import com.voinismartiot.voni.api.repository.HomeRepository
 import com.voinismartiot.voni.common.interfaces.DialogShowListener
@@ -50,6 +51,9 @@ class MainActivity : AppCompatActivity() {
 
     private var roomTypeList: List<RoomTypeData> = ArrayList()
     private var roomTypeId: String? = null
+
+    private var appliancesList = arrayListOf<DeviceAppliances>()
+    private var isApiCalled = false
 
     //
     //region override methods
@@ -148,6 +152,11 @@ class MainActivity : AppCompatActivity() {
         NetworkConnectionLiveData().observe(this, { isConnected ->
             NotifyManager.internetInfo.postValue(isConnected)
         })
+
+        if (!isApiCalled){
+            appliancesList.clear()
+            viewModel.getDeviceAppliances()
+        }
 
         apiResponses()
     }
@@ -413,11 +422,38 @@ class MainActivity : AppCompatActivity() {
                     }
                 }
 
+                launch {
+                    viewModel.getDeviceAppliancesResponse.collectLatest { response ->
+                        isApiCalled = true
+                        when (response) {
+                            is Resource.Success -> {
+                                DialogUtil.hideDialog()
+                                if (response.values.status && response.values.code == Constants.API_SUCCESS_CODE) {
+                                    response.values.data?.let { appliancesData ->
+//                                        appliancesList.add(0,DeviceAppliances("","0",getString(R.string.text_select_appliances),"",""))
+                                        appliancesList.addAll(appliancesData)
+                                    }
+                                }
+                            }
+                            is Resource.Failure -> {
+                                DialogUtil.hideDialog()
+                                showToast(getString(R.string.error_something_went_wrong))
+                                Log.e(logTag, " getDeviceAppliancesResponse ${response.errorBody?.string()} ")
+                            }
+                            else -> {
+                                // We will do nothing here
+                            }
+                        }
+                    }
+                }
+
             }
 
         }
 
     }
+
+    fun getAppliances() = appliancesList
 
     //
     //endregion

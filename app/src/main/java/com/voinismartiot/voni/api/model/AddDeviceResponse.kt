@@ -69,11 +69,13 @@ data class GetDeviceData(
     @SerializedName("iActiveSwitchCount")
     var activeSwitchCount: Int,
     @SerializedName("switchData")
-    var switchData: ArrayList<DeviceSwitchData>? = null
+    var switchData: ArrayList<DeviceSwitchData>? = null,
+    @SerializedName("iDeviceAppliances")
+    var deviceAppliances: String? = null,
 ) : Parcelable, Serializable {
 
     override fun toString(): String {
-        return "GetDeviceData(id='$id', userId='$userId', productGroup='$productGroup', deviceSerialNo='$deviceSerialNo', outdoorMode='$outdoorMode', deviceName='$deviceName', deviceType=$deviceType, retainState=$retainState, isDeviceAvailable='$isDeviceAvailable', activeSwitchCount=$activeSwitchCount, switchData=$switchData)"
+        return "GetDeviceData(id='$id', userId='$userId', productGroup='$productGroup', deviceSerialNo='$deviceSerialNo', outdoorMode='$outdoorMode', outdoorModeSwitch=$outdoorModeSwitch, deviceName='$deviceName', deviceType=$deviceType, retainState=$retainState, isDeviceAvailable='$isDeviceAvailable', activeSwitchCount=$activeSwitchCount, switchData=$switchData, deviceAppliances=$deviceAppliances)"
     }
 
     override fun equals(other: Any?): Boolean {
@@ -87,12 +89,14 @@ data class GetDeviceData(
         if (productGroup != other.productGroup) return false
         if (deviceSerialNo != other.deviceSerialNo) return false
         if (outdoorMode != other.outdoorMode) return false
+        if (outdoorModeSwitch != other.outdoorModeSwitch) return false
         if (deviceName != other.deviceName) return false
         if (deviceType != other.deviceType) return false
         if (retainState != other.retainState) return false
         if (isDeviceAvailable != other.isDeviceAvailable) return false
         if (activeSwitchCount != other.activeSwitchCount) return false
         if (switchData != other.switchData) return false
+        if (deviceAppliances != other.deviceAppliances) return false
 
         return true
     }
@@ -103,12 +107,14 @@ data class GetDeviceData(
         result = 31 * result + productGroup.hashCode()
         result = 31 * result + deviceSerialNo.hashCode()
         result = 31 * result + outdoorMode.hashCode()
+        result = 31 * result + (outdoorModeSwitch?.hashCode() ?: 0)
         result = 31 * result + deviceName.hashCode()
         result = 31 * result + deviceType
         result = 31 * result + retainState
         result = 31 * result + isDeviceAvailable.hashCode()
         result = 31 * result + activeSwitchCount
         result = 31 * result + (switchData?.hashCode() ?: 0)
+        result = 31 * result + (deviceAppliances?.hashCode() ?: 0)
         return result
     }
 
