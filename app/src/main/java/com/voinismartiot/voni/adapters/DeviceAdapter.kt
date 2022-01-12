@@ -1016,6 +1016,9 @@ class DeviceAdapter(
                                 device.deviceAppliances?.let {dApp->
                                     spinnerAppliances.setSelection(applianceAdapter.getPositionById(dApp))
                                 }
+
+                                var check = 0
+
                                 spinnerAppliances.onItemSelectedListener =
                                     object : AdapterView.OnItemSelectedListener {
                                         override fun onItemSelected(
@@ -1025,16 +1028,18 @@ class DeviceAdapter(
                                             p3: Long
                                         ) {
 
-                                            val appliance = p0?.selectedItem as DeviceAppliances
-                                            device.deviceAppliances = appliance.id
-                                            publishAppliance(
-                                                device.deviceSerialNo,
-                                                appliance.title
-                                            )
+                                            if (++check > 1){
+                                                val appliance = p0?.selectedItem as DeviceAppliances
+                                                device.deviceAppliances = appliance.id
+                                                publishAppliance(
+                                                    device.deviceSerialNo,
+                                                    appliance.title
+                                                )
+                                            }
                                         }
 
                                         override fun onNothingSelected(p0: AdapterView<*>?) {
-
+                                            Log.e(logTag, " nothing selected ")
                                         }
 
                                     }

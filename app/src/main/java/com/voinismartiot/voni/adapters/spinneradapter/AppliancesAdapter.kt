@@ -2,6 +2,7 @@ package com.voinismartiot.voni.adapters.spinneradapter
 
 import android.app.Activity
 import android.graphics.Typeface
+import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
@@ -14,11 +15,6 @@ class AppliancesAdapter(private val activity: Activity, private val items: List<
     override fun getDropDownView(position: Int, convertView: View?, parent: ViewGroup): View {
         val textView = super.getView(position, convertView, parent) as TextView
         textView.text = items[position].title
-
-        if (position == 0) {
-            textView.setTypeface(null, Typeface.ITALIC)
-        }
-
         return textView
     }
 

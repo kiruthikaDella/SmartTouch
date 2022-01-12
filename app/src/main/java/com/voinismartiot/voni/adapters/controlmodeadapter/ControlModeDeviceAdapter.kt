@@ -6,13 +6,14 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.RelativeLayout
-import android.widget.TextView
+import android.widget.*
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.amazonaws.mobileconnectors.iot.AWSIotMqttQos
 import com.google.android.material.switchmaterial.SwitchMaterial
 import com.voinismartiot.voni.R
+import com.voinismartiot.voni.adapters.spinneradapter.AppliancesAdapter
+import com.voinismartiot.voni.api.model.DeviceAppliances
 import com.voinismartiot.voni.api.model.GetDeviceData
 import com.voinismartiot.voni.common.utils.Constants
 import com.voinismartiot.voni.common.utils.Utils.isSmartAck
@@ -22,6 +23,7 @@ import com.voinismartiot.voni.common.utils.Utils.toBoolean
 import com.voinismartiot.voni.common.utils.Utils.toInt
 import com.voinismartiot.voni.mqtt.AwsMqttSingleton
 import com.voinismartiot.voni.mqtt.MQTTConstants
+import com.voinismartiot.voni.ui.activities.MainActivity
 import com.warkiz.widget.IndicatorSeekBar
 import com.warkiz.widget.OnSeekChangeListener
 import com.warkiz.widget.SeekParams
@@ -35,6 +37,8 @@ class ControlModeDeviceAdapter(
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private val logTag = this::class.java.simpleName
+
+    private val applianceList = (mActivity as MainActivity).getAppliances()
 
     private val eightPanelView = 1
     private val fourPanelView = 2
@@ -227,6 +231,10 @@ class ControlModeDeviceAdapter(
         val constraintLayout = itemView.findViewById(R.id.relative_main) as RelativeLayout
         val relativeLayout = itemView.findViewById(R.id.relative_layout) as RelativeLayout
         val tvPanelName = itemView.findViewById(R.id.tv_panel_name) as TextView
+
+        val rlSelectAppliances = itemView.findViewById(R.id.rl_select_appliances) as RelativeLayout
+        val spinnerAppliances = itemView.findViewById(R.id.spinner_appliances) as Spinner
+        val ivAppliancesDown = itemView.findViewById(R.id.iv_appliances_down) as ImageView
 
         val tvOutdoorModeIndication =
             itemView.findViewById(R.id.tv_outdoor_mode_indication) as TextView
@@ -726,6 +734,50 @@ class ControlModeDeviceAdapter(
                             switchOne.isChecked = value.switchStatus.toInt().toBoolean()
                             value.desc?.let {
                                 tvSwitchNameOneDesc.text = it
+
+                                val is15ADevice =
+                                    it.lowercase() == mActivity.getString(R.string.text_15a)
+                                        .lowercase()
+                                rlSelectAppliances.isVisible = is15ADevice
+
+                                if (!is15ADevice)
+                                    return@let
+
+                                val applianceAdapter = AppliancesAdapter(mActivity, applianceList)
+                                spinnerAppliances.adapter = applianceAdapter
+                                device.deviceAppliances?.let {dApp->
+                                    spinnerAppliances.setSelection(applianceAdapter.getPositionById(dApp))
+                                }
+
+                                var check = 0
+
+                                spinnerAppliances.onItemSelectedListener =
+                                    object : AdapterView.OnItemSelectedListener {
+                                        override fun onItemSelected(
+                                            p0: AdapterView<*>?,
+                                            p1: View?,
+                                            p2: Int,
+                                            p3: Long
+                                        ) {
+
+                                            if (++check > 1){
+                                                val appliance = p0?.selectedItem as DeviceAppliances
+                                                device.deviceAppliances = appliance.id
+                                                publishAppliance(
+                                                    device.deviceSerialNo,
+                                                    appliance.title
+                                                )
+                                            }
+                                        }
+
+                                        override fun onNothingSelected(p0: AdapterView<*>?) {
+                                            Log.e(logTag, " nothing selected ")
+                                        }
+
+                                    }
+                                ivAppliancesDown.setOnClickListener {
+                                    spinnerAppliances.performClick()
+                                }
                             }
                         }
                     }
@@ -928,6 +980,20 @@ class ControlModeDeviceAdapter(
         } catch (e: Exception) {
             Log.e(logTag, "Subscription error.", e)
         }
+    }
+
+    fun publishAppliance(
+        deviceId: String, appliance: String
+    ) {
+        val payload = JSONObject()
+        payload.put(MQTTConstants.AWS_APPLIANCES, appliance)
+
+        AwsMqttSingleton.publish(
+            MQTTConstants.DEVICE_APPLIANCES.replace(
+                MQTTConstants.AWS_DEVICE_ID,
+                deviceId
+            ), payload.toString()
+        )
     }
 
     private fun publish(
