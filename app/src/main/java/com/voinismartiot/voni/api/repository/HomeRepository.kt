@@ -126,6 +126,9 @@ class HomeRepository @Inject constructor(
     suspend fun updateSceneStatus(sceneId: String,bodyUpdateSceneStatus: BodyUpdateSceneStatus) =
         safeApiCall { smartTouchApi.updateSceneStatus(getAccessKey(), sceneId, bodyUpdateSceneStatus) }
 
+    suspend fun getDeviceAppliances() =
+        safeApiCall { smartTouchApi.getDeviceAppliances(getAccessKey()) }
+
     //
     //endregion
     //

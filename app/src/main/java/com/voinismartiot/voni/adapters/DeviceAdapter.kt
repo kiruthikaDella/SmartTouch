@@ -6,15 +6,14 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.LinearLayout
-import android.widget.RelativeLayout
-import android.widget.TextView
+import android.widget.*
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.amazonaws.mobileconnectors.iot.AWSIotMqttQos
 import com.google.android.material.switchmaterial.SwitchMaterial
 import com.voinismartiot.voni.R
+import com.voinismartiot.voni.adapters.spinneradapter.AppliancesAdapter
+import com.voinismartiot.voni.api.model.DeviceAppliances
 import com.voinismartiot.voni.api.model.DeviceSwitchData
 import com.voinismartiot.voni.api.model.GetDeviceData
 import com.voinismartiot.voni.common.interfaces.AdapterItemClickListener
@@ -27,6 +26,7 @@ import com.voinismartiot.voni.common.utils.Utils.toBoolean
 import com.voinismartiot.voni.common.utils.Utils.toInt
 import com.voinismartiot.voni.mqtt.AwsMqttSingleton
 import com.voinismartiot.voni.mqtt.MQTTConstants
+import com.voinismartiot.voni.ui.activities.MainActivity
 import com.warkiz.widget.IndicatorSeekBar
 import com.warkiz.widget.OnSeekChangeListener
 import com.warkiz.widget.SeekParams
@@ -44,6 +44,8 @@ class DeviceAdapter(
     //
 
     private val logTag = this::class.java.simpleName
+
+    private val applianceList = (mActivity as MainActivity).getAppliances()
 
     private var customizationClickListener: AdapterItemClickListener<GetDeviceData>? = null
     private var featuresClickListener: AdapterItemClickListener<GetDeviceData>? = null
@@ -294,6 +296,10 @@ class DeviceAdapter(
         val linearPanelMenu = itemView.findViewById(R.id.linear_panel_menu) as LinearLayout
         val constraintLayout = itemView.findViewById(R.id.relative_main) as RelativeLayout
         val relativeLayout = itemView.findViewById(R.id.relative_layout) as RelativeLayout
+
+        val rlSelectAppliances = itemView.findViewById(R.id.rl_select_appliances) as RelativeLayout
+        val spinnerAppliances = itemView.findViewById(R.id.spinner_appliances) as Spinner
+        val ivAppliancesDown = itemView.findViewById(R.id.iv_appliances_down) as ImageView
 
         val tvDeviceSettings = itemView.findViewById(R.id.tv_device_settings) as TextView
 
@@ -996,6 +1002,50 @@ class DeviceAdapter(
                             switchOne.isChecked = value.switchStatus.toInt().toBoolean()
                             value.desc?.let {
                                 tvSwitchNameOneDesc.text = it
+
+                                val is15ADevice =
+                                    it.lowercase() == mActivity.getString(R.string.text_15a)
+                                        .lowercase()
+                                rlSelectAppliances.isVisible = is15ADevice
+
+                                if (!is15ADevice)
+                                    return@let
+
+                                val applianceAdapter = AppliancesAdapter(mActivity, applianceList)
+                                spinnerAppliances.adapter = applianceAdapter
+                                device.deviceAppliances?.let {dApp->
+                                    spinnerAppliances.setSelection(applianceAdapter.getPositionById(dApp))
+                                }
+
+                                var check = 0
+
+                                spinnerAppliances.onItemSelectedListener =
+                                    object : AdapterView.OnItemSelectedListener {
+                                        override fun onItemSelected(
+                                            p0: AdapterView<*>?,
+                                            p1: View?,
+                                            p2: Int,
+                                            p3: Long
+                                        ) {
+
+                                            if (++check > 1){
+                                                val appliance = p0?.selectedItem as DeviceAppliances
+                                                device.deviceAppliances = appliance.id
+                                                publishAppliance(
+                                                    device.deviceSerialNo,
+                                                    appliance.title
+                                                )
+                                            }
+                                        }
+
+                                        override fun onNothingSelected(p0: AdapterView<*>?) {
+                                            Log.e(logTag, " nothing selected ")
+                                        }
+
+                                    }
+                                ivAppliancesDown.setOnClickListener {
+                                    spinnerAppliances.performClick()
+                                }
                             }
                         }
                     }
@@ -1026,6 +1076,41 @@ class DeviceAdapter(
             }
 
             switchOne.setOnClickListener {
+
+                /*if (switchOne.isChecked){
+                    device.switchData?.let {
+                        it[0].desc?.let { des->
+
+                            val is15ADevice = des.lowercase() == mActivity.getString(R.string.text_15a).lowercase()
+                            if (is15ADevice){
+                                val deviceAppliance = spinnerAppliances.selectedItem as DeviceAppliances
+                                if (deviceAppliance.title.lowercase() == mActivity.getString(R.string.text_select_appliances).lowercase()){
+                                    mActivity.showToast(mActivity.getString(R.string.error_select_appliances))
+                                    switchOne.isChecked = false
+                                }else {
+                                    publish(
+                                        device.deviceSerialNo,
+                                        MQTTConstants.AWS_SWITCH_1,
+                                        switchOne.isChecked.toInt().toString()
+                                    )
+                                }
+                            }else {
+                                publish(
+                                    device.deviceSerialNo,
+                                    MQTTConstants.AWS_SWITCH_1,
+                                    switchOne.isChecked.toInt().toString()
+                                )
+                            }
+                        }
+                    }
+                }else{
+                    publish(
+                        device.deviceSerialNo,
+                        MQTTConstants.AWS_SWITCH_1,
+                        switchOne.isChecked.toInt().toString()
+                    )
+                }*/
+
                 publish(
                     device.deviceSerialNo,
                     MQTTConstants.AWS_SWITCH_1,
@@ -1034,7 +1119,6 @@ class DeviceAdapter(
             }
         }
     }
-
 
     //
     //endregion
@@ -1086,7 +1170,10 @@ class DeviceAdapter(
                             // topic [8] = Switch 8 Status (if DT = 8)
 
                             if (jsonObject.has(MQTTConstants.AWS_DEVICE_TYPE)) {
-                                if (jsonObject.getInt(MQTTConstants.AWS_DEVICE_TYPE) == Constants.DEVICE_TYPE_EIGHT || jsonObject.getInt(MQTTConstants.AWS_DEVICE_TYPE) == Constants.DEVICE_TYPE_SIX) {
+                                if (jsonObject.getInt(MQTTConstants.AWS_DEVICE_TYPE) == Constants.DEVICE_TYPE_EIGHT || jsonObject.getInt(
+                                        MQTTConstants.AWS_DEVICE_TYPE
+                                    ) == Constants.DEVICE_TYPE_SIX
+                                ) {
 
                                     deviceData?.switchData?.get(0)?.switchStatus = switchStatus[0]
                                     deviceData?.switchData?.get(1)?.switchStatus = switchStatus[1]
@@ -1293,6 +1380,20 @@ class DeviceAdapter(
         )
         AwsMqttSingleton.publish(
             topic, payload.toString()
+        )
+    }
+
+    fun publishAppliance(
+        deviceId: String, appliance: String
+    ) {
+        val payload = JSONObject()
+        payload.put(MQTTConstants.AWS_APPLIANCES, appliance)
+
+        AwsMqttSingleton.publish(
+            MQTTConstants.DEVICE_APPLIANCES.replace(
+                MQTTConstants.AWS_DEVICE_ID,
+                deviceId
+            ), payload.toString()
         )
     }
 

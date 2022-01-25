@@ -27,6 +27,8 @@ object MQTTConstants {
     const val OUTDOOR_MODE_SETTINGS = "/smarttouch/$AWS_DEVICE_ID/outdoor-mode-settings/"  //update outdoor mode settings
     const val OUTDOOR_MODE_ACK = "/smarttouch/$AWS_DEVICE_ID/outdoor-mode-settings-ack/"  //get outdoor mode settings
     const val PIN_HOLE_RESET = "/smarttouch/$AWS_DEVICE_ID/pin-hole-reset/"  //Refresh device list
+    const val DEVICE_APPLIANCES = "/smarttouch/$AWS_DEVICE_ID/device-appliances/"  //send device appliance to device
+    const val DEVICE_APPLIANCES_ACK = "/smarttouch/$AWS_DEVICE_ID/ack-device-appliances/"  //get device appliance from device
 
     const val USB_A = "USB_A"
     const val USB_C = "USB_C"
@@ -52,6 +54,7 @@ object MQTTConstants {
     const val AWS_USB_A = "U1" //USB A
     const val AWS_USB_C = "U2" //USB C
     const val AWS_DIMMER = "D"   //DMR
+    const val AWS_APPLIANCES = "dapp"   //DMR
 
     //Features
     const val AWS_SLEEP_MODE = "sm"   //Sleep Mode
