@@ -7,24 +7,24 @@
     android:background="@color/transparent"
     android:gravity="center"
     android:orientation="vertical"
-    app:corner_radius="@dimen/dialog_corner_radius"
     android:paddingTop="@dimen/_20sdp"
-    android:paddingBottom="@dimen/_20sdp">
+    android:paddingBottom="@dimen/_20sdp"
+    app:corner_radius="@dimen/dialog_corner_radius">
 
     <com.wang.avi.AVLoadingIndicatorView
+        style="@style/AVLoadingIndicatorView"
         android:layout_width="@dimen/_20sdp"
         android:layout_height="@dimen/_20sdp"
-        style="@style/AVLoadingIndicatorView"
         android:visibility="visible"
-        app:indicatorName="LineSpinFadeLoaderIndicator"
-        app:indicatorColor="@color/theme_color"/>
+        app:indicatorColor="@color/theme_color"
+        app:indicatorName="LineSpinFadeLoaderIndicator" />
 
     <TextView
         android:id="@+id/tv_dialog_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/_10sdp"
         android:layout_marginStart="@dimen/_15sdp"
+        android:layout_marginTop="@dimen/_10sdp"
         android:layout_marginEnd="@dimen/_15sdp"
         android:fontFamily="@font/roboto_medium"
         android:gravity="center"

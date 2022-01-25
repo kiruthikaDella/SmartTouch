@@ -423,6 +423,40 @@ class DeviceSettingsFragment :
 
     private fun subscribeToDevice(deviceId: String) {
         try {
+
+            //Current Device Status Update - Online/Offline
+            AwsMqttSingleton.mqttManager!!.subscribeToTopic(
+                MQTTConstants.DEVICE_STATUS.replace(MQTTConstants.AWS_DEVICE_ID, deviceId),
+                AWSIotMqttQos.QOS0
+            ) { topic, data ->
+                activity?.let {
+                    it.runOnUiThread {
+
+                        val message = String(data, StandardCharsets.UTF_8)
+                        Log.d("$logTag ReceivedData", "$topic    $message")
+
+                        val jsonObject = JSONObject(message)
+
+                        if (jsonObject.has(MQTTConstants.AWS_STATUS)) {
+                            val deviceStatus = jsonObject.getString(MQTTConstants.AWS_STATUS)
+                            if (deviceStatus == "1") {
+                                DialogUtil.hideDialog()
+                            } else {
+                                DialogUtil.deviceOfflineAlert(
+                                    it,
+                                    onClick = object : DialogShowListener {
+                                        override fun onClick() {
+                                            findNavController().navigateUp()
+                                        }
+
+                                    })
+                            }
+                        }
+                    }
+                }
+            }
+
+
             AwsMqttSingleton.mqttManager?.subscribeToTopic(
                 MQTTConstants.OUTDOOR_MODE_ACK.replace(
                     MQTTConstants.AWS_DEVICE_ID,

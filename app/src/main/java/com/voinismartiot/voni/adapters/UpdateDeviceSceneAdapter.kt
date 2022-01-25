@@ -18,6 +18,7 @@ import com.voinismartiot.voni.common.interfaces.DialogAskListener
 import com.voinismartiot.voni.common.utils.DialogUtil
 import com.voinismartiot.voni.common.utils.Utils.toBoolean
 import com.voinismartiot.voni.common.utils.Utils.toInt
+import com.warkiz.widget.IndicatorSeekBar
 
 class UpdateDeviceSceneAdapter(
     private val mActivity: Activity,
@@ -29,6 +30,7 @@ class UpdateDeviceSceneAdapter(
     private val roomDataList = arrayListOf<ControlModeRoomData>()
     private var roomList = arrayListOf<GetRoomData>()
     private var errorList: MutableMap<Int, String> = mutableMapOf()
+    private var switchType = ""
 
     private var deleteClickListener: DeleteSceneItemClickListener<Scene>? = null
 
@@ -104,7 +106,7 @@ class UpdateDeviceSceneAdapter(
         val spinnerRoom = itemView.findViewById(R.id.spinner_room_name) as Spinner
         val spinnerDevice = itemView.findViewById(R.id.spinner_device_name) as Spinner
         val spinnerSwitch = itemView.findViewById(R.id.spinner_switch_name) as Spinner
-        val switch = itemView.findViewById(R.id.switch_status) as SwitchMaterial
+        val switchStatus = itemView.findViewById(R.id.switch_status) as SwitchMaterial
 
         val ibDelete = itemView.findViewById(R.id.ib_delete) as ImageView
         val ivRoomName = itemView.findViewById(R.id.iv_room_name_down) as ImageView
@@ -112,6 +114,7 @@ class UpdateDeviceSceneAdapter(
         val ivSwitchName = itemView.findViewById(R.id.iv_switch_name_down) as ImageView
 
         val tvError = itemView.findViewById(R.id.tv_text_error) as TextView
+        val seekBar = itemView.findViewById(R.id.seek_bar) as IndicatorSeekBar
     }
 
     private fun setSpinners(holder: MyViewHolder) {
@@ -334,6 +337,9 @@ class UpdateDeviceSceneAdapter(
                     ) {
                         val switch = parent?.selectedItem as DeviceSwitchData
                         scenes[adapterPosition].switchData = switch
+                        switchType = switch.desc?.lowercase() ?: ""
+                        seekBar.isVisible = switchStatus.isChecked && switchType == mActivity.getString(R.string.text_switch_fan_speed).lowercase()
+
                         if (switch.name == mActivity.getString(R.string.text_no_switch) || switch.name == mActivity.getString(
                                 R.string.text_select_switch
                             )
@@ -350,10 +356,11 @@ class UpdateDeviceSceneAdapter(
 
                 }
 
-            switch.isChecked = scenes[adapterPosition].deviceSwitchSettingValue.toBoolean()
+            switchStatus.isChecked = scenes[adapterPosition].deviceSwitchSettingValue.toBoolean()
 
-            switch.setOnCheckedChangeListener { _, isChecked ->
+            switchStatus.setOnCheckedChangeListener { _, isChecked ->
                 scenes[adapterPosition].deviceSwitchSettingValue = isChecked.toInt()
+                seekBar.isVisible = isChecked && switchType == mActivity.getString(R.string.text_switch_fan_speed).lowercase()
             }
 
 

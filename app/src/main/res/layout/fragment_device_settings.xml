@@ -8,10 +8,10 @@
     android:background="@color/app_background_color"
     android:gravity="bottom"
     android:orientation="vertical"
-    app:umanoScrollableView="@+id/rv_days"
     app:umanoDragView="@id/drag_switches"
     app:umanoOverlay="true"
     app:umanoPanelHeight="0dp"
+    app:umanoScrollableView="@+id/rv_days"
     tools:context="com.voinismartiot.voni.ui.fragments.main.home.DeviceSettingsFragment"
     tools:ignore="contentDescription,Autofill,LabelFor">
 
@@ -68,7 +68,8 @@
                         android:layout_marginEnd="@dimen/_10sdp"
                         android:layout_toStartOf="@+id/iv_restart_info"
                         android:gravity="center_vertical"
-                        android:orientation="horizontal">
+                        android:orientation="horizontal"
+                        tools:ignore="UseCompoundDrawables">
 
                         <ImageView
                             android:id="@+id/iv_restart"
@@ -108,7 +109,8 @@
                         android:layout_marginEnd="@dimen/_10sdp"
                         android:layout_toStartOf="@+id/iv_factory_reset_info"
                         android:gravity="center_vertical"
-                        android:orientation="horizontal">
+                        android:orientation="horizontal"
+                        tools:ignore="UseCompoundDrawables">
 
                         <ImageView
                             android:id="@+id/iv_factory_reset"
@@ -148,7 +150,8 @@
                         android:layout_marginEnd="@dimen/_10sdp"
                         android:layout_toStartOf="@+id/iv_remove_info"
                         android:gravity="center_vertical"
-                        android:orientation="horizontal">
+                        android:orientation="horizontal"
+                        tools:ignore="UseCompoundDrawables">
 
                         <ImageView
                             android:id="@+id/iv_remove"
@@ -189,7 +192,8 @@
                         android:layout_marginEnd="@dimen/_5sdp"
                         android:layout_toStartOf="@+id/iv_update_info"
                         android:gravity="center_vertical"
-                        android:orientation="horizontal">
+                        android:orientation="horizontal"
+                        tools:ignore="UseCompoundDrawables">
 
                         <ImageView
                             android:id="@+id/iv_update"
@@ -232,7 +236,8 @@
                         android:layout_marginEnd="@dimen/_10sdp"
                         android:layout_toStartOf="@+id/iv_retain_state_info"
                         android:gravity="center_vertical"
-                        android:orientation="horizontal">
+                        android:orientation="horizontal"
+                        tools:ignore="UseCompoundDrawables">
 
                         <ImageView
                             android:id="@+id/iv_retain_state"
@@ -282,7 +287,8 @@
                         android:layout_marginEnd="@dimen/_10sdp"
                         android:layout_toStartOf="@+id/iv_outdoor_mode_info"
                         android:gravity="center_vertical"
-                        android:orientation="horizontal">
+                        android:orientation="horizontal"
+                        tools:ignore="UseCompoundDrawables">
 
                         <ImageView
                             android:id="@+id/iv_outdoor_mode"

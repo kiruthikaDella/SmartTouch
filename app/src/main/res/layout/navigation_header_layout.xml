@@ -10,16 +10,16 @@
         android:id="@+id/tv_user_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="@dimen/_14ssp"
         android:fontFamily="@font/roboto_medium"
-        android:textColor="@color/theme_color" />
+        android:textColor="@color/theme_color"
+        android:textSize="@dimen/_14ssp" />
 
     <TextView
         android:id="@+id/tv_user_email"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="@dimen/_12ssp"
         android:fontFamily="@font/roboto_medium"
-        android:textColor="@color/daintree"/>
+        android:textColor="@color/daintree"
+        android:textSize="@dimen/_12ssp" />
 
 </LinearLayout>

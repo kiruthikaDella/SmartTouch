@@ -17,6 +17,7 @@ import com.voinismartiot.voni.api.model.*
 import com.voinismartiot.voni.common.interfaces.DialogAskListener
 import com.voinismartiot.voni.common.utils.DialogUtil
 import com.voinismartiot.voni.common.utils.Utils.toInt
+import com.warkiz.widget.IndicatorSeekBar
 
 class DeviceSceneAdapter(
     private val mActivity: Activity,
@@ -25,6 +26,7 @@ class DeviceSceneAdapter(
 
     private val roomDataList = arrayListOf<ControlModeRoomData>()
     private val logTag = this::class.java.simpleName
+    private var switchType = ""
 
     private var roomList = arrayListOf<GetRoomData>()
     private var errorList: MutableMap<Int, String> = mutableMapOf()
@@ -95,7 +97,7 @@ class DeviceSceneAdapter(
         val spinnerRoom = itemView.findViewById(R.id.spinner_room_name) as Spinner
         val spinnerDevice = itemView.findViewById(R.id.spinner_device_name) as Spinner
         val spinnerSwitch = itemView.findViewById(R.id.spinner_switch_name) as Spinner
-        val switch = itemView.findViewById(R.id.switch_status) as SwitchMaterial
+        val switchStatus = itemView.findViewById(R.id.switch_status) as SwitchMaterial
 
         val ibDelete = itemView.findViewById(R.id.ib_delete) as ImageView
         val ivRoomName = itemView.findViewById(R.id.iv_room_name_down) as ImageView
@@ -103,6 +105,7 @@ class DeviceSceneAdapter(
         val ivSwitchName = itemView.findViewById(R.id.iv_switch_name_down) as ImageView
 
         val tvError = itemView.findViewById(R.id.tv_text_error) as TextView
+        val seekBar = itemView.findViewById(R.id.seek_bar) as IndicatorSeekBar
 
     }
 
@@ -271,7 +274,7 @@ class DeviceSceneAdapter(
                                     null
                                 )
                                 switchList.add(switch)
-                                switchList.addAll(switchData.filter { it.typeOfSwitch == 0 })
+                                switchList.addAll(switchData.filter { it.typeOfSwitch == 0 || it.desc?.lowercase() == mActivity.getString(R.string.text_switch_fan_speed).lowercase() })
                                 spinnerSwitch.isEnabled = true
 
                             } ?: kotlin.run {
@@ -331,6 +334,8 @@ class DeviceSceneAdapter(
                     ) {
                         val switch = parent?.selectedItem as DeviceSwitchData
                         bodyScenes[adapterPosition].deviceSwitchId = switch.id
+                        switchType = switch.desc?.lowercase() ?: ""
+                        seekBar.isVisible = switchStatus.isChecked && switchType == mActivity.getString(R.string.text_switch_fan_speed).lowercase()
                         if (switch.name == mActivity.getString(R.string.text_no_switch) || switch.name == mActivity.getString(
                                 R.string.text_select_switch
                             )
@@ -347,8 +352,9 @@ class DeviceSceneAdapter(
 
                 }
 
-            switch.setOnCheckedChangeListener { _, isChecked ->
+            switchStatus.setOnCheckedChangeListener { _, isChecked ->
                 bodyScenes[adapterPosition].deviceSwitchSettingValue = isChecked.toInt()
+                seekBar.isVisible = isChecked && switchType == mActivity.getString(R.string.text_switch_fan_speed).lowercase()
             }
         }
     }

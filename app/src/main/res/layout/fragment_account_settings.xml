@@ -6,8 +6,8 @@
     android:layout_height="match_parent"
     android:background="@color/app_background_color"
     android:orientation="vertical"
-    tools:ignore="contentDescription"
-    tools:context="com.voinismartiot.voni.ui.fragments.main.home.AccountSettingsFragment">
+    tools:context="com.voinismartiot.voni.ui.fragments.main.home.AccountSettingsFragment"
+    tools:ignore="contentDescription">
 
     <RelativeLayout
         android:id="@+id/relative_header"

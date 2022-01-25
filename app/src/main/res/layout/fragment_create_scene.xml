@@ -17,8 +17,8 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:focusable="true"
-        android:clickable="true">
+        android:clickable="true"
+        android:focusable="true">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -43,7 +43,8 @@
                     android:layout_height="wrap_content"
                     android:layout_centerInParent="true"
                     android:layout_gravity="center_horizontal"
-                    android:text="@string/title_text_create_scene" />
+                    android:text="@string/title_text_create_scene"
+                    tools:ignore="RelativeOverlap" />
 
                 <ImageView
                     android:id="@+id/ib_save"
@@ -101,6 +102,7 @@
                         android:background="@android:color/transparent"
                         android:fontFamily="@font/roboto_bold"
                         android:gravity="center_vertical"
+                        android:inputType="text"
                         android:maxLength="20"
                         android:singleLine="true"
                         android:textColor="@color/daintree"
@@ -125,9 +127,9 @@
                 android:id="@+id/recycler_scenes"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight="1"
                 android:layout_marginStart="@dimen/screen_start_margin"
                 android:layout_marginEnd="@dimen/screen_end_margin"
+                android:layout_weight="1"
                 android:overScrollMode="never"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
@@ -139,6 +141,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:background="@color/white"
+            android:baselineAligned="false"
             android:orientation="horizontal"
             android:weightSum="3">
 
@@ -286,7 +289,7 @@
             android:id="@+id/layout_frequency_weekly"
             layout="@layout/layout_frequency_weekly"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content" />
 
     </com.jcminarro.roundkornerlayout.RoundKornerLinearLayout>
 

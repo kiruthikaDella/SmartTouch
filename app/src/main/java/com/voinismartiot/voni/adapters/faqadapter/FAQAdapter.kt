@@ -30,8 +30,8 @@ class FAQAdapter(faqList: List<ExpandableGroup<*>?>?) :
         holder: AnswersViewHolder, flatPosition: Int,
         group: ExpandableGroup<*>, childIndex: Int
     ) {
-        val artist: AnswerModel? = (group as QuestionModel).items[childIndex]
-        holder.setArtistName(artist?.name)
+        val answerModel: AnswerModel? = (group as QuestionModel).items[childIndex]
+        holder.setAnswer(answerModel?.name)
     }
 
     override fun onBindGroupViewHolder(

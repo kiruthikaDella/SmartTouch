@@ -10,7 +10,7 @@
     android:focusable="true"
     android:orientation="vertical"
     android:visibility="gone"
-    tools:ignore="contentDescription">
+    tools:ignore="contentDescription,Autofill,LabelFor">
 
     <TextView
         android:layout_width="wrap_content"
@@ -62,11 +62,13 @@
         android:background="@drawable/catskill_white_background"
         android:fontFamily="@font/roboto_medium"
         android:hint="@string/hint_text_enter_serial_number"
+        android:inputType="text"
         android:paddingStart="@dimen/_10sdp"
         android:paddingEnd="@dimen/_10sdp"
         android:textColor="@color/theme_color"
         android:textColorHint="@color/ghost"
-        android:textSize="@dimen/_12ssp" />
+        android:textSize="@dimen/_12ssp"
+        tools:ignore="TextFields" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btn_add_panel"

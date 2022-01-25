@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/app_background_color"
     android:orientation="vertical"
-    tools:ignore="contentDescription,Autofill,LabelFor"
-    tools:context=".ui.fragments.main.scenes.SceneFragment">
+    tools:context=".ui.fragments.main.scenes.SceneFragment"
+    tools:ignore="contentDescription,Autofill,LabelFor">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -21,7 +21,8 @@
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:layout_gravity="center_horizontal"
-            android:text="@string/title_text_scene" />
+            android:text="@string/title_text_scene"
+            tools:ignore="RelativeOverlap" />
 
         <ImageView
             android:id="@+id/ib_create"
@@ -29,8 +30,8 @@
             android:layout_height="match_parent"
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
-            android:src="@drawable/ic_add"
             android:padding="@dimen/_6sdp"
+            android:src="@drawable/ic_add"
             app:tint="@color/daintree" />
 
     </RelativeLayout>

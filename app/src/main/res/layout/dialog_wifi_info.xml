@@ -16,7 +16,7 @@
         android:fontFamily="@font/roboto_medium"
         android:text="@string/below_given_default_gateway_wifi_ssid_and_password"
         android:textColor="@color/theme_color"
-        android:textSize="@dimen/_13ssp"/>
+        android:textSize="@dimen/_13ssp" />
 
     <TextView
         android:id="@+id/tvInstructionsInfo"

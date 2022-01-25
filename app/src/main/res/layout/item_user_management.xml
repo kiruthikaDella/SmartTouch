@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_marginStart="@dimen/screen_start_margin"
     android:layout_marginTop="@dimen/_5sdp"
-    android:layout_marginBottom="@dimen/_5sdp"
     android:layout_marginEnd="@dimen/screen_end_margin"
-    tools:ignore="contentDescription"
+    android:layout_marginBottom="@dimen/_5sdp"
+    app:cardCornerRadius="@dimen/corner_radius_4dp"
     app:cardElevation="@dimen/_3sdp"
-    app:cardCornerRadius="@dimen/corner_radius_4dp">
+    tools:ignore="contentDescription">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -30,12 +30,12 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_marginStart="@dimen/_8sdp"
-            android:singleLine="true"
             android:layout_marginEnd="@dimen/_8sdp"
             android:layout_toStartOf="@+id/iv_remove_user"
             android:layout_toEndOf="@+id/iv_active_user"
             android:fontFamily="@font/roboto_medium"
-            android:text="Patty Garg"
+            android:singleLine="true"
+            android:text="@string/text_name"
             android:textColor="@color/daintree"
             android:textSize="@dimen/_12ssp" />
 

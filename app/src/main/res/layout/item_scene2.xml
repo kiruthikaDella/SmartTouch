@@ -17,8 +17,8 @@
         android:layout_width="@dimen/_40sdp"
         android:layout_height="match_parent"
         android:layout_gravity="end"
-        android:padding="@dimen/_13sdp"
         android:background="@color/red"
+        android:padding="@dimen/_13sdp"
         android:src="@drawable/ic_delete"
         app:tint="@color/white" />
 

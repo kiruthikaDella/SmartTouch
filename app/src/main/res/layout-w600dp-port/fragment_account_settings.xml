@@ -6,8 +6,8 @@
     android:layout_height="match_parent"
     android:background="@color/app_background_color"
     android:orientation="vertical"
-    tools:ignore="contentDescription"
-    tools:context="com.voinismartiot.voni.ui.fragments.main.home.AccountSettingsFragment">
+    tools:context="com.voinismartiot.voni.ui.fragments.main.home.AccountSettingsFragment"
+    tools:ignore="contentDescription">
 
     <RelativeLayout
         android:id="@+id/relative_header"
@@ -35,8 +35,8 @@
 
     <ScrollView
         android:layout_width="match_parent"
-        android:overScrollMode="never"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:overScrollMode="never">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -91,8 +91,8 @@
                 android:id="@+id/iv_edit_name"
                 android:layout_width="@dimen/_20sdp"
                 android:layout_height="@dimen/_20sdp"
-                android:padding="@dimen/_4sdp"
                 android:layout_marginEnd="@dimen/screen_end_margin"
+                android:padding="@dimen/_4sdp"
                 android:src="@drawable/ic_as_edit"
                 app:layout_constraintBottom_toBottomOf="@+id/tv_name"
                 app:layout_constraintEnd_toEndOf="parent"

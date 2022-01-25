@@ -33,11 +33,11 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/_250sdp"
         android:layout_marginTop="@dimen/_5sdp"
-        android:focusable="true"
         android:clickable="true"
+        android:focusable="true"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        tools:listitem="@layout/item_weekly_days"
-        tools:itemCount="7"/>
+        tools:itemCount="7"
+        tools:listitem="@layout/item_weekly_days" />
 
     <com.jcminarro.roundkornerlayout.RoundKornerLinearLayout
         android:id="@+id/btn_save"

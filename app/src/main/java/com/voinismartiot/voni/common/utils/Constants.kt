@@ -34,11 +34,6 @@ object Constants {
     const val DEVICE_TYPE_SIX = 6
     const val DEVICE_TYPE_ONE = 1
 
-    const val DEVICE_TYPE_EIGHT_STRING = "8"
-    const val DEVICE_TYPE_FOUR_STRING = "4"
-    const val DEVICE_TYPE_SIX_STRING = "8"
-    const val DEVICE_TYPE_ONE_STRING = "1"
-
     const val PRODUCT_SMART_TOUCH = "smartouch"
     const val PRODUCT_SMART_ACK = "smartack"
     const val PRODUCT_SMART_AP = "smartap"

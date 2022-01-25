@@ -7,7 +7,7 @@ import com.thoughtbot.expandablerecyclerview.viewholders.ChildViewHolder
 
 class AnswersViewHolder(itemView: View) : ChildViewHolder(itemView) {
     private val childTextView: TextView = itemView.findViewById(R.id.tv_answer) as TextView
-    fun setArtistName(name: String?) {
+    fun setAnswer(name: String?) {
         childTextView.text = name
     }
 

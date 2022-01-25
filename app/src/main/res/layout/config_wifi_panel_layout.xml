@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/linear_config_wifi_panel"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    tools:ignore="contentDescription,Autofill,LabelFor">
 
     <TextView
         android:layout_width="wrap_content"
@@ -27,9 +29,9 @@
         android:background="@drawable/catskill_white_background"
         android:fontFamily="@font/roboto_regular"
         android:hint="@string/hint_text_enter_panel_name"
+        android:imeOptions="actionNext"
         android:inputType="text"
         android:maxLength="20"
-        android:imeOptions="actionNext"
         android:paddingStart="@dimen/_10sdp"
         android:paddingEnd="@dimen/_10sdp"
         android:textColor="@color/daintree"
@@ -57,9 +59,9 @@
         android:background="@drawable/catskill_white_background"
         android:fontFamily="@font/roboto_regular"
         android:hint="@string/hint_text_wifi_ssid"
+        android:imeOptions="actionNext"
         android:inputType="text"
         android:maxLength="50"
-        android:imeOptions="actionNext"
         android:paddingStart="@dimen/_10sdp"
         android:paddingEnd="@dimen/_10sdp"
         android:textColor="@color/daintree"
@@ -87,9 +89,9 @@
         android:background="@drawable/catskill_white_background"
         android:fontFamily="@font/roboto_regular"
         android:hint="@string/hint_text_wifi_password"
+        android:imeOptions="actionDone"
         android:inputType="text"
         android:maxLength="50"
-        android:imeOptions="actionDone"
         android:paddingStart="@dimen/_10sdp"
         android:paddingEnd="@dimen/_10sdp"
         android:textColor="@color/daintree"

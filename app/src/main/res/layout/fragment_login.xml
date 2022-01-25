@@ -135,7 +135,8 @@
             android:fontFamily="@font/roboto_medium"
             android:text="@string/text_forgot_password"
             android:textColor="@color/theme_color"
-            android:textSize="@dimen/_12ssp" />
+            android:textSize="@dimen/_12ssp"
+            tools:ignore="RelativeOverlap" />
 
     </RelativeLayout>
 
@@ -147,6 +148,7 @@
         android:layout_marginTop="@dimen/_30sdp"
         android:layout_marginEnd="@dimen/login_component_end_margin"
         android:background="@color/white"
+        android:baselineAligned="false"
         android:orientation="horizontal"
         app:layout_constraintTop_toBottomOf="@+id/relative_remember">
 

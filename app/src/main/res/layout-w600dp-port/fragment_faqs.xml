@@ -54,9 +54,9 @@
         android:id="@+id/recycler_faq"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"
         android:layout_marginStart="@dimen/screen_start_margin"
         android:layout_marginEnd="@dimen/screen_end_margin"
+        android:layout_weight="1"
         android:overScrollMode="never"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
