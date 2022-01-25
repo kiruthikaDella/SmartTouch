@@ -347,7 +347,7 @@ object TCPClientService {
                     // Increase count for read new byte array
                     count += packetLength
                     Log.d(
-                        "Binjal1",
+                        logTag,
                         "remainingByteArray is ${remainingByteArray.toString(Charset.defaultCharset())}"
                     )
 
@@ -365,7 +365,7 @@ object TCPClientService {
                         data = remainingByteArray.take(packetLength).toByteArray()
 
                         Log.d(
-                            "Binjal2",
+                            logTag,
                             "remainingByteArray is ${remainingByteArray.toString(Charset.defaultCharset())}"
                         )
 
@@ -391,7 +391,7 @@ object TCPClientService {
                         if (isFirstSet) {
                             remainingByteArray = Utils.trimByteArray(data)
                             Log.d(
-                                "Binjal3",
+                                logTag,
                                 "remainingByteArray is ${remainingByteArray.toString(Charset.defaultCharset())}"
                             )
                         }
@@ -471,11 +471,11 @@ object TCPClientService {
 
                     stringData = remainingStringData!!
                     remainingStringData = ""
-                    Log.e("Binjal1", "remainingStringData not null blank $stringData")
+                    Log.e(logTag, "remainingStringData not null blank $stringData")
 
                 } else {
                     stringData = Utils.trimByteArray(data).toString(Charset.defaultCharset())
-                    Log.e("Binjal2", "remainingStringData null blank $stringData")
+                    Log.e(logTag, "remainingStringData null blank $stringData")
                 }
 
                 if (stringData.contains(startBit) && stringData.contains(endBits)) {
@@ -548,7 +548,7 @@ object TCPClientService {
                                     if (subStr.contains(startBit)) {
                                         remainingStringData = subStr
                                         Log.e(
-                                            "Binjal*",
+                                            logTag,
                                             "remainingStringData data is $remainingStringData"
                                         )
                                     }
@@ -557,7 +557,7 @@ object TCPClientService {
                                     endBitIndex = null
                                     isSetStartIndex = false
                                 } else {
-                                    Log.d("Binjal", "s > e")
+                                    Log.d(logTag, "s > e")
 
                                     val subStr = stringData.substring(endBitIndex + 1, stringData.length)
 
@@ -566,17 +566,17 @@ object TCPClientService {
                                     if (subStr.contains(startBit)) {
                                         remainingStringData = subStr
                                         Log.e(
-                                            "Binjal*",
+                                            logTag,
                                             "remainingStringData data is $remainingStringData"
                                         )
                                     }
                                     endBitIndex = null
                                 }
                             } else {
-                                Log.d("Binjal", "End bit null")
+                                Log.d(logTag, "End bit null")
                             }
                         } else {
-                            Log.d("Binjal", "Start bit null")
+                            Log.d(logTag, "Start bit null")
                         }
                         i++
                     }
@@ -584,7 +584,7 @@ object TCPClientService {
                 } else if (stringData.contains(startBit)) {
                     remainingStringData = ""
                     remainingStringData = stringData
-                    Log.d("Binjal3", "remainingStringData data is $remainingStringData")
+                    Log.d(logTag, "remainingStringData data is $remainingStringData")
                 }
             } catch (e: java.lang.Exception) {
                 printLog("Exception in Read Value Between Start And End Bits $e")
