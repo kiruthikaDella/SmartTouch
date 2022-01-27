@@ -232,12 +232,12 @@ object TCPServerService {
             connectedMap?.let { it ->
 
                 val mKey = it.filterValues { it == socket }
-                Log.e("Binjal", "key $mKey")
+                Log.e(logTag, "key $mKey")
 
                 if (mKey.containsValue(socket)) {
                     it.values.remove(socket)
 
-                    Log.e("Binjal", "hh $it")
+                    Log.e(logTag, "hh $it")
 
                     connectResultListener?.onSuccess(
                         (Utils.concatDateAndTime("${mKey.keys} is disconnected")),
@@ -389,11 +389,11 @@ object TCPServerService {
 
                     val isRemainingExists = FastSave.getInstance().isKeyExists(Utils.REMAINING_BYTE_ARRAY_STRING + connectedMap?.filterValues { it == socket }?.keys)
                     Log.e(
-                        "Binjal1",
+                        logTag,
                         "Key exists is ${FastSave.getInstance().isKeyExists(Utils.REMAINING_BYTE_ARRAY_STRING + connectedMap?.filterValues { it == socket }?.keys)}"
                     )
                     /*Log.e(
-                        "Binjal1",
+                        logTag,
                         "remainingByteArray is ${remainingByteArray.toString(Charset.defaultCharset())}"
                     )*/
 
@@ -418,7 +418,7 @@ object TCPServerService {
                         data = remainingByteArray.take(packetLength).toByteArray()
 
                         Log.e(
-                            "Binjal2",
+                            logTag,
                             "remainingByteArray is ${remainingByteArray.toString(Charset.defaultCharset())}"
                         )
 
@@ -444,7 +444,7 @@ object TCPServerService {
                         if (isFirstSet) {
                             remainingByteArray = Utils.trimByteArray(data)
                             Log.e(
-                                "Binjal3",
+                                logTag,
                                 "remainingByteArray is ${remainingByteArray.toString(Charset.defaultCharset())}"
                             )
                             FastSave.getInstance().saveString(Utils.REMAINING_BYTE_ARRAY_STRING + connectedMap?.filterValues { it == socket }?.keys, remainingByteArray.toPreservedString)
@@ -528,11 +528,11 @@ object TCPServerService {
 
                     stringData = remainingStringData
                     remainingStringData = ""
-                    Log.e("Binjal21", "remaining StringData not null blank $stringData")
+                    Log.e(logTag, "remaining StringData not null blank $stringData")
 
                 } else {
                     stringData = Utils.trimByteArray(data).toString(Charset.defaultCharset())
-                    Log.e("Binjal21", "remaining StringData null blank $stringData")
+                    Log.e(logTag, "remaining StringData null blank $stringData")
                 }
 
                 if (stringData.contains(startBit) && stringData.contains(endBits)) {
@@ -610,7 +610,7 @@ object TCPServerService {
                                         remainingStringData = subStr
                                         FastSave.getInstance().saveString(Utils.REMAINING_STRING_DATA + connectedMap?.filterValues { it == socket }?.keys, remainingStringData)
                                         Log.e(
-                                            "Binjal*",
+                                            logTag,
                                             "remainingStringData data is $remainingStringData"
                                         )
                                     }
@@ -631,7 +631,7 @@ object TCPServerService {
                                         remainingStringData = subStr
                                         FastSave.getInstance().saveString(Utils.REMAINING_STRING_DATA + connectedMap?.filterValues { it == socket }?.keys, remainingStringData)
                                         Log.e(
-                                            "Binjal*",
+                                            logTag,
                                             "remainingStringData data is $remainingStringData"
                                         )
                                     }
@@ -650,7 +650,7 @@ object TCPServerService {
                 } else if (stringData.contains(startBit)) {
                     remainingStringData = stringData
                     FastSave.getInstance().saveString(Utils.REMAINING_STRING_DATA + connectedMap?.filterValues { it == socket }?.keys, remainingStringData)
-                    Log.e("Binjal*", "remainingStringData data is $remainingStringData")
+                    Log.e(logTag, "remainingStringData data is $remainingStringData")
                 }
             } catch (e: java.lang.Exception) {
                 printLog("Exception in Read Value Between Start And End Bits $e")

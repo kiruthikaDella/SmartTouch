@@ -518,7 +518,7 @@ object WifiUtils {
 
         val info = mWifiManager?.connectionInfo!!
         return if (info.supplicantState == SupplicantState.COMPLETED) {
-            Log.i("Binjal", info.ssid)
+            Log.i(logTag, info.ssid)
             info.ssid.replace("\"", "")
         } else {
             null
