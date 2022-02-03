@@ -23,9 +23,9 @@ object NetworkModule {
 
     // set your desired log level
     private val httpClient: Builder = Builder()
-        .connectTimeout(1, TimeUnit.MINUTES)
-        .writeTimeout(1, TimeUnit.MINUTES)
-        .readTimeout(1, TimeUnit.MINUTES)
+        .connectTimeout(30, TimeUnit.SECONDS)
+        .writeTimeout(30, TimeUnit.SECONDS)
+        .readTimeout(30, TimeUnit.SECONDS)
         .addInterceptor(providesInterceptor())
         .addInterceptor(logging)
 

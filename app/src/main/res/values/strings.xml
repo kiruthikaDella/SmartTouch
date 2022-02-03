@@ -56,7 +56,7 @@
     <string name="error_text_scene_name_length">Scene name must be more than 3 character</string>
     <string name="error_text_only_master_user_can_edit">Only master user can edit this settings</string>
     <string name="error_text_unauthorized">You are not authorized to access this action.</string>
-    <string name="error_something_went_wrong">Something went wrong. Please try again after sometime</string>
+    <string name="error_something_went_wrong">Something went wrong with the server. Please try again after sometime</string>
     <string name="error_sleep_mode_digit_only">Sleep mode value must be digit</string>
     <string name="error_sleep_mode_limit_reached">You can not enter more than 600 seconds in sleep mode</string>
 
@@ -318,22 +318,6 @@
     <string name="text_connected">Connected</string>
     <string name="text_connection_failed">Connection Failed</string>
     <string name="receiver_port">8881</string>
-    <string name="message_wait_for_internet">Please wait for internet connection and once you connected with internet then press ok</string>
-
-    <string-array name="appliance_list">
-        <item>Microwave Oven</item>
-        <item>Washing Machine</item>
-        <item>Cloth Dryer</item>
-        <item>Roaster</item>
-        <item>Dishwasher</item>
-        <item>Geyser</item>
-        <item>Air Conditioner</item>
-        <item>Electric Kettle</item>
-        <item>Electric Cooker</item>
-        <item>Griller</item>
-        <item>Electric Rice Cooker</item>
-        <item>Coffee Maker</item>
-        <item>Crockpot</item>
-    </string-array>
+    <string name="message_wait_for_internet">Please wait for internet connection and once you connected with internet then press OK</string>
 
 </resources>

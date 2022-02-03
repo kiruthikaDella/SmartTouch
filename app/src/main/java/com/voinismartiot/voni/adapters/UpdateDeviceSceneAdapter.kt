@@ -338,7 +338,7 @@ class UpdateDeviceSceneAdapter(
                         val switch = parent?.selectedItem as DeviceSwitchData
                         scenes[adapterPosition].switchData = switch
                         switchType = switch.desc?.lowercase() ?: ""
-                        seekBar.isVisible = switchStatus.isChecked && switchType == mActivity.getString(R.string.text_switch_fan_speed).lowercase()
+//                        seekBar.isVisible = switchStatus.isChecked && switchType == mActivity.getString(R.string.text_switch_fan_speed).lowercase()
 
                         if (switch.name == mActivity.getString(R.string.text_no_switch) || switch.name == mActivity.getString(
                                 R.string.text_select_switch
@@ -360,7 +360,7 @@ class UpdateDeviceSceneAdapter(
 
             switchStatus.setOnCheckedChangeListener { _, isChecked ->
                 scenes[adapterPosition].deviceSwitchSettingValue = isChecked.toInt()
-                seekBar.isVisible = isChecked && switchType == mActivity.getString(R.string.text_switch_fan_speed).lowercase()
+//                seekBar.isVisible = isChecked && switchType == mActivity.getString(R.string.text_switch_fan_speed).lowercase()
             }
 
 

@@ -44,9 +44,9 @@ abstract class ModelBaseFragment<VM : ViewModel, B : ViewBinding, R : BaseReposi
 
     protected fun isInternetConnected(): Boolean {
         var isInternetConnected = false
-        NotifyManager.internetInfo.observe(viewLifecycleOwner, {
-           isInternetConnected = it
-        })
+        NotifyManager.internetInfo.observe(viewLifecycleOwner) {
+            isInternetConnected = it
+        }
         return isInternetConnected
     }
 }

@@ -21,6 +21,7 @@ import com.voinismartiot.voni.common.interfaces.AdapterItemClickListener
 import com.voinismartiot.voni.common.interfaces.DialogAskListener
 import com.voinismartiot.voni.common.utils.Constants
 import com.voinismartiot.voni.common.utils.DialogUtil
+import com.voinismartiot.voni.common.utils.Utils
 import com.voinismartiot.voni.common.utils.showToast
 import com.voinismartiot.voni.databinding.FragmentSceneBinding
 import com.voinismartiot.voni.mqtt.NotifyManager
@@ -74,7 +75,7 @@ class SceneFragment : ModelBaseFragment<HomeViewModel, FragmentSceneBinding, Hom
                         getString(R.string.text_no),
                         object : DialogAskListener {
                             override fun onYesClicked() {
-                                if (!isInternetConnected()) {
+                                if (!Utils.isNetworkConnectivityAvailable()) {
                                     context?.showToast(getString(R.string.text_no_internet_available))
                                 } else {
                                     DialogUtil.loadingAlert(it)
@@ -96,7 +97,7 @@ class SceneFragment : ModelBaseFragment<HomeViewModel, FragmentSceneBinding, Hom
             ScenesAdapter.SwitchItemClickListener<GetSceneData> {
             override fun onItemClick(data: GetSceneData, sceneStatusValue: Int) {
 
-                if (!isInternetConnected()) {
+                if (!Utils.isNetworkConnectivityAvailable()) {
                     context?.showToast(getString(R.string.text_no_internet_available))
                 } else {
                     activity?.let {

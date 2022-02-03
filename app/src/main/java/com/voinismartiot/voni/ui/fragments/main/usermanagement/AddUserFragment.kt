@@ -12,6 +12,7 @@ import com.voinismartiot.voni.api.Resource
 import com.voinismartiot.voni.api.body.BodyAddSubordinateUser
 import com.voinismartiot.voni.api.repository.UserManagementRepository
 import com.voinismartiot.voni.common.utils.DialogUtil
+import com.voinismartiot.voni.common.utils.Utils
 import com.voinismartiot.voni.common.utils.showToast
 import com.voinismartiot.voni.databinding.FragmentAddUserBinding
 import com.voinismartiot.voni.ui.fragments.ModelBaseFragment
@@ -66,7 +67,7 @@ class AddUserFragment :
                 }
                 else -> {
 
-                    if (!isInternetConnected()){
+                    if (!Utils.isNetworkConnectivityAvailable()){
                         context?.getString(R.string.text_no_internet_available)
                         return@setOnClickListener
                     }

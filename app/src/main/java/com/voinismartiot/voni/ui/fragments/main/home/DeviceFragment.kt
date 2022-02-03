@@ -45,15 +45,24 @@ import com.voinismartiot.voni.R
 import com.voinismartiot.voni.adapters.DeviceAdapter
 import com.voinismartiot.voni.adapters.spinneradapter.SpinnerAdapter
 import com.voinismartiot.voni.api.Resource
-import com.voinismartiot.voni.api.body.*
+import com.voinismartiot.voni.api.body.BodyAddDevice
+import com.voinismartiot.voni.api.body.BodyUpdateDeviceName
+import com.voinismartiot.voni.api.body.BodyUpdateRoom
+import com.voinismartiot.voni.api.body.BodyUpdateSwitchName
 import com.voinismartiot.voni.api.model.DeviceSwitchData
 import com.voinismartiot.voni.api.model.GetDeviceData
 import com.voinismartiot.voni.api.model.GetRoomData
 import com.voinismartiot.voni.api.repository.HomeRepository
-import com.voinismartiot.voni.common.interfaces.*
-import com.voinismartiot.voni.common.utils.*
+import com.voinismartiot.voni.common.interfaces.AdapterItemClickListener
+import com.voinismartiot.voni.common.interfaces.DialogEditListener
+import com.voinismartiot.voni.common.interfaces.DialogShowListener
+import com.voinismartiot.voni.common.interfaces.PingHoleStatusListener
+import com.voinismartiot.voni.common.utils.Constants
+import com.voinismartiot.voni.common.utils.DialogUtil
 import com.voinismartiot.voni.common.utils.Utils.clearError
 import com.voinismartiot.voni.common.utils.Utils.toEditable
+import com.voinismartiot.voni.common.utils.hideKeyboard
+import com.voinismartiot.voni.common.utils.showToast
 import com.voinismartiot.voni.databinding.FragmentDeviceBinding
 import com.voinismartiot.voni.mqtt.NotifyManager
 import com.voinismartiot.voni.ui.fragments.ModelBaseFragment
@@ -78,6 +87,7 @@ class DeviceFragment : ModelBaseFragment<HomeViewModel, FragmentDeviceBinding, H
     private lateinit var deviceTypeAdapter: SpinnerAdapter
     private var isSelectedSmarTouch = true
     private var isSelectedSmartAck: Boolean? = null
+    private var counter = 0
 
     private val wifiRegister =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
@@ -106,7 +116,6 @@ class DeviceFragment : ModelBaseFragment<HomeViewModel, FragmentDeviceBinding, H
                 getString(R.string.text_smart_tap)
             )
 
-        deviceList.clear()
         activity?.let {
             panelAdapter = DeviceAdapter(it, deviceList)
             binding.recyclerRoomPanels.adapter = panelAdapter
@@ -118,9 +127,12 @@ class DeviceFragment : ModelBaseFragment<HomeViewModel, FragmentDeviceBinding, H
 
         binding.tvTitle.text = args.roomDetail.roomName
 
-        NotifyManager.internetInfo.observe(viewLifecycleOwner, { isConnected ->
+        NotifyManager.internetInfo.observe(viewLifecycleOwner) { isConnected ->
+            counter++
             if (isConnected) {
-                getDeviceData()
+                if (counter > 1) {
+                    getDeviceData()
+                }
             } else {
                 if (isSelectedSmarTouch) {
                     activity?.let {
@@ -138,7 +150,7 @@ class DeviceFragment : ModelBaseFragment<HomeViewModel, FragmentDeviceBinding, H
                     }
                 }
             }
-        })
+        }
 
         activity?.let { mActivity ->
             deviceTypeAdapter = SpinnerAdapter(mActivity, deviceTypeList.toMutableList())
@@ -149,7 +161,7 @@ class DeviceFragment : ModelBaseFragment<HomeViewModel, FragmentDeviceBinding, H
         apiCall()
     }
 
-    private fun getDeviceData(){
+    private fun getDeviceData() {
         showLoading()
         viewModel.getDevice(args.roomDetail.id)
     }
@@ -348,7 +360,7 @@ class DeviceFragment : ModelBaseFragment<HomeViewModel, FragmentDeviceBinding, H
             }
         })
 
-        panelAdapter.setOnPingHoleListener(object : PingHoleStatusListener{
+        panelAdapter.setOnPingHoleListener(object : PingHoleStatusListener {
             override fun statusArrived() {
                 viewLifecycleOwner.lifecycleScope.launchWhenStarted {
                     withContext(Dispatchers.Main) {

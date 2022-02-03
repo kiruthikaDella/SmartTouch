@@ -24,6 +24,7 @@ import com.voinismartiot.voni.api.repository.HomeRepository
 import com.voinismartiot.voni.common.interfaces.DialogShowListener
 import com.voinismartiot.voni.common.utils.Constants
 import com.voinismartiot.voni.common.utils.DialogUtil
+import com.voinismartiot.voni.common.utils.Utils
 import com.voinismartiot.voni.databinding.FragmentConnectingWifiBinding
 import com.voinismartiot.voni.ui.activities.MainActivity
 import com.voinismartiot.voni.ui.fragments.ModelBaseFragment
@@ -309,7 +310,7 @@ class ConnectingWifiFragment :
             getString(R.string.text_smart_tap)
         }
 
-        if (isInternetConnected()) {
+        if (Utils.isNetworkConnectivityAvailable()) {
             runnable = Runnable {
                 try {
                     getDeviceStr?.let {

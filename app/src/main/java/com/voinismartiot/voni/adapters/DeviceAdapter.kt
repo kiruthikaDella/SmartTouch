@@ -337,6 +337,11 @@ class DeviceAdapter(
                 seekBar.visibility = View.GONE
             }
 
+            if (device.productGroup.isSmartAp()) {
+                tvCustomization.visibility = View.GONE
+                tvFeature.visibility = View.GONE
+            }
+
             tvPanelName.text = device.deviceName
             relativeLayout.isVisible = !device.isDeviceAvailable.toBoolean()
             tvOutdoorModeIndication.isVisible = device.outdoorMode.toBoolean()
@@ -1013,8 +1018,12 @@ class DeviceAdapter(
 
                                 val applianceAdapter = AppliancesAdapter(mActivity, applianceList)
                                 spinnerAppliances.adapter = applianceAdapter
-                                device.deviceAppliances?.let {dApp->
-                                    spinnerAppliances.setSelection(applianceAdapter.getPositionById(dApp))
+                                device.deviceAppliances?.let { dApp ->
+                                    spinnerAppliances.setSelection(
+                                        applianceAdapter.getPositionById(
+                                            dApp
+                                        )
+                                    )
                                 }
 
                                 var check = 0
@@ -1028,7 +1037,7 @@ class DeviceAdapter(
                                             p3: Long
                                         ) {
 
-                                            if (++check > 1){
+                                            if (++check > 1) {
                                                 val appliance = p0?.selectedItem as DeviceAppliances
                                                 device.deviceAppliances = appliance.id
                                                 publishAppliance(
@@ -1039,7 +1048,6 @@ class DeviceAdapter(
                                         }
 
                                         override fun onNothingSelected(p0: AdapterView<*>?) {
-                                            Log.e(logTag, " nothing selected ")
                                         }
 
                                     }
@@ -1222,6 +1230,7 @@ class DeviceAdapter(
                                                 MQTTConstants.AWS_DIMMER
                                             ) //Dimmer
                                     }
+
                                 } else if (jsonObject.getInt(MQTTConstants.AWS_DEVICE_TYPE) == Constants.DEVICE_TYPE_ONE) {
                                     deviceData?.switchData?.get(0)?.switchStatus = switchStatus[0]
                                 }

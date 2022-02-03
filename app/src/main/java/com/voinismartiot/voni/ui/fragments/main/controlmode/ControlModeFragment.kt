@@ -37,6 +37,7 @@ import com.facebook.login.LoginManager
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.voinismartiot.voni.common.utils.Utils
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
@@ -65,7 +66,7 @@ class ControlModeFragment :
 
         initGoogleSignInClient()
 
-        NotifyManager.internetInfo.observe(viewLifecycleOwner, { isConnected ->
+        NotifyManager.internetInfo.observe(viewLifecycleOwner) { isConnected ->
             if (isConnected) {
                 activity?.let {
                     DialogUtil.loadingAlert(it)
@@ -75,11 +76,11 @@ class ControlModeFragment :
             } else {
                 Log.e(logTag, " internet is not available")
             }
-        })
+        }
 
         binding.ibPin.setOnClickListener {
 
-            if (!isInternetConnected()) {
+            if (Utils.isNetworkConnectivityAvailable()) {
                 context?.showToast(getString(R.string.text_no_internet_available))
                 return@setOnClickListener
             }

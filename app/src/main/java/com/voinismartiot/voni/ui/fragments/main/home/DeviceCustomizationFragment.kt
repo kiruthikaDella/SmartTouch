@@ -150,11 +150,8 @@ class DeviceCustomizationFragment :
 
         }
 
-        NotifyManager.internetInfo.observe(viewLifecycleOwner, { isConnected ->
+        NotifyManager.internetInfo.observe(viewLifecycleOwner) { isConnected ->
             if (isConnected) {
-                activity?.let {
-                    DialogUtil.loadingAlert(it)
-                }
                 viewModel.getDeviceCustomization(args.deviceDetail.id)
             } else {
                 activity?.let {
@@ -171,7 +168,7 @@ class DeviceCustomizationFragment :
                     )
                 }
             }
-        })
+        }
 
         clickEvents()
 

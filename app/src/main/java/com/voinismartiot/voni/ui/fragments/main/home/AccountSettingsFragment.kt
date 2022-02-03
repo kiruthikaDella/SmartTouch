@@ -149,7 +149,7 @@ class AccountSettingsFragment :
                 }
                 else -> {
 
-                    if (!isInternetConnected()) {
+                    if (!Utils.isNetworkConnectivityAvailable()) {
                         context?.showToast(getString(R.string.text_no_internet_available))
                         return@setOnClickListener
                     }
@@ -248,7 +248,7 @@ class AccountSettingsFragment :
                     mActivity.showToast(getString(R.string.error_text_valid_email))
                 } else {
 
-                    if (!isInternetConnected()) {
+                    if (!Utils.isNetworkConnectivityAvailable()) {
                         context?.showToast(getString(R.string.text_no_internet_available))
                         return@setOnClickListener
                     }

@@ -36,6 +36,7 @@ import com.voinismartiot.voni.databinding.FragmentCreateSceneBinding
 import com.voinismartiot.voni.ui.fragments.ModelBaseFragment
 import com.voinismartiot.voni.ui.viewmodel.HomeViewModel
 import com.sothree.slidinguppanel.SlidingUpPanelLayout
+import com.voinismartiot.voni.common.utils.Utils
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import java.text.Format
@@ -243,7 +244,7 @@ class CreateSceneFragment :
                 }
                 else -> {
 
-                    if (!isInternetConnected()){
+                    if (!Utils.isNetworkConnectivityAvailable()){
                         context?.showToast(getString(R.string.text_no_internet_available))
                         return@setOnClickListener
                     }

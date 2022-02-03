@@ -14,6 +14,7 @@ import com.voinismartiot.voni.api.repository.AuthRepository
 import com.voinismartiot.voni.common.interfaces.DialogShowListener
 import com.voinismartiot.voni.common.utils.Constants
 import com.voinismartiot.voni.common.utils.DialogUtil
+import com.voinismartiot.voni.common.utils.Utils
 import com.voinismartiot.voni.common.utils.showToast
 import com.voinismartiot.voni.databinding.FragmentForgotPasswordBinding
 import com.voinismartiot.voni.ui.fragments.ModelBaseFragment
@@ -38,7 +39,7 @@ class ForgotPasswordFragment :
 
         binding.btnSend.setOnClickListener {
 
-            if (isInternetConnected()) {
+            if (Utils.isNetworkConnectivityAvailable()) {
                 val email = binding.edtEmail.text.toString().trim()
                 if (email.isBlank()) {
                     binding.edtEmail.error = getString(R.string.error_text_email)

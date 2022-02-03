@@ -31,12 +31,10 @@ import com.voinismartiot.voni.common.interfaces.DialogShowListener
 import com.voinismartiot.voni.common.utils.Constants
 import com.voinismartiot.voni.common.utils.DialogUtil
 import com.voinismartiot.voni.common.utils.Utils
-import com.voinismartiot.voni.common.utils.Utils.toBoolean
 import com.voinismartiot.voni.common.utils.showToast
 import com.voinismartiot.voni.databinding.FragmentHomeBinding
 import com.voinismartiot.voni.mqtt.NotifyManager
 import com.voinismartiot.voni.ui.activities.AuthenticationActivity
-import com.voinismartiot.voni.ui.activities.MainActivity
 import com.voinismartiot.voni.ui.fragments.ModelBaseFragment
 import com.voinismartiot.voni.ui.viewmodel.HomeViewModel
 import kotlinx.coroutines.flow.collectLatest
@@ -111,7 +109,7 @@ class HomeFragment : ModelBaseFragment<HomeViewModel, FragmentHomeBinding, HomeR
         // initializing navigation menu
         setUpNavigationView()
 
-        if (!isInternetConnected()) {
+        if (!Utils.isNetworkConnectivityAvailable()) {
             activity?.let {
                 DialogUtil.deviceOfflineAlert(
                     it,
@@ -138,14 +136,11 @@ class HomeFragment : ModelBaseFragment<HomeViewModel, FragmentHomeBinding, HomeR
 
     private fun apiCall() {
 
-        NotifyManager.internetInfo.observe(viewLifecycleOwner, { isConnected ->
+        NotifyManager.internetInfo.observe(viewLifecycleOwner) { isConnected ->
             if (isConnected) {
-                activity?.let {
-                    DialogUtil.loadingAlert(it)
-                }
                 viewModel.getRoom()
             }
-        })
+        }
 
         viewLifecycleOwner.lifecycleScope.launch {
 

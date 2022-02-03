@@ -119,7 +119,7 @@ class LoginFragment : ModelBaseFragment<AuthViewModel, FragmentLoginBinding, Aut
         }
 
         binding.btnLogin.setOnClickListener {
-            if (isInternetConnected()) {
+            if (isNetworkConnectivityAvailable()) {
                 validateUserInformation()
             } else {
                 activity?.let {
@@ -188,7 +188,6 @@ class LoginFragment : ModelBaseFragment<AuthViewModel, FragmentLoginBinding, Aut
 
                 loginType = Constants.LOGIN_TYPE_FACEBOOK
 
-                Log.e(logTag, " activity $activity ")
                 activity?.let {
                     DialogUtil.loadingAlert(it)
                     viewModel.socialLogin(

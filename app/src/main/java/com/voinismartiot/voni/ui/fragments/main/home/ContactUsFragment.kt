@@ -12,6 +12,7 @@ import com.voinismartiot.voni.api.Resource
 import com.voinismartiot.voni.api.body.BodyFeedback
 import com.voinismartiot.voni.api.repository.ContactUsRepository
 import com.voinismartiot.voni.common.utils.DialogUtil
+import com.voinismartiot.voni.common.utils.Utils
 import com.voinismartiot.voni.common.utils.showToast
 import com.voinismartiot.voni.databinding.FragmentContactUsBinding
 import com.voinismartiot.voni.ui.fragments.ModelBaseFragment
@@ -36,7 +37,7 @@ class ContactUsFragment :
                 context?.showToast("Please write something in feedback")
             } else {
 
-                if (!isInternetConnected()){
+                if (!Utils.isNetworkConnectivityAvailable()){
                     context?.getString(R.string.text_no_internet_available)
                     return@setOnClickListener
                 }

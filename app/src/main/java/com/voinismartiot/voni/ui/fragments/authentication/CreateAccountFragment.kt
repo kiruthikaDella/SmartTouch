@@ -19,6 +19,7 @@ import com.voinismartiot.voni.api.repository.AuthRepository
 import com.voinismartiot.voni.common.interfaces.DialogShowListener
 import com.voinismartiot.voni.common.utils.Constants
 import com.voinismartiot.voni.common.utils.DialogUtil
+import com.voinismartiot.voni.common.utils.Utils
 import com.voinismartiot.voni.common.utils.showToast
 import com.voinismartiot.voni.databinding.FragmentCreateAccountBinding
 import com.voinismartiot.voni.ui.fragments.ModelBaseFragment
@@ -45,7 +46,7 @@ class CreateAccountFragment :
         }
 
         binding.btnSignUp.setOnClickListener {
-            if (isInternetConnected()) {
+            if (Utils.isNetworkConnectivityAvailable()) {
                 validateUserInformation()
             } else {
                 activity?.let {
