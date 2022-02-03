@@ -647,7 +647,7 @@ class DeviceFragment : ModelBaseFragment<HomeViewModel, FragmentDeviceBinding, H
 
     private fun checkPermission() {
         val locationManager = context?.getSystemService(Context.LOCATION_SERVICE) as LocationManager
-        if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+        if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) && !locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
             context?.let {
                 Toast.makeText(it, "Please turn on GPS", Toast.LENGTH_SHORT).show()
                 val gpsIntent = Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)

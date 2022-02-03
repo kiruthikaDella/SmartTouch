@@ -69,7 +69,7 @@ data class GetRoomTypeId(
     @SerializedName("vFilePath")
     var filePath: String,
     @SerializedName("vFile")
-    var file: String
+    var file: String? = null
 ) : Parcelable, Serializable {
     override fun toString(): String {
         return "GetRoomTypeId(id='$id', roomName='$roomName', filePath='$filePath', file='$file')"

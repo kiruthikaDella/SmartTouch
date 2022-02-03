@@ -266,8 +266,11 @@ class ControlModeDeviceAdapter(
 
             tvPanelName.text = device.deviceName
             relativeLayout.isVisible = !device.isDeviceAvailable.toBoolean()
-            seekBar.visibility = View.GONE
             tvOutdoorModeIndication.isVisible = device.outdoorMode.toBoolean()
+
+            if (device.productGroup.isSmartouch()) {
+                seekBar.visibility = View.GONE
+            }
 
             device.switchData?.let { switchData ->
                 for (value in switchData) {
@@ -454,8 +457,11 @@ class ControlModeDeviceAdapter(
 
             tvPanelName.text = device.deviceName
             relativeLayout.isVisible = !device.isDeviceAvailable.toBoolean()
-            seekBar.visibility = View.GONE
             tvOutdoorModeIndication.isVisible = device.outdoorMode.toBoolean()
+
+            if (device.productGroup.isSmartouch()) {
+                seekBar.visibility = View.GONE
+            }
 
             device.switchData?.let { switchData ->
                 for (value in switchData) {
@@ -630,6 +636,8 @@ class ControlModeDeviceAdapter(
                             value.desc?.let {
                                 tvSwitchNameFiveDesc.text = it
                             }
+
+                            seekBar.isVisible = value.switchStatus.toInt().toBoolean()
                         }
                         "6" -> {
                             seekBar.setProgress(value.switchStatus.toFloat())
