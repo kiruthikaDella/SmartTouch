@@ -153,7 +153,7 @@ class MainActivity : AppCompatActivity() {
             NotifyManager.internetInfo.postValue(isConnected)
         })
 
-        if (!isApiCalled){
+        if (!isApiCalled) {
             appliancesList.clear()
             viewModel.getDeviceAppliances()
         }
@@ -438,7 +438,10 @@ class MainActivity : AppCompatActivity() {
                             is Resource.Failure -> {
                                 DialogUtil.hideDialog()
                                 showToast(getString(R.string.error_something_went_wrong))
-                                Log.e(logTag, " getDeviceAppliancesResponse ${response.errorBody?.string()} ")
+                                Log.e(
+                                    logTag,
+                                    " getDeviceAppliancesResponse ${response.errorBody?.string()} "
+                                )
                             }
                             else -> {
                                 // We will do nothing here

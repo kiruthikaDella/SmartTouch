@@ -114,7 +114,7 @@ class HomeRepository @Inject constructor(
     suspend fun deleteScene(sceneId: String) =
         safeApiCall { smartTouchApi.deleteScene(getAccessKey(), sceneId) }
 
-    suspend fun deleteSceneDetail(sceneId: String,sceneDetailId: String) =
+    suspend fun deleteSceneDetail(sceneId: String, sceneDetailId: String) =
         safeApiCall { smartTouchApi.deleteSceneDetail(getAccessKey(), sceneId, sceneDetailId) }
 
     suspend fun factoryReset(bodyFactoryReset: BodyFactoryReset) =
@@ -123,11 +123,20 @@ class HomeRepository @Inject constructor(
     suspend fun factoryResetAllDevice() =
         safeApiCall { smartTouchApi.factoryResetAllDevice(getAccessKey()) }
 
-    suspend fun updateSceneStatus(sceneId: String,bodyUpdateSceneStatus: BodyUpdateSceneStatus) =
-        safeApiCall { smartTouchApi.updateSceneStatus(getAccessKey(), sceneId, bodyUpdateSceneStatus) }
+    suspend fun updateSceneStatus(sceneId: String, bodyUpdateSceneStatus: BodyUpdateSceneStatus) =
+        safeApiCall {
+            smartTouchApi.updateSceneStatus(
+                getAccessKey(),
+                sceneId,
+                bodyUpdateSceneStatus
+            )
+        }
 
     suspend fun getDeviceAppliances() =
         safeApiCall { smartTouchApi.getDeviceAppliances(getAccessKey()) }
+
+    suspend fun getDevicePreviousData(deviceId: String) =
+        safeApiCall { smartTouchApi.getDevicePreviousData(getAccessKey(), deviceId) }
 
     //
     //endregion
@@ -151,5 +160,6 @@ class HomeRepository @Inject constructor(
     //
 
     //SmarTack
-    suspend fun deviceRegister(bodyRegisterDevice: BodyRegisterDevice) = safeApiCall { smartTouchApi.deviceRegister(getAccessKey(), bodyRegisterDevice) }
+    suspend fun deviceRegister(bodyRegisterDevice: BodyRegisterDevice) =
+        safeApiCall { smartTouchApi.deviceRegister(getAccessKey(), bodyRegisterDevice) }
 }

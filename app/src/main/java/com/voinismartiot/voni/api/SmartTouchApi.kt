@@ -59,6 +59,7 @@ interface SmartTouchApi {
         const val API_FACTORY_RESET_ALL_DEVICE = "device/factory-reset-all-devices"
         const val API_UPDATE_SCENE_STATUS = "device/scene-unable-disable/{sceneId}"
         const val API_GET_DEVICE_APPLIANCES = "device/device-appliances"
+        const val API_GET_DEVICE_PREVIOUS_DATA = "device/device-previous-data/{id}"
 
         // Contact Us APIs
         const val API_FEEDBACK = "feedback/add"
@@ -354,6 +355,12 @@ interface SmartTouchApi {
         @Header("access_key") access_key: String
     ): GetDeviceAppliancesResponse
 
+    @GET(API_GET_DEVICE_PREVIOUS_DATA)
+    suspend fun getDevicePreviousData(
+        @Header("access_key") access_key: String,
+        @Path("id") deviceId: String
+    ): GetDevicePreviousDataResponse
+
     //
     //endregion
     //
@@ -386,8 +393,8 @@ interface SmartTouchApi {
 
     //SmarTack and SmarTap
     @POST(API_DEVICE_REGISTER)
-   suspend fun deviceRegister(
-       @Header("access_key") access_key: String,
-       @Body bodyRegisterDevice: BodyRegisterDevice
-   ): CommonResponse
+    suspend fun deviceRegister(
+        @Header("access_key") access_key: String,
+        @Body bodyRegisterDevice: BodyRegisterDevice
+    ): CommonResponse
 }

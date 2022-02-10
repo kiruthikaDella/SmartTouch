@@ -73,7 +73,7 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-@SuppressLint("ClickableViewAccessibility")
+@SuppressLint("ClickableViewAccessibility", "NotifyDataSetChanged")
 class DeviceFragment : ModelBaseFragment<HomeViewModel, FragmentDeviceBinding, HomeRepository>() {
 
     private val logTag = this::class.java.simpleName
@@ -248,7 +248,7 @@ class DeviceFragment : ModelBaseFragment<HomeViewModel, FragmentDeviceBinding, H
                     DialogUtil.editDialog(
                         it,
                         "Edit Panel name",
-                        data.deviceName ?: "",
+                        data.deviceName,
                         getString(R.string.text_save),
                         getString(R.string.text_cancel),
                         onClick = object : DialogEditListener {
@@ -614,7 +614,7 @@ class DeviceFragment : ModelBaseFragment<HomeViewModel, FragmentDeviceBinding, H
                                                         panelAdapter.publish(
                                                             dData.deviceSerialNo,
                                                             "SW0${sPosition + 1}",
-                                                            sData.switchStatus.toString(),
+                                                            sData.switchStatus,
                                                             sData.name
                                                         )
                                                         devicePosition = null
@@ -647,7 +647,10 @@ class DeviceFragment : ModelBaseFragment<HomeViewModel, FragmentDeviceBinding, H
 
     private fun checkPermission() {
         val locationManager = context?.getSystemService(Context.LOCATION_SERVICE) as LocationManager
-        if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) && !locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
+        if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) && !locationManager.isProviderEnabled(
+                LocationManager.NETWORK_PROVIDER
+            )
+        ) {
             context?.let {
                 Toast.makeText(it, "Please turn on GPS", Toast.LENGTH_SHORT).show()
                 val gpsIntent = Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)

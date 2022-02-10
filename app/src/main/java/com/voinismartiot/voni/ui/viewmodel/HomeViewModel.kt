@@ -206,6 +206,9 @@ class HomeViewModel @Inject constructor(
     private val _getDeviceAppliancesResponse = MutableSharedFlow<Resource<GetDeviceAppliancesResponse>>()
     val getDeviceAppliancesResponse = _getDeviceAppliancesResponse.asSharedFlow()
 
+    private val _getDevicePreviousDataResponse = MutableSharedFlow<Resource<GetDevicePreviousDataResponse>>()
+    val getDevicePreviousDataResponse = _getDevicePreviousDataResponse.asSharedFlow()
+
     fun addDevice(bodyAddDevice: BodyAddDevice) = viewModelScope.launch {
         _addDeviceResponse.emit(Resource.Loading)
         _addDeviceResponse.emit(homeRepository.addDevice(bodyAddDevice))
@@ -322,6 +325,12 @@ class HomeViewModel @Inject constructor(
         viewModelScope.launch {
             _getDeviceAppliancesResponse.emit(Resource.Loading)
             _getDeviceAppliancesResponse.emit(homeRepository.getDeviceAppliances())
+        }
+
+    fun getDevicePreviousData(deviceId: String) =
+        viewModelScope.launch {
+            _getDevicePreviousDataResponse.emit(Resource.Loading)
+            _getDevicePreviousDataResponse.emit(homeRepository.getDevicePreviousData(deviceId))
         }
 
     //

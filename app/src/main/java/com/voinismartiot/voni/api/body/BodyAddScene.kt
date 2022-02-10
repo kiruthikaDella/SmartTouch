@@ -10,7 +10,7 @@ class BodyAddScene(
     @SerializedName("iSchedulerTime") var schedulerTime: Long,
     @SerializedName("vSceneIntervalValue") var sceneIntervalValue: ArrayList<String>,
     @SerializedName("scene") var scenes: ArrayList<BodySceneData>
-){
+) {
 
     override fun toString(): String {
         return "BodyAddScene(sceneName='$sceneName', sceneTime='$sceneTime', sceneTimeZone='$sceneTimeZone', sceneInterval='$sceneInterval', schedulerTime=$schedulerTime, sceneIntervalValue=$sceneIntervalValue, scenes=$scenes)"
@@ -52,7 +52,7 @@ class BodySceneData(
     @SerializedName("iDeviceId") var deviceId: String,
     @SerializedName("iDeviceSwitchId") var deviceSwitchId: String,
     @SerializedName("tiDeviceSwitchSettingValue") var deviceSwitchSettingValue: Int
-){
+) {
 
     override fun toString(): String {
         return "BodySceneData(roomId='$roomId', deviceId='$deviceId', deviceSwitchId='$deviceSwitchId', deviceSwitchSettingValue=$deviceSwitchSettingValue)"

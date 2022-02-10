@@ -22,7 +22,6 @@ import com.appizona.yehiahd.fastsave.FastSave
 import com.facebook.appevents.internal.AppEventUtility.bytesToHex
 import com.voinismartiot.voni.AppDelegate
 import java.io.ByteArrayOutputStream
-import java.lang.Double.parseDouble
 import java.security.MessageDigest
 import java.util.*
 import javax.crypto.Mac

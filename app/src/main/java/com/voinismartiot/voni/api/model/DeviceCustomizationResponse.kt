@@ -40,6 +40,10 @@ data class DeviceCustomizationData(
     var isLock: Int
 ) : Parcelable, Serializable {
 
+    override fun toString(): String {
+        return "DeviceCustomizationData(id='$id', uploadImage='$uploadImage', screenLayoutType='$screenLayoutType', screenLayout='$screenLayout', switchName='$switchName', switchIconSize='$switchIconSize', textStyle='$textStyle', textColor='$textColor', textSize='$textSize', isLock=$isLock)"
+    }
+
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
@@ -74,7 +78,5 @@ data class DeviceCustomizationData(
         return result
     }
 
-    override fun toString(): String {
-        return "DeviceCustomizationData(id='$id', uploadImage='$uploadImage', screenLayoutType='$screenLayoutType', screenLayout='$screenLayout', switchName='$switchName', switchIconSize='$switchIconSize', textStyle='$textStyle', textColor='$textColor', textSize='$textSize', isLock=$isLock)"
-    }
+
 }

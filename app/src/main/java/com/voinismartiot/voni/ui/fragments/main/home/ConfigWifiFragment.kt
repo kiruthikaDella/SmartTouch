@@ -7,6 +7,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import com.teksun.tcpudplibrary.TCPClientService
+import com.teksun.tcpudplibrary.listener.ReadWriteValueListener
 import com.voinismartiot.voni.api.repository.HomeRepository
 import com.voinismartiot.voni.common.interfaces.DialogShowListener
 import com.voinismartiot.voni.common.utils.DialogUtil
@@ -14,8 +16,6 @@ import com.voinismartiot.voni.databinding.FragmentConfigWifiBinding
 import com.voinismartiot.voni.ui.activities.MainActivity
 import com.voinismartiot.voni.ui.fragments.ModelBaseFragment
 import com.voinismartiot.voni.ui.viewmodel.HomeViewModel
-import com.teksun.tcpudplibrary.TCPClientService
-import com.teksun.tcpudplibrary.listener.ReadWriteValueListener
 import org.json.JSONObject
 
 class ConfigWifiFragment :
@@ -61,11 +61,12 @@ class ConfigWifiFragment :
                     binding.layoutConfigWifiPanel.edtWifiPassword.requestFocus()
                 }
                 password.length < 8 -> {
-                    binding.layoutConfigWifiPanel.edtWifiPassword.error = "Password length must be 8 characters"
+                    binding.layoutConfigWifiPanel.edtWifiPassword.error =
+                        "Password length must be 8 characters"
                     binding.layoutConfigWifiPanel.edtWifiPassword.requestFocus()
                 }
                 else -> {
-                    val jObject =  JSONObject()
+                    val jObject = JSONObject()
                     jObject.apply {
                         put("device_name", panelName)
                         put("wifi_ssid", ssid)
@@ -85,25 +86,34 @@ class ConfigWifiFragment :
     }
 
     private fun sendTCPData(configData: String) {
-            TCPClientService.sendDefaultValue(configData, object : ReadWriteValueListener<String> {
-                override fun onSuccess(message: String, value: String?) {
-                    Log.e(logTag, "$message $value")
-                    findNavController().navigate(ConfigWifiFragmentDirections.actionConfigWifiFragmentToConnectingWifiFragment(true, args.roomDetail, args.isSmarTack))
-                }
+        TCPClientService.sendDefaultValue(configData, object : ReadWriteValueListener<String> {
+            override fun onSuccess(message: String, value: String?) {
+                Log.e(logTag, "$message $value")
+                findNavController().navigate(
+                    ConfigWifiFragmentDirections.actionConfigWifiFragmentToConnectingWifiFragment(
+                        true,
+                        args.roomDetail,
+                        args.isSmarTack
+                    )
+                )
+            }
 
-                override fun onFailure(message: String) {
-                    Log.e(logTag, "Send data failed $message")
+            override fun onFailure(message: String) {
+                Log.e(logTag, "Send data failed $message")
 
-                    activity?.let {
-                        DialogUtil.deviceOfflineAlert(it, "Device Disconnected", object: DialogShowListener {
+                activity?.let {
+                    DialogUtil.deviceOfflineAlert(
+                        it,
+                        "Device Disconnected",
+                        object : DialogShowListener {
                             override fun onClick() {
                                 DialogUtil.hideDialog()
                                 findNavController().navigateUp()
                             }
                         })
-                    }
                 }
-            })
+            }
+        })
     }
 
 

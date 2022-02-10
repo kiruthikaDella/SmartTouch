@@ -49,7 +49,7 @@ data class GetDeviceData(
     @SerializedName("_id")
     var id: String,
     @SerializedName("iUserId")
-    var userId: String,
+    var userId: String? = null,
     @SerializedName("vProductGroup")
     var productGroup: String,
     @SerializedName("vDeviceSerialNo")
@@ -103,7 +103,7 @@ data class GetDeviceData(
 
     override fun hashCode(): Int {
         var result = id.hashCode()
-        result = 31 * result + userId.hashCode()
+        result = 31 * result + (userId?.hashCode() ?: 0)
         result = 31 * result + productGroup.hashCode()
         result = 31 * result + deviceSerialNo.hashCode()
         result = 31 * result + outdoorMode.hashCode()
@@ -160,6 +160,7 @@ data class DeviceSwitchData(
         if (switchStatus != other.switchStatus) return false
         if (desc != other.desc) return false
         if (iconFile != other.iconFile) return false
+        if (isChecked != other.isChecked) return false
 
         return true
     }
@@ -169,10 +170,11 @@ data class DeviceSwitchData(
         result = 31 * result + typeOfSwitch
         result = 31 * result + index.hashCode()
         result = 31 * result + name.hashCode()
-        result = 31 * result + icon.hashCode()
+        result = 31 * result + (icon?.hashCode() ?: 0)
         result = 31 * result + switchStatus.hashCode()
         result = 31 * result + (desc?.hashCode() ?: 0)
         result = 31 * result + (iconFile?.hashCode() ?: 0)
+        result = 31 * result + isChecked.hashCode()
         return result
     }
 

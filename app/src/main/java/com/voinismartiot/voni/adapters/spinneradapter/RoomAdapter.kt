@@ -15,7 +15,7 @@ class RoomAdapter(private val activity: Activity, private val items: List<GetRoo
         val textView = super.getView(position, convertView, parent) as TextView
         textView.text = items[position].roomName
 
-        if (position == 0){
+        if (position == 0) {
             textView.setTypeface(null, Typeface.ITALIC)
         }
 
@@ -37,13 +37,13 @@ class RoomAdapter(private val activity: Activity, private val items: List<GetRoo
         return v
     }
 
-    fun getPositionById(roomId: String): Int{
+    fun getPositionById(roomId: String): Int {
         var position: Int = -1
         for ((index, value) in items.withIndex()) {
-           if (value.id == roomId){
-               position = index
-               break
-           }
+            if (value.id == roomId) {
+                position = index
+                break
+            }
         }
         return position
     }

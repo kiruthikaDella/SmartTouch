@@ -7,12 +7,12 @@ import android.widget.ImageView
 import android.widget.RelativeLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.switchmaterial.SwitchMaterial
 import com.voinismartiot.voni.R
 import com.voinismartiot.voni.api.model.GetSceneData
 import com.voinismartiot.voni.common.interfaces.AdapterItemClickListener
 import com.voinismartiot.voni.common.utils.Utils.toBoolean
 import com.voinismartiot.voni.common.utils.Utils.toInt
-import com.google.android.material.switchmaterial.SwitchMaterial
 
 class ScenesAdapter(
     private val sceneList: MutableList<GetSceneData>

@@ -16,6 +16,7 @@ data class ControlModeResponse(
     @SerializedName("data")
     var data: List<ControlModeRoomData>? = null
 ) : Parcelable, Serializable {
+
     override fun toString(): String {
         return "ControlModeResponse(status=$status, code=$code, message='$message', data=$data)"
     }
@@ -55,7 +56,8 @@ data class ControlModeRoomData(
     var roomName: String,
     @SerializedName("deviceData")
     var deviceData: ArrayList<GetDeviceData>? = null
-) : Parcelable, Serializable{
+) : Parcelable, Serializable {
+
     override fun toString(): String {
         return "ControlModeRoomData(id='$id', userId='$userId', roomName='$roomName', deviceData=$deviceData)"
     }

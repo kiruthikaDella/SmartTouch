@@ -1,8 +1,6 @@
 package com.voinismartiot.voni.adapters.spinneradapter
 
 import android.app.Activity
-import android.graphics.Typeface
-import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
@@ -33,10 +31,10 @@ class AppliancesAdapter(private val activity: Activity, private val items: List<
         return v
     }
 
-    fun getPositionById(deviceId: String): Int{
+    fun getPositionById(deviceId: String): Int {
         var position = 0
         for ((index, value) in items.withIndex()) {
-            if (value.id == deviceId){
+            if (value.id == deviceId) {
                 position = index
                 break
             }

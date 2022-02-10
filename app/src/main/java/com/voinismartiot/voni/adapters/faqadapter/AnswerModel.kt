@@ -45,7 +45,8 @@ class AnswerModel : Parcelable {
     }
 
     companion object {
-        @JvmField val CREATOR: Parcelable.Creator<AnswerModel?> = object : Parcelable.Creator<AnswerModel?> {
+        @JvmField
+        val CREATOR: Parcelable.Creator<AnswerModel?> = object : Parcelable.Creator<AnswerModel?> {
             override fun createFromParcel(`in`: Parcel): AnswerModel? {
                 return AnswerModel(`in`)
             }

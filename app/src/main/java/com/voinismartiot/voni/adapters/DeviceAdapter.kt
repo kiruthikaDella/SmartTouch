@@ -346,88 +346,107 @@ class DeviceAdapter(
             relativeLayout.isVisible = !device.isDeviceAvailable.toBoolean()
             tvOutdoorModeIndication.isVisible = device.outdoorMode.toBoolean()
 
-            device.switchData?.let { switchData ->
-                for (value in switchData) {
-                    when (value.index) {
-                        "1" -> {
-                            val switchName = value.name
-                            tvSwitchNameOne.text = switchName
-                            switchOne.isChecked = value.switchStatus.toInt().toBoolean()
-                            value.desc?.let {
-                                tvSwitchNameOneDesc.text = it
+            if (device.outdoorMode.toBoolean()) {
+                switchOne.isEnabled = false
+                switchTwo.isEnabled = false
+                switchThree.isEnabled = false
+                switchFour.isEnabled = false
+                switchFive.isEnabled = false
+                switchSix.isEnabled = false
+                switchSeven.isEnabled = false
+                switchEight.isEnabled = false
+                seekBar.isEnabled = false
+                switchPortA.isEnabled = false
+                switchPortC.isEnabled = false
+            }
+
+            try {
+                device.switchData?.let { switchData ->
+                    for (value in switchData) {
+                        when (value.index) {
+                            "1" -> {
+                                val switchName = value.name
+                                tvSwitchNameOne.text = switchName
+                                switchOne.isChecked = value.switchStatus.toInt().toBoolean()
+                                value.desc?.let {
+                                    tvSwitchNameOneDesc.text = it
+                                }
                             }
-                        }
-                        "2" -> {
-                            val switchName = value.name
-                            tvSwitchNameTwo.text = switchName
-                            switchTwo.isChecked = value.switchStatus.toInt().toBoolean()
-                            value.desc?.let {
-                                tvSwitchNameTwoDesc.text = it
+                            "2" -> {
+                                val switchName = value.name
+                                tvSwitchNameTwo.text = switchName
+                                switchTwo.isChecked = value.switchStatus.toInt().toBoolean()
+                                value.desc?.let {
+                                    tvSwitchNameTwoDesc.text = it
+                                }
                             }
-                        }
-                        "3" -> {
-                            val switchName = value.name
-                            tvSwitchNameThree.text = switchName
-                            switchThree.isChecked = value.switchStatus.toInt().toBoolean()
-                            value.desc?.let {
-                                tvSwitchNameThreeDesc.text = it
+                            "3" -> {
+                                val switchName = value.name
+                                tvSwitchNameThree.text = switchName
+                                switchThree.isChecked = value.switchStatus.toInt().toBoolean()
+                                value.desc?.let {
+                                    tvSwitchNameThreeDesc.text = it
+                                }
                             }
-                        }
-                        "4" -> {
-                            val switchName = value.name
-                            tvSwitchNameFour.text = switchName
-                            switchFour.isChecked = value.switchStatus.toInt().toBoolean()
-                            value.desc?.let {
-                                tvSwitchNameFourDesc.text = it
+                            "4" -> {
+                                val switchName = value.name
+                                tvSwitchNameFour.text = switchName
+                                switchFour.isChecked = value.switchStatus.toInt().toBoolean()
+                                value.desc?.let {
+                                    tvSwitchNameFourDesc.text = it
+                                }
                             }
-                        }
-                        "5" -> {
-                            val switchName = value.name
-                            tvSwitchNameFive.text = switchName
-                            switchFive.isChecked = value.switchStatus.toInt().toBoolean()
-                            value.desc?.let {
-                                tvSwitchNameFiveDesc.text = it
+                            "5" -> {
+                                val switchName = value.name
+                                tvSwitchNameFive.text = switchName
+                                switchFive.isChecked = value.switchStatus.toInt().toBoolean()
+                                value.desc?.let {
+                                    tvSwitchNameFiveDesc.text = it
+                                }
                             }
-                        }
-                        "6" -> {
-                            val switchName = value.name
-                            tvSwitchNameSix.text = switchName
-                            switchSix.isChecked = value.switchStatus.toInt().toBoolean()
-                            value.desc?.let {
-                                tvSwitchNameSixDesc.text = it
+                            "6" -> {
+                                val switchName = value.name
+                                tvSwitchNameSix.text = switchName
+                                switchSix.isChecked = value.switchStatus.toInt().toBoolean()
+                                value.desc?.let {
+                                    tvSwitchNameSixDesc.text = it
+                                }
                             }
-                        }
-                        "7" -> {
-                            val switchName = value.name
-                            tvSwitchNameSeven.text = switchName
-                            switchSeven.isChecked = value.switchStatus.toInt().toBoolean()
-                            value.desc?.let {
-                                tvSwitchNameSevenDesc.text = it
+                            "7" -> {
+                                val switchName = value.name
+                                tvSwitchNameSeven.text = switchName
+                                switchSeven.isChecked = value.switchStatus.toInt().toBoolean()
+                                value.desc?.let {
+                                    tvSwitchNameSevenDesc.text = it
+                                }
                             }
-                        }
-                        "8" -> {
-                            val switchName = value.name
-                            tvSwitchNameEight.text = switchName
-                            switchEight.isChecked = value.switchStatus.toInt().toBoolean()
-                            value.desc?.let {
-                                tvSwitchNameEightDesc.text = it
+                            "8" -> {
+                                val switchName = value.name
+                                tvSwitchNameEight.text = switchName
+                                switchEight.isChecked = value.switchStatus.toInt().toBoolean()
+                                value.desc?.let {
+                                    tvSwitchNameEightDesc.text = it
+                                }
                             }
-                        }
-                        "9" -> {
-                            seekBar.setProgress(value.switchStatus.toFloat())
-                        }
-                        "10" -> {
-                            val switchName = value.name
-                            tvSwitchPortA.text = switchName
-                            switchPortA.isChecked = value.switchStatus.toInt().toBoolean()
-                        }
-                        "11" -> {
-                            val switchName = value.name
-                            tvSwitchPortC.text = switchName
-                            switchPortC.isChecked = value.switchStatus.toInt().toBoolean()
+                            "9" -> {
+                                seekBar.setProgress(value.switchStatus.toFloat())
+                            }
+                            "10" -> {
+                                val switchName = value.name
+                                tvSwitchPortA.text = switchName
+                                switchPortA.isChecked = value.switchStatus.toInt().toBoolean()
+                            }
+                            "11" -> {
+                                val switchName = value.name
+                                tvSwitchPortC.text = switchName
+                                switchPortC.isChecked = value.switchStatus.toInt().toBoolean()
+                            }
                         }
                     }
                 }
+
+            } catch (e: Exception) {
+                e.printStackTrace()
             }
 
             imgBtnPanelMenu.setOnClickListener {
@@ -630,59 +649,73 @@ class DeviceAdapter(
             relativeLayout.isVisible = !device.isDeviceAvailable.toBoolean()
             tvOutdoorModeIndication.isVisible = device.outdoorMode.toBoolean()
 
+            if (device.outdoorMode.toBoolean()) {
+                switchOne.isEnabled = false
+                switchTwo.isEnabled = false
+                switchThree.isEnabled = false
+                switchFour.isEnabled = false
+                seekBar.isEnabled = false
+                switchPortC.isEnabled = false
+            }
+
             if (device.productGroup.isSmartAp()) {
                 tvCustomization.visibility = View.GONE
                 tvFeature.visibility = View.GONE
             }
 
-            device.switchData?.let { switchData ->
-                for (value in switchData) {
-                    when (value.index) {
-                        "1" -> {
-                            val switchName = value.name
-                            tvSwitchNameOne.text = switchName
-                            switchOne.isChecked = value.switchStatus.toInt().toBoolean()
-                            value.desc?.let {
-                                tvSwitchNameOneDesc.text = it
+            try {
+                device.switchData?.let { switchData ->
+                    for (value in switchData) {
+                        when (value.index) {
+                            "1" -> {
+                                val switchName = value.name
+                                tvSwitchNameOne.text = switchName
+                                switchOne.isChecked = value.switchStatus.toInt().toBoolean()
+                                value.desc?.let {
+                                    tvSwitchNameOneDesc.text = it
+                                }
                             }
-                        }
-                        "2" -> {
-                            val switchName = value.name
-                            tvSwitchNameTwo.text = switchName
-                            switchTwo.isChecked = value.switchStatus.toInt().toBoolean()
-                            value.desc?.let {
-                                tvSwitchNameTwoDesc.text = it
+                            "2" -> {
+                                val switchName = value.name
+                                tvSwitchNameTwo.text = switchName
+                                switchTwo.isChecked = value.switchStatus.toInt().toBoolean()
+                                value.desc?.let {
+                                    tvSwitchNameTwoDesc.text = it
+                                }
                             }
-                        }
-                        "3" -> {
-                            val switchName = value.name
-                            tvSwitchNameThree.text = switchName
-                            switchThree.isChecked = value.switchStatus.toInt().toBoolean()
-                            value.desc?.let {
-                                tvSwitchNameThreeDesc.text = it
+                            "3" -> {
+                                val switchName = value.name
+                                tvSwitchNameThree.text = switchName
+                                switchThree.isChecked = value.switchStatus.toInt().toBoolean()
+                                value.desc?.let {
+                                    tvSwitchNameThreeDesc.text = it
+                                }
                             }
-                        }
-                        "4" -> {
-                            val switchName = value.name
-                            tvSwitchNameFour.text = switchName
-                            switchFour.isChecked = value.switchStatus.toInt().toBoolean()
-                            if (device.productGroup.isSmartAp()) {
-                                seekBar.isVisible = switchFour.isChecked
+                            "4" -> {
+                                val switchName = value.name
+                                tvSwitchNameFour.text = switchName
+                                switchFour.isChecked = value.switchStatus.toInt().toBoolean()
+                                if (device.productGroup.isSmartAp()) {
+                                    seekBar.isVisible = switchFour.isChecked
+                                }
+                                value.desc?.let {
+                                    tvSwitchNameFourDesc.text = it
+                                }
                             }
-                            value.desc?.let {
-                                tvSwitchNameFourDesc.text = it
+                            "5" -> {
+                                seekBar.setProgress(value.switchStatus.toFloat())
                             }
-                        }
-                        "5" -> {
-                            seekBar.setProgress(value.switchStatus.toFloat())
-                        }
-                        "6" -> {
-                            val switchName = value.name
-                            tvSwitchPortC.text = switchName
-                            switchPortC.isChecked = value.switchStatus.toInt().toBoolean()
+                            "6" -> {
+                                val switchName = value.name
+                                tvSwitchPortC.text = switchName
+                                switchPortC.isChecked = value.switchStatus.toInt().toBoolean()
+                            }
                         }
                     }
                 }
+
+            } catch (e: Exception) {
+                e.printStackTrace()
             }
 
             imgBtnPanelMenu.setOnClickListener {
@@ -824,56 +857,70 @@ class DeviceAdapter(
             relativeLayout.isVisible = !device.isDeviceAvailable.toBoolean()
             tvOutdoorModeIndication.isVisible = device.outdoorMode.toBoolean()
 
-            device.switchData?.let { switchData ->
-                for (value in switchData) {
-                    when (value.index) {
-                        "1" -> {
-                            val switchName = value.name
-                            tvSwitchNameOne.text = switchName
-                            switchOne.isChecked = value.switchStatus.toInt().toBoolean()
-                            value.desc?.let {
-                                tvSwitchNameOneDesc.text = it
-                            }
-                        }
-                        "2" -> {
-                            val switchName = value.name
-                            tvSwitchNameTwo.text = switchName
-                            switchTwo.isChecked = value.switchStatus.toInt().toBoolean()
-                            value.desc?.let {
-                                tvSwitchNameTwoDesc.text = it
-                            }
-                        }
-                        "3" -> {
-                            val switchName = value.name
-                            tvSwitchNameThree.text = switchName
-                            switchThree.isChecked = value.switchStatus.toInt().toBoolean()
-                            value.desc?.let {
-                                tvSwitchNameThreeDesc.text = it
-                            }
-                        }
-                        "4" -> {
-                            val switchName = value.name
-                            tvSwitchNameFour.text = switchName
-                            switchFour.isChecked = value.switchStatus.toInt().toBoolean()
-                            value.desc?.let {
-                                tvSwitchNameFourDesc.text = it
-                            }
-                        }
-                        "5" -> {
-                            val switchName = value.name
-                            tvSwitchNameFive.text = switchName
-                            switchFive.isChecked = value.switchStatus.toInt().toBoolean()
-                            value.desc?.let {
-                                tvSwitchNameFiveDesc.text = it
-                            }
+            if (device.outdoorMode.toBoolean()) {
+                switchOne.isEnabled = false
+                switchTwo.isEnabled = false
+                switchThree.isEnabled = false
+                switchFour.isEnabled = false
+                switchFive.isEnabled = false
+                seekBar.isEnabled = false
+            }
 
-                            seekBar.isVisible = value.switchStatus.toInt().toBoolean()
-                        }
-                        "6" -> {
-                            seekBar.setProgress(value.switchStatus.toFloat())
+            try {
+                device.switchData?.let { switchData ->
+                    for (value in switchData) {
+                        when (value.index) {
+                            "1" -> {
+                                val switchName = value.name
+                                tvSwitchNameOne.text = switchName
+                                switchOne.isChecked = value.switchStatus.toInt().toBoolean()
+                                value.desc?.let {
+                                    tvSwitchNameOneDesc.text = it
+                                }
+                            }
+                            "2" -> {
+                                val switchName = value.name
+                                tvSwitchNameTwo.text = switchName
+                                switchTwo.isChecked = value.switchStatus.toInt().toBoolean()
+                                value.desc?.let {
+                                    tvSwitchNameTwoDesc.text = it
+                                }
+                            }
+                            "3" -> {
+                                val switchName = value.name
+                                tvSwitchNameThree.text = switchName
+                                switchThree.isChecked = value.switchStatus.toInt().toBoolean()
+                                value.desc?.let {
+                                    tvSwitchNameThreeDesc.text = it
+                                }
+                            }
+                            "4" -> {
+                                val switchName = value.name
+                                tvSwitchNameFour.text = switchName
+                                switchFour.isChecked = value.switchStatus.toInt().toBoolean()
+                                value.desc?.let {
+                                    tvSwitchNameFourDesc.text = it
+                                }
+                            }
+                            "5" -> {
+                                val switchName = value.name
+                                tvSwitchNameFive.text = switchName
+                                switchFive.isChecked = value.switchStatus.toInt().toBoolean()
+                                value.desc?.let {
+                                    tvSwitchNameFiveDesc.text = it
+                                }
+
+                                seekBar.isVisible = value.switchStatus.toInt().toBoolean()
+                            }
+                            "6" -> {
+                                seekBar.setProgress(value.switchStatus.toFloat())
+                            }
                         }
                     }
                 }
+
+            } catch (e: Exception) {
+                e.printStackTrace()
             }
 
             imgBtnPanelMenu.setOnClickListener {
@@ -998,66 +1045,77 @@ class DeviceAdapter(
             relativeLayout.isVisible = !device.isDeviceAvailable.toBoolean()
             tvOutdoorModeIndication.isVisible = device.outdoorMode.toBoolean()
 
-            device.switchData?.let { switchData ->
-                for (value in switchData) {
-                    when (value.index) {
-                        "1" -> {
-                            val switchName = value.name
-                            tvSwitchNameOne.text = switchName
-                            switchOne.isChecked = value.switchStatus.toInt().toBoolean()
-                            value.desc?.let {
-                                tvSwitchNameOneDesc.text = it
+            if (device.outdoorMode.toBoolean()) {
+                switchOne.isEnabled = false
+            }
 
-                                val is15ADevice =
-                                    it.lowercase() == mActivity.getString(R.string.text_15a)
-                                        .lowercase()
-                                rlSelectAppliances.isVisible = is15ADevice
+            try {
+                device.switchData?.let { switchData ->
+                    for (value in switchData) {
+                        when (value.index) {
+                            "1" -> {
+                                val switchName = value.name
+                                tvSwitchNameOne.text = switchName
+                                switchOne.isChecked = value.switchStatus.toInt().toBoolean()
+                                value.desc?.let {
+                                    tvSwitchNameOneDesc.text = it
 
-                                if (!is15ADevice)
-                                    return@let
+                                    val is15ADevice =
+                                        it.lowercase() == mActivity.getString(R.string.text_15a)
+                                            .lowercase()
+                                    rlSelectAppliances.isVisible = is15ADevice
 
-                                val applianceAdapter = AppliancesAdapter(mActivity, applianceList)
-                                spinnerAppliances.adapter = applianceAdapter
-                                device.deviceAppliances?.let { dApp ->
-                                    spinnerAppliances.setSelection(
-                                        applianceAdapter.getPositionById(
-                                            dApp
+                                    if (!is15ADevice)
+                                        return@let
+
+                                    val applianceAdapter =
+                                        AppliancesAdapter(mActivity, applianceList)
+                                    spinnerAppliances.adapter = applianceAdapter
+                                    device.deviceAppliances?.let { dApp ->
+                                        spinnerAppliances.setSelection(
+                                            applianceAdapter.getPositionById(
+                                                dApp
+                                            )
                                         )
-                                    )
-                                }
-
-                                var check = 0
-
-                                spinnerAppliances.onItemSelectedListener =
-                                    object : AdapterView.OnItemSelectedListener {
-                                        override fun onItemSelected(
-                                            p0: AdapterView<*>?,
-                                            p1: View?,
-                                            p2: Int,
-                                            p3: Long
-                                        ) {
-
-                                            if (++check > 1) {
-                                                val appliance = p0?.selectedItem as DeviceAppliances
-                                                device.deviceAppliances = appliance.id
-                                                publishAppliance(
-                                                    device.deviceSerialNo,
-                                                    appliance.title
-                                                )
-                                            }
-                                        }
-
-                                        override fun onNothingSelected(p0: AdapterView<*>?) {
-                                        }
-
                                     }
-                                ivAppliancesDown.setOnClickListener {
-                                    spinnerAppliances.performClick()
+
+                                    var check = 0
+
+                                    spinnerAppliances.onItemSelectedListener =
+                                        object : AdapterView.OnItemSelectedListener {
+                                            override fun onItemSelected(
+                                                p0: AdapterView<*>?,
+                                                p1: View?,
+                                                p2: Int,
+                                                p3: Long
+                                            ) {
+
+                                                if (++check > 1) {
+                                                    val appliance =
+                                                        p0?.selectedItem as DeviceAppliances
+                                                    device.deviceAppliances = appliance.id
+                                                    publishAppliance(
+                                                        device.deviceSerialNo,
+                                                        appliance.title
+                                                    )
+                                                }
+                                            }
+
+                                            override fun onNothingSelected(p0: AdapterView<*>?) {
+                                            }
+
+                                        }
+                                    ivAppliancesDown.setOnClickListener {
+                                        spinnerAppliances.performClick()
+                                    }
                                 }
                             }
                         }
                     }
                 }
+
+            } catch (e: Exception) {
+                e.printStackTrace()
             }
 
             imgBtnPanelMenu.setOnClickListener {

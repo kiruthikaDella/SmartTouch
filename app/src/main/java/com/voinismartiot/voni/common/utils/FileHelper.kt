@@ -8,7 +8,6 @@ import androidx.exifinterface.media.ExifInterface
 import com.voinismartiot.voni.AppDelegate
 import java.io.File
 import java.io.IOException
-import java.lang.Exception
 
 object FileHelper {
 

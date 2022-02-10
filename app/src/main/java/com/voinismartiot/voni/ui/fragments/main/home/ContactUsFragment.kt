@@ -37,7 +37,7 @@ class ContactUsFragment :
                 context?.showToast("Please write something in feedback")
             } else {
 
-                if (!Utils.isNetworkConnectivityAvailable()){
+                if (!Utils.isNetworkConnectivityAvailable()) {
                     context?.getString(R.string.text_no_internet_available)
                     return@setOnClickListener
                 }

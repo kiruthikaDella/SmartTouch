@@ -15,6 +15,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import com.sothree.slidinguppanel.SlidingUpPanelLayout
 import com.voinismartiot.voni.R
 import com.voinismartiot.voni.adapters.DeviceSceneAdapter
 import com.voinismartiot.voni.adapters.UpdateDeviceSceneAdapter
@@ -30,13 +31,12 @@ import com.voinismartiot.voni.api.repository.HomeRepository
 import com.voinismartiot.voni.common.interfaces.DialogEditListener
 import com.voinismartiot.voni.common.utils.Constants
 import com.voinismartiot.voni.common.utils.DialogUtil
+import com.voinismartiot.voni.common.utils.Utils
 import com.voinismartiot.voni.common.utils.Utils.toEditable
 import com.voinismartiot.voni.common.utils.showToast
 import com.voinismartiot.voni.databinding.FragmentCreateSceneBinding
 import com.voinismartiot.voni.ui.fragments.ModelBaseFragment
 import com.voinismartiot.voni.ui.viewmodel.HomeViewModel
-import com.sothree.slidinguppanel.SlidingUpPanelLayout
-import com.voinismartiot.voni.common.utils.Utils
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import java.text.Format
@@ -244,7 +244,7 @@ class CreateSceneFragment :
                 }
                 else -> {
 
-                    if (!Utils.isNetworkConnectivityAvailable()){
+                    if (!Utils.isNetworkConnectivityAvailable()) {
                         context?.showToast(getString(R.string.text_no_internet_available))
                         return@setOnClickListener
                     }

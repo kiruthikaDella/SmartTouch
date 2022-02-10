@@ -17,7 +17,7 @@ android {
         minSdkVersion 23
         targetSdkVersion 31
         versionCode 1
-        versionName "1.27.2"
+        versionName "1.27.3"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -70,8 +70,8 @@ dependencies {
     implementation 'com.karumi:dexter:6.2.2'
 
     // Navigation Component dependencies
-    implementation 'androidx.navigation:navigation-fragment-ktx:2.4.0'
-    implementation 'androidx.navigation:navigation-ui-ktx:2.4.0'
+    implementation 'androidx.navigation:navigation-fragment-ktx:2.3.5'
+    implementation 'androidx.navigation:navigation-ui-ktx:2.3.5'
 
     //FastSave for save data in local shared preference
     implementation 'com.github.yehiahd:FastSave-Android:1.0.6'

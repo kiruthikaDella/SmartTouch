@@ -23,7 +23,7 @@ data class GetRoomData(
     @SerializedName("iRoomTypeId")
     var roomTypeId: GetRoomTypeId? = null,
     @SerializedName("iUserId")
-    var userId: String,
+    var userId: String? = null,
     @SerializedName("vRoomName")
     var roomName: String,
     @SerializedName("tiRetainState")
@@ -51,7 +51,7 @@ data class GetRoomData(
     override fun hashCode(): Int {
         var result = id.hashCode()
         result = 31 * result + (roomTypeId?.hashCode() ?: 0)
-        result = 31 * result + userId.hashCode()
+        result = 31 * result + (userId?.hashCode() ?: 0)
         result = 31 * result + roomName.hashCode()
         result = 31 * result + retainState
         return result
@@ -93,7 +93,7 @@ data class GetRoomTypeId(
         var result = id.hashCode()
         result = 31 * result + roomName.hashCode()
         result = 31 * result + filePath.hashCode()
-        result = 31 * result + file.hashCode()
+        result = 31 * result + (file?.hashCode() ?: 0)
         return result
     }
 

@@ -11,7 +11,7 @@ data class FAQResponse(
     var message: String,
     @SerializedName("data")
     var data: List<FAQResponseData>? = null
-){
+) {
     override fun toString(): String {
         return "FAQResponse(status=$status, code=$code, message='$message', data=$data)"
     }
@@ -50,7 +50,7 @@ data class FAQResponseData(
     var description: String,
     @SerializedName("tiIsExpand")
     var isExpand: Int
-){
+) {
     override fun toString(): String {
         return "FAQResponseData(id='$id', title='$title', description='$description', isExpand=$isExpand)"
     }

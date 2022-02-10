@@ -65,7 +65,7 @@ class FaqsFragment : ModelBaseFragment<HomeViewModel, FragmentFaqsBinding, HomeR
 
         })
 
-        NotifyManager.internetInfo.observe(viewLifecycleOwner, { isConnected ->
+        NotifyManager.internetInfo.observe(viewLifecycleOwner) { isConnected ->
             if (isConnected) {
                 faqList.clear()
                 activity?.let {
@@ -75,7 +75,7 @@ class FaqsFragment : ModelBaseFragment<HomeViewModel, FragmentFaqsBinding, HomeR
             } else {
                 Log.e(logTag, " internet is not available")
             }
-        })
+        }
 
         viewLifecycleOwner.lifecycleScope.launchWhenStarted {
 

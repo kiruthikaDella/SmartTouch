@@ -15,9 +15,12 @@ class AuthRepository @Inject constructor(
 
     suspend fun login(bodyLogin: BodyLogin) = safeApiCall { smartTouchApi.loginUser(bodyLogin) }
 
-    suspend fun signUp(bodySignUp: BodySignUp) = safeApiCall { smartTouchApi.signUpUser(bodySignUp) }
+    suspend fun signUp(bodySignUp: BodySignUp) =
+        safeApiCall { smartTouchApi.signUpUser(bodySignUp) }
 
-    suspend fun forgotPassword(bodyForgotPassword: BodyForgotPassword) = safeApiCall { smartTouchApi.forgotPassword(bodyForgotPassword) }
+    suspend fun forgotPassword(bodyForgotPassword: BodyForgotPassword) =
+        safeApiCall { smartTouchApi.forgotPassword(bodyForgotPassword) }
 
-    suspend fun socialLogin(bodySocialLogin: BodySocialLogin) = safeApiCall { smartTouchApi.socialLogin(bodySocialLogin) }
+    suspend fun socialLogin(bodySocialLogin: BodySocialLogin) =
+        safeApiCall { smartTouchApi.socialLogin(bodySocialLogin) }
 }

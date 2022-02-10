@@ -15,7 +15,7 @@ class DeviceAdapter(private val activity: Activity, private val items: List<GetD
         val textView = super.getView(position, convertView, parent) as TextView
         textView.text = items[position].deviceName
 
-        if (position == 0){
+        if (position == 0) {
             textView.setTypeface(null, Typeface.ITALIC)
         }
 
@@ -37,10 +37,10 @@ class DeviceAdapter(private val activity: Activity, private val items: List<GetD
         return v
     }
 
-    fun getPositionById(deviceId: String): Int{
+    fun getPositionById(deviceId: String): Int {
         var position: Int = -1
         for ((index, value) in items.withIndex()) {
-            if (value.id == deviceId){
+            if (value.id == deviceId) {
                 position = index
                 break
             }

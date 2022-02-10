@@ -274,7 +274,11 @@ class DeviceSceneAdapter(
                                     null
                                 )
                                 switchList.add(switch)
-                                switchList.addAll(switchData.filter { it.typeOfSwitch == 0 || it.desc?.lowercase() == mActivity.getString(R.string.text_switch_fan_speed).lowercase() })
+                                switchList.addAll(switchData.filter {
+                                    it.typeOfSwitch == 0 || it.desc?.lowercase() == mActivity.getString(
+                                        R.string.text_switch_fan_speed
+                                    ).lowercase()
+                                })
                                 spinnerSwitch.isEnabled = true
 
                             } ?: kotlin.run {

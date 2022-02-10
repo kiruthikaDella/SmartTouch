@@ -59,7 +59,7 @@ class SwitchIconsFragment :
 
         switchList.clear()
 
-        NotifyManager.internetInfo.observe(viewLifecycleOwner, { isConnected ->
+        NotifyManager.internetInfo.observe(viewLifecycleOwner) { isConnected ->
             if (!isConnected) {
                 activity?.let {
                     DialogUtil.deviceOfflineAlert(
@@ -75,7 +75,7 @@ class SwitchIconsFragment :
                     )
                 }
             }
-        })
+        }
 
         args.deviceDetail.switchData?.let {
 

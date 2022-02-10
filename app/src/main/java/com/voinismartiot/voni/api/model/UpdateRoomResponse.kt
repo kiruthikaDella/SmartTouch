@@ -11,7 +11,7 @@ data class UpdateRoomResponse(
     var message: String,
     @SerializedName("data")
     var data: GetRoomData? = null
-){
+) {
     override fun toString(): String {
         return "UpdateRoomResponse(status=$status, code=$code, message='$message', data=$data)"
     }

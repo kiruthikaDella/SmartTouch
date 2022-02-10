@@ -56,9 +56,9 @@ class UserManagementFragment :
                         object : DialogAskListener {
                             override fun onYesClicked() {
 
-                                if (!Utils.isNetworkConnectivityAvailable()){
+                                if (!Utils.isNetworkConnectivityAvailable()) {
                                     context?.showToast(getString(R.string.text_no_internet_available))
-                                }else {
+                                } else {
                                     showProgressDialog()
                                     userData = data
                                     viewModel.deleteSubordinateUser(data.id)
@@ -81,25 +81,25 @@ class UserManagementFragment :
 
     private fun apiCall() {
 
-      /*  if (isInternetConnected()){
-            showProgressDialog()
-            viewModel.getSubordinateUser()
-        }else {
-            activity?.let {
-                DialogUtil.deviceOfflineAlert(
-                    it,
-                    getString(R.string.text_no_internet_available),
-                    object : DialogShowListener {
-                        override fun onClick() {
-                            DialogUtil.hideDialog()
-                        }
+        /*  if (isInternetConnected()){
+              showProgressDialog()
+              viewModel.getSubordinateUser()
+          }else {
+              activity?.let {
+                  DialogUtil.deviceOfflineAlert(
+                      it,
+                      getString(R.string.text_no_internet_available),
+                      object : DialogShowListener {
+                          override fun onClick() {
+                              DialogUtil.hideDialog()
+                          }
 
-                    }
-                )
-            }
-        }*/
+                      }
+                  )
+              }
+          }*/
 
-        NotifyManager.internetInfo.observe(viewLifecycleOwner, { isConnected ->
+        NotifyManager.internetInfo.observe(viewLifecycleOwner) { isConnected ->
             if (isConnected) {
                 Log.e(logTag, " internet is not available connected $isConnected")
                 showProgressDialog()
@@ -107,11 +107,11 @@ class UserManagementFragment :
             } else {
                 Log.e(logTag, " internet is not available")
             }
-        })
+        }
 
         viewLifecycleOwner.lifecycleScope.launchWhenStarted {
 
-            viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED){
+            viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 launch {
                     viewModel.getSubordinateUserResponse.collectLatest { response ->
                         userList.clear()

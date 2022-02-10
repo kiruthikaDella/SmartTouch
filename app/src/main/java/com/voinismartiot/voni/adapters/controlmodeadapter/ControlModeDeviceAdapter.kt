@@ -268,6 +268,20 @@ class ControlModeDeviceAdapter(
             relativeLayout.isVisible = !device.isDeviceAvailable.toBoolean()
             tvOutdoorModeIndication.isVisible = device.outdoorMode.toBoolean()
 
+            if (device.outdoorMode.toBoolean()) {
+                switchOne.isEnabled = false
+                switchTwo.isEnabled = false
+                switchThree.isEnabled = false
+                switchFour.isEnabled = false
+                switchFive.isEnabled = false
+                switchSix.isEnabled = false
+                switchSeven.isEnabled = false
+                switchEight.isEnabled = false
+                seekBar.isEnabled = false
+                switchPortA.isEnabled = false
+                switchPortC.isEnabled = false
+            }
+
             if (device.productGroup.isSmartouch()) {
                 seekBar.visibility = View.GONE
             }
@@ -459,6 +473,15 @@ class ControlModeDeviceAdapter(
             relativeLayout.isVisible = !device.isDeviceAvailable.toBoolean()
             tvOutdoorModeIndication.isVisible = device.outdoorMode.toBoolean()
 
+            if (device.outdoorMode.toBoolean()) {
+                switchOne.isEnabled = false
+                switchTwo.isEnabled = false
+                switchThree.isEnabled = false
+                switchFour.isEnabled = false
+                seekBar.isEnabled = false
+                switchPortC.isEnabled = false
+            }
+
             if (device.productGroup.isSmartouch()) {
                 seekBar.visibility = View.GONE
             }
@@ -598,6 +621,15 @@ class ControlModeDeviceAdapter(
             relativeLayout.isVisible = !device.isDeviceAvailable.toBoolean()
             tvOutdoorModeIndication.isVisible = device.outdoorMode.toBoolean()
 
+            if (device.outdoorMode.toBoolean()) {
+                switchOne.isEnabled = false
+                switchTwo.isEnabled = false
+                switchThree.isEnabled = false
+                switchFour.isEnabled = false
+                switchFive.isEnabled = false
+                seekBar.isEnabled = false
+            }
+
             device.switchData?.let { switchData ->
                 for (value in switchData) {
                     when (value.index) {
@@ -733,6 +765,10 @@ class ControlModeDeviceAdapter(
             relativeLayout.isVisible = !device.isDeviceAvailable.toBoolean()
             tvOutdoorModeIndication.isVisible = device.outdoorMode.toBoolean()
 
+            if (device.outdoorMode.toBoolean()) {
+                switchOne.isEnabled = false
+            }
+
             device.switchData?.let { switchData ->
                 for (value in switchData) {
                     when (value.index) {
@@ -753,8 +789,12 @@ class ControlModeDeviceAdapter(
 
                                 val applianceAdapter = AppliancesAdapter(mActivity, applianceList)
                                 spinnerAppliances.adapter = applianceAdapter
-                                device.deviceAppliances?.let {dApp->
-                                    spinnerAppliances.setSelection(applianceAdapter.getPositionById(dApp))
+                                device.deviceAppliances?.let { dApp ->
+                                    spinnerAppliances.setSelection(
+                                        applianceAdapter.getPositionById(
+                                            dApp
+                                        )
+                                    )
                                 }
 
                                 var check = 0
@@ -768,7 +808,7 @@ class ControlModeDeviceAdapter(
                                             p3: Long
                                         ) {
 
-                                            if (++check > 1){
+                                            if (++check > 1) {
                                                 val appliance = p0?.selectedItem as DeviceAppliances
                                                 device.deviceAppliances = appliance.id
                                                 publishAppliance(
@@ -779,7 +819,6 @@ class ControlModeDeviceAdapter(
                                         }
 
                                         override fun onNothingSelected(p0: AdapterView<*>?) {
-                                            Log.e(logTag, " nothing selected ")
                                         }
 
                                     }
@@ -848,7 +887,10 @@ class ControlModeDeviceAdapter(
                             // topic [8] = Switch 8 Status (if DT = 8)
 
                             if (jsonObject.has(MQTTConstants.AWS_DEVICE_TYPE)) {
-                                if (jsonObject.getInt(MQTTConstants.AWS_DEVICE_TYPE) == Constants.DEVICE_TYPE_EIGHT || jsonObject.getInt(MQTTConstants.AWS_DEVICE_TYPE) == Constants.DEVICE_TYPE_SIX) {
+                                if (jsonObject.getInt(MQTTConstants.AWS_DEVICE_TYPE) == Constants.DEVICE_TYPE_EIGHT || jsonObject.getInt(
+                                        MQTTConstants.AWS_DEVICE_TYPE
+                                    ) == Constants.DEVICE_TYPE_SIX
+                                ) {
                                     deviceData?.switchData?.get(0)?.switchStatus = switchStatus[0]
                                     deviceData?.switchData?.get(1)?.switchStatus = switchStatus[1]
                                     deviceData?.switchData?.get(2)?.switchStatus = switchStatus[2]

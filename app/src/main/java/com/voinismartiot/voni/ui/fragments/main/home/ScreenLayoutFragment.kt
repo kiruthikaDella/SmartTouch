@@ -120,7 +120,7 @@ class ScreenLayoutFragment : DialogFragment() {
             }
         }
 
-        NotifyManager.internetInfo.observe(viewLifecycleOwner, { isConnected ->
+        NotifyManager.internetInfo.observe(viewLifecycleOwner) { isConnected ->
             if (!isConnected) {
                 activity?.let {
                     DialogUtil.deviceOfflineAlert(
@@ -136,7 +136,7 @@ class ScreenLayoutFragment : DialogFragment() {
                     )
                 }
             }
-        })
+        }
 
         binding.ivBack.setOnClickListener {
             findNavController().navigateUp()

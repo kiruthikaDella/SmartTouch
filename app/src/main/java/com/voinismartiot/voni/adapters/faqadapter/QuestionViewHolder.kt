@@ -5,9 +5,9 @@ import android.view.animation.Animation
 import android.view.animation.RotateAnimation
 import android.widget.ImageView
 import android.widget.TextView
-import com.voinismartiot.voni.R
 import com.thoughtbot.expandablerecyclerview.models.ExpandableGroup
 import com.thoughtbot.expandablerecyclerview.viewholders.GroupViewHolder
+import com.voinismartiot.voni.R
 
 class QuestionViewHolder(itemView: View) : GroupViewHolder(itemView) {
     private val tvQuestion: TextView = itemView.findViewById<View>(R.id.tv_question) as TextView

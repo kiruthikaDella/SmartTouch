@@ -24,6 +24,7 @@ import com.voinismartiot.voni.common.interfaces.DialogShowListener
 import com.voinismartiot.voni.common.utils.Constants
 import com.voinismartiot.voni.common.utils.DialogUtil
 import com.voinismartiot.voni.common.utils.DialogUtil.featureDetailAlert
+import com.voinismartiot.voni.common.utils.Utils
 import com.voinismartiot.voni.common.utils.Utils.toBoolean
 import com.voinismartiot.voni.common.utils.Utils.toInt
 import com.voinismartiot.voni.common.utils.showToast
@@ -48,6 +49,8 @@ class DeviceSettingsFragment :
     private val args: DeviceSettingsFragmentArgs by navArgs()
     private val logTag = this::class.java.simpleName
     private val switchList = arrayListOf<DeviceSwitchData>()
+    private val previousSwitchList = arrayListOf<String>()
+    private val previousSwitchOffList = arrayListOf<String>()
     private lateinit var switchAdapter: SwitchesAdapter
     private var isOutdoorSaved = false
 
@@ -61,7 +64,9 @@ class DeviceSettingsFragment :
 
         args.deviceDetail.switchData?.let { switches ->
             for (switch in switches) {
-                if (switch.typeOfSwitch != 1 && switch.desc.toString().lowercase() != getString(R.string.text_switch_fan_speed).lowercase()) {
+                if (switch.typeOfSwitch != 1 && switch.desc.toString()
+                        .lowercase() != getString(R.string.text_switch_fan_speed).lowercase()
+                ) {
                     switchList.add(
                         DeviceSwitchData(
                             switch.id,
@@ -76,14 +81,30 @@ class DeviceSettingsFragment :
                         )
                     )
                 }
+
+                if (switch.typeOfSwitch == 0 && switch.switchStatus == "1") {
+                    previousSwitchList.add("SW0${switch.index}")
+                } else if (switch.typeOfSwitch == 2 && switch.switchStatus == "1") {
+                    if (switch.name == MQTTConstants.USB_A) {
+                        previousSwitchList.add(MQTTConstants.AWS_USB_PORT_A)
+                    } else if (switch.name == MQTTConstants.USB_C) {
+                        previousSwitchList.add(MQTTConstants.AWS_USB_PORT_C)
+                    }
+                }
+
             }
+
             switchAdapter = SwitchesAdapter(switchList)
             binding.layoutSwitches.tvTitle.text = getString(R.string.text_select_switch)
             binding.layoutSwitches.rvDays.adapter = switchAdapter
         }
 
+        if (Utils.isNetworkConnectivityAvailable()){
+            getDevicePreviousData()
+        }
 
-        NotifyManager.internetInfo.observe(viewLifecycleOwner, { isConnected ->
+
+        NotifyManager.internetInfo.observe(viewLifecycleOwner) { isConnected ->
             if (!isConnected) {
                 activity?.let {
                     DialogUtil.deviceOfflineAlert(
@@ -99,7 +120,7 @@ class DeviceSettingsFragment :
                     )
                 }
             }
-        })
+        }
 
         clickEvents()
 
@@ -277,7 +298,10 @@ class DeviceSettingsFragment :
             hidePanel()
         }
 
-        binding.layoutSlidingUpPanel.addPanelSlideListener( object : SlidingUpPanelLayout.PanelSlideListener {
+        binding.layoutSlidingUpPanel.setFadeOnClickListener { hidePanel() }
+
+        binding.layoutSlidingUpPanel.addPanelSlideListener(object :
+            SlidingUpPanelLayout.PanelSlideListener {
             override fun onPanelSlide(panel: View?, slideOffset: Float) {
 
             }
@@ -287,7 +311,7 @@ class DeviceSettingsFragment :
                 previousState: SlidingUpPanelLayout.PanelState?,
                 newState: SlidingUpPanelLayout.PanelState?
             ) {
-                if (newState == SlidingUpPanelLayout.PanelState.COLLAPSED && !isOutdoorSaved){
+                if (newState == SlidingUpPanelLayout.PanelState.COLLAPSED && !isOutdoorSaved) {
                     binding.switchOutdoorMode.isChecked = false
                 }
             }
@@ -417,7 +441,36 @@ class DeviceSettingsFragment :
                         }
                     }
                 }
+
+                launch {
+                    viewModel.getDevicePreviousDataResponse.collectLatest { response ->
+                        when (response) {
+                            is Resource.Success -> {
+                                DialogUtil.hideDialog()
+                                if (response.values.status && response.values.code == Constants.API_SUCCESS_CODE) {
+                                    response.values.data?.let {
+                                        previousSwitchOffList.addAll(it)
+                                    }
+                                } else {
+                                    context?.showToast(response.values.message)
+                                }
+                            }
+                            is Resource.Failure -> {
+                                DialogUtil.hideDialog()
+                                context?.showToast(getString(R.string.error_something_went_wrong))
+                                Log.e(
+                                    logTag,
+                                    " factoryResetResponse Failure ${response.errorBody?.string()}"
+                                )
+                            }
+                            else -> {
+                                //We will do nothing here
+                            }
+                        }
+                    }
+                }
             }
+
         }
     }
 
@@ -496,9 +549,27 @@ class DeviceSettingsFragment :
         payload.put(MQTTConstants.AWS_OUTDOOR_MODE, value)
         payload.put(MQTTConstants.AWS_OUTDOOR_MODE_SWITCH, JSONArray(selectedSwitch))
 
+        if (value == "0"){
+            payload.put(MQTTConstants.AWS_OUTDOOR_MODE_SWITCH_DATA, JSONArray(previousSwitchOffList))
+        }else {
+            payload.put(MQTTConstants.AWS_OUTDOOR_MODE_SWITCH_DATA, JSONArray(previousSwitchList))
+        }
+
         if (AwsMqttSingleton.isConnected()) {
             AwsMqttSingleton.publish(topicName, payload.toString())
         }
+
+        viewLifecycleOwner.lifecycleScope.launchWhenStarted {
+            withContext(Dispatchers.Main) {
+                delay(Constants.OUTDOOR_MODE_API_DELAY)
+                getDevicePreviousData()
+            }
+        }
+    }
+
+    private fun getDevicePreviousData(){
+        previousSwitchOffList.clear()
+        viewModel.getDevicePreviousData(args.deviceDetail.id)
     }
 
 }

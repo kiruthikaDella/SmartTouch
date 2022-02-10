@@ -19,7 +19,7 @@ data class UserProfile(
     var userRole: String? = null,
     @SerializedName("iIsPinStatus")
     var iIsPinStatus: Int? = null
-){
+) {
 
     override fun toString(): String {
         return "UserProfile(iUserId=$iUserId, vFullName=$vFullName, vUserName=$vUserName, vEmail=$vEmail, socialId=$socialId, bPhoneNumber=$bPhoneNumber, userRole=$userRole, iIsPinStatus=$iIsPinStatus)"

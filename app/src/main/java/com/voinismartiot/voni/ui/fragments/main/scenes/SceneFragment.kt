@@ -95,7 +95,7 @@ class SceneFragment : ModelBaseFragment<HomeViewModel, FragmentSceneBinding, Hom
 
         sceneAdapter.setOnSwitchClickListener(object :
             ScenesAdapter.SwitchItemClickListener<GetSceneData> {
-            override fun onItemClick(data: GetSceneData, sceneStatusValue: Int) {
+            override fun onItemClick(data: GetSceneData, sceneStatus: Int) {
 
                 if (!Utils.isNetworkConnectivityAvailable()) {
                     context?.showToast(getString(R.string.text_no_internet_available))
@@ -103,16 +103,16 @@ class SceneFragment : ModelBaseFragment<HomeViewModel, FragmentSceneBinding, Hom
                     activity?.let {
                         DialogUtil.loadingAlert(it)
                     }
-                    sceneStatus = sceneStatusValue
+                    this@SceneFragment.sceneStatus = sceneStatus
                     sceneData = data
-                    viewModel.updateSceneStatus(data.id, BodyUpdateSceneStatus(sceneStatus))
+                    viewModel.updateSceneStatus(data.id, BodyUpdateSceneStatus(this@SceneFragment.sceneStatus))
                 }
 
             }
 
         })
 
-        NotifyManager.internetInfo.observe(viewLifecycleOwner, { isConnected ->
+        NotifyManager.internetInfo.observe(viewLifecycleOwner) { isConnected ->
             if (isConnected) {
                 activity?.let {
                     DialogUtil.loadingAlert(it)
@@ -120,7 +120,7 @@ class SceneFragment : ModelBaseFragment<HomeViewModel, FragmentSceneBinding, Hom
                 viewModel.getScene(BodyGetScene("", ""))
                 viewModel.getControl()
             }
-        })
+        }
 
         apiResponse()
     }

@@ -13,6 +13,10 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.appizona.yehiahd.fastsave.FastSave
+import com.facebook.login.LoginManager
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInClient
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.voinismartiot.voni.R
 import com.voinismartiot.voni.adapters.controlmodeadapter.ControlModeAdapter
 import com.voinismartiot.voni.api.Resource
@@ -23,6 +27,7 @@ import com.voinismartiot.voni.api.repository.HomeRepository
 import com.voinismartiot.voni.common.interfaces.DialogAskListener
 import com.voinismartiot.voni.common.utils.Constants
 import com.voinismartiot.voni.common.utils.DialogUtil
+import com.voinismartiot.voni.common.utils.Utils
 import com.voinismartiot.voni.common.utils.Utils.isControlModePin
 import com.voinismartiot.voni.common.utils.Utils.toBoolean
 import com.voinismartiot.voni.common.utils.Utils.toInt
@@ -33,11 +38,6 @@ import com.voinismartiot.voni.ui.activities.AuthenticationActivity
 import com.voinismartiot.voni.ui.activities.MainActivity
 import com.voinismartiot.voni.ui.fragments.ModelBaseFragment
 import com.voinismartiot.voni.ui.viewmodel.HomeViewModel
-import com.facebook.login.LoginManager
-import com.google.android.gms.auth.api.signin.GoogleSignIn
-import com.google.android.gms.auth.api.signin.GoogleSignInClient
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions
-import com.voinismartiot.voni.common.utils.Utils
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
@@ -80,7 +80,7 @@ class ControlModeFragment :
 
         binding.ibPin.setOnClickListener {
 
-            if (Utils.isNetworkConnectivityAvailable()) {
+            if (!Utils.isNetworkConnectivityAvailable()) {
                 context?.showToast(getString(R.string.text_no_internet_available))
                 return@setOnClickListener
             }
@@ -252,10 +252,10 @@ class ControlModeFragment :
                                         )
 
                                         if (it.isPinStatus.toBoolean()) {
-                                           pinnedControlMode()
+                                            pinnedControlMode()
 
                                         } else {
-                                          unpinnedControlMode()
+                                            unpinnedControlMode()
                                         }
                                     }
                                 }

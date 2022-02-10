@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName
 class BodyGetScene(
     @SerializedName("iRoomId") var roomId: String,
     @SerializedName("iDeviceId") var deviceId: String
-){
+) {
 
     override fun toString(): String {
         return "BodyGetScene(roomId='$roomId', deviceId='$deviceId')"

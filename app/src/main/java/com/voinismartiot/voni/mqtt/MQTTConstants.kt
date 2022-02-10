@@ -85,6 +85,9 @@ object MQTTConstants {
     const val AWS_RESTART_DEVICE = "rd" //Restart
     const val AWS_FACTORY_RESET = "rsf" //Factory Reset Settings
     const val AWS_PIN_HOLE_RESET = "phr" //Pin hole reset
-    const val AWS_OUTDOOR_MODE_SWITCH = "sw" //Pin hole reset
+    const val AWS_OUTDOOR_MODE_SWITCH = "sw" //Switch list
+    const val AWS_OUTDOOR_MODE_SWITCH_NAME = "name" //Switch list
+    const val AWS_OUTDOOR_MODE_SWITCH_VALUE = "value" //Switch list
+    const val AWS_OUTDOOR_MODE_SWITCH_DATA = "swd" //Switch list
 
 }

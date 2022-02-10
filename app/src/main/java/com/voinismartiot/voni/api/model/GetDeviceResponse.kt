@@ -11,7 +11,7 @@ data class GetDeviceResponse(
     var message: String,
     @SerializedName("data")
     var data: List<GetDeviceData>? = null
-){
+) {
     override fun toString(): String {
         return "GetDeviceResponse(status=$status, code=$code, message='$message', data=$data)"
     }

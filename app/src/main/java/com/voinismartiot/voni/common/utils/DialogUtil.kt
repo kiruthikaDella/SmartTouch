@@ -11,12 +11,12 @@ import android.view.View
 import android.widget.EditText
 import android.widget.TextView
 import androidx.core.view.isVisible
+import com.google.android.material.button.MaterialButton
 import com.voinismartiot.voni.R
 import com.voinismartiot.voni.common.interfaces.DialogAskListener
 import com.voinismartiot.voni.common.interfaces.DialogEditListener
 import com.voinismartiot.voni.common.interfaces.DialogShowListener
 import com.voinismartiot.voni.common.utils.Utils.toEditable
-import com.google.android.material.button.MaterialButton
 
 object DialogUtil {
 
@@ -126,15 +126,15 @@ object DialogUtil {
         btnCancel.text = strNo
         btnSave.text = strYes
 
-        if (isLimitedText){
+        if (isLimitedText) {
             editText.isVisible = true
             editTextNoLimit.isVisible = false
-        }else {
+        } else {
             editText.isVisible = false
             editTextNoLimit.isVisible = true
         }
 
-        if (inputType == activity.getString(R.string.dialog_input_type_phone)){
+        if (inputType == activity.getString(R.string.dialog_input_type_phone)) {
             editText.setRawInputType(InputType.TYPE_CLASS_PHONE)
             editTextNoLimit.setRawInputType(InputType.TYPE_CLASS_PHONE)
             editText.keyListener = DigitsKeyListener.getInstance("0123456789")
@@ -146,9 +146,9 @@ object DialogUtil {
         }
 
         btnSave.setOnClickListener {
-            if (isLimitedText){
+            if (isLimitedText) {
                 onClick?.onYesClicked(editText.text.toString().trim())
-            }else{
+            } else {
                 onClick?.onYesClicked(editTextNoLimit.text.toString().trim())
             }
         }
@@ -211,9 +211,9 @@ object DialogUtil {
         val tvDetail = dialog?.findViewById(R.id.tv_detail) as TextView
         val tvClose = dialog?.findViewById(R.id.tv_close) as TextView
 
-        if (title.isNotEmpty()){
+        if (title.isNotEmpty()) {
             tvTitle.text = title
-        }else {
+        } else {
             tvTitle.visibility = View.GONE
         }
 

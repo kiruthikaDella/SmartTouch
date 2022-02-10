@@ -14,7 +14,7 @@ data class OwnershipResponse(
     var message: String,
     @SerializedName("data")
     var data: OwnershipTransferData? = null
-){
+) {
     override fun toString(): String {
         return "OwnershipResponse(status=$status, code=$code, message='$message', data=$data)"
     }
@@ -54,7 +54,7 @@ data class OwnershipTransferData(
     var name: String,
     @SerializedName("isEmailVerified")
     var isEmailVerified: Int
-) : Parcelable, Serializable{
+) : Parcelable, Serializable {
     override fun toString(): String {
         return "OwnershipTransferData(id='$id', email='$email', name='$name', isEmailVerified=$isEmailVerified)"
     }

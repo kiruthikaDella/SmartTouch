@@ -3,9 +3,9 @@ package com.voinismartiot.voni.adapters.faqadapter
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.voinismartiot.voni.R
 import com.thoughtbot.expandablerecyclerview.ExpandableRecyclerViewAdapter
 import com.thoughtbot.expandablerecyclerview.models.ExpandableGroup
+import com.voinismartiot.voni.R
 
 class FAQAdapter(faqList: List<ExpandableGroup<*>?>?) :
     ExpandableRecyclerViewAdapter<QuestionViewHolder, AnswersViewHolder>(

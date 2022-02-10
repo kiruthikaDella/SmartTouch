@@ -57,12 +57,12 @@ class SwitchesAdapter(
     fun getSelectedSwitchNames(): ArrayList<String> {
         val arrayDays: ArrayList<String> = ArrayList()
         for (switch in switchList) {
-            if (switch.typeOfSwitch == 0 && switch.isChecked){
+            if (switch.typeOfSwitch == 0 && switch.isChecked) {
                 arrayDays.add("SW0${switch.index}")
-            }else if (switch.typeOfSwitch == 2 && switch.isChecked){
-                if (switch.name == MQTTConstants.USB_A){
+            } else if (switch.typeOfSwitch == 2 && switch.isChecked) {
+                if (switch.name == MQTTConstants.USB_A) {
                     arrayDays.add(MQTTConstants.AWS_USB_PORT_A)
-                }else if (switch.name == MQTTConstants.USB_C){
+                } else if (switch.name == MQTTConstants.USB_C) {
                     arrayDays.add(MQTTConstants.AWS_USB_PORT_C)
                 }
             }

@@ -28,7 +28,7 @@ class ControlModeAdapter(
         sectionViewHolder.apply {
             tvRoomName.text = data.roomName
             data.deviceData?.let { deviceData ->
-                recyclerDevices.adapter = ControlModeDeviceAdapter(mActivity,deviceData)
+                recyclerDevices.adapter = ControlModeDeviceAdapter(mActivity, deviceData)
             }
         }
 

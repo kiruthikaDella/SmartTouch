@@ -70,7 +70,7 @@ class SwitchIconsDetailFragment :
                     }
                 }
 
-        NotifyManager.internetInfo.observe(viewLifecycleOwner, { isConnected ->
+        NotifyManager.internetInfo.observe(viewLifecycleOwner) { isConnected ->
             if (isConnected) {
                 activity?.let {
                     DialogUtil.loadingAlert(it)
@@ -91,7 +91,7 @@ class SwitchIconsDetailFragment :
                     )
                 }
             }
-        })
+        }
 
         switchIconList.clear()
         adapter = SwitchIconsDetailAdapter(switchIconList)

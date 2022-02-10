@@ -76,7 +76,7 @@ class DeviceFeaturesFragment :
                     }
                 }
 
-        NotifyManager.internetInfo.observe(viewLifecycleOwner, { isConnected ->
+        NotifyManager.internetInfo.observe(viewLifecycleOwner) { isConnected ->
             if (isConnected) {
                 activity?.let {
                     DialogUtil.loadingAlert(it)
@@ -97,7 +97,7 @@ class DeviceFeaturesFragment :
                     )
                 }
             }
-        })
+        }
 
         viewLifecycleOwner.lifecycleScope.launchWhenStarted {
             viewModel.getDeviceFeatureSettingsResponse.collectLatest { response ->

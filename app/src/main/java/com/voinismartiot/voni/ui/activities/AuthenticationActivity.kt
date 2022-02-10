@@ -13,7 +13,6 @@ import com.voinismartiot.voni.api.NetworkModule
 import com.voinismartiot.voni.api.repository.AuthRepository
 import com.voinismartiot.voni.common.interfaces.FacebookLoginListener
 import com.voinismartiot.voni.common.utils.showToast
-import com.voinismartiot.voni.ui.fragments.authentication.LoginFragment
 import com.voinismartiot.voni.ui.viewmodel.AuthViewModel
 import com.voinismartiot.voni.ui.viewmodel.ViewModelFactory
 import org.json.JSONObject
@@ -43,7 +42,7 @@ class AuthenticationActivity : AppCompatActivity() {
 
     }
 
-    fun setFacebookLoginListener(listener: FacebookLoginListener){
+    fun setFacebookLoginListener(listener: FacebookLoginListener) {
         this.facebookLoginListener = listener
     }
 

@@ -15,6 +15,7 @@ data class DeviceFeatureResponse(
     @SerializedName("data")
     var data: DeviceFeatureData? = null
 ) {
+
     override fun toString(): String {
         return "DeviceFeatureResponse(status=$status, code=$code, message='$message', data=$data)"
     }

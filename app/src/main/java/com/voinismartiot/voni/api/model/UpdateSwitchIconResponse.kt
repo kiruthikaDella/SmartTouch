@@ -11,7 +11,7 @@ data class UpdateSwitchIconResponse(
     var message: String,
     @SerializedName("data")
     var data: DeviceSwitchData? = null
-){
+) {
     override fun toString(): String {
         return "UpdateSwitchIconResponse(status=$status, code=$code, message='$message', data=$data)"
     }

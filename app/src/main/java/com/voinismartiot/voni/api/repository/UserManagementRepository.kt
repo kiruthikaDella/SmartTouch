@@ -17,5 +17,5 @@ class UserManagementRepository @Inject constructor(
         safeApiCall { smartTouchApi.getSubordinateUser(getAccessKey()) }
 
     suspend fun deleteSubordinateUser(subordinateUserId: String) =
-        safeApiCall { smartTouchApi.deleteSubordinateUser(getAccessKey(),subordinateUserId) }
+        safeApiCall { smartTouchApi.deleteSubordinateUser(getAccessKey(), subordinateUserId) }
 }

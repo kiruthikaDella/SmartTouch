@@ -60,7 +60,7 @@ data class ErrorSceneData(
     var deviceSwitchId: String,
     @SerializedName("message")
     var message: String
-): Parcelable, Serializable {
+) : Parcelable, Serializable {
 
     override fun toString(): String {
         return "ErrorSceneData(roomId='$roomId', deviceId='$deviceId', deviceSwitchId='$deviceSwitchId', message='$message')"
