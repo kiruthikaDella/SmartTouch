@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.daimajia.swipe.SwipeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/swipe_layout"
+    android:id="@+id/main_view"
     android:layout_width="match_parent"
     android:layout_height="@dimen/_43sdp"
     android:layout_marginStart="@dimen/screen_start_margin"
@@ -12,45 +12,39 @@
     android:background="@drawable/white_background_with_catskill_white_dark_border"
     tools:ignore="contentDescription">
 
+    <TextView
+        android:id="@+id/tv_scene_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginStart="@dimen/_8sdp"
+        android:layout_marginEnd="@dimen/_10sdp"
+        android:layout_toStartOf="@+id/switch_status"
+        android:fontFamily="@font/roboto_medium"
+        android:text="@string/text_scene_name"
+        android:textColor="@color/daintree"
+        android:textSize="@dimen/_12ssp" />
+
+    <com.google.android.material.switchmaterial.SwitchMaterial
+        android:id="@+id/switch_status"
+        style="@style/PanelSwitchColorStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginEnd="@dimen/_2sdp"
+        android:layout_toStartOf="@+id/ib_delete"
+        android:padding="@dimen/_10sdp"
+        android:scaleX="1.5"
+        android:scaleY="1.5" />
+
     <ImageView
         android:id="@+id/ib_delete"
         android:layout_width="@dimen/_40sdp"
         android:layout_height="match_parent"
-        android:layout_gravity="end"
-        android:background="@color/red"
+        android:layout_alignParentEnd="true"
+        android:layout_centerVertical="true"
         android:padding="@dimen/_13sdp"
         android:src="@drawable/ic_delete"
-        app:tint="@color/white" />
+        app:tint="@color/theme_color" />
 
-    <RelativeLayout
-        android:id="@+id/main_view"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <TextView
-            android:id="@+id/tv_scene_name"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_marginStart="@dimen/_8sdp"
-            android:layout_marginEnd="@dimen/_10sdp"
-            android:layout_toStartOf="@+id/switch_status"
-            android:fontFamily="@font/roboto_medium"
-            android:text="@string/text_scene_name"
-            android:textColor="@color/daintree"
-            android:textSize="@dimen/_12ssp" />
-
-        <com.google.android.material.switchmaterial.SwitchMaterial
-            android:id="@+id/switch_status"
-            style="@style/PanelSwitchColorStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_centerVertical="true"
-            android:padding="@dimen/_10sdp"
-            android:scaleX="1.5"
-            android:scaleY="1.5" />
-
-    </RelativeLayout>
-
-</com.daimajia.swipe.SwipeLayout>
+</RelativeLayout>

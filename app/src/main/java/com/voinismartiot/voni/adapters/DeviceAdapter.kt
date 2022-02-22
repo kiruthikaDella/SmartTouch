@@ -1404,11 +1404,6 @@ class DeviceAdapter(
                     Log.d("$logTag ReceivedData", "$topic    $message")
 
                     try {
-                        val topic1 = topic.split("/")
-                        // topic [0] = ''
-                        // topic [1] = smarttouch
-                        // topic [2] = deviceId
-                        // topic [3] = status
 
                         val jsonObject = JSONObject(message)
 

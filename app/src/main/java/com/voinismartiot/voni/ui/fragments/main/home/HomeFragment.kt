@@ -178,6 +178,7 @@ class HomeFragment : ModelBaseFragment<HomeViewModel, FragmentHomeBinding, HomeR
                                         }
 
                                         FastSave.getInstance().clearSession()
+                                        Utils.clearFirebaseToken()
                                         startActivity(
                                             Intent(
                                                 it,

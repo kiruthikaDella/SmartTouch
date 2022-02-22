@@ -20,6 +20,7 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.appizona.yehiahd.fastsave.FastSave
 import com.facebook.appevents.internal.AppEventUtility.bytesToHex
+import com.google.firebase.iid.FirebaseInstanceId
 import com.voinismartiot.voni.AppDelegate
 import java.io.ByteArrayOutputStream
 import java.security.MessageDigest
@@ -119,6 +120,10 @@ object Utils {
         val path =
             MediaStore.Images.Media.insertImage(inContext.contentResolver, inImage, imageName, null)
         return Uri.parse(path)
+    }
+
+    fun clearFirebaseToken(){
+        FirebaseInstanceId.getInstance().deleteInstanceId()
     }
 
     fun String.toEditable(): Editable = Editable.Factory.getInstance().newEditable(this)

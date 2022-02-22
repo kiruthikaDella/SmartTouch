@@ -214,6 +214,7 @@ class ControlModeFragment :
                                         }
 
                                         FastSave.getInstance().clearSession()
+                                        Utils.clearFirebaseToken()
                                         startActivity(
                                             Intent(
                                                 it,
