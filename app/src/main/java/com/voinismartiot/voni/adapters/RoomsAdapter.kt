@@ -1,6 +1,5 @@
 package com.voinismartiot.voni.adapters
 
-import android.content.Context
 import android.text.Html
 import android.view.LayoutInflater
 import android.view.View
@@ -21,13 +20,12 @@ class RoomsAdapter(
 
     private var roomClickListener: AdapterItemClickListener<GetRoomData>? = null
     private var roomDeleteClickListener: AdapterItemClickListener<GetRoomData>? = null
-    private var mContext: Context? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
-        val v = LayoutInflater.from(parent.context)
-            .inflate(R.layout.item_home_room, parent, false)
-        mContext = parent.context
-        return MyViewHolder(v)
+        return MyViewHolder(
+            LayoutInflater.from(parent.context)
+                .inflate(R.layout.item_home_room, parent, false)
+        )
     }
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
@@ -55,15 +53,13 @@ class RoomsAdapter(
                 }
             }
 
-            mContext?.let {
-                Glide
-                    .with(it)
-                    .load(data.roomTypeId?.file)
-                    .diskCacheStrategy(DiskCacheStrategy.DATA)
-                    .centerCrop()
-                    .placeholder(R.drawable.ic_room_placeholder)
-                    .into(ivRoomImage)
-            }
+            Glide
+                .with(this.itemView.context)
+                .load(data.roomTypeId?.file)
+                .diskCacheStrategy(DiskCacheStrategy.DATA)
+                .centerCrop()
+                .placeholder(R.drawable.ic_room_placeholder)
+                .into(ivRoomImage)
 
             itemView.setOnClickListener {
                 roomClickListener?.onItemClick(data)

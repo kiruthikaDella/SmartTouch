@@ -1,6 +1,5 @@
 package com.voinismartiot.voni.adapters
 
-import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -19,7 +18,6 @@ class SwitchIconsDetailAdapter(
     private val iconList: ArrayList<IconListData>
 ) : RecyclerView.Adapter<SwitchIconsDetailAdapter.MyViewHolder>() {
 
-    private var mContext: Context? = null
     private var switchClickListener: AdapterItemClickListener<IconListData>? = null
     private var rowIndex = -1
 
@@ -29,10 +27,10 @@ class SwitchIconsDetailAdapter(
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
-        val v = LayoutInflater.from(parent.context)
-            .inflate(R.layout.item_switch_icons_detail, parent, false)
-        mContext = parent.context
-        return MyViewHolder(v)
+        return MyViewHolder(
+            LayoutInflater.from(parent.context)
+                .inflate(R.layout.item_switch_icons_detail, parent, false)
+        )
     }
 
     override fun getItemCount(): Int {
@@ -46,14 +44,12 @@ class SwitchIconsDetailAdapter(
 
             tvSwitchName.text = data.iconName
 
-            mContext?.let {
-                Glide
-                    .with(it)
-                    .load(data.icon)
-                    .diskCacheStrategy(DiskCacheStrategy.DATA)
-                    .centerCrop()
-                    .into(ivSwitch)
-            }
+            Glide
+                .with(this.itemView.context)
+                .load(data.icon)
+                .diskCacheStrategy(DiskCacheStrategy.DATA)
+                .centerCrop()
+                .into(ivSwitch)
 
             itemView.setOnClickListener {
                 rowIndex = adapterPosition
@@ -62,17 +58,13 @@ class SwitchIconsDetailAdapter(
             }
 
             if (rowIndex == adapterPosition) {
-                mContext?.let { ctx ->
-                    ivSwitch.setColorFilter(ctx.getColor(R.color.white))
-                    ivSwitch.backgroundTintList =
-                        ContextCompat.getColorStateList(ctx, R.color.theme_color)
-                }
+                ivSwitch.setColorFilter(this.itemView.context.getColor(R.color.white))
+                ivSwitch.backgroundTintList =
+                    ContextCompat.getColorStateList(this.itemView.context, R.color.theme_color)
             } else {
-                mContext?.let { ctx ->
-                    ivSwitch.setColorFilter(ctx.getColor(R.color.theme_color))
-                    ivSwitch.backgroundTintList =
-                        ContextCompat.getColorStateList(ctx, R.color.white)
-                }
+                ivSwitch.setColorFilter(this.itemView.context.getColor(R.color.theme_color))
+                ivSwitch.backgroundTintList =
+                    ContextCompat.getColorStateList(this.itemView.context, R.color.white)
             }
         }
     }

@@ -17,9 +17,10 @@ class UserManagementAdapter(
     private var removeUserClickListener: AdapterItemClickListener<SubordinateUserData>? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
-        val v = LayoutInflater.from(parent.context)
-            .inflate(R.layout.item_user_management, parent, false)
-        return MyViewHolder(v)
+        return MyViewHolder(
+            LayoutInflater.from(parent.context)
+                .inflate(R.layout.item_user_management, parent, false)
+        )
     }
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {

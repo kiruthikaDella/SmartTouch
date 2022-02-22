@@ -1,6 +1,5 @@
 package com.voinismartiot.voni.adapters
 
-import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -18,7 +17,6 @@ class SwitchIconsAdapter(
 ) : RecyclerView.Adapter<SwitchIconsAdapter.MyViewHolder>() {
 
     private var switchClickListener: AdapterItemClickListener<DeviceSwitchData>? = null
-    private var mContext: Context? = null
 
     inner class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val tvSwitchName = itemView.findViewById(R.id.tv_switch_name) as TextView
@@ -26,10 +24,10 @@ class SwitchIconsAdapter(
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
-        val v = LayoutInflater.from(parent.context)
-            .inflate(R.layout.item_switch_icons, parent, false)
-        mContext = parent.context
-        return MyViewHolder(v)
+        return MyViewHolder(
+            LayoutInflater.from(parent.context)
+                .inflate(R.layout.item_switch_icons, parent, false)
+        )
     }
 
     override fun getItemCount(): Int {
@@ -46,15 +44,13 @@ class SwitchIconsAdapter(
                 switchClickListener?.onItemClick(data)
             }
 
-            mContext?.let {
-                Glide
-                    .with(it)
-                    .load(data.icon)
-                    .diskCacheStrategy(DiskCacheStrategy.DATA)
-                    .placeholder(R.drawable.ic_switch)
-                    .centerCrop()
-                    .into(ivSwitch)
-            }
+            Glide
+                .with(this.itemView.context)
+                .load(data.icon)
+                .diskCacheStrategy(DiskCacheStrategy.DATA)
+                .placeholder(R.drawable.ic_switch)
+                .centerCrop()
+                .into(ivSwitch)
         }
     }
 
