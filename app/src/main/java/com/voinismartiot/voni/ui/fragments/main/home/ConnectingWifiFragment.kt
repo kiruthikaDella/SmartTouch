@@ -26,11 +26,13 @@ import com.voinismartiot.voni.common.utils.Constants
 import com.voinismartiot.voni.common.utils.DialogUtil
 import com.voinismartiot.voni.common.utils.Utils
 import com.voinismartiot.voni.databinding.FragmentConnectingWifiBinding
+import com.voinismartiot.voni.mqtt.AwsMqttSingleton
 import com.voinismartiot.voni.ui.activities.MainActivity
 import com.voinismartiot.voni.ui.fragments.ModelBaseFragment
 import com.voinismartiot.voni.ui.viewmodel.HomeViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 import org.json.JSONException
 import org.json.JSONObject
 
@@ -311,6 +313,12 @@ class ConnectingWifiFragment :
         }
 
         if (Utils.isNetworkConnectivityAvailable()) {
+
+            AwsMqttSingleton.disconnectAws()
+            viewLifecycleOwner.lifecycleScope.launch {
+                delay(2000)
+                AwsMqttSingleton.connectAWS()
+            }
             runnable = Runnable {
                 try {
                     getDeviceStr?.let {

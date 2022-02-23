@@ -34,7 +34,7 @@ object AwsMqttSingleton {
 
     private var isInternetConnected = false
 
-    private fun connectAWS() {
+    fun connectAWS() {
         Log.d("Aws connection", "clientId = $clientId")
 
         if (clientKeyStore == null) {
