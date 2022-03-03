@@ -23,6 +23,7 @@ import com.facebook.appevents.internal.AppEventUtility.bytesToHex
 import com.google.firebase.iid.FirebaseInstanceId
 import com.voinismartiot.voni.AppDelegate
 import java.io.ByteArrayOutputStream
+import java.io.IOException
 import java.security.MessageDigest
 import java.util.*
 import javax.crypto.Mac
@@ -123,7 +124,13 @@ object Utils {
     }
 
     fun clearFirebaseToken(){
-        FirebaseInstanceId.getInstance().deleteInstanceId()
+        Thread {
+            try {
+                FirebaseInstanceId.getInstance().deleteInstanceId()
+            } catch (e: IOException) {
+                e.printStackTrace()
+            }
+        }.start()
     }
 
     fun String.toEditable(): Editable = Editable.Factory.getInstance().newEditable(this)

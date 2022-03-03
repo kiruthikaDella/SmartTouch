@@ -522,7 +522,6 @@ class LoginFragment : ModelBaseFragment<AuthViewModel, FragmentLoginBinding, Aut
 
         FirebaseInstanceId.getInstance().instanceId.addOnSuccessListener {
             val strToken = it.token
-            Log.i("$logTag FirebaseMessagingService token ---->>", "$strToken")
             FastSave.getInstance().saveString(Constants.FCM_TOKEN, strToken)
         }
     }

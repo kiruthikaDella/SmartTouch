@@ -149,25 +149,22 @@ class MainActivity : AppCompatActivity() {
             }
         })
 
-        NetworkConnectionLiveData().observe(this, { isConnected ->
+        NetworkConnectionLiveData().observe(this) { isConnected ->
             NotifyManager.internetInfo.postValue(isConnected)
-        })
 
-        if (!isApiCalled) {
             appliancesList.clear()
             viewModel.getDeviceAppliances()
-        }
 
-        apiResponses()
-    }
-
-    override fun onStart() {
-        super.onStart()
-
-        if (Utils.isNetworkConnectivityAvailable()) {
             roomTypeList.toMutableList().clear()
             viewModel.roomType()
         }
+
+        /* if (!isApiCalled) {
+             appliancesList.clear()
+             viewModel.getDeviceAppliances()
+         }*/
+
+        apiResponses()
     }
 
     override fun onResume() {
@@ -377,16 +374,13 @@ class MainActivity : AppCompatActivity() {
                             }
                             is Resource.Failure -> {
                                 if (navController.currentDestination?.id != R.id.connectingWifiFragment && navController.currentDestination?.id != R.id.configWifiFragment) {
-//                                    this@MainActivity.showToast(getString(R.string.error_something_went_wrong))
                                     Log.e(
                                         logTag,
                                         " roomTypeResponse error ${response.errorBody?.string()}"
                                     )
                                 }
                             }
-                            else -> {
-                                // We will do nothing here
-                            }
+                            else -> Unit
                         }
                     }
                 }
@@ -415,9 +409,7 @@ class MainActivity : AppCompatActivity() {
                                 showToast(getString(R.string.error_something_went_wrong))
                                 Log.e(logTag, " addRoomResponse ${response.errorBody?.string()} ")
                             }
-                            else -> {
-                                // We will do nothing here
-                            }
+                            else -> Unit
                         }
                     }
                 }
@@ -437,15 +429,12 @@ class MainActivity : AppCompatActivity() {
                             }
                             is Resource.Failure -> {
                                 DialogUtil.hideDialog()
-                                showToast(getString(R.string.error_something_went_wrong))
                                 Log.e(
                                     logTag,
                                     " getDeviceAppliancesResponse ${response.errorBody?.string()} "
                                 )
                             }
-                            else -> {
-                                // We will do nothing here
-                            }
+                            else -> Unit
                         }
                     }
                 }
