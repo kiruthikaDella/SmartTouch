@@ -1,12 +1,18 @@
 package com.voinismartiot.voni.ui.fragments.main.home
 
+import android.app.Activity
+import android.app.Dialog
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.util.DisplayMetrics
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import android.widget.Toast
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -48,6 +54,7 @@ class ConnectingWifiFragment :
     private var isConnection: Boolean? = null
     private var isApiResponseSuccess: Boolean? = null
     private var getDeviceStr: String? = null
+    private var dialog: Dialog? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -351,10 +358,10 @@ class ConnectingWifiFragment :
 
     private fun showOfflineAlert() {
         activity?.let {
-            DialogUtil.deviceOfflineAlert(it, getString(R.string.message_wait_for_internet),
+            waitForInternetAlert(it, getString(R.string.message_wait_for_internet),
                 object : DialogShowListener {
                     override fun onClick() {
-                        DialogUtil.hideDialog()
+                        closeDialog()
                         sendDataToCloud()
                     }
                 })
@@ -430,6 +437,49 @@ class ConnectingWifiFragment :
         FragmentConnectingWifiBinding.inflate(inflater, container, false)
 
     override fun getFragmentRepository(): HomeRepository = HomeRepository(networkModel)
+
+    private fun waitForInternetAlert(
+        activity: Activity,
+        title: String? = null,
+        onClick: DialogShowListener? = null
+    ) {
+
+        dialog = Dialog(activity)
+        dialog?.setContentView(R.layout.dialog_layout_device_offline)
+        dialog?.setCancelable(false)
+
+        val tvTitle = dialog?.findViewById(R.id.tv_dialog_title) as TextView
+        val btnOk = dialog?.findViewById(R.id.tv_ok) as TextView
+
+        title?.let {
+            tvTitle.text = it
+        }
+
+        btnOk.setOnClickListener {
+            if (onClick == null) {
+                DialogUtil.hideDialog()
+            } else {
+                onClick.onClick()
+            }
+        }
+
+        val displayMetrics = DisplayMetrics()
+        activity.windowManager?.defaultDisplay?.getMetrics(displayMetrics)
+        val width = (displayMetrics.widthPixels * Constants.COMMON_DIALOG_WIDTH)
+        val height = (displayMetrics.heightPixels * Constants.COMMON_DIALOG_HEIGHT)
+
+        dialog?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        dialog?.window?.setLayout(width.toInt(), height.toInt())
+        dialog?.show()
+    }
+
+    private fun closeDialog() {
+        dialog?.let {
+            if (it.isShowing) {
+                it.dismiss()
+            }
+        }
+    }
 }
 
 
