@@ -77,9 +77,7 @@ class ScreenLayoutFragment : DialogFragment() {
                         MQTTConnectionStatus.CONNECTED -> {
                             subscribeToDevice(args.deviceDetail.deviceSerialNo)
                         }
-                        else -> {
-                            //We will do nothing here
-                        }
+                        else -> Unit
                     }
                 }
 
@@ -100,22 +98,22 @@ class ScreenLayoutFragment : DialogFragment() {
         }
 
         when (args.deviceCustomizationDetail.screenLayout) {
-            screenLayoutModel?.LEFT_MOST -> {
+            ScreenLayoutModel.LEFT_MOST -> {
                 binding.ivLeftMost.performClick()
             }
-            screenLayoutModel?.RIGHT_MOST -> {
+            ScreenLayoutModel.RIGHT_MOST -> {
                 binding.ivRightMost.performClick()
             }
-            screenLayoutModel?.LEFT_RIGHT -> {
+            ScreenLayoutModel.LEFT_RIGHT -> {
                 binding.ivLeftRight.performClick()
             }
-            screenLayoutModel?.MIDDLE_CENTER -> {
+            ScreenLayoutModel.MIDDLE_CENTER -> {
                 binding.ivMiddleCenter.performClick()
             }
-            screenLayoutModel?.TOP_CENTER -> {
+            ScreenLayoutModel.TOP_CENTER -> {
                 binding.ivTopCenter.performClick()
             }
-            screenLayoutModel?.BOTTOM_CENTER -> {
+            ScreenLayoutModel.BOTTOM_CENTER -> {
                 binding.ivBottomCenter.performClick()
             }
         }

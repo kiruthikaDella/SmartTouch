@@ -9,21 +9,25 @@ class ScreenLayoutModel(context: Context, mBinding: FragmentScreenLayoutBinding)
 
     private var mContext = context
     private var binding = mBinding
-    private var viewType = VIEW_TYPE.EIGHT_ICONS_VIEW
-    var screenLayoutType: String? = null
+    private var viewType = ViewType.EIGHT_ICONS_VIEW
+    private var screenLayoutType: String? = null
     var screenLayout: String? = null
     val screenLayoutEight = "8"
     val screenLayoutSix = "6"
     val screenLayoutFour = "4"
-    val LEFT_MOST = "left_most"
-    val RIGHT_MOST = "right_most"
-    val LEFT_RIGHT = "left_right"
-    val MIDDLE_CENTER = "middle_center"
-    val TOP_CENTER = "top_center"
-    val BOTTOM_CENTER = "bottom_center"
+
+    companion object {
+        const val LEFT_MOST = "left_most"
+        const val RIGHT_MOST = "right_most"
+        const val LEFT_RIGHT = "left_right"
+        const val MIDDLE_CENTER = "middle_center"
+        const val TOP_CENTER = "top_center"
+        const val BOTTOM_CENTER = "bottom_center"
+    }
+
     var storedViewType: String = screenLayoutEight
 
-    enum class VIEW_TYPE {
+    enum class ViewType {
         EIGHT_ICONS_VIEW,
         SIX_ICONS_VIEW,
         FOUR_ICONS_VIEW
@@ -33,29 +37,29 @@ class ScreenLayoutModel(context: Context, mBinding: FragmentScreenLayoutBinding)
         changeViewType(viewType)
         binding.tvEightIconsView.setOnClickListener {
             screenLayoutType = screenLayoutEight
-            viewType = VIEW_TYPE.EIGHT_ICONS_VIEW
+            viewType = ViewType.EIGHT_ICONS_VIEW
             changeViewType(viewType)
         }
 
         binding.tvSixIconsView.setOnClickListener {
             screenLayoutType = screenLayoutSix
-            viewType = VIEW_TYPE.SIX_ICONS_VIEW
+            viewType = ViewType.SIX_ICONS_VIEW
             changeViewType(viewType)
         }
 
         binding.tvFourIconsView.setOnClickListener {
             screenLayoutType = screenLayoutFour
-            viewType = VIEW_TYPE.FOUR_ICONS_VIEW
+            viewType = ViewType.FOUR_ICONS_VIEW
             changeViewType(viewType)
         }
 
         setClickListeners()
     }
 
-    fun changeViewType(viewType: VIEW_TYPE) {
+    private fun changeViewType(viewType: ViewType) {
         changeImagesWithViewType(viewType)
         when (viewType) {
-            VIEW_TYPE.EIGHT_ICONS_VIEW -> {
+            ViewType.EIGHT_ICONS_VIEW -> {
                 binding.tvEightIconsView.setCompoundDrawablesWithIntrinsicBounds(
                     R.drawable.ic_screen_layout_tab_selected,
                     0,
@@ -96,7 +100,7 @@ class ScreenLayoutModel(context: Context, mBinding: FragmentScreenLayoutBinding)
                     )
                 )
             }
-            VIEW_TYPE.SIX_ICONS_VIEW -> {
+            ViewType.SIX_ICONS_VIEW -> {
                 binding.tvSixIconsView.setCompoundDrawablesWithIntrinsicBounds(
                     R.drawable.ic_screen_layout_tab_selected,
                     0,
@@ -142,7 +146,7 @@ class ScreenLayoutModel(context: Context, mBinding: FragmentScreenLayoutBinding)
                     )
                 )
             }
-            VIEW_TYPE.FOUR_ICONS_VIEW -> {
+            ViewType.FOUR_ICONS_VIEW -> {
                 binding.tvFourIconsView.setCompoundDrawablesWithIntrinsicBounds(
                     R.drawable.ic_screen_layout_tab_selected,
                     0,
@@ -186,9 +190,9 @@ class ScreenLayoutModel(context: Context, mBinding: FragmentScreenLayoutBinding)
         }
     }
 
-    private fun changeImagesWithViewType(viewType: VIEW_TYPE) {
+    private fun changeImagesWithViewType(viewType: ViewType) {
         when (viewType) {
-            VIEW_TYPE.EIGHT_ICONS_VIEW -> {
+            ViewType.EIGHT_ICONS_VIEW -> {
                 binding.ivLeftRight.isEnabled = true
                 binding.ivLeftRight.alpha = 1f
                 binding.ivLeftMost.setImageDrawable(
@@ -228,7 +232,7 @@ class ScreenLayoutModel(context: Context, mBinding: FragmentScreenLayoutBinding)
                     )
                 )
             }
-            VIEW_TYPE.SIX_ICONS_VIEW -> {
+            ViewType.SIX_ICONS_VIEW -> {
                 binding.ivLeftRight.isEnabled = true
                 binding.ivLeftRight.alpha = 1f
                 binding.ivLeftMost.setImageDrawable(
@@ -268,7 +272,7 @@ class ScreenLayoutModel(context: Context, mBinding: FragmentScreenLayoutBinding)
                     )
                 )
             }
-            VIEW_TYPE.FOUR_ICONS_VIEW -> {
+            ViewType.FOUR_ICONS_VIEW -> {
                 binding.ivLeftRight.isEnabled = false
                 binding.ivLeftRight.alpha = 0.5f
                 binding.ivLeftMost.setImageDrawable(
@@ -312,19 +316,19 @@ class ScreenLayoutModel(context: Context, mBinding: FragmentScreenLayoutBinding)
         selectLayout(viewType)
     }
 
-    private fun selectLayout(viewType: VIEW_TYPE) {
+    private fun selectLayout(viewType: ViewType) {
         when (viewType) {
-            VIEW_TYPE.EIGHT_ICONS_VIEW -> {
+            ViewType.EIGHT_ICONS_VIEW -> {
                 if (storedViewType == screenLayoutEight) {
                     selectDefaultLayout()
                 }
             }
-            VIEW_TYPE.SIX_ICONS_VIEW -> {
+            ViewType.SIX_ICONS_VIEW -> {
                 if (storedViewType == screenLayoutSix) {
                     selectDefaultLayout()
                 }
             }
-            VIEW_TYPE.FOUR_ICONS_VIEW -> {
+            ViewType.FOUR_ICONS_VIEW -> {
                 if (storedViewType == screenLayoutFour) {
                     selectDefaultLayout()
                 }
@@ -359,7 +363,7 @@ class ScreenLayoutModel(context: Context, mBinding: FragmentScreenLayoutBinding)
         binding.ivLeftMost.setOnClickListener {
             screenLayout = LEFT_MOST
             when (viewType) {
-                VIEW_TYPE.EIGHT_ICONS_VIEW -> {
+                ViewType.EIGHT_ICONS_VIEW -> {
                     storedViewType = screenLayoutEight
                     binding.ivLeftMost.setImageDrawable(
                         ContextCompat.getDrawable(
@@ -398,7 +402,7 @@ class ScreenLayoutModel(context: Context, mBinding: FragmentScreenLayoutBinding)
                         )
                     )
                 }
-                VIEW_TYPE.SIX_ICONS_VIEW -> {
+                ViewType.SIX_ICONS_VIEW -> {
                     storedViewType = screenLayoutSix
                     binding.ivLeftMost.setImageDrawable(
                         ContextCompat.getDrawable(
@@ -437,7 +441,7 @@ class ScreenLayoutModel(context: Context, mBinding: FragmentScreenLayoutBinding)
                         )
                     )
                 }
-                VIEW_TYPE.FOUR_ICONS_VIEW -> {
+                ViewType.FOUR_ICONS_VIEW -> {
                     storedViewType = screenLayoutFour
                     binding.ivLeftMost.setImageDrawable(
                         ContextCompat.getDrawable(
@@ -482,7 +486,7 @@ class ScreenLayoutModel(context: Context, mBinding: FragmentScreenLayoutBinding)
         binding.ivLeftRight.setOnClickListener {
             screenLayout = LEFT_RIGHT
             when (viewType) {
-                VIEW_TYPE.EIGHT_ICONS_VIEW -> {
+                ViewType.EIGHT_ICONS_VIEW -> {
                     storedViewType = screenLayoutEight
                     binding.ivLeftMost.setImageDrawable(
                         ContextCompat.getDrawable(
@@ -521,7 +525,7 @@ class ScreenLayoutModel(context: Context, mBinding: FragmentScreenLayoutBinding)
                         )
                     )
                 }
-                VIEW_TYPE.SIX_ICONS_VIEW -> {
+                ViewType.SIX_ICONS_VIEW -> {
                     storedViewType = screenLayoutSix
                     binding.ivLeftMost.setImageDrawable(
                         ContextCompat.getDrawable(
@@ -560,7 +564,7 @@ class ScreenLayoutModel(context: Context, mBinding: FragmentScreenLayoutBinding)
                         )
                     )
                 }
-                VIEW_TYPE.FOUR_ICONS_VIEW -> {
+                ViewType.FOUR_ICONS_VIEW -> {
                     storedViewType = screenLayoutFour
                     binding.ivLeftMost.setImageDrawable(
                         ContextCompat.getDrawable(
@@ -605,7 +609,7 @@ class ScreenLayoutModel(context: Context, mBinding: FragmentScreenLayoutBinding)
         binding.ivTopCenter.setOnClickListener {
             screenLayout = TOP_CENTER
             when (viewType) {
-                VIEW_TYPE.EIGHT_ICONS_VIEW -> {
+                ViewType.EIGHT_ICONS_VIEW -> {
                     storedViewType = screenLayoutEight
                     binding.ivLeftMost.setImageDrawable(
                         ContextCompat.getDrawable(
@@ -644,7 +648,7 @@ class ScreenLayoutModel(context: Context, mBinding: FragmentScreenLayoutBinding)
                         )
                     )
                 }
-                VIEW_TYPE.SIX_ICONS_VIEW -> {
+                ViewType.SIX_ICONS_VIEW -> {
                     storedViewType = screenLayoutSix
                     binding.ivLeftMost.setImageDrawable(
                         ContextCompat.getDrawable(
@@ -683,7 +687,7 @@ class ScreenLayoutModel(context: Context, mBinding: FragmentScreenLayoutBinding)
                         )
                     )
                 }
-                VIEW_TYPE.FOUR_ICONS_VIEW -> {
+                ViewType.FOUR_ICONS_VIEW -> {
                     storedViewType = screenLayoutFour
                     binding.ivLeftMost.setImageDrawable(
                         ContextCompat.getDrawable(
@@ -728,7 +732,7 @@ class ScreenLayoutModel(context: Context, mBinding: FragmentScreenLayoutBinding)
         binding.ivRightMost.setOnClickListener {
             screenLayout = RIGHT_MOST
             when (viewType) {
-                VIEW_TYPE.EIGHT_ICONS_VIEW -> {
+                ViewType.EIGHT_ICONS_VIEW -> {
                     storedViewType = screenLayoutEight
                     binding.ivLeftMost.setImageDrawable(
                         ContextCompat.getDrawable(
@@ -767,7 +771,7 @@ class ScreenLayoutModel(context: Context, mBinding: FragmentScreenLayoutBinding)
                         )
                     )
                 }
-                VIEW_TYPE.SIX_ICONS_VIEW -> {
+                ViewType.SIX_ICONS_VIEW -> {
                     storedViewType = screenLayoutSix
                     binding.ivLeftMost.setImageDrawable(
                         ContextCompat.getDrawable(
@@ -806,7 +810,7 @@ class ScreenLayoutModel(context: Context, mBinding: FragmentScreenLayoutBinding)
                         )
                     )
                 }
-                VIEW_TYPE.FOUR_ICONS_VIEW -> {
+                ViewType.FOUR_ICONS_VIEW -> {
                     storedViewType = screenLayoutFour
                     binding.ivLeftMost.setImageDrawable(
                         ContextCompat.getDrawable(
@@ -851,7 +855,7 @@ class ScreenLayoutModel(context: Context, mBinding: FragmentScreenLayoutBinding)
         binding.ivMiddleCenter.setOnClickListener {
             screenLayout = MIDDLE_CENTER
             when (viewType) {
-                VIEW_TYPE.EIGHT_ICONS_VIEW -> {
+                ViewType.EIGHT_ICONS_VIEW -> {
                     storedViewType = screenLayoutEight
                     binding.ivLeftMost.setImageDrawable(
                         ContextCompat.getDrawable(
@@ -890,7 +894,7 @@ class ScreenLayoutModel(context: Context, mBinding: FragmentScreenLayoutBinding)
                         )
                     )
                 }
-                VIEW_TYPE.SIX_ICONS_VIEW -> {
+                ViewType.SIX_ICONS_VIEW -> {
                     storedViewType = screenLayoutSix
                     binding.ivLeftMost.setImageDrawable(
                         ContextCompat.getDrawable(
@@ -929,7 +933,7 @@ class ScreenLayoutModel(context: Context, mBinding: FragmentScreenLayoutBinding)
                         )
                     )
                 }
-                VIEW_TYPE.FOUR_ICONS_VIEW -> {
+                ViewType.FOUR_ICONS_VIEW -> {
                     storedViewType = screenLayoutFour
                     binding.ivLeftMost.setImageDrawable(
                         ContextCompat.getDrawable(
@@ -974,7 +978,7 @@ class ScreenLayoutModel(context: Context, mBinding: FragmentScreenLayoutBinding)
         binding.ivBottomCenter.setOnClickListener {
             screenLayout = BOTTOM_CENTER
             when (viewType) {
-                VIEW_TYPE.EIGHT_ICONS_VIEW -> {
+                ViewType.EIGHT_ICONS_VIEW -> {
                     storedViewType = screenLayoutEight
                     binding.ivLeftMost.setImageDrawable(
                         ContextCompat.getDrawable(
@@ -1013,7 +1017,7 @@ class ScreenLayoutModel(context: Context, mBinding: FragmentScreenLayoutBinding)
                         )
                     )
                 }
-                VIEW_TYPE.SIX_ICONS_VIEW -> {
+                ViewType.SIX_ICONS_VIEW -> {
                     storedViewType = screenLayoutSix
                     binding.ivLeftMost.setImageDrawable(
                         ContextCompat.getDrawable(
@@ -1052,7 +1056,7 @@ class ScreenLayoutModel(context: Context, mBinding: FragmentScreenLayoutBinding)
                         )
                     )
                 }
-                VIEW_TYPE.FOUR_ICONS_VIEW -> {
+                ViewType.FOUR_ICONS_VIEW -> {
                     storedViewType = screenLayoutFour
                     binding.ivLeftMost.setImageDrawable(
                         ContextCompat.getDrawable(

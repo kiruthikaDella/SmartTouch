@@ -412,7 +412,7 @@
                         android:id="@+id/btn_synchronize"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:background="@android:color/transparent"
+                        android:background="@drawable/sync_button"
                         android:fontFamily="@font/roboto_medium"
                         android:text="@string/button_text_synchronize"
                         android:textColor="@color/white"

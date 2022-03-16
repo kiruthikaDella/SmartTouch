@@ -191,9 +191,7 @@ class DeviceFragment : ModelBaseFragment<HomeViewModel, FragmentDeviceBinding, H
 
         binding.layoutSlidingUpPanel.addPanelSlideListener(object :
             SlidingUpPanelLayout.PanelSlideListener {
-            override fun onPanelSlide(panel: View?, slideOffset: Float) {
-
-            }
+            override fun onPanelSlide(panel: View?, slideOffset: Float) = Unit
 
             override fun onPanelStateChanged(
                 panel: View?,
@@ -222,13 +220,14 @@ class DeviceFragment : ModelBaseFragment<HomeViewModel, FragmentDeviceBinding, H
                         override fun onYesClicked(string: String) {
                             if (string.isEmpty()) {
                                 it.showToast("Room name must not be empty!")
-                            } else {
-                                roomData = args.roomDetail
-                                roomData?.roomName = string
-                                DialogUtil.hideDialog()
-                                DialogUtil.loadingAlert(it)
-                                viewModel.updateRoom(BodyUpdateRoom(args.roomDetail.id, string))
+                                return
                             }
+
+                            roomData = args.roomDetail
+                            roomData?.roomName = string
+                            DialogUtil.hideDialog()
+                            DialogUtil.loadingAlert(it)
+                            viewModel.updateRoom(BodyUpdateRoom(args.roomDetail.id, string))
                         }
 
                         override fun onNoClicked() {
@@ -255,19 +254,21 @@ class DeviceFragment : ModelBaseFragment<HomeViewModel, FragmentDeviceBinding, H
                             override fun onYesClicked(string: String) {
                                 if (string.isEmpty()) {
                                     it.showToast("Device name must not be empty!")
-                                } else {
-                                    deviceData = data
-                                    deviceData?.deviceName = string
-                                    DialogUtil.hideDialog()
-                                    this@DeviceFragment.devicePosition = devicePosition
-                                    DialogUtil.loadingAlert(it)
-                                    viewModel.updateDeviceName(
-                                        BodyUpdateDeviceName(
-                                            data.id,
-                                            string
-                                        )
-                                    )
+                                    return
                                 }
+
+                                deviceData = data
+                                deviceData?.deviceName = string
+                                DialogUtil.hideDialog()
+                                this@DeviceFragment.devicePosition = devicePosition
+                                DialogUtil.loadingAlert(it)
+                                viewModel.updateDeviceName(
+                                    BodyUpdateDeviceName(
+                                        data.id,
+                                        string
+                                    )
+                                )
+
                             }
 
                             override fun onNoClicked() {
@@ -320,21 +321,22 @@ class DeviceFragment : ModelBaseFragment<HomeViewModel, FragmentDeviceBinding, H
                             override fun onYesClicked(string: String) {
                                 if (string.isEmpty()) {
                                     it.showToast("Switch name must not be empty!")
-                                } else {
-                                    deviceData = data
-                                    DialogUtil.hideDialog()
-                                    this@DeviceFragment.devicePosition = devicePosition
-                                    switchPosition = switchData.index.toInt() - 1
-                                    deviceData?.switchData?.get(switchPosition!!)?.name = string
-                                    DialogUtil.loadingAlert(it)
-                                    viewModel.updateSwitchName(
-                                        BodyUpdateSwitchName(
-                                            data.id,
-                                            switchData.id,
-                                            string
-                                        )
-                                    )
+                                    return
                                 }
+
+                                deviceData = data
+                                DialogUtil.hideDialog()
+                                this@DeviceFragment.devicePosition = devicePosition
+                                switchPosition = switchData.index.toInt() - 1
+                                deviceData?.switchData?.get(switchPosition!!)?.name = string
+                                DialogUtil.loadingAlert(it)
+                                viewModel.updateSwitchName(
+                                    BodyUpdateSwitchName(
+                                        data.id,
+                                        switchData.id,
+                                        string
+                                    )
+                                )
                             }
 
                             override fun onNoClicked() {
@@ -439,6 +441,7 @@ class DeviceFragment : ModelBaseFragment<HomeViewModel, FragmentDeviceBinding, H
                     isSelectedSmartAck = false
                     checkPermission()
                 }
+                else -> Unit
             }
         }
 

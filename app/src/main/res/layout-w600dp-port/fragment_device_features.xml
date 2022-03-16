@@ -457,7 +457,7 @@
                 <com.google.android.material.button.MaterialButton
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:background="@android:color/transparent"
+                    android:background="@drawable/sync_button"
                     android:clickable="false"
                     android:focusable="false"
                     android:fontFamily="@font/roboto_medium"

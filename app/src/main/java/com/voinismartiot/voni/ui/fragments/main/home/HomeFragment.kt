@@ -227,9 +227,7 @@ class HomeFragment : ModelBaseFragment<HomeViewModel, FragmentHomeBinding, HomeR
                                     "getRoomResponse Failure ${response.errorBody?.string()} "
                                 )
                             }
-                            else -> {
-                                // We will do nothing here
-                            }
+                            else -> Unit
                         }
                     }
                 }
@@ -257,9 +255,7 @@ class HomeFragment : ModelBaseFragment<HomeViewModel, FragmentHomeBinding, HomeR
                                     " deleteRoomResponse Failure ${response.errorBody?.string()} "
                                 )
                             }
-                            else -> {
-                                //We will do nothing here
-                            }
+                            else -> Unit
                         }
                     }
                 }
@@ -279,9 +275,7 @@ class HomeFragment : ModelBaseFragment<HomeViewModel, FragmentHomeBinding, HomeR
                                     " profileResetResponse Failure ${response.errorBody?.string()}"
                                 )
                             }
-                            else -> {
-                                //We will do nothing here
-                            }
+                            else -> Unit
                         }
                     }
                 }
@@ -358,7 +352,6 @@ class HomeFragment : ModelBaseFragment<HomeViewModel, FragmentHomeBinding, HomeR
                                     DialogUtil.hideDialog()
                                     val loginType =
                                         FastSave.getInstance().getString(Constants.LOGIN_TYPE, "")
-                                    Log.e(logTag, " LOGIN_TYPE $loginType")
                                     if (loginType == Constants.LOGIN_TYPE_GOOGLE) {
 
                                         activity?.let {
@@ -371,9 +364,9 @@ class HomeFragment : ModelBaseFragment<HomeViewModel, FragmentHomeBinding, HomeR
                                                 GoogleSignIn.getClient(it, gso)
                                             mGoogleSingInClient.signOut()
                                                 .addOnCompleteListener { task ->
-                                                    Log.e(logTag, " task $task")
+                                                    Log.i(logTag, " task $task")
                                                     if (task.isSuccessful) {
-                                                        Log.e(logTag, " Google logout success")
+                                                        Log.i(logTag, " Google logout success")
                                                     }
                                                 }
                                         }
