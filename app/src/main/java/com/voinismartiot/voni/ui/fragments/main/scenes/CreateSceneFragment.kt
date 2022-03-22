@@ -369,9 +369,7 @@ class CreateSceneFragment :
                                     " addSceneResponse Failure ${response.errorBody?.string()} "
                                 )
                             }
-                            else -> {
-                                //We will do nothing here
-                            }
+                            else -> Unit
                         }
                     }
                 }
@@ -399,9 +397,7 @@ class CreateSceneFragment :
                                     " updateSceneResponse Failure ${response.errorBody?.string()} "
                                 )
                             }
-                            else -> {
-                                //We will do nothing here
-                            }
+                            else -> Unit
                         }
                     }
                 }
@@ -426,9 +422,7 @@ class CreateSceneFragment :
                                     " deleteSceneDetailResponse Failure ${response.errorBody?.string()} "
                                 )
                             }
-                            else -> {
-                                //We will do nothing here
-                            }
+                            else -> Unit
                         }
                     }
                 }

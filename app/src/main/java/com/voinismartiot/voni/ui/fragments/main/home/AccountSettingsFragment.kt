@@ -345,7 +345,7 @@ class AccountSettingsFragment :
 
     private fun apiCall() {
 
-        NotifyManager.internetInfo.observe(viewLifecycleOwner, { isConnected ->
+        NotifyManager.internetInfo.observe(viewLifecycleOwner) { isConnected ->
             if (isConnected) {
                 activity?.let {
                     DialogUtil.loadingAlert(it)
@@ -355,7 +355,7 @@ class AccountSettingsFragment :
             } else {
                 Log.e(logTag, " internet is not available")
             }
-        })
+        }
 
         viewLifecycleOwner.lifecycleScope.launchWhenStarted {
 
@@ -392,9 +392,7 @@ class AccountSettingsFragment :
                                     "getUserProfileResponse Failure ${response.errorBody?.string()}"
                                 )
                             }
-                            else -> {
-                                // We will do nothing here
-                            }
+                            else -> Unit
                         }
                     }
                 }
@@ -448,9 +446,7 @@ class AccountSettingsFragment :
                                     "getUserProfileResponse Failure ${response.errorBody?.string()}"
                                 )
                             }
-                            else -> {
-                                // We will do nothing here
-                            }
+                            else -> Unit
                         }
                     }
                 }
@@ -470,9 +466,7 @@ class AccountSettingsFragment :
                                     " changePasswordResponse Failure ${response.errorBody?.string()} "
                                 )
                             }
-                            else -> {
-                                // We will do nothing here
-                            }
+                            else -> Unit
                         }
                     }
                 }
@@ -517,9 +511,7 @@ class AccountSettingsFragment :
                                     " getOwnershipResponse Failure ${response.errorBody?.string()} "
                                 )
                             }
-                            else -> {
-                                //We will do nothing here
-                            }
+                            else -> Unit
                         }
                     }
                 }
@@ -542,9 +534,7 @@ class AccountSettingsFragment :
                                     " transferOwnershipResponse Failure ${response.errorBody?.string()} "
                                 )
                             }
-                            else -> {
-                                //We will do nothing here
-                            }
+                            else -> Unit
                         }
                     }
                 }
@@ -567,9 +557,7 @@ class AccountSettingsFragment :
                                     " cancelOwnershipResponse Failure ${response.errorBody?.string()} "
                                 )
                             }
-                            else -> {
-                                //We will do nothing here
-                            }
+                            else -> Unit
                         }
                     }
                 }

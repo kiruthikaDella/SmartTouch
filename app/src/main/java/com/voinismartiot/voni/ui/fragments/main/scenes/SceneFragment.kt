@@ -83,8 +83,7 @@ class SceneFragment : ModelBaseFragment<HomeViewModel, FragmentSceneBinding, Hom
                                 }
                             }
 
-                            override fun onNoClicked() {
-                            }
+                            override fun onNoClicked() = Unit
 
                         }
                     )
@@ -158,9 +157,7 @@ class SceneFragment : ModelBaseFragment<HomeViewModel, FragmentSceneBinding, Hom
                                     " getControlResponse Failure ${response.errorBody?.string()} "
                                 )
                             }
-                            else -> {
-                                //We will do nothing here
-                            }
+                            else -> Unit
                         }
                     }
                 }
@@ -186,9 +183,7 @@ class SceneFragment : ModelBaseFragment<HomeViewModel, FragmentSceneBinding, Hom
                                     " getSceneResponse Failure ${response.errorBody?.string()} "
                                 )
                             }
-                            else -> {
-                                //We will do nothing here
-                            }
+                            else -> Unit
                         }
                     }
                 }
@@ -212,9 +207,7 @@ class SceneFragment : ModelBaseFragment<HomeViewModel, FragmentSceneBinding, Hom
                                     " deleteSceneResponse Failure ${response.errorBody?.string()} "
                                 )
                             }
-                            else -> {
-                                //We will do nothing here
-                            }
+                            else -> Unit
                         }
                     }
                 }
@@ -247,9 +240,7 @@ class SceneFragment : ModelBaseFragment<HomeViewModel, FragmentSceneBinding, Hom
                                     " updateSceneStatusResponse Failure ${response.errorBody?.string()} "
                                 )
                             }
-                            else -> {
-                                //We will do nothing here
-                            }
+                            else -> Unit
                         }
                     }
                 }

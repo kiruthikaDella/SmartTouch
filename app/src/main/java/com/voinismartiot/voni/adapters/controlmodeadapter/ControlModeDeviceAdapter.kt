@@ -432,11 +432,9 @@ class ControlModeDeviceAdapter(
             }
 
             seekBar.onSeekChangeListener = object : OnSeekChangeListener {
-                override fun onSeeking(seekParams: SeekParams?) {
-                }
+                override fun onSeeking(seekParams: SeekParams?) = Unit
 
-                override fun onStartTrackingTouch(seekBar: IndicatorSeekBar?) {
-                }
+                override fun onStartTrackingTouch(seekBar: IndicatorSeekBar?) = Unit
 
                 override fun onStopTrackingTouch(seekBar: IndicatorSeekBar?) {
                     seekBar?.progress?.let {
@@ -580,11 +578,9 @@ class ControlModeDeviceAdapter(
                 )
             }
             seekBar.onSeekChangeListener = object : OnSeekChangeListener {
-                override fun onSeeking(seekParams: SeekParams?) {
-                }
+                override fun onSeeking(seekParams: SeekParams?) = Unit
 
-                override fun onStartTrackingTouch(seekBar: IndicatorSeekBar?) {
-                }
+                override fun onStartTrackingTouch(seekBar: IndicatorSeekBar?) = Unit
 
                 override fun onStopTrackingTouch(seekBar: IndicatorSeekBar?) {
                     seekBar?.progress?.let {
@@ -723,11 +719,9 @@ class ControlModeDeviceAdapter(
             }
 
             seekBar.onSeekChangeListener = object : OnSeekChangeListener {
-                override fun onSeeking(seekParams: SeekParams?) {
-                }
+                override fun onSeeking(seekParams: SeekParams?) = Unit
 
-                override fun onStartTrackingTouch(seekBar: IndicatorSeekBar?) {
-                }
+                override fun onStartTrackingTouch(seekBar: IndicatorSeekBar?) = Unit
 
                 override fun onStopTrackingTouch(seekBar: IndicatorSeekBar?) {
                     seekBar?.progress?.let {

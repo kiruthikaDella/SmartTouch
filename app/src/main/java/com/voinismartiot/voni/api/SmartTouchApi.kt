@@ -13,8 +13,6 @@ interface SmartTouchApi {
     //
 
     companion object {
-        //        const val BASE_URL = "https://dev.teksun.com/smarttouch/api/v1/"
-//        const val BASE_URL = "http://192.168.4.113:6001/api/v1/"
         const val BASE_URL = "https://dev.teksun.com/smarttouch_new/api/v1/"
 
         // Authentication APIs

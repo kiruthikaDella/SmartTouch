@@ -51,9 +51,7 @@ class SwitchIconsFragment :
                             Log.e(logTag, " MQTTConnectionStatus.CONNECTED ")
                             subscribeToDevice(args.deviceDetail.deviceSerialNo)
                         }
-                        else -> {
-                            //We will do nothing here
-                        }
+                        else -> Unit
                     }
                 }
 

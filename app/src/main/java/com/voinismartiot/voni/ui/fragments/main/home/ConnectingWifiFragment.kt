@@ -116,9 +116,7 @@ class ConnectingWifiFragment :
                             showOfflineAlert()
                         }
                     }
-                    else -> {
-                        //We will do nothing here
-                    }
+                    else -> Unit
                 }
             }
 

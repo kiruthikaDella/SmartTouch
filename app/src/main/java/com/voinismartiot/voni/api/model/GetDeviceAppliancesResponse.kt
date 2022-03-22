@@ -57,10 +57,12 @@ data class DeviceAppliances(
     var createdAt: String,
     @SerializedName("iUpdatedAt")
     var updatedAt: String,
+    @SerializedName("vGroupType")
+    var groupType: String,
 ) : Parcelable, Serializable {
 
     override fun toString(): String {
-        return "DeviceAppliances(message='$message', id='$id', title='$title', createdAt='$createdAt', updatedAt='$updatedAt')"
+        return "DeviceAppliances(message='$message', id='$id', title='$title', createdAt='$createdAt', updatedAt='$updatedAt', groupType='$groupType')"
     }
 
     override fun equals(other: Any?): Boolean {
@@ -74,6 +76,7 @@ data class DeviceAppliances(
         if (title != other.title) return false
         if (createdAt != other.createdAt) return false
         if (updatedAt != other.updatedAt) return false
+        if (groupType != other.groupType) return false
 
         return true
     }
@@ -84,6 +87,7 @@ data class DeviceAppliances(
         result = 31 * result + title.hashCode()
         result = 31 * result + createdAt.hashCode()
         result = 31 * result + updatedAt.hashCode()
+        result = 31 * result + groupType.hashCode()
         return result
     }
 

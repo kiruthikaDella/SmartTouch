@@ -57,6 +57,8 @@ data class DeviceFeatureData(
     var sleepModeSecond: String? = null,
     @SerializedName("tiTime")
     var time: Int,
+    @SerializedName("tiDate")
+    var date: Int,
     @SerializedName("tiOutdoorMode")
     var outdoorMode: Int,
     @SerializedName("bTimeFormat")
@@ -74,7 +76,7 @@ data class DeviceFeatureData(
 ) : Parcelable, Serializable {
 
     override fun toString(): String {
-        return "DeviceFeatureData(id='$id', sleepMode=$sleepMode, nightMode=$nightMode, sleepModeSecond=$sleepModeSecond, time=$time, outdoorMode=$outdoorMode, timeFormat=$timeFormat, weatherReport=$weatherReport, roomTemperature=$roomTemperature, temperatureUnit=$temperatureUnit, displayBrightnessMode='$displayBrightnessMode', displayBrightnessValue='$displayBrightnessValue')"
+        return "DeviceFeatureData(id='$id', sleepMode=$sleepMode, nightMode=$nightMode, sleepModeSecond=$sleepModeSecond, time=$time, date=$date, outdoorMode=$outdoorMode, timeFormat=$timeFormat, weatherReport=$weatherReport, roomTemperature=$roomTemperature, temperatureUnit=$temperatureUnit, displayBrightnessMode='$displayBrightnessMode', displayBrightnessValue='$displayBrightnessValue')"
     }
 
     override fun equals(other: Any?): Boolean {
@@ -88,6 +90,7 @@ data class DeviceFeatureData(
         if (nightMode != other.nightMode) return false
         if (sleepModeSecond != other.sleepModeSecond) return false
         if (time != other.time) return false
+        if (date != other.date) return false
         if (outdoorMode != other.outdoorMode) return false
         if (timeFormat != other.timeFormat) return false
         if (weatherReport != other.weatherReport) return false
@@ -105,6 +108,7 @@ data class DeviceFeatureData(
         result = 31 * result + nightMode
         result = 31 * result + (sleepModeSecond?.hashCode() ?: 0)
         result = 31 * result + time
+        result = 31 * result + date
         result = 31 * result + outdoorMode
         result = 31 * result + timeFormat
         result = 31 * result + weatherReport

@@ -114,6 +114,8 @@ class DeviceFeaturesFragment :
                                         deviceFeatureData.nightMode.toBoolean()
                                     binding.switchTime.isChecked =
                                         deviceFeatureData.time.toBoolean()
+                                    binding.switchDate.isChecked =
+                                        deviceFeatureData.date.toBoolean()
                                     binding.switchWeatherReport.isChecked =
                                         deviceFeatureData.weatherReport.toBoolean()
                                     binding.switchRoomTemperature.isChecked =
@@ -142,9 +144,7 @@ class DeviceFeaturesFragment :
                             " getDeviceFeatureSettingsResponse Failure ${response.errorBody?.string()} "
                         )
                     }
-                    else -> {
-                        // We will do nothing here
-                    }
+                    else -> Unit
                 }
             }
         }
@@ -226,6 +226,10 @@ class DeviceFeaturesFragment :
                     payload.put(
                         MQTTConstants.AWS_TIME_DISPLAY,
                         binding.switchTime.isChecked.toInt()
+                    )
+                    payload.put(
+                        MQTTConstants.AWS_DATE_DISPLAY,
+                        binding.switchDate.isChecked.toInt()
                     )
                     payload.put(
                         MQTTConstants.AWS_TIME_FORMAT,
@@ -385,6 +389,10 @@ class DeviceFeaturesFragment :
                             if (jsonObject.has(MQTTConstants.AWS_TIME_DISPLAY)) {
                                 binding.switchTime.isChecked =
                                     jsonObject.getInt(MQTTConstants.AWS_TIME_DISPLAY).toBoolean()
+                            }
+                            if (jsonObject.has(MQTTConstants.AWS_DATE_DISPLAY)) {
+                                binding.switchDate.isChecked =
+                                    jsonObject.getInt(MQTTConstants.AWS_DATE_DISPLAY).toBoolean()
                             }
                             if (jsonObject.has(MQTTConstants.AWS_TIME_FORMAT)) {
                                 binding.rgTimeFormat.check(

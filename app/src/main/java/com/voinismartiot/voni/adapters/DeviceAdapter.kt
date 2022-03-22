@@ -603,12 +603,9 @@ class DeviceAdapter(
             }
 
             seekBar.onSeekChangeListener = object : OnSeekChangeListener {
-                override fun onSeeking(seekParams: SeekParams?) {
+                override fun onSeeking(seekParams: SeekParams?) = Unit
 
-                }
-
-                override fun onStartTrackingTouch(seekBar: IndicatorSeekBar?) {
-                }
+                override fun onStartTrackingTouch(seekBar: IndicatorSeekBar?) = Unit
 
                 override fun onStopTrackingTouch(seekBar: IndicatorSeekBar?) {
                     seekBar?.progress?.let {
@@ -816,11 +813,9 @@ class DeviceAdapter(
             }
 
             seekBar.onSeekChangeListener = object : OnSeekChangeListener {
-                override fun onSeeking(seekParams: SeekParams?) {
-                }
+                override fun onSeeking(seekParams: SeekParams?) = Unit
 
-                override fun onStartTrackingTouch(seekBar: IndicatorSeekBar?) {
-                }
+                override fun onStartTrackingTouch(seekBar: IndicatorSeekBar?) = Unit
 
                 override fun onStopTrackingTouch(seekBar: IndicatorSeekBar?) {
                     seekBar?.progress?.let {
@@ -1003,12 +998,9 @@ class DeviceAdapter(
             }
 
             seekBar.onSeekChangeListener = object : OnSeekChangeListener {
-                override fun onSeeking(seekParams: SeekParams?) {
+                override fun onSeeking(seekParams: SeekParams?) = Unit
 
-                }
-
-                override fun onStartTrackingTouch(seekBar: IndicatorSeekBar?) {
-                }
+                override fun onStartTrackingTouch(seekBar: IndicatorSeekBar?) = Unit
 
                 override fun onStopTrackingTouch(seekBar: IndicatorSeekBar?) {
                     seekBar?.progress?.let {
@@ -1096,13 +1088,13 @@ class DeviceAdapter(
                                                     device.deviceAppliances = appliance.id
                                                     publishAppliance(
                                                         device.deviceSerialNo,
-                                                        appliance.title
+                                                        appliance.title,
+                                                        appliance.groupType
                                                     )
                                                 }
                                             }
 
-                                            override fun onNothingSelected(p0: AdapterView<*>?) {
-                                            }
+                                            override fun onNothingSelected(p0: AdapterView<*>?) = Unit
 
                                         }
                                     ivAppliancesDown.setOnClickListener {
@@ -1446,10 +1438,11 @@ class DeviceAdapter(
     }
 
     fun publishAppliance(
-        deviceId: String, appliance: String
+        deviceId: String, appliance: String, groupType: String
     ) {
         val payload = JSONObject()
         payload.put(MQTTConstants.AWS_APPLIANCES, appliance)
+        payload.put(MQTTConstants.AWS_APPLIANCES_GROUP_TYPE, groupType)
 
         AwsMqttSingleton.publish(
             MQTTConstants.DEVICE_APPLIANCES.replace(

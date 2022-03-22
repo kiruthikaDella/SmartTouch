@@ -105,9 +105,7 @@ class ControlModeFragment :
                             viewModel.updatePinStatus(BodyPinStatus(isPinned.toInt()))
                         }
 
-                        override fun onNoClicked() {
-
-                        }
+                        override fun onNoClicked() = Unit
                     }
                 )
             }
@@ -232,9 +230,7 @@ class ControlModeFragment :
                                 context?.showToast(getString(R.string.error_something_went_wrong))
                                 Log.e(logTag, "logout error ${response.errorBody?.string()}")
                             }
-                            else -> {
-                                // We will do nothing here
-                            }
+                            else -> Unit
                         }
                     }
                 }
@@ -266,9 +262,7 @@ class ControlModeFragment :
                                 context?.showToast(getString(R.string.error_something_went_wrong))
                                 Log.e(logTag, " updatePinStatusResponse Failure $response ")
                             }
-                            else -> {
-                                //We will do nothing here
-                            }
+                            else -> Unit
                         }
                     }
                 }
@@ -303,9 +297,7 @@ class ControlModeFragment :
                                     " getControlResponse Failure ${response.errorBody?.string()} "
                                 )
                             }
-                            else -> {
-                                //We will do nothing here
-                            }
+                            else -> Unit
                         }
                     }
                 }
@@ -335,9 +327,7 @@ class ControlModeFragment :
                                 context?.showToast(getString(R.string.error_something_went_wrong))
                                 Log.e(logTag, " updatePinStatusResponse Failure $response ")
                             }
-                            else -> {
-                                //We will do nothing here
-                            }
+                            else -> Unit
                         }
                     }
                 }

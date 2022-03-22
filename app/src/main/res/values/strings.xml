@@ -196,6 +196,7 @@
     <string name="text_night_mode">Night Mode</string>
     <string name="text_outdoor_mode">Outdoor Mode</string>
     <string name="text_time">Time</string>
+    <string name="text_date">Date</string>
     <string name="text_time_format">Time Format</string>
     <string name="text_12_hours">12 Hours</string>
     <string name="text_24_hours">24 Hours</string>

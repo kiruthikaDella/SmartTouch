@@ -492,9 +492,7 @@ class DeviceFragment : ModelBaseFragment<HomeViewModel, FragmentDeviceBinding, H
                                     " updateRoomResponse Failure ${response.errorBody?.string()}"
                                 )
                             }
-                            else -> {
-                                //We will do nothing here
-                            }
+                            else -> Unit
                         }
                     }
                 }
@@ -521,9 +519,7 @@ class DeviceFragment : ModelBaseFragment<HomeViewModel, FragmentDeviceBinding, H
                                     "addDeviceResponse Failure ${response.errorBody?.string()}"
                                 )
                             }
-                            else -> {
-                                //We will do nothing here
-                            }
+                            else -> Unit
                         }
                     }
                 }
@@ -554,9 +550,7 @@ class DeviceFragment : ModelBaseFragment<HomeViewModel, FragmentDeviceBinding, H
                                     )
                                 }
                             }
-                            else -> {
-                                // We will do nothing here
-                            }
+                            else -> Unit
                         }
                     }
                 }
@@ -589,9 +583,7 @@ class DeviceFragment : ModelBaseFragment<HomeViewModel, FragmentDeviceBinding, H
                                     " updateDeviceNameResponse Failure ${response.errorBody?.string()} "
                                 )
                             }
-                            else -> {
-                                //We will do nothing here
-                            }
+                            else -> Unit
                         }
                     }
                 }
@@ -638,9 +630,7 @@ class DeviceFragment : ModelBaseFragment<HomeViewModel, FragmentDeviceBinding, H
                                     " updateSwitchNameResponse Failure ${response.errorBody?.string()} "
                                 )
                             }
-                            else -> {
-                                //We will do nothing here
-                            }
+                            else -> Unit
                         }
                     }
                 }

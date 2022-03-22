@@ -25,7 +25,6 @@ class DeviceSceneAdapter(
 ) : RecyclerView.Adapter<DeviceSceneAdapter.MyViewHolder>() {
 
     private val roomDataList = arrayListOf<ControlModeRoomData>()
-    private val logTag = this::class.java.simpleName
     private var switchType = ""
 
     private var roomList = arrayListOf<GetRoomData>()
@@ -51,8 +50,7 @@ class DeviceSceneAdapter(
                             notifyDataSetChanged()
                         }
 
-                        override fun onNoClicked() {
-                        }
+                        override fun onNoClicked() = Unit
 
                     }
                 )
@@ -242,9 +240,7 @@ class DeviceSceneAdapter(
 
                 }
 
-                override fun onNothingSelected(parent: AdapterView<*>?) {
-
-                }
+                override fun onNothingSelected(parent: AdapterView<*>?) = Unit
 
             }
 
@@ -322,9 +318,7 @@ class DeviceSceneAdapter(
 
                     }
 
-                    override fun onNothingSelected(parent: AdapterView<*>?) {
-
-                    }
+                    override fun onNothingSelected(parent: AdapterView<*>?) = Unit
 
                 }
 
@@ -350,9 +344,7 @@ class DeviceSceneAdapter(
 
                     }
 
-                    override fun onNothingSelected(parent: AdapterView<*>?) {
-
-                    }
+                    override fun onNothingSelected(parent: AdapterView<*>?) = Unit
 
                 }
 

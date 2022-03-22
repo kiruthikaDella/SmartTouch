@@ -93,9 +93,7 @@ class HomeFragment : ModelBaseFragment<HomeViewModel, FragmentHomeBinding, HomeR
                                 viewModel.deleteRoom(data.id)
                             }
 
-                            override fun onNoClicked() {
-
-                            }
+                            override fun onNoClicked() = Unit
 
                         }
                     )
@@ -310,9 +308,7 @@ class HomeFragment : ModelBaseFragment<HomeViewModel, FragmentHomeBinding, HomeR
                                     viewModel.factoryResetAllDevice()
                                 }
 
-                                override fun onNoClicked() {
-
-                                }
+                                override fun onNoClicked() = Unit
 
                             }
                         )

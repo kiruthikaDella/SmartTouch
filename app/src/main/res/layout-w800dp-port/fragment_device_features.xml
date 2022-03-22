@@ -190,6 +190,40 @@
                         app:layout_constraintTop_toBottomOf="@+id/switch_night_mode" />
 
                     <TextView
+                        android:id="@+id/tv_date"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="@dimen/_2sdp"
+                        android:fontFamily="@font/roboto_medium"
+                        android:singleLine="true"
+                        android:text="@string/text_date"
+                        android:textColor="@color/daintree"
+                        android:textSize="@dimen/_12ssp"
+                        app:layout_constraintBottom_toBottomOf="@+id/switch_date"
+                        app:layout_constraintEnd_toEndOf="@+id/guideline"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="@+id/switch_date" />
+
+                    <ImageView
+                        android:id="@+id/iv_date_info"
+                        style="@style/ToolTipIcon"
+                        app:layout_constraintBottom_toBottomOf="@+id/switch_date"
+                        app:layout_constraintStart_toStartOf="@+id/guideline"
+                        app:layout_constraintTop_toTopOf="@+id/switch_date" />
+
+                    <com.google.android.material.switchmaterial.SwitchMaterial
+                        android:id="@+id/switch_date"
+                        style="@style/PanelSwitchColorStyle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_10sdp"
+                        android:padding="@dimen/_10sdp"
+                        android:scaleX="1.5"
+                        android:scaleY="1.5"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/switch_time" />
+
+                    <TextView
                         android:id="@+id/tv_time_format"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
@@ -210,7 +244,7 @@
                         android:layout_marginTop="@dimen/_10sdp"
                         android:visibility="invisible"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/switch_time" />
+                        app:layout_constraintTop_toBottomOf="@+id/switch_date" />
 
                     <RadioGroup
                         android:id="@+id/rg_time_format"

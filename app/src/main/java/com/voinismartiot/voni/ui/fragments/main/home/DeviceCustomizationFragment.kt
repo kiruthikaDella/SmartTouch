@@ -115,7 +115,7 @@ class DeviceCustomizationFragment :
         super.onViewCreated(view, savedInstanceState)
 
         val sizeList = arrayOf("Small", "Medium", "Large")
-        val fontNames = arrayOf("Times New Roman", "Arial", "Roman")
+        val fontNames = arrayOf("Times New Roman", "Arial", "Roman", "Verdana", "Roboto")
 
         if (FastSave.getInstance().getBoolean(
                 Constants.isDeviceCustomizationLocked,
@@ -211,9 +211,7 @@ class DeviceCustomizationFragment :
                             )
                         }
 
-                        override fun onNoClicked() {
-
-                        }
+                        override fun onNoClicked() = Unit
 
                     }
                 )
@@ -370,9 +368,7 @@ class DeviceCustomizationFragment :
                             viewModel.deleteImage(args.deviceDetail.id)
                         }
 
-                        override fun onNoClicked() {
-
-                        }
+                        override fun onNoClicked() = Unit
 
                     }
                 )
@@ -614,9 +610,7 @@ class DeviceCustomizationFragment :
                                 DialogUtil.hideDialog()
                                 context?.showToast(getString(R.string.error_something_went_wrong))
                             }
-                            else -> {
-                                // We will do nothing here
-                            }
+                            else -> Unit
                         }
                     }
                 }
@@ -646,9 +640,7 @@ class DeviceCustomizationFragment :
                                     " customizationLockResponse Failure ${response.errorBody?.string()}"
                                 )
                             }
-                            else -> {
-                                //We will do nothing here
-                            }
+                            else -> Unit
                         }
                     }
                 }
@@ -680,9 +672,7 @@ class DeviceCustomizationFragment :
                                 }
                                 mCroppedImageFile = null
                             }
-                            else -> {
-                                //We will do nothing here
-                            }
+                            else -> Unit
                         }
                     }
                 }
@@ -701,9 +691,7 @@ class DeviceCustomizationFragment :
                                 DialogUtil.hideDialog()
                                 context?.showToast(getString(R.string.error_something_went_wrong))
                             }
-                            else -> {
-                                //We will do nothing here
-                            }
+                            else -> Unit
                         }
                     }
                 }

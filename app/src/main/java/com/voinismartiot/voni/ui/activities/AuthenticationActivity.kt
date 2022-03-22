@@ -71,8 +71,7 @@ class AuthenticationActivity : AppCompatActivity() {
                             override fun onCurrentAccessTokenChanged(
                                 accessToken: AccessToken?,
                                 accessToken1: AccessToken?
-                            ) {
-                            }
+                            ) = Unit
                         }
                         accessTokenTracker?.startTracking()
 
@@ -80,8 +79,7 @@ class AuthenticationActivity : AppCompatActivity() {
                             override fun onCurrentProfileChanged(
                                 oldProfile: Profile?,
                                 currentProfile: Profile?
-                            ) {
-                            }
+                            ) = Unit
                         }
                         profileTracker?.startTracking()
 

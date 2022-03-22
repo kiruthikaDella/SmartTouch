@@ -25,8 +25,6 @@ class UpdateDeviceSceneAdapter(
     private val scenes: ArrayList<Scene>
 ) : RecyclerView.Adapter<UpdateDeviceSceneAdapter.MyViewHolder>() {
 
-    private val logTag = this::class.java.simpleName
-
     private val roomDataList = arrayListOf<ControlModeRoomData>()
     private var roomList = arrayListOf<GetRoomData>()
     private var errorList: MutableMap<Int, String> = mutableMapOf()
@@ -61,8 +59,7 @@ class UpdateDeviceSceneAdapter(
                             }
                         }
 
-                        override fun onNoClicked() {
-                        }
+                        override fun onNoClicked() = Unit
 
                     }
                 )
@@ -247,9 +244,7 @@ class UpdateDeviceSceneAdapter(
 
                     }
 
-                    override fun onNothingSelected(parent: AdapterView<*>?) {
-
-                    }
+                    override fun onNothingSelected(parent: AdapterView<*>?) = Unit
 
                 }
 
@@ -321,9 +316,7 @@ class UpdateDeviceSceneAdapter(
 
                     }
 
-                    override fun onNothingSelected(parent: AdapterView<*>?) {
-
-                    }
+                    override fun onNothingSelected(parent: AdapterView<*>?) = Unit
 
                 }
 

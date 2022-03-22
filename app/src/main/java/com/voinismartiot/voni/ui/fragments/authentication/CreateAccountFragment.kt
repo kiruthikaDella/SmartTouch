@@ -143,9 +143,7 @@ class CreateAccountFragment :
 
                         Log.e(logTag, "registration error ${response.errorBody?.string()}")
                     }
-                    else -> {
-                        //We will do nothing here
-                    }
+                    else -> Unit
                 }
             }
 

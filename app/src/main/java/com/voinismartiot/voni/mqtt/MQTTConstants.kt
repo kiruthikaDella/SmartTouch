@@ -54,13 +54,15 @@ object MQTTConstants {
     const val AWS_USB_A = "U1" //USB A
     const val AWS_USB_C = "U2" //USB C
     const val AWS_DIMMER = "D"   //DMR
-    const val AWS_APPLIANCES = "dapp"   //DMR
+    const val AWS_APPLIANCES = "dapp"   //Appliance Name
+    const val AWS_APPLIANCES_GROUP_TYPE = "gt"   //Appliance Group Type
 
     //Features
     const val AWS_SLEEP_MODE = "sm"   //Sleep Mode
     const val AWS_SLEEP_MODE_SECOND = "sms"   //Sleep Mode Seconds
     const val AWS_NIGHT_MODE = "nm"   //Night Mode
     const val AWS_TIME_DISPLAY = "ti"   //Time Display
+    const val AWS_DATE_DISPLAY = "dt"   //Date Display
     const val AWS_TIME_FORMAT = "tf"   //Time Format
     const val AWS_OUTDOOR_MODE = "om"   //Outdoor Mode
     const val AWS_WEATHER_REPORT_DISPLAY = "wr"   //weather Report Display

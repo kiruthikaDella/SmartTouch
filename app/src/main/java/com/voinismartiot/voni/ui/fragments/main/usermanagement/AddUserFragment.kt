@@ -44,9 +44,7 @@ class AddUserFragment :
                         context?.showToast(getString(R.string.error_something_went_wrong))
                         Log.e(logTag, " addSubordinateUserResponse ${response.errorBody?.string()}")
                     }
-                    else -> {
-                        // we will do nothing here
-                    }
+                    else -> Unit
                 }
             }
 

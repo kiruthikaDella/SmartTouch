@@ -50,9 +50,7 @@ class FaqsFragment : ModelBaseFragment<HomeViewModel, FragmentFaqsBinding, HomeR
         faqAdapter = FAQAdapter(faqList)
 
         binding.edtSearch.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-
-            }
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) = Unit
 
             override fun onTextChanged(char: CharSequence?, start: Int, before: Int, count: Int) {
                 char?.let {
@@ -60,8 +58,7 @@ class FaqsFragment : ModelBaseFragment<HomeViewModel, FragmentFaqsBinding, HomeR
                 }
             }
 
-            override fun afterTextChanged(s: Editable?) {
-            }
+            override fun afterTextChanged(s: Editable?) = Unit
 
         })
 
@@ -115,9 +112,7 @@ class FaqsFragment : ModelBaseFragment<HomeViewModel, FragmentFaqsBinding, HomeR
                         context?.showToast(getString(R.string.error_something_went_wrong))
                         Log.e(logTag, "faqResponse error ${response.errorBody}")
                     }
-                    else -> {
-                        // We will do nothing here
-                    }
+                    else -> Unit
                 }
             }
 

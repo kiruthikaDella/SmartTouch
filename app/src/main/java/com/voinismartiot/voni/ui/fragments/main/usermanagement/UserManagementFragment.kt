@@ -65,8 +65,7 @@ class UserManagementFragment :
                                 }
                             }
 
-                            override fun onNoClicked() {
-                            }
+                            override fun onNoClicked() = Unit
 
                         }
                     )
@@ -136,9 +135,7 @@ class UserManagementFragment :
                                     " getSubordinateUserResponse Failure ${response.errorBody?.string()}  "
                                 )
                             }
-                            else -> {
-                                // we will do nothing here
-                            }
+                            else -> Unit
                         }
                     }
                 }
@@ -164,9 +161,7 @@ class UserManagementFragment :
                                     " deleteSubordinateUserResponse Failure ${response.errorBody?.string()}  "
                                 )
                             }
-                            else -> {
-                                // we will do nothing here
-                            }
+                            else -> Unit
                         }
                     }
                 }

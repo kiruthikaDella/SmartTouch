@@ -207,8 +207,7 @@ class DeviceSettingsFragment :
                             )
                         }
 
-                        override fun onNoClicked() {
-                        }
+                        override fun onNoClicked() = Unit
 
                     }
                 )
@@ -302,9 +301,7 @@ class DeviceSettingsFragment :
 
         binding.layoutSlidingUpPanel.addPanelSlideListener(object :
             SlidingUpPanelLayout.PanelSlideListener {
-            override fun onPanelSlide(panel: View?, slideOffset: Float) {
-
-            }
+            override fun onPanelSlide(panel: View?, slideOffset: Float) = Unit
 
             override fun onPanelStateChanged(
                 panel: View?,
@@ -366,9 +363,7 @@ class DeviceSettingsFragment :
                                 DialogUtil.hideDialog()
                                 context?.showToast(getString(R.string.error_something_went_wrong))
                             }
-                            else -> {
-                                //We will do nothing here
-                            }
+                            else -> Unit
                         }
                     }
                 }
@@ -393,9 +388,7 @@ class DeviceSettingsFragment :
                                     " retainStateResponse Failure ${response.errorBody?.string()} "
                                 )
                             }
-                            else -> {
-                                //We will do nothing here
-                            }
+                            else -> Unit
                         }
                     }
                 }
@@ -435,9 +428,7 @@ class DeviceSettingsFragment :
                                     " factoryResetResponse Failure ${response.errorBody?.string()}"
                                 )
                             }
-                            else -> {
-                                //We will do nothing here
-                            }
+                            else -> Unit
                         }
                     }
                 }
@@ -463,9 +454,7 @@ class DeviceSettingsFragment :
                                     " factoryResetResponse Failure ${response.errorBody?.string()}"
                                 )
                             }
-                            else -> {
-                                //We will do nothing here
-                            }
+                            else -> Unit
                         }
                     }
                 }

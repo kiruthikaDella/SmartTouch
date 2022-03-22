@@ -370,9 +370,7 @@ class LoginFragment : ModelBaseFragment<AuthViewModel, FragmentLoginBinding, Aut
                                 context?.getString(R.string.error_something_went_wrong)
                                 Log.e(logTag, "login error ${response.errorBody?.string()}")
                             }
-                            else -> {
-                                // We will do nothing here
-                            }
+                            else -> Unit
                         }
                     }
                 }
@@ -452,9 +450,7 @@ class LoginFragment : ModelBaseFragment<AuthViewModel, FragmentLoginBinding, Aut
                                 context?.showToast(getString(R.string.error_something_went_wrong))
                                 Log.e(logTag, "login error ${response.errorBody?.string()}")
                             }
-                            else -> {
-                                // We will do nothing here
-                            }
+                            else -> Unit
                         }
                     }
                 }

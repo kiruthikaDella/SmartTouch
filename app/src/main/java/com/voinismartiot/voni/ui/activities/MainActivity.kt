@@ -132,9 +132,7 @@ class MainActivity : AppCompatActivity() {
 
         binding.layoutSlidingUpPanel.addPanelSlideListener(object :
             SlidingUpPanelLayout.PanelSlideListener {
-            override fun onPanelSlide(panel: View?, slideOffset: Float) {
-
-            }
+            override fun onPanelSlide(panel: View?, slideOffset: Float) = Unit
 
             override fun onPanelStateChanged(
                 panel: View?,
@@ -158,11 +156,6 @@ class MainActivity : AppCompatActivity() {
             roomTypeList.toMutableList().clear()
             viewModel.roomType()
         }
-
-        /* if (!isApiCalled) {
-             appliancesList.clear()
-             viewModel.getDeviceAppliances()
-         }*/
 
         apiResponses()
     }
@@ -361,9 +354,7 @@ class MainActivity : AppCompatActivity() {
                                                     roomTypeId = room.roomTypeId
                                                 }
 
-                                                override fun onNothingSelected(parent: AdapterView<*>?) {
-
-                                                }
+                                                override fun onNothingSelected(parent: AdapterView<*>?) = Unit
 
                                             }
                                     }
@@ -422,7 +413,6 @@ class MainActivity : AppCompatActivity() {
                                 DialogUtil.hideDialog()
                                 if (response.values.status && response.values.code == Constants.API_SUCCESS_CODE) {
                                     response.values.data?.let { appliancesData ->
-//                                        appliancesList.add(0,DeviceAppliances("","0",getString(R.string.text_select_appliances),"",""))
                                         appliancesList.addAll(appliancesData)
                                     }
                                 }
