@@ -17,7 +17,8 @@ import androidx.navigation.fragment.navArgs
 import com.amazonaws.mobileconnectors.iot.AWSIotMqttQos
 import com.voinismartiot.voni.R
 import com.voinismartiot.voni.common.interfaces.DialogShowListener
-import com.voinismartiot.voni.common.utils.DialogUtil
+import com.voinismartiot.voni.common.utils.deviceOfflineAlert
+import com.voinismartiot.voni.common.utils.hideDialog
 import com.voinismartiot.voni.common.utils.showToast
 import com.voinismartiot.voni.databinding.FragmentScreenLayoutBinding
 import com.voinismartiot.voni.mqtt.AwsMqttSingleton
@@ -120,19 +121,16 @@ class ScreenLayoutFragment : DialogFragment() {
 
         NotifyManager.internetInfo.observe(viewLifecycleOwner) { isConnected ->
             if (!isConnected) {
-                activity?.let {
-                    DialogUtil.deviceOfflineAlert(
-                        it,
-                        getString(R.string.text_no_internet_available),
-                        object : DialogShowListener {
-                            override fun onClick() {
-                                DialogUtil.hideDialog()
-                                findNavController().navigate(ScreenLayoutFragmentDirections.actionGlobalHomeFragment())
-                            }
-
+                activity?.deviceOfflineAlert(
+                    getString(R.string.text_no_internet_available),
+                    object : DialogShowListener {
+                        override fun onClick() {
+                            hideDialog()
+                            findNavController().navigate(ScreenLayoutFragmentDirections.actionGlobalHomeFragment())
                         }
-                    )
-                }
+
+                    }
+                )
             }
         }
 
@@ -175,10 +173,9 @@ class ScreenLayoutFragment : DialogFragment() {
                         if (jsonObject.has(MQTTConstants.AWS_STATUS)) {
                             val deviceStatus = jsonObject.getString(MQTTConstants.AWS_STATUS)
                             if (deviceStatus == "1") {
-                                DialogUtil.hideDialog()
+                                hideDialog()
                             } else {
-                                DialogUtil.deviceOfflineAlert(
-                                    it,
+                                it.deviceOfflineAlert(
                                     onClick = object : DialogShowListener {
                                         override fun onClick() {
                                             lifecycleScope.launchWhenResumed {

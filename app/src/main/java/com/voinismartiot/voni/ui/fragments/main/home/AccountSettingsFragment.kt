@@ -31,21 +31,17 @@ import com.voinismartiot.voni.api.body.BodyUpdateUserProfile
 import com.voinismartiot.voni.api.repository.HomeRepository
 import com.voinismartiot.voni.common.interfaces.DialogAskListener
 import com.voinismartiot.voni.common.interfaces.DialogEditListener
-import com.voinismartiot.voni.common.utils.Constants
-import com.voinismartiot.voni.common.utils.DialogUtil
-import com.voinismartiot.voni.common.utils.DialogUtil.featureDetailAlert
-import com.voinismartiot.voni.common.utils.Utils
-import com.voinismartiot.voni.common.utils.showToast
+import com.voinismartiot.voni.common.utils.*
 import com.voinismartiot.voni.databinding.FragmentAccountSettingsBinding
 import com.voinismartiot.voni.mqtt.NotifyManager
-import com.voinismartiot.voni.ui.fragments.ModelBaseFragment
+import com.voinismartiot.voni.ui.fragments.BaseFragment
 import com.voinismartiot.voni.ui.viewmodel.HomeViewModel
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 @Suppress("DEPRECATION")
 class AccountSettingsFragment :
-    ModelBaseFragment<HomeViewModel, FragmentAccountSettingsBinding, HomeRepository>() {
+    BaseFragment<HomeViewModel, FragmentAccountSettingsBinding, HomeRepository>() {
 
     private val logTag = this::class.java.simpleName
     private var dialog: Dialog? = null
@@ -61,72 +57,66 @@ class AccountSettingsFragment :
 
         binding.ivEditName.setOnClickListener {
 
-            activity?.let {
-                DialogUtil.editDialog(
-                    it,
-                    "Edit name",
-                    binding.tvName.text.toString().trim(),
-                    getString(R.string.text_save),
-                    getString(R.string.text_cancel),
-                    isLimitedText = false,
-                    onClick = object : DialogEditListener {
-                        override fun onYesClicked(string: String) {
-                            when {
-                                string.isEmpty() -> {
-                                    it.showToast(getString(R.string.error_text_full_name))
-                                }
-                                string.length < 3 -> {
-                                    it.showToast(getString(R.string.error_text_full_name_length))
-                                }
-                                else -> {
-                                    DialogUtil.hideDialog()
-                                    binding.tvName.text = string
-                                }
+            activity?.editDialog(
+                "Edit name",
+                binding.tvName.text.toString().trim(),
+                getString(R.string.text_save),
+                getString(R.string.text_cancel),
+                isLimitedText = false,
+                onClick = object : DialogEditListener {
+                    override fun onYesClicked(string: String) {
+                        when {
+                            string.isEmpty() -> {
+                                activity?.showToast(getString(R.string.error_text_full_name))
+                            }
+                            string.length < 3 -> {
+                                activity?.showToast(getString(R.string.error_text_full_name_length))
+                            }
+                            else -> {
+                                hideDialog()
+                                binding.tvName.text = string
                             }
                         }
-
-                        override fun onNoClicked() {
-                            DialogUtil.hideDialog()
-                        }
-
                     }
-                )
-            }
+
+                    override fun onNoClicked() {
+                        hideDialog()
+                    }
+
+                }
+            )
 
         }
 
         binding.ivEditPhoneNumber.setOnClickListener {
-            activity?.let {
-                DialogUtil.editDialog(
-                    it,
-                    "Edit name",
-                    binding.tvPhoneNumber.text.toString().trim(),
-                    getString(R.string.text_save),
-                    getString(R.string.text_cancel),
-                    getString(R.string.dialog_input_type_phone),
-                    onClick = object : DialogEditListener {
-                        override fun onYesClicked(string: String) {
-                            when {
-                                string.isEmpty() -> {
-                                    it.showToast(getString(R.string.error_text_full_name))
-                                }
-                                string.length < 3 -> {
-                                    it.showToast(getString(R.string.error_text_full_name_length))
-                                }
-                                else -> {
-                                    DialogUtil.hideDialog()
-                                    binding.tvPhoneNumber.text = string
-                                }
+            activity?.editDialog(
+                "Edit name",
+                binding.tvPhoneNumber.text.toString().trim(),
+                getString(R.string.text_save),
+                getString(R.string.text_cancel),
+                getString(R.string.dialog_input_type_phone),
+                onClick = object : DialogEditListener {
+                    override fun onYesClicked(string: String) {
+                        when {
+                            string.isEmpty() -> {
+                                activity?.showToast(getString(R.string.error_text_full_name))
+                            }
+                            string.length < 3 -> {
+                                activity?.showToast(getString(R.string.error_text_full_name_length))
+                            }
+                            else -> {
+                                hideDialog()
+                                binding.tvPhoneNumber.text = string
                             }
                         }
-
-                        override fun onNoClicked() {
-                            DialogUtil.hideDialog()
-                        }
-
                     }
-                )
-            }
+
+                    override fun onNoClicked() {
+                        hideDialog()
+                    }
+
+                }
+            )
         }
 
         binding.ivEditPassword.setOnClickListener {
@@ -155,7 +145,7 @@ class AccountSettingsFragment :
                     }
 
                     activity?.let {
-                        DialogUtil.loadingAlert(it)
+                        it.loadingDialog()
                         viewModel.updateUserProfile(
                             BodyUpdateUserProfile(
                                 fullName,
@@ -168,131 +158,119 @@ class AccountSettingsFragment :
         }
 
         binding.ivMasterEditName.setOnClickListener {
-            activity?.let {
-                DialogUtil.editDialog(
-                    it,
-                    "Edit name",
-                    binding.tvMasterName.text.toString().trim(),
-                    getString(R.string.text_save),
-                    getString(R.string.text_cancel),
-                    isLimitedText = false,
-                    onClick = object : DialogEditListener {
-                        override fun onYesClicked(string: String) {
-                            when {
-                                string.isEmpty() -> {
-                                    it.showToast(getString(R.string.error_text_name))
-                                }
-                                string.length < 3 -> {
-                                    it.showToast(getString(R.string.error_text_name_length))
-                                }
-                                else -> {
-                                    DialogUtil.hideDialog()
-                                    binding.tvMasterName.text = string
-                                }
+            activity?.editDialog(
+                "Edit name",
+                binding.tvMasterName.text.toString().trim(),
+                getString(R.string.text_save),
+                getString(R.string.text_cancel),
+                isLimitedText = false,
+                onClick = object : DialogEditListener {
+                    override fun onYesClicked(string: String) {
+                        when {
+                            string.isEmpty() -> {
+                                activity?.showToast(getString(R.string.error_text_name))
+                            }
+                            string.length < 3 -> {
+                                activity?.showToast(getString(R.string.error_text_name_length))
+                            }
+                            else -> {
+                                hideDialog()
+                                binding.tvMasterName.text = string
                             }
                         }
-
-                        override fun onNoClicked() {
-                            DialogUtil.hideDialog()
-                        }
-
                     }
-                )
-            }
+
+                    override fun onNoClicked() {
+                        hideDialog()
+                    }
+
+                }
+            )
         }
 
         binding.ivMasterEditEmail.setOnClickListener {
-            activity?.let {
-                DialogUtil.editDialog(
-                    it,
-                    "Edit email",
-                    binding.tvMasterEmail.text.toString().trim(),
-                    getString(R.string.text_save),
-                    getString(R.string.text_cancel),
-                    isLimitedText = false,
-                    onClick = object : DialogEditListener {
-                        override fun onYesClicked(string: String) {
-                            if (string.isEmpty()) {
-                                it.showToast(getString(R.string.error_text_email))
-                            } else if (!Patterns.EMAIL_ADDRESS.matcher(string).matches()) {
-                                it.showToast(getString(R.string.error_text_valid_email))
-                            } else {
-                                DialogUtil.hideDialog()
-                                binding.tvMasterEmail.text = string
-                            }
-
-                        }
-
-                        override fun onNoClicked() {
-                            DialogUtil.hideDialog()
+            activity?.editDialog(
+                "Edit email",
+                binding.tvMasterEmail.text.toString().trim(),
+                getString(R.string.text_save),
+                getString(R.string.text_cancel),
+                isLimitedText = false,
+                onClick = object : DialogEditListener {
+                    override fun onYesClicked(string: String) {
+                        if (string.isEmpty()) {
+                            activity?.showToast(getString(R.string.error_text_email))
+                        } else if (!Patterns.EMAIL_ADDRESS.matcher(string).matches()) {
+                            activity?.showToast(getString(R.string.error_text_valid_email))
+                        } else {
+                            hideDialog()
+                            binding.tvMasterEmail.text = string
                         }
 
                     }
-                )
-            }
+
+                    override fun onNoClicked() {
+                        hideDialog()
+                    }
+
+                }
+            )
         }
 
         binding.btnTransferOwnership.setOnClickListener {
             val name = binding.tvMasterName.text.toString().trim()
             val email = binding.tvMasterEmail.text.toString().trim()
 
-            activity?.let { mActivity ->
+            if (name.isEmpty()) {
+                activity?.showToast(getString(R.string.error_text_name))
+            } else if (name.length < 3) {
+                activity?.showToast(getString(R.string.error_text_full_name_length))
+            } else if (email.isEmpty()) {
+                activity?.showToast(getString(R.string.error_text_email))
+            } else if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+                activity?.showToast(getString(R.string.error_text_valid_email))
+            } else {
 
-                if (name.isEmpty()) {
-                    mActivity.showToast(getString(R.string.error_text_name))
-                } else if (name.length < 3) {
-                    mActivity.showToast(getString(R.string.error_text_full_name_length))
-                } else if (email.isEmpty()) {
-                    mActivity.showToast(getString(R.string.error_text_email))
-                } else if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-                    mActivity.showToast(getString(R.string.error_text_valid_email))
-                } else {
-
-                    if (!Utils.isNetworkConnectivityAvailable()) {
-                        context?.showToast(getString(R.string.text_no_internet_available))
-                        return@setOnClickListener
-                    }
-
-                    if (cancelOwnership) {
-                        DialogUtil.askAlert(
-                            mActivity,
-                            getString(R.string.dialog_title_cancel_ownership),
-                            getString(R.string.text_ok),
-                            getString(R.string.text_cancel),
-                            object : DialogAskListener {
-                                override fun onYesClicked() {
-                                    DialogUtil.hideDialog()
-                                    DialogUtil.loadingAlert(mActivity)
-                                    ownershipId?.let {
-                                        viewModel.cancelOwnership(it)
-                                    }
-                                }
-
-                                override fun onNoClicked() {
-                                    DialogUtil.hideDialog()
-                                }
-                            })
-                    } else {
-                        DialogUtil.askAlert(
-                            mActivity,
-                            getString(R.string.dialog_title_transfer_ownership),
-                            getString(R.string.text_ok),
-                            getString(R.string.text_cancel),
-                            object : DialogAskListener {
-                                override fun onYesClicked() {
-                                    DialogUtil.hideDialog()
-                                    DialogUtil.loadingAlert(mActivity)
-                                    viewModel.transferOwnership(BodyOwnership(email, name))
-                                }
-
-                                override fun onNoClicked() {
-                                    DialogUtil.hideDialog()
-                                }
-                            })
-
-                    }
+                if (!Utils.isNetworkConnectivityAvailable()) {
+                    context?.showToast(getString(R.string.text_no_internet_available))
+                    return@setOnClickListener
                 }
 
+                if (cancelOwnership) {
+                    activity?.askAlert(
+                        getString(R.string.dialog_title_cancel_ownership),
+                        getString(R.string.text_ok),
+                        getString(R.string.text_cancel),
+                        object : DialogAskListener {
+                            override fun onYesClicked() {
+                                hideDialog()
+                                activity?.loadingDialog()
+                                ownershipId?.let {
+                                    viewModel.cancelOwnership(it)
+                                }
+                            }
+
+                            override fun onNoClicked() {
+                                hideDialog()
+                            }
+                        })
+                } else {
+                    activity?.askAlert(
+                        getString(R.string.dialog_title_transfer_ownership),
+                        getString(R.string.text_ok),
+                        getString(R.string.text_cancel),
+                        object : DialogAskListener {
+                            override fun onYesClicked() {
+                                hideDialog()
+                                activity?.loadingDialog()
+                                viewModel.transferOwnership(BodyOwnership(email, name))
+                            }
+
+                            override fun onNoClicked() {
+                                hideDialog()
+                            }
+                        })
+
+                }
             }
         }
 
@@ -347,9 +325,7 @@ class AccountSettingsFragment :
 
         NotifyManager.internetInfo.observe(viewLifecycleOwner) { isConnected ->
             if (isConnected) {
-                activity?.let {
-                    DialogUtil.loadingAlert(it)
-                }
+                activity?.loadingDialog()
                 viewModel.getUserProfile()
                 viewModel.getOwnership()
             } else {
@@ -365,7 +341,7 @@ class AccountSettingsFragment :
                     viewModel.getUserProfileResponse.collectLatest { response ->
                         when (response) {
                             is Resource.Success -> {
-                                DialogUtil.hideDialog()
+                                hideDialog()
                                 if (response.values.status && response.values.code == Constants.API_SUCCESS_CODE) {
 
                                     response.values.data?.let { userData ->
@@ -385,7 +361,7 @@ class AccountSettingsFragment :
                                 }
                             }
                             is Resource.Failure -> {
-                                DialogUtil.hideDialog()
+                                hideDialog()
                                 context?.showToast(getString(R.string.error_something_went_wrong))
                                 Log.e(
                                     logTag,
@@ -401,7 +377,7 @@ class AccountSettingsFragment :
                     viewModel.updateUserProfileResponse.collectLatest { response ->
                         when (response) {
                             is Resource.Success -> {
-                                DialogUtil.hideDialog()
+                                hideDialog()
                                 Log.e(logTag, " ${response.values.message} ")
                                 context?.showToast(response.values.message)
                                 if (response.values.status && response.values.code == Constants.API_SUCCESS_CODE) {
@@ -439,7 +415,7 @@ class AccountSettingsFragment :
                                 }
                             }
                             is Resource.Failure -> {
-                                DialogUtil.hideDialog()
+                                hideDialog()
                                 context?.showToast(getString(R.string.error_something_went_wrong))
                                 Log.e(
                                     logTag,
@@ -455,11 +431,11 @@ class AccountSettingsFragment :
                     viewModel.changePasswordResponse.collectLatest { response ->
                         when (response) {
                             is Resource.Success -> {
-                                DialogUtil.hideDialog()
+                                hideDialog()
                                 context?.showToast(response.values.message)
                             }
                             is Resource.Failure -> {
-                                DialogUtil.hideDialog()
+                                hideDialog()
                                 context?.showToast(getString(R.string.error_something_went_wrong))
                                 Log.e(
                                     logTag,
@@ -475,7 +451,7 @@ class AccountSettingsFragment :
                     viewModel.getOwnershipResponse.collectLatest { response ->
                         when (response) {
                             is Resource.Success -> {
-                                DialogUtil.hideDialog()
+                                hideDialog()
                                 if (response.values.status && response.values.code == Constants.API_SUCCESS_CODE) {
                                     response.values.data?.let {
                                         binding.tvMasterName.text = it.name
@@ -504,7 +480,7 @@ class AccountSettingsFragment :
                                 }
                             }
                             is Resource.Failure -> {
-                                DialogUtil.hideDialog()
+                                hideDialog()
                                 context?.showToast(getString(R.string.error_something_went_wrong))
                                 Log.e(
                                     logTag,
@@ -520,14 +496,14 @@ class AccountSettingsFragment :
                     viewModel.transferOwnershipResponse.collectLatest { response ->
                         when (response) {
                             is Resource.Success -> {
-                                DialogUtil.hideDialog()
+                                hideDialog()
                                 context?.showToast(response.values.message)
                                 if (response.values.status && response.values.code == Constants.API_SUCCESS_CODE) {
                                     getOwnership()
                                 }
                             }
                             is Resource.Failure -> {
-                                DialogUtil.hideDialog()
+                                hideDialog()
                                 context?.showToast(getString(R.string.error_something_went_wrong))
                                 Log.e(
                                     logTag,
@@ -543,14 +519,14 @@ class AccountSettingsFragment :
                     viewModel.cancelOwnershipResponse.collectLatest { response ->
                         when (response) {
                             is Resource.Success -> {
-                                DialogUtil.hideDialog()
+                                hideDialog()
                                 context?.showToast(response.values.message)
                                 if (response.values.status && response.values.code == Constants.API_SUCCESS_CODE) {
                                     getOwnership()
                                 }
                             }
                             is Resource.Failure -> {
-                                DialogUtil.hideDialog()
+                                hideDialog()
                                 context?.showToast(getString(R.string.error_something_went_wrong))
                                 Log.e(
                                     logTag,
@@ -569,9 +545,7 @@ class AccountSettingsFragment :
     }
 
     private fun getOwnership() {
-        activity?.let {
-            DialogUtil.loadingAlert(it)
-        }
+        activity?.loadingDialog()
         viewModel.getOwnership()
     }
 
@@ -694,7 +668,7 @@ class AccountSettingsFragment :
                     }
                     else -> {
                         dialog?.dismiss()
-                        DialogUtil.loadingAlert(myActivity)
+                        activity?.loadingDialog()
                         viewModel.changePassword(BodyChangePassword(currentPassword, newPassword))
                     }
                 }

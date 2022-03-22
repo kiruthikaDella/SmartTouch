@@ -54,9 +54,7 @@ import com.voinismartiot.voni.api.model.DeviceCustomizationData
 import com.voinismartiot.voni.api.repository.HomeRepository
 import com.voinismartiot.voni.common.interfaces.DialogAskListener
 import com.voinismartiot.voni.common.interfaces.DialogShowListener
-import com.voinismartiot.voni.common.utils.Constants
-import com.voinismartiot.voni.common.utils.DialogUtil
-import com.voinismartiot.voni.common.utils.DialogUtil.featureDetailAlert
+import com.voinismartiot.voni.common.utils.*
 import com.voinismartiot.voni.common.utils.FileHelper.getImageOrientation
 import com.voinismartiot.voni.common.utils.FileHelper.getRealPathFromUri
 import com.voinismartiot.voni.common.utils.FileHelper.sizeInMb
@@ -64,13 +62,12 @@ import com.voinismartiot.voni.common.utils.Utils.getImageUri
 import com.voinismartiot.voni.common.utils.Utils.toBoolean
 import com.voinismartiot.voni.common.utils.Utils.toInt
 import com.voinismartiot.voni.common.utils.Utils.toReverseInt
-import com.voinismartiot.voni.common.utils.showToast
 import com.voinismartiot.voni.databinding.FragmentDeviceCustomizationBinding
 import com.voinismartiot.voni.mqtt.AwsMqttSingleton
 import com.voinismartiot.voni.mqtt.MQTTConnectionStatus
 import com.voinismartiot.voni.mqtt.MQTTConstants
 import com.voinismartiot.voni.mqtt.NotifyManager
-import com.voinismartiot.voni.ui.fragments.ModelBaseFragment
+import com.voinismartiot.voni.ui.fragments.BaseFragment
 import com.voinismartiot.voni.ui.viewmodel.HomeViewModel
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
@@ -92,7 +89,7 @@ import java.util.*
 
 @Suppress("DEPRECATION")
 class DeviceCustomizationFragment :
-    ModelBaseFragment<HomeViewModel, FragmentDeviceCustomizationBinding, HomeRepository>() {
+    BaseFragment<HomeViewModel, FragmentDeviceCustomizationBinding, HomeRepository>() {
 
     private val logTag = this::class.java.simpleName
     private val args: DeviceCustomizationFragmentArgs by navArgs()
@@ -154,19 +151,16 @@ class DeviceCustomizationFragment :
             if (isConnected) {
                 viewModel.getDeviceCustomization(args.deviceDetail.id)
             } else {
-                activity?.let {
-                    DialogUtil.deviceOfflineAlert(
-                        it,
-                        getString(R.string.text_no_internet_available),
-                        object : DialogShowListener {
-                            override fun onClick() {
-                                DialogUtil.hideDialog()
-                                findNavController().navigate(DeviceCustomizationFragmentDirections.actionGlobalHomeFragment())
-                            }
-
+                activity?.deviceOfflineAlert(
+                    getString(R.string.text_no_internet_available),
+                    object : DialogShowListener {
+                        override fun onClick() {
+                            hideDialog()
+                            findNavController().navigate(DeviceCustomizationFragmentDirections.actionGlobalHomeFragment())
                         }
-                    )
-                }
+
+                    }
+                )
             }
         }
 
@@ -188,34 +182,31 @@ class DeviceCustomizationFragment :
         binding.layoutSlidingUpPanel.setFadeOnClickListener { hidePanel() }
 
         binding.ibLock.setOnClickListener {
-            activity?.let {
-                val msg = if (isDeviceCustomizationLocked) {
-                    getString(R.string.dialog_title_text_unlock)
-                } else {
-                    getString(R.string.dialog_title_text_lock)
-                }
-
-                DialogUtil.askAlert(
-                    it,
-                    msg,
-                    getString(R.string.text_ok),
-                    getString(R.string.text_cancel),
-                    object : DialogAskListener {
-                        override fun onYesClicked() {
-                            DialogUtil.loadingAlert(it)
-                            viewModel.customizationLock(
-                                BodyCustomizationLock(
-                                    args.deviceDetail.id,
-                                    isDeviceCustomizationLocked.toReverseInt()
-                                )
-                            )
-                        }
-
-                        override fun onNoClicked() = Unit
-
-                    }
-                )
+            val msg = if (isDeviceCustomizationLocked) {
+                getString(R.string.dialog_title_text_unlock)
+            } else {
+                getString(R.string.dialog_title_text_lock)
             }
+
+            activity?.askAlert(
+                msg,
+                getString(R.string.text_ok),
+                getString(R.string.text_cancel),
+                object : DialogAskListener {
+                    override fun onYesClicked() {
+                        activity?.loadingDialog()
+                        viewModel.customizationLock(
+                            BodyCustomizationLock(
+                                args.deviceDetail.id,
+                                isDeviceCustomizationLocked.toReverseInt()
+                            )
+                        )
+                    }
+
+                    override fun onNoClicked() = Unit
+
+                }
+            )
         }
 
         binding.ivScreenLayoutSettings.setOnClickListener {
@@ -323,7 +314,7 @@ class DeviceCustomizationFragment :
                         } else {
                             imageParts.clear()
 
-                            DialogUtil.loadingAlert(mActivity)
+                            mActivity.loadingDialog()
 
                             val fileExtension = mCroppedImageFile!!.extension
 
@@ -354,25 +345,21 @@ class DeviceCustomizationFragment :
 
         binding.layoutUploadImage.ivRemove.setOnClickListener {
 
-            activity?.let { mActivity ->
-
-                DialogUtil.askAlert(
-                    mActivity,
-                    getString(R.string.dialog_title_remove_device_image),
-                    getString(R.string.text_ok),
-                    getString(R.string.text_cancel),
-                    object : DialogAskListener {
-                        override fun onYesClicked() {
-                            hidePanel()
-                            DialogUtil.loadingAlert(mActivity)
-                            viewModel.deleteImage(args.deviceDetail.id)
-                        }
-
-                        override fun onNoClicked() = Unit
-
+            activity?.askAlert(
+                getString(R.string.dialog_title_remove_device_image),
+                getString(R.string.text_ok),
+                getString(R.string.text_cancel),
+                object : DialogAskListener {
+                    override fun onYesClicked() {
+                        hidePanel()
+                        activity?.loadingDialog()
+                        viewModel.deleteImage(args.deviceDetail.id)
                     }
-                )
-            }
+
+                    override fun onNoClicked() = Unit
+
+                }
+            )
         }
 
         binding.layoutTextStyle.btnSave.setOnClickListener {
@@ -573,7 +560,7 @@ class DeviceCustomizationFragment :
                     viewModel.getDeviceCustomizationSettingsResponse.collectLatest { response ->
                         when (response) {
                             is Resource.Success -> {
-                                DialogUtil.hideDialog()
+                                hideDialog()
 
                                 if (response.values.status && response.values.code == Constants.API_SUCCESS_CODE) {
                                     response.values.data?.let {
@@ -607,7 +594,7 @@ class DeviceCustomizationFragment :
                                 }
                             }
                             is Resource.Failure -> {
-                                DialogUtil.hideDialog()
+                                hideDialog()
                                 context?.showToast(getString(R.string.error_something_went_wrong))
                             }
                             else -> Unit
@@ -619,7 +606,7 @@ class DeviceCustomizationFragment :
                     viewModel.customizationLockResponse.collectLatest { response ->
                         when (response) {
                             is Resource.Success -> {
-                                DialogUtil.hideDialog()
+                                hideDialog()
                                 context?.showToast(response.values.message)
                                 if (response.values.status && response.values.code == Constants.API_SUCCESS_CODE) {
 
@@ -633,7 +620,7 @@ class DeviceCustomizationFragment :
                                 }
                             }
                             is Resource.Failure -> {
-                                DialogUtil.hideDialog()
+                                hideDialog()
                                 context?.showToast(getString(R.string.error_something_went_wrong))
                                 Log.e(
                                     logTag,
@@ -649,7 +636,7 @@ class DeviceCustomizationFragment :
                     viewModel.imageUploadResponse.collectLatest { response ->
                         when (response) {
                             is Resource.Success -> {
-                                DialogUtil.hideDialog()
+                                hideDialog()
 
                                 if (mCroppedImageFile?.exists() == true) {
                                     mCroppedImageFile?.delete()
@@ -665,7 +652,7 @@ class DeviceCustomizationFragment :
                                 }
                             }
                             is Resource.Failure -> {
-                                DialogUtil.hideDialog()
+                                hideDialog()
                                 context?.showToast(getString(R.string.error_something_went_wrong))
                                 if (mCroppedImageFile?.exists() == true) {
                                     mCroppedImageFile?.delete()
@@ -681,14 +668,14 @@ class DeviceCustomizationFragment :
                     viewModel.deleteImageResponse.collectLatest { response ->
                         when (response) {
                             is Resource.Success -> {
-                                DialogUtil.hideDialog()
+                                hideDialog()
                                 context?.showToast(response.values.message)
                                 if (response.values.status && response.values.code == Constants.API_SUCCESS_CODE) {
                                     deviceCustomization?.uploadImage = ""
                                 }
                             }
                             is Resource.Failure -> {
-                                DialogUtil.hideDialog()
+                                hideDialog()
                                 context?.showToast(getString(R.string.error_something_went_wrong))
                             }
                             else -> Unit
@@ -960,10 +947,9 @@ class DeviceCustomizationFragment :
                         if (jsonObject.has(MQTTConstants.AWS_STATUS)) {
                             val deviceStatus = jsonObject.getString(MQTTConstants.AWS_STATUS)
                             if (deviceStatus == "1") {
-                                DialogUtil.hideDialog()
+                                hideDialog()
                             } else {
-                                DialogUtil.deviceOfflineAlert(
-                                    it,
+                                activity?.deviceOfflineAlert(
                                     onClick = object : DialogShowListener {
                                         override fun onClick() {
                                             findNavController().navigateUp()

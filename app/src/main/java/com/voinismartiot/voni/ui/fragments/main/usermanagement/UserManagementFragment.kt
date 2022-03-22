@@ -16,19 +16,16 @@ import com.voinismartiot.voni.api.model.SubordinateUserData
 import com.voinismartiot.voni.api.repository.UserManagementRepository
 import com.voinismartiot.voni.common.interfaces.AdapterItemClickListener
 import com.voinismartiot.voni.common.interfaces.DialogAskListener
-import com.voinismartiot.voni.common.utils.Constants
-import com.voinismartiot.voni.common.utils.DialogUtil
-import com.voinismartiot.voni.common.utils.Utils
-import com.voinismartiot.voni.common.utils.showToast
+import com.voinismartiot.voni.common.utils.*
 import com.voinismartiot.voni.databinding.FragmentUserManagementBinding
 import com.voinismartiot.voni.mqtt.NotifyManager
-import com.voinismartiot.voni.ui.fragments.ModelBaseFragment
+import com.voinismartiot.voni.ui.fragments.BaseFragment
 import com.voinismartiot.voni.ui.viewmodel.UserManagementViewModel
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 class UserManagementFragment :
-    ModelBaseFragment<UserManagementViewModel, FragmentUserManagementBinding, UserManagementRepository>() {
+    BaseFragment<UserManagementViewModel, FragmentUserManagementBinding, UserManagementRepository>() {
 
     private val logTag = this::class.java.simpleName
     private lateinit var userManagementAdapter: UserManagementAdapter
@@ -47,29 +44,26 @@ class UserManagementFragment :
         userManagementAdapter.setOnRemoveClickListener(object :
             AdapterItemClickListener<SubordinateUserData> {
             override fun onItemClick(data: SubordinateUserData) {
-                activity?.let {
-                    DialogUtil.askAlert(
-                        it,
-                        getString(R.string.dialog_title_remove_subordinate_user),
-                        getString(R.string.text_yes),
-                        getString(R.string.text_no),
-                        object : DialogAskListener {
-                            override fun onYesClicked() {
+                activity?.askAlert(
+                    getString(R.string.dialog_title_remove_subordinate_user),
+                    getString(R.string.text_yes),
+                    getString(R.string.text_no),
+                    object : DialogAskListener {
+                        override fun onYesClicked() {
 
-                                if (!Utils.isNetworkConnectivityAvailable()) {
-                                    context?.showToast(getString(R.string.text_no_internet_available))
-                                } else {
-                                    showProgressDialog()
-                                    userData = data
-                                    viewModel.deleteSubordinateUser(data.id)
-                                }
+                            if (!Utils.isNetworkConnectivityAvailable()) {
+                                context?.showToast(getString(R.string.text_no_internet_available))
+                            } else {
+                                showProgressDialog()
+                                userData = data
+                                viewModel.deleteSubordinateUser(data.id)
                             }
-
-                            override fun onNoClicked() = Unit
-
                         }
-                    )
-                }
+
+                        override fun onNoClicked() = Unit
+
+                    }
+                )
 
             }
 
@@ -79,24 +73,6 @@ class UserManagementFragment :
     }
 
     private fun apiCall() {
-
-        /*  if (isInternetConnected()){
-              showProgressDialog()
-              viewModel.getSubordinateUser()
-          }else {
-              activity?.let {
-                  DialogUtil.deviceOfflineAlert(
-                      it,
-                      getString(R.string.text_no_internet_available),
-                      object : DialogShowListener {
-                          override fun onClick() {
-                              DialogUtil.hideDialog()
-                          }
-
-                      }
-                  )
-              }
-          }*/
 
         NotifyManager.internetInfo.observe(viewLifecycleOwner) { isConnected ->
             if (isConnected) {
@@ -116,7 +92,7 @@ class UserManagementFragment :
                         userList.clear()
                         when (response) {
                             is Resource.Success -> {
-                                DialogUtil.hideDialog()
+                                hideDialog()
                                 if (response.values.status && response.values.code == Constants.API_SUCCESS_CODE) {
                                     response.values.data?.let { userData ->
                                         userList.addAll(userData)
@@ -128,7 +104,7 @@ class UserManagementFragment :
                                 }
                             }
                             is Resource.Failure -> {
-                                DialogUtil.hideDialog()
+                                hideDialog()
                                 context?.showToast(getString(R.string.error_something_went_wrong))
                                 Log.e(
                                     logTag,
@@ -144,7 +120,7 @@ class UserManagementFragment :
                     viewModel.deleteSubordinateUserResponse.collectLatest { response ->
                         when (response) {
                             is Resource.Success -> {
-                                DialogUtil.hideDialog()
+                                hideDialog()
                                 context?.showToast(response.values.message)
                                 if (response.values.status && response.values.code == Constants.API_SUCCESS_CODE) {
                                     userData?.let {
@@ -154,7 +130,7 @@ class UserManagementFragment :
                                 }
                             }
                             is Resource.Failure -> {
-                                DialogUtil.hideDialog()
+                                hideDialog()
                                 context?.showToast(getString(R.string.error_something_went_wrong))
                                 Log.e(
                                     logTag,
@@ -170,9 +146,7 @@ class UserManagementFragment :
     }
 
     private fun showProgressDialog() {
-        activity?.let {
-            DialogUtil.loadingAlert(it)
-        }
+        activity?.loadingDialog()
     }
 
     override fun getViewModel(): Class<UserManagementViewModel> =

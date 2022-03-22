@@ -15,10 +15,9 @@ import com.voinismartiot.voni.adapters.spinneradapter.SwitchAdapter
 import com.voinismartiot.voni.api.body.BodyUpdateSceneData
 import com.voinismartiot.voni.api.model.*
 import com.voinismartiot.voni.common.interfaces.DialogAskListener
-import com.voinismartiot.voni.common.utils.DialogUtil
 import com.voinismartiot.voni.common.utils.Utils.toBoolean
 import com.voinismartiot.voni.common.utils.Utils.toInt
-import com.warkiz.widget.IndicatorSeekBar
+import com.voinismartiot.voni.common.utils.askAlert
 
 class UpdateDeviceSceneAdapter(
     private val mActivity: Activity,
@@ -43,8 +42,8 @@ class UpdateDeviceSceneAdapter(
         holder.apply {
 
             ibDelete.setOnClickListener {
-                DialogUtil.askAlert(
-                    mActivity, mActivity.getString(R.string.dialog_title_delete_scene),
+                mActivity.askAlert(
+                    mActivity.getString(R.string.dialog_title_delete_scene),
                     mActivity.getString(R.string.text_yes),
                     mActivity.getString(R.string.text_no),
                     object : DialogAskListener {
@@ -80,15 +79,10 @@ class UpdateDeviceSceneAdapter(
                     spinnerSwitch.performClick()
             }
 
-            if (errorList.isNotEmpty()) {
-                if (errorList.containsKey(position)) {
-                    tvError.text = errorList[position]
-                    tvError.isVisible = true
-                } else {
-                    tvError.isVisible = false
-                }
-            } else {
-                tvError.isVisible = false
+            tvError.isVisible = false
+            if (errorList.isNotEmpty() && errorList.containsKey(adapterPosition)) {
+                tvError.text = errorList[adapterPosition]
+                tvError.isVisible = true
             }
         }
 
@@ -111,7 +105,6 @@ class UpdateDeviceSceneAdapter(
         val ivSwitchName = itemView.findViewById(R.id.iv_switch_name_down) as ImageView
 
         val tvError = itemView.findViewById(R.id.tv_text_error) as TextView
-        val seekBar = itemView.findViewById(R.id.seek_bar) as IndicatorSeekBar
     }
 
     private fun setSpinners(holder: MyViewHolder) {
@@ -331,7 +324,6 @@ class UpdateDeviceSceneAdapter(
                         val switch = parent?.selectedItem as DeviceSwitchData
                         scenes[adapterPosition].switchData = switch
                         switchType = switch.desc?.lowercase() ?: ""
-//                        seekBar.isVisible = switchStatus.isChecked && switchType == mActivity.getString(R.string.text_switch_fan_speed).lowercase()
 
                         if (switch.name == mActivity.getString(R.string.text_no_switch) || switch.name == mActivity.getString(
                                 R.string.text_select_switch
@@ -343,9 +335,7 @@ class UpdateDeviceSceneAdapter(
 
                     }
 
-                    override fun onNothingSelected(parent: AdapterView<*>?) {
-
-                    }
+                    override fun onNothingSelected(parent: AdapterView<*>?) = Unit
 
                 }
 
@@ -353,7 +343,6 @@ class UpdateDeviceSceneAdapter(
 
             switchStatus.setOnCheckedChangeListener { _, isChecked ->
                 scenes[adapterPosition].deviceSwitchSettingValue = isChecked.toInt()
-//                seekBar.isVisible = isChecked && switchType == mActivity.getString(R.string.text_switch_fan_speed).lowercase()
             }
 
 

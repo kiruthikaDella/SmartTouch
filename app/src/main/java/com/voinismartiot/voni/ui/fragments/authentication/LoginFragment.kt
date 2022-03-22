@@ -34,24 +34,21 @@ import com.voinismartiot.voni.api.model.UserProfile
 import com.voinismartiot.voni.api.repository.AuthRepository
 import com.voinismartiot.voni.common.interfaces.DialogShowListener
 import com.voinismartiot.voni.common.interfaces.FacebookLoginListener
-import com.voinismartiot.voni.common.utils.Constants
-import com.voinismartiot.voni.common.utils.DialogUtil
-import com.voinismartiot.voni.common.utils.Utils
+import com.voinismartiot.voni.common.utils.*
 import com.voinismartiot.voni.common.utils.Utils.isNetworkConnectivityAvailable
 import com.voinismartiot.voni.common.utils.Utils.toBoolean
 import com.voinismartiot.voni.common.utils.Utils.toEditable
-import com.voinismartiot.voni.common.utils.showToast
 import com.voinismartiot.voni.databinding.FragmentLoginBinding
 import com.voinismartiot.voni.ui.activities.AuthenticationActivity
 import com.voinismartiot.voni.ui.activities.MainActivity
-import com.voinismartiot.voni.ui.fragments.ModelBaseFragment
+import com.voinismartiot.voni.ui.fragments.BaseFragment
 import com.voinismartiot.voni.ui.viewmodel.AuthViewModel
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import java.util.*
 
 @SuppressLint("ClickableViewAccessibility")
-class LoginFragment : ModelBaseFragment<AuthViewModel, FragmentLoginBinding, AuthRepository>() {
+class LoginFragment : BaseFragment<AuthViewModel, FragmentLoginBinding, AuthRepository>() {
 
     private val logTag = this::class.java.simpleName
     private var isPasswordVisible = false
@@ -122,19 +119,16 @@ class LoginFragment : ModelBaseFragment<AuthViewModel, FragmentLoginBinding, Aut
             if (isNetworkConnectivityAvailable()) {
                 validateUserInformation()
             } else {
-                activity?.let {
-                    DialogUtil.deviceOfflineAlert(
-                        it,
-                        getString(R.string.text_no_internet_available),
-                        object : DialogShowListener {
-                            override fun onClick() {
-                                DialogUtil.hideDialog()
-                                findNavController().navigateUp()
-                            }
-
+                activity?.deviceOfflineAlert(
+                    getString(R.string.text_no_internet_available),
+                    object : DialogShowListener {
+                        override fun onClick() {
+                            hideDialog()
+                            findNavController().navigateUp()
                         }
-                    )
-                }
+
+                    }
+                )
             }
         }
 
@@ -142,13 +136,9 @@ class LoginFragment : ModelBaseFragment<AuthViewModel, FragmentLoginBinding, Aut
             if (isNetworkConnectivityAvailable()) {
                 (activity as AuthenticationActivity).performFacebookLogin()
             } else {
-                activity?.let {
-                    DialogUtil.deviceOfflineAlert(
-                        it,
-                        getString(R.string.text_no_internet_available)
-                    )
-                }
-
+                activity?.deviceOfflineAlert(
+                    getString(R.string.text_no_internet_available)
+                )
             }
         }
 
@@ -189,7 +179,7 @@ class LoginFragment : ModelBaseFragment<AuthViewModel, FragmentLoginBinding, Aut
                 loginType = Constants.LOGIN_TYPE_FACEBOOK
 
                 activity?.let {
-                    DialogUtil.loadingAlert(it)
+                    it.loadingDialog()
                     viewModel.socialLogin(
                         BodySocialLogin(
                             userId,
@@ -233,9 +223,7 @@ class LoginFragment : ModelBaseFragment<AuthViewModel, FragmentLoginBinding, Aut
                             val uuid: String = UUID.randomUUID().toString()
                             FastSave.getInstance().saveString(Constants.MOBILE_UUID, uuid)
 
-                            activity?.let { act ->
-                                DialogUtil.loadingAlert(act)
-                            }
+                            activity?.loadingDialog()
 
                             loginType = Constants.LOGIN_TYPE_GOOGLE
 
@@ -267,12 +255,9 @@ class LoginFragment : ModelBaseFragment<AuthViewModel, FragmentLoginBinding, Aut
                 googleSignInResultLauncher.launch(intent)
 
             } else {
-                activity?.let {
-                    DialogUtil.deviceOfflineAlert(
-                        it,
-                        getString(R.string.text_no_internet_available)
-                    )
-                }
+                activity?.deviceOfflineAlert(
+                    getString(R.string.text_no_internet_available)
+                )
             }
         }
     }
@@ -287,8 +272,7 @@ class LoginFragment : ModelBaseFragment<AuthViewModel, FragmentLoginBinding, Aut
                     viewModel.loginResponse.collectLatest { response ->
                         when (response) {
                             is Resource.Success -> {
-                                DialogUtil.hideDialog()
-                                Log.e(logTag, "code ${response.values.code}")
+                                hideDialog()
                                 if (response.values.status && response.values.code == Constants.API_SUCCESS_CODE) {
 
                                     val userProfile: UserProfile? = response.values.data?.user_data
@@ -366,7 +350,7 @@ class LoginFragment : ModelBaseFragment<AuthViewModel, FragmentLoginBinding, Aut
                                 }
                             }
                             is Resource.Failure -> {
-                                DialogUtil.hideDialog()
+                                hideDialog()
                                 context?.getString(R.string.error_something_went_wrong)
                                 Log.e(logTag, "login error ${response.errorBody?.string()}")
                             }
@@ -379,7 +363,7 @@ class LoginFragment : ModelBaseFragment<AuthViewModel, FragmentLoginBinding, Aut
                     viewModel.socialLoginResponse.collectLatest { response ->
                         when (response) {
                             is Resource.Success -> {
-                                DialogUtil.hideDialog()
+                                hideDialog()
 
                                 if (response.values.status && response.values.code == Constants.API_SUCCESS_CODE) {
 
@@ -446,7 +430,7 @@ class LoginFragment : ModelBaseFragment<AuthViewModel, FragmentLoginBinding, Aut
                                 }
                             }
                             is Resource.Failure -> {
-                                DialogUtil.hideDialog()
+                                hideDialog()
                                 context?.showToast(getString(R.string.error_something_went_wrong))
                                 Log.e(logTag, "login error ${response.errorBody?.string()}")
                             }
@@ -478,9 +462,7 @@ class LoginFragment : ModelBaseFragment<AuthViewModel, FragmentLoginBinding, Aut
             binding.edtPassword.requestFocus()
         } else {
             Log.e(logTag, "Valid")
-            activity?.let {
-                DialogUtil.loadingAlert(it)
-            }
+            activity?.loadingDialog()
             viewModel.login(
                 BodyLogin(
                     email, password, deviceId, Utils.getFCMToken()

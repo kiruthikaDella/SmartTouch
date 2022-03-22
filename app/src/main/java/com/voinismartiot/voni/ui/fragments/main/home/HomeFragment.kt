@@ -28,19 +28,16 @@ import com.voinismartiot.voni.api.repository.HomeRepository
 import com.voinismartiot.voni.common.interfaces.AdapterItemClickListener
 import com.voinismartiot.voni.common.interfaces.DialogAskListener
 import com.voinismartiot.voni.common.interfaces.DialogShowListener
-import com.voinismartiot.voni.common.utils.Constants
-import com.voinismartiot.voni.common.utils.DialogUtil
-import com.voinismartiot.voni.common.utils.Utils
-import com.voinismartiot.voni.common.utils.showToast
+import com.voinismartiot.voni.common.utils.*
 import com.voinismartiot.voni.databinding.FragmentHomeBinding
 import com.voinismartiot.voni.mqtt.NotifyManager
 import com.voinismartiot.voni.ui.activities.AuthenticationActivity
-import com.voinismartiot.voni.ui.fragments.ModelBaseFragment
+import com.voinismartiot.voni.ui.fragments.BaseFragment
 import com.voinismartiot.voni.ui.viewmodel.HomeViewModel
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
-class HomeFragment : ModelBaseFragment<HomeViewModel, FragmentHomeBinding, HomeRepository>() {
+class HomeFragment : BaseFragment<HomeViewModel, FragmentHomeBinding, HomeRepository>() {
 
     private val logTag = this::class.java.simpleName
     private lateinit var roomsAdapter: RoomsAdapter
@@ -80,24 +77,21 @@ class HomeFragment : ModelBaseFragment<HomeViewModel, FragmentHomeBinding, HomeR
 
         roomsAdapter.setDeleteCallback(object : AdapterItemClickListener<GetRoomData> {
             override fun onItemClick(data: GetRoomData) {
-                activity?.let {
-                    DialogUtil.askAlert(
-                        it,
-                        getString(R.string.dialog_title_delete_room),
-                        getString(R.string.text_ok),
-                        getString(R.string.text_cancel),
-                        object : DialogAskListener {
-                            override fun onYesClicked() {
-                                DialogUtil.loadingAlert(it)
-                                roomData = data
-                                viewModel.deleteRoom(data.id)
-                            }
-
-                            override fun onNoClicked() = Unit
-
+                activity?.askAlert(
+                    getString(R.string.dialog_title_delete_room),
+                    getString(R.string.text_ok),
+                    getString(R.string.text_cancel),
+                    object : DialogAskListener {
+                        override fun onYesClicked() {
+                            activity?.loadingDialog()
+                            roomData = data
+                            viewModel.deleteRoom(data.id)
                         }
-                    )
-                }
+
+                        override fun onNoClicked() = Unit
+
+                    }
+                )
             }
 
         })
@@ -108,17 +102,14 @@ class HomeFragment : ModelBaseFragment<HomeViewModel, FragmentHomeBinding, HomeR
         setUpNavigationView()
 
         if (!Utils.isNetworkConnectivityAvailable()) {
-            activity?.let {
-                DialogUtil.deviceOfflineAlert(
-                    it,
-                    getString(R.string.text_no_internet_available),
-                    object : DialogShowListener {
-                        override fun onClick() {
-                            DialogUtil.hideDialog()
-                        }
+            activity?.deviceOfflineAlert(
+                getString(R.string.text_no_internet_available),
+                object : DialogShowListener {
+                    override fun onClick() {
+                        hideDialog()
                     }
-                )
-            }
+                }
+            )
         }
         apiCall()
     }
@@ -148,7 +139,7 @@ class HomeFragment : ModelBaseFragment<HomeViewModel, FragmentHomeBinding, HomeR
                     viewModel.logoutResponse.collectLatest { response ->
                         when (response) {
                             is Resource.Success -> {
-                                DialogUtil.hideDialog()
+                                hideDialog()
                                 if (response.values.status && response.values.code == Constants.API_SUCCESS_CODE) {
                                     activity?.let {
 
@@ -190,7 +181,7 @@ class HomeFragment : ModelBaseFragment<HomeViewModel, FragmentHomeBinding, HomeR
                                 }
                             }
                             is Resource.Failure -> {
-                                DialogUtil.hideDialog()
+                                hideDialog()
                                 context?.showToast(getString(R.string.error_something_went_wrong))
                                 Log.e(logTag, "logout error ${response.errorBody?.string()}")
                             }
@@ -206,7 +197,7 @@ class HomeFragment : ModelBaseFragment<HomeViewModel, FragmentHomeBinding, HomeR
                         roomList.clear()
                         when (response) {
                             is Resource.Success -> {
-                                DialogUtil.hideDialog()
+                                hideDialog()
                                 if (response.values.status && response.values.code == Constants.API_SUCCESS_CODE) {
                                     response.values.data?.let { roomData ->
                                         roomList.addAll(roomData)
@@ -218,7 +209,7 @@ class HomeFragment : ModelBaseFragment<HomeViewModel, FragmentHomeBinding, HomeR
                                 }
                             }
                             is Resource.Failure -> {
-                                DialogUtil.hideDialog()
+                                hideDialog()
                                 context?.showToast(getString(R.string.error_something_went_wrong))
                                 Log.e(
                                     logTag,
@@ -234,7 +225,7 @@ class HomeFragment : ModelBaseFragment<HomeViewModel, FragmentHomeBinding, HomeR
                     viewModel.deleteRoomResponse.collectLatest { response ->
                         when (response) {
                             is Resource.Success -> {
-                                DialogUtil.hideDialog()
+                                hideDialog()
                                 context?.showToast(response.values.message)
 
                                 if (response.values.status && response.values.code == Constants.API_SUCCESS_CODE) {
@@ -246,7 +237,7 @@ class HomeFragment : ModelBaseFragment<HomeViewModel, FragmentHomeBinding, HomeR
                                 }
                             }
                             is Resource.Failure -> {
-                                DialogUtil.hideDialog()
+                                hideDialog()
                                 context?.showToast(getString(R.string.error_something_went_wrong))
                                 Log.e(
                                     logTag,
@@ -262,11 +253,11 @@ class HomeFragment : ModelBaseFragment<HomeViewModel, FragmentHomeBinding, HomeR
                     viewModel.factoryResetAllDeviceResponse.collectLatest { response ->
                         when (response) {
                             is Resource.Success -> {
-                                DialogUtil.hideDialog()
+                                hideDialog()
                                 context?.showToast(response.values.message)
                             }
                             is Resource.Failure -> {
-                                DialogUtil.hideDialog()
+                                hideDialog()
                                 context?.showToast(getString(R.string.error_something_went_wrong))
                                 Log.e(
                                     logTag,
@@ -295,34 +286,28 @@ class HomeFragment : ModelBaseFragment<HomeViewModel, FragmentHomeBinding, HomeR
                     findNavController().navigate(HomeFragmentDirections.actionHomeFragmentToAccountSettingsFragment())
                 }
                 R.id.nav_restore_devices -> {
-                    activity?.let {
-                        DialogUtil.askAlert(
-                            it,
-                            getString(R.string.dialog_title_restore_device),
-                            getString(R.string.text_ok),
-                            getString(R.string.text_cancel),
-                            object : DialogAskListener {
-                                override fun onYesClicked() {
-                                    openOrCloseDrawer()
-                                    DialogUtil.loadingAlert(it)
-                                    viewModel.factoryResetAllDevice()
-                                }
-
-                                override fun onNoClicked() = Unit
-
+                    activity?.askAlert(
+                        getString(R.string.dialog_title_restore_device),
+                        getString(R.string.text_ok),
+                        getString(R.string.text_cancel),
+                        object : DialogAskListener {
+                            override fun onYesClicked() {
+                                openOrCloseDrawer()
+                                activity?.loadingDialog()
+                                viewModel.factoryResetAllDevice()
                             }
-                        )
-                    }
+
+                            override fun onNoClicked() = Unit
+
+                        }
+                    )
                 }
                 R.id.nav_profile_reset -> {
-                    activity?.let {
-                        DialogUtil.askAlert(
-                            it,
-                            getString(R.string.dialog_title_profile_reset),
-                            getString(R.string.text_ok),
-                            getString(R.string.text_cancel)
-                        )
-                    }
+                    activity?.askAlert(
+                        getString(R.string.dialog_title_profile_reset),
+                        getString(R.string.text_ok),
+                        getString(R.string.text_cancel)
+                    )
                 }
                 R.id.nav_faqs -> {
                     openOrCloseDrawer()
@@ -337,55 +322,52 @@ class HomeFragment : ModelBaseFragment<HomeViewModel, FragmentHomeBinding, HomeR
                 }
                 R.id.nav_logout -> {
 
-                    activity?.let { mActivity ->
-                        DialogUtil.askAlert(
-                            mActivity,
-                            getString(R.string.dialog_title_logout),
-                            getString(R.string.text_yes),
-                            getString(R.string.text_no),
-                            object : DialogAskListener {
-                                override fun onYesClicked() {
-                                    DialogUtil.hideDialog()
-                                    val loginType =
-                                        FastSave.getInstance().getString(Constants.LOGIN_TYPE, "")
-                                    if (loginType == Constants.LOGIN_TYPE_GOOGLE) {
+                    activity?.askAlert(
+                        getString(R.string.dialog_title_logout),
+                        getString(R.string.text_yes),
+                        getString(R.string.text_no),
+                        object : DialogAskListener {
+                            override fun onYesClicked() {
+                                hideDialog()
+                                val loginType =
+                                    FastSave.getInstance().getString(Constants.LOGIN_TYPE, "")
+                                if (loginType == Constants.LOGIN_TYPE_GOOGLE) {
 
-                                        activity?.let {
-                                            val gso =
-                                                GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                                                    .requestEmail()
-                                                    .build()
+                                    activity?.let {
+                                        val gso =
+                                            GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                                                .requestEmail()
+                                                .build()
 
-                                            val mGoogleSingInClient =
-                                                GoogleSignIn.getClient(it, gso)
-                                            mGoogleSingInClient.signOut()
-                                                .addOnCompleteListener { task ->
-                                                    Log.i(logTag, " task $task")
-                                                    if (task.isSuccessful) {
-                                                        Log.i(logTag, " Google logout success")
-                                                    }
+                                        val mGoogleSingInClient =
+                                            GoogleSignIn.getClient(it, gso)
+                                        mGoogleSingInClient.signOut()
+                                            .addOnCompleteListener { task ->
+                                                Log.i(logTag, " task $task")
+                                                if (task.isSuccessful) {
+                                                    Log.i(logTag, " Google logout success")
                                                 }
-                                        }
-
-                                    } else if (loginType == Constants.LOGIN_TYPE_FACEBOOK) {
-                                        LoginManager.getInstance().logOut()
+                                            }
                                     }
 
-                                    DialogUtil.loadingAlert(mActivity)
+                                } else if (loginType == Constants.LOGIN_TYPE_FACEBOOK) {
+                                    LoginManager.getInstance().logOut()
+                                }
 
-                                    viewModel.logout(
-                                        BodyLogout(
-                                            deviceId
-                                        )
+                                activity?.loadingDialog()
+
+                                viewModel.logout(
+                                    BodyLogout(
+                                        deviceId
                                     )
-                                }
+                                )
+                            }
 
-                                override fun onNoClicked() {
-                                    DialogUtil.hideDialog()
-                                }
+                            override fun onNoClicked() {
+                                hideDialog()
+                            }
 
-                            })
-                    }
+                        })
 
                 }
             }

@@ -29,12 +29,12 @@ import com.voinismartiot.voni.api.body.BodyRegisterDevice
 import com.voinismartiot.voni.api.repository.HomeRepository
 import com.voinismartiot.voni.common.interfaces.DialogShowListener
 import com.voinismartiot.voni.common.utils.Constants
-import com.voinismartiot.voni.common.utils.DialogUtil
 import com.voinismartiot.voni.common.utils.Utils
+import com.voinismartiot.voni.common.utils.hideDialog
 import com.voinismartiot.voni.databinding.FragmentConnectingWifiBinding
 import com.voinismartiot.voni.mqtt.AwsMqttSingleton
 import com.voinismartiot.voni.ui.activities.MainActivity
-import com.voinismartiot.voni.ui.fragments.ModelBaseFragment
+import com.voinismartiot.voni.ui.fragments.BaseFragment
 import com.voinismartiot.voni.ui.viewmodel.HomeViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
@@ -43,7 +43,7 @@ import org.json.JSONException
 import org.json.JSONObject
 
 class ConnectingWifiFragment :
-    ModelBaseFragment<HomeViewModel, FragmentConnectingWifiBinding, HomeRepository>(),
+    BaseFragment<HomeViewModel, FragmentConnectingWifiBinding, HomeRepository>(),
     ReadWriteValueListener<String>, ConnectCResultListener {
     private val logTag = this::class.java.simpleName
     private val args: ConnectingWifiFragmentArgs by navArgs()
@@ -107,7 +107,7 @@ class ConnectingWifiFragment :
 
                     }
                     is Resource.Failure -> {
-                        DialogUtil.hideDialog()
+                        hideDialog()
                         Log.e(
                             logTag,
                             "deviceRegistrationResponse Failure ${response.errorBody?.string()}"
@@ -455,7 +455,7 @@ class ConnectingWifiFragment :
 
         btnOk.setOnClickListener {
             if (onClick == null) {
-                DialogUtil.hideDialog()
+                hideDialog()
             } else {
                 onClick.onClick()
             }

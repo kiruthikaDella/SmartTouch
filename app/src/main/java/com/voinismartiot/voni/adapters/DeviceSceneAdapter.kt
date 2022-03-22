@@ -15,9 +15,8 @@ import com.voinismartiot.voni.adapters.spinneradapter.SwitchAdapter
 import com.voinismartiot.voni.api.body.BodySceneData
 import com.voinismartiot.voni.api.model.*
 import com.voinismartiot.voni.common.interfaces.DialogAskListener
-import com.voinismartiot.voni.common.utils.DialogUtil
 import com.voinismartiot.voni.common.utils.Utils.toInt
-import com.warkiz.widget.IndicatorSeekBar
+import com.voinismartiot.voni.common.utils.askAlert
 
 class DeviceSceneAdapter(
     private val mActivity: Activity,
@@ -40,8 +39,8 @@ class DeviceSceneAdapter(
 
         holder.apply {
             ibDelete.setOnClickListener {
-                DialogUtil.askAlert(
-                    mActivity, mActivity.getString(R.string.dialog_title_delete_scene),
+                mActivity.askAlert(
+                    mActivity.getString(R.string.dialog_title_delete_scene),
                     mActivity.getString(R.string.text_yes),
                     mActivity.getString(R.string.text_no),
                     object : DialogAskListener {
@@ -71,16 +70,12 @@ class DeviceSceneAdapter(
                     spinnerSwitch.performClick()
             }
 
-            if (errorList.isNotEmpty()) {
-                if (errorList.containsKey(adapterPosition)) {
-                    tvError.text = errorList[adapterPosition]
-                    tvError.isVisible = true
-                } else {
-                    tvError.isVisible = false
-                }
-            } else {
-                tvError.isVisible = false
+            tvError.isVisible = false
+            if (errorList.isNotEmpty() && errorList.containsKey(adapterPosition)) {
+                tvError.text = errorList[adapterPosition]
+                tvError.isVisible = true
             }
+
         }
 
         setSpinners(holder)
@@ -103,7 +98,6 @@ class DeviceSceneAdapter(
         val ivSwitchName = itemView.findViewById(R.id.iv_switch_name_down) as ImageView
 
         val tvError = itemView.findViewById(R.id.tv_text_error) as TextView
-        val seekBar = itemView.findViewById(R.id.seek_bar) as IndicatorSeekBar
 
     }
 
@@ -333,7 +327,6 @@ class DeviceSceneAdapter(
                         val switch = parent?.selectedItem as DeviceSwitchData
                         bodyScenes[adapterPosition].deviceSwitchId = switch.id
                         switchType = switch.desc?.lowercase() ?: ""
-//                        seekBar.isVisible = switchStatus.isChecked && switchType == mActivity.getString(R.string.text_switch_fan_speed).lowercase()
                         if (switch.name == mActivity.getString(R.string.text_no_switch) || switch.name == mActivity.getString(
                                 R.string.text_select_switch
                             )
@@ -350,7 +343,6 @@ class DeviceSceneAdapter(
 
             switchStatus.setOnCheckedChangeListener { _, isChecked ->
                 bodyScenes[adapterPosition].deviceSwitchSettingValue = isChecked.toInt()
-//                seekBar.isVisible = isChecked && switchType == mActivity.getString(R.string.text_switch_fan_speed).lowercase()
             }
         }
     }

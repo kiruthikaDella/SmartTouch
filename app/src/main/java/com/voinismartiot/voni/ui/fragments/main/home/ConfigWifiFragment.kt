@@ -11,15 +11,16 @@ import com.teksun.tcpudplibrary.TCPClientService
 import com.teksun.tcpudplibrary.listener.ReadWriteValueListener
 import com.voinismartiot.voni.api.repository.HomeRepository
 import com.voinismartiot.voni.common.interfaces.DialogShowListener
-import com.voinismartiot.voni.common.utils.DialogUtil
+import com.voinismartiot.voni.common.utils.deviceOfflineAlert
+import com.voinismartiot.voni.common.utils.hideDialog
 import com.voinismartiot.voni.databinding.FragmentConfigWifiBinding
 import com.voinismartiot.voni.ui.activities.MainActivity
-import com.voinismartiot.voni.ui.fragments.ModelBaseFragment
+import com.voinismartiot.voni.ui.fragments.BaseFragment
 import com.voinismartiot.voni.ui.viewmodel.HomeViewModel
 import org.json.JSONObject
 
 class ConfigWifiFragment :
-    ModelBaseFragment<HomeViewModel, FragmentConfigWifiBinding, HomeRepository>() {
+    BaseFragment<HomeViewModel, FragmentConfigWifiBinding, HomeRepository>() {
     private val logTag = ConfigWifiFragment::class.java.simpleName
     private val args: ConfigWifiFragmentArgs by navArgs()
 
@@ -101,17 +102,14 @@ class ConfigWifiFragment :
             override fun onFailure(message: String) {
                 Log.e(logTag, "Send data failed $message")
 
-                activity?.let {
-                    DialogUtil.deviceOfflineAlert(
-                        it,
-                        "Device Disconnected",
-                        object : DialogShowListener {
-                            override fun onClick() {
-                                DialogUtil.hideDialog()
-                                findNavController().navigateUp()
-                            }
-                        })
-                }
+                activity?.deviceOfflineAlert(
+                    "Device Disconnected",
+                    object : DialogShowListener {
+                        override fun onClick() {
+                            hideDialog()
+                            findNavController().navigateUp()
+                        }
+                    })
             }
         })
     }

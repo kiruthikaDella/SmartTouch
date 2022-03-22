@@ -29,13 +29,10 @@ import com.voinismartiot.voni.api.model.Scene
 import com.voinismartiot.voni.api.model.WeeklyDaysModel
 import com.voinismartiot.voni.api.repository.HomeRepository
 import com.voinismartiot.voni.common.interfaces.DialogEditListener
-import com.voinismartiot.voni.common.utils.Constants
-import com.voinismartiot.voni.common.utils.DialogUtil
-import com.voinismartiot.voni.common.utils.Utils
+import com.voinismartiot.voni.common.utils.*
 import com.voinismartiot.voni.common.utils.Utils.toEditable
-import com.voinismartiot.voni.common.utils.showToast
 import com.voinismartiot.voni.databinding.FragmentCreateSceneBinding
-import com.voinismartiot.voni.ui.fragments.ModelBaseFragment
+import com.voinismartiot.voni.ui.fragments.BaseFragment
 import com.voinismartiot.voni.ui.viewmodel.HomeViewModel
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -45,7 +42,7 @@ import java.util.*
 
 @Suppress("DEPRECATION")
 class CreateSceneFragment :
-    ModelBaseFragment<HomeViewModel, FragmentCreateSceneBinding, HomeRepository>() {
+    BaseFragment<HomeViewModel, FragmentCreateSceneBinding, HomeRepository>() {
 
     private val logTag = this::class.java.simpleName
     private val args: CreateSceneFragmentArgs by navArgs()
@@ -161,32 +158,29 @@ class CreateSceneFragment :
         }
 
         binding.ivEditCreateScene.setOnClickListener {
-            activity?.let {
-                DialogUtil.editDialog(
-                    it,
-                    "Edit Scene name",
-                    binding.edtSceneName.text.toString().trim(),
-                    getString(R.string.text_save),
-                    getString(
-                        R.string.text_cancel
-                    ),
-                    onClick = object : DialogEditListener {
-                        override fun onYesClicked(string: String) {
-                            if (string.isEmpty()) {
-                                it.showToast("Scene name must not be empty!")
-                            } else {
-                                DialogUtil.hideDialog()
-                                binding.edtSceneName.text = string.toEditable()
-                            }
+            activity?.editDialog(
+                "Edit Scene name",
+                binding.edtSceneName.text.toString().trim(),
+                getString(R.string.text_save),
+                getString(
+                    R.string.text_cancel
+                ),
+                onClick = object : DialogEditListener {
+                    override fun onYesClicked(string: String) {
+                        if (string.isEmpty()) {
+                            activity?.showToast("Scene name must not be empty!")
+                        } else {
+                            hideDialog()
+                            binding.edtSceneName.text = string.toEditable()
                         }
-
-                        override fun onNoClicked() {
-                            DialogUtil.hideDialog()
-                        }
-
                     }
-                )
-            }
+
+                    override fun onNoClicked() {
+                        hideDialog()
+                    }
+
+                }
+            )
         }
 
         binding.tvTime.setOnClickListener {
@@ -259,9 +253,7 @@ class CreateSceneFragment :
                                 context?.showToast(getString(R.string.error_text_duplicate_scene))
                             }
                             else -> {
-                                activity?.let {
-                                    DialogUtil.loadingAlert(it)
-                                }
+                                activity?.loadingDialog()
                                 val weeklyDayList = weeklyDaysAdapter.getDayList()
                                 if (sceneFrequency != getString(R.string.text_weekly).lowercase()) {
                                     weeklyDayList.clear()
@@ -289,9 +281,7 @@ class CreateSceneFragment :
                                 context?.showToast(getString(R.string.error_text_empty_switch))
                             }
                             else -> {
-                                activity?.let {
-                                    DialogUtil.loadingAlert(it)
-                                }
+                                activity?.loadingDialog()
 
                                 val weeklyDayList = weeklyDaysAdapter.getDayList()
                                 if (sceneFrequency != getString(R.string.text_weekly).lowercase()) {
@@ -351,7 +341,7 @@ class CreateSceneFragment :
                     viewModel.addSceneResponse.collectLatest { response ->
                         when (response) {
                             is Resource.Success -> {
-                                DialogUtil.hideDialog()
+                                hideDialog()
                                 context?.showToast(response.values.message)
                                 if (response.values.status && response.values.code == Constants.API_SUCCESS_CODE) {
                                     findNavController().navigateUp()
@@ -362,7 +352,7 @@ class CreateSceneFragment :
                                 }
                             }
                             is Resource.Failure -> {
-                                DialogUtil.hideDialog()
+                                hideDialog()
                                 context?.showToast(getString(R.string.error_something_went_wrong))
                                 Log.e(
                                     logTag,
@@ -378,7 +368,7 @@ class CreateSceneFragment :
                     viewModel.updateSceneResponse.collectLatest { response ->
                         when (response) {
                             is Resource.Success -> {
-                                DialogUtil.hideDialog()
+                                hideDialog()
                                 context?.showToast(response.values.message)
                                 if (response.values.status && response.values.code == Constants.API_SUCCESS_CODE) {
                                     findNavController().navigateUp()
@@ -390,7 +380,7 @@ class CreateSceneFragment :
 
                             }
                             is Resource.Failure -> {
-                                DialogUtil.hideDialog()
+                                hideDialog()
                                 context?.showToast(getString(R.string.error_something_went_wrong))
                                 Log.e(
                                     logTag,
@@ -406,7 +396,7 @@ class CreateSceneFragment :
                     viewModel.deleteSceneDetailResponse.collectLatest { response ->
                         when (response) {
                             is Resource.Success -> {
-                                DialogUtil.hideDialog()
+                                hideDialog()
                                 context?.showToast(response.values.message)
                                 if (response.values.status && response.values.code == Constants.API_SUCCESS_CODE) {
                                     itemPosition?.let {
@@ -415,7 +405,7 @@ class CreateSceneFragment :
                                 }
                             }
                             is Resource.Failure -> {
-                                DialogUtil.hideDialog()
+                                hideDialog()
                                 context?.showToast(getString(R.string.error_something_went_wrong))
                                 Log.e(
                                     logTag,
@@ -466,7 +456,7 @@ class CreateSceneFragment :
                 updateDeviceSceneAdapter.setOnDeleteClickListener(object :
                     UpdateDeviceSceneAdapter.DeleteSceneItemClickListener<Scene> {
                     override fun onItemClick(data: Scene, scenePosition: Int) {
-                        DialogUtil.loadingAlert(mActivity)
+                        mActivity.loadingDialog()
                         viewModel.deleteSceneDetail(args.sceneDetail!!.id, data.id)
                         itemPosition = scenePosition
                     }

@@ -21,18 +21,14 @@ import com.voinismartiot.voni.api.model.DeviceSwitchData
 import com.voinismartiot.voni.api.repository.HomeRepository
 import com.voinismartiot.voni.common.interfaces.DialogAskListener
 import com.voinismartiot.voni.common.interfaces.DialogShowListener
-import com.voinismartiot.voni.common.utils.Constants
-import com.voinismartiot.voni.common.utils.DialogUtil
-import com.voinismartiot.voni.common.utils.DialogUtil.featureDetailAlert
-import com.voinismartiot.voni.common.utils.Utils
+import com.voinismartiot.voni.common.utils.*
 import com.voinismartiot.voni.common.utils.Utils.toBoolean
 import com.voinismartiot.voni.common.utils.Utils.toInt
-import com.voinismartiot.voni.common.utils.showToast
 import com.voinismartiot.voni.databinding.FragmentDeviceSettingsBinding
 import com.voinismartiot.voni.mqtt.AwsMqttSingleton
 import com.voinismartiot.voni.mqtt.MQTTConstants
 import com.voinismartiot.voni.mqtt.NotifyManager
-import com.voinismartiot.voni.ui.fragments.ModelBaseFragment
+import com.voinismartiot.voni.ui.fragments.BaseFragment
 import com.voinismartiot.voni.ui.viewmodel.HomeViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -44,7 +40,7 @@ import org.json.JSONObject
 import java.nio.charset.StandardCharsets
 
 class DeviceSettingsFragment :
-    ModelBaseFragment<HomeViewModel, FragmentDeviceSettingsBinding, HomeRepository>() {
+    BaseFragment<HomeViewModel, FragmentDeviceSettingsBinding, HomeRepository>() {
 
     private val args: DeviceSettingsFragmentArgs by navArgs()
     private val logTag = this::class.java.simpleName
@@ -99,26 +95,23 @@ class DeviceSettingsFragment :
             binding.layoutSwitches.rvDays.adapter = switchAdapter
         }
 
-        if (Utils.isNetworkConnectivityAvailable()){
+        if (Utils.isNetworkConnectivityAvailable()) {
             getDevicePreviousData()
         }
 
 
         NotifyManager.internetInfo.observe(viewLifecycleOwner) { isConnected ->
             if (!isConnected) {
-                activity?.let {
-                    DialogUtil.deviceOfflineAlert(
-                        it,
-                        getString(R.string.text_no_internet_available),
-                        object : DialogShowListener {
-                            override fun onClick() {
-                                DialogUtil.hideDialog()
-                                findNavController().navigate(DeviceSettingsFragmentDirections.actionGlobalHomeFragment())
-                            }
-
+                activity?.deviceOfflineAlert(
+                    getString(R.string.text_no_internet_available),
+                    object : DialogShowListener {
+                        override fun onClick() {
+                            hideDialog()
+                            findNavController().navigate(DeviceSettingsFragmentDirections.actionGlobalHomeFragment())
                         }
-                    )
-                }
+
+                    }
+                )
             }
         }
 
@@ -134,89 +127,78 @@ class DeviceSettingsFragment :
         }
 
         binding.layoutRestart.setOnClickListener {
-            activity?.let {
-                DialogUtil.askAlert(
-                    it,
-                    getString(R.string.dialog_title_restart_device),
-                    getString(R.string.text_ok),
-                    getString(R.string.text_cancel),
-                    object : DialogAskListener {
-                        override fun onYesClicked() {
-                            DialogUtil.hideDialog()
-                            publishTopic(
-                                MQTTConstants.RESTART_DEVICE.replace(
-                                    MQTTConstants.AWS_DEVICE_ID,
-                                    args.deviceDetail.deviceSerialNo
-                                ), MQTTConstants.AWS_RESTART_DEVICE
-                            )
-                        }
-
-                        override fun onNoClicked() {
-                            DialogUtil.hideDialog()
-                        }
-
+            activity?.askAlert(
+                getString(R.string.dialog_title_restart_device),
+                getString(R.string.text_ok),
+                getString(R.string.text_cancel),
+                object : DialogAskListener {
+                    override fun onYesClicked() {
+                        hideDialog()
+                        publishTopic(
+                            MQTTConstants.RESTART_DEVICE.replace(
+                                MQTTConstants.AWS_DEVICE_ID,
+                                args.deviceDetail.deviceSerialNo
+                            ), MQTTConstants.AWS_RESTART_DEVICE
+                        )
                     }
-                )
-            }
+
+                    override fun onNoClicked() {
+                        hideDialog()
+                    }
+
+                }
+            )
         }
 
         binding.layoutFactoryReset.setOnClickListener {
-            activity?.let {
-                DialogUtil.askAlert(
-                    it,
-                    getString(R.string.dialog_title_factory_reset),
-                    getString(R.string.text_ok),
-                    getString(R.string.text_cancel),
-                    object : DialogAskListener {
-                        override fun onYesClicked() {
-                            DialogUtil.loadingAlert(it)
-                            viewModel.factoryReset(
-                                BodyFactoryReset(
-                                    args.deviceDetail.id,
-                                    args.deviceDetail.deviceType.toString(),
-                                    args.deviceDetail.productGroup
-                                )
+            activity?.askAlert(
+                getString(R.string.dialog_title_factory_reset),
+                getString(R.string.text_ok),
+                getString(R.string.text_cancel),
+                object : DialogAskListener {
+                    override fun onYesClicked() {
+                        activity?.loadingDialog()
+                        viewModel.factoryReset(
+                            BodyFactoryReset(
+                                args.deviceDetail.id,
+                                args.deviceDetail.deviceType.toString(),
+                                args.deviceDetail.productGroup
                             )
-                        }
-
-                        override fun onNoClicked() {
-                            DialogUtil.hideDialog()
-                        }
-
+                        )
                     }
-                )
-            }
+
+                    override fun onNoClicked() {
+                        hideDialog()
+                    }
+
+                }
+            )
         }
 
         binding.layoutRemove.setOnClickListener {
-            activity?.let {
-                DialogUtil.askAlert(
-                    it,
-                    getString(R.string.dialog_title_remove_device),
-                    getString(R.string.text_ok),
-                    getString(R.string.text_cancel),
-                    object : DialogAskListener {
-                        override fun onYesClicked() {
-                            activity?.let { myActivity ->
-                                DialogUtil.loadingAlert(myActivity)
-                            }
-                            viewModel.deleteDevice(
-                                args.deviceDetail.productGroup,
-                                args.roomDetail.id,
-                                args.deviceDetail.id
-                            )
-                        }
-
-                        override fun onNoClicked() = Unit
-
+            activity?.askAlert(
+                getString(R.string.dialog_title_remove_device),
+                getString(R.string.text_ok),
+                getString(R.string.text_cancel),
+                object : DialogAskListener {
+                    override fun onYesClicked() {
+                        activity?.loadingDialog()
+                        viewModel.deleteDevice(
+                            args.deviceDetail.productGroup,
+                            args.roomDetail.id,
+                            args.deviceDetail.id
+                        )
                     }
-                )
-            }
+
+                    override fun onNoClicked() = Unit
+
+                }
+            )
         }
 
         binding.switchRetainState.setOnClickListener {
             activity?.let {
-                DialogUtil.loadingAlert(it)
+                it.loadingDialog()
                 viewModel.retainState(
                     BodyRetainState(
                         args.deviceDetail.id,
@@ -353,14 +335,14 @@ class DeviceSettingsFragment :
                     viewModel.deleteDeviceResponse.collectLatest { response ->
                         when (response) {
                             is Resource.Success -> {
-                                DialogUtil.hideDialog()
+                                hideDialog()
                                 context?.showToast(response.values.message)
                                 if (response.values.status && response.values.code == Constants.API_SUCCESS_CODE) {
                                     findNavController().navigateUp()
                                 }
                             }
                             is Resource.Failure -> {
-                                DialogUtil.hideDialog()
+                                hideDialog()
                                 context?.showToast(getString(R.string.error_something_went_wrong))
                             }
                             else -> Unit
@@ -372,7 +354,7 @@ class DeviceSettingsFragment :
                     viewModel.retainStateResponse.collectLatest { response ->
                         when (response) {
                             is Resource.Success -> {
-                                DialogUtil.hideDialog()
+                                hideDialog()
                                 context?.showToast(response.values.message)
                                 if (!response.values.status || response.values.code != Constants.API_SUCCESS_CODE) {
                                     binding.switchRetainState.isChecked =
@@ -381,7 +363,7 @@ class DeviceSettingsFragment :
                                 }
                             }
                             is Resource.Failure -> {
-                                DialogUtil.hideDialog()
+                                hideDialog()
                                 context?.showToast(getString(R.string.error_something_went_wrong))
                                 Log.e(
                                     logTag,
@@ -397,7 +379,7 @@ class DeviceSettingsFragment :
                     viewModel.factoryResetResponse.collectLatest { response ->
                         when (response) {
                             is Resource.Success -> {
-                                DialogUtil.hideDialog()
+                                hideDialog()
                                 if (response.values.status && response.values.code == Constants.API_SUCCESS_CODE) {
                                     publishTopic(
                                         MQTTConstants.RESTORE_FACTORY_SETTINGS.replace(
@@ -405,23 +387,20 @@ class DeviceSettingsFragment :
                                             args.deviceDetail.deviceSerialNo
                                         ), MQTTConstants.AWS_FACTORY_RESET
                                     )
-                                    activity?.let {
-                                        DialogUtil.deviceOfflineAlert(
-                                            it,
-                                            response.values.message,
-                                            object : DialogShowListener {
-                                                override fun onClick() {
-                                                    DialogUtil.hideDialog()
-                                                    findNavController().navigateUp()
-                                                }
-                                            })
-                                    }
+                                    activity?.deviceOfflineAlert(
+                                        response.values.message,
+                                        object : DialogShowListener {
+                                            override fun onClick() {
+                                                hideDialog()
+                                                findNavController().navigateUp()
+                                            }
+                                        })
                                 } else {
                                     context?.showToast(response.values.message)
                                 }
                             }
                             is Resource.Failure -> {
-                                DialogUtil.hideDialog()
+                                hideDialog()
                                 context?.showToast(getString(R.string.error_something_went_wrong))
                                 Log.e(
                                     logTag,
@@ -437,7 +416,7 @@ class DeviceSettingsFragment :
                     viewModel.getDevicePreviousDataResponse.collectLatest { response ->
                         when (response) {
                             is Resource.Success -> {
-                                DialogUtil.hideDialog()
+                                hideDialog()
                                 if (response.values.status && response.values.code == Constants.API_SUCCESS_CODE) {
                                     response.values.data?.let {
                                         previousSwitchOffList.addAll(it)
@@ -447,7 +426,7 @@ class DeviceSettingsFragment :
                                 }
                             }
                             is Resource.Failure -> {
-                                DialogUtil.hideDialog()
+                                hideDialog()
                                 context?.showToast(getString(R.string.error_something_went_wrong))
                                 Log.e(
                                     logTag,
@@ -482,10 +461,9 @@ class DeviceSettingsFragment :
                         if (jsonObject.has(MQTTConstants.AWS_STATUS)) {
                             val deviceStatus = jsonObject.getString(MQTTConstants.AWS_STATUS)
                             if (deviceStatus == "1") {
-                                DialogUtil.hideDialog()
+                                hideDialog()
                             } else {
-                                DialogUtil.deviceOfflineAlert(
-                                    it,
+                                it.deviceOfflineAlert(
                                     onClick = object : DialogShowListener {
                                         override fun onClick() {
                                             findNavController().navigateUp()
@@ -538,9 +516,12 @@ class DeviceSettingsFragment :
         payload.put(MQTTConstants.AWS_OUTDOOR_MODE, value)
         payload.put(MQTTConstants.AWS_OUTDOOR_MODE_SWITCH, JSONArray(selectedSwitch))
 
-        if (value == "0"){
-            payload.put(MQTTConstants.AWS_OUTDOOR_MODE_SWITCH_DATA, JSONArray(previousSwitchOffList))
-        }else {
+        if (value == "0") {
+            payload.put(
+                MQTTConstants.AWS_OUTDOOR_MODE_SWITCH_DATA,
+                JSONArray(previousSwitchOffList)
+            )
+        } else {
             payload.put(MQTTConstants.AWS_OUTDOOR_MODE_SWITCH_DATA, JSONArray(previousSwitchList))
         }
 
@@ -556,7 +537,7 @@ class DeviceSettingsFragment :
         }
     }
 
-    private fun getDevicePreviousData(){
+    private fun getDevicePreviousData() {
         previousSwitchOffList.clear()
         viewModel.getDevicePreviousData(args.deviceDetail.id)
     }

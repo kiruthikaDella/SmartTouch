@@ -12,17 +12,14 @@ import com.voinismartiot.voni.api.Resource
 import com.voinismartiot.voni.api.body.BodyForgotPassword
 import com.voinismartiot.voni.api.repository.AuthRepository
 import com.voinismartiot.voni.common.interfaces.DialogShowListener
-import com.voinismartiot.voni.common.utils.Constants
-import com.voinismartiot.voni.common.utils.DialogUtil
-import com.voinismartiot.voni.common.utils.Utils
-import com.voinismartiot.voni.common.utils.showToast
+import com.voinismartiot.voni.common.utils.*
 import com.voinismartiot.voni.databinding.FragmentForgotPasswordBinding
-import com.voinismartiot.voni.ui.fragments.ModelBaseFragment
+import com.voinismartiot.voni.ui.fragments.BaseFragment
 import com.voinismartiot.voni.ui.viewmodel.AuthViewModel
 import kotlinx.coroutines.flow.collectLatest
 
 class ForgotPasswordFragment :
-    ModelBaseFragment<AuthViewModel, FragmentForgotPasswordBinding, AuthRepository>() {
+    BaseFragment<AuthViewModel, FragmentForgotPasswordBinding, AuthRepository>() {
 
     private val logTag = this::class.java.simpleName
 
@@ -44,25 +41,20 @@ class ForgotPasswordFragment :
                 if (email.isBlank()) {
                     binding.edtEmail.error = getString(R.string.error_text_email)
                 } else {
-                    activity?.let {
-                        DialogUtil.loadingAlert(it)
-                    }
+                    activity?.loadingDialog()
                     viewModel.forgotPassword(BodyForgotPassword(email))
                 }
             } else {
-                activity?.let {
-                    DialogUtil.deviceOfflineAlert(
-                        it,
-                        getString(R.string.text_no_internet_available),
-                        object : DialogShowListener {
-                            override fun onClick() {
-                                DialogUtil.hideDialog()
-                                findNavController().navigateUp()
-                            }
-
+                activity?.deviceOfflineAlert(
+                    getString(R.string.text_no_internet_available),
+                    object : DialogShowListener {
+                        override fun onClick() {
+                            hideDialog()
+                            findNavController().navigateUp()
                         }
-                    )
-                }
+
+                    }
+                )
             }
         }
 
@@ -70,7 +62,7 @@ class ForgotPasswordFragment :
             viewModel.forgotPasswordResponse.collectLatest { response ->
                 when (response) {
                     is Resource.Success -> {
-                        DialogUtil.hideDialog()
+                        hideDialog()
                         if (response.values.status && response.values.code == Constants.API_SUCCESS_CODE) {
                             findNavController().navigateUp()
                             context?.showToast(response.values.message)
@@ -79,13 +71,11 @@ class ForgotPasswordFragment :
                         }
                     }
                     is Resource.Failure -> {
-                        DialogUtil.hideDialog()
+                        hideDialog()
                         context?.showToast(getString(R.string.error_something_went_wrong))
                         Log.e(logTag, " Failure ${response.errorBody?.string()}")
                     }
-                    else -> {
-                        //We will do nothing here
-                    }
+                    else -> Unit
                 }
             }
 

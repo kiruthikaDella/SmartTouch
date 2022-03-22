@@ -11,16 +11,17 @@ import com.voinismartiot.voni.R
 import com.voinismartiot.voni.api.Resource
 import com.voinismartiot.voni.api.body.BodyAddSubordinateUser
 import com.voinismartiot.voni.api.repository.UserManagementRepository
-import com.voinismartiot.voni.common.utils.DialogUtil
 import com.voinismartiot.voni.common.utils.Utils
+import com.voinismartiot.voni.common.utils.hideDialog
+import com.voinismartiot.voni.common.utils.loadingDialog
 import com.voinismartiot.voni.common.utils.showToast
 import com.voinismartiot.voni.databinding.FragmentAddUserBinding
-import com.voinismartiot.voni.ui.fragments.ModelBaseFragment
+import com.voinismartiot.voni.ui.fragments.BaseFragment
 import com.voinismartiot.voni.ui.viewmodel.UserManagementViewModel
 import kotlinx.coroutines.flow.collectLatest
 
 class AddUserFragment :
-    ModelBaseFragment<UserManagementViewModel, FragmentAddUserBinding, UserManagementRepository>() {
+    BaseFragment<UserManagementViewModel, FragmentAddUserBinding, UserManagementRepository>() {
 
     private val logTag = this::class.java.simpleName
 
@@ -36,11 +37,11 @@ class AddUserFragment :
                     is Resource.Success -> {
                         binding.edtFullName.setText("")
                         binding.edtEmailAddress.setText("")
-                        DialogUtil.hideDialog()
+                        hideDialog()
                         context?.showToast(response.values.message)
                     }
                     is Resource.Failure -> {
-                        DialogUtil.hideDialog()
+                        hideDialog()
                         context?.showToast(getString(R.string.error_something_went_wrong))
                         Log.e(logTag, " addSubordinateUserResponse ${response.errorBody?.string()}")
                     }
@@ -65,15 +66,14 @@ class AddUserFragment :
                 }
                 else -> {
 
-                    if (!Utils.isNetworkConnectivityAvailable()){
+                    if (!Utils.isNetworkConnectivityAvailable()) {
                         context?.getString(R.string.text_no_internet_available)
                         return@setOnClickListener
                     }
 
-                    activity?.let {
-                        DialogUtil.loadingAlert(it)
-                        viewModel.addSubordinateUser(BodyAddSubordinateUser(userName, email))
-                    }
+                    activity?.loadingDialog()
+                    viewModel.addSubordinateUser(BodyAddSubordinateUser(userName, email))
+
                 }
             }
         }

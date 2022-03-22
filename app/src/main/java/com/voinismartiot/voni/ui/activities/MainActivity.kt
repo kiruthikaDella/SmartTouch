@@ -121,7 +121,7 @@ class MainActivity : AppCompatActivity() {
                 else -> {
                     hidePanel()
                     Handler(Looper.getMainLooper()).postDelayed({
-                        DialogUtil.loadingAlert(this)
+                        loadingDialog()
                         viewModel.addRoom(BodyAddRoom(roomTypeId!!, roomName))
                     }, 600)
                 }
@@ -265,12 +265,11 @@ class MainActivity : AppCompatActivity() {
                     )
                     navController.navigate(R.id.userManagementFragment)
                 } else {
-                    DialogUtil.deviceOfflineAlert(
-                        this,
+                    deviceOfflineAlert(
                         getString(R.string.error_text_unauthorized),
                         object : DialogShowListener {
                             override fun onClick() {
-                                DialogUtil.hideDialog()
+                                hideDialog()
                             }
                         })
                 }
@@ -354,7 +353,8 @@ class MainActivity : AppCompatActivity() {
                                                     roomTypeId = room.roomTypeId
                                                 }
 
-                                                override fun onNothingSelected(parent: AdapterView<*>?) = Unit
+                                                override fun onNothingSelected(parent: AdapterView<*>?) =
+                                                    Unit
 
                                             }
                                     }
@@ -380,7 +380,7 @@ class MainActivity : AppCompatActivity() {
                     viewModel.addRoomResponse.collectLatest { response ->
                         when (response) {
                             is Resource.Success -> {
-                                DialogUtil.hideDialog()
+                                hideDialog()
                                 if (response.values.status && response.values.code == Constants.API_SUCCESS_CODE) {
                                     response.values.data?.let { roomData ->
                                         if (navController.currentDestination?.id == R.id.homeFragment) {
@@ -396,7 +396,7 @@ class MainActivity : AppCompatActivity() {
                                 }
                             }
                             is Resource.Failure -> {
-                                DialogUtil.hideDialog()
+                                hideDialog()
                                 showToast(getString(R.string.error_something_went_wrong))
                                 Log.e(logTag, " addRoomResponse ${response.errorBody?.string()} ")
                             }
@@ -410,7 +410,7 @@ class MainActivity : AppCompatActivity() {
                         isApiCalled = true
                         when (response) {
                             is Resource.Success -> {
-                                DialogUtil.hideDialog()
+                                hideDialog()
                                 if (response.values.status && response.values.code == Constants.API_SUCCESS_CODE) {
                                     response.values.data?.let { appliancesData ->
                                         appliancesList.addAll(appliancesData)
@@ -418,7 +418,7 @@ class MainActivity : AppCompatActivity() {
                                 }
                             }
                             is Resource.Failure -> {
-                                DialogUtil.hideDialog()
+                                hideDialog()
                                 Log.e(
                                     logTag,
                                     " getDeviceAppliancesResponse ${response.errorBody?.string()} "

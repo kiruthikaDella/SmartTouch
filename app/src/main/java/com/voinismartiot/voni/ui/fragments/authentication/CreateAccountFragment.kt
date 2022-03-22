@@ -17,17 +17,14 @@ import com.voinismartiot.voni.api.Resource
 import com.voinismartiot.voni.api.body.BodySignUp
 import com.voinismartiot.voni.api.repository.AuthRepository
 import com.voinismartiot.voni.common.interfaces.DialogShowListener
-import com.voinismartiot.voni.common.utils.Constants
-import com.voinismartiot.voni.common.utils.DialogUtil
-import com.voinismartiot.voni.common.utils.Utils
-import com.voinismartiot.voni.common.utils.showToast
+import com.voinismartiot.voni.common.utils.*
 import com.voinismartiot.voni.databinding.FragmentCreateAccountBinding
-import com.voinismartiot.voni.ui.fragments.ModelBaseFragment
+import com.voinismartiot.voni.ui.fragments.BaseFragment
 import com.voinismartiot.voni.ui.viewmodel.AuthViewModel
 import kotlinx.coroutines.flow.collectLatest
 
 class CreateAccountFragment :
-    ModelBaseFragment<AuthViewModel, FragmentCreateAccountBinding, AuthRepository>() {
+    BaseFragment<AuthViewModel, FragmentCreateAccountBinding, AuthRepository>() {
 
     private val logTag = this::class.java.simpleName
     private var isPasswordVisible = false
@@ -49,19 +46,16 @@ class CreateAccountFragment :
             if (Utils.isNetworkConnectivityAvailable()) {
                 validateUserInformation()
             } else {
-                activity?.let {
-                    DialogUtil.deviceOfflineAlert(
-                        it,
-                        getString(R.string.text_no_internet_available),
-                        object : DialogShowListener {
-                            override fun onClick() {
-                                DialogUtil.hideDialog()
-                                findNavController().navigateUp()
-                            }
-
+                activity?.deviceOfflineAlert(
+                    getString(R.string.text_no_internet_available),
+                    object : DialogShowListener {
+                        override fun onClick() {
+                            hideDialog()
+                            findNavController().navigateUp()
                         }
-                    )
-                }
+
+                    }
+                )
             }
         }
 
@@ -128,7 +122,7 @@ class CreateAccountFragment :
             viewModel.signUpResponse.collectLatest { response ->
                 when (response) {
                     is Resource.Success -> {
-                        DialogUtil.hideDialog()
+                        hideDialog()
                         if (response.values.status && response.values.code == Constants.API_SUCCESS_CODE) {
                             context?.showToast(response.values.message)
                             findNavController().navigateUp()
@@ -138,7 +132,7 @@ class CreateAccountFragment :
 
                     }
                     is Resource.Failure -> {
-                        DialogUtil.hideDialog()
+                        hideDialog()
                         context?.showToast(getString(R.string.error_something_went_wrong))
 
                         Log.e(logTag, "registration error ${response.errorBody?.string()}")
@@ -194,9 +188,7 @@ class CreateAccountFragment :
             binding.edtConfirmPassword.error = getString(R.string.error_text_confirm_password)
             binding.edtPassword.requestFocus()
         } else {
-            activity?.let {
-                DialogUtil.loadingAlert(it)
-            }
+            activity?.loadingDialog()
             viewModel.signUp(
                 BodySignUp(
                     fullName,

@@ -11,16 +11,17 @@ import com.voinismartiot.voni.R
 import com.voinismartiot.voni.api.Resource
 import com.voinismartiot.voni.api.body.BodyFeedback
 import com.voinismartiot.voni.api.repository.ContactUsRepository
-import com.voinismartiot.voni.common.utils.DialogUtil
 import com.voinismartiot.voni.common.utils.Utils
+import com.voinismartiot.voni.common.utils.hideDialog
+import com.voinismartiot.voni.common.utils.loadingDialog
 import com.voinismartiot.voni.common.utils.showToast
 import com.voinismartiot.voni.databinding.FragmentContactUsBinding
-import com.voinismartiot.voni.ui.fragments.ModelBaseFragment
+import com.voinismartiot.voni.ui.fragments.BaseFragment
 import com.voinismartiot.voni.ui.viewmodel.ContactUsViewModel
 import kotlinx.coroutines.flow.collectLatest
 
 class ContactUsFragment :
-    ModelBaseFragment<ContactUsViewModel, FragmentContactUsBinding, ContactUsRepository>() {
+    BaseFragment<ContactUsViewModel, FragmentContactUsBinding, ContactUsRepository>() {
 
     private val logTag = this::class.java.simpleName
 
@@ -43,7 +44,7 @@ class ContactUsFragment :
                 }
 
                 activity?.let {
-                    DialogUtil.loadingAlert(it)
+                    it.loadingDialog()
                     viewModel.addFeedback(BodyFeedback(feedback))
                 }
             }
@@ -68,17 +69,15 @@ class ContactUsFragment :
             viewModel.addFeedbackResponse.collectLatest { response ->
                 when (response) {
                     is Resource.Success -> {
-                        DialogUtil.hideDialog()
+                        hideDialog()
                         context?.showToast(response.values.message)
                     }
                     is Resource.Failure -> {
-                        DialogUtil.hideDialog()
+                        hideDialog()
                         context?.showToast(getString(R.string.error_something_went_wrong))
                         Log.e(logTag, " addFeedbackResponse Failure ${response.errorBody}")
                     }
-                    else -> {
-                        //we will do nothing here
-                    }
+                    else -> Unit
                 }
 
             }

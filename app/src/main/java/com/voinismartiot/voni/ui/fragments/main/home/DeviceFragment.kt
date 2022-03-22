@@ -57,15 +57,12 @@ import com.voinismartiot.voni.common.interfaces.AdapterItemClickListener
 import com.voinismartiot.voni.common.interfaces.DialogEditListener
 import com.voinismartiot.voni.common.interfaces.DialogShowListener
 import com.voinismartiot.voni.common.interfaces.PingHoleStatusListener
-import com.voinismartiot.voni.common.utils.Constants
-import com.voinismartiot.voni.common.utils.DialogUtil
+import com.voinismartiot.voni.common.utils.*
 import com.voinismartiot.voni.common.utils.Utils.clearError
 import com.voinismartiot.voni.common.utils.Utils.toEditable
-import com.voinismartiot.voni.common.utils.hideKeyboard
-import com.voinismartiot.voni.common.utils.showToast
 import com.voinismartiot.voni.databinding.FragmentDeviceBinding
 import com.voinismartiot.voni.mqtt.NotifyManager
-import com.voinismartiot.voni.ui.fragments.ModelBaseFragment
+import com.voinismartiot.voni.ui.fragments.BaseFragment
 import com.voinismartiot.voni.ui.viewmodel.HomeViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -74,7 +71,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 @SuppressLint("ClickableViewAccessibility", "NotifyDataSetChanged")
-class DeviceFragment : ModelBaseFragment<HomeViewModel, FragmentDeviceBinding, HomeRepository>() {
+class DeviceFragment : BaseFragment<HomeViewModel, FragmentDeviceBinding, HomeRepository>() {
 
     private val logTag = this::class.java.simpleName
     private val args: DeviceFragmentArgs by navArgs()
@@ -135,19 +132,16 @@ class DeviceFragment : ModelBaseFragment<HomeViewModel, FragmentDeviceBinding, H
                 }
             } else {
                 if (isSelectedSmarTouch) {
-                    activity?.let {
-                        DialogUtil.deviceOfflineAlert(
-                            it,
-                            getString(R.string.text_no_internet_available),
-                            object : DialogShowListener {
-                                override fun onClick() {
-                                    DialogUtil.hideDialog()
-                                    findNavController().navigateUp()
-                                }
-
+                    activity?.deviceOfflineAlert(
+                        getString(R.string.text_no_internet_available),
+                        object : DialogShowListener {
+                            override fun onClick() {
+                                hideDialog()
+                                findNavController().navigateUp()
                             }
-                        )
-                    }
+
+                        }
+                    )
                 }
             }
         }
@@ -209,75 +203,69 @@ class DeviceFragment : ModelBaseFragment<HomeViewModel, FragmentDeviceBinding, H
         })
 
         binding.iBtnEditRoomName.setOnClickListener {
-            activity?.let {
-                DialogUtil.editDialog(
-                    it,
-                    "Edit Room name",
-                    binding.tvTitle.text.toString().trim(),
-                    getString(R.string.text_save),
-                    getString(R.string.text_cancel),
-                    onClick = object : DialogEditListener {
-                        override fun onYesClicked(string: String) {
-                            if (string.isEmpty()) {
-                                it.showToast("Room name must not be empty!")
-                                return
-                            }
-
-                            roomData = args.roomDetail
-                            roomData?.roomName = string
-                            DialogUtil.hideDialog()
-                            DialogUtil.loadingAlert(it)
-                            viewModel.updateRoom(BodyUpdateRoom(args.roomDetail.id, string))
+            activity?.editDialog(
+                "Edit Room name",
+                binding.tvTitle.text.toString().trim(),
+                getString(R.string.text_save),
+                getString(R.string.text_cancel),
+                onClick = object : DialogEditListener {
+                    override fun onYesClicked(string: String) {
+                        if (string.isEmpty()) {
+                            activity?.showToast("Room name must not be empty!")
+                            return
                         }
 
-                        override fun onNoClicked() {
-                            DialogUtil.hideDialog()
-                            hideKeyboard()
-                        }
-
+                        roomData = args.roomDetail
+                        roomData?.roomName = string
+                        hideDialog()
+                        activity?.loadingDialog()
+                        viewModel.updateRoom(BodyUpdateRoom(args.roomDetail.id, string))
                     }
-                )
-            }
+
+                    override fun onNoClicked() {
+                        hideDialog()
+                        hideKeyboard()
+                    }
+
+                }
+            )
         }
 
         panelAdapter.setOnUpdateDeviceNameClickListener(object :
             DeviceAdapter.DeviceItemClickListener<GetDeviceData> {
             override fun onItemClick(data: GetDeviceData, devicePosition: Int) {
-                activity?.let {
-                    DialogUtil.editDialog(
-                        it,
-                        "Edit Panel name",
-                        data.deviceName,
-                        getString(R.string.text_save),
-                        getString(R.string.text_cancel),
-                        onClick = object : DialogEditListener {
-                            override fun onYesClicked(string: String) {
-                                if (string.isEmpty()) {
-                                    it.showToast("Device name must not be empty!")
-                                    return
-                                }
+                activity?.editDialog(
+                    "Edit Panel name",
+                    data.deviceName,
+                    getString(R.string.text_save),
+                    getString(R.string.text_cancel),
+                    onClick = object : DialogEditListener {
+                        override fun onYesClicked(string: String) {
+                            if (string.isEmpty()) {
+                                activity?.showToast("Device name must not be empty!")
+                                return
+                            }
 
-                                deviceData = data
-                                deviceData?.deviceName = string
-                                DialogUtil.hideDialog()
-                                this@DeviceFragment.devicePosition = devicePosition
-                                DialogUtil.loadingAlert(it)
-                                viewModel.updateDeviceName(
-                                    BodyUpdateDeviceName(
-                                        data.id,
-                                        string
-                                    )
+                            deviceData = data
+                            deviceData?.deviceName = string
+                            hideDialog()
+                            this@DeviceFragment.devicePosition = devicePosition
+                            activity?.loadingDialog()
+                            viewModel.updateDeviceName(
+                                BodyUpdateDeviceName(
+                                    data.id,
+                                    string
                                 )
-
-                            }
-
-                            override fun onNoClicked() {
-                                DialogUtil.hideDialog()
-                            }
+                            )
 
                         }
-                    )
-                }
+
+                        override fun onNoClicked() {
+                            hideDialog()
+                        }
+
+                    }
+                )
             }
 
         })
@@ -310,43 +298,39 @@ class DeviceFragment : ModelBaseFragment<HomeViewModel, FragmentDeviceBinding, H
                 devicePosition: Int,
                 switchData: DeviceSwitchData
             ) {
-                activity?.let {
-                    DialogUtil.editDialog(
-                        it,
-                        "Edit Switch name",
-                        switchData.name,
-                        getString(R.string.text_save),
-                        getString(R.string.text_cancel),
-                        onClick = object : DialogEditListener {
-                            override fun onYesClicked(string: String) {
-                                if (string.isEmpty()) {
-                                    it.showToast("Switch name must not be empty!")
-                                    return
-                                }
+                activity?.editDialog(
+                    "Edit Switch name",
+                    switchData.name,
+                    getString(R.string.text_save),
+                    getString(R.string.text_cancel),
+                    onClick = object : DialogEditListener {
+                        override fun onYesClicked(string: String) {
+                            if (string.isEmpty()) {
+                                activity?.showToast("Switch name must not be empty!")
+                                return
+                            }
 
-                                deviceData = data
-                                DialogUtil.hideDialog()
-                                this@DeviceFragment.devicePosition = devicePosition
-                                switchPosition = switchData.index.toInt() - 1
-                                deviceData?.switchData?.get(switchPosition!!)?.name = string
-                                DialogUtil.loadingAlert(it)
-                                viewModel.updateSwitchName(
-                                    BodyUpdateSwitchName(
-                                        data.id,
-                                        switchData.id,
-                                        string
-                                    )
+                            deviceData = data
+                            hideDialog()
+                            this@DeviceFragment.devicePosition = devicePosition
+                            switchPosition = switchData.index.toInt() - 1
+                            deviceData?.switchData?.get(switchPosition!!)?.name = string
+                            activity?.loadingDialog()
+                            viewModel.updateSwitchName(
+                                BodyUpdateSwitchName(
+                                    data.id,
+                                    switchData.id,
+                                    string
                                 )
-                            }
-
-                            override fun onNoClicked() {
-                                DialogUtil.hideDialog()
-                            }
-
+                            )
                         }
-                    )
 
-                }
+                        override fun onNoClicked() {
+                            hideDialog()
+                        }
+
+                    }
+                )
             }
 
         })
@@ -458,9 +442,7 @@ class DeviceFragment : ModelBaseFragment<HomeViewModel, FragmentDeviceBinding, H
     }
 
     private fun showLoading() {
-        activity?.let {
-            DialogUtil.loadingAlert(it)
-        }
+        activity?.loadingDialog()
     }
 
     private fun apiCall() {
@@ -473,7 +455,7 @@ class DeviceFragment : ModelBaseFragment<HomeViewModel, FragmentDeviceBinding, H
                     viewModel.updateRoomResponse.collectLatest { response ->
                         when (response) {
                             is Resource.Success -> {
-                                DialogUtil.hideDialog()
+                                hideDialog()
                                 context?.showToast(response.values.message)
 
                                 if (response.values.status && response.values.code == Constants.API_SUCCESS_CODE) {
@@ -485,7 +467,7 @@ class DeviceFragment : ModelBaseFragment<HomeViewModel, FragmentDeviceBinding, H
                                 }
                             }
                             is Resource.Failure -> {
-                                DialogUtil.hideDialog()
+                                hideDialog()
                                 context?.showToast(getString(R.string.error_something_went_wrong))
                                 Log.e(
                                     logTag,
@@ -501,7 +483,7 @@ class DeviceFragment : ModelBaseFragment<HomeViewModel, FragmentDeviceBinding, H
                     viewModel.addDeviceResponse.collectLatest { response ->
                         when (response) {
                             is Resource.Success -> {
-                                DialogUtil.hideDialog()
+                                hideDialog()
                                 context?.showToast(response.values.message)
                                 if (response.values.status && response.values.code == Constants.API_SUCCESS_CODE) {
                                     response.values.data?.let {
@@ -512,7 +494,7 @@ class DeviceFragment : ModelBaseFragment<HomeViewModel, FragmentDeviceBinding, H
                                 }
                             }
                             is Resource.Failure -> {
-                                DialogUtil.hideDialog()
+                                hideDialog()
                                 context?.showToast(getString(R.string.error_something_went_wrong))
                                 Log.e(
                                     logTag,
@@ -529,7 +511,7 @@ class DeviceFragment : ModelBaseFragment<HomeViewModel, FragmentDeviceBinding, H
                         deviceList.clear()
                         when (response) {
                             is Resource.Success -> {
-                                DialogUtil.hideDialog()
+                                hideDialog()
                                 if (response.values.status && response.values.code == Constants.API_SUCCESS_CODE) {
                                     response.values.data?.let { deviceData ->
                                         deviceList.addAll(deviceData)
@@ -541,7 +523,7 @@ class DeviceFragment : ModelBaseFragment<HomeViewModel, FragmentDeviceBinding, H
                                 panelAdapter.notifyDataSetChanged()
                             }
                             is Resource.Failure -> {
-                                DialogUtil.hideDialog()
+                                hideDialog()
                                 if (isSelectedSmarTouch) {
                                     context?.showToast(getString(R.string.error_something_went_wrong))
                                     Log.e(
@@ -559,7 +541,7 @@ class DeviceFragment : ModelBaseFragment<HomeViewModel, FragmentDeviceBinding, H
                     viewModel.updateDeviceNameResponse.collectLatest { response ->
                         when (response) {
                             is Resource.Success -> {
-                                DialogUtil.hideDialog()
+                                hideDialog()
                                 context?.showToast(response.values.message)
                                 if (response.values.status && response.values.code == Constants.API_SUCCESS_CODE) {
 
@@ -576,7 +558,7 @@ class DeviceFragment : ModelBaseFragment<HomeViewModel, FragmentDeviceBinding, H
                                 }
                             }
                             is Resource.Failure -> {
-                                DialogUtil.hideDialog()
+                                hideDialog()
                                 context?.showToast(getString(R.string.error_something_went_wrong))
                                 Log.e(
                                     logTag,
@@ -592,7 +574,7 @@ class DeviceFragment : ModelBaseFragment<HomeViewModel, FragmentDeviceBinding, H
                     viewModel.updateSwitchNameResponse.collectLatest { response ->
                         when (response) {
                             is Resource.Success -> {
-                                DialogUtil.hideDialog()
+                                hideDialog()
                                 response.values.message?.let { msg ->
                                     context?.showToast(msg)
                                 }
@@ -623,7 +605,7 @@ class DeviceFragment : ModelBaseFragment<HomeViewModel, FragmentDeviceBinding, H
                                 }
                             }
                             is Resource.Failure -> {
-                                DialogUtil.hideDialog()
+                                hideDialog()
                                 context?.showToast(getString(R.string.error_something_went_wrong))
                                 Log.e(
                                     logTag,
@@ -772,9 +754,9 @@ class DeviceFragment : ModelBaseFragment<HomeViewModel, FragmentDeviceBinding, H
             }
             if (WifiUtils.isSSIDWifiConnected(currentSSID)) {
                 activity?.let {
-                    DialogUtil.loadingAlert(it, isCancelable = false)
+                    it.loadingDialog()
                     Handler(Looper.getMainLooper()).postDelayed({
-                        DialogUtil.hideDialog()
+                        hideDialog()
                         isSelectedSmartAck?.let { isSmarTack ->
                             findNavController().navigate(
                                 DeviceFragmentDirections.actionDeviceFragmentToConnectingWifiFragment(

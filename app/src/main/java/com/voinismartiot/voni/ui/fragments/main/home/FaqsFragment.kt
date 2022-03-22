@@ -18,15 +18,16 @@ import com.voinismartiot.voni.adapters.faqadapter.QuestionModel
 import com.voinismartiot.voni.api.Resource
 import com.voinismartiot.voni.api.repository.HomeRepository
 import com.voinismartiot.voni.common.utils.Constants
-import com.voinismartiot.voni.common.utils.DialogUtil
+import com.voinismartiot.voni.common.utils.hideDialog
+import com.voinismartiot.voni.common.utils.loadingDialog
 import com.voinismartiot.voni.common.utils.showToast
 import com.voinismartiot.voni.databinding.FragmentFaqsBinding
 import com.voinismartiot.voni.mqtt.NotifyManager
-import com.voinismartiot.voni.ui.fragments.ModelBaseFragment
+import com.voinismartiot.voni.ui.fragments.BaseFragment
 import com.voinismartiot.voni.ui.viewmodel.HomeViewModel
 import kotlinx.coroutines.flow.collectLatest
 
-class FaqsFragment : ModelBaseFragment<HomeViewModel, FragmentFaqsBinding, HomeRepository>() {
+class FaqsFragment : BaseFragment<HomeViewModel, FragmentFaqsBinding, HomeRepository>() {
 
     private val logTag = this::class.java.simpleName
     private lateinit var faqAdapter: FAQAdapter
@@ -50,7 +51,8 @@ class FaqsFragment : ModelBaseFragment<HomeViewModel, FragmentFaqsBinding, HomeR
         faqAdapter = FAQAdapter(faqList)
 
         binding.edtSearch.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) = Unit
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) =
+                Unit
 
             override fun onTextChanged(char: CharSequence?, start: Int, before: Int, count: Int) {
                 char?.let {
@@ -65,9 +67,7 @@ class FaqsFragment : ModelBaseFragment<HomeViewModel, FragmentFaqsBinding, HomeR
         NotifyManager.internetInfo.observe(viewLifecycleOwner) { isConnected ->
             if (isConnected) {
                 faqList.clear()
-                activity?.let {
-                    DialogUtil.loadingAlert(it)
-                }
+                activity?.loadingDialog()
                 viewModel.getFAQ()
             } else {
                 Log.e(logTag, " internet is not available")
@@ -79,7 +79,7 @@ class FaqsFragment : ModelBaseFragment<HomeViewModel, FragmentFaqsBinding, HomeR
             viewModel.faqResponse.collectLatest { response ->
                 when (response) {
                     is Resource.Success -> {
-                        DialogUtil.hideDialog()
+                        hideDialog()
                         if (response.values.status && response.values.code == Constants.API_SUCCESS_CODE) {
 
                             response.values.data?.let { faqData ->
@@ -108,7 +108,7 @@ class FaqsFragment : ModelBaseFragment<HomeViewModel, FragmentFaqsBinding, HomeR
                         }
                     }
                     is Resource.Failure -> {
-                        DialogUtil.hideDialog()
+                        hideDialog()
                         context?.showToast(getString(R.string.error_something_went_wrong))
                         Log.e(logTag, "faqResponse error ${response.errorBody}")
                     }

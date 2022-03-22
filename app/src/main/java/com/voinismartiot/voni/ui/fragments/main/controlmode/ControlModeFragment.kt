@@ -25,24 +25,21 @@ import com.voinismartiot.voni.api.body.BodyPinStatus
 import com.voinismartiot.voni.api.model.ControlModeRoomData
 import com.voinismartiot.voni.api.repository.HomeRepository
 import com.voinismartiot.voni.common.interfaces.DialogAskListener
-import com.voinismartiot.voni.common.utils.Constants
-import com.voinismartiot.voni.common.utils.DialogUtil
-import com.voinismartiot.voni.common.utils.Utils
+import com.voinismartiot.voni.common.utils.*
 import com.voinismartiot.voni.common.utils.Utils.isControlModePin
 import com.voinismartiot.voni.common.utils.Utils.toBoolean
 import com.voinismartiot.voni.common.utils.Utils.toInt
-import com.voinismartiot.voni.common.utils.showToast
 import com.voinismartiot.voni.databinding.FragmentControlModeBinding
 import com.voinismartiot.voni.mqtt.NotifyManager
 import com.voinismartiot.voni.ui.activities.AuthenticationActivity
 import com.voinismartiot.voni.ui.activities.MainActivity
-import com.voinismartiot.voni.ui.fragments.ModelBaseFragment
+import com.voinismartiot.voni.ui.fragments.BaseFragment
 import com.voinismartiot.voni.ui.viewmodel.HomeViewModel
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 class ControlModeFragment :
-    ModelBaseFragment<HomeViewModel, FragmentControlModeBinding, HomeRepository>() {
+    BaseFragment<HomeViewModel, FragmentControlModeBinding, HomeRepository>() {
 
     private val logTag = this::class.java.simpleName
     private lateinit var controlModeAdapter: ControlModeAdapter
@@ -68,9 +65,7 @@ class ControlModeFragment :
 
         NotifyManager.internetInfo.observe(viewLifecycleOwner) { isConnected ->
             if (isConnected) {
-                activity?.let {
-                    DialogUtil.loadingAlert(it)
-                }
+                activity?.loadingDialog()
                 viewModel.getControl()
                 viewModel.getPinStatus()
             } else {
@@ -85,66 +80,60 @@ class ControlModeFragment :
                 return@setOnClickListener
             }
 
-            activity?.let {
-                var isPinned = isControlModePin()
-                val msg: String = if (isPinned) {
-                    isPinned = false
-                    getString(R.string.dialog_title_unpin_control_mode)
-                } else {
-                    isPinned = true
-                    getString(R.string.dialog_title_pin_control_mode)
-                }
-                DialogUtil.askAlert(
-                    it,
-                    msg,
-                    getString(R.string.text_ok),
-                    getString(R.string.text_cancel),
-                    object : DialogAskListener {
-                        override fun onYesClicked() {
-                            DialogUtil.loadingAlert(it)
-                            viewModel.updatePinStatus(BodyPinStatus(isPinned.toInt()))
-                        }
-
-                        override fun onNoClicked() = Unit
-                    }
-                )
+            var isPinned = isControlModePin()
+            val msg: String = if (isPinned) {
+                isPinned = false
+                getString(R.string.dialog_title_unpin_control_mode)
+            } else {
+                isPinned = true
+                getString(R.string.dialog_title_pin_control_mode)
             }
+            activity?.askAlert(
+                msg,
+                getString(R.string.text_ok),
+                getString(R.string.text_cancel),
+                object : DialogAskListener {
+                    override fun onYesClicked() {
+                        activity?.loadingDialog()
+                        viewModel.updatePinStatus(BodyPinStatus(isPinned.toInt()))
+                    }
+
+                    override fun onNoClicked() = Unit
+                }
+            )
         }
 
         binding.ibLogout.setOnClickListener {
 
-            activity?.let { mActivity ->
-                DialogUtil.askAlert(
-                    mActivity,
-                    getString(R.string.dialog_title_logout),
-                    getString(R.string.text_yes),
-                    getString(R.string.text_no),
-                    object : DialogAskListener {
-                        override fun onYesClicked() {
-                            DialogUtil.hideDialog()
-                            val loginType =
-                                FastSave.getInstance().getString(Constants.LOGIN_TYPE, "")
-                            if (loginType == Constants.LOGIN_TYPE_GOOGLE) {
-                                mGoogleSingInClient?.signOut()
-                            } else if (loginType == Constants.LOGIN_TYPE_FACEBOOK) {
-                                LoginManager.getInstance().logOut()
-                            }
+            activity?.askAlert(
+                getString(R.string.dialog_title_logout),
+                getString(R.string.text_yes),
+                getString(R.string.text_no),
+                object : DialogAskListener {
+                    override fun onYesClicked() {
+                        hideDialog()
+                        val loginType =
+                            FastSave.getInstance().getString(Constants.LOGIN_TYPE, "")
+                        if (loginType == Constants.LOGIN_TYPE_GOOGLE) {
+                            mGoogleSingInClient?.signOut()
+                        } else if (loginType == Constants.LOGIN_TYPE_FACEBOOK) {
+                            LoginManager.getInstance().logOut()
+                        }
 
-                            DialogUtil.loadingAlert(mActivity)
+                        activity?.loadingDialog()
 
-                            viewModel.logout(
-                                BodyLogout(
-                                    FastSave.getInstance().getString(Constants.MOBILE_UUID, null)
-                                )
+                        viewModel.logout(
+                            BodyLogout(
+                                FastSave.getInstance().getString(Constants.MOBILE_UUID, null)
                             )
-                        }
+                        )
+                    }
 
-                        override fun onNoClicked() {
-                            DialogUtil.hideDialog()
-                        }
+                    override fun onNoClicked() {
+                        hideDialog()
+                    }
 
-                    })
-            }
+                })
         }
 
 
@@ -162,7 +151,7 @@ class ControlModeFragment :
 
     override fun onStop() {
         super.onStop()
-        DialogUtil.hideDialog()
+        hideDialog()
     }
 
     override fun getViewModel(): Class<HomeViewModel> = HomeViewModel::class.java
@@ -184,7 +173,7 @@ class ControlModeFragment :
                     viewModel.logoutResponse.collectLatest { response ->
                         when (response) {
                             is Resource.Success -> {
-                                DialogUtil.hideDialog()
+                                hideDialog()
                                 if (response.values.status && response.values.code == Constants.API_SUCCESS_CODE) {
                                     activity?.let {
 
@@ -226,7 +215,7 @@ class ControlModeFragment :
                                 }
                             }
                             is Resource.Failure -> {
-                                DialogUtil.hideDialog()
+                                hideDialog()
                                 context?.showToast(getString(R.string.error_something_went_wrong))
                                 Log.e(logTag, "logout error ${response.errorBody?.string()}")
                             }
@@ -239,7 +228,7 @@ class ControlModeFragment :
                     viewModel.updatePinStatusResponse.collectLatest { response ->
                         when (response) {
                             is Resource.Success -> {
-                                DialogUtil.hideDialog()
+                                hideDialog()
                                 context?.showToast(response.values.message)
                                 if (response.values.status && response.values.code == Constants.API_SUCCESS_CODE) {
                                     response.values.data?.let {
@@ -258,7 +247,7 @@ class ControlModeFragment :
                                 }
                             }
                             is Resource.Failure -> {
-                                DialogUtil.hideDialog()
+                                hideDialog()
                                 context?.showToast(getString(R.string.error_something_went_wrong))
                                 Log.e(logTag, " updatePinStatusResponse Failure $response ")
                             }
@@ -272,7 +261,7 @@ class ControlModeFragment :
                         roomList.clear()
                         when (response) {
                             is Resource.Success -> {
-                                DialogUtil.hideDialog()
+                                hideDialog()
 
                                 if (response.values.status && response.values.code == Constants.API_SUCCESS_CODE) {
                                     response.values.data?.let { roomDataList ->
@@ -290,7 +279,7 @@ class ControlModeFragment :
                                 }
                             }
                             is Resource.Failure -> {
-                                DialogUtil.hideDialog()
+                                hideDialog()
                                 context?.showToast(getString(R.string.error_something_went_wrong))
                                 Log.e(
                                     logTag,
@@ -306,7 +295,7 @@ class ControlModeFragment :
                     viewModel.getPinStatusResponse.collectLatest { response ->
                         when (response) {
                             is Resource.Success -> {
-                                DialogUtil.hideDialog()
+                                hideDialog()
                                 if (response.values.status && response.values.code == Constants.API_SUCCESS_CODE) {
                                     response.values.data?.let {
                                         FastSave.getInstance().saveBoolean(
@@ -323,7 +312,7 @@ class ControlModeFragment :
                                 }
                             }
                             is Resource.Failure -> {
-                                DialogUtil.hideDialog()
+                                hideDialog()
                                 context?.showToast(getString(R.string.error_something_went_wrong))
                                 Log.e(logTag, " updatePinStatusResponse Failure $response ")
                             }

@@ -14,13 +14,14 @@ import com.voinismartiot.voni.api.model.DeviceSwitchData
 import com.voinismartiot.voni.api.repository.HomeRepository
 import com.voinismartiot.voni.common.interfaces.AdapterItemClickListener
 import com.voinismartiot.voni.common.interfaces.DialogShowListener
-import com.voinismartiot.voni.common.utils.DialogUtil
+import com.voinismartiot.voni.common.utils.deviceOfflineAlert
+import com.voinismartiot.voni.common.utils.hideDialog
 import com.voinismartiot.voni.databinding.FragmentSwitchIconsBinding
 import com.voinismartiot.voni.mqtt.AwsMqttSingleton
 import com.voinismartiot.voni.mqtt.MQTTConnectionStatus
 import com.voinismartiot.voni.mqtt.MQTTConstants
 import com.voinismartiot.voni.mqtt.NotifyManager
-import com.voinismartiot.voni.ui.fragments.ModelBaseFragment
+import com.voinismartiot.voni.ui.fragments.BaseFragment
 import com.voinismartiot.voni.ui.viewmodel.HomeViewModel
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
@@ -28,7 +29,7 @@ import org.json.JSONObject
 import java.nio.charset.StandardCharsets
 
 class SwitchIconsFragment :
-    ModelBaseFragment<HomeViewModel, FragmentSwitchIconsBinding, HomeRepository>() {
+    BaseFragment<HomeViewModel, FragmentSwitchIconsBinding, HomeRepository>() {
 
     private val logTag = this::class.java.simpleName
     private val args: SwitchIconsFragmentArgs by navArgs()
@@ -59,19 +60,16 @@ class SwitchIconsFragment :
 
         NotifyManager.internetInfo.observe(viewLifecycleOwner) { isConnected ->
             if (!isConnected) {
-                activity?.let {
-                    DialogUtil.deviceOfflineAlert(
-                        it,
-                        getString(R.string.text_no_internet_available),
-                        object : DialogShowListener {
-                            override fun onClick() {
-                                DialogUtil.hideDialog()
-                                findNavController().navigate(SwitchIconsFragmentDirections.actionGlobalHomeFragment())
-                            }
-
+                activity?.deviceOfflineAlert(
+                    getString(R.string.text_no_internet_available),
+                    object : DialogShowListener {
+                        override fun onClick() {
+                            hideDialog()
+                            findNavController().navigate(SwitchIconsFragmentDirections.actionGlobalHomeFragment())
                         }
-                    )
-                }
+
+                    }
+                )
             }
         }
 
@@ -136,10 +134,9 @@ class SwitchIconsFragment :
                         if (jsonObject.has(MQTTConstants.AWS_STATUS)) {
                             val deviceStatus = jsonObject.getString(MQTTConstants.AWS_STATUS)
                             if (deviceStatus == "1") {
-                                DialogUtil.hideDialog()
+                                hideDialog()
                             } else {
-                                DialogUtil.deviceOfflineAlert(
-                                    it,
+                                it.deviceOfflineAlert(
                                     onClick = object : DialogShowListener {
                                         override fun onClick() {
                                             findNavController().navigate(

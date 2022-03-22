@@ -19,18 +19,15 @@ import com.voinismartiot.voni.api.model.GetSceneData
 import com.voinismartiot.voni.api.repository.HomeRepository
 import com.voinismartiot.voni.common.interfaces.AdapterItemClickListener
 import com.voinismartiot.voni.common.interfaces.DialogAskListener
-import com.voinismartiot.voni.common.utils.Constants
-import com.voinismartiot.voni.common.utils.DialogUtil
-import com.voinismartiot.voni.common.utils.Utils
-import com.voinismartiot.voni.common.utils.showToast
+import com.voinismartiot.voni.common.utils.*
 import com.voinismartiot.voni.databinding.FragmentSceneBinding
 import com.voinismartiot.voni.mqtt.NotifyManager
-import com.voinismartiot.voni.ui.fragments.ModelBaseFragment
+import com.voinismartiot.voni.ui.fragments.BaseFragment
 import com.voinismartiot.voni.ui.viewmodel.HomeViewModel
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
-class SceneFragment : ModelBaseFragment<HomeViewModel, FragmentSceneBinding, HomeRepository>() {
+class SceneFragment : BaseFragment<HomeViewModel, FragmentSceneBinding, HomeRepository>() {
 
     private val logTag = this::class.java.simpleName
     private var controlModeRoomData = arrayListOf<ControlModeRoomData>()
@@ -68,26 +65,24 @@ class SceneFragment : ModelBaseFragment<HomeViewModel, FragmentSceneBinding, Hom
 
         sceneAdapter.setOnDeleteClickListener(object : AdapterItemClickListener<GetSceneData> {
             override fun onItemClick(data: GetSceneData) {
-                activity?.let {
-                    DialogUtil.askAlert(
-                        it, getString(R.string.dialog_title_delete_scene),
-                        getString(R.string.text_yes),
-                        getString(R.string.text_no),
-                        object : DialogAskListener {
-                            override fun onYesClicked() {
-                                if (!Utils.isNetworkConnectivityAvailable()) {
-                                    context?.showToast(getString(R.string.text_no_internet_available))
-                                } else {
-                                    DialogUtil.loadingAlert(it)
-                                    viewModel.deleteScene(data.id)
-                                }
+                activity?.askAlert(
+                    getString(R.string.dialog_title_delete_scene),
+                    getString(R.string.text_yes),
+                    getString(R.string.text_no),
+                    object : DialogAskListener {
+                        override fun onYesClicked() {
+                            if (!Utils.isNetworkConnectivityAvailable()) {
+                                context?.showToast(getString(R.string.text_no_internet_available))
+                            } else {
+                                activity?.loadingDialog()
+                                viewModel.deleteScene(data.id)
                             }
-
-                            override fun onNoClicked() = Unit
-
                         }
-                    )
-                }
+
+                        override fun onNoClicked() = Unit
+
+                    }
+                )
             }
 
         })
@@ -99,12 +94,13 @@ class SceneFragment : ModelBaseFragment<HomeViewModel, FragmentSceneBinding, Hom
                 if (!Utils.isNetworkConnectivityAvailable()) {
                     context?.showToast(getString(R.string.text_no_internet_available))
                 } else {
-                    activity?.let {
-                        DialogUtil.loadingAlert(it)
-                    }
+                    activity?.loadingDialog()
                     this@SceneFragment.sceneStatus = sceneStatus
                     sceneData = data
-                    viewModel.updateSceneStatus(data.id, BodyUpdateSceneStatus(this@SceneFragment.sceneStatus))
+                    viewModel.updateSceneStatus(
+                        data.id,
+                        BodyUpdateSceneStatus(this@SceneFragment.sceneStatus)
+                    )
                 }
 
             }
@@ -113,9 +109,7 @@ class SceneFragment : ModelBaseFragment<HomeViewModel, FragmentSceneBinding, Hom
 
         NotifyManager.internetInfo.observe(viewLifecycleOwner) { isConnected ->
             if (isConnected) {
-                activity?.let {
-                    DialogUtil.loadingAlert(it)
-                }
+                activity?.loadingDialog()
                 viewModel.getScene(BodyGetScene("", ""))
                 viewModel.getControl()
             }
@@ -142,7 +136,7 @@ class SceneFragment : ModelBaseFragment<HomeViewModel, FragmentSceneBinding, Hom
                         controlModeRoomData.clear()
                         when (response) {
                             is Resource.Success -> {
-                                DialogUtil.hideDialog()
+                                hideDialog()
                                 if (response.values.status && response.values.code == Constants.API_SUCCESS_CODE) {
                                     response.values.data?.let { roomDataList ->
                                         controlModeRoomData.addAll(roomDataList)
@@ -150,7 +144,7 @@ class SceneFragment : ModelBaseFragment<HomeViewModel, FragmentSceneBinding, Hom
                                 }
                             }
                             is Resource.Failure -> {
-                                DialogUtil.hideDialog()
+                                hideDialog()
                                 context?.showToast(getString(R.string.error_something_went_wrong))
                                 Log.e(
                                     logTag,
@@ -167,7 +161,7 @@ class SceneFragment : ModelBaseFragment<HomeViewModel, FragmentSceneBinding, Hom
                         sceneList.clear()
                         when (response) {
                             is Resource.Success -> {
-                                DialogUtil.hideDialog()
+                                hideDialog()
                                 if (response.values.status && response.values.code == Constants.API_SUCCESS_CODE) {
                                     response.values.data?.let {
                                         sceneList.addAll(it)
@@ -176,7 +170,7 @@ class SceneFragment : ModelBaseFragment<HomeViewModel, FragmentSceneBinding, Hom
                                 sceneAdapter.notifyDataSetChanged()
                             }
                             is Resource.Failure -> {
-                                DialogUtil.hideDialog()
+                                hideDialog()
                                 context?.showToast(getString(R.string.error_something_went_wrong))
                                 Log.e(
                                     logTag,
@@ -196,11 +190,11 @@ class SceneFragment : ModelBaseFragment<HomeViewModel, FragmentSceneBinding, Hom
                                 if (response.values.status && response.values.code == Constants.API_SUCCESS_CODE) {
                                     viewModel.getScene(BodyGetScene("", ""))
                                 } else {
-                                    DialogUtil.hideDialog()
+                                    hideDialog()
                                 }
                             }
                             is Resource.Failure -> {
-                                DialogUtil.hideDialog()
+                                hideDialog()
                                 context?.showToast(getString(R.string.error_something_went_wrong))
                                 Log.e(
                                     logTag,
@@ -216,7 +210,7 @@ class SceneFragment : ModelBaseFragment<HomeViewModel, FragmentSceneBinding, Hom
                     viewModel.updateSceneStatusResponse.collectLatest { response ->
                         when (response) {
                             is Resource.Success -> {
-                                DialogUtil.hideDialog()
+                                hideDialog()
                                 context?.showToast(response.values.message)
 
                                 if (response.values.status && response.values.code == Constants.API_SUCCESS_CODE) {
@@ -233,7 +227,7 @@ class SceneFragment : ModelBaseFragment<HomeViewModel, FragmentSceneBinding, Hom
                                 sceneData = null
                             }
                             is Resource.Failure -> {
-                                DialogUtil.hideDialog()
+                                hideDialog()
                                 context?.showToast(getString(R.string.error_something_went_wrong))
                                 Log.e(
                                     logTag,

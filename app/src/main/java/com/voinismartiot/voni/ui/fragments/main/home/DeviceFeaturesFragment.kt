@@ -16,19 +16,16 @@ import com.voinismartiot.voni.R
 import com.voinismartiot.voni.api.Resource
 import com.voinismartiot.voni.api.repository.HomeRepository
 import com.voinismartiot.voni.common.interfaces.DialogShowListener
-import com.voinismartiot.voni.common.utils.Constants
-import com.voinismartiot.voni.common.utils.DialogUtil
-import com.voinismartiot.voni.common.utils.DialogUtil.featureDetailAlert
+import com.voinismartiot.voni.common.utils.*
 import com.voinismartiot.voni.common.utils.Utils.toBoolean
 import com.voinismartiot.voni.common.utils.Utils.toEditable
 import com.voinismartiot.voni.common.utils.Utils.toInt
-import com.voinismartiot.voni.common.utils.showToast
 import com.voinismartiot.voni.databinding.FragmentDeviceFeaturesBinding
 import com.voinismartiot.voni.mqtt.AwsMqttSingleton
 import com.voinismartiot.voni.mqtt.MQTTConnectionStatus
 import com.voinismartiot.voni.mqtt.MQTTConstants
 import com.voinismartiot.voni.mqtt.NotifyManager
-import com.voinismartiot.voni.ui.fragments.ModelBaseFragment
+import com.voinismartiot.voni.ui.fragments.BaseFragment
 import com.voinismartiot.voni.ui.viewmodel.HomeViewModel
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
@@ -40,7 +37,7 @@ import org.json.JSONObject
 import java.nio.charset.StandardCharsets
 
 class DeviceFeaturesFragment :
-    ModelBaseFragment<HomeViewModel, FragmentDeviceFeaturesBinding, HomeRepository>() {
+    BaseFragment<HomeViewModel, FragmentDeviceFeaturesBinding, HomeRepository>() {
 
     private val logTag = this::class.java.simpleName
     private val args: DeviceFeaturesFragmentArgs by navArgs()
@@ -64,38 +61,29 @@ class DeviceFeaturesFragment :
         mqttConnectionDisposable =
             NotifyManager.getMQTTConnectionInfo().observeOn(AndroidSchedulers.mainThread())
                 .subscribe {
-                    Log.e(logTag, " MQTTConnectionStatus = $it ")
                     when (it) {
                         MQTTConnectionStatus.CONNECTED -> {
-                            Log.e(logTag, " MQTTConnectionStatus.CONNECTED ")
                             subscribeToDevice(args.deviceDetail.deviceSerialNo)
                         }
-                        else -> {
-                            //We will do nothing here
-                        }
+                        else -> Unit
                     }
                 }
 
         NotifyManager.internetInfo.observe(viewLifecycleOwner) { isConnected ->
             if (isConnected) {
-                activity?.let {
-                    DialogUtil.loadingAlert(it)
-                }
+                activity?.loadingDialog()
                 viewModel.getDeviceFeatures(args.deviceDetail.id)
             } else {
-                activity?.let {
-                    DialogUtil.deviceOfflineAlert(
-                        it,
-                        getString(R.string.text_no_internet_available),
-                        object : DialogShowListener {
-                            override fun onClick() {
-                                DialogUtil.hideDialog()
-                                findNavController().navigate(DeviceCustomizationFragmentDirections.actionGlobalHomeFragment())
-                            }
-
+                activity?.deviceOfflineAlert(
+                    getString(R.string.text_no_internet_available),
+                    object : DialogShowListener {
+                        override fun onClick() {
+                            hideDialog()
+                            findNavController().navigate(DeviceCustomizationFragmentDirections.actionGlobalHomeFragment())
                         }
-                    )
-                }
+
+                    }
+                )
             }
         }
 
@@ -103,7 +91,7 @@ class DeviceFeaturesFragment :
             viewModel.getDeviceFeatureSettingsResponse.collectLatest { response ->
                 when (response) {
                     is Resource.Success -> {
-                        DialogUtil.hideDialog()
+                        hideDialog()
                         if (response.values.status && response.values.code == Constants.API_SUCCESS_CODE) {
                             response.values.data?.let { deviceFeatureData ->
 
@@ -137,7 +125,7 @@ class DeviceFeaturesFragment :
                         }
                     }
                     is Resource.Failure -> {
-                        DialogUtil.hideDialog()
+                        hideDialog()
                         context?.showToast(getString(R.string.error_something_went_wrong))
                         Log.e(
                             logTag,
@@ -330,10 +318,9 @@ class DeviceFeaturesFragment :
                         if (jsonObject.has(MQTTConstants.AWS_STATUS)) {
                             val deviceStatus = jsonObject.getString(MQTTConstants.AWS_STATUS)
                             if (deviceStatus == "1") {
-                                DialogUtil.hideDialog()
+                                hideDialog()
                             } else {
-                                DialogUtil.deviceOfflineAlert(
-                                    it,
+                                it.deviceOfflineAlert(
                                     onClick = object : DialogShowListener {
                                         override fun onClick() {
                                             findNavController().navigateUp()
