@@ -11,6 +11,7 @@ import com.teksun.tcpudplibrary.TCPClientService
 import com.teksun.tcpudplibrary.listener.ReadWriteValueListener
 import com.voinismartiot.voni.api.repository.HomeRepository
 import com.voinismartiot.voni.common.interfaces.DialogShowListener
+import com.voinismartiot.voni.common.utils.Utils
 import com.voinismartiot.voni.common.utils.deviceOfflineAlert
 import com.voinismartiot.voni.common.utils.hideDialog
 import com.voinismartiot.voni.databinding.FragmentConfigWifiBinding
@@ -23,6 +24,8 @@ class ConfigWifiFragment :
     BaseFragment<HomeViewModel, FragmentConfigWifiBinding, HomeRepository>() {
     private val logTag = ConfigWifiFragment::class.java.simpleName
     private val args: ConfigWifiFragmentArgs by navArgs()
+
+    private var uniqId =""
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -68,10 +71,12 @@ class ConfigWifiFragment :
                 }
                 else -> {
                     val jObject = JSONObject()
+                    uniqId = System.currentTimeMillis().toString().takeLast(5) + Utils.nonce().takeLast(5)
                     jObject.apply {
                         put("device_name", panelName)
                         put("wifi_ssid", ssid)
                         put("password", password)
+                        put("unique_id", uniqId)
                     }
                     val jsonObject = JSONObject()
                     jsonObject.apply {
@@ -94,7 +99,8 @@ class ConfigWifiFragment :
                     ConfigWifiFragmentDirections.actionConfigWifiFragmentToConnectingWifiFragment(
                         true,
                         args.roomDetail,
-                        args.isSmarTack
+                        args.isSmarTack,
+                        uniqId
                     )
                 )
             }

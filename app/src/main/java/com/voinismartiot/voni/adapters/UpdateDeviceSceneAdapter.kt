@@ -142,97 +142,33 @@ class UpdateDeviceSceneAdapter(
 
                         val roomData = roomDataList.find { it.id == room.id }
                         deviceList.clear()
+                        spinnerDevice.isEnabled = roomData?.deviceData?.isNotEmpty() ?: false
 
-                        if (roomData != null) {
-                            roomData.deviceData?.let { devices ->
-                                if (devices.isNotEmpty()) {
-                                    spinnerDevice.isEnabled = true
-                                    val device = GetDeviceData(
-                                        "",
-                                        "",
-                                        "",
-                                        "",
-                                        "0",
-                                        ArrayList(),
-                                        mActivity.getString(R.string.text_select_device),
-                                        0,
-                                        0,
-                                        "0",
-                                        0,
-                                        null
-                                    )
-                                    deviceList.add(device)
-                                    deviceList.addAll(devices)
-                                } else {
-                                    val device = GetDeviceData(
-                                        "",
-                                        "",
-                                        "",
-                                        "",
-                                        "0",
-                                        ArrayList(),
-                                        mActivity.getString(R.string.text_no_device),
-                                        0,
-                                        0,
-                                        "0",
-                                        0,
-                                        null
-                                    )
-                                    deviceList.add(device)
-                                    spinnerDevice.isEnabled = false
-                                }
-                            } ?: kotlin.run {
-                                val device = GetDeviceData(
-                                    "",
-                                    "",
-                                    "",
-                                    "",
-                                    "0",
-                                    ArrayList(),
-                                    mActivity.getString(R.string.text_no_device),
-                                    0,
-                                    0,
-                                    "0",
-                                    0,
-                                    null
-                                )
-                                deviceList.add(device)
-                                spinnerDevice.isEnabled = false
-                            }
+                        val device = GetDeviceData(
+                            "",
+                            "",
+                            "",
+                            "",
+                            "0",
+                            ArrayList(),
+                            if (roomData?.deviceData?.isNotEmpty() == true) mActivity.getString(R.string.text_select_device) else mActivity.getString(
+                                R.string.text_no_device
+                            ),
+                            0,
+                            0,
+                            "0",
+                            0,
+                            null
+                        )
+                        deviceList.add(device)
+                        deviceList.addAll(if (roomData?.deviceData?.isNotEmpty() == true) roomData.deviceData!! else emptyList())
 
-                            val deviceAdapter = DeviceAdapter(mActivity, deviceList)
-                            spinnerDevice.adapter = deviceAdapter
+                        val deviceAdapter = DeviceAdapter(mActivity, deviceList)
+                        spinnerDevice.adapter = deviceAdapter
 
-                            scenes[adapterPosition].deviceData?.let {
-                                spinnerDevice.setSelection(
-                                    deviceAdapter.getPositionById(
-                                        it.id
-                                    )
-                                )
-                            }
-
-                        } else {
-
-                            val device = GetDeviceData(
-                                "",
-                                "",
-                                "",
-                                "",
-                                "0",
-                                ArrayList(),
-                                mActivity.getString(R.string.text_no_device),
-                                0,
-                                0,
-                                "0",
-                                0,
-                                null
-                            )
-                            deviceList.add(device)
-                            spinnerDevice.isEnabled = false
-
-                            val deviceAdapter = DeviceAdapter(mActivity, deviceList)
-                            spinnerDevice.adapter = deviceAdapter
-
+                        scenes[adapterPosition].deviceData?.let {
+                            val devicePosition = deviceAdapter.getPositionById(it.id)
+                            spinnerDevice.setSelection(if (devicePosition >= 0) devicePosition else 0)
                         }
 
                     }
@@ -267,7 +203,11 @@ class UpdateDeviceSceneAdapter(
                                     null
                                 )
                                 switchList.add(switch)
-                                switchList.addAll(switchData.filter { it.typeOfSwitch == 0 })
+                                switchList.addAll(switchData.filter {
+                                    it.typeOfSwitch == 0 || it.desc?.lowercase() == mActivity.getString(
+                                        R.string.text_switch_fan_speed
+                                    ).lowercase()
+                                })
                                 spinnerSwitch.isEnabled = true
 
                             } ?: kotlin.run {

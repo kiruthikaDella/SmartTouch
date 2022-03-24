@@ -340,7 +340,8 @@ class ConnectingWifiFragment :
                                 productGroup = productGroup,
                                 manufactureDate = jsonObject.get("vManufactureDate").toString(),
                                 firmwareVersion = jsonObject.get("vFirmwareVersion").toString(),
-                                desc = jsonObject.get("vDesc").toString()
+                                desc = jsonObject.get("vDesc").toString(),
+                                uniqueId = args.uniqId
                             )
                         )
                     }
@@ -411,7 +412,6 @@ class ConnectingWifiFragment :
     }
 
     override fun onDestroyView() {
-
         super.onDestroyView()
 
         handler?.let { handler ->

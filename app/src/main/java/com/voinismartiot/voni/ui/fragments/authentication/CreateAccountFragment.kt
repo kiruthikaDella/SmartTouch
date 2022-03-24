@@ -43,20 +43,22 @@ class CreateAccountFragment :
         }
 
         binding.btnSignUp.setOnClickListener {
+
             if (Utils.isNetworkConnectivityAvailable()) {
                 validateUserInformation()
-            } else {
-                activity?.deviceOfflineAlert(
-                    getString(R.string.text_no_internet_available),
-                    object : DialogShowListener {
-                        override fun onClick() {
-                            hideDialog()
-                            findNavController().navigateUp()
-                        }
-
-                    }
-                )
+                return@setOnClickListener
             }
+
+            activity?.deviceOfflineAlert(
+                getString(R.string.text_no_internet_available),
+                object : DialogShowListener {
+                    override fun onClick() {
+                        hideDialog()
+                        findNavController().navigateUp()
+                    }
+
+                }
+            )
         }
 
         binding.ivHidePassword.setOnClickListener {
@@ -72,18 +74,19 @@ class CreateAccountFragment :
                     binding.edtPassword.transformationMethod =
                         PasswordTransformationMethod.getInstance()
                 }
-            } else {
-                isPasswordVisible = true
-                context?.let {
-                    binding.ivHidePassword.setImageDrawable(
-                        ContextCompat.getDrawable(
-                            it,
-                            R.drawable.ic_password_visible
-                        )
+                return@setOnClickListener
+            }
+
+            isPasswordVisible = true
+            context?.let {
+                binding.ivHidePassword.setImageDrawable(
+                    ContextCompat.getDrawable(
+                        it,
+                        R.drawable.ic_password_visible
                     )
-                    binding.edtPassword.transformationMethod =
-                        HideReturnsTransformationMethod.getInstance()
-                }
+                )
+                binding.edtPassword.transformationMethod =
+                    HideReturnsTransformationMethod.getInstance()
             }
         }
 
@@ -101,18 +104,19 @@ class CreateAccountFragment :
                     binding.edtConfirmPassword.transformationMethod =
                         PasswordTransformationMethod.getInstance()
                 }
-            } else {
-                isConfirmPasswordVisible = true
-                context?.let {
-                    binding.ivHideConfirmPassword.setImageDrawable(
-                        ContextCompat.getDrawable(
-                            it,
-                            R.drawable.ic_password_visible
-                        )
+                return@setOnClickListener
+            }
+
+            isConfirmPasswordVisible = true
+            context?.let {
+                binding.ivHideConfirmPassword.setImageDrawable(
+                    ContextCompat.getDrawable(
+                        it,
+                        R.drawable.ic_password_visible
                     )
-                    binding.edtConfirmPassword.transformationMethod =
-                        HideReturnsTransformationMethod.getInstance()
-                }
+                )
+                binding.edtConfirmPassword.transformationMethod =
+                    HideReturnsTransformationMethod.getInstance()
             }
 
         }

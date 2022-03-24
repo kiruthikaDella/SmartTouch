@@ -249,5 +249,8 @@
         <argument
             android:name="isSmarTack"
             app:argType="boolean" />
+        <argument
+            android:name="uniqId"
+            app:argType="string" />
     </fragment>
 </navigation>

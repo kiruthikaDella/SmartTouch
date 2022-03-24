@@ -1134,41 +1134,6 @@ class DeviceAdapter(
             }
 
             switchOne.setOnClickListener {
-
-                /*if (switchOne.isChecked){
-                    device.switchData?.let {
-                        it[0].desc?.let { des->
-
-                            val is15ADevice = des.lowercase() == mActivity.getString(R.string.text_15a).lowercase()
-                            if (is15ADevice){
-                                val deviceAppliance = spinnerAppliances.selectedItem as DeviceAppliances
-                                if (deviceAppliance.title.lowercase() == mActivity.getString(R.string.text_select_appliances).lowercase()){
-                                    mActivity.showToast(mActivity.getString(R.string.error_select_appliances))
-                                    switchOne.isChecked = false
-                                }else {
-                                    publish(
-                                        device.deviceSerialNo,
-                                        MQTTConstants.AWS_SWITCH_1,
-                                        switchOne.isChecked.toInt().toString()
-                                    )
-                                }
-                            }else {
-                                publish(
-                                    device.deviceSerialNo,
-                                    MQTTConstants.AWS_SWITCH_1,
-                                    switchOne.isChecked.toInt().toString()
-                                )
-                            }
-                        }
-                    }
-                }else{
-                    publish(
-                        device.deviceSerialNo,
-                        MQTTConstants.AWS_SWITCH_1,
-                        switchOne.isChecked.toInt().toString()
-                    )
-                }*/
-
                 publish(
                     device.deviceSerialNo,
                     MQTTConstants.AWS_SWITCH_1,

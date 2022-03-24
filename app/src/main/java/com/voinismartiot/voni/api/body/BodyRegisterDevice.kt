@@ -24,5 +24,7 @@ data class BodyRegisterDevice(
     @SerializedName("vManufactureDate")
     val manufactureDate: String,
     @SerializedName("vDesc")
-    val desc: String
+    val desc: String,
+    @SerializedName("vUniqueId")
+    val uniqueId: String
 )

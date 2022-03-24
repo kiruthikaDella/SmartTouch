@@ -812,8 +812,7 @@ class ControlModeDeviceAdapter(
                                             }
                                         }
 
-                                        override fun onNothingSelected(p0: AdapterView<*>?) {
-                                        }
+                                        override fun onNothingSelected(p0: AdapterView<*>?) = Unit
 
                                     }
                                 ivAppliancesDown.setOnClickListener {

@@ -761,7 +761,7 @@ class DeviceFragment : BaseFragment<HomeViewModel, FragmentDeviceBinding, HomeRe
                             findNavController().navigate(
                                 DeviceFragmentDirections.actionDeviceFragmentToConnectingWifiFragment(
                                     false,
-                                    args.roomDetail, isSmarTack
+                                    args.roomDetail, isSmarTack, ""
                                 )
                             )
                         }
