@@ -807,7 +807,8 @@ class ControlModeDeviceAdapter(
                                                 device.deviceAppliances = appliance.id
                                                 publishAppliance(
                                                     device.deviceSerialNo,
-                                                    appliance.title
+                                                    appliance.title,
+                                                    appliance.groupType
                                                 )
                                             }
                                         }
@@ -1026,10 +1027,11 @@ class ControlModeDeviceAdapter(
     }
 
     fun publishAppliance(
-        deviceId: String, appliance: String
+        deviceId: String, appliance: String, groupType: String
     ) {
         val payload = JSONObject()
         payload.put(MQTTConstants.AWS_APPLIANCES, appliance)
+        payload.put(MQTTConstants.AWS_APPLIANCES_GROUP_TYPE, groupType)
 
         AwsMqttSingleton.publish(
             MQTTConstants.DEVICE_APPLIANCES.replace(

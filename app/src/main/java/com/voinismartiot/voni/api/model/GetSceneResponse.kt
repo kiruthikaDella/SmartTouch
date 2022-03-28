@@ -110,17 +110,17 @@ data class Scene(
     @SerializedName("_id")
     var id: String,
     @SerializedName("iRoomId")
-    var roomData: GetRoomData? = null,
+    var roomId: RoomId? = null,
     @SerializedName("iDeviceId")
-    var deviceData: GetDeviceData? = null,
+    var deviceId: DeviceId? = null,
     @SerializedName("iDeviceSwitchId")
-    var switchData: DeviceSwitchData? = null,
+    var deviceSwitchId: DeviceSwitchId? = null,
     @SerializedName("tiDeviceSwitchSettingValue")
     var deviceSwitchSettingValue: Int
 ) : Parcelable, Serializable {
 
     override fun toString(): String {
-        return "Scene(id='$id', roomData=$roomData, deviceData=$deviceData, switchData=$switchData, deviceSwitchSettingValue=$deviceSwitchSettingValue)"
+        return "Scene(id='$id', roomData=$roomId, deviceData=$deviceId, switchData=$deviceSwitchId, deviceSwitchSettingValue=$deviceSwitchSettingValue)"
     }
 
     override fun equals(other: Any?): Boolean {
@@ -130,9 +130,9 @@ data class Scene(
         other as Scene
 
         if (id != other.id) return false
-        if (roomData != other.roomData) return false
-        if (deviceData != other.deviceData) return false
-        if (switchData != other.switchData) return false
+        if (roomId != other.roomId) return false
+        if (deviceId != other.deviceId) return false
+        if (deviceSwitchId != other.deviceSwitchId) return false
         if (deviceSwitchSettingValue != other.deviceSwitchSettingValue) return false
 
         return true
@@ -140,10 +140,108 @@ data class Scene(
 
     override fun hashCode(): Int {
         var result = id.hashCode()
-        result = 31 * result + (roomData?.hashCode() ?: 0)
-        result = 31 * result + (deviceData?.hashCode() ?: 0)
-        result = 31 * result + (switchData?.hashCode() ?: 0)
+        result = 31 * result + (roomId?.hashCode() ?: 0)
+        result = 31 * result + (deviceId?.hashCode() ?: 0)
+        result = 31 * result + (deviceSwitchId?.hashCode() ?: 0)
         result = 31 * result + deviceSwitchSettingValue
+        return result
+    }
+
+
+}
+
+@Parcelize
+data class RoomId(
+    @SerializedName("_id")
+    var id: String,
+    @SerializedName("vRoomName")
+    var roomName: String
+) : Parcelable, Serializable {
+
+    override fun toString(): String {
+        return "RoomId(id='$id', roomName='$roomName')"
+    }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as RoomId
+
+        if (id != other.id) return false
+        if (roomName != other.roomName) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        var result = id.hashCode()
+        result = 31 * result + roomName.hashCode()
+        return result
+    }
+
+
+}
+
+@Parcelize
+data class DeviceId(
+    @SerializedName("_id")
+    var id: String,
+    @SerializedName("vDeviceName")
+    var deviceName: String
+) : Parcelable, Serializable {
+
+    override fun toString(): String {
+        return "DeviceId(id='$id', deviceName='$deviceName')"
+    }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as DeviceId
+
+        if (id != other.id) return false
+        if (deviceName != other.deviceName) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        var result = id.hashCode()
+        result = 31 * result + deviceName.hashCode()
+        return result
+    }
+
+}
+
+@Parcelize
+data class DeviceSwitchId(
+    @SerializedName("_id")
+    var id: String,
+    @SerializedName("vName")
+    var switchName: String
+) : Parcelable, Serializable {
+
+    override fun toString(): String {
+        return "DeviceSwitchId(id='$id', switchName='$switchName')"
+    }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as DeviceSwitchId
+
+        if (id != other.id) return false
+        if (switchName != other.switchName) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        var result = id.hashCode()
+        result = 31 * result + switchName.hashCode()
         return result
     }
 

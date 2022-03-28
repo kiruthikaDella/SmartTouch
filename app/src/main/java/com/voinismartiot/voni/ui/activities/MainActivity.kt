@@ -150,11 +150,14 @@ class MainActivity : AppCompatActivity() {
         NetworkConnectionLiveData().observe(this) { isConnected ->
             NotifyManager.internetInfo.postValue(isConnected)
 
-            appliancesList.clear()
-            viewModel.getDeviceAppliances()
+            if (navController.currentDestination?.id == R.id.homeFragment) {
+                appliancesList.clear()
+                viewModel.getDeviceAppliances()
 
-            roomTypeList.toMutableList().clear()
-            viewModel.roomType()
+                roomTypeList.toMutableList().clear()
+                viewModel.roomType()
+            }
+
         }
 
         apiResponses()

@@ -125,7 +125,7 @@ class UpdateDeviceSceneAdapter(
             val roomAdapter = RoomAdapter(mActivity, roomList)
             spinnerRoom.adapter = roomAdapter
 
-            scenes[adapterPosition].roomData?.let { roomData ->
+            scenes[adapterPosition].roomId?.let { roomData ->
                 spinnerRoom.setSelection(roomAdapter.getPositionById(roomData.id))
             }
 
@@ -138,7 +138,8 @@ class UpdateDeviceSceneAdapter(
                         id: Long
                     ) {
                         val room = parent?.selectedItem as GetRoomData
-                        scenes[adapterPosition].roomData = room
+                        scenes[adapterPosition].roomId?.id = room.id
+                        scenes[adapterPosition].roomId?.roomName = room.roomName
 
                         val roomData = roomDataList.find { it.id == room.id }
                         deviceList.clear()
@@ -166,7 +167,7 @@ class UpdateDeviceSceneAdapter(
                         val deviceAdapter = DeviceAdapter(mActivity, deviceList)
                         spinnerDevice.adapter = deviceAdapter
 
-                        scenes[adapterPosition].deviceData?.let {
+                        scenes[adapterPosition].deviceId?.let {
                             val devicePosition = deviceAdapter.getPositionById(it.id)
                             spinnerDevice.setSelection(if (devicePosition >= 0) devicePosition else 0)
                         }
@@ -186,7 +187,8 @@ class UpdateDeviceSceneAdapter(
                         id: Long
                     ) {
                         val device = parent?.selectedItem as GetDeviceData
-                        scenes[adapterPosition].deviceData = device
+                        scenes[adapterPosition].deviceId?.id = device.id
+                        scenes[adapterPosition].deviceId?.deviceName = device.deviceName
 
                         val deviceData = deviceList.find { it.id == device.id }
                         switchList.clear()
@@ -242,7 +244,7 @@ class UpdateDeviceSceneAdapter(
                         val switchAdapter = SwitchAdapter(mActivity, switchList)
                         spinnerSwitch.adapter = switchAdapter
 
-                        scenes[adapterPosition].switchData?.id?.let {
+                        scenes[adapterPosition].deviceSwitchId?.id?.let {
                             spinnerSwitch.setSelection(switchAdapter.getPositionById(it))
                         }
 
@@ -262,14 +264,15 @@ class UpdateDeviceSceneAdapter(
                         id: Long
                     ) {
                         val switch = parent?.selectedItem as DeviceSwitchData
-                        scenes[adapterPosition].switchData = switch
+                        scenes[adapterPosition].deviceSwitchId?.id = switch.id
+                        scenes[adapterPosition].deviceSwitchId?.switchName = switch.name
                         switchType = switch.desc?.lowercase() ?: ""
 
                         if (switch.name == mActivity.getString(R.string.text_no_switch) || switch.name == mActivity.getString(
                                 R.string.text_select_switch
                             )
                         ) {
-                            scenes[adapterPosition].switchData?.id =
+                            scenes[adapterPosition].deviceSwitchId?.id =
                                 mActivity.getString(R.string.text_no_switch)
                         }
 
@@ -326,13 +329,13 @@ class UpdateDeviceSceneAdapter(
     fun getScenes(): ArrayList<BodyUpdateSceneData> {
         val array = arrayListOf<BodyUpdateSceneData>()
         for (scene in scenes) {
-            if (scene.roomData != null && scene.deviceData != null && scene.switchData != null) {
+            if (scene.roomId != null && scene.deviceId != null && scene.deviceSwitchId != null) {
                 array.add(
                     BodyUpdateSceneData(
-                        scene.roomData!!.id,
-                        scene.deviceData!!.id,
+                        scene.roomId!!.id,
+                        scene.deviceId!!.id,
                         scene.id,
-                        scene.switchData!!.id,
+                        scene.deviceSwitchId!!.id,
                         scene.deviceSwitchSettingValue
                     )
                 )

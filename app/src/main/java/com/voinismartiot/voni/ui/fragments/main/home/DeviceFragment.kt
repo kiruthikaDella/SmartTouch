@@ -6,8 +6,10 @@ import android.app.AlertDialog
 import android.app.Dialog
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
+import android.location.Location
 import android.location.LocationManager
 import android.net.Uri
 import android.net.wifi.WifiManager
@@ -26,12 +28,14 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.app.ActivityCompat
 import androidx.core.view.isVisible
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import com.google.android.gms.location.*
 import com.google.android.material.button.MaterialButton
 import com.karumi.dexter.Dexter
 import com.karumi.dexter.MultiplePermissionsReport
@@ -69,6 +73,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.util.concurrent.TimeUnit
 
 @SuppressLint("ClickableViewAccessibility", "NotifyDataSetChanged")
 class DeviceFragment : BaseFragment<HomeViewModel, FragmentDeviceBinding, HomeRepository>() {
@@ -101,8 +106,26 @@ class DeviceFragment : BaseFragment<HomeViewModel, FragmentDeviceBinding, HomeRe
             onActivityResult(Constants.REQUEST_GPS_CODE, result)
         }
 
+    // FusedLocationProviderClient - Main class for receiving location updates.
+    private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
+
+    // LocationRequest - Requirements for the location updates, i.e.,
+    // how often you should receive updates, the priority, etc.
+    private lateinit var locationRequest: LocationRequest
+
+    // LocationCallback - Called when FusedLocationProviderClient
+    // has a new Location
+    private lateinit var locationCallback: LocationCallback
+
+    // This will store current location info
+    private var currentLocation: Location? = null
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        activity?.let {
+            fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(it)
+        }
 
         WifiUtils.init(context)
 
@@ -149,6 +172,43 @@ class DeviceFragment : BaseFragment<HomeViewModel, FragmentDeviceBinding, HomeRe
         activity?.let { mActivity ->
             deviceTypeAdapter = SpinnerAdapter(mActivity, deviceTypeList.toMutableList())
             binding.layoutSelectDevice.spinnerDeviceType.adapter = deviceTypeAdapter
+        }
+
+        locationRequest = LocationRequest.create().apply {
+            // Sets the desired interval for
+            // active location updates.
+            // This interval is inexact.
+            interval = 100
+
+            // Sets the fastest rate for active location updates.
+            // This interval is exact, and your application will never
+            // receive updates more frequently than this value
+            fastestInterval = 50
+
+            // Sets the maximum time when batched location
+            // updates are delivered. Updates may be
+            // delivered sooner than this interval
+            maxWaitTime = 100
+
+            priority = LocationRequest.PRIORITY_HIGH_ACCURACY
+        }
+
+        locationCallback = object : LocationCallback() {
+            override fun onLocationResult(locationResult: LocationResult) {
+                super.onLocationResult(locationResult)
+                locationResult.lastLocation.let {
+                    currentLocation = it
+
+                    fusedLocationProviderClient.removeLocationUpdates(locationCallback).addOnCompleteListener { task ->
+                        if (task.isSuccessful) {
+                            Log.d(logTag, "Location Callback removed.")
+                        } else {
+                            Log.d(logTag, "Failed to remove Location Callback.")
+                        }
+                    }
+
+                }
+            }
         }
 
         clickEvents()
@@ -392,7 +452,9 @@ class DeviceFragment : BaseFragment<HomeViewModel, FragmentDeviceBinding, HomeRe
                             BodyAddDevice(
                                 serialNumber,
                                 args.roomDetail.id,
-                                deviceName
+                                deviceName,
+                                (currentLocation?.latitude ?: "").toString(),
+                                (currentLocation?.longitude ?: "").toString()
                             )
                         )
                     }, 600)
@@ -412,6 +474,7 @@ class DeviceFragment : BaseFragment<HomeViewModel, FragmentDeviceBinding, HomeRe
                     binding.layoutRoomPanel.linearPanel.isVisible = true
                     binding.tvBottomViewTitle.text = getString(R.string.text_add_panel)
                     showPanel()
+                    checkPermission()
                 }
                 getString(R.string.text_smart_tack) -> {
                     hidePanel()
@@ -643,7 +706,26 @@ class DeviceFragment : BaseFragment<HomeViewModel, FragmentDeviceBinding, HomeRe
                         override fun onPermissionsChecked(report: MultiplePermissionsReport?) {
                             report?.let { rep ->
                                 if (rep.areAllPermissionsGranted()) {
-                                    redirectToWifiSetting()
+                                    if (ActivityCompat.checkSelfPermission(
+                                            it,
+                                            Manifest.permission.ACCESS_FINE_LOCATION
+                                        ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                                            it,
+                                            Manifest.permission.ACCESS_COARSE_LOCATION
+                                        ) != PackageManager.PERMISSION_GRANTED
+                                    ) {
+                                        return
+                                    }
+                                    Log.d(logTag, "areAllPermissionsGranted")
+                                    Looper.myLooper()?.let { it1 ->
+                                        Log.d(logTag, "myLooper")
+                                        fusedLocationProviderClient.requestLocationUpdates(locationRequest, locationCallback,
+                                            it1
+                                        )
+                                    }
+                                    if (!isSelectedSmarTouch){
+                                        redirectToWifiSetting()
+                                    }
                                     return
                                 }
                                 // check for permanent denial of any permission
