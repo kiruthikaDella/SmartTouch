@@ -298,7 +298,7 @@
     <string name="description_factory_reset">This will set default settings to the device</string>
     <string name="description_remove">To remove device from this account</string>
     <string name="description_retain_state">If this switch is on in that case if house face power cut and when power supply restores, whichever relay was ON it will be ON and whichever was OFF it will be OFF</string>
-    <string name="description_outdoor_mode">It needs to switch the whole device and only then can it return to your home</string>
+    <string name="description_outdoor_mode">By enabling outdoor mode user can select particular loads which needs to be activated when going out of the home</string>
 
 
     <string name="title_text_config_wifi">Config Wi-Fi</string>
