@@ -162,8 +162,8 @@
     <string name="toast_text_device_synchronized">Device synchronized successful</string>
     <string name="dialog_title_text_lock">Do you want to lock customization with your account?</string>
     <string name="dialog_title_text_unlock">Do you want to unlock customization with your account?</string>
-    <string name="text_eight_icons_view">8 Icons</string>
-    <string name="text_six_icons_view">6 Icons</string>
+    <string name="text_eight_icons_view">8 Switches</string>
+    <string name="text_six_icons_view">6 Switches</string>
     <string name="text_four_icons_view">4 Icons</string>
     <string name="text_left_most">Left Most</string>
     <string name="text_right_most">Right Most</string>

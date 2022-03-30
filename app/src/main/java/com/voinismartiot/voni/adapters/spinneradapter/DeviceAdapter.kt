@@ -39,6 +39,10 @@ class DeviceAdapter(private val activity: Activity, private val items: List<GetD
 
     fun getPositionById(deviceId: String): Int {
         var position: Int = -1
+
+        if (deviceId.isEmpty())
+            return position
+
         for ((index, value) in items.withIndex()) {
             if (value.id == deviceId) {
                 position = index

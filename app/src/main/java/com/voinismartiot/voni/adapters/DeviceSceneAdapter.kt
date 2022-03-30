@@ -133,7 +133,7 @@ class DeviceSceneAdapter(
                     deviceList.clear()
                     spinnerDevice.isEnabled = roomData?.deviceData?.isNotEmpty() ?: false
 
-                    val device = GetDeviceData(
+                    deviceList.add(GetDeviceData(
                         "",
                         "",
                         "",
@@ -148,14 +148,13 @@ class DeviceSceneAdapter(
                         "0",
                         0,
                         null
-                    )
-                    deviceList.add(device)
+                    ))
                     deviceList.addAll(if (roomData?.deviceData?.isNotEmpty() == true) roomData.deviceData!! else emptyList())
 
                     val deviceAdapter = DeviceAdapter(mActivity, deviceList)
                     spinnerDevice.adapter = deviceAdapter
 
-                    if (roomData != null && bodyScenes[adapterPosition].deviceId != "") {
+                    roomData?.let {
                         spinnerDevice.setSelection(
                             deviceAdapter.getPositionById(
                                 bodyScenes[adapterPosition].deviceId
@@ -185,7 +184,7 @@ class DeviceSceneAdapter(
 
                         spinnerSwitch.isEnabled = deviceData?.switchData?.isNotEmpty() ?: false
 
-                        val switch = DeviceSwitchData(
+                        switchList.add(DeviceSwitchData(
                             "",
                             0,
                             "",
@@ -195,29 +194,24 @@ class DeviceSceneAdapter(
                             "",
                             "0",
                             null
-                        )
-                        switchList.add(switch)
+                        ))
 
-                        if (deviceData != null) {
-                            deviceData.switchData?.let { switchData ->
-                                switchList.addAll(switchData.filter {
-                                    it.typeOfSwitch == 0 || it.desc?.lowercase() == mActivity.getString(
-                                        R.string.text_switch_fan_speed
-                                    ).lowercase()
-                                })
+                        deviceData?.switchData?.let { switchData ->
+                            switchList.addAll(switchData.filter {
+                                it.typeOfSwitch == 0 || it.desc?.lowercase() == mActivity.getString(
+                                    R.string.text_switch_fan_speed
+                                ).lowercase()
+                            })
 
-                            }
                         }
 
                         val switchAdapter = SwitchAdapter(mActivity, switchList)
                         spinnerSwitch.adapter = switchAdapter
-                        if (bodyScenes[adapterPosition].deviceSwitchId != "") {
-                            spinnerSwitch.setSelection(
-                                switchAdapter.getPositionById(
-                                    bodyScenes[adapterPosition].deviceSwitchId
-                                )
+                        spinnerSwitch.setSelection(
+                            switchAdapter.getPositionById(
+                                bodyScenes[adapterPosition].deviceSwitchId
                             )
-                        }
+                        )
 
                     }
 

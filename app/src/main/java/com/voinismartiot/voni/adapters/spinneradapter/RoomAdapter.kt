@@ -39,6 +39,10 @@ class RoomAdapter(private val activity: Activity, private val items: List<GetRoo
 
     fun getPositionById(roomId: String): Int {
         var position: Int = -1
+
+        if (roomId.isEmpty())
+            return position
+
         for ((index, value) in items.withIndex()) {
             if (value.id == roomId) {
                 position = index
