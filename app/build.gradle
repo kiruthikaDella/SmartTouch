@@ -17,7 +17,7 @@ android {
         minSdkVersion 23
         targetSdkVersion 32
         versionCode 1
-        versionName "1.27.12"
+        versionName "1.27.13"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -82,7 +82,7 @@ dependencies {
 
     //Social Media Integration
     implementation 'com.google.android.gms:play-services-auth:20.1.0' // ----> Google
-    implementation 'com.facebook.android:facebook-login:11.0.0' // ----> Facebook
+    implementation 'com.facebook.android:facebook-android-sdk:12.3.0' // ----> Facebook
 
     //Firebase
     implementation platform('com.google.firebase:firebase-bom:27.0.0')
@@ -116,6 +116,9 @@ dependencies {
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.0"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.0"
     implementation "androidx.lifecycle:lifecycle-runtime-ktx:2.4.1"
+
+    // required to avoid crash on Android 12 API 31
+    implementation 'androidx.work:work-runtime-ktx:2.7.0'
 
     implementation project(path: ':wifilibrary')
     implementation project(path: ':tcpudplibrary')

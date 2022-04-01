@@ -49,7 +49,7 @@ class AuthenticationActivity : AppCompatActivity() {
     fun performFacebookLogin() {
         LoginManager.getInstance().logInWithReadPermissions(
             this,
-            arrayListOf("public_profile")
+            arrayListOf("public_profile", "email")
         )
     }
 
@@ -63,9 +63,19 @@ class AuthenticationActivity : AppCompatActivity() {
 
             LoginManager.getInstance()
                 .registerCallback(callbackManager, object : FacebookCallback<LoginResult> {
-                    override fun onSuccess(result: LoginResult?) {
-                        Log.i(logTag, "Success Facebook Login")
-                        accessToken = result?.accessToken!!
+
+                    override fun onCancel() {
+                        showToast("Login Cancel")
+                        Log.e(logTag, "Success Facebook Login onCancel")
+                    }
+
+                    override fun onError(error: FacebookException) {
+                        showToast("${error?.message}")
+                        Log.e(logTag, "FacebookException $error")
+                    }
+
+                    override fun onSuccess(result: LoginResult) {
+                        accessToken = result.accessToken
 
                         accessTokenTracker = object : AccessTokenTracker() {
                             override fun onCurrentAccessTokenChanged(
@@ -83,19 +93,19 @@ class AuthenticationActivity : AppCompatActivity() {
                         }
                         profileTracker?.startTracking()
 
-                        var email = ""
-
                         val request =
-                            GraphRequest.newMeRequest(result.accessToken) { _, response ->
+                            GraphRequest.newMeRequest(result.accessToken) { obj, response ->
 
-                                response?.let {
-                                    val json: JSONObject? = it.jsonObject
-                                    email = try {
-                                        json?.getString("email") ?: ""
-                                    } catch (e: java.lang.Exception) {
-                                        ""
-                                    }
+                                Log.e(logTag, " GraphRequest obj $obj response $response")
+
+                                val email = try {
+                                    obj?.getString("email") ?: ""
+                                } catch (e: java.lang.Exception) {
+                                    ""
                                 }
+
+                                facebookLoginListener?.performLogin(accessToken.userId, email)
+
                             }
 
                         val parameter = Bundle()
@@ -106,12 +116,12 @@ class AuthenticationActivity : AppCompatActivity() {
                         request.parameters = parameter
                         request.executeAsync()
 
-                        val profile = Profile.getCurrentProfile()
+                       /* val profile = Profile.getCurrentProfile()
 
                         profile?.let {
-                            Log.d(
+                            Log.e(
                                 logTag,
-                                "Facebook userId = ${accessToken.userId} firstname = ${it.firstName} lastName = ${it.lastName}"
+                                "Facebook userId = ${accessToken.userId} firstname = ${it.firstName} lastName = ${it.lastName} email = $email"
                             )
 
                             facebookLoginListener?.performLogin(accessToken.userId, email)
@@ -119,24 +129,13 @@ class AuthenticationActivity : AppCompatActivity() {
 
                         } ?: run {
                             performFacebookLogin()
-                        }
-
-                    }
-
-                    override fun onCancel() {
-                        showToast("Login Cancel")
-                        Log.i(logTag, "Success Facebook Login onCancel")
-                    }
-
-                    override fun onError(error: FacebookException?) {
-                        showToast("${error?.message}")
-                        Log.i(logTag, "Success Facebook Login onError")
-                        Log.e(logTag, "FacebookException $error")
+                        }*/
                     }
 
                 })
+
+
         } catch (e: Exception) {
-            Log.i(logTag, "Success Facebook Login catch " + e.printStackTrace())
             e.printStackTrace()
         }
 
@@ -144,7 +143,6 @@ class AuthenticationActivity : AppCompatActivity() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        Log.e(logTag, " onActivityResult ")
         if (FacebookSdk.isFacebookRequestCode(requestCode)) {
             callbackManager.onActivityResult(requestCode, resultCode, data)
         }

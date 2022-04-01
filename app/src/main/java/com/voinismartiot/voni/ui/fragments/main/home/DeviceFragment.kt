@@ -18,17 +18,22 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.provider.Settings
+import android.text.method.HideReturnsTransformationMethod
+import android.text.method.PasswordTransformationMethod
 import android.util.DisplayMetrics
 import android.util.Log
 import android.view.Display
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
+import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -757,15 +762,19 @@ class DeviceFragment : BaseFragment<HomeViewModel, FragmentDeviceBinding, HomeRe
 
     @SuppressLint("SetTextI18n")
     private fun redirectToWifiSetting() {
-        context?.let {
-            val dialog = Dialog(it)
+        context?.let { ctx ->
+            val dialog = Dialog(ctx)
 
             dialog.setContentView(R.layout.dialog_wifi_info)
             dialog.setCancelable(true)
 
+            var isPasswordVisible = false
+
             val tvInstructionInfo = dialog.findViewById(R.id.tvInstructionsInfo) as TextView
             val tvSSID = dialog.findViewById(R.id.tv_default_ssid) as TextView
             val tvPassword = dialog.findViewById(R.id.tv_default_password) as TextView
+            val edtPassword = dialog.findViewById(R.id.edt_password) as EditText
+            val ivHidePassword = dialog.findViewById(R.id.iv_hide_password) as ImageView
             val btnOk = dialog.findViewById(R.id.btn_ok) as MaterialButton
             val btnCancel = dialog.findViewById(R.id.btn_cancel) as MaterialButton
 
@@ -777,7 +786,32 @@ class DeviceFragment : BaseFragment<HomeViewModel, FragmentDeviceBinding, HomeRe
                 }
             }
 
-            tvPassword.text = "Password: ${getString(R.string.str_gateway_password)}"
+            tvPassword.text = "Password:"
+            edtPassword.text = getString(R.string.str_gateway_password).toEditable()
+
+            ivHidePassword.setOnClickListener {
+                if (isPasswordVisible) {
+                    isPasswordVisible = false
+                    ivHidePassword.setImageDrawable(
+                        ContextCompat.getDrawable(
+                            ctx,
+                            R.drawable.ic_password_hidden
+                        )
+                    )
+                    edtPassword.transformationMethod =
+                        PasswordTransformationMethod.getInstance()
+                } else {
+                    isPasswordVisible = true
+                    ivHidePassword.setImageDrawable(
+                        ContextCompat.getDrawable(
+                            ctx,
+                            R.drawable.ic_password_visible
+                        )
+                    )
+                    edtPassword.transformationMethod =
+                        HideReturnsTransformationMethod.getInstance()
+                }
+            }
 
             if (VersionUtils.isAndroidQOrLater) {
                 tvInstructionInfo.text = getString(R.string.text_wifi_instruction_10)

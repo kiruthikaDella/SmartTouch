@@ -2,6 +2,7 @@ package com.voinismartiot.voni
 
 import android.app.Application
 import com.appizona.yehiahd.fastsave.FastSave
+import com.facebook.appevents.AppEventsLogger
 import com.google.firebase.FirebaseApp
 import com.teksun.tcpudplibrary.SettingsService
 import com.voinismartiot.voni.mqtt.AwsMqttSingleton
@@ -18,6 +19,9 @@ class AppDelegate : Application() {
 
         //Initialize FastSave
         FastSave.init(this)
+
+        //Facebook SDK
+//        AppEventsLogger.activateApp(this)
 
         FirebaseApp.initializeApp(this)
         AwsMqttSingleton.initializeMQTT()
