@@ -20,9 +20,6 @@ class AppDelegate : Application() {
         //Initialize FastSave
         FastSave.init(this)
 
-        //Facebook SDK
-//        AppEventsLogger.activateApp(this)
-
         FirebaseApp.initializeApp(this)
         AwsMqttSingleton.initializeMQTT()
 

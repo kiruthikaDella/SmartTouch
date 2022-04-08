@@ -37,6 +37,7 @@ import com.voinismartiot.voni.ui.viewmodel.HomeViewModel
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
+
 class HomeFragment : BaseFragment<HomeViewModel, FragmentHomeBinding, HomeRepository>() {
 
     private val logTag = this::class.java.simpleName
@@ -95,6 +96,11 @@ class HomeFragment : BaseFragment<HomeViewModel, FragmentHomeBinding, HomeReposi
             }
 
         })
+
+        binding.pullToRefresh.setOnRefreshListener {
+            viewModel.getRoom()
+            binding.pullToRefresh.isRefreshing = false
+        }
 
         binding.tvAppVersion.text = String.format("%s", "Version - ${BuildConfig.VERSION_NAME}")
 

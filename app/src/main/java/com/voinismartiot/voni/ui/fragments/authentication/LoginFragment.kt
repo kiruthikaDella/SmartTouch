@@ -354,7 +354,7 @@ class LoginFragment : BaseFragment<AuthViewModel, FragmentLoginBinding, AuthRepo
                             }
                             is Resource.Failure -> {
                                 hideDialog()
-                                context?.getString(R.string.error_something_went_wrong)
+                                context?.showToast(getString(R.string.error_something_went_wrong))
                                 Log.e(logTag, "login error ${response.errorBody?.string()}")
                             }
                             else -> Unit

@@ -136,6 +136,11 @@ class ControlModeFragment :
                 })
         }
 
+        binding.pullToRefresh.setOnClickListener {
+            viewModel.getControl()
+            binding.pullToRefresh.isRefreshing = false
+        }
+
 
         apiCall()
     }

@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import androidx.appcompat.widget.AppCompatSpinner
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.switchmaterial.SwitchMaterial
@@ -18,6 +19,7 @@ import com.voinismartiot.voni.common.interfaces.DialogAskListener
 import com.voinismartiot.voni.common.utils.Utils.toBoolean
 import com.voinismartiot.voni.common.utils.Utils.toInt
 import com.voinismartiot.voni.common.utils.askAlert
+import com.voinismartiot.voni.customviews.CustomSpinner
 
 class UpdateDeviceSceneAdapter(
     private val mActivity: Activity,
@@ -97,7 +99,7 @@ class UpdateDeviceSceneAdapter(
     inner class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val spinnerRoom = itemView.findViewById(R.id.spinner_room_name) as Spinner
         val spinnerDevice = itemView.findViewById(R.id.spinner_device_name) as Spinner
-        val spinnerSwitch = itemView.findViewById(R.id.spinner_switch_name) as Spinner
+        val spinnerSwitch = itemView.findViewById(R.id.spinner_switch_name) as CustomSpinner
         val switchStatus = itemView.findViewById(R.id.switch_status) as SwitchMaterial
 
         val ibDelete = itemView.findViewById(R.id.ib_delete) as ImageView
@@ -240,6 +242,35 @@ class UpdateDeviceSceneAdapter(
                     override fun onNothingSelected(parent: AdapterView<*>?) = Unit
 
                 }
+
+            spinnerSwitch.setSpinnerEventsListener(object : CustomSpinner.OnSpinnerEventsListener {
+                override fun onSpinnerOpened(spinner: AppCompatSpinner?) {
+
+                    val filteredSwitchList = arrayListOf<DeviceSwitchData>()
+                    val size = spinner?.adapter?.count ?: 0
+
+                    for (i in 0 until size) {
+                        filteredSwitchList.add(spinner!!.adapter!!.getItem(i) as DeviceSwitchData)
+                    }
+
+                    val abc = arrayListOf<DeviceSwitchData>()
+                    abc.addAll(filteredSwitchList.filter { !scenes.any { obj -> obj.deviceSwitchId?.id == it.id } })
+                    if ((spinnerSwitch.selectedItem as DeviceSwitchData).name != mActivity.getString(
+                            R.string.text_select_switch
+                        )
+                    ) {
+                        abc.add(spinnerSwitch.selectedItem as DeviceSwitchData)
+                    }
+
+                    val switchAdapter = SwitchAdapter(mActivity, abc)
+                    switchAdapter.notifyDataSetChanged()
+                    spinnerSwitch.adapter = switchAdapter
+
+
+                }
+
+                override fun onSpinnerClosed(spinner: AppCompatSpinner?) = Unit
+            })
 
             spinnerSwitch.onItemSelectedListener =
                 object : AdapterView.OnItemSelectedListener {

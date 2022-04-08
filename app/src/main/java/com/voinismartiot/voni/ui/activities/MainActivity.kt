@@ -32,6 +32,7 @@ import com.voinismartiot.voni.common.utils.Utils.clearError
 import com.voinismartiot.voni.common.utils.Utils.isControlModePin
 import com.voinismartiot.voni.common.utils.Utils.toEditable
 import com.voinismartiot.voni.databinding.ActivityMainBinding
+import com.voinismartiot.voni.mqtt.AwsMqttSingleton
 import com.voinismartiot.voni.mqtt.NetworkConnectionLiveData
 import com.voinismartiot.voni.mqtt.NotifyManager
 import com.voinismartiot.voni.ui.fragments.main.home.HomeFragmentDirections
@@ -157,6 +158,8 @@ class MainActivity : AppCompatActivity() {
                 roomTypeList.toMutableList().clear()
                 viewModel.roomType()
             }
+
+            AwsMqttSingleton.connectAWS()
 
         }
 

@@ -17,7 +17,7 @@ android {
         minSdkVersion 23
         targetSdkVersion 32
         versionCode 1
-        versionName "1.27.13"
+        versionName "1.27.14"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -65,6 +65,7 @@ dependencies {
     implementation 'com.github.CanHub:Android-Image-Cropper:3.3.5' // ----> Crop image
 
     implementation 'com.skyfishjy.ripplebackground:library:1.0.1' // ----> Pulse view
+    implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0' // ----> Pull to refresh
 
     // For managing request permission
     implementation 'com.karumi:dexter:6.2.2'

@@ -69,6 +69,11 @@ class UserManagementFragment :
 
         })
 
+        binding.pullToRefresh.setOnClickListener {
+            viewModel.getSubordinateUser()
+            binding.pullToRefresh.isRefreshing = false
+        }
+
         apiCall()
     }
 

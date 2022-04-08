@@ -143,7 +143,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/rl_device_name">
 
-            <Spinner
+            <com.voinismartiot.voni.customviews.CustomSpinner
                 android:id="@+id/spinner_switch_name"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"

@@ -497,6 +497,11 @@ class DeviceFragment : BaseFragment<HomeViewModel, FragmentDeviceBinding, HomeRe
             }
         }
 
+        binding.pullToRefresh.setOnRefreshListener {
+            viewModel.getDevice(args.roomDetail.id)
+            binding.pullToRefresh.isRefreshing = false
+        }
+
     }
 
     private fun showPanel() {

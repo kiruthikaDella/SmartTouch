@@ -342,6 +342,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginEnd="@dimen/_2sdp"
                             android:fontFamily="@font/roboto_medium"
+                            android:visibility="gone"
                             android:singleLine="true"
                             android:text="@string/text_size"
                             android:textColor="@color/daintree"
@@ -355,6 +356,7 @@
                             android:id="@+id/iv_text_size_info"
                             style="@style/ToolTipIcon"
                             app:layout_constraintBottom_toBottomOf="@+id/rl_text_size_info"
+                            android:visibility="gone"
                             app:layout_constraintStart_toStartOf="@+id/iv_screen_layout_info"
                             app:layout_constraintTop_toTopOf="@+id/rl_text_size_info" />
 
@@ -363,6 +365,7 @@
                             android:layout_width="@dimen/_80sdp"
                             android:layout_height="@dimen/_30sdp"
                             android:layout_marginTop="@dimen/_15sdp"
+                            android:visibility="gone"
                             android:layout_marginEnd="@dimen/_10sdp"
                             android:background="@drawable/transparent_background_with_catskill_white_dark_border"
                             app:layout_constraintEnd_toEndOf="parent"

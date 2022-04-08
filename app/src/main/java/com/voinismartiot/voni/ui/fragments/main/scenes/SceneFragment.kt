@@ -115,6 +115,12 @@ class SceneFragment : BaseFragment<HomeViewModel, FragmentSceneBinding, HomeRepo
             }
         }
 
+        binding.pullToRefresh.setOnRefreshListener {
+            viewModel.getScene(BodyGetScene("", ""))
+            viewModel.getControl()
+            binding.pullToRefresh.isRefreshing = false
+        }
+
         apiResponse()
     }
 
