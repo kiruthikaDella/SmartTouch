@@ -23,8 +23,8 @@ class SwitchesAdapter(
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
 
-        val dayData = switchList[position]
         holder.apply {
+            val dayData = switchList[adapterPosition]
             tvDay.text = dayData.name
             cbDay.isChecked = dayData.isChecked
 

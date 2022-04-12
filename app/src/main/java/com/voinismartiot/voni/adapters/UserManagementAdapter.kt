@@ -24,8 +24,8 @@ class UserManagementAdapter(
     }
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
-        val data = userList[position]
         holder.apply {
+            val data = userList[adapterPosition]
             tvUserName.text = data.fullName
             ivRemoveUser.setOnClickListener {
                 removeUserClickListener?.onItemClick(data)

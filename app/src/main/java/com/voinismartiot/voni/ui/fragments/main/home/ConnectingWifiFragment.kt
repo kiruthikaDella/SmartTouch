@@ -311,12 +311,6 @@ class ConnectingWifiFragment :
     }
 
     private fun sendDataToCloud() {
-        val productGroup = if (args.isSmarTack) {
-            getString(R.string.text_smart_tack)
-        } else {
-            getString(R.string.text_smart_tap)
-        }
-
         if (Utils.isNetworkConnectivityAvailable()) {
 
             AwsMqttSingleton.disconnectAws()
@@ -337,7 +331,11 @@ class ConnectingWifiFragment :
                                 wifiSSID = jsonObject.get("wifi_ssid").toString(),
                                 password = jsonObject.get("password").toString(),
                                 macImei = jsonObject.get("mac_imei").toString(),
-                                productGroup = productGroup,
+                                productGroup = if (args.isSmarTack) {
+                                    getString(R.string.text_smart_tack)
+                                } else {
+                                    getString(R.string.text_smart_tap)
+                                },
                                 manufactureDate = jsonObject.get("vManufactureDate").toString(),
                                 firmwareVersion = jsonObject.get("vFirmwareVersion").toString(),
                                 desc = jsonObject.get("vDesc").toString(),

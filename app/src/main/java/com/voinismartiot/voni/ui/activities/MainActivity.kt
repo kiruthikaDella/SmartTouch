@@ -151,12 +151,14 @@ class MainActivity : AppCompatActivity() {
         NetworkConnectionLiveData().observe(this) { isConnected ->
             NotifyManager.internetInfo.postValue(isConnected)
 
-            if (navController.currentDestination?.id == R.id.homeFragment) {
-                appliancesList.clear()
-                viewModel.getDeviceAppliances()
-
+            if (isConnected && navController.currentDestination?.id == R.id.homeFragment) {
                 roomTypeList.toMutableList().clear()
                 viewModel.roomType()
+            }
+
+            if (isConnected) {
+                appliancesList.clear()
+                viewModel.getDeviceAppliances()
             }
 
             AwsMqttSingleton.connectAWS()

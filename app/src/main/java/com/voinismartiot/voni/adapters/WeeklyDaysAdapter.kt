@@ -22,8 +22,8 @@ class WeeklyDaysAdapter(
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
 
-        val dayData = daysList[position]
         holder.apply {
+            val dayData = daysList[adapterPosition]
             tvDay.text = dayData.day
             cbDay.isChecked = dayData.isChecked
 

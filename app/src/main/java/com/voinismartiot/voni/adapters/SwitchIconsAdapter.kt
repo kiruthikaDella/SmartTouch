@@ -35,9 +35,9 @@ class SwitchIconsAdapter(
     }
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
-        val data = switchList[position]
 
         holder.apply {
+            val data = switchList[adapterPosition]
             tvSwitchName.text = data.name
 
             itemView.setOnClickListener {

@@ -22,7 +22,7 @@ class ControlModeAdapter(
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        val data = panelList[position]
+        val data = panelList[holder.adapterPosition]
 
         val sectionViewHolder: SectionViewHolder = holder as SectionViewHolder
         sectionViewHolder.apply {

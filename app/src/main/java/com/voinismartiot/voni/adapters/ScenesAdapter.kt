@@ -40,9 +40,9 @@ class ScenesAdapter(
     }
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
-        val data = sceneList[position]
 
         holder.apply {
+            val data = sceneList[adapterPosition]
             tvSceneName.text = data.sceneName
             switchSceneStatus.isChecked = data.isDeviceDisable.toBoolean()
 

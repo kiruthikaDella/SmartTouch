@@ -29,7 +29,7 @@ class RoomsAdapter(
     }
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
-        val data = roomList[position]
+        val data = roomList[holder.adapterPosition]
 
         holder.apply {
 

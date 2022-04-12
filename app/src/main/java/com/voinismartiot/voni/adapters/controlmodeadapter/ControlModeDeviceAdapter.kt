@@ -71,7 +71,7 @@ class ControlModeDeviceAdapter(
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        val data = deviceList[position]
+        val data = deviceList[holder.adapterPosition]
 
         if (AwsMqttSingleton.isConnected()) {
             subscribeToDevice(data.deviceSerialNo)
@@ -830,6 +830,13 @@ class ControlModeDeviceAdapter(
                     device.deviceSerialNo,
                     MQTTConstants.AWS_SWITCH_1,
                     switchOne.isChecked.toInt().toString()
+                )
+                val appliance = spinnerAppliances.selectedItem as DeviceAppliances
+
+                publishAppliance(
+                    device.deviceSerialNo,
+                    appliance.title,
+                    appliance.groupType
                 )
             }
         }
