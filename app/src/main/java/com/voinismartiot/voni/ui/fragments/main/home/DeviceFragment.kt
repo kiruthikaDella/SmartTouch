@@ -498,8 +498,9 @@ class DeviceFragment : BaseFragment<HomeViewModel, FragmentDeviceBinding, HomeRe
         }
 
         binding.pullToRefresh.setOnRefreshListener {
+            deviceList.clear()
+            panelAdapter.notifyDataSetChanged()
             viewModel.getDevice(args.roomDetail.id)
-            binding.pullToRefresh.isRefreshing = false
         }
 
     }
@@ -562,9 +563,9 @@ class DeviceFragment : BaseFragment<HomeViewModel, FragmentDeviceBinding, HomeRe
                                     response.values.data?.let {
                                         deviceList.add(it)
                                         binding.recyclerRoomPanels.recycledViewPool.clear()
-                                        panelAdapter.notifyDataSetChanged()
                                     }
                                 }
+                                panelAdapter.notifyDataSetChanged()
                             }
                             is Resource.Failure -> {
                                 hideDialog()
@@ -584,6 +585,7 @@ class DeviceFragment : BaseFragment<HomeViewModel, FragmentDeviceBinding, HomeRe
                         deviceList.clear()
                         when (response) {
                             is Resource.Success -> {
+                                binding.pullToRefresh.isRefreshing = false
                                 hideDialog()
                                 if (response.values.status && response.values.code == Constants.API_SUCCESS_CODE) {
                                     response.values.data?.let { deviceData ->
@@ -596,6 +598,7 @@ class DeviceFragment : BaseFragment<HomeViewModel, FragmentDeviceBinding, HomeRe
                                 panelAdapter.notifyDataSetChanged()
                             }
                             is Resource.Failure -> {
+                                binding.pullToRefresh.isRefreshing = false
                                 hideDialog()
                                 if (isSelectedSmarTouch) {
                                     context?.showToast(getString(R.string.error_something_went_wrong))

@@ -61,6 +61,11 @@ class ControlModeFragment :
             }
         }
 
+        activity?.let { mActivity ->
+            controlModeAdapter = ControlModeAdapter(mActivity, roomList)
+            binding.recyclerControlModes.adapter = controlModeAdapter
+        }
+
         initGoogleSignInClient()
 
         NotifyManager.internetInfo.observe(viewLifecycleOwner) { isConnected ->
@@ -68,8 +73,6 @@ class ControlModeFragment :
                 activity?.loadingDialog()
                 viewModel.getControl()
                 viewModel.getPinStatus()
-            } else {
-                Log.e(logTag, " internet is not available")
             }
         }
 
@@ -136,11 +139,11 @@ class ControlModeFragment :
                 })
         }
 
-        binding.pullToRefresh.setOnClickListener {
+        binding.pullToRefresh.setOnRefreshListener {
+            roomList.clear()
+            controlModeAdapter.notifyDataSetChanged()
             viewModel.getControl()
-            binding.pullToRefresh.isRefreshing = false
         }
-
 
         apiCall()
     }
@@ -244,7 +247,6 @@ class ControlModeFragment :
 
                                         if (it.isPinStatus.toBoolean()) {
                                             pinnedControlMode()
-
                                         } else {
                                             unpinnedControlMode()
                                         }
@@ -264,6 +266,7 @@ class ControlModeFragment :
                 launch {
                     viewModel.getControlResponse.collectLatest { response ->
                         roomList.clear()
+                        binding.pullToRefresh.isRefreshing = response is Resource.Loading
                         when (response) {
                             is Resource.Success -> {
                                 hideDialog()
@@ -271,13 +274,7 @@ class ControlModeFragment :
                                 if (response.values.status && response.values.code == Constants.API_SUCCESS_CODE) {
                                     response.values.data?.let { roomDataList ->
                                         roomList.addAll(roomDataList)
-                                        activity?.let { mActivity ->
-                                            controlModeAdapter =
-                                                ControlModeAdapter(mActivity, roomList)
-                                            binding.recyclerControlModes.adapter =
-                                                controlModeAdapter
-                                        }
-
+                                        controlModeAdapter.notifyDataSetChanged()
                                     }
                                 } else {
                                     context?.showToast(response.values.message)

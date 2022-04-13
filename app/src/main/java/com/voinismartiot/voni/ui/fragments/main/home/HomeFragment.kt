@@ -98,8 +98,9 @@ class HomeFragment : BaseFragment<HomeViewModel, FragmentHomeBinding, HomeReposi
         })
 
         binding.pullToRefresh.setOnRefreshListener {
+            roomList.clear()
+            roomsAdapter.notifyDataSetChanged()
             viewModel.getRoom()
-            binding.pullToRefresh.isRefreshing = false
         }
 
         binding.tvAppVersion.text = String.format("%s", "Version - ${BuildConfig.VERSION_NAME}")
@@ -201,6 +202,7 @@ class HomeFragment : BaseFragment<HomeViewModel, FragmentHomeBinding, HomeReposi
                 launch {
                     viewModel.getRoomResponse.collectLatest { response ->
                         roomList.clear()
+                        binding.pullToRefresh.isRefreshing = response is Resource.Loading
                         when (response) {
                             is Resource.Success -> {
                                 hideDialog()

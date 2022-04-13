@@ -116,9 +116,10 @@ class SceneFragment : BaseFragment<HomeViewModel, FragmentSceneBinding, HomeRepo
         }
 
         binding.pullToRefresh.setOnRefreshListener {
+            sceneList.clear()
+            sceneAdapter.notifyDataSetChanged()
             viewModel.getScene(BodyGetScene("", ""))
             viewModel.getControl()
-            binding.pullToRefresh.isRefreshing = false
         }
 
         apiResponse()
@@ -165,6 +166,7 @@ class SceneFragment : BaseFragment<HomeViewModel, FragmentSceneBinding, HomeRepo
                 launch {
                     viewModel.getSceneResponse.collectLatest { response ->
                         sceneList.clear()
+                        binding.pullToRefresh.isRefreshing = response is Resource.Loading
                         when (response) {
                             is Resource.Success -> {
                                 hideDialog()

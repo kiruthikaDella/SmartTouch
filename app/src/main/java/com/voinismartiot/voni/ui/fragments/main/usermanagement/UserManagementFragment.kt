@@ -69,9 +69,10 @@ class UserManagementFragment :
 
         })
 
-        binding.pullToRefresh.setOnClickListener {
+        binding.pullToRefresh.setOnRefreshListener {
+            userList.clear()
+            userManagementAdapter.notifyDataSetChanged()
             viewModel.getSubordinateUser()
-            binding.pullToRefresh.isRefreshing = false
         }
 
         apiCall()
@@ -95,18 +96,18 @@ class UserManagementFragment :
                 launch {
                     viewModel.getSubordinateUserResponse.collectLatest { response ->
                         userList.clear()
+                        binding.pullToRefresh.isRefreshing = response is Resource.Loading
                         when (response) {
                             is Resource.Success -> {
                                 hideDialog()
                                 if (response.values.status && response.values.code == Constants.API_SUCCESS_CODE) {
                                     response.values.data?.let { userData ->
                                         userList.addAll(userData)
-                                        userManagementAdapter.notifyDataSetChanged()
                                     }
                                 } else {
-                                    userManagementAdapter.notifyDataSetChanged()
                                     context?.showToast(response.values.message)
                                 }
+                                userManagementAdapter.notifyDataSetChanged()
                             }
                             is Resource.Failure -> {
                                 hideDialog()
