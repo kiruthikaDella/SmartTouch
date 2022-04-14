@@ -78,7 +78,6 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import java.util.concurrent.TimeUnit
 
 @SuppressLint("ClickableViewAccessibility", "NotifyDataSetChanged")
 class DeviceFragment : BaseFragment<HomeViewModel, FragmentDeviceBinding, HomeRepository>() {
@@ -204,13 +203,14 @@ class DeviceFragment : BaseFragment<HomeViewModel, FragmentDeviceBinding, HomeRe
                 locationResult.lastLocation.let {
                     currentLocation = it
 
-                    fusedLocationProviderClient.removeLocationUpdates(locationCallback).addOnCompleteListener { task ->
-                        if (task.isSuccessful) {
-                            Log.d(logTag, "Location Callback removed.")
-                        } else {
-                            Log.d(logTag, "Failed to remove Location Callback.")
+                    fusedLocationProviderClient.removeLocationUpdates(locationCallback)
+                        .addOnCompleteListener { task ->
+                            if (task.isSuccessful) {
+                                Log.d(logTag, "Location Callback removed.")
+                            } else {
+                                Log.d(logTag, "Failed to remove Location Callback.")
+                            }
                         }
-                    }
 
                 }
             }
@@ -732,11 +732,12 @@ class DeviceFragment : BaseFragment<HomeViewModel, FragmentDeviceBinding, HomeRe
                                     Log.d(logTag, "areAllPermissionsGranted")
                                     Looper.myLooper()?.let { it1 ->
                                         Log.d(logTag, "myLooper")
-                                        fusedLocationProviderClient.requestLocationUpdates(locationRequest, locationCallback,
+                                        fusedLocationProviderClient.requestLocationUpdates(
+                                            locationRequest, locationCallback,
                                             it1
                                         )
                                     }
-                                    if (!isSelectedSmarTouch){
+                                    if (!isSelectedSmarTouch) {
                                         redirectToWifiSetting()
                                     }
                                     return
@@ -787,11 +788,8 @@ class DeviceFragment : BaseFragment<HomeViewModel, FragmentDeviceBinding, HomeRe
             val btnCancel = dialog.findViewById(R.id.btn_cancel) as MaterialButton
 
             isSelectedSmartAck?.let { isSmartAck ->
-                if (isSmartAck) {
-                    tvSSID.text = "SSID: ${getString(R.string.text_smart_tack)}"
-                } else {
-                    tvSSID.text = "SSID: ${getString(R.string.text_smart_tap)}"
-                }
+                tvSSID.text =
+                    "SSID: ${if (isSmartAck) getString(R.string.text_smart_tack) else getString(R.string.text_smart_tap)}"
             }
 
             tvPassword.text = "Password:"
@@ -808,24 +806,25 @@ class DeviceFragment : BaseFragment<HomeViewModel, FragmentDeviceBinding, HomeRe
                     )
                     edtPassword.transformationMethod =
                         PasswordTransformationMethod.getInstance()
-                } else {
-                    isPasswordVisible = true
-                    ivHidePassword.setImageDrawable(
-                        ContextCompat.getDrawable(
-                            ctx,
-                            R.drawable.ic_password_visible
-                        )
-                    )
-                    edtPassword.transformationMethod =
-                        HideReturnsTransformationMethod.getInstance()
+
+                    return@setOnClickListener
                 }
+
+                isPasswordVisible = true
+                ivHidePassword.setImageDrawable(
+                    ContextCompat.getDrawable(
+                        ctx,
+                        R.drawable.ic_password_visible
+                    )
+                )
+                edtPassword.transformationMethod =
+                    HideReturnsTransformationMethod.getInstance()
             }
 
-            if (VersionUtils.isAndroidQOrLater) {
-                tvInstructionInfo.text = getString(R.string.text_wifi_instruction_10)
-            } else {
-                tvInstructionInfo.text = getString(R.string.text_wifi_instruction)
-            }
+            tvInstructionInfo.text =
+                if (VersionUtils.isAndroidQOrLater) getString(R.string.text_wifi_instruction_10) else getString(
+                    R.string.text_wifi_instruction
+                )
 
             btnCancel.setOnClickListener {
                 dialog.dismiss()

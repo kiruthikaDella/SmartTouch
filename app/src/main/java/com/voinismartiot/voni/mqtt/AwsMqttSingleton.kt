@@ -114,15 +114,15 @@ object AwsMqttSingleton {
         )
 
         mqttManager = AWSIotMqttManager(clientId, MQTTConstants.CUSTOMER_SPECIFIC_ENDPOINT)
-        mqttManager!!.keepAlive = 10
+        mqttManager?.keepAlive = 10
 
-        mqttManager!!.mqttLastWillAndTestament = AWSIotMqttLastWillAndTestament(
+        mqttManager?.mqttLastWillAndTestament = AWSIotMqttLastWillAndTestament(
             "my/lwt/topic",
             "Android client lost connection", AWSIotMqttQos.QOS0
         )
 
         mIotAndroidClient = AWSIotClient(credentialsProvider)
-        mIotAndroidClient!!.setRegion(Region.getRegion(MQTTConstants.MY_REGION))
+        mIotAndroidClient?.setRegion(Region.getRegion(MQTTConstants.MY_REGION))
 
         keystorePath = instance.filesDir.path
         keystoreName = MQTTConstants.KEYSTORE_NAME
@@ -173,22 +173,22 @@ object AwsMqttSingleton {
                         CreateKeysAndCertificateRequest()
                     createKeysAndCertificateRequest.isSetAsActive = true
 
-                    val createKeysAndCertificateResult: CreateKeysAndCertificateResult =
-                        mIotAndroidClient!!.createKeysAndCertificate(
+                    val createKeysAndCertificateResult: CreateKeysAndCertificateResult? =
+                        mIotAndroidClient?.createKeysAndCertificate(
                             createKeysAndCertificateRequest
                         )
 
                     Log.i(
                         logTag,
                         "Cert ID: " +
-                                createKeysAndCertificateResult.certificateId +
+                                createKeysAndCertificateResult?.certificateId +
                                 " created."
                     )
 
                     AWSIotKeystoreHelper.saveCertificateAndPrivateKey(
                         certificateId,
-                        createKeysAndCertificateResult.certificatePem,
-                        createKeysAndCertificateResult.keyPair.privateKey,
+                        createKeysAndCertificateResult?.certificatePem,
+                        createKeysAndCertificateResult?.keyPair?.privateKey,
                         keystorePath, keystoreName, keystorePassword
                     )
 
@@ -196,8 +196,8 @@ object AwsMqttSingleton {
                         AttachPrincipalPolicyRequest()
                     policyAttachRequest.policyName = MQTTConstants.AWS_IOT_POLICY_NAME
                     policyAttachRequest.principal = createKeysAndCertificateResult
-                        .certificateArn
-                    mIotAndroidClient!!.attachPrincipalPolicy(policyAttachRequest)
+                        ?.certificateArn
+                    mIotAndroidClient?.attachPrincipalPolicy(policyAttachRequest)
 
                     connectAWS()
                 } catch (e: Exception) {
@@ -216,7 +216,7 @@ object AwsMqttSingleton {
     fun subscribe(topic: String) {
         Log.d(logTag, "topic = $topic")
         try {
-            mqttManager!!.subscribeToTopic(
+            mqttManager?.subscribeToTopic(
                 topic, AWSIotMqttQos.QOS0
             ) { topicName, data ->
                 val message = String(data, StandardCharsets.UTF_8)
@@ -227,11 +227,20 @@ object AwsMqttSingleton {
         }
     }
 
+    fun unsubscribe(topic: String) {
+        Log.d(logTag, "topic = $topic")
+        try {
+            mqttManager?.unsubscribeTopic(topic)
+        } catch (e: Exception) {
+            Log.e(logTag, "Subscription error.", e)
+        }
+    }
+
     fun publish(topic: String, msg: String) {
         try {
             if (isConnected()) {
                 Log.i(logTag, " topic $topic msg $msg")
-                mqttManager!!.publishString(msg, topic, AWSIotMqttQos.QOS0)
+                mqttManager?.publishString(msg, topic, AWSIotMqttQos.QOS0)
             }
         } catch (e: Exception) {
             Log.e(logTag, "Publish error.", e)
@@ -239,7 +248,7 @@ object AwsMqttSingleton {
     }
 
     fun disconnectAws() {
-        mqttManager!!.disconnect()
+        mqttManager?.disconnect()
     }
 
     fun isConnected(): Boolean {

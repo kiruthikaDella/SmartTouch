@@ -222,9 +222,7 @@ class UpdateDeviceSceneAdapter(
                         switchList.add(switch)
                         deviceData?.switchData?.let { switchData ->
                             switchList.addAll(switchData.filter {
-                                it.typeOfSwitch == 0 || it.desc?.lowercase() == mActivity.getString(
-                                    R.string.text_switch_fan_speed
-                                ).lowercase()
+                                it.typeOfSwitch == 0
                             })
                         }
 

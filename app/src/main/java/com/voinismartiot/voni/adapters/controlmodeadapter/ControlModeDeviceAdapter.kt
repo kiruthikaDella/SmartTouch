@@ -763,6 +763,7 @@ class ControlModeDeviceAdapter(
                 switchOne.isEnabled = false
             }
 
+            var is15ADevice = false
             device.switchData?.let { switchData ->
                 for (value in switchData) {
                     when (value.index) {
@@ -773,7 +774,7 @@ class ControlModeDeviceAdapter(
                             value.desc?.let {
                                 tvSwitchNameOneDesc.text = it
 
-                                val is15ADevice =
+                                is15ADevice =
                                     it.lowercase() == mActivity.getString(R.string.text_15a)
                                         .lowercase()
                                 rlSelectAppliances.isVisible = is15ADevice
@@ -831,6 +832,11 @@ class ControlModeDeviceAdapter(
                     MQTTConstants.AWS_SWITCH_1,
                     switchOne.isChecked.toInt().toString()
                 )
+
+                if (!is15ADevice){
+                    return@setOnClickListener
+                }
+
                 val appliance = spinnerAppliances.selectedItem as DeviceAppliances
 
                 publishAppliance(

@@ -1041,6 +1041,7 @@ class DeviceAdapter(
                 switchOne.isEnabled = false
             }
 
+            var is15ADevice = false
             try {
                 device.switchData?.let { switchData ->
                     for (value in switchData) {
@@ -1052,7 +1053,7 @@ class DeviceAdapter(
                                 value.desc?.let {
                                     tvSwitchNameOneDesc.text = it
 
-                                    val is15ADevice =
+                                    is15ADevice =
                                         it.lowercase() == mActivity.getString(R.string.text_15a)
                                             .lowercase()
                                     rlSelectAppliances.isVisible = is15ADevice
@@ -1094,7 +1095,8 @@ class DeviceAdapter(
                                                 }
                                             }
 
-                                            override fun onNothingSelected(p0: AdapterView<*>?) = Unit
+                                            override fun onNothingSelected(p0: AdapterView<*>?) =
+                                                Unit
 
                                         }
                                     ivAppliancesDown.setOnClickListener {
@@ -1139,6 +1141,10 @@ class DeviceAdapter(
                     MQTTConstants.AWS_SWITCH_1,
                     switchOne.isChecked.toInt().toString()
                 )
+
+                if (!is15ADevice) {
+                    return@setOnClickListener
+                }
 
                 val appliance = spinnerAppliances.selectedItem as DeviceAppliances
 

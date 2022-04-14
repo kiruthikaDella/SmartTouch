@@ -314,12 +314,9 @@ class ConnectingWifiFragment :
         if (Utils.isNetworkConnectivityAvailable()) {
 
             AwsMqttSingleton.disconnectAws()
-            viewLifecycleOwner.lifecycleScope.launch {
-                delay(2000)
-                AwsMqttSingleton.connectAWS()
-            }
             runnable = Runnable {
                 try {
+                    AwsMqttSingleton.connectAWS()
                     getDeviceStr?.let {
                         val jsonObject = JSONObject(it)
                         viewModel.deviceRegister(
