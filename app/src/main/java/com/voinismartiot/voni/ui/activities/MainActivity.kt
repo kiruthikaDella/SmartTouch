@@ -50,8 +50,9 @@ class MainActivity : AppCompatActivity() {
     private val logTag = this::class.java.simpleName
     private lateinit var navController: NavController
 
-    private var roomTypeList: List<RoomTypeData> = ArrayList()
+    private var roomTypeList = arrayListOf<RoomTypeData>()
     private var roomTypeId: String? = null
+    private lateinit var roomTypeAdapter: RoomTypeAdapter
 
     private var appliancesList = arrayListOf<DeviceAppliances>()
     private var isApiCalled = false
@@ -89,6 +90,26 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }
+
+        roomTypeAdapter = RoomTypeAdapter(this, roomTypeList)
+        binding.layoutAddRoom.spinnerRoom.adapter = roomTypeAdapter
+
+        binding.layoutAddRoom.spinnerRoom.onItemSelectedListener =
+            object : AdapterView.OnItemSelectedListener {
+                override fun onItemSelected(
+                    parent: AdapterView<*>?,
+                    view: View?,
+                    position: Int,
+                    id: Long
+                ) {
+                    val room = parent?.selectedItem as RoomTypeData
+                    roomTypeId = room.roomTypeId
+                }
+
+                override fun onNothingSelected(parent: AdapterView<*>?) =
+                    Unit
+
+            }
 
         bottomNavigationClickEvent()
 
@@ -152,7 +173,7 @@ class MainActivity : AppCompatActivity() {
             NotifyManager.internetInfo.postValue(isConnected)
 
             if (isConnected && navController.currentDestination?.id == R.id.homeFragment) {
-                roomTypeList.toMutableList().clear()
+                roomTypeList.clear()
                 viewModel.roomType()
             }
 
@@ -339,32 +360,13 @@ class MainActivity : AppCompatActivity() {
 
                 launch {
                     viewModel.roomTypeResponse.collectLatest { response ->
-                        roomTypeList.toMutableList().clear()
+                        roomTypeList.clear()
                         when (response) {
                             is Resource.Success -> {
                                 if (response.values.status && response.values.code == Constants.API_SUCCESS_CODE) {
-                                    roomTypeList = response.values.data!!
-
-                                    if (roomTypeList.isNotEmpty()) {
-                                        val roomAdapter =
-                                            RoomTypeAdapter(this@MainActivity, roomTypeList)
-                                        binding.layoutAddRoom.spinnerRoom.adapter = roomAdapter
-                                        binding.layoutAddRoom.spinnerRoom.onItemSelectedListener =
-                                            object : AdapterView.OnItemSelectedListener {
-                                                override fun onItemSelected(
-                                                    parent: AdapterView<*>?,
-                                                    view: View?,
-                                                    position: Int,
-                                                    id: Long
-                                                ) {
-                                                    val room = parent?.selectedItem as RoomTypeData
-                                                    roomTypeId = room.roomTypeId
-                                                }
-
-                                                override fun onNothingSelected(parent: AdapterView<*>?) =
-                                                    Unit
-
-                                            }
+                                    response.values.data?.let { listData ->
+                                        roomTypeList.addAll(listData)
+                                        roomTypeAdapter.notifyDataSetChanged()
                                     }
 
                                 } else {
