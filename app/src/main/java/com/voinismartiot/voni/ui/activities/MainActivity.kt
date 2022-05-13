@@ -194,6 +194,11 @@ class MainActivity : AppCompatActivity() {
         hideSoftKeyboard()
     }
 
+    override fun onStart() {
+        super.onStart()
+        hideSoftKeyboard()
+    }
+
     override fun onBackPressed() {
 
         if (navController.currentDestination?.id == R.id.userManagementFragment || navController.currentDestination?.id == R.id.controlModeFragment || navController.currentDestination?.id == R.id.sceneFragment) {

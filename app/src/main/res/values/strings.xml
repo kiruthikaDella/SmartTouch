@@ -57,8 +57,10 @@
     <string name="error_text_only_master_user_can_edit">Only master user can edit this settings</string>
     <string name="error_text_unauthorized">You are not authorized to access this action.</string>
     <string name="error_something_went_wrong">Something went wrong. Please try again after sometime</string>
+    <string name="error_sleep_mode_empty">Sleep mode value must not be empty</string>
     <string name="error_sleep_mode_digit_only">Sleep mode value must be digit</string>
     <string name="error_sleep_mode_limit_reached">You can not enter more than 600 seconds in sleep mode</string>
+    <string name="error_sleep_mode_second">Second must be greater than 5.</string>
 
     <!--    Forgot Password-->
     <string name="title_text_forgot_password">Forgot your password?</string>
@@ -208,7 +210,7 @@
     <string name="text_display_brightness">Display Brightness</string>
     <string name="text_auto">Auto</string>
     <string name="text_manual">Manual</string>
-    <string name="description_sleep_mode">Display will turn off when touch is not used for the period specified by the application.</string>
+    <string name="description_sleep_mode">Display will turn off when touch is not used for the period specified by the application. Sleep mode value will be consider in second.</string>
     <string name="description_night_mode">It will blacken the image and OEM logo and make the sole icon glow at bedtime.</string>
     <string name="description_time_mode">The date and time should be displayed on the touch screen on the bottom left or bottom right along with the day.</string>
     <string name="description_weather_report">The weather report needs to be displayed on the touch screen at the bottom left or right. It is also necessary to indicate the weather conditions with predefined symbols like cloudy, sunny.</string>

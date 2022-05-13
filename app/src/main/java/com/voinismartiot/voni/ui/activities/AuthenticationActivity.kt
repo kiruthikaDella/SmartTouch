@@ -12,6 +12,7 @@ import com.voinismartiot.voni.R
 import com.voinismartiot.voni.api.NetworkModule
 import com.voinismartiot.voni.api.repository.AuthRepository
 import com.voinismartiot.voni.common.interfaces.FacebookLoginListener
+import com.voinismartiot.voni.common.utils.hideSoftKeyboard
 import com.voinismartiot.voni.common.utils.showToast
 import com.voinismartiot.voni.ui.viewmodel.AuthViewModel
 import com.voinismartiot.voni.ui.viewmodel.ViewModelFactory
@@ -146,5 +147,10 @@ class AuthenticationActivity : AppCompatActivity() {
         if (FacebookSdk.isFacebookRequestCode(requestCode)) {
             callbackManager.onActivityResult(requestCode, resultCode, data)
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        hideSoftKeyboard()
     }
 }

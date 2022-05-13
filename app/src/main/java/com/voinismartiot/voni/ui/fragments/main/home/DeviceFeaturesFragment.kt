@@ -172,12 +172,22 @@ class DeviceFeaturesFragment :
 
         binding.btnSynchronize.setOnClickListener {
 
+            if (binding.edtSleepTime.text.toString().isEmpty()){
+                activity?.showToast(getString(R.string.error_sleep_mode_empty))
+                return@setOnClickListener
+            }
+
             if (!binding.edtSleepTime.text.toString().isDigitsOnly()) {
                 activity?.showToast(getString(R.string.error_sleep_mode_digit_only))
                 return@setOnClickListener
             }
 
-            if (binding.edtSleepTime.text.toString().toInt() > Constants.SLEEP_MODE_LIMIT) {
+            if (binding.edtSleepTime.text.toString().toInt() < Constants.SLEEP_MODE_LIMIT_MIN) {
+                activity?.showToast(getString(R.string.error_sleep_mode_limit_reached))
+                return@setOnClickListener
+            }
+
+            if (binding.edtSleepTime.text.toString().toInt() > Constants.SLEEP_MODE_LIMIT_MAX) {
                 activity?.showToast(getString(R.string.error_sleep_mode_limit_reached))
                 return@setOnClickListener
             }

@@ -874,13 +874,14 @@ class DeviceCustomizationFragment :
                     R.drawable.dodger_blue_background_6dp_corner
                 )
 
-                val croppedImageUri =
-                    getImageUri(mActivity, cropImageView.croppedImage!!, imageName)
+                val croppedImageUri = getImageUri(mActivity, cropImageView.croppedImage!!, imageName)
 
                 croppedImageUri?.let { uri ->
                     getRealPathFromUri(uri)?.let {
                         mCroppedImageFile = File(it)
-                        imagePath = mProfileFile!!.absolutePath
+                        mProfileFile?.absolutePath?.let { path ->
+                            imagePath = path
+                        }
                         imageName = imagePath.substring(imagePath.lastIndexOf("/") + 1)
                     }
 

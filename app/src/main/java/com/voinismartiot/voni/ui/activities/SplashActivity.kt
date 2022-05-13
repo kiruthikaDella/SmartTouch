@@ -11,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.appizona.yehiahd.fastsave.FastSave
 import com.voinismartiot.voni.R
 import com.voinismartiot.voni.common.utils.Constants
+import com.voinismartiot.voni.common.utils.hideSoftKeyboard
 
 class SplashActivity : AppCompatActivity() {
     private lateinit var content: View
@@ -25,6 +26,8 @@ class SplashActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
+
+        hideSoftKeyboard()
 
         Handler(Looper.getMainLooper()).postDelayed({
             isHandlerSet = true
@@ -57,5 +60,10 @@ class SplashActivity : AppCompatActivity() {
         } else {
             startActivity(Intent(this@SplashActivity, AuthenticationActivity::class.java))
         }
+    }
+
+    override fun onStart() {
+        super.onStart()
+        hideSoftKeyboard()
     }
 }

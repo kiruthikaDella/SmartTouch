@@ -37,6 +37,8 @@ abstract class BaseFragment<VM : ViewModel, B : ViewBinding, R : BaseRepository>
         val factory = ViewModelFactory(getFragmentRepository())
         viewModel = ViewModelProvider(requireActivity(), factory).get(getViewModel())
 
+        hideKeyboard()
+
         return binding.root
     }
 

@@ -11,7 +11,8 @@ object Constants {
     var COMMON_DIALOG_WIDTH = 0.8.toFloat()
     var COMMON_DIALOG_HEIGHT = 0.9.toFloat()
 
-    const val SLEEP_MODE_LIMIT = 600
+    const val SLEEP_MODE_LIMIT_MAX = 600
+    const val SLEEP_MODE_LIMIT_MIN = 5
 
     const val SYNC_DELAY = 5000L
     const val PING_HOLE_DELAY = 3000L
