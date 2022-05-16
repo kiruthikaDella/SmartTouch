@@ -183,7 +183,7 @@ class DeviceFeaturesFragment :
             }
 
             if (binding.edtSleepTime.text.toString().toInt() < Constants.SLEEP_MODE_LIMIT_MIN) {
-                activity?.showToast(getString(R.string.error_sleep_mode_limit_reached))
+                activity?.showToast(getString(R.string.error_sleep_mode_second))
                 return@setOnClickListener
             }
 
