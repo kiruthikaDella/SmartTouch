@@ -12,6 +12,7 @@ import com.voinismartiot.voni.R
 import com.voinismartiot.voni.api.NetworkModule
 import com.voinismartiot.voni.api.repository.AuthRepository
 import com.voinismartiot.voni.common.interfaces.FacebookLoginListener
+import com.voinismartiot.voni.common.utils.hideDialog
 import com.voinismartiot.voni.common.utils.hideSoftKeyboard
 import com.voinismartiot.voni.common.utils.showToast
 import com.voinismartiot.voni.ui.viewmodel.AuthViewModel
@@ -152,5 +153,10 @@ class AuthenticationActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         hideSoftKeyboard()
+    }
+
+    override fun onDestroy() {
+        hideDialog()
+        super.onDestroy()
     }
 }

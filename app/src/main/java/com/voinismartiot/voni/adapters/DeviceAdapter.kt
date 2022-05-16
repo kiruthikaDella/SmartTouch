@@ -1146,13 +1146,18 @@ class DeviceAdapter(
                     return@setOnClickListener
                 }
 
-                val appliance = spinnerAppliances.selectedItem as DeviceAppliances
+                try {
+                    val appliance = spinnerAppliances.selectedItem as DeviceAppliances
 
-                publishAppliance(
-                    device.deviceSerialNo,
-                    appliance.title,
-                    appliance.groupType
-                )
+                    publishAppliance(
+                        device.deviceSerialNo,
+                        appliance.title,
+                        appliance.groupType
+                    )
+                }catch (e: Exception){
+                    e.printStackTrace()
+                }
+
             }
         }
     }

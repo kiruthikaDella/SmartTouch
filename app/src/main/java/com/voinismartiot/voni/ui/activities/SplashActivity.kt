@@ -11,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.appizona.yehiahd.fastsave.FastSave
 import com.voinismartiot.voni.R
 import com.voinismartiot.voni.common.utils.Constants
+import com.voinismartiot.voni.common.utils.hideDialog
 import com.voinismartiot.voni.common.utils.hideSoftKeyboard
 
 class SplashActivity : AppCompatActivity() {
@@ -65,5 +66,10 @@ class SplashActivity : AppCompatActivity() {
     override fun onStart() {
         super.onStart()
         hideSoftKeyboard()
+    }
+
+    override fun onDestroy() {
+        hideDialog()
+        super.onDestroy()
     }
 }

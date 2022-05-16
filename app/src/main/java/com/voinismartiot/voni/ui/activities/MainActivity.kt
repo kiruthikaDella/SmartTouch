@@ -199,6 +199,11 @@ class MainActivity : AppCompatActivity() {
         hideSoftKeyboard()
     }
 
+    override fun onDestroy() {
+        hideDialog()
+        super.onDestroy()
+    }
+
     override fun onBackPressed() {
 
         if (navController.currentDestination?.id == R.id.userManagementFragment || navController.currentDestination?.id == R.id.controlModeFragment || navController.currentDestination?.id == R.id.sceneFragment) {
