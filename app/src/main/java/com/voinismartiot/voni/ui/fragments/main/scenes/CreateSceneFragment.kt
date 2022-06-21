@@ -258,6 +258,7 @@ class CreateSceneFragment :
                                 if (sceneFrequency != getString(R.string.text_weekly).lowercase()) {
                                     weeklyDayList.clear()
                                 }
+//                                Log.e(logTag, " updateDeviceSceneAdapter sss ${updateDeviceSceneAdapter.getScenes()} ")
                                 viewModel.updateScene(
                                     BodyUpdateScene(
                                         args.sceneDetail!!.id,
@@ -287,6 +288,7 @@ class CreateSceneFragment :
                                 if (sceneFrequency != getString(R.string.text_weekly).lowercase()) {
                                     weeklyDayList.clear()
                                 }
+                                Log.e(logTag, " deviceSceneAdapter sss ${deviceSceneAdapter.getScenes()} ")
                                 viewModel.addScene(
                                     BodyAddScene(
                                         sceneName,

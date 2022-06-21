@@ -2,6 +2,7 @@ package com.voinismartiot.voni.ui.fragments.main.home
 
 import android.content.Context
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.provider.Settings
 import android.util.Log
@@ -322,7 +323,9 @@ class HomeFragment : BaseFragment<HomeViewModel, FragmentHomeBinding, HomeReposi
                     findNavController().navigate(HomeFragmentDirections.actionHomeFragmentToFaqsFragment())
                 }
                 R.id.nav_shop -> {
-                    Log.e(logTag, "nav_shop")
+                    val uri: Uri = Uri.parse(getString(R.string.shop_url)) // missing 'http://' will cause crashed
+                    val intent = Intent(Intent.ACTION_VIEW, uri)
+                    startActivity(intent)
                 }
                 R.id.nav_contact_us -> {
                     openOrCloseDrawer()

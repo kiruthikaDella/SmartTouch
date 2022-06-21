@@ -148,7 +148,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/roboto_medium"
-                android:text="@string/text_office_address"
+                android:text="@string/text_office_address1"
                 android:textColor="@color/daintree"
                 android:textSize="@dimen/_12ssp"
                 app:layout_constraintBottom_toBottomOf="@+id/iv_office_address"
@@ -168,6 +168,42 @@
                 app:layout_constraintStart_toStartOf="@+id/tv_title_office_address"
                 app:layout_constraintTop_toBottomOf="@+id/tv_title_office_address" />
 
+
+            <ImageView
+                android:id="@+id/iv_office_address2"
+                android:layout_width="@dimen/_14sdp"
+                android:layout_height="@dimen/_18sdp"
+                android:layout_marginTop="@dimen/_20sdp"
+                android:src="@drawable/ic_location"
+                app:layout_constraintStart_toStartOf="@+id/iv_office_address"
+                app:layout_constraintTop_toBottomOf="@+id/tv_office_address" />
+
+            <TextView
+                android:id="@+id/tv_title_office_address2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/roboto_medium"
+                android:text="@string/text_office_address2"
+                android:textColor="@color/daintree"
+                android:textSize="@dimen/_12ssp"
+                app:layout_constraintBottom_toBottomOf="@+id/iv_office_address2"
+                app:layout_constraintStart_toEndOf="@+id/guideline"
+                app:layout_constraintTop_toTopOf="@+id/iv_office_address2" />
+
+            <TextView
+                android:id="@+id/tv_office_address2"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/_5sdp"
+                android:fontFamily="@font/roboto_regular"
+                android:text="@string/office_address2"
+                android:textColor="@color/waikawa_gray"
+                android:textSize="@dimen/_12ssp"
+                app:layout_constraintEnd_toStartOf="@+id/guideline2"
+                app:layout_constraintStart_toStartOf="@+id/tv_title_office_address2"
+                app:layout_constraintTop_toBottomOf="@+id/tv_title_office_address2" />
+
+
             <ImageView
                 android:id="@+id/iv_feedback"
                 android:layout_width="@dimen/_18sdp"
@@ -175,7 +211,7 @@
                 android:layout_marginTop="@dimen/_20sdp"
                 android:src="@drawable/ic_feedback"
                 app:layout_constraintStart_toStartOf="@+id/iv_email"
-                app:layout_constraintTop_toBottomOf="@+id/tv_office_address" />
+                app:layout_constraintTop_toBottomOf="@+id/tv_office_address2" />
 
             <TextView
                 android:id="@+id/tv_title_feedback"

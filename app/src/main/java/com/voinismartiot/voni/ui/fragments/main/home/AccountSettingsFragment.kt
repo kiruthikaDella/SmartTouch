@@ -90,7 +90,7 @@ class AccountSettingsFragment :
 
         binding.ivEditPhoneNumber.setOnClickListener {
             activity?.editDialog(
-                "Edit name",
+                "Edit phone number",
                 binding.tvPhoneNumber.text.toString().trim(),
                 getString(R.string.text_save),
                 getString(R.string.text_cancel),
@@ -99,10 +99,10 @@ class AccountSettingsFragment :
                     override fun onYesClicked(string: String) {
                         when {
                             string.isEmpty() -> {
-                                activity?.showToast(getString(R.string.error_text_full_name))
+                                activity?.showToast(getString(R.string.error_text_phone_number))
                             }
-                            string.length < 3 -> {
-                                activity?.showToast(getString(R.string.error_text_full_name_length))
+                            string.length < 6 -> {
+                                activity?.showToast(getString(R.string.error_text_phone_number_min_length))
                             }
                             else -> {
                                 hideDialog()

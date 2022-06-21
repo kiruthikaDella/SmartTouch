@@ -12,6 +12,7 @@ import android.provider.MediaStore
 import android.text.Editable
 import android.util.Base64
 import android.util.Log
+import android.util.Patterns
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
@@ -158,6 +159,8 @@ object Utils {
     fun String.isSmartAck(): Boolean = this.lowercase() == Constants.PRODUCT_SMART_ACK
 
     fun String.isSmartAp(): Boolean = this.lowercase() == Constants.PRODUCT_SMART_AP
+
+    fun String.isValidEmail(): Boolean = Patterns.EMAIL_ADDRESS.matcher(this).matches()
 
 }
 

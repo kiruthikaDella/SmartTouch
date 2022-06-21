@@ -97,6 +97,7 @@
     <string name="hint_text_room_name">Enter your room name</string>
     <string name="title_text_room_type">Room Type</string>
     <string name="button_text_add_room">+ Add</string>
+    <string name="shop_url">https://www.vonismart.com/smart-touch.html</string>
 
     <!--    Side Navigation-->
     <string name="side_nav_text_account_settings">Account Settings</string>
@@ -271,14 +272,16 @@
 
     <!--    Contact us Screen -->
     <string name="title_text_contact_us">Contact Us</string>
-    <string name="text_office_address">Office Address</string>
+    <string name="text_office_address1">Office Address1</string>
+    <string name="text_office_address2">Office Address2</string>
     <string name="text_feedback">Feedback</string>
-    <string name="office_address">Akshya Nagar 1st Block 1st Cross, Rammurthy nagar, Bangalore-560016</string>
+    <string name="office_address">Voni SmartIot Pvt.Ltd., 4D/10.Third Floor,Vijay Towers, Collector Office Road, Opp.St. JJohn\'s Vestry School, Tiruchirapalli - 620 001</string>
+    <string name="office_address2">Voni /smartiot Pvt Ltd (Bengaluru) 301,2nd Floor,Urban Korner,2nd Main Road, KAsturi NAgar,Bengaluru - 560043</string>
     <string name="hint_text_comments">Your comments…</string>
     <string name="button_text_send">Send</string>
-    <string name="text_contact_us_email">hermione.granger@gmail.com</string>
-    <string name="text_contact_us_mobile1">+91 9812345678</string>
-    <string name="text_contact_us_mobile2">+91 8098765432</string>
+    <string name="text_contact_us_email">support@vonismart.com</string>
+    <string name="text_contact_us_mobile1">9591326826</string>
+    <string name="text_contact_us_mobile2"></string>
 
     <!--    Switch Icons   -->
     <string name="title_text_switch_icons">Switch Icons</string>

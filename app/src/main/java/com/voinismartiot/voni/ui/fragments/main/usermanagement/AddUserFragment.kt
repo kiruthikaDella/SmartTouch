@@ -12,6 +12,7 @@ import com.voinismartiot.voni.api.Resource
 import com.voinismartiot.voni.api.body.BodyAddSubordinateUser
 import com.voinismartiot.voni.api.repository.UserManagementRepository
 import com.voinismartiot.voni.common.utils.Utils
+import com.voinismartiot.voni.common.utils.Utils.isValidEmail
 import com.voinismartiot.voni.common.utils.hideDialog
 import com.voinismartiot.voni.common.utils.loadingDialog
 import com.voinismartiot.voni.common.utils.showToast
@@ -57,11 +58,15 @@ class AddUserFragment :
 
             when {
                 userName.isEmpty() -> {
-                    binding.edtFullName.error = "Please enter name."
+                    binding.edtFullName.error = getString(R.string.error_text_name)
                     binding.edtFullName.requestFocus()
                 }
                 email.isEmpty() -> {
-                    binding.edtEmailAddress.error = "Please enter email."
+                    binding.edtEmailAddress.error = getString(R.string.error_text_email)
+                    binding.edtEmailAddress.requestFocus()
+                }
+                !email.isValidEmail() -> {
+                    binding.edtEmailAddress.error = getString(R.string.error_text_valid_email)
                     binding.edtEmailAddress.requestFocus()
                 }
                 else -> {

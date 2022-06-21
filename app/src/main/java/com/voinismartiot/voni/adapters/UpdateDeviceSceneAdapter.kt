@@ -1,6 +1,7 @@
 package com.voinismartiot.voni.adapters
 
 import android.app.Activity
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -30,6 +31,8 @@ class UpdateDeviceSceneAdapter(
     private var roomList = arrayListOf<GetRoomData>()
     private var errorList: MutableMap<Int, String> = mutableMapOf()
     private var switchType = ""
+
+    private val logTag = this::class.java.simpleName
 
     private var deleteClickListener: DeleteSceneItemClickListener<Scene>? = null
 
@@ -148,8 +151,7 @@ class UpdateDeviceSceneAdapter(
                         id: Long
                     ) {
                         val room = parent?.selectedItem as GetRoomData
-                        scenes[adapterPosition].roomId?.id = room.id
-                        scenes[adapterPosition].roomId?.roomName = room.roomName
+                        scenes[adapterPosition].roomId = RoomId(room.id, room.roomName)
 
                         val roomData = roomDataList.find { it.id == room.id }
                         deviceList.clear()
@@ -200,8 +202,7 @@ class UpdateDeviceSceneAdapter(
                         id: Long
                     ) {
                         val device = parent?.selectedItem as GetDeviceData
-                        scenes[adapterPosition].deviceId?.id = device.id
-                        scenes[adapterPosition].deviceId?.deviceName = device.deviceName
+                        scenes[adapterPosition].deviceId = DeviceId(device.id, device.deviceName)
 
                         val deviceData = deviceList.find { it.id == device.id }
                         switchList.clear()
@@ -251,8 +252,10 @@ class UpdateDeviceSceneAdapter(
                         filteredSwitchList.add(spinner!!.adapter!!.getItem(i) as DeviceSwitchData)
                     }
 
+
                     val abc = arrayListOf<DeviceSwitchData>()
                     abc.addAll(filteredSwitchList.filter { !scenes.any { obj -> obj.deviceSwitchId?.id == it.id } })
+
                     if ((spinnerSwitch.selectedItem as DeviceSwitchData).name != mActivity.getString(
                             R.string.text_select_switch
                         )
@@ -279,8 +282,9 @@ class UpdateDeviceSceneAdapter(
                         id: Long
                     ) {
                         val switch = parent?.selectedItem as DeviceSwitchData
-                        scenes[adapterPosition].deviceSwitchId?.id = switch.id
-                        scenes[adapterPosition].deviceSwitchId?.switchName = switch.name
+                        scenes[adapterPosition].deviceSwitchId =
+                            DeviceSwitchId(switch.id, switch.name)
+
                         switchType = switch.desc?.lowercase() ?: ""
 
                         if (switch.name == mActivity.getString(R.string.text_no_switch) || switch.name == mActivity.getString(
