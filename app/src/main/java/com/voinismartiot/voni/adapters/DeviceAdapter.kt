@@ -319,6 +319,8 @@ class DeviceAdapter(
     private fun setEightSwitchViewHolder(holder: EightPanelViewHolder, device: GetDeviceData) {
         holder.apply {
 
+            changeEightSwitchStatus(this, true)
+
             try {
                 val wrapSpec = View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED)
                 constraintLayout.measure(wrapSpec, wrapSpec)
@@ -347,17 +349,7 @@ class DeviceAdapter(
             tvOutdoorModeIndication.isVisible = device.outdoorMode.toBoolean()
 
             if (device.outdoorMode.toBoolean()) {
-                switchOne.isEnabled = false
-                switchTwo.isEnabled = false
-                switchThree.isEnabled = false
-                switchFour.isEnabled = false
-                switchFive.isEnabled = false
-                switchSix.isEnabled = false
-                switchSeven.isEnabled = false
-                switchEight.isEnabled = false
-                seekBar.isEnabled = false
-                switchPortA.isEnabled = false
-                switchPortC.isEnabled = false
+                changeEightSwitchStatus(this, false)
             }
 
             try {
@@ -515,6 +507,7 @@ class DeviceAdapter(
             }
 
             switchOne.setOnClickListener {
+                changeEightSwitchStatus(this, false)
                 publish(
                     device.deviceSerialNo,
                     MQTTConstants.AWS_SWITCH_1,
@@ -524,6 +517,7 @@ class DeviceAdapter(
             }
 
             switchTwo.setOnClickListener {
+                changeEightSwitchStatus(this, false)
                 publish(
                     device.deviceSerialNo,
                     MQTTConstants.AWS_SWITCH_2,
@@ -533,6 +527,7 @@ class DeviceAdapter(
             }
 
             switchThree.setOnClickListener {
+                changeEightSwitchStatus(this, false)
                 publish(
                     device.deviceSerialNo,
                     MQTTConstants.AWS_SWITCH_3,
@@ -542,6 +537,7 @@ class DeviceAdapter(
             }
 
             switchFour.setOnClickListener {
+                changeEightSwitchStatus(this, false)
                 publish(
                     device.deviceSerialNo,
                     MQTTConstants.AWS_SWITCH_4,
@@ -551,6 +547,7 @@ class DeviceAdapter(
             }
 
             switchFive.setOnClickListener {
+                changeEightSwitchStatus(this, false)
                 publish(
                     device.deviceSerialNo,
                     MQTTConstants.AWS_SWITCH_5,
@@ -560,6 +557,7 @@ class DeviceAdapter(
             }
 
             switchSix.setOnClickListener {
+                changeEightSwitchStatus(this, false)
                 publish(
                     device.deviceSerialNo,
                     MQTTConstants.AWS_SWITCH_6,
@@ -569,6 +567,7 @@ class DeviceAdapter(
             }
 
             switchSeven.setOnClickListener {
+                changeEightSwitchStatus(this, false)
                 publish(
                     device.deviceSerialNo,
                     MQTTConstants.AWS_SWITCH_7,
@@ -578,6 +577,7 @@ class DeviceAdapter(
             }
 
             switchEight.setOnClickListener {
+                changeEightSwitchStatus(this, false)
                 publish(
                     device.deviceSerialNo,
                     MQTTConstants.AWS_SWITCH_8,
@@ -587,6 +587,7 @@ class DeviceAdapter(
             }
 
             switchPortA.setOnClickListener {
+                changeEightSwitchStatus(this, false)
                 publish(
                     device.deviceSerialNo,
                     MQTTConstants.AWS_USB_PORT_A,
@@ -595,6 +596,7 @@ class DeviceAdapter(
             }
 
             switchPortC.setOnClickListener {
+                changeEightSwitchStatus(this, false)
                 publish(
                     device.deviceSerialNo,
                     MQTTConstants.AWS_USB_PORT_C,
@@ -620,9 +622,26 @@ class DeviceAdapter(
         }
     }
 
+    private fun changeEightSwitchStatus(holder: EightPanelViewHolder, isEnable: Boolean) {
+        holder.apply {
+            switchOne.isEnabled = isEnable
+            switchTwo.isEnabled = isEnable
+            switchThree.isEnabled = isEnable
+            switchFour.isEnabled = isEnable
+            switchFive.isEnabled = isEnable
+            switchSix.isEnabled = isEnable
+            switchSeven.isEnabled = isEnable
+            switchEight.isEnabled = isEnable
+            seekBar.isEnabled = isEnable
+            switchPortA.isEnabled = isEnable
+            switchPortC.isEnabled = isEnable
+        }
+    }
+
     private fun setFourSwitchViewHolder(holder: FourPanelViewHolder, device: GetDeviceData) {
         holder.apply {
 
+            changeFourSwitchStatus(this, true)
             try {
 
                 val wrapSpec = View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED)
@@ -647,12 +666,7 @@ class DeviceAdapter(
             tvOutdoorModeIndication.isVisible = device.outdoorMode.toBoolean()
 
             if (device.outdoorMode.toBoolean()) {
-                switchOne.isEnabled = false
-                switchTwo.isEnabled = false
-                switchThree.isEnabled = false
-                switchFour.isEnabled = false
-                seekBar.isEnabled = false
-                switchPortC.isEnabled = false
+                changeFourSwitchStatus(this, false)
             }
 
             if (device.productGroup.isSmartAp()) {
@@ -763,6 +777,7 @@ class DeviceAdapter(
             }
 
             switchOne.setOnClickListener {
+                changeFourSwitchStatus(this, false)
                 publish(
                     device.deviceSerialNo,
                     MQTTConstants.AWS_SWITCH_1,
@@ -772,6 +787,7 @@ class DeviceAdapter(
             }
 
             switchTwo.setOnClickListener {
+                changeFourSwitchStatus(this, false)
                 publish(
                     device.deviceSerialNo,
                     MQTTConstants.AWS_SWITCH_2,
@@ -781,6 +797,7 @@ class DeviceAdapter(
             }
 
             switchThree.setOnClickListener {
+                changeFourSwitchStatus(this, false)
                 publish(
                     device.deviceSerialNo,
                     MQTTConstants.AWS_SWITCH_3,
@@ -790,6 +807,7 @@ class DeviceAdapter(
             }
 
             switchFour.setOnClickListener {
+                changeFourSwitchStatus(this, false)
                 publish(
                     device.deviceSerialNo,
                     MQTTConstants.AWS_SWITCH_4,
@@ -799,12 +817,14 @@ class DeviceAdapter(
             }
 
             switchFour.setOnCheckedChangeListener { _, p1 ->
+                changeFourSwitchStatus(this, false)
                 if (device.productGroup.isSmartAp()) {
                     seekBar.isVisible = p1
                 }
             }
 
             switchPortC.setOnClickListener {
+                changeFourSwitchStatus(this, false)
                 publish(
                     device.deviceSerialNo,
                     MQTTConstants.AWS_USB_PORT_C,
@@ -830,9 +850,21 @@ class DeviceAdapter(
         }
     }
 
+    private fun changeFourSwitchStatus(holder: FourPanelViewHolder, isEnable: Boolean) {
+        holder.apply {
+            switchOne.isEnabled = isEnable
+            switchTwo.isEnabled = isEnable
+            switchThree.isEnabled = isEnable
+            switchFour.isEnabled = isEnable
+            seekBar.isEnabled = isEnable
+            switchPortC.isEnabled = isEnable
+        }
+    }
+
     private fun setSmartAckViewHolder(holder: SmartAckPanelViewHolder, device: GetDeviceData) {
         holder.apply {
 
+            changeSmartAckSwitchStatus(this, true)
             try {
 
                 val wrapSpec = View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED)
@@ -853,12 +885,7 @@ class DeviceAdapter(
             tvOutdoorModeIndication.isVisible = device.outdoorMode.toBoolean()
 
             if (device.outdoorMode.toBoolean()) {
-                switchOne.isEnabled = false
-                switchTwo.isEnabled = false
-                switchThree.isEnabled = false
-                switchFour.isEnabled = false
-                switchFive.isEnabled = false
-                seekBar.isEnabled = false
+                changeSmartAckSwitchStatus(this, false)
             }
 
             try {
@@ -958,6 +985,7 @@ class DeviceAdapter(
             }
 
             switchOne.setOnClickListener {
+                changeSmartAckSwitchStatus(this, false)
                 publish(
                     device.deviceSerialNo,
                     MQTTConstants.AWS_SWITCH_1,
@@ -966,6 +994,7 @@ class DeviceAdapter(
             }
 
             switchTwo.setOnClickListener {
+                changeSmartAckSwitchStatus(this, false)
                 publish(
                     device.deviceSerialNo,
                     MQTTConstants.AWS_SWITCH_2,
@@ -974,6 +1003,7 @@ class DeviceAdapter(
             }
 
             switchThree.setOnClickListener {
+                changeSmartAckSwitchStatus(this, false)
                 publish(
                     device.deviceSerialNo,
                     MQTTConstants.AWS_SWITCH_3,
@@ -982,6 +1012,7 @@ class DeviceAdapter(
             }
 
             switchFour.setOnClickListener {
+                changeSmartAckSwitchStatus(this, false)
                 publish(
                     device.deviceSerialNo,
                     MQTTConstants.AWS_SWITCH_4,
@@ -990,6 +1021,7 @@ class DeviceAdapter(
             }
 
             switchFive.setOnClickListener {
+                changeSmartAckSwitchStatus(this, false)
                 publish(
                     device.deviceSerialNo,
                     MQTTConstants.AWS_SWITCH_5,
@@ -1004,6 +1036,7 @@ class DeviceAdapter(
 
                 override fun onStopTrackingTouch(seekBar: IndicatorSeekBar?) {
                     seekBar?.progress?.let {
+                        changeSmartAckSwitchStatus(this@apply, false)
                         publishDimmer(
                             device.deviceSerialNo,
                             it.toString()
@@ -1015,8 +1048,21 @@ class DeviceAdapter(
         }
     }
 
+    private fun changeSmartAckSwitchStatus(holder: SmartAckPanelViewHolder, isEnable: Boolean) {
+        holder.apply {
+            switchOne.isEnabled = isEnable
+            switchTwo.isEnabled = isEnable
+            switchThree.isEnabled = isEnable
+            switchFour.isEnabled = isEnable
+            switchFive.isEnabled = isEnable
+            seekBar.isEnabled = isEnable
+        }
+    }
+
     private fun setSmartApViewHolder(holder: SmartApPanelViewHolder, device: GetDeviceData) {
         holder.apply {
+
+            switchOne.isEnabled = true
 
             try {
 
@@ -1136,6 +1182,7 @@ class DeviceAdapter(
             }
 
             switchOne.setOnClickListener {
+                switchOne.isEnabled = false
                 publish(
                     device.deviceSerialNo,
                     MQTTConstants.AWS_SWITCH_1,
@@ -1154,7 +1201,7 @@ class DeviceAdapter(
                         appliance.title,
                         appliance.groupType
                     )
-                }catch (e: Exception){
+                } catch (e: Exception) {
                     e.printStackTrace()
                 }
 
