@@ -278,6 +278,7 @@ class DeviceAdapter(
         val tvSwitchTwoEdit = itemView.findViewById(R.id.tv_switch_two_edit) as TextView
         val tvSwitchThreeEdit = itemView.findViewById(R.id.tv_switch_three_edit) as TextView
         val tvSwitchFourEdit = itemView.findViewById(R.id.tv_switch_four_edit) as TextView
+        val tvSwitchFiveEdit = itemView.findViewById(R.id.tv_switch_five_edit) as TextView
 
         val switchOne = itemView.findViewById(R.id.switch_one) as SwitchMaterial
         val switchTwo = itemView.findViewById(R.id.switch_two) as SwitchMaterial
@@ -981,6 +982,11 @@ class DeviceAdapter(
             tvSwitchFourEdit.setOnClickListener {
                 device.switchData?.let { switchData ->
                     editSwitchNameClickListener?.onItemClick(device, adapterPosition, switchData[3])
+                }
+            }
+            tvSwitchFiveEdit.setOnClickListener {
+                device.switchData?.let { switchData ->
+                    editSwitchNameClickListener?.onItemClick(device, adapterPosition, switchData[4])
                 }
             }
 
