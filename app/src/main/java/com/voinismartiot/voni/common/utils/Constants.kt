@@ -16,7 +16,7 @@ object Constants {
 
     const val SYNC_DELAY = 5000L
     const val PING_HOLE_DELAY = 3000L
-    const val OUTDOOR_MODE_DELAY = 2000L
+    const val OUTDOOR_MODE_DELAY = 3000L
     const val OUTDOOR_MODE_API_DELAY = 1000L
 
     const val API_SUCCESS_CODE = 200
