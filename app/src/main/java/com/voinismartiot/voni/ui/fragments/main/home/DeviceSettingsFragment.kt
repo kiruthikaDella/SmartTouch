@@ -310,6 +310,10 @@ class DeviceSettingsFragment :
         val payload = JSONObject()
         payload.put(stringIndex, "1")
 
+        if (topicName.contains("restore")) {
+            payload.put("type", "Android")
+        }
+
         if (AwsMqttSingleton.isConnected()) {
             AwsMqttSingleton.publish(topicName, payload.toString())
         }

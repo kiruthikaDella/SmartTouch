@@ -279,9 +279,11 @@ class ControlModeDeviceAdapter(
                 changeEightSwitchStatus(this, false)
             }
 
-            if (device.productGroup.isSmartouch()) {
+            /*if (device.productGroup.isSmartouch()) {
                 seekBar.visibility = View.GONE
-            }
+            }*/
+
+            seekBar.isVisible = device.switchData?.find { it.desc?.lowercase() == mActivity.getString(R.string.text_switch_dimmer).lowercase() }?.switchStatus?.toInt()?.toBoolean() ?: false
 
             device.switchData?.let { switchData ->
                 for (value in switchData) {
@@ -498,9 +500,11 @@ class ControlModeDeviceAdapter(
                 changeFourSwitchStatus(this, false)
             }
 
-            if (device.productGroup.isSmartouch()) {
+            /*if (device.productGroup.isSmartouch()) {
                 seekBar.visibility = View.GONE
-            }
+            }*/
+
+            seekBar.isVisible = device.switchData?.find { it.desc?.lowercase() == mActivity.getString(R.string.text_switch_dimmer).lowercase() }?.switchStatus?.toInt()?.toBoolean() ?: false
 
             device.switchData?.let { switchData ->
                 for (value in switchData) {
@@ -523,9 +527,9 @@ class ControlModeDeviceAdapter(
                         "4" -> {
                             tvSwitchNameFour.text = value.name
                             switchFour.isChecked = value.switchStatus.toInt().toBoolean()
-                            if (device.productGroup.isSmartAp()) {
+                            /*if (device.productGroup.isSmartAp()) {
                                 seekBar.isVisible = switchFour.isChecked
-                            }
+                            }*/
                             tvSwitchNameFourDesc.text = value.desc ?: ""
                         }
                         "5" -> {
