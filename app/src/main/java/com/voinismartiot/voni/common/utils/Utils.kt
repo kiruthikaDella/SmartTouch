@@ -162,6 +162,24 @@ object Utils {
 
     fun String.isValidEmail(): Boolean = Patterns.EMAIL_ADDRESS.matcher(this).matches()
 
+    fun String.stringToFloat(): Float {
+        return try {
+            this.toFloat()
+        }catch (e: Exception){
+            e.printStackTrace()
+            0.0.toFloat()
+        }
+    }
+
+    fun String.stringToInt(): Int{
+        return try {
+            this.toInt()
+        }catch (e: Exception){
+            e.printStackTrace()
+            0
+        }
+    }
+
 }
 
 

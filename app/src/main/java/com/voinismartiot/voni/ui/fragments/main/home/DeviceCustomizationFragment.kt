@@ -39,6 +39,7 @@ import com.amazonaws.mobileconnectors.iot.AWSIotMqttQos
 import com.appizona.yehiahd.fastsave.FastSave
 import com.canhub.cropper.CropImageView
 import com.google.android.material.button.MaterialButton
+import com.google.gson.JsonObject
 import com.karumi.dexter.Dexter
 import com.karumi.dexter.MultiplePermissionsReport
 import com.karumi.dexter.PermissionToken
@@ -110,6 +111,9 @@ class DeviceCustomizationFragment :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        Log.e(logTag, " onViewCreated ${args.deviceDetail.switchData}")
+
 
         val sizeList = arrayOf("Small", "Medium", "Large")
         val fontNames = arrayOf("Times New Roman", "Arial", "Roman", "Verdana", "Roboto")
@@ -401,16 +405,38 @@ class DeviceCustomizationFragment :
                     MQTTConstants.AWS_CUSTOMIZATION_LOCK,
                     isDeviceCustomizationLocked.toInt()
                 )
-                val switchIconsArray = JSONArray()
+              /*  val switchIconsArray = JSONArray()
                 args.deviceDetail.switchData?.let {
-                    val switchIconsObject = JSONObject()
+                    Log.e(logTag, "switchData?.let ${it.size}")
+                    val switchIconsObject = JsonObject()
                     for (switch in it) {
+                        Log.e(logTag, "switch in it ${switch.typeOfSwitch}")
                         if (switch.typeOfSwitch == 0) {
-                            switchIconsObject.put("SW0${switch.index.toInt()}", switch.iconFile)
+                            Log.e(logTag, "switch.typeOfSwitch == 0")
+                            switchIconsObject.add("SW0${switch.index.toInt()}", switch.iconFile)
                         }
                     }
                     switchIconsArray.put(switchIconsObject)
+                }*/
+
+
+                val switchIconsArray = JSONArray()
+                args.deviceDetail.switchData?.let {
+                    Log.e(logTag, "switchData?.let ${it.size}")
+                    for (switch in it) {
+                        Log.e(logTag, "switch in it ${switch.typeOfSwitch}")
+                        if (switch.typeOfSwitch == 0) {
+                            val switchIconsObject = JSONObject()
+                            Log.e(logTag, "switch.typeOfSwitch == 0 index ${switch.index.toInt()} iconFile ${switch.iconFile}")
+                            switchIconsObject.put("SW0${switch.index.toInt()}", switch.iconFile)
+                            Log.e(logTag, "switchIconsObject")
+                            switchIconsArray.put(switchIconsObject)
+                        }
+                    }
                 }
+
+                Log.e(logTag, " switchData ${args.deviceDetail.switchData}")
+                Log.e(logTag, " switchIconsArray $switchIconsArray")
                 payload.put(MQTTConstants.AWS_SWITCH_ICONS, switchIconsArray)
 
                 if (AwsMqttSingleton.isConnected()) {

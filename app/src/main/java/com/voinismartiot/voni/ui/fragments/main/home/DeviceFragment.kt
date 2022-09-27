@@ -560,12 +560,13 @@ class DeviceFragment : BaseFragment<HomeViewModel, FragmentDeviceBinding, HomeRe
                                 hideDialog()
                                 context?.showToast(response.values.message)
                                 if (response.values.status && response.values.code == Constants.API_SUCCESS_CODE) {
-                                    response.values.data?.let {
+                                   /* response.values.data?.let {
                                         deviceList.add(it)
                                         binding.recyclerRoomPanels.recycledViewPool.clear()
-                                    }
+                                    }*/
+                                    getDeviceData()
                                 }
-                                panelAdapter.notifyDataSetChanged()
+//                                panelAdapter.notifyDataSetChanged()
                             }
                             is Resource.Failure -> {
                                 hideDialog()
