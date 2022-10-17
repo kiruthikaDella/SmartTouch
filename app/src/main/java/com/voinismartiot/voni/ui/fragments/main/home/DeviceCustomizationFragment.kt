@@ -22,6 +22,7 @@ import android.util.DisplayMetrics
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
+import android.view.View.OnClickListener
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.ProgressBar
@@ -39,7 +40,6 @@ import com.amazonaws.mobileconnectors.iot.AWSIotMqttQos
 import com.appizona.yehiahd.fastsave.FastSave
 import com.canhub.cropper.CropImageView
 import com.google.android.material.button.MaterialButton
-import com.google.gson.JsonObject
 import com.karumi.dexter.Dexter
 import com.karumi.dexter.MultiplePermissionsReport
 import com.karumi.dexter.PermissionToken
@@ -126,7 +126,6 @@ class DeviceCustomizationFragment :
         mqttConnectionDisposable =
             NotifyManager.getMQTTConnectionInfo().observeOn(AndroidSchedulers.mainThread())
                 .subscribe {
-                    Log.e(logTag, " MQTTConnectionStatus = $it ")
                     when (it) {
                         MQTTConnectionStatus.CONNECTED -> {
                             subscribeToDevice(args.deviceDetail.deviceSerialNo)
@@ -306,8 +305,6 @@ class DeviceCustomizationFragment :
                     mActivity.showToast("Please select image.")
                 } else {
 
-                    Log.e(logTag, " mCroppedImageFile size ${mCroppedImageFile!!.sizeInMb} ")
-
                     mCroppedImageFile?.let { cropFile ->
 
                         if (cropFile.sizeInMb > 5.0) {
@@ -368,6 +365,8 @@ class DeviceCustomizationFragment :
                 binding.layoutTextStyle.spinnerFonts.selectedItem.toString()
             hidePanel()
         }
+
+        binding.layoutTextStyle.linearDown.setOnClickListener { binding.layoutTextStyle.spinnerFonts.performClick() }
 
         binding.btnSynchronize.setOnClickListener {
             binding.btnSynchronize.isEnabled = false
@@ -525,10 +524,6 @@ class DeviceCustomizationFragment :
                     val bitMapOption = BitmapFactory.Options()
                     bitMapOption.inJustDecodeBounds = true
                     BitmapFactory.decodeFile(imagePath, bitMapOption)
-                    val imageWidth = bitMapOption.outWidth
-                    val imageHeight = bitMapOption.outHeight
-
-                    Log.e(logTag, " imageWidth $imageWidth imageHeight $imageHeight ")
 
                     dialogCropImage(uri)
                 }
@@ -541,10 +536,6 @@ class DeviceCustomizationFragment :
             val bitMapOption = BitmapFactory.Options()
             bitMapOption.inJustDecodeBounds = true
             BitmapFactory.decodeFile(imagePath, bitMapOption)
-            val imageWidth = bitMapOption.outWidth
-            val imageHeight = bitMapOption.outHeight
-
-            Log.e(logTag, " imageWidth $imageWidth imageHeight $imageHeight ")
 
             mProfileFile?.let { mFile ->
                 dialogCropImage(mFile.toUri())
@@ -613,7 +604,7 @@ class DeviceCustomizationFragment :
                                 context?.showToast(response.values.message)
                                 if (response.values.status && response.values.code == Constants.API_SUCCESS_CODE) {
 
-                                    isDeviceCustomizationLocked = !isDeviceCustomizationLocked
+                                     isDeviceCustomizationLocked = !isDeviceCustomizationLocked
                                     if (isDeviceCustomizationLocked) {
                                         lockScreen()
                                     } else {
@@ -625,10 +616,6 @@ class DeviceCustomizationFragment :
                             is Resource.Failure -> {
                                 hideDialog()
                                 context?.showToast(getString(R.string.error_something_went_wrong))
-                                Log.e(
-                                    logTag,
-                                    " customizationLockResponse Failure ${response.errorBody?.string()}"
-                                )
                             }
                             else -> Unit
                         }
@@ -877,7 +864,8 @@ class DeviceCustomizationFragment :
                     R.drawable.dodger_blue_background_6dp_corner
                 )
 
-                val croppedImageUri = getImageUri(mActivity, cropImageView.croppedImage!!, imageName)
+                val croppedImageUri =
+                    getImageUri(mActivity, cropImageView.croppedImage!!, imageName)
 
                 croppedImageUri?.let { uri ->
                     getRealPathFromUri(uri)?.let {

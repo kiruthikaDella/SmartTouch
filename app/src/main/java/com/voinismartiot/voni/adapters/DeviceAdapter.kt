@@ -1215,7 +1215,7 @@ class DeviceAdapter(
                         val topic1 = topic.split("/")
                         // topic [0] = ''
                         // topic [1] = smarttouch
-                        // topic [2] = deviceId
+                        // topic [2] = deviceSerial
                         // topic [3] = swstatus
 
                         val deviceData = deviceList.find { it.deviceSerialNo == topic1[2] }
